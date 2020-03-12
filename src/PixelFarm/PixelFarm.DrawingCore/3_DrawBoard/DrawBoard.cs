@@ -167,8 +167,8 @@ namespace PixelFarm.Drawing
         public abstract Rectangle CurrentClipRect { get; }
         //------------------------------------------------------
         //buffer
-        public abstract void Clear(Color c);
-        public abstract void RenderTo(System.IntPtr destHdc, int sourceX, int sourceY, Rectangle destArea);
+        public abstract void Clear(Color c); //TODO: add SetClearColor(), Clear(), 
+        public abstract void RenderTo(System.IntPtr destHdc, int sourceX, int sourceY, Rectangle destArea); //TODO: review here
         public virtual void RenderTo(Image destImg, int srcX, int srcYy, int srcW, int srcH) { }
         //------------------------------------------------------- 
 
@@ -198,7 +198,10 @@ namespace PixelFarm.Drawing
         public abstract void DrawText(char[] buffer, Rectangle logicalTextBox, int textAlignment);
         public abstract void DrawText(char[] buffer, int startAt, int len, Rectangle logicalTextBox, int textAlignment);
         public abstract DrawTextTechnique DrawTextTechnique { get; set; }
-        public abstract Color TextBackgroundColorHint { get; set; }
+        //TODO: review here again
+        public abstract Color TextBackgroundColorHint { get; set; }//explicit set current text background color hint
+        public abstract bool SetLatestFillAsTextBackgroundColorHint();
+        public abstract bool LatestFillCouldbeUsedAsTextBackgroundHint();
         //-------------------------------------------------------
         /// <summary>
         /// create formatted string base on current font,font-size, font style

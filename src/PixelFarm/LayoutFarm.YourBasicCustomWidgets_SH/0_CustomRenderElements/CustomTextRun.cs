@@ -22,9 +22,6 @@ namespace LayoutFarm.CustomWidgets
         byte _borderRight;
         byte _borderBottom;
 
-
-
-
         public CustomTextRun(RootGraphic rootgfx, int width, int height)
             : base(rootgfx, width, height)
         {
@@ -247,22 +244,31 @@ namespace LayoutFarm.CustomWidgets
                 d.DrawTextTechnique = this.DrawTextTechnique;
 
 
-                if (_backColor.A > 0)
+                if (_backColor.A == 255)
                 {
+                    //opaque background
                     d.FillRectangle(_backColor, 0, 0, this.Width, this.Height);
                     //for lcd-subpix, hint will help the performance
-                    d.TextBackgroundColorHint = _backColor;
+                    d.SetLatestFillAsTextBackgroundColorHint();
                 }
                 else
                 {
-
+                  
                     //for lcd-subpix, hint will help the performance
                     //label has transparent bg
-                    //
-                    d.TextBackgroundColorHint = Color.Transparent;
+
+                    //this custom text run may have transparent bg
+                    //but it may place on host that has opaque color
+
+                    //TODO: review this
+                    //1. we should use latest text color hint or not
+
+                    //in that case, we can hint the text-rendering with host color instead
+                    //so we try to check the host color by policy that configure  on this CustomTextRun
+
+                    //TODO: if the 
+
                 }
-
-
 
                 if (_textBuffer.Length > 2)
                 {

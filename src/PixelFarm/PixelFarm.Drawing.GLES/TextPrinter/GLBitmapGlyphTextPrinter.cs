@@ -114,7 +114,7 @@ namespace PixelFarm.DrawingGL
         LayoutFarm.OpenFontTextService _textServices;
         float _px_scale = 1;
         TextureCoordVboBuilder _vboBuilder = new TextureCoordVboBuilder();
-        Color _textBackgroundColorHint;
+
 
 #if DEBUG
         public static GlyphTexturePrinterDrawingTechnique s_dbugDrawTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering;
@@ -212,10 +212,7 @@ namespace PixelFarm.DrawingGL
         {
             //TODO: implementation here
         }
-        public void SetBackgroundColorHint(Color backgroundColor)
-        {
-            _textBackgroundColorHint = backgroundColor;
-        }
+
         public TextBaseline TextBaseline { get; set; }
 
         public void ChangeFont(RequestFont font)
@@ -567,8 +564,9 @@ namespace PixelFarm.DrawingGL
                         if (vxFmtStr.OwnerPlate != null)
                         {
                             //depend on current owner plate bg color***
-                            //                          
-                            if (_textBackgroundColorHint.A == 255)
+                            //                
+                            Color bgColorHint = _painter.TextBgColorHint;
+                            if (bgColorHint.A == 255)
                             {
                                 //solid bg color
                                 //TODO: configure this value to range 
@@ -579,7 +577,7 @@ namespace PixelFarm.DrawingGL
                                     vxFmtStr.Width, vxFmtStr.SpanHeight,
                                     (float)Math.Round(x),
                                     (float)Math.Floor(y + base_offset),
-                                    _textBackgroundColorHint);
+                                    bgColorHint);
                             }
                             else
                             {

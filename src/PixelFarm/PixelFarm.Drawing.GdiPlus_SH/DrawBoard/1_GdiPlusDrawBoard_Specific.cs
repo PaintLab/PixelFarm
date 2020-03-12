@@ -74,7 +74,12 @@ namespace PixelFarm.Drawing.WinGdi
             this.CurrentFont = renderSurface.CurrentFont;
         }
 
-
+        public override bool SetLatestFillAsTextBackgroundColorHint()
+        {
+            //not used in this mode
+            return true;
+        }
+        public override bool LatestFillCouldbeUsedAsTextBackgroundHint() => false;//not used in this mode
         public override DrawTextTechnique DrawTextTechnique
         {
             get => _textDrawingTechnique;

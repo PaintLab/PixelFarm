@@ -18,8 +18,11 @@ namespace LayoutFarm
             //TODO: implement FillRect() with no blending ... , or FastClear() 
             if (!WaitForStartRenderElement)
             {
+                //just clear with white?
                 d.FillRectangle(Color.White, 0, 0, this.Width, this.Height);
+                d.SetLatestFillAsTextBackgroundColorHint();
             }
+
             this.DrawDefaultLayer(d, updateArea); 
 
         }
