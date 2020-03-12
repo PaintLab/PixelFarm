@@ -29,11 +29,14 @@ namespace Mini
         {
             _myWidth = 800;
             _myHeight = 600;
-
-
             _surfaceViewport = surfaceViewport;
             _rootGfx = surfaceViewport.RootGfx;
         }
+        public void InvalidateUI()
+        {
+            _demoUI.InvalidateGraphics();
+        }
+
         public void LoadExample(DemoBase exBase)
         {
             _demoUI = new DemoUI(exBase, _myWidth, _myHeight);
@@ -84,10 +87,8 @@ namespace Mini
                 return _canvasRenderE;
             }
 
-            public override void InvalidateGraphics()
-            {
+            public override void InvalidateGraphics() => _canvasRenderE?.InvalidateGraphics();
 
-            }
 
             public override void Accept(UIVisitor visitor)
             {

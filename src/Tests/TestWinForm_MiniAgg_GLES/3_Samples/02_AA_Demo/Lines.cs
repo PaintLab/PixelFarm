@@ -5,6 +5,7 @@
 // it still follows the originall agg function names.  I have been cleaning these up over time
 // and intend to do much more refactoring of these things over the long term.
 
+using System;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.Drawing;
@@ -243,6 +244,9 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
         void UpdateVxsOutput()
         {
+            //this example show each component of line stroke
+            //we scale line-width to 50px 
+
             _outputStrokeVxs = new VertexStore();
             //
             _strokeMath.Width = 50;
@@ -453,6 +457,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             {
                 _drawSteps = value;
                 _needUpdate = true;
+                InvalidateGraphics();
             }
         }
         [DemoConfig]
@@ -463,10 +468,17 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             {
                 _outlineChoice = value;
                 _outputStrokeVxs = null;
+                InvalidateGraphics();
             }
         }
+
+
+        delegate void MySimpleAction();
+
         void UpdateVxsOutput()
         {
+
+            //demo only, demonstrate stroke detail
             _outputStrokeVxs = new VertexStore();
             //
             _strokeMath.Width = 10;
@@ -483,73 +495,70 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 {
                     case RawStrokeMath2Choices.Auto_OuterAndInner:
                         {
-                            using (VxsTemp.Borrow(out var vxs3, out var vxs4))
-                            using (VectorToolBox.Borrow(vxs3, out PathWriter pw))
                             using (VectorToolBox.Borrow(out Stroke stroke))
+                            using (VectorToolBox.Borrow(out ShapeBuilder b))
                             {
+
                                 stroke.Width = 10;
                                 stroke.LineCap = this.LineCap;
                                 stroke.LineJoin = this.LineJoin;
 
-                                //pw.MoveTo(_v0.x, _v0.y);
-                                //pw.LineTo(_v1.x, _v1.y);
-                                //pw.LineTo(_v2.x, _v2.y);
-                                //pw.LineTo(_v3.x, _v3.y);
-                                //pw.CloseFigure();
+                                b.MoveTo(_v0.x, _v0.y);
+                                b.LineTo(_v3.x, _v3.y);
+                                b.LineTo(_v2.x, _v2.y);
+                                b.LineTo(_v1.x, _v1.y);
+                                b.CloseFigure();
 
-                                pw.MoveTo(_v0.x, _v0.y);
-                                pw.LineTo(_v3.x, _v3.y);
-                                pw.LineTo(_v2.x, _v2.y);
-                                pw.LineTo(_v1.x, _v1.y);
-                                pw.CloseFigure();
+                                b.Stroke(stroke);
 
-
-                                _outputStrokeVxs = vxs3.CreateTrim();
-                                //vxs3.AddMoveTo(_v0.x, _v0.y);
-                                //vxs3.AddLineTo(_v1.x, _v1.y);
-                                //vxs3.AddLineTo(_v2.x, _v2.y);
-                                //vxs3.AddLineTo(_v3.x, _v3.y);
-                                //vxs3.AddLineTo(_v0.x, _v0.y);
-                                //vxs3.AddCloseFigure();
-
-                                //stroke.MakeVxs(vxs3, vxs4);
-                                //_outputStrokeVxs = vxs4.CreateTrim();
-
+                                _outputStrokeVxs = b.CurrentSharedVxs.CreateTrim();
                             }
-
                         }
                         break;
                     case RawStrokeMath2Choices.OuterBorder:
                         {
 
+                            //demo only, show step-by-step
 
-                            _strokeMath.CreateJoin(vxs1, _v0, _v1, _v2);
-                            _outputStrokeVxs.AppendVertexStore(vxs1);
-                            vxs1.Clear();
-                            stepCount++; if (stepCount > Steps) break; //demo only
-                            //---------
+                            MySimpleAction[] actions = new MySimpleAction[]
+                            {
+                                //create join
+                                //since we want to see data inside each step, so 
+                                //we generate data into vxs1 first and the copy it to output_vxs
+                                //(but you can generate data directly to _outputStrokeVxs
 
-                            _strokeMath.CreateJoin(vxs1, _v1, _v2, _v3);
-                            _outputStrokeVxs.AppendVertexStore(vxs1);
-                            vxs1.Clear();
-                            stepCount++; if (stepCount > Steps) break; //demo only
-                            //---------
+                                new MySimpleAction(()=>{
+                                    _strokeMath.CreateJoin(vxs1, _v0, _v1, _v2);
+                                    _outputStrokeVxs.AppendVertexStore(vxs1);
+                                    vxs1.Clear();
+                                }),
+                                //
+                               new MySimpleAction(()=>{
+                                    _strokeMath.CreateJoin(vxs1, _v1, _v2, _v3);
+                                    _outputStrokeVxs.AppendVertexStore(vxs1);
+                                    vxs1.Clear();
+                                }),
+                               new MySimpleAction(()=>{
+                                    _strokeMath.CreateJoin(vxs1, _v2, _v3, _v0);
+                                    _outputStrokeVxs.AppendVertexStore(vxs1);
+                                    vxs1.Clear();
+                                }),
+                               new MySimpleAction(()=>{
+                                    _strokeMath.CreateJoin(vxs1, _v3, _v0, _v1);
+                                    _outputStrokeVxs.AppendVertexStore(vxs1);
+                                    vxs1.Clear();
+                                }),
+                                new MySimpleAction(()=>{
+                                    _outputStrokeVxs.GetVertex(0, out double first_moveX, out double first_moveY);
+                                    _outputStrokeVxs.AddLineTo(first_moveX, first_moveY);
+                                    _outputStrokeVxs.AddCloseFigure();
+                                }),
+                            };
 
-                            _strokeMath.CreateJoin(vxs1, _v2, _v3, _v0);
-                            _outputStrokeVxs.AppendVertexStore(vxs1);
-                            vxs1.Clear();
-                            stepCount++; if (stepCount > Steps) break; //demo only
-                            //---------
-
-                            _strokeMath.CreateJoin(vxs1, _v3, _v0, _v1);
-                            _outputStrokeVxs.AppendVertexStore(vxs1);
-                            vxs1.Clear();
-                            stepCount++; if (stepCount > Steps) break; //demo only
-                            //---------
-
-                            _outputStrokeVxs.GetVertex(0, out double first_moveX, out double first_moveY);
-                            _outputStrokeVxs.AddLineTo(first_moveX, first_moveY);
-                            _outputStrokeVxs.AddCloseFigure();
+                            for (int i = stepCount; i < actions.Length && i < Steps; ++i)
+                            {
+                                actions[i]();
+                            }
                         }
                         break;
                     case RawStrokeMath2Choices.InnerBorder:
