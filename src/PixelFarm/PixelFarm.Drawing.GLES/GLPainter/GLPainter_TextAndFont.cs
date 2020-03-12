@@ -11,7 +11,12 @@ namespace PixelFarm.DrawingGL
         WordPlateMx _wordPlateMx = new WordPlateMx();
         GLBitmapGlyphTextPrinter _bmpTextPrinter;
         GlyphTexturePrinterDrawingTechnique _drawingTech;
-
+        Color _textBgColorHint;
+        public Color TextBgColorHint
+        {
+            get => _textBgColorHint;
+            set => _textBgColorHint = value;
+        }
         public Color FontFillColor
         {
             get => _pcx.FontFillColor;
@@ -133,8 +138,8 @@ namespace PixelFarm.DrawingGL
                 else
                 {
 
-                } 
-                
+                }
+
                 if (!wordPlate.CreateWordStrip(this, vxFmtStr))
                 {
                     //we have some error?

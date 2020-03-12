@@ -104,16 +104,12 @@ namespace PixelFarm.Drawing.GLES2
             this.StrokeWidth = 1;
         }
 
-        Color _textBgColorHint;
+
         public override Color TextBackgroundColorHint
         {
             //temp fix
-            get => _textBgColorHint;
-            set
-            {
-                _textBgColorHint = value;
-                _gpuPainter.TextPrinter.SetBackgroundColorHint(value);
-            }
+            get => _gpuPainter.TextBgColorHint;
+            set => _gpuPainter.TextBgColorHint = value;
         }
         public override DrawTextTechnique DrawTextTechnique
         {

@@ -98,7 +98,7 @@ namespace PixelFarm.Drawing
         //-------------
         void ChangeFillColor(Color fillColor);
         void ChangeStrokeColor(Color strokColor);
-        void SetBackgroundColorHint(Color backgroundColor); //useful hint for some text printer(eg, lcd-effect subpix)
+       
         //-------------
         void MeasureString(char[] buffer, int startAt, int len, out int w, out int h);
     }

@@ -1169,11 +1169,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
             //TODO: ...
         }
-        public void SetBackgroundColorHint(Color backgroundColor)
-        {
-            //TODO: currently not used in this mode
-
-        }
+      
         public void DrawString(char[] text, int startAt, int len, double left, double top)
         {
             //TODO: review TextBaseline ***
