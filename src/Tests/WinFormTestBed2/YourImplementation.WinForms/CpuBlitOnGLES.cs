@@ -254,8 +254,8 @@ namespace YourImplementation
                 if (board != null)
                 {
                     board.SetClipRect(updateArea.CurrentRect);
-                    board.Clear(Color.White); //clear background
-                    //board.SetClipRect(new Rectangle(0, 0, 1200, 1200)); 
+                    board.Clear(Color.White); //clear background, clear with white solid
+
                     DrawDefaultLayer(board, updateArea);
 #if DEBUG
                     //_ui.dbugSaveAggBmp("a001.png");
@@ -272,7 +272,7 @@ namespace YourImplementation
 
             //------------------------------------------------------------------------- 
             d.DrawImage(_glBmp, 0, 0);
-            //_pcx.DrawImage(_glBmp, 0, 0);
+            
 
             //test print text from our GLTextPrinter 
             //_glPainter.FillColor = PixelFarm.Drawing.Color.Black;

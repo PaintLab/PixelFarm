@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 
 using PixelFarm.CpuBlit;
-using PixelFarm.CpuBlit.VertexProcessing;
 
 namespace PixelFarm.Drawing.GLES2
 {
@@ -13,7 +12,9 @@ namespace PixelFarm.Drawing.GLES2
     {
         class MyGLCanvasException : Exception { }
 
-        //==========================================================
+        Color _latestFillSolidColor;
+        bool _latestFillCouldbeUsedAsTextBgHint;
+
         public override Color StrokeColor
         {
             get => _gpuPainter.StrokeColor;
@@ -40,7 +41,7 @@ namespace PixelFarm.Drawing.GLES2
             _gpuPainter.Clear(c);
         }
 
-  
+
         public override void FillRectangle(Brush brush, float left, float top, float width, float height)
         {
 
@@ -53,37 +54,30 @@ namespace PixelFarm.Drawing.GLES2
                         _gpuPainter.FillRect(
                             left, top,
                             width, height,
-                            solidBrush.Color);
+                           _latestFillSolidColor = solidBrush.Color);
+                        _latestFillCouldbeUsedAsTextBgHint = _latestFillSolidColor.A == 255;
                     }
                     break;
                 case BrushKind.LinearGradient:
-                    {
-
-
-                        // throw new MyGLCanvasException();
-                    }
-                    break;
                 case BrushKind.PolygonGradient:
-                    {
-                    }
-                    break;
                 case BrushKind.CircularGraident:
-                    {
-                    }
-                    break;
                 case BrushKind.Texture:
                     {
+                        _latestFillCouldbeUsedAsTextBgHint = false;
                     }
                     break;
+                default: throw new NotSupportedException();
             }
         }
+
         public override void FillRectangle(Color color, float left, float top, float width, float height)
         {
             _gpuPainter.FillRect(left, top, width, height, color);
+            _latestFillSolidColor = color;
+            _latestFillCouldbeUsedAsTextBgHint = color.A == 255;
         }
         public override void DrawRectangle(Color color, float left, float top, float width, float height)
         {
-
             Color prev = _gpuPainter.StrokeColor;
             _gpuPainter.StrokeColor = color;
             _gpuPainter.DrawRect(left, top, width, height);
@@ -125,6 +119,7 @@ namespace PixelFarm.Drawing.GLES2
                 glbmp.dbugNotifyUsage();
 #endif
                 _gpuPainter.PainterContext.DrawSubImage(glbmp, destRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, destRect.Left, destRect.Top);
+                _latestFillCouldbeUsedAsTextBgHint = false;
             }
         }
         public override void DrawImage(Image image, int x, int y)
@@ -136,6 +131,7 @@ namespace PixelFarm.Drawing.GLES2
                 glbmp.dbugNotifyUsage();
 #endif
                 _gpuPainter.PainterContext.DrawSubImage(glbmp, 0, 0, glbmp.Width, glbmp.Height, x, y);
+                _latestFillCouldbeUsedAsTextBgHint = false;
             }
         }
         public override void DrawImages(Image image, RectangleF[] destAndSrcPairs)
@@ -161,7 +157,7 @@ namespace PixelFarm.Drawing.GLES2
             //        i += 2;
             //    }
             //}
-
+            _latestFillCouldbeUsedAsTextBgHint = false;
         }
 
         /// <summary>
@@ -175,6 +171,7 @@ namespace PixelFarm.Drawing.GLES2
             if (image is AtlasImageBinder atlasImg)
             {
                 _gpuPainter.DrawImage(image, (float)destRect.X, (float)destRect.Y, (int)0, (int)0, (int)destRect.Width, (int)destRect.Height);
+                _latestFillCouldbeUsedAsTextBgHint = false;
             }
             else
             {
@@ -185,15 +182,18 @@ namespace PixelFarm.Drawing.GLES2
                     glbmp.dbugNotifyUsage();
 #endif
                     _gpuPainter.PainterContext.DrawImage(glbmp, destRect.Left, destRect.Top, destRect.Width, destRect.Height);
+                    _latestFillCouldbeUsedAsTextBgHint = false;
                 }
             }
-        }       
+
+        }
         public override void FillPolygon(Brush brush, PointF[] points)
         {
             //throw new MyGLCanvasException();
             //var pps = ConvPointFArray(points);
             ////use internal solid color            
             //gx.FillPolygon(brush.InnerBrush as System.Drawing.Brush, pps);
+            _latestFillCouldbeUsedAsTextBgHint = false;
         }
         public override void FillPolygon(Color color, PointF[] points)
         {
@@ -201,6 +201,7 @@ namespace PixelFarm.Drawing.GLES2
             //var pps = ConvPointFArray(points);
             //internalSolidBrush.Color = ConvColor(color);
             //gx.FillPolygon(this.internalSolidBrush, pps);
+            _latestFillCouldbeUsedAsTextBgHint = false;
         }
 
     }

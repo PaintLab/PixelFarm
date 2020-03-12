@@ -111,6 +111,18 @@ namespace PixelFarm.Drawing.GLES2
             get => _gpuPainter.TextBgColorHint;
             set => _gpuPainter.TextBgColorHint = value;
         }
+        public override bool SetLatestFillAsTextBackgroundColorHint()
+        {
+            if (_latestFillCouldbeUsedAsTextBgHint)
+            {
+                _gpuPainter.TextBgColorHint = _latestFillSolidColor;
+                return true;
+            }
+            return false;
+        }
+
+        public override bool LatestFillCouldbeUsedAsTextBackgroundHint() => _latestFillCouldbeUsedAsTextBgHint;
+
         public override DrawTextTechnique DrawTextTechnique
         {
             get => _textDrawingTechnique;

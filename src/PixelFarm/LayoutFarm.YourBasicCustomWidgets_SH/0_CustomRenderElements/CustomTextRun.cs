@@ -249,11 +249,11 @@ namespace LayoutFarm.CustomWidgets
                     //opaque background
                     d.FillRectangle(_backColor, 0, 0, this.Width, this.Height);
                     //for lcd-subpix, hint will help the performance
-                    d.TextBackgroundColorHint = _backColor;
+                    d.SetLatestFillAsTextBackgroundColorHint();
                 }
                 else
                 {
-
+                  
                     //for lcd-subpix, hint will help the performance
                     //label has transparent bg
 
@@ -265,14 +265,10 @@ namespace LayoutFarm.CustomWidgets
 
                     //in that case, we can hint the text-rendering with host color instead
                     //so we try to check the host color by policy that configure  on this CustomTextRun
-                    
+
                     //TODO: if the 
 
-
-                    d.TextBackgroundColorHint = Color.Transparent;
                 }
-
-
 
                 if (_textBuffer.Length > 2)
                 {
