@@ -286,7 +286,10 @@ namespace PixelFarm.Drawing
                     () => new ShapeBuilder(),
                     f => f.Reset());
             }
-            return Temp<ShapeBuilder>.Borrow(out shapeBuilder);
+
+            TempContext<ShapeBuilder> context = Temp<ShapeBuilder>.Borrow(out shapeBuilder);
+            shapeBuilder.InitVxs();//make it ready-to-use
+            return context;
         }
     }
 

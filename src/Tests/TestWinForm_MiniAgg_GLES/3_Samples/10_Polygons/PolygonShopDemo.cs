@@ -177,7 +177,7 @@ namespace PixelFarm
             using (VectorToolBox.Borrow(out ShapeBuilder b))
             using (VectorToolBox.Borrow(out Stroke stroke))
             {
-                b.InitVxs();
+
                 b.MoveTo(5, 20);
                 b.LineTo(10, 10);
                 b.LineTo(15, 20);
@@ -198,16 +198,16 @@ namespace PixelFarm
             using (VectorToolBox.Borrow(out ShapeBuilder b))
             using (VectorToolBox.Borrow(out Stroke stroke))
             {
-                b.InitVxs();
-                b.MoveTo(5, 20);
-                b.LineTo(10, 10);
-                b.LineTo(15, 20);
 
                 stroke.Width = 5;
                 stroke.LineJoin = LineJoin.Round;
 
+                b.MoveTo(5, 20);
+                b.LineTo(10, 10);
+                b.LineTo(15, 20);
                 b.Scale(3);
                 b.Stroke(stroke);
+
                 return b.CreateTrim();
             }
         }
@@ -216,16 +216,13 @@ namespace PixelFarm
             using (VectorToolBox.Borrow(out ShapeBuilder b))
             using (VectorToolBox.Borrow(out Stroke stroke))
             {
-                b.InitVxs();
-                b.MoveTo(5, 20);
-                b.LineTo(10, 10);
-                b.LineTo(15, 20);
-
-
                 stroke.StrokeSideForOpenShape = StrokeSideForOpenShape.Outside;
                 stroke.Width = 5;
                 stroke.LineJoin = LineJoin.Round;
 
+                b.MoveTo(5, 20);
+                b.LineTo(10, 10);
+                b.LineTo(15, 20);
                 b.Scale(3);
                 b.Stroke(stroke);
                 return b.CreateTrim();
@@ -236,18 +233,16 @@ namespace PixelFarm
             using (VectorToolBox.Borrow(out ShapeBuilder b))
             using (VectorToolBox.Borrow(out Stroke stroke))
             {
-                b.InitVxs();
-                b.MoveTo(5, 20);
-                b.LineTo(10, 10);
-                b.LineTo(15, 20);
-
-
                 stroke.StrokeSideForOpenShape = StrokeSideForOpenShape.Inside;
                 stroke.Width = 5;
                 stroke.LineJoin = LineJoin.Round;
 
+                b.MoveTo(5, 20);
+                b.LineTo(10, 10);
+                b.LineTo(15, 20);
                 b.Scale(3);
                 b.Stroke(stroke);
+
                 return b.CreateTrim();
             }
         }
@@ -413,7 +408,7 @@ namespace PixelFarm
                     selectedVxs = _catmullRomSpline1;
                     break;
 
-               
+
                 case PolygonKind.CardinalSpline2:
                     selectedVxs = _cardinalSpline2;
                     break;
