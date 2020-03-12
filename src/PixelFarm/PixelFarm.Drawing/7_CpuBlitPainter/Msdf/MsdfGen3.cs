@@ -134,8 +134,8 @@ namespace ExtMsdfGen
                             using (VectorToolBox.Borrow(out ShapeBuilder s))
                             using (VectorToolBox.Borrow(out Stroke strk))
                             {
-                                s.InitVxs()
-                                 .MoveTo(cs.P0.x + _dx, cs.P0.y + _dy) //...
+                                
+                                 s.MoveTo(cs.P0.x + _dx, cs.P0.y + _dy) //...
                                  .Curve4To(cs.P1.x + _dx, cs.P1.y + _dy,
                                            cs.P2.x + _dx, cs.P2.y + _dy,
                                            cs.P3.x + _dx, cs.P3.y + _dy)
@@ -167,8 +167,8 @@ namespace ExtMsdfGen
                             using (VxsTemp.Borrow(out var v1))
                             using (VectorToolBox.Borrow(out Stroke strk))
                             {
-                                s.InitVxs()
-                                 .MoveTo(qs.P0.x + _dx, qs.P0.y + _dy)//...
+                                 
+                                 s.MoveTo(qs.P0.x + _dx, qs.P0.y + _dy)//...
                                  .Curve3To(qs.P1.x + _dx, qs.P1.y + _dy,
                                            qs.P2.x + _dx, qs.P2.y + _dy)
                                  .NoMore()
