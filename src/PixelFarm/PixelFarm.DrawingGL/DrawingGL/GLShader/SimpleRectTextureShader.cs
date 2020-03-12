@@ -1164,13 +1164,12 @@ namespace PixelFarm.DrawingGL
 
             //2. we apply each color component with alpha blend equation per channel
             
-            //equation, ch_x= (bg_x *(1-src_alpha_x) + src_x* src_alpha_x)
-       
+            //equation, ch_x= (bg_x *(1-src_alpha_x) + src_x* src_alpha_x)       
 
             //gl_FragColor = vec4((u_bg[0] * (1.0 - c[0]) + u_color[0] * c[0]),
             //                    (u_bg[1] * (1.0 - c[1]) + u_color[1] * c[1]),
             //                    (u_bg[2] * (1.0 - c[2]) + u_color[2] * c[2]),
-            //                    1.0);          
+            //                    1.0);           
 
             //-----------
             string fs = @"
@@ -1327,11 +1326,11 @@ namespace PixelFarm.DrawingGL
             } 
 
             //in this shader,
-            //we will calculate blend value by the shader and copy to dest
+            //we will calculate final blend value manually
             //so temp disable it.
             GL.Disable(EnableCap.Blend);
 
-            GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
+            GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices); 
 
             GL.Enable(EnableCap.Blend);//restore
         }
