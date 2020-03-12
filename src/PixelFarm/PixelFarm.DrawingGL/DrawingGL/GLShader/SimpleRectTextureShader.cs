@@ -1128,7 +1128,7 @@ namespace PixelFarm.DrawingGL
         //-------
 
         PixelFarm.Drawing.Color _bgColor;
-        float _bgR, _bgG, _bgB, _bgA;
+        float _bgR, _bgG, _bgB;
         bool _bgChanged;
 
         public LcdEffectSubPixelRenderingShaderForSolidBg(ShaderSharedResource shareRes)
@@ -1163,7 +1163,7 @@ namespace PixelFarm.DrawingGL
             //vec4 c = texture2D(s_texture, v_texCoord)*u_color[3]; 
 
             //2. we apply each color component with alpha blend equation per channel
-            
+
             //equation, ch_x= (bg_x *(1-src_alpha_x) + src_x* src_alpha_x)       
 
             //gl_FragColor = vec4((u_bg[0] * (1.0 - c[0]) + u_color[0] * c[0]),
@@ -1214,8 +1214,10 @@ namespace PixelFarm.DrawingGL
 
             _bgR = c.R / 255f;
             _bgG = c.G / 255f;
-            _bgB = c.B / 255f;
-            _bgA = c.A / 255f;
+            _bgB = c.B / 255f; 
+            
+            //the background color must be opaque color
+            //(no alpha channel for bg color)
         }
         public void SetTextColor(PixelFarm.Drawing.Color c)
         {
@@ -1232,10 +1234,6 @@ namespace PixelFarm.DrawingGL
             _fillG = c.G / 255f;
             _fillB = c.B / 255f;
             _fillA = c.A / 255f;
-
-            //TODO: add alpha channel support
-
-
         }
         protected override void SetVarsBeforeRender() { }
 
@@ -1311,26 +1309,26 @@ namespace PixelFarm.DrawingGL
                 }
             }
 
-      
+
 
             if (_fillChanged)
-            {               
+            {
                 _u_color.SetValue(_fillR, _fillG, _fillB, _fillA);
                 _fillChanged = false;
             }
 
             if (_bgChanged)
             {
-                _u_bg.SetValue(_bgR, _bgG, _bgB, _bgA);
+                _u_bg.SetValue(_bgR, _bgG, _bgB, 1.0f);
                 _bgChanged = false;
-            } 
+            }
 
             //in this shader,
             //we will calculate final blend value manually
             //so temp disable it.
             GL.Disable(EnableCap.Blend);
 
-            GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices); 
+            GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
 
             GL.Enable(EnableCap.Blend);//restore
         }
