@@ -1150,11 +1150,29 @@ namespace PixelFarm.DrawingGL
                  }	 
                 ";
 
-            //u_color=> text color (uniform vec4)
-            //invt => inverted u_color
-            //u_bg=> background color (uniform vec4)             
+            //the same concept as the 'LcdEffectSubPixelRenderingShader'
+            //but this for solid color background.
+            //since we know the background-color so we can calculate the result.
+            //in this shader we call 1 DrawElements() call ( the original needs 3 calls)
 
- 
+
+            //description here...
+
+            //1. we think a 'c' is an 'coverage area'.
+            //if filling color (u_color) has alpha component, the we apply it to the 'c' value.
+            //vec4 c = texture2D(s_texture, v_texCoord)*u_color[3]; 
+
+            //2. we apply each color component with alpha blend equation per channel
+            
+            //equation, ch_x= (bg_x *(1-src_alpha_x) + src_x* src_alpha_x)
+       
+
+            //gl_FragColor = vec4((u_bg[0] * (1.0 - c[0]) + u_color[0] * c[0]),
+            //                    (u_bg[1] * (1.0 - c[1]) + u_color[1] * c[1]),
+            //                    (u_bg[2] * (1.0 - c[2]) + u_color[2] * c[2]),
+            //                    1.0);          
+
+            //-----------
             string fs = @"
                       precision mediump float; 
                       uniform sampler2D s_texture;
@@ -1163,12 +1181,11 @@ namespace PixelFarm.DrawingGL
                       varying vec2 v_texCoord; 
                       void main()
                       {   
-                         vec4 c = texture2D(s_texture,v_texCoord);   
-                         vec4 invt = vec4(1.0,1.0,1.0,1.0)-u_color;                         
-                          
-                         gl_FragColor= vec4(u_bg[0] - c[0]*invt[0] + c[0]*u_color[0],
-                                            u_bg[1] - c[1]*invt[1] + c[1]*u_color[1],
-                                            u_bg[2] - c[2]*invt[2] + c[2]*u_color[2],
+                         vec4 c = texture2D(s_texture,v_texCoord)*u_color[3];   
+
+                         gl_FragColor =vec4(u_bg[0]*(1.0-c[0]) + u_color[0]*c[0],
+                                            u_bg[1]*(1.0-c[1]) + u_color[1]*c[1],
+                                            u_bg[2]*(1.0-c[2]) + u_color[2]*c[2],
                                             1.0);
                       }
                 ";
@@ -1219,8 +1236,8 @@ namespace PixelFarm.DrawingGL
 
             //TODO: add alpha channel support
 
-           
-        } 
+
+        }
         protected override void SetVarsBeforeRender() { }
 
         public void DrawSubImageWithStencil(GLBitmap glBmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
@@ -1295,9 +1312,10 @@ namespace PixelFarm.DrawingGL
                 }
             }
 
+      
 
             if (_fillChanged)
-            {
+            {               
                 _u_color.SetValue(_fillR, _fillG, _fillB, _fillA);
                 _fillChanged = false;
             }
@@ -1306,13 +1324,13 @@ namespace PixelFarm.DrawingGL
             {
                 _u_bg.SetValue(_bgR, _bgG, _bgB, _bgA);
                 _bgChanged = false;
-            }
+            } 
 
             //in this shader,
             //we will calculate blend value by the shader and copy to dest
             //so temp disable it.
             GL.Disable(EnableCap.Blend);
- 
+
             GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
 
             GL.Enable(EnableCap.Blend);//restore
