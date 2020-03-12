@@ -571,12 +571,11 @@ namespace LayoutFarm.TextEditing
 
 #if DEBUG
                 d.FillRectangle(BackgroundColor, 0, 0, innerBgSize.Width, innerBgSize.Height);
-                //canvas.FillRectangle(ColorEx.dbugGetRandomColor(), 0, 0, innerBgSize.Width, innerBgSize.Height);
+                //d.FillRectangle(ColorEx.dbugGetRandomColor(), 0, 0, innerBgSize.Width, innerBgSize.Height);
 #else
                 d.FillRectangle(BackgroundColor, 0, 0, innerBgSize.Width, innerBgSize.Height);
 #endif
-
-
+                d.SetLatestFillAsTextBackgroundColorHint();
             }
 
 

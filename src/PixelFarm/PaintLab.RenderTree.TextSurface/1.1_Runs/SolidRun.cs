@@ -224,7 +224,7 @@ namespace LayoutFarm.TextEditing
             int bWidth = this.Width;
             int bHeight = this.Height;
 
-            //1. bg
+            //1. bg, yellow for test
             d.FillRectangle(Color.Yellow, 0, 0, bWidth, bHeight);
 
             //if (!this.HasStyle)

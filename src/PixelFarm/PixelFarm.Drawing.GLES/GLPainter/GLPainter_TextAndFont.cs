@@ -12,6 +12,8 @@ namespace PixelFarm.DrawingGL
         GLBitmapGlyphTextPrinter _bmpTextPrinter;
         GlyphTexturePrinterDrawingTechnique _drawingTech;
 
+        public Color TextBgColorHint { get; set; }
+
         public Color FontFillColor
         {
             get => _pcx.FontFillColor;
@@ -133,8 +135,8 @@ namespace PixelFarm.DrawingGL
                 else
                 {
 
-                } 
-                
+                }
+
                 if (!wordPlate.CreateWordStrip(this, vxFmtStr))
                 {
                     //we have some error?

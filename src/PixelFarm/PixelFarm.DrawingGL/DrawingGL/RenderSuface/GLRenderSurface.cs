@@ -125,7 +125,8 @@ namespace PixelFarm.DrawingGL
         BGRAImageTextureShader _bgraImgTextureShader;
 
         LcdEffectSubPixelRenderingShader _lcdSubPixShader;
-        InvertedColorShader _invertedColorShader;
+        LcdEffectSubPixelRenderingShaderForSolidBg _lcdSubPixForSolidBgShader;
+
         RGBATextureShader _rgbaTextureShader;
         RGBTextureShader _rgbTextureShader;
         BlurShader _blurShader;
@@ -197,8 +198,9 @@ namespace PixelFarm.DrawingGL
             _rgbTextureShader = new RGBTextureShader(_shareRes);
             //
             _glyphStencilShader = new GlyphImageStecilShader(_shareRes);
+
             _lcdSubPixShader = new LcdEffectSubPixelRenderingShader(_shareRes);
-            _invertedColorShader = new InvertedColorShader(_shareRes);
+            _lcdSubPixForSolidBgShader = new LcdEffectSubPixelRenderingShaderForSolidBg(_shareRes);
 
             _blurShader = new BlurShader(_shareRes);
             //
@@ -868,23 +870,19 @@ namespace PixelFarm.DrawingGL
             _lcdSubPixShader.DrawSubImageWithStencil(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
         }
 
-        public void DrawWordSpanWithInvertedColorCopyTechnique(GLBitmap bmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
+        public void DrawWordSpanWithLcdSubpixForSolidBgColor(GLBitmap bmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop, Color textBgColor)
         {
-
-            //similar to DrawSubImage(), use this for debug
-            //DrawSubImage(bmp,
-            //   srcLeft, srcTop,
-            //   srcW, srcH,
-            //   targetLeft,
-            //   targetTop);
+            //lcd-effect subpix rendering, optimized version for solid bg color
+            //
 
             if (OriginKind == RenderSurfaceOrientation.LeftTop) //***
             {
                 targetTop += srcH; //***
             }
 
-            _invertedColorShader.AlphaWeight = 255;
-            _invertedColorShader.DrawSubImageWithStencil(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
+            _lcdSubPixForSolidBgShader.SetBackgroundColor(textBgColor);
+            _lcdSubPixForSolidBgShader.SetTextColor(FontFillColor);
+            _lcdSubPixForSolidBgShader.DrawSubImageWithStencil(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
         }
 
 
@@ -2027,7 +2025,7 @@ namespace PixelFarm.DrawingGL
         }
         public void AppendDegenerativeTrinagle()
         {
-             
+
             ushort indexCount = (ushort)_indexList.Count;
             if (indexCount > 0)
             {

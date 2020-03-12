@@ -8,18 +8,25 @@ namespace LayoutFarm.CustomWidgets
     public class Label : AbstractRectUI
     {
         string _text;
-        Color _textColor;
-        Color _backColor;
+        Color _textColor; //text color
+        Color _backColor;//actual filling color
+
+        Color _textBackgroundColorHint; //background color hint, 
+        //some time the label background is transparent
+        //but its host has solid color, so this value will hint
+
         RequestFont _font;
         CustomTextRun _myTextRun;
+        DrawTextTechnique _drawTextTechnique;
+
         //
         public Label(int w, int h)
             : base(w, h)
         {
             _textColor = PixelFarm.Drawing.Color.Black; //default?, use Theme?
-            DrawTextTechnique = DrawTextTechnique.Stencil;
+            DrawTextTechnique = DrawTextTechnique.Stencil;//default
         }
-        public DrawTextTechnique DrawTextTechnique { get; set; }
+
 #if DEBUG
         public bool dbugBreakOnRenderElement;
 #endif
@@ -27,15 +34,16 @@ namespace LayoutFarm.CustomWidgets
         {
             if (_myTextRun == null)
             {
-                var t_run = new CustomTextRun(rootgfx, this.Width, this.Height); 
-                t_run.DrawTextTechnique = DrawTextTechnique;
-                t_run.SetLocation(this.Left, this.Top);
+                var t_run = new CustomTextRun(rootgfx, this.Width, this.Height);
+                t_run.DrawTextTechnique = _drawTextTechnique;
+
                 t_run.TextColor = _textColor;
                 t_run.BackColor = _backColor;
                 t_run.Text = this.Text;
                 t_run.PaddingLeft = this.PaddingLeft;
                 t_run.PaddingTop = this.PaddingTop;
                 t_run.SetVisible(this.Visible);
+                t_run.SetLocation(this.Left, this.Top);
                 t_run.SetController(this);
                 t_run.TransparentForAllEvents = this.TransparentAllMouseEvents;
 
@@ -107,6 +115,21 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
+        public DrawTextTechnique DrawTextTechnique
+        {
+            get => _drawTextTechnique;
+            set
+            {
+                _drawTextTechnique = value;
+                if (_myTextRun != null)
+                {
+                    _myTextRun.DrawTextTechnique = value;
+                }
+            }
+        }
+
+
+
         /// <summary>
         /// text color
         /// </summary>
@@ -119,6 +142,8 @@ namespace LayoutFarm.CustomWidgets
                 if (_myTextRun != null)
                 {
                     _myTextRun.TextColor = value;
+                    //?
+                    //_myTextRun.InvalidateGraphics();
                 }
             }
         }
@@ -131,6 +156,8 @@ namespace LayoutFarm.CustomWidgets
                 if (_myTextRun != null)
                 {
                     _myTextRun.BackColor = value;
+                    //?
+                    //_myTextRun.InvalidateGraphics();
                 }
             }
         }

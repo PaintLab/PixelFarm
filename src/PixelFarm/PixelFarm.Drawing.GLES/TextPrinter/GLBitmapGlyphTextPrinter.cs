@@ -116,7 +116,6 @@ namespace PixelFarm.DrawingGL
         TextureCoordVboBuilder _vboBuilder = new TextureCoordVboBuilder();
 
 
-
 #if DEBUG
         public static GlyphTexturePrinterDrawingTechnique s_dbugDrawTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering;
         public static bool s_dbugUseVBO = true;
@@ -540,8 +539,7 @@ namespace PixelFarm.DrawingGL
                         }
 
                         //LCD-Effect****
-                        if (!vxFmtStr.UseWithWordPlate ||
-                            _pcx.FontFillColor != Color.White)//in this version!
+                        if (!vxFmtStr.UseWithWordPlate)
                         {
                             _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(
                               _glBmp,
@@ -565,13 +563,39 @@ namespace PixelFarm.DrawingGL
                         //eval again                         
                         if (vxFmtStr.OwnerPlate != null)
                         {
-                            //depend on current owner plate bg 
-                            // 
-                            _pcx.DrawWordSpanWithInvertedColorCopyTechnique((GLBitmap)vxFmtStr.OwnerPlate._backBuffer.GetImage(),
-                                vxFmtStr.WordPlateLeft, -vxFmtStr.WordPlateTop - vxFmtStr.SpanHeight,
-                                vxFmtStr.Width, vxFmtStr.SpanHeight,
-                                (float)Math.Round(x),
-                                (float)Math.Floor(y + base_offset));
+                            //depend on current owner plate bg color***
+                            //                
+                            Color bgColorHint = _painter.TextBgColorHint;
+                            if (bgColorHint.A == 255)
+                            {
+                                //solid bg color
+                                //TODO: configure this value to range 
+                                //since this works with since some light color (near white) too
+
+                                //_pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(
+                                //   _glBmp,
+                                //   vxFmtStr.GetVbo(),
+                                //   vxFmtStr.IndexArrayCount,
+                                //   (float)Math.Round(x),
+                                //   (float)Math.Floor(y + base_offset));
+
+                                _pcx.DrawWordSpanWithLcdSubpixForSolidBgColor((GLBitmap)vxFmtStr.OwnerPlate._backBuffer.GetImage(),
+                                    vxFmtStr.WordPlateLeft, -vxFmtStr.WordPlateTop - vxFmtStr.SpanHeight - base_offset,
+                                    vxFmtStr.Width, vxFmtStr.SpanHeight,
+                                    (float)Math.Round(x),
+                                    (float)Math.Floor(y + base_offset),
+                                    bgColorHint);
+                            }
+                            else
+                            {
+                                _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(
+                                 _glBmp,
+                                 vxFmtStr.GetVbo(),
+                                 vxFmtStr.IndexArrayCount,
+                                 (float)Math.Round(x),
+                                 (float)Math.Floor(y + base_offset));
+
+                            }
                         }
                         else
                         {
