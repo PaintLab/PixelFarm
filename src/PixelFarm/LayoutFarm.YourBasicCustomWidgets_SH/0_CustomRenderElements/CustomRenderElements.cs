@@ -242,6 +242,7 @@ namespace LayoutFarm.CustomWidgets
             if (!WaitForStartRenderElement)
             {
                 d.FillRectangle(BackColor, ViewportLeft, ViewportTop, this.Width, this.Height);
+                d.SetLatestFillAsTextBackgroundColorHint();
                 //border is over background color          
             }
 

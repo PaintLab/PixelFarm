@@ -657,9 +657,13 @@ namespace PixelFarm.DrawingGL
         }
     }
 
+    /// <summary>
+    /// texture-based, lcd-subpix rendering shader for any background
+    /// </summary>
     sealed class LcdEffectSubPixelRenderingShader : SimpleRectTextureShader
     {
         //this shader is designed for subpixel shader
+        //for transparent background        
 
         ShaderUniformVar2 _offset;
         ShaderUniformVar3 _u_compo3;
@@ -1104,21 +1108,30 @@ namespace PixelFarm.DrawingGL
         }
     }
 
+
     /// <summary>
-    /// inverted color 
+    /// texture-based, lcd-subpix rendering shader for solid-color-background 
     /// </summary>
-    sealed class InvertedColorShader : SimpleRectTextureShader
+    sealed class LcdEffectSubPixelRenderingShaderForSolidBg : SimpleRectTextureShader
     {
 
         ShaderUniformVar2 _offset;
-        ShaderUniformVar2 _u_alphaWeight;
+        ShaderUniformVar4 _u_color;
+        ShaderUniformVar4 _u_bg;
+
         bool _hasSomeOffset;
 
-        bool _alphaWeightChanged = true;
-        byte _alphaWeight_u8 = 255;
-        float _alphaWeight = 1;
+        //-------
+        PixelFarm.Drawing.Color _textColor;
+        float _fillR, _fillG, _fillB, _fillA;
+        bool _fillChanged;
+        //-------
 
-        public InvertedColorShader(ShaderSharedResource shareRes)
+        PixelFarm.Drawing.Color _bgColor;
+        float _bgR, _bgG, _bgB, _bgA;
+        bool _bgChanged;
+
+        public LcdEffectSubPixelRenderingShaderForSolidBg(ShaderSharedResource shareRes)
             : base(shareRes)
         {
             string vs = @"
@@ -1136,39 +1149,93 @@ namespace PixelFarm.DrawingGL
                     v_texCoord =  a_texCoord;
                  }	 
                 ";
+
+            //the same concept as the 'LcdEffectSubPixelRenderingShader'
+            //but this for solid color background.
+            //since we know the background-color so we can calculate the result.
+            //in this shader we call 1 DrawElements() call ( the original needs 3 calls)
+
+
+            //description here...
+
+            //1. we think a 'c' is an 'coverage area'.
+            //if filling color (u_color) has alpha component, the we apply it to the 'c' value.
+            //vec4 c = texture2D(s_texture, v_texCoord)*u_color[3]; 
+
+            //2. we apply each color component with alpha blend equation per channel
+            
+            //equation, ch_x= (bg_x *(1-src_alpha_x) + src_x* src_alpha_x)       
+
+            //gl_FragColor = vec4((u_bg[0] * (1.0 - c[0]) + u_color[0] * c[0]),
+            //                    (u_bg[1] * (1.0 - c[1]) + u_color[1] * c[1]),
+            //                    (u_bg[2] * (1.0 - c[2]) + u_color[2] * c[2]),
+            //                    1.0);           
+
+            //-----------
             string fs = @"
                       precision mediump float; 
                       uniform sampler2D s_texture;
-                      uniform vec2 u_alpha_weight; 
+                      uniform vec4 u_color; 
+                      uniform vec4 u_bg;                    
                       varying vec2 v_texCoord; 
                       void main()
                       {   
-                         vec4 c= texture2D(s_texture,v_texCoord);
-                         gl_FragColor = vec4(1.0- c[0],1.0-c[1],1.0-c[2], clamp((c[0]+c[1]+c[2])*(u_alpha_weight[0]),0.0,1.0)); 
+                         vec4 c = texture2D(s_texture,v_texCoord)*u_color[3];   
+
+                         gl_FragColor =vec4(u_bg[0]*(1.0-c[0]) + u_color[0]*c[0],
+                                            u_bg[1]*(1.0-c[1]) + u_color[1]*c[1],
+                                            u_bg[2]*(1.0-c[2]) + u_color[2]*c[2],
+                                            1.0);
                       }
                 ";
-
             BuildProgram(vs, fs);
-            AlphaWeight = 255;
-            _alphaWeightChanged = true;//init 
+
+            SetBackgroundColor(PixelFarm.Drawing.Color.White);//default
+            SetTextColor(PixelFarm.Drawing.Color.Black);//default
         }
-        public byte AlphaWeight
-        {
-            get => _alphaWeight_u8;
-            set
-            {
-                if (value != _alphaWeight)
-                {
-                    _alphaWeight_u8 = value;
-                    _alphaWeightChanged = true;
-                    _alphaWeight = value / 255f;
-                }
-            }
-        }
+
         protected override void OnProgramBuilt()
         {
-            _u_alphaWeight = _shaderProgram.GetUniform2("u_alpha_weight");
+            _u_color = _shaderProgram.GetUniform4("u_color");
+            _u_bg = _shaderProgram.GetUniform4("u_bg");
             _offset = _shaderProgram.GetUniform2("u_offset");
+        }
+
+        public void SetBackgroundColor(PixelFarm.Drawing.Color c)
+        {
+            if (_bgColor == c)
+            {
+                //no change
+                return;
+            }
+
+            _bgColor = c;
+            _bgChanged = true;
+
+            _bgR = c.R / 255f;
+            _bgG = c.G / 255f;
+            _bgB = c.B / 255f;
+            _bgA = c.A / 255f;
+        }
+        public void SetTextColor(PixelFarm.Drawing.Color c)
+        {
+            if (_textColor == c)
+            {
+                //no change
+                return;
+            }
+
+            _textColor = c;
+            _fillChanged = true;
+
+            _fillR = c.R / 255f;
+            _fillG = c.G / 255f;
+            _fillB = c.B / 255f;
+            _fillA = c.A / 255f;
+
+            //TODO: add alpha channel support
+
+
         }
         protected override void SetVarsBeforeRender() { }
 
@@ -1244,15 +1311,31 @@ namespace PixelFarm.DrawingGL
                 }
             }
 
+      
 
-            if (_alphaWeightChanged)
-            {
-                _u_alphaWeight.SetValue(_alphaWeight, 0);
-                _alphaWeightChanged = false;
+            if (_fillChanged)
+            {               
+                _u_color.SetValue(_fillR, _fillG, _fillB, _fillA);
+                _fillChanged = false;
             }
-            GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
+
+            if (_bgChanged)
+            {
+                _u_bg.SetValue(_bgR, _bgG, _bgB, _bgA);
+                _bgChanged = false;
+            } 
+
+            //in this shader,
+            //we will calculate final blend value manually
+            //so temp disable it.
+            GL.Disable(EnableCap.Blend);
+
+            GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices); 
+
+            GL.Enable(EnableCap.Blend);//restore
         }
     }
+
 
     //--------------------------------------------------------
     static class SimpleRectTextureShaderExtensions

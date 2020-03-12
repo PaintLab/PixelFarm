@@ -56,6 +56,7 @@ namespace PixelFarm.Drawing.WinGdi
         Painter _painter;
         BitmapBufferProvider _memBmpBinder;
         DrawTextTechnique _textDrawingTechnique;
+        Color _textBackgroundColorHint;
 
         public GdiPlusDrawBoard(GdiPlusRenderSurface renderSurface)
         {
@@ -72,15 +73,26 @@ namespace PixelFarm.Drawing.WinGdi
 
             this.CurrentFont = renderSurface.CurrentFont;
         }
-     
 
+        public override bool SetLatestFillAsTextBackgroundColorHint()
+        {
+            //not used in this mode
+            return true;
+        }
+        public override bool LatestFillCouldbeUsedAsTextBackgroundHint() => false;//not used in this mode
         public override DrawTextTechnique DrawTextTechnique
         {
             get => _textDrawingTechnique;
             set => _textDrawingTechnique = value;
         }
+        public override Color TextBackgroundColorHint
+        {
+            get => _textBackgroundColorHint;
+            set => _textBackgroundColorHint = value;//not used in this mode
+        }
+
         public override void EnterNewDrawboardBuffer(DrawboardBuffer backbuffer)
-        {             
+        {
 
         }
         public override void ExitCurrentDrawboardBuffer()
