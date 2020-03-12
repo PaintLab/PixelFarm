@@ -28,7 +28,7 @@ namespace Mini
         GetGLSurface _getGLSurface;
 
         public event EventHandler RequestGraphicRefresh;
-        protected void InvalidateGraphics()
+        public void InvalidateGraphics()
         {
             RequestGraphicRefresh?.Invoke(this, EventArgs.Empty);
         }
