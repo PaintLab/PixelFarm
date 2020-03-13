@@ -25,7 +25,7 @@ namespace OpenTkEssTest
         float _scale = 1.0f;
         bool _showMsdf;
 
-        ExtMsdfGen.SpriteTextureMapData<MemBitmap> _spriteMapData;
+        Msdfgen.SpriteTextureMapData<MemBitmap> _spriteMapData;
         public T401_MsdfTest1()
         {
             Mode = MsdfTest1Mode.Test2_Cache;
@@ -158,7 +158,7 @@ namespace OpenTkEssTest
                     //that still preserve original detail for reconstruction 
 
 
-                    ExtMsdfGen.MsdfGen3 gen3 = new ExtMsdfGen.MsdfGen3();
+                    Msdfgen.MsdfGen3 gen3 = new Msdfgen.MsdfGen3();
                     _spriteMapData = gen3.GenerateMsdfTexture(v1);
                     _msdf_bmp = new GLBitmap(_spriteMapData.Source, true);
                 }

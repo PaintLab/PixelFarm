@@ -29,16 +29,17 @@ namespace OpenTkEssTest
             InstalledTypefaceCollection collection = new InstalledTypefaceCollection();
             collection.LoadSystemFonts();
             InstalledTypeface tahomaFont = collection.GetInstalledTypeface("tahoma", TypefaceStyle.Regular);
-            FontFace tahomaFace = OpenFontLoader.LoadFont(tahomaFont.FontPath);
-            ActualFont actualFont = tahomaFace.GetFontAtPointSize(72);
-            FontGlyph glyph = (FontGlyph)actualFont.GetGlyph('K');
+            //TODO: reimplement this again
+            //FontFace tahomaFace = OpenFontLoader.LoadFont(tahomaFont.FontPath);
+            //ActualFont actualFont = tahomaFace.GetFontAtPointSize(72);
+            //FontGlyph glyph = (FontGlyph)actualFont.GetGlyph('K');
 
 
-            _glyph_vx = _painter.CreateRenderVx(_tempSnap1 = glyph.flattenVxs);
+            //_glyph_vx = _painter.CreateRenderVx(_tempSnap1 = glyph.flattenVxs);
 
-            _linearGrBrush2 = new LinearGradientBrush(
-               new PointF(0, 0), new PointF(100, 100),
-               Color.Red, Color.Black);
+            //_linearGrBrush2 = new LinearGradientBrush(
+            //   new PointF(0, 0), new PointF(100, 100),
+            //   Color.Red, Color.Black);
 
         }
 

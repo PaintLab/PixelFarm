@@ -17,7 +17,7 @@ namespace PixelFarm.DrawingGL
 
         int _width;
         int _height;
-
+       
         FigureBuilder _pathRenderVxBuilder;
         PathRenderVxBuilder2 _pathRenderVxBuilder2;
 
@@ -163,18 +163,18 @@ namespace PixelFarm.DrawingGL
 
         class PathRenderVxBuilder2
         {
-            ExtMsdfGen.MsdfGen3 _msdfGen;
+            Msdfgen.MsdfGen3 _msdfGen;
             public PathRenderVxBuilder2()
             {
-                _msdfGen = new ExtMsdfGen.MsdfGen3();
-                _msdfGen.MsdfGenParams = new ExtMsdfGen.MsdfGenParams();
+                _msdfGen = new Msdfgen.MsdfGen3();
+                _msdfGen.MsdfGenParams = new Msdfgen.MsdfGenParams();
             }
             public TextureRenderVx CreateRenderVx(VertexStore vxs)
             {
 #if DEBUG
                 //_msdfGen.dbugWriteMsdfTexture = true;
 #endif
-                ExtMsdfGen.SpriteTextureMapData<MemBitmap> spriteTextureMap = _msdfGen.GenerateMsdfTexture(vxs);
+                Msdfgen.SpriteTextureMapData<MemBitmap> spriteTextureMap = _msdfGen.GenerateMsdfTexture(vxs);
                 TextureRenderVx textureRenderVx = new TextureRenderVx(spriteTextureMap);
                 return textureRenderVx;
             }

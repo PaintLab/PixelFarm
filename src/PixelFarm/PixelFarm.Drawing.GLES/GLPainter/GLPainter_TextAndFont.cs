@@ -13,7 +13,7 @@ namespace PixelFarm.DrawingGL
         GlyphTexturePrinterDrawingTechnique _drawingTech;
 
         public Color TextBgColorHint { get; set; }
-
+        internal bool PreparingWordStrip { get; set; }
         public Color FontFillColor
         {
             get => _pcx.FontFillColor;

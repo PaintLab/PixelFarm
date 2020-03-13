@@ -213,12 +213,7 @@ namespace BuildMergeProject
             return mergePro;
         }
 
-        public string ProjectKind
-        {
-            get;
-            set;
-        }
-
+        public string ProjectKind { get; set; }
 
 
         public void BuildMergeProjectFromSelectedItem()

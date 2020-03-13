@@ -9,7 +9,7 @@ using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.Drawing;
 
-namespace ExtMsdfGen
+namespace Msdfgen
 {
     /// <summary>
     /// msdf texture generator
@@ -24,14 +24,16 @@ namespace ExtMsdfGen
 
         public MsdfGen3()
         {
+            //our MsdfGen3 is a modified version of the original Msdf
+
 
             _prebuiltThresholdGamma_OverlappedBorder = PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable.CreateSameValuesGammaTable(PixelFarm.CpuBlit.Rasterization.ScanlineRasterizer.AA_MASK);
 
             _prebuiltThresholdGamma_50 = new PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable(
-                new PixelFarm.CpuBlit.FragmentProcessing.GammaThreshold(0.5f));//***50% coverage 
+                new PixelFarm.CpuBlit.FragmentProcessing.GammaThreshold(0.5f));//***50% confident coverage 
 
             _prebuiltThresholdGamma_100 = new PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable(
-                new PixelFarm.CpuBlit.FragmentProcessing.GammaThreshold(1f));//*** 100% coverage 
+                new PixelFarm.CpuBlit.FragmentProcessing.GammaThreshold(1f));//*** 100% confident coverage 
 
             _strokeMath.Width = 3; //outside 1.5, inside=1.5
             _strokeMath.LineCap = LineCap.Butt;
@@ -278,6 +280,7 @@ namespace ExtMsdfGen
 
 
         const double MAX = 1e240;
+
         static void PreviewSizeAndLocation(Shape shape, MsdfGenParams genParams,
            out int imgW, out int imgH,
            out Vector2 translate1)
@@ -308,28 +311,25 @@ namespace ExtMsdfGen
             //double range = pxRange / Math.Min(scale.x, scale.y);
 
 
-            int borderW = (int)((float)w / 5f) + 3;
+            int borderW = (int)((float)w / 5f);
 
             //org
             //var translate = new ExtMsdfgen.Vector2(left < 0 ? -left + borderW : borderW, bottom < 0 ? -bottom + borderW : borderW);
             //test
-            var translate = new Vector2(-left + borderW, -bottom + borderW);
+
 
             w += borderW * 2; //borders,left- right
             h += borderW * 2; //borders, top- bottom
 
             imgW = w;
             imgH = h;
-            translate1 = translate;
+            translate1 = new Vector2(-left + borderW, -bottom + borderW);
         }
 
         public SpriteTextureMapData<MemBitmap> GenerateMsdfTexture(VertexStore v1)
         {
 
             Shape shape = CreateShape(v1, out EdgeBmpLut edgeBmpLut);
-
-
-
 
             if (MsdfGenParams == null)
             {
@@ -461,7 +461,7 @@ namespace ExtMsdfGen
                     }
                     edgeBmpLut.SetBmpBuffer(bmpLut.Width, bmpLut.Height, lutBuffer5);
                     //generate actual sprite
-                    SpriteTextureMapData<MemBitmap> spriteTextureMapData = CreateMsdfImage(shape, MsdfGenParams, edgeBmpLut);
+                    SpriteTextureMapData<MemBitmap> spriteTextureMapData = CreateMsdfImage(shape, MsdfGenParams, imgW, imgH, translateVec, edgeBmpLut);
                     //save msdf bitmap to file              
                     spriteTextureMapData.Source.SaveImage(dbug_msdf_output);
                     return spriteTextureMapData;
@@ -472,7 +472,7 @@ namespace ExtMsdfGen
                 //[B] after we have a lookup table
                 int[] lutBuffer = bmpLut.CopyImgBuffer(bmpLut.Width, bmpLut.Height);
                 edgeBmpLut.SetBmpBuffer(bmpLut.Width, bmpLut.Height, lutBuffer);
-                return CreateMsdfImage(shape, MsdfGenParams, edgeBmpLut);
+                return CreateMsdfImage(shape, MsdfGenParams, imgW, imgH, translateVec, edgeBmpLut);
             }
         }
 
@@ -805,45 +805,8 @@ namespace ExtMsdfGen
             //}
         }
 
-        public static SpriteTextureMapData<PixelFarm.CpuBlit.MemBitmap> CreateMsdfImage(ExtMsdfGen.Shape shape, MsdfGenParams genParams, EdgeBmpLut lutBuffer = null)
+        static SpriteTextureMapData<PixelFarm.CpuBlit.MemBitmap> CreateMsdfImage(Shape shape, MsdfGenParams genParams, int w, int h, Vector2 translate, EdgeBmpLut lutBuffer = null)
         {
-            double left = MAX;
-            double bottom = MAX;
-            double right = -MAX;
-            double top = -MAX;
-
-            shape.findBounds(ref left, ref bottom, ref right, ref top);
-            int w = (int)Math.Ceiling((right - left));
-            int h = (int)Math.Ceiling((top - bottom));
-
-            if (w < genParams.minImgWidth)
-            {
-                w = genParams.minImgWidth;
-            }
-            if (h < genParams.minImgHeight)
-            {
-                h = genParams.minImgHeight;
-            }
-
-
-            //temp, for debug with glyph 'I', tahoma font
-            //double edgeThreshold = 1.00000001;//default, if edgeThreshold < 0 then  set  edgeThreshold=1 
-            //Msdfgen.Vector2 scale = new Msdfgen.Vector2(0.98714652956298199, 0.98714652956298199);
-            //double pxRange = 4;
-            //translate = new Msdfgen.Vector2(12.552083333333332, 4.0520833333333330);
-            //double range = pxRange / Math.Min(scale.x, scale.y);
-
-
-            int borderW = (int)((float)w / 5f) + 3;
-
-            //org
-            //var translate = new ExtMsdfgen.Vector2(left < 0 ? -left + borderW : borderW, bottom < 0 ? -bottom + borderW : borderW);
-            //test
-            var translate = new Vector2(-left + borderW, -bottom + borderW);
-
-            w += borderW * 2; //borders,left- right
-            h += borderW * 2; //borders, top- bottom
-
             double edgeThreshold = genParams.edgeThreshold;
             if (edgeThreshold < 0)
             {
