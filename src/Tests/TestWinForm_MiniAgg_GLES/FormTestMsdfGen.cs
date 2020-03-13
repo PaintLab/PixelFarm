@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
-using ExtMsdfGen;
+using Msdfgen;
 
 using Typography.OpenFont;
 using Typography.Contours;
@@ -237,7 +237,7 @@ namespace Mini
         void GenerateMsdf(VertexStore v1)
         {
 
-            ExtMsdfGen.MsdfGen3 gen3 = new ExtMsdfGen.MsdfGen3();
+            Msdfgen.MsdfGen3 gen3 = new Msdfgen.MsdfGen3();
 #if DEBUG
             gen3.dbugWriteMsdfTexture = true;
             {

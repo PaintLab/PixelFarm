@@ -127,8 +127,6 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Typography.OpenFont", "..\.
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Typography.GlyphLayout", "..\..\Typography\Typography.GlyphLayout\Typography.GlyphLayout.shproj", "{D8861CF8-C506-472B-8A57-632BD6CA6496}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Typography.MsdfGen", "..\..\Typography\Typography.MsdfGen\Typography.MsdfGen.shproj", "{86A03BFA-0879-4449-8D6C-B1F9FB062E7E}"
-EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Typography.TextBreak", "..\..\Typography\Typography.TextBreak\Typography.TextBreak\Typography.TextBreak.shproj", "{9A99F103-B119-4A4D-8093-6A03BAA6D36B}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Typography.TextFlow", "..\..\Typography\Typography.TextFlow\Typography.TextFlow.shproj", "{7A8A63D2-2CB5-41F5-8E83-6F6E54398CF4}"
@@ -208,7 +206,6 @@ Global
 		PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\LayoutFarm.YourBasicCustomWidgets_SH.projitems*{6317f5f0-bc4b-4bfd-b3c0-73c05c2aa11e}*SharedItemsImports = 4
 		PixelFarm\BackEnd.PaintFx\PdnSharedProject\PdnSharedProject.projitems*{6ff96bfb-9e4b-4634-b682-7de60468da38}*SharedItemsImports = 13
 		..\..\Typography\Typography.TextFlow\Typography.TextFlow.projitems*{7a8a63d2-2cb5-41f5-8e83-6f6e54398cf4}*SharedItemsImports = 13
-		..\..\Typography\Typography.MsdfGen\Typography.MsdfGen.projitems*{86a03bfa-0879-4449-8d6c-b1f9fb062e7e}*SharedItemsImports = 13
 		..\..\Typography\Typography.TextBreak\Typography.TextBreak\Typography.TextBreak.projitems*{9a99f103-b119-4a4d-8093-6a03baa6d36b}*SharedItemsImports = 13
 		PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\LayoutFarm.YourBasicCustomWidgets_SH.projitems*{9ee24857-0686-4faf-9411-856904e88452}*SharedItemsImports = 13
 		PixelFarm\PaintLab.AppHost\PaintLab.AppHost.projitems*{a634550f-edad-4a1d-872c-730c2fd8c1c9}*SharedItemsImports = 4
@@ -225,7 +222,6 @@ Global
 		PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\MiniOpenTK_Core2.projitems*{e9a5d738-bc13-4909-94d8-d7a13d7068ff}*SharedItemsImports = 4
 		..\..\Typography\FontAtlas\FontAtlas.projitems*{ec1307c6-309f-43ea-bfcc-5219e2f5a103}*SharedItemsImports = 4
 		..\..\Typography\Typography.GlyphLayout\Typography.GlyphLayout.projitems*{ec1307c6-309f-43ea-bfcc-5219e2f5a103}*SharedItemsImports = 4
-		..\..\Typography\Typography.MsdfGen\Typography.MsdfGen.projitems*{ec1307c6-309f-43ea-bfcc-5219e2f5a103}*SharedItemsImports = 4
 		..\..\Typography\Typography.OpenFont\Typography.OpenFont.projitems*{ec1307c6-309f-43ea-bfcc-5219e2f5a103}*SharedItemsImports = 4
 		..\..\Typography\Typography.TextBreak\Typography.TextBreak\Typography.TextBreak.projitems*{ec1307c6-309f-43ea-bfcc-5219e2f5a103}*SharedItemsImports = 4
 		..\..\Typography\Typography.TextFlow\Typography.TextFlow.projitems*{ec1307c6-309f-43ea-bfcc-5219e2f5a103}*SharedItemsImports = 4
@@ -7647,7 +7643,6 @@ Global
 		{9422AB9D-341B-4B72-8611-86418707B2E8} = {ABA16C8F-2363-4B10-ADE5-C168383C13CC}
 		{235A071B-8D06-40AE-A5C5-B1CE59715EE9} = {C1FD503F-59E2-4016-8AEA-831AC3231430}
 		{D8861CF8-C506-472B-8A57-632BD6CA6496} = {C1FD503F-59E2-4016-8AEA-831AC3231430}
-		{86A03BFA-0879-4449-8D6C-B1F9FB062E7E} = {C1FD503F-59E2-4016-8AEA-831AC3231430}
 		{9A99F103-B119-4A4D-8093-6A03BAA6D36B} = {C1FD503F-59E2-4016-8AEA-831AC3231430}
 		{7A8A63D2-2CB5-41F5-8E83-6F6E54398CF4} = {C1FD503F-59E2-4016-8AEA-831AC3231430}
 		{D07686EE-2618-4C20-8EB5-32AD4C4D3810} = {C1FD503F-59E2-4016-8AEA-831AC3231430}

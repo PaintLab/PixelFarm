@@ -848,14 +848,6 @@
     <Compile Include="D:\projects\Typography\Typography.GlyphLayout\MeasureStringBox.cs" />
     <Compile Include="D:\projects\Typography\Typography.GlyphLayout\PixelScaleLayoutExtensions.cs" />
     <Compile Include="D:\projects\Typography\Typography.GlyphLayout\UserCharToGlyphIndexMap.cs" />
-    <Compile Include="D:\projects\Typography\Typography.MsdfGen\BasicElements.cs" />
-    <Compile Include="D:\projects\Typography\Typography.MsdfGen\EdgeColor.cs" />
-    <Compile Include="D:\projects\Typography\Typography.MsdfGen\EdgeColoring.cs" />
-    <Compile Include="D:\projects\Typography\Typography.MsdfGen\EdgeHolder.cs" />
-    <Compile Include="D:\projects\Typography\Typography.MsdfGen\EdgeSegment.cs" />
-    <Compile Include="D:\projects\Typography\Typography.MsdfGen\EquationSolver.cs" />
-    <Compile Include="D:\projects\Typography\Typography.MsdfGen\MsdfGen.cs" />
-    <Compile Include="D:\projects\Typography\Typography.MsdfGen\SignedDistance.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\AdditionalInfo\AdobeGlyphList.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\AdditionalInfo\AdobeGlyphListForNewFont.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\AdditionalInfo\MacPostFormat1.cs" />

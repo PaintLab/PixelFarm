@@ -825,7 +825,6 @@
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphOutlineAnalyzer.cs" Link="Typography\PixelFarm.Typography\4_TextPrinter\GlyphOutlineAnalyzer.cs" />
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphOutlineBuilderBase.cs" Link="Typography\PixelFarm.Typography\4_TextPrinter\GlyphOutlineBuilderBase.cs" />
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\TextPrinterBase.cs" Link="Typography\PixelFarm.Typography\4_TextPrinter\TextPrinterBase.cs" />
-    <Compile Include="..\..\..\..\Typography\FontAtlas\BinPacker.cs" Link="Typography\FontAtlas\BinPacker.cs" />
     <Compile Include="..\..\..\..\Typography\FontAtlas\FontAtlasFile.cs" Link="Typography\FontAtlas\FontAtlasFile.cs" />
     <Compile Include="..\..\..\..\Typography\FontAtlas\GlyphImages.cs" Link="Typography\FontAtlas\GlyphImages.cs" />
     <Compile Include="..\..\..\..\Typography\FontAtlas\MsdfGlyphGen.cs" Link="Typography\FontAtlas\MsdfGlyphGen.cs" />
@@ -840,14 +839,6 @@
     <Compile Include="..\..\..\..\Typography\Typography.GlyphLayout\MeasureStringBox.cs" Link="Typography\Typography.GlyphLayout\MeasureStringBox.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.GlyphLayout\PixelScaleLayoutExtensions.cs" Link="Typography\Typography.GlyphLayout\PixelScaleLayoutExtensions.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.GlyphLayout\UserCharToGlyphIndexMap.cs" Link="Typography\Typography.GlyphLayout\UserCharToGlyphIndexMap.cs" />
-    <Compile Include="..\..\..\..\Typography\Typography.MsdfGen\BasicElements.cs" Link="Typography\Typography.MsdfGen\BasicElements.cs" />
-    <Compile Include="..\..\..\..\Typography\Typography.MsdfGen\EdgeColor.cs" Link="Typography\Typography.MsdfGen\EdgeColor.cs" />
-    <Compile Include="..\..\..\..\Typography\Typography.MsdfGen\EdgeColoring.cs" Link="Typography\Typography.MsdfGen\EdgeColoring.cs" />
-    <Compile Include="..\..\..\..\Typography\Typography.MsdfGen\EdgeHolder.cs" Link="Typography\Typography.MsdfGen\EdgeHolder.cs" />
-    <Compile Include="..\..\..\..\Typography\Typography.MsdfGen\EdgeSegment.cs" Link="Typography\Typography.MsdfGen\EdgeSegment.cs" />
-    <Compile Include="..\..\..\..\Typography\Typography.MsdfGen\EquationSolver.cs" Link="Typography\Typography.MsdfGen\EquationSolver.cs" />
-    <Compile Include="..\..\..\..\Typography\Typography.MsdfGen\MsdfGen.cs" Link="Typography\Typography.MsdfGen\MsdfGen.cs" />
-    <Compile Include="..\..\..\..\Typography\Typography.MsdfGen\SignedDistance.cs" Link="Typography\Typography.MsdfGen\SignedDistance.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\AdditionalInfo\AdobeGlyphList.cs" Link="Typography\Typography.OpenFont\AdditionalInfo\AdobeGlyphList.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\AdditionalInfo\AdobeGlyphListForNewFont.cs" Link="Typography\Typography.OpenFont\AdditionalInfo\AdobeGlyphListForNewFont.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\AdditionalInfo\MacPostFormat1.cs" Link="Typography\Typography.OpenFont\AdditionalInfo\MacPostFormat1.cs" />
@@ -1092,7 +1083,6 @@
     <Folder Include="Typography\PixelFarm.Typography\4_TextPrinter" />
     <Folder Include="Typography\FontAtlas" />
     <Folder Include="Typography\Typography.GlyphLayout" />
-    <Folder Include="Typography\Typography.MsdfGen" />
     <Folder Include="Typography\Typography.OpenFont\AdditionalInfo" />
     <Folder Include="Typography\Typography.OpenFont" />
     <Folder Include="Typography\Typography.OpenFont\IO" />
