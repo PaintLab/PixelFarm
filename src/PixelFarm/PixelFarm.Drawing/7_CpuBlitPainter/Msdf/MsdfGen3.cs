@@ -102,7 +102,7 @@ namespace ExtMsdfGen
             //middle-point, current vertex
             //right-point,=> next vertex 
             //a vertex may be touch-curve vertext, or 'not-touch-curve' vertex
-            
+
             //'is not touch-curve point', => this vertex is a  control point of C3 or C4 curve,
             //-------------------------------------------------------
 
@@ -111,9 +111,12 @@ namespace ExtMsdfGen
                 //c0 => touch curve
                 //c1 => touch curve,
                 //we create an imaginary line from  c0 to c1
-
+                //then we create an 'inner border' of a line from c0 to c1
+                //and we create an 'outer border' of a line from c0 to c1
+                //
                 using (VxsTemp.Borrow(out var v1))
                 {
+                    //1. inner-border, set fill mode to inform proper color encoding of inner border
                     _msdfEdgePxBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.InnerBorder;
                     CreateInnerBorder(v1,
                      c0.MiddlePoint.X, c0.MiddlePoint.Y,
@@ -122,6 +125,7 @@ namespace ExtMsdfGen
 
                     //-------------
                     v1.Clear(); //reuse
+                    //2. outer-border, set fill mode too.
                     _msdfEdgePxBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.OuterBorder;
                     CreateOuterBorder(v1,
                         c0.MiddlePoint.X, c0.MiddlePoint.Y,
@@ -131,10 +135,15 @@ namespace ExtMsdfGen
             }
             else
             {
-                painter.CurrentBxtBlendOp = null;//**
 
-                //right side may be Curve2 or Curve3
+                painter.CurrentBxtBlendOp = null;
+
+                //**
+                //c0 is touch line,
+                //but c1 is not, this means=> next segment will be a curve(C3 or C4 curve)
+                //
                 EdgeSegment ownerSeg = c1.CenterSegment;
+
                 switch (ownerSeg.SegmentKind)
                 {
                     default: throw new NotSupportedException();
@@ -142,32 +151,31 @@ namespace ExtMsdfGen
                         {
                             //approximate 
                             CubicSegment cs = (CubicSegment)ownerSeg;
-
-
                             using (VxsTemp.Borrow(out var v1))
-                            using (VectorToolBox.Borrow(out ShapeBuilder s))
+                            using (VectorToolBox.Borrow(out ShapeBuilder b))
                             using (VectorToolBox.Borrow(out Stroke strk))
                             {
-                                
-                                 s.MoveTo(cs.P0.x + _dx, cs.P0.y + _dy) //...
-                                 .Curve4To(cs.P1.x + _dx, cs.P1.y + _dy,
-                                           cs.P2.x + _dx, cs.P2.y + _dy,
-                                           cs.P3.x + _dx, cs.P3.y + _dy)
-                                 .NoMore()
-                                 .Flatten();
+
+                                b.MoveTo(cs.P0.x + _dx, cs.P0.y + _dy) //...
+                                .Curve4To(cs.P1.x + _dx, cs.P1.y + _dy,
+                                          cs.P2.x + _dx, cs.P2.y + _dy,
+                                          cs.P3.x + _dx, cs.P3.y + _dy)
+                                .NoMore()
+                                .Flatten();
 
 
                                 //-----------------------
                                 //fill outside part of the curve
                                 strk.Width = CURVE_STROKE_EACHSIDE * 2;
                                 strk.StrokeSideForOpenShape = StrokeSideForOpenShape.Outside;
-                                strk.MakeVxs(s.CurrentSharedVxs, v1);
+                                strk.MakeVxs(b.CurrentSharedVxs, v1);
+
                                 painter.Fill(v1, c0.OuterColor);
                                 //-----------------------
                                 //fill inside part of the curve
-                                v1.Clear();
+                                v1.Clear(); //reuse
                                 strk.StrokeSideForOpenShape = StrokeSideForOpenShape.Inside;
-                                strk.MakeVxs(s.CurrentSharedVxs, v1);
+                                strk.MakeVxs(b.CurrentSharedVxs, v1);
                                 painter.Fill(v1, c0.InnerColor);
                                 //-----------------------
 
@@ -177,28 +185,28 @@ namespace ExtMsdfGen
                     case EdgeSegmentKind.QuadraticSegment:
                         {
                             QuadraticSegment qs = (QuadraticSegment)ownerSeg;
-                            using (VectorToolBox.Borrow(out ShapeBuilder s))
+                            using (VectorToolBox.Borrow(out ShapeBuilder b))
                             using (VxsTemp.Borrow(out var v1))
                             using (VectorToolBox.Borrow(out Stroke strk))
                             {
-                                 
-                                 s.MoveTo(qs.P0.x + _dx, qs.P0.y + _dy)//...
-                                 .Curve3To(qs.P1.x + _dx, qs.P1.y + _dy,
-                                           qs.P2.x + _dx, qs.P2.y + _dy)
-                                 .NoMore()
-                                 .Flatten();
+
+                                b.MoveTo(qs.P0.x + _dx, qs.P0.y + _dy)//...
+                                .Curve3To(qs.P1.x + _dx, qs.P1.y + _dy,
+                                          qs.P2.x + _dx, qs.P2.y + _dy)
+                                .NoMore()
+                                .Flatten();
 
                                 //-----------------------
                                 //fill outside part of the curve
                                 strk.Width = CURVE_STROKE_EACHSIDE * 2;
                                 strk.StrokeSideForOpenShape = StrokeSideForOpenShape.Outside;
-                                strk.MakeVxs(s.CurrentSharedVxs, v1);
+                                strk.MakeVxs(b.CurrentSharedVxs, v1);
                                 painter.Fill(v1, c0.OuterColor);
                                 //-----------------------
                                 //fill inside part of the curve
-                                v1.Clear();
+                                v1.Clear();//reuse
                                 strk.StrokeSideForOpenShape = StrokeSideForOpenShape.Inside;
-                                strk.MakeVxs(s.CurrentSharedVxs, v1);
+                                strk.MakeVxs(b.CurrentSharedVxs, v1);
                                 painter.Fill(v1, c0.InnerColor);
                                 //----------------------- 
                             }
@@ -895,7 +903,7 @@ namespace ExtMsdfGen
                     dstLineHead += width;
                 }
             }
-            return output; 
+            return output;
         }
 
 
