@@ -810,16 +810,9 @@
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphTranslatorToVxs.cs" Link="Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphTranslatorToVxs.cs" />
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\OpenFontTextService.cs" Link="Typography\PixelFarm.Typography\1.1_Drawing_Fonts\OpenFontTextService.cs" />
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\VxsTextPrinter.cs" Link="Typography\PixelFarm.Typography\1.1_Drawing_Fonts\VxsTextPrinter.cs" />
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.3_DrawingFonts\ManagedShapingService.cs" Link="Typography\PixelFarm.Typography\1.3_DrawingFonts\ManagedShapingService.cs" />
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.3_DrawingFonts\TextShapingAndLayoutService.cs" Link="Typography\PixelFarm.Typography\1.3_DrawingFonts\TextShapingAndLayoutService.cs" />
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\2_Drawing_Text\ActualFont.cs" Link="Typography\PixelFarm.Typography\2_Drawing_Text\ActualFont.cs" />
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\2_Drawing_Text\FontFace.cs" Link="Typography\PixelFarm.Typography\2_Drawing_Text\FontFace.cs" />
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\2_Drawing_Text\FontGlyph.cs" Link="Typography\PixelFarm.Typography\2_Drawing_Text\FontGlyph.cs" />
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_FontFaceImpl\AggGlyphTextureGen.cs" Link="Typography\PixelFarm.Typography\3_FontFaceImpl\AggGlyphTextureGen.cs" />
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_FontFaceImpl\BitmapFontMx.cs" Link="Typography\PixelFarm.Typography\3_FontFaceImpl\BitmapFontMx.cs" />
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_FontFaceImpl\GlyphTextureBitmapGenerator.cs" Link="Typography\PixelFarm.Typography\3_FontFaceImpl\GlyphTextureBitmapGenerator.cs" />
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_FontFaceImpl\NOpenFontFace.cs" Link="Typography\PixelFarm.Typography\3_FontFaceImpl\NOpenFontFace.cs" />
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_FontFaceImpl\OpenFontLoader.cs" Link="Typography\PixelFarm.Typography\3_FontFaceImpl\OpenFontLoader.cs" />
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_FontFaceImpl\ScriptLangConv.cs" Link="Typography\PixelFarm.Typography\3_FontFaceImpl\ScriptLangConv.cs" />
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphMeshCollection.cs" Link="Typography\PixelFarm.Typography\4_TextPrinter\GlyphMeshCollection.cs" />
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphOutlineAnalyzer.cs" Link="Typography\PixelFarm.Typography\4_TextPrinter\GlyphOutlineAnalyzer.cs" />
@@ -1077,8 +1070,6 @@
     <Folder Include="PixelFarm\PixelFarm.Drawing\9_BitmapAtlas" />
     <Folder Include="Typography\Build\N20\Typography.OpenFont" />
     <Folder Include="Typography\PixelFarm.Typography\1.1_Drawing_Fonts" />
-    <Folder Include="Typography\PixelFarm.Typography\1.3_DrawingFonts" />
-    <Folder Include="Typography\PixelFarm.Typography\2_Drawing_Text" />
     <Folder Include="Typography\PixelFarm.Typography\3_FontFaceImpl" />
     <Folder Include="Typography\PixelFarm.Typography\4_TextPrinter" />
     <Folder Include="Typography\FontAtlas" />

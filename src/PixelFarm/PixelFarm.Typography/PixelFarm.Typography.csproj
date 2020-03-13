@@ -68,21 +68,6 @@
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\VxsTextPrinter.cs">
       <Link>1.1_Drawing_Fonts\VxsTextPrinter.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.3_DrawingFonts\ManagedShapingService.cs">
-      <Link>1.3_DrawingFonts\ManagedShapingService.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.3_DrawingFonts\TextShapingAndLayoutService.cs">
-      <Link>1.3_DrawingFonts\TextShapingAndLayoutService.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\2_Drawing_Text\ActualFont.cs">
-      <Link>2_Drawing_Text\ActualFont.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\2_Drawing_Text\FontFace.cs">
-      <Link>2_Drawing_Text\FontFace.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\2_Drawing_Text\FontGlyph.cs">
-      <Link>2_Drawing_Text\FontGlyph.cs</Link>
-    </Compile>
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_FontFaceImpl\AggGlyphTextureGen.cs">
       <Link>3_FontFaceImpl\AggGlyphTextureGen.cs</Link>
     </Compile>
@@ -91,12 +76,6 @@
     </Compile>
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_FontFaceImpl\GlyphTextureBitmapGenerator.cs">
       <Link>3_FontFaceImpl\GlyphTextureBitmapGenerator.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_FontFaceImpl\NOpenFontFace.cs">
-      <Link>3_FontFaceImpl\NOpenFontFace.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_FontFaceImpl\OpenFontLoader.cs">
-      <Link>3_FontFaceImpl\OpenFontLoader.cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_FontFaceImpl\ScriptLangConv.cs">
       <Link>3_FontFaceImpl\ScriptLangConv.cs</Link>

@@ -17,6 +17,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)DrawBoard\Conv.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Painter\BitmapHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Painter\BufferBitmapStore.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Painter\FontFace.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Painter\GdiMemBitmapIO.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Painter\GdiPlusRenderVx.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Painter\NativeTextWin32.cs" />
