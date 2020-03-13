@@ -660,7 +660,7 @@ namespace PixelFarm.DrawingGL
     /// <summary>
     /// texture-based, lcd-subpix rendering shader for any background
     /// </summary>
-    sealed class LcdEffectSubPixelRenderingShader : SimpleRectTextureShader
+    sealed class LcdSubPixShader : SimpleRectTextureShader
     {
         //this shader is designed for subpixel shader
         //for transparent background        
@@ -684,7 +684,7 @@ namespace PixelFarm.DrawingGL
             C_ALL,
         }
 
-        public LcdEffectSubPixelRenderingShader(ShaderSharedResource shareRes)
+        public LcdSubPixShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
             string vs = @"
@@ -1114,7 +1114,7 @@ namespace PixelFarm.DrawingGL
     /// <summary>
     /// texture-based, lcd-subpix rendering shader for solid-color-background 
     /// </summary>
-    sealed class LcdEffectSubPixelRenderingShaderForSolidBg : SimpleRectTextureShader
+    sealed class LcdSubPixShaderForSolidBg : SimpleRectTextureShader
     {
 
         ShaderUniformVar2 _offset;
@@ -1133,7 +1133,7 @@ namespace PixelFarm.DrawingGL
         float _bgR, _bgG, _bgB;
         bool _bgChanged;
 
-        public LcdEffectSubPixelRenderingShaderForSolidBg(ShaderSharedResource shareRes)
+        public LcdSubPixShaderForSolidBg(ShaderSharedResource shareRes)
             : base(shareRes)
         {
             string vs = @"
@@ -1338,15 +1338,15 @@ namespace PixelFarm.DrawingGL
 
 
     /// <summary>
-    /// lcd subpix for word strip creation
+    ///texture-based, lcd-subpix rendering shader for word-strip creation on solid-color-background
     /// </summary>
-    sealed class LcdEffectSubPixelRenderingShaderForWordStripCreation : SimpleRectTextureShader
+    sealed class LcdSubPixShaderForWordStripCreation : SimpleRectTextureShader
     {
         //this shader is designed for subpixel shader
         //for transparent background        
 
         ShaderUniformVar2 _offset;
-        public LcdEffectSubPixelRenderingShaderForWordStripCreation(ShaderSharedResource shareRes)
+        public LcdSubPixShaderForWordStripCreation(ShaderSharedResource shareRes)
             : base(shareRes)
         {
             string vs = @"

@@ -124,10 +124,10 @@ namespace PixelFarm.DrawingGL
         BGRImageTextureShader _bgrImgTextureShader;
         BGRAImageTextureShader _bgraImgTextureShader;
 
-        LcdEffectSubPixelRenderingShader _lcdSubPixShader;
+        LcdSubPixShader _lcdSubPixShader;
 
-        LcdEffectSubPixelRenderingShaderForSolidBg _lcdSubPixForSolidBgShader;
-        LcdEffectSubPixelRenderingShaderForWordStripCreation _lcdSubPixShaderForWordStripCreation;
+        LcdSubPixShaderForSolidBg _lcdSubPixForSolidBgShader;
+        LcdSubPixShaderForWordStripCreation _lcdSubPixShaderForWordStripCreation;
 
 
         RGBATextureShader _rgbaTextureShader;
@@ -202,9 +202,10 @@ namespace PixelFarm.DrawingGL
             //
             _glyphStencilShader = new GlyphImageStecilShader(_shareRes);
 
-            _lcdSubPixShader = new LcdEffectSubPixelRenderingShader(_shareRes);
-            _lcdSubPixShaderForWordStripCreation = new LcdEffectSubPixelRenderingShaderForWordStripCreation(_shareRes);
-            _lcdSubPixForSolidBgShader = new LcdEffectSubPixelRenderingShaderForSolidBg(_shareRes);
+            _lcdSubPixShader = new LcdSubPixShader(_shareRes);
+            _lcdSubPixForSolidBgShader = new LcdSubPixShaderForSolidBg(_shareRes);
+            _lcdSubPixShaderForWordStripCreation = new LcdSubPixShaderForWordStripCreation(_shareRes);
+
 
             _blurShader = new BlurShader(_shareRes);
             //
@@ -924,18 +925,18 @@ namespace PixelFarm.DrawingGL
             //TODO: review performance here ***
             //1. B , cyan result
             GL.ColorMask(false, false, true, false);
-            _lcdSubPixShader.SetCompo(LcdEffectSubPixelRenderingShader.ColorCompo.C0);
+            _lcdSubPixShader.SetCompo(LcdSubPixShader.ColorCompo.C0);
             SimpleRectTextureShaderExtensions.DrawSubImage(_lcdSubPixShader, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
             //float subpixel_shift = 1 / 9f;
             //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft - subpixel_shift, targetTop); //TODO: review this option
             //---------------------------------------------------
             //2. G , magenta result
             GL.ColorMask(false, true, false, false);
-            _lcdSubPixShader.SetCompo(LcdEffectSubPixelRenderingShader.ColorCompo.C1);
+            _lcdSubPixShader.SetCompo(LcdSubPixShader.ColorCompo.C1);
             SimpleRectTextureShaderExtensions.DrawSubImage(_lcdSubPixShader, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
             //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop); //TODO: review this option
             //3. R , yellow result 
-            _lcdSubPixShader.SetCompo(LcdEffectSubPixelRenderingShader.ColorCompo.C2);
+            _lcdSubPixShader.SetCompo(LcdSubPixShader.ColorCompo.C2);
             GL.ColorMask(true, false, false, false);//             
             SimpleRectTextureShaderExtensions.DrawSubImage(_lcdSubPixShader, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
             //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft + subpixel_shift, targetTop); //TODO: review this option
