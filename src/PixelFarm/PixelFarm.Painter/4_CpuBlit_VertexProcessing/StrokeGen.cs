@@ -42,7 +42,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     class StrokeGenerator
     {
 
-        StrokeMath _stroker = new StrokeMath();
+        StrokeMath _strkMath = new StrokeMath();
         Vertex2dList _vtx2dList = new Vertex2dList();
         VertexStore _tmpVxs = new VertexStore();
         double _shorten;
@@ -53,41 +53,41 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
         public LineCap LineCap
         {
-            get => _stroker.LineCap;
-            set => _stroker.LineCap = value;
+            get => _strkMath.LineCap;
+            set => _strkMath.LineCap = value;
         }
         public LineJoin LineJoin
         {
-            get => _stroker.LineJoin;
-            set => _stroker.LineJoin = value;
+            get => _strkMath.LineJoin;
+            set => _strkMath.LineJoin = value;
         }
         public InnerJoin InnerJoin
         {
-            get => _stroker.InnerJoin;
-            set => _stroker.InnerJoin = value;
+            get => _strkMath.InnerJoin;
+            set => _strkMath.InnerJoin = value;
         }
 
         public double Width
         {
-            get => _stroker.Width;
-            set => _stroker.Width = value;
+            get => _strkMath.Width;
+            set => _strkMath.Width = value;
         }
-        public void SetMiterLimitTheta(double t) => _stroker.SetMiterLimitTheta(t);
+        public void SetMiterLimitTheta(double t) => _strkMath.SetMiterLimitTheta(t);
 
         public double InnerMiterLimit
         {
-            get => _stroker.InnerMiterLimit;
-            set => _stroker.InnerMiterLimit = value;
+            get => _strkMath.InnerMiterLimit;
+            set => _strkMath.InnerMiterLimit = value;
         }
         public double MiterLimit
         {
-            get => _stroker.InnerMiterLimit;
-            set => _stroker.InnerMiterLimit = value;
+            get => _strkMath.InnerMiterLimit;
+            set => _strkMath.InnerMiterLimit = value;
         }
         public double ApproximateScale
         {
-            get => _stroker.ApproximateScale;
-            set => _stroker.ApproximateScale = value;
+            get => _strkMath.ApproximateScale;
+            set => _strkMath.ApproximateScale = value;
         }
         public bool AutoDetectOrientation
         {
@@ -228,7 +228,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 //full, inside and outside 
                 //[B] cap1
                 _vtx2dList.GetFirst2(out Vertex2d v0, out Vertex2d v1);
-                _stroker.CreateCap(
+                _strkMath.CreateCap(
                     _tmpVxs,
                     v0,
                     v1);
@@ -251,7 +251,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 }
 
                 // v_last-> v0-> v1
-                _stroker.CreateJoin(_tmpVxs,
+                _strkMath.CreateJoin(_tmpVxs,
                     v_last,
                     v0,
                     v1);
@@ -275,7 +275,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     out Vertex2d cur,
                     out Vertex2d next);
                 //check if we should join or not ?
-                _stroker.CreateJoin(_tmpVxs,
+                _strkMath.CreateJoin(_tmpVxs,
                    prev,
                    cur,
                    next);
@@ -291,7 +291,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 if (!_closed)
                 {
                     _vtx2dList.GetLast2(out Vertex2d beforeLast, out Vertex2d last);
-                    _stroker.CreateCap(_tmpVxs,
+                    _strkMath.CreateCap(_tmpVxs,
                         last, //**please note different direction (compare with above)
                         beforeLast);
 
@@ -318,7 +318,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
                     //**please note different direction (compare with above)
 
-                    _stroker.CreateJoin(_tmpVxs,
+                    _strkMath.CreateJoin(_tmpVxs,
                         v1,
                         v0,
                         v_last);
@@ -346,7 +346,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     out Vertex2d cur,
                     out Vertex2d next);
 
-                _stroker.CreateJoin(_tmpVxs,
+                _strkMath.CreateJoin(_tmpVxs,
                   next, //**please note different direction (compare with above)
                   cur,
                   prev);
@@ -384,7 +384,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 //[B] cap1
                 _vtx2dList.GetFirst2(out Vertex2d v0, out Vertex2d v1);
 
-                _stroker.CreateHalfCap(_tmpVxs, v0, v1);
+                _strkMath.CreateHalfCap(_tmpVxs, v0, v1);
 
                 output.AddMoveTo(v0.x, v0.y);
                 _tmpVxs.GetVertex(1, out double tmpX, out double tmpY);
@@ -409,7 +409,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 //check if we should join or not ?
 
 
-                _stroker.CreateJoin(_tmpVxs,
+                _strkMath.CreateJoin(_tmpVxs,
                    prev,
                    cur,
                    next);
@@ -424,7 +424,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             {
                 _vtx2dList.GetLast2(out Vertex2d beforeLast, out Vertex2d last);
 
-                _stroker.CreateHalfCap(_tmpVxs, last, beforeLast);//**please note different direction (compare with above)
+                _strkMath.CreateHalfCap(_tmpVxs, last, beforeLast);//**please note different direction (compare with above)
 
                 if (this.StrokeSideForOpenShape == StrokeSideForOpenShape.Outside)
                 {
@@ -458,7 +458,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             {
                 _vtx2dList.GetLast2(out Vertex2d beforeLast, out Vertex2d last);
 
-                _stroker.CreateHalfCap(_tmpVxs, last, beforeLast);//**please note different direction (compare with above)
+                _strkMath.CreateHalfCap(_tmpVxs, last, beforeLast);//**please note different direction (compare with above)
 
                 output.AddMoveTo(last.x, last.y);
                 _tmpVxs.GetVertex(1, out double tmp_x, out double tmp_y);
@@ -477,7 +477,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     out Vertex2d cur,
                     out Vertex2d next);
 
-                _stroker.CreateJoin(_tmpVxs,
+                _strkMath.CreateJoin(_tmpVxs,
                   next, //**please note different direction (compare with above)
                   cur,
                   prev);
@@ -491,7 +491,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
                 //[B] cap1
                 _vtx2dList.GetFirst2(out Vertex2d v0, out Vertex2d v1);
-                _stroker.CreateHalfCap(_tmpVxs, v0, v1);
+                _strkMath.CreateHalfCap(_tmpVxs, v0, v1);
 
                 _tmpVxs.GetVertex(0, out double tmp_x, out double tmp_y);
                 output.AddLineTo(tmp_x, tmp_y);
@@ -546,7 +546,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 }
 
                 // v_last-> v0-> v1
-                _stroker.CreateJoin(_tmpVxs,
+                _strkMath.CreateJoin(_tmpVxs,
                     v_last,
                     v0,
                     v1);
@@ -570,7 +570,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     out Vertex2d next);
                 //check if we should join or not ?
 
-                _stroker.CreateJoin(_tmpVxs,
+                _strkMath.CreateJoin(_tmpVxs,
                    prev,
                    cur,
                    next);

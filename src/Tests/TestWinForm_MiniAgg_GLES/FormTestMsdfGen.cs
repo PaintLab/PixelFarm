@@ -142,7 +142,7 @@ namespace Mini
                 OpenFontReader fontReader = new OpenFontReader();
                 typeface = fontReader.Read(fs);
 
-                glyphMeshStore.SetFont(typeface, 48);
+                glyphMeshStore.SetFont(typeface, 56);
 
                 ushort glyphIndex = typeface.GetGlyphIndex(singleChar);
 

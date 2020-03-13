@@ -20,6 +20,7 @@ namespace ExtMsdfGen
         PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable _prebuiltThresholdGamma_OverlappedBorder;
         PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable _prebuiltThresholdGamma_50;
         MsdfEdgePixelBlender _msdfEdgePxBlender = new MsdfEdgePixelBlender();
+        StrokeMath _strokeMath = new StrokeMath();
 
         public MsdfGen3()
         {
@@ -31,6 +32,11 @@ namespace ExtMsdfGen
 
             _prebuiltThresholdGamma_100 = new PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable(
                 new PixelFarm.CpuBlit.FragmentProcessing.GammaThreshold(1f));//*** 100% coverage 
+
+            _strokeMath.Width = 3; //outside 1.5, inside=1.5
+            _strokeMath.LineCap = LineCap.Butt;
+            _strokeMath.LineJoin = LineJoin.Miter;
+            _strokeMath.InnerJoin = InnerJoin.Bevel;
         }
         public MsdfGenParams MsdfGenParams { get; set; }
 #if DEBUG
@@ -76,6 +82,27 @@ namespace ExtMsdfGen
             vxs.AddLineTo(x0 + vdiff.x, y0 + vdiff.y);
             vxs.AddCloseFigure();
         }
+        void CreateBorder(VertexStore vxs, Vertex2d prev, Vertex2d now, Vertex2d next0, Vertex2d next1)
+        {
+            //now we are on now
+            using (VxsTemp.Borrow(out var vxs1))
+            {
+                vxs.AddMoveTo(now.x, now.y);
+
+                //create outer line-join
+                _strokeMath.CreateJoin(vxs1, prev, now, next0);
+                vxs.AppendVertexStore(vxs1);
+                //create inner line join
+
+                //next outer line join
+                vxs1.Clear();//reuse
+                _strokeMath.CreateJoin(vxs1, now, next0, next1);
+                vxs.AppendVertexStore(vxs1);
+
+                vxs.AddLineTo(next0.x, next0.y);
+                vxs.AddCloseFigure();
+            }
+        }
 
         const int INNER_BORDER_W = 1;
         const int OUTER_BORDER_W = 1;
@@ -83,6 +110,9 @@ namespace ExtMsdfGen
 
         double _dx;
         double _dy;
+        bool _use_v3_1;
+
+        static Vertex2d ConvToV2d(PointD p) => new Vertex2d(p.X, p.Y); //temp
 
         /// <summary>
         /// fill inner and outer border from corner0 to corner1
@@ -94,33 +124,86 @@ namespace ExtMsdfGen
         {
 
             //counter-clockwise
+
             if (!c0.MiddlePoint_IsTouchPoint) { return; }
+
+            //with a given corner, have have information of 3 points
+            //left-point of the corner,=> from vertex
+            //middle-point, current vertex
+            //right-point,=> next vertex 
+            //a vertex may be touch-curve vertext, or 'not-touch-curve' vertex
+
+            //'is not touch-curve point', => this vertex is a  control point of C3 or C4 curve,
             //-------------------------------------------------------
+
             if (c0.RightPoint_IsTouchPoint)
             {
-                using (VxsTemp.Borrow(out var v9))
+                //c0 => touch curve
+                //c1 => touch curve,
+                //we create an imaginary line from  c0 to c1
+                //then we create an 'inner border' of a line from c0 to c1
+                //and we create an 'outer border' of a line from c0 to c1
+                //
+                using (VxsTemp.Borrow(out var v1))
                 {
+                    //1. inner-border, set fill mode to inform proper color encoding of inner border
                     _msdfEdgePxBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.InnerBorder;
-                    CreateInnerBorder(v9,
-                     c0.MiddlePoint.X, c0.MiddlePoint.Y,
-                     c1.MiddlePoint.X, c1.MiddlePoint.Y, INNER_BORDER_W);
-                    painter.Fill(v9, c0.InnerColor);
 
+
+
+                    //2020-03-13, version 3 fill is still better than v3.1, 
+                    //TODO: review version v3.1
+
+
+                    if (_use_v3_1)
+                    {
+                        //version 3.1 fill technique
+                        CreateBorder(v1, ConvToV2d(c1.RightPoint), ConvToV2d(c1.MiddlePoint), ConvToV2d(c0.MiddlePoint), ConvToV2d(c0.LeftPoint));
+                    }
+                    else
+                    {
+                        //version 3 fill technique
+                        CreateInnerBorder(v1,
+                         c0.MiddlePoint.X, c0.MiddlePoint.Y,
+                         c1.MiddlePoint.X, c1.MiddlePoint.Y, INNER_BORDER_W);
+                    }
+
+                    painter.Fill(v1, c0.InnerColor);
                     //-------------
-                    v9.Clear(); //reuse
+                    v1.Clear(); //reuse
+                                //2. outer-border, set fill mode too. 
+
+
                     _msdfEdgePxBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.OuterBorder;
-                    CreateOuterBorder(v9,
-                        c0.MiddlePoint.X, c0.MiddlePoint.Y,
-                        c1.MiddlePoint.X, c1.MiddlePoint.Y, OUTER_BORDER_W);
-                    painter.Fill(v9, c0.OuterColor);
+
+                    if (_use_v3_1)
+                    {
+                        //version 3.1 fill technique
+                        CreateBorder(v1, ConvToV2d(c0.LeftPoint), ConvToV2d(c0.MiddlePoint), ConvToV2d(c1.MiddlePoint), ConvToV2d(c1.RightPoint));
+                    }
+                    else
+                    {
+                        //version 3 fill technique
+                        CreateOuterBorder(v1,
+                            c0.MiddlePoint.X, c0.MiddlePoint.Y,
+                            c1.MiddlePoint.X, c1.MiddlePoint.Y, OUTER_BORDER_W);
+                    }
+
+
+                    painter.Fill(v1, c0.OuterColor);
                 }
             }
             else
             {
-                painter.CurrentBxtBlendOp = null;//**
 
-                //right side may be Curve2 or Curve3
+                painter.CurrentBxtBlendOp = null;
+
+                //**
+                //c0 is touch line,
+                //but c1 is not, this means=> next segment will be a curve(C3 or C4 curve)
+                //
                 EdgeSegment ownerSeg = c1.CenterSegment;
+
                 switch (ownerSeg.SegmentKind)
                 {
                     default: throw new NotSupportedException();
@@ -128,32 +211,31 @@ namespace ExtMsdfGen
                         {
                             //approximate 
                             CubicSegment cs = (CubicSegment)ownerSeg;
-
-
                             using (VxsTemp.Borrow(out var v1))
-                            using (VectorToolBox.Borrow(out ShapeBuilder s))
+                            using (VectorToolBox.Borrow(out ShapeBuilder b))
                             using (VectorToolBox.Borrow(out Stroke strk))
                             {
-                                
-                                 s.MoveTo(cs.P0.x + _dx, cs.P0.y + _dy) //...
-                                 .Curve4To(cs.P1.x + _dx, cs.P1.y + _dy,
-                                           cs.P2.x + _dx, cs.P2.y + _dy,
-                                           cs.P3.x + _dx, cs.P3.y + _dy)
-                                 .NoMore()
-                                 .Flatten();
+
+                                b.MoveTo(cs.P0.x + _dx, cs.P0.y + _dy) //...
+                                .Curve4To(cs.P1.x + _dx, cs.P1.y + _dy,
+                                          cs.P2.x + _dx, cs.P2.y + _dy,
+                                          cs.P3.x + _dx, cs.P3.y + _dy)
+                                .NoMore()
+                                .Flatten();
 
 
                                 //-----------------------
                                 //fill outside part of the curve
                                 strk.Width = CURVE_STROKE_EACHSIDE * 2;
                                 strk.StrokeSideForOpenShape = StrokeSideForOpenShape.Outside;
-                                strk.MakeVxs(s.CurrentSharedVxs, v1);
+                                strk.MakeVxs(b.CurrentSharedVxs, v1);
+
                                 painter.Fill(v1, c0.OuterColor);
                                 //-----------------------
                                 //fill inside part of the curve
-                                v1.Clear();
+                                v1.Clear(); //reuse
                                 strk.StrokeSideForOpenShape = StrokeSideForOpenShape.Inside;
-                                strk.MakeVxs(s.CurrentSharedVxs, v1);
+                                strk.MakeVxs(b.CurrentSharedVxs, v1);
                                 painter.Fill(v1, c0.InnerColor);
                                 //-----------------------
 
@@ -163,28 +245,28 @@ namespace ExtMsdfGen
                     case EdgeSegmentKind.QuadraticSegment:
                         {
                             QuadraticSegment qs = (QuadraticSegment)ownerSeg;
-                            using (VectorToolBox.Borrow(out ShapeBuilder s))
+                            using (VectorToolBox.Borrow(out ShapeBuilder b))
                             using (VxsTemp.Borrow(out var v1))
                             using (VectorToolBox.Borrow(out Stroke strk))
                             {
-                                 
-                                 s.MoveTo(qs.P0.x + _dx, qs.P0.y + _dy)//...
-                                 .Curve3To(qs.P1.x + _dx, qs.P1.y + _dy,
-                                           qs.P2.x + _dx, qs.P2.y + _dy)
-                                 .NoMore()
-                                 .Flatten();
+
+                                b.MoveTo(qs.P0.x + _dx, qs.P0.y + _dy)//...
+                                .Curve3To(qs.P1.x + _dx, qs.P1.y + _dy,
+                                          qs.P2.x + _dx, qs.P2.y + _dy)
+                                .NoMore()
+                                .Flatten();
 
                                 //-----------------------
                                 //fill outside part of the curve
                                 strk.Width = CURVE_STROKE_EACHSIDE * 2;
                                 strk.StrokeSideForOpenShape = StrokeSideForOpenShape.Outside;
-                                strk.MakeVxs(s.CurrentSharedVxs, v1);
+                                strk.MakeVxs(b.CurrentSharedVxs, v1);
                                 painter.Fill(v1, c0.OuterColor);
                                 //-----------------------
                                 //fill inside part of the curve
-                                v1.Clear();
+                                v1.Clear();//reuse
                                 strk.StrokeSideForOpenShape = StrokeSideForOpenShape.Inside;
-                                strk.MakeVxs(s.CurrentSharedVxs, v1);
+                                strk.MakeVxs(b.CurrentSharedVxs, v1);
                                 painter.Fill(v1, c0.InnerColor);
                                 //----------------------- 
                             }
@@ -318,6 +400,7 @@ namespace ExtMsdfGen
                     //-----------
                     //AA-borders of the contour
                     painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_OverlappedBorder); //this creates overlapped area 
+
                     for (; n < next_corner_startAt; ++n)
                     {
                         //0-> 1
@@ -880,7 +963,7 @@ namespace ExtMsdfGen
                     dstLineHead += width;
                 }
             }
-            return output; 
+            return output;
         }
 
 
