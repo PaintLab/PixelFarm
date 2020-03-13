@@ -91,8 +91,7 @@ namespace Mini
 
         static DemoBase InitDemo(ExampleAndDesc exampleAndDesc)
         {
-            DemoBase exBase = Activator.CreateInstance(exampleAndDesc.Type) as DemoBase;
-            if (exBase == null)
+            if (!(Activator.CreateInstance(exampleAndDesc.Type) is DemoBase exBase))
             {
                 return null;
             }
@@ -102,8 +101,7 @@ namespace Mini
         void lstExample_DoubleClick(object sender, EventArgs e)
         {
             //load sample form
-            ExampleAndDesc exAndDesc = this.lstExamples.SelectedItem as ExampleAndDesc;
-            if (exAndDesc == null)
+            if (!(this.lstExamples.SelectedItem is ExampleAndDesc exAndDesc))
             {
                 return; //early exit
             }
@@ -135,10 +133,8 @@ namespace Mini
                         cpuBlitContextWinForm.BindSurface(surfaceViewport);
                         cpuBlitContextWinForm.LoadExample(demo);
 
-                        demo.RequestGraphicRefresh += (s, e1) =>
-                        {
-                            surfaceViewport.Refresh();
-                        };
+                        demo.RequestGraphicRefresh += (s, e1) => cpuBlitContextWinForm.InvalidateUI();
+
                         formTestBed.FormClosed += (s1, e1) => cpuBlitContextWinForm.Close();
                         formTestBed.LoadExample(exAndDesc, demo);
 
