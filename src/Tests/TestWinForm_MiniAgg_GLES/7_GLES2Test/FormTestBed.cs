@@ -22,7 +22,7 @@ namespace Mini
                     _configList[i].InvokeUpdatePresentationValue();
                 }
             }
-        } 
+        }
 
         bool _globalUpdateOtherProperties; //prevent recursive loop while update other presentation properties
         LayoutFarm.UI.GraphicsViewRoot _cpuBlitControl;
@@ -32,12 +32,13 @@ namespace Mini
 
         public FormTestBed()
         {
-            InitializeComponent(); 
+            InitializeComponent();
         }
 
         void InvalidateSampleViewPort()
         {
-            _cpuBlitControl?.Invalidate();
+            //_cpuBlitControl?.Invalidate();
+            _exampleBase.InvalidateGraphics();
         }
         public void SetUISurfaceViewportControl(LayoutFarm.UI.GraphicsViewRoot cpuBlitControl)
         {
@@ -109,7 +110,7 @@ namespace Mini
                     subPanel.Height = 300;//example
                     flowLayoutPanel1.Controls.Add(subPanel);
 
-                    CreateConfigPresentation(groupOwner, subConfig, subPanel); 
+                    CreateConfigPresentation(groupOwner, subConfig, subPanel);
                 }
             }
         }
@@ -290,11 +291,12 @@ namespace Mini
                                     radio.Checked = ofield.ValueAsInt32 == currentValue;
                                     radio.Click += delegate
                                     {
-                                        if (radio.Checked)
-                                        {
-                                            ofield.InvokeSet(configOwner);
-                                            InvalidateSampleViewPort();
-                                        }
+                                        //if (radio.Checked)
+                                        //{
+                                           
+                                        //}
+                                        ofield.InvokeSet(configOwner);
+                                        InvalidateSampleViewPort();
                                     };
 
                                     totalHeight += radio.Height + 10;
