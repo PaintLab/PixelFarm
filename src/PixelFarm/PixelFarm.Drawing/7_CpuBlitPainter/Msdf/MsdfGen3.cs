@@ -94,25 +94,39 @@ namespace ExtMsdfGen
         {
 
             //counter-clockwise
+
             if (!c0.MiddlePoint_IsTouchPoint) { return; }
+
+            //with a given corner, have have information of 3 points
+            //left-point of the corner,=> from vertex
+            //middle-point, current vertex
+            //right-point,=> next vertex 
+            //a vertex may be touch-curve vertext, or 'not-touch-curve' vertex
+            
+            //'is not touch-curve point', => this vertex is a  control point of C3 or C4 curve,
             //-------------------------------------------------------
+
             if (c0.RightPoint_IsTouchPoint)
             {
-                using (VxsTemp.Borrow(out var v9))
+                //c0 => touch curve
+                //c1 => touch curve,
+                //we create an imaginary line from  c0 to c1
+
+                using (VxsTemp.Borrow(out var v1))
                 {
                     _msdfEdgePxBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.InnerBorder;
-                    CreateInnerBorder(v9,
+                    CreateInnerBorder(v1,
                      c0.MiddlePoint.X, c0.MiddlePoint.Y,
                      c1.MiddlePoint.X, c1.MiddlePoint.Y, INNER_BORDER_W);
-                    painter.Fill(v9, c0.InnerColor);
+                    painter.Fill(v1, c0.InnerColor);
 
                     //-------------
-                    v9.Clear(); //reuse
+                    v1.Clear(); //reuse
                     _msdfEdgePxBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.OuterBorder;
-                    CreateOuterBorder(v9,
+                    CreateOuterBorder(v1,
                         c0.MiddlePoint.X, c0.MiddlePoint.Y,
                         c1.MiddlePoint.X, c1.MiddlePoint.Y, OUTER_BORDER_W);
-                    painter.Fill(v9, c0.OuterColor);
+                    painter.Fill(v1, c0.OuterColor);
                 }
             }
             else
@@ -318,6 +332,7 @@ namespace ExtMsdfGen
                     //-----------
                     //AA-borders of the contour
                     painter.RenderSurface.SetGamma(_prebuiltThresholdGamma_OverlappedBorder); //this creates overlapped area 
+
                     for (; n < next_corner_startAt; ++n)
                     {
                         //0-> 1
