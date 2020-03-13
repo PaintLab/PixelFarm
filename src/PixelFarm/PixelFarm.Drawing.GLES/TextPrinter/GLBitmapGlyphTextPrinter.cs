@@ -541,12 +541,31 @@ namespace PixelFarm.DrawingGL
                         //LCD-Effect****
                         if (!vxFmtStr.UseWithWordPlate)
                         {
-                            _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(
-                              _glBmp,
-                              vxFmtStr.GetVbo(),
-                              vxFmtStr.IndexArrayCount,
-                              (float)Math.Round(x),
-                              (float)Math.Floor(y + base_offset));
+                            if (_painter.PreparingWordStrip)
+                            {
+                                //
+#if DEBUG
+                                //ensure text bg hint
+#endif
+
+
+                                _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_ForWordStrip_FromVBO(
+                                 _glBmp,
+                                 vxFmtStr.GetVbo(),
+                                 vxFmtStr.IndexArrayCount,
+                                 (float)Math.Round(x),
+                                 (float)Math.Floor(y + base_offset));
+                            }
+                            else
+                            {
+                                _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(
+                                 _glBmp,
+                                 vxFmtStr.GetVbo(),
+                                 vxFmtStr.IndexArrayCount,
+                                 (float)Math.Round(x),
+                                 (float)Math.Floor(y + base_offset));
+                            }
+
                             return;
                         }
 
@@ -931,13 +950,20 @@ namespace PixelFarm.DrawingGL
             //we need to go to newline or not
 
             Color prevColor = painter.FontFillColor;
+            Color prevTextBgHint = painter.TextBgColorHint;
+            bool prevPreparingWordStrip = painter.PreparingWordStrip;
+
+            painter.TextBgColorHint = Color.Black;
             painter.FontFillColor = Color.White;
-
-
+            painter.PreparingWordStrip = true;
             renderVxFormattedString.UseWithWordPlate = false;
             //
             painter.DrawString(renderVxFormattedString, _currentX, _currentY);
-            renderVxFormattedString.UseWithWordPlate = true;
+
+            renderVxFormattedString.UseWithWordPlate = true;//restore
+            painter.FontFillColor = prevColor;//restore
+            painter.TextBgColorHint = prevTextBgHint;//restore
+            painter.PreparingWordStrip = prevPreparingWordStrip;
             //
             //in this case we can dispose vbo inside renderVx
             //(we can recreate that vbo later)
@@ -955,7 +981,6 @@ namespace PixelFarm.DrawingGL
             //--------
 
             _currentX += (int)Math.Ceiling(renderVxFormattedString.Width) + INTERWORD_SPACE; //interspace x 1px
-            painter.FontFillColor = prevColor;
 
             return true;
         }

@@ -125,7 +125,10 @@ namespace PixelFarm.DrawingGL
         BGRAImageTextureShader _bgraImgTextureShader;
 
         LcdEffectSubPixelRenderingShader _lcdSubPixShader;
+
         LcdEffectSubPixelRenderingShaderForSolidBg _lcdSubPixForSolidBgShader;
+        LcdEffectSubPixelRenderingShaderForWordStripCreation _lcdSubPixShaderForWordStripCreation;
+
 
         RGBATextureShader _rgbaTextureShader;
         RGBTextureShader _rgbTextureShader;
@@ -200,6 +203,7 @@ namespace PixelFarm.DrawingGL
             _glyphStencilShader = new GlyphImageStecilShader(_shareRes);
 
             _lcdSubPixShader = new LcdEffectSubPixelRenderingShader(_shareRes);
+            _lcdSubPixShaderForWordStripCreation = new LcdEffectSubPixelRenderingShaderForWordStripCreation(_shareRes);
             _lcdSubPixForSolidBgShader = new LcdEffectSubPixelRenderingShaderForSolidBg(_shareRes);
 
             _blurShader = new BlurShader(_shareRes);
@@ -842,12 +846,16 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(GLBitmap glBmp, VertexBufferObject vbo, int count, float x, float y)
         {
-            _lcdSubPixShader.SetColor(FontFillColor);
+            _lcdSubPixShader.SetColor(FontFillColor); //original
             _lcdSubPixShader.NewDrawSubImage4FromVBO(glBmp, vbo, count, x, y);
+        }
+        public void DrawGlyphImageWithSubPixelRenderingTechnique4_ForWordStrip_FromVBO(GLBitmap glBmp, VertexBufferObject vbo, int count, float x, float y)
+        {
+            //special optimization for WordStrip creation
+            _lcdSubPixShaderForWordStripCreation.NewDrawSubImage4FromVBO(glBmp, vbo, count, x, y);
         }
         public void DrawGlyphImageWithStencilRenderingTechnique4_FromVBO(GLBitmap glBmp, VertexBufferObject vbo, int count, float x, float y)
         {
-
             _lcdSubPixShader.SetColor(FontFillColor);
             _lcdSubPixShader.NewDrawSubImageStencilFromVBO(glBmp, vbo, count, x, y);
         }

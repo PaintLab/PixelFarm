@@ -1109,6 +1109,8 @@ namespace PixelFarm.DrawingGL
     }
 
 
+
+
     /// <summary>
     /// texture-based, lcd-subpix rendering shader for solid-color-background 
     /// </summary>
@@ -1214,8 +1216,8 @@ namespace PixelFarm.DrawingGL
 
             _bgR = c.R / 255f;
             _bgG = c.G / 255f;
-            _bgB = c.B / 255f; 
-            
+            _bgB = c.B / 255f;
+
             //the background color must be opaque color
             //(no alpha channel for bg color)
         }
@@ -1333,6 +1335,80 @@ namespace PixelFarm.DrawingGL
             GL.Enable(EnableCap.Blend);//restore
         }
     }
+
+
+    /// <summary>
+    /// lcd subpix for word strip creation
+    /// </summary>
+    sealed class LcdEffectSubPixelRenderingShaderForWordStripCreation : SimpleRectTextureShader
+    {
+        //this shader is designed for subpixel shader
+        //for transparent background        
+
+        ShaderUniformVar2 _offset;
+        public LcdEffectSubPixelRenderingShaderForWordStripCreation(ShaderSharedResource shareRes)
+            : base(shareRes)
+        {
+            string vs = @"
+                attribute vec4 a_position;
+                attribute vec2 a_texCoord;
+
+                uniform vec2 u_ortho_offset;
+                uniform vec2 u_offset;                
+                uniform mat4 u_mvpMatrix; 
+
+                varying vec2 v_texCoord;
+                void main()
+                {                      
+                    gl_Position = u_mvpMatrix* (a_position+ vec4(u_offset+u_ortho_offset,0,0));
+                    v_texCoord =  a_texCoord;
+                 }	 
+                ";
+            //-----------
+            //please note that we swap color channel R and B from input texture
+            string fs = @"
+                      precision mediump float; 
+                      uniform sampler2D s_texture;
+                      varying vec2 v_texCoord; 
+                      void main()
+                      {   
+                            vec4 c = texture2D(s_texture,v_texCoord);  
+                            gl_FragColor = vec4(c[2],c[1],c[0],c[3]);
+                      }
+                ";
+
+            BuildProgram(vs, fs);
+        }
+
+        protected override void OnProgramBuilt()
+        {
+            _offset = _shaderProgram.GetUniform2("u_offset");
+        }
+        protected override void SetVarsBeforeRender() { }
+        public void NewDrawSubImage4FromVBO(GLBitmap glBmp, VertexBufferObject vbo, int elemCount, float x, float y)
+        {
+            SetCurrent();
+            CheckViewMatrix();
+            LoadGLBitmap(glBmp);
+            //
+            _offset.SetValue(x, y);
+
+            //-------------------------------------------------------------------------------------          
+            //each vertex has 5 element (x,y,z,u,v), //interleave data
+            //(x,y,z) 3d location 
+            //(u,v) 2d texture coord  
+
+            vbo.Bind();
+            a_position.LoadLatest(5, 0);
+            a_texCoord.LoadLatest(5, 3 * 4);
+
+            GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
+
+            vbo.UnBind();
+        }
+
+    }
+
 
 
     //--------------------------------------------------------
