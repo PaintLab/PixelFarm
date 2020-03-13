@@ -24,14 +24,16 @@ namespace ExtMsdfGen
 
         public MsdfGen3()
         {
+            //our MsdfGen3 is a modified version of the original Msdf
+
 
             _prebuiltThresholdGamma_OverlappedBorder = PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable.CreateSameValuesGammaTable(PixelFarm.CpuBlit.Rasterization.ScanlineRasterizer.AA_MASK);
 
             _prebuiltThresholdGamma_50 = new PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable(
-                new PixelFarm.CpuBlit.FragmentProcessing.GammaThreshold(0.5f));//***50% coverage 
+                new PixelFarm.CpuBlit.FragmentProcessing.GammaThreshold(0.5f));//***50% confident coverage 
 
             _prebuiltThresholdGamma_100 = new PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable(
-                new PixelFarm.CpuBlit.FragmentProcessing.GammaThreshold(1f));//*** 100% coverage 
+                new PixelFarm.CpuBlit.FragmentProcessing.GammaThreshold(1f));//*** 100% confident coverage 
 
             _strokeMath.Width = 3; //outside 1.5, inside=1.5
             _strokeMath.LineCap = LineCap.Butt;
