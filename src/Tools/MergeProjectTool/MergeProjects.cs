@@ -412,8 +412,6 @@ namespace BuildMergeProject
 
         class SimpleNetStdProj
         {
-
-
             List<SimpleCompileNode> _compileNodes = new List<SimpleCompileNode>();
             Dictionary<string, string> _linkFolders = new Dictionary<string, string>();
             List<XmlElement> _xmlElementFromOthers;
@@ -482,6 +480,12 @@ namespace BuildMergeProject
                     AppendAttribute(compileNode, "Include", folderNode);
                 }
                 outputDoc.Save(filename);
+
+                ////for .netstd, remove=>   xmlns="http://schemas.microsoft.com/developer/msbuild/2003" all inside the document
+                string file_content = File.ReadAllText(filename);
+                string replaced_content = file_content.Replace(" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\"", "");
+                File.WriteAllText(filename, replaced_content);
+
             }
         }
 
@@ -495,9 +499,8 @@ namespace BuildMergeProject
             //
             foreach (XmlNode child in other.ChildNodes)
             {
-                if (child is XmlElement)
+                if (child is XmlElement child_elem)
                 {
-                    XmlElement child_elem = (XmlElement)child;
                     //
 
                     if (xmlElemEvalator(child_elem))
@@ -568,7 +571,7 @@ namespace BuildMergeProject
                 Directory.CreateDirectory(targetSaveDir);
             }
 
-            //xmldoc.Save(saveFileName);
+
             netstdProj.Save(saveFileName);
             if (removeOriginalSrcProject)
             {
