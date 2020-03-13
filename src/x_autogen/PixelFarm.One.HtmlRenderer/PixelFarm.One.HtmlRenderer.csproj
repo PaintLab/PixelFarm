@@ -834,7 +834,6 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Typography\..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphOutlineAnalyzer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Typography\..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphOutlineBuilderBase.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Typography\..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\TextPrinterBase.cs" />
-    <Compile Include="D:\projects\Typography\FontAtlas\BinPacker.cs" />
     <Compile Include="D:\projects\Typography\FontAtlas\FontAtlasFile.cs" />
     <Compile Include="D:\projects\Typography\FontAtlas\GlyphImages.cs" />
     <Compile Include="D:\projects\Typography\FontAtlas\MsdfGlyphGen.cs" />
