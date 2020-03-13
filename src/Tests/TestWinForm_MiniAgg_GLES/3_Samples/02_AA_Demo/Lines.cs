@@ -158,17 +158,18 @@ namespace PixelFarm.CpuBlit.Sample_Draw
         {
             base.Init();
 
-            using (VxsTemp.Borrow(out var v1, out var v2))
-            using (VectorToolBox.Borrow(out CurveFlattener f))
-            using (VectorToolBox.Borrow(v1, out PathWriter writer))
+            using (VectorToolBox.Borrow(out ShapeBuilder b))
             {
                 int y_offset = 20;
-                writer.MoveTo(100, y_offset + 0);
-                writer.Curve4(
+
+                b.MoveTo(100, y_offset + 0);
+                b.Curve4To(
                     300, y_offset + 0,
                     300, y_offset + 200,
                     100, y_offset + 200);
-                _vxs = f.MakeVxs(v1, v2).CreateTrim();
+                b.Flatten();
+
+                _vxs = b.CurrentSharedVxs.CreateTrim();
             }
         }
         public override void Draw(PixelFarm.Drawing.Painter p)
@@ -387,8 +388,6 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             p.StrokeWidth = 2;
             p.Draw(_outputStrokeVxs);
 
-
-
             p.Line(_v0.x, _v0.y, _v1.x, _v1.y, Color.Red);
             p.Line(_v1.x, _v1.y, _v2.x, _v2.y, Color.Red);
 
@@ -410,7 +409,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
         InnerBorder,
         OuterAndInner,
 
-        Auto_OuterAndInner,
+        Auto_OuterAndInner
     }
     [Info(OrderCode = "02")]
     [Info("RawStroke2")]
@@ -563,7 +562,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                         break;
                     case RawStrokeMath2Choices.InnerBorder:
                         {
-                             
+
 
                             MySimpleAction[] actions = new MySimpleAction[]
                             {
@@ -609,75 +608,78 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                     case RawStrokeMath2Choices.OuterAndInner:
                         {
                             //outer
-                            _strokeMath.CreateJoin(vxs1, _v0, _v1, _v2);
-                            _outputStrokeVxs.AppendVertexStore(vxs1);
-                            vxs1.Clear();
-                            stepCount++; if (stepCount > Steps) break; //demo only
-                            //---------
+                            double first_moveX = 0;
+                            double first_moveY = 0;
 
-                            _strokeMath.CreateJoin(vxs1, _v1, _v2, _v3);
-                            _outputStrokeVxs.AppendVertexStore(vxs1);
-                            vxs1.Clear();
-                            stepCount++; if (stepCount > Steps) break; //demo only
-                            //---------
+                            MySimpleAction[] actions = new MySimpleAction[]
+                            {
+                                //create join
+                                //since we want to see data inside each step, so 
+                                //we generate data into vxs1 first and the copy it to output_vxs
+                                //(but you can generate data directly to _outputStrokeVxs
 
-
-                            _strokeMath.CreateJoin(vxs1, _v2, _v3, _v0);
-                            _outputStrokeVxs.AppendVertexStore(vxs1);
-                            vxs1.Clear();
-                            stepCount++; if (stepCount > Steps) break; //demo only
-                            //---------
-
-
-                            _strokeMath.CreateJoin(vxs1, _v3, _v0, _v1);
-                            _outputStrokeVxs.AppendVertexStore(vxs1);
-                            vxs1.Clear();
-                            stepCount++; if (stepCount > Steps) break; //demo only
-                            //---------
-
-
-                            _outputStrokeVxs.GetVertex(0, out double first_moveX, out double first_moveY);
-                            _outputStrokeVxs.AddLineTo(first_moveX, first_moveY);
-                            _outputStrokeVxs.AddCloseFigure();
-                            stepCount++; if (stepCount > Steps) break; //demo only
-
-                            //----------------------------------------------------
-                            //inner  
-
-
-                            _strokeMath.CreateJoin(vxs1, _v2, _v1, _v0);
-                            vxs1.GetVertex(0, out first_moveX, out first_moveY);
-                            _outputStrokeVxs.AddMoveTo(first_moveX, first_moveY);
-                            //_outputStrokeVxs.AppendVertexStore(vxs1);
-                            vxs1.Clear();
-                            stepCount++; if (stepCount > Steps) break; //demo only
-                                                                       //---------
+                                new MySimpleAction(()=>{
+                                    _strokeMath.CreateJoin(vxs1, _v0, _v1, _v2);
+                                    _outputStrokeVxs.AppendVertexStore(vxs1);
+                                    vxs1.Clear();
+                                }),
+                                //
+                               new MySimpleAction(()=>{
+                                   _strokeMath.CreateJoin(vxs1, _v1, _v2, _v3);
+                                   _outputStrokeVxs.AppendVertexStore(vxs1);
+                                   vxs1.Clear();
+                                }),
+                               new MySimpleAction(()=>{
+                                   _strokeMath.CreateJoin(vxs1, _v2, _v3, _v0);
+                                   _outputStrokeVxs.AppendVertexStore(vxs1);
+                                   vxs1.Clear();
+                                }),
+                               new MySimpleAction(()=>{
+                                    _strokeMath.CreateJoin(vxs1, _v3, _v0, _v1);
+                                    _outputStrokeVxs.AppendVertexStore(vxs1);
+                                    vxs1.Clear();
+                               }),
+                               new MySimpleAction(()=>{
+                                    _outputStrokeVxs.GetVertex(0, out first_moveX, out first_moveY);
+                                    _outputStrokeVxs.AddLineTo(first_moveX, first_moveY);
+                                    _outputStrokeVxs.AddCloseFigure();
+                                }),
 
 
-                            _strokeMath.CreateJoin(vxs1, _v1, _v0, _v3);
-                            _outputStrokeVxs.AppendVertexStore(vxs1);
-                            vxs1.Clear();
-                            stepCount++; if (stepCount > Steps) break; //demo only
-                            //---------
+                                //----------------------------------------------------
+                                //inner
+                               new MySimpleAction(()=>{
+                                    _strokeMath.CreateJoin(vxs1, _v2, _v1, _v0);
+                                    vxs1.GetVertex(0, out first_moveX, out first_moveY);
+                                    _outputStrokeVxs.AddMoveTo(first_moveX, first_moveY);
+                                    _outputStrokeVxs.AppendVertexStore(vxs1);
+                                    vxs1.Clear();
+                                }),
+                               new MySimpleAction(()=>{
+                                    _strokeMath.CreateJoin(vxs1, _v1, _v0, _v3);
+                                    _outputStrokeVxs.AppendVertexStore(vxs1);
+                                    vxs1.Clear();
+                                }),
+                               new MySimpleAction(()=>{
+                                    _strokeMath.CreateJoin(vxs1, _v0, _v3, _v2);
+                                    _outputStrokeVxs.AppendVertexStore(vxs1);
+                                    vxs1.Clear();
+                                }),
+                               new MySimpleAction(()=>{
+                                   _strokeMath.CreateJoin(vxs1, _v3, _v2, _v1);
+                                   _outputStrokeVxs.AppendVertexStore(vxs1);
+                                   vxs1.Clear();
+                                }),
+                               new MySimpleAction(()=>{
+                                   _outputStrokeVxs.AddLineTo(first_moveX, first_moveY);
+                                  _outputStrokeVxs.AddCloseFigure();
+                                }),
+                            };
 
-
-                            _strokeMath.CreateJoin(vxs1, _v0, _v3, _v2);
-                            _outputStrokeVxs.AppendVertexStore(vxs1);
-                            vxs1.Clear();
-                            stepCount++; if (stepCount > Steps) break; //demo only
-                            //---------
-
-
-                            _strokeMath.CreateJoin(vxs1, _v3, _v2, _v1);
-                            _outputStrokeVxs.AppendVertexStore(vxs1);
-                            vxs1.Clear();
-                            stepCount++; if (stepCount > Steps) break; //demo only
-                            //---------
-
-                            _outputStrokeVxs.AddLineTo(first_moveX, first_moveY);
-                            _outputStrokeVxs.AddCloseFigure();
-                            stepCount++; if (stepCount > Steps) break; //demo only
-                            //---------
+                            for (int i = stepCount; i < actions.Length && i < Steps; ++i)
+                            {
+                                actions[i]();
+                            }
 
                         }
                         break;
@@ -710,7 +712,14 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
             p.FillColor = p.StrokeColor;
 
-            p.Draw(_outputStrokeVxs);
+            if (OutlineChoices == RawStrokeMath2Choices.Auto_OuterAndInner)
+            {
+                p.Fill(_outputStrokeVxs);
+            }
+            else
+            {
+                p.Draw(_outputStrokeVxs);
+            }
 
             p.StrokeWidth = prevW;
             //restore
