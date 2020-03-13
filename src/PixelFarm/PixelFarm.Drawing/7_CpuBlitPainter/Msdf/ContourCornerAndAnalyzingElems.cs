@@ -111,8 +111,11 @@ namespace ExtMsdfGen
         /// corner number in flatten list
         /// </summary>
         internal ushort CornerNo => _cornerNo;
- 
-        public PixelFarm.Drawing.PointD MiddlePoint => _pCenter; 
+
+        public PixelFarm.Drawing.PointD MiddlePoint => _pCenter;
+        public PixelFarm.Drawing.PointD LeftPoint => _pLeft;
+        public PixelFarm.Drawing.PointD RightPoint => _pRight;
+
         public EdgeSegment CenterSegment => _center.owner;
 
         public Vec2PointKind LeftPointKind => _left.Kind;

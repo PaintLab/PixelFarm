@@ -20,6 +20,7 @@ namespace ExtMsdfGen
         PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable _prebuiltThresholdGamma_OverlappedBorder;
         PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable _prebuiltThresholdGamma_50;
         MsdfEdgePixelBlender _msdfEdgePxBlender = new MsdfEdgePixelBlender();
+        StrokeMath _strokeMath = new StrokeMath();
 
         public MsdfGen3()
         {
@@ -31,6 +32,11 @@ namespace ExtMsdfGen
 
             _prebuiltThresholdGamma_100 = new PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable(
                 new PixelFarm.CpuBlit.FragmentProcessing.GammaThreshold(1f));//*** 100% coverage 
+
+            _strokeMath.Width = 3; //outside 1.5, inside=1.5
+            _strokeMath.LineCap = LineCap.Butt;
+            _strokeMath.LineJoin = LineJoin.Miter;
+            _strokeMath.InnerJoin = InnerJoin.Bevel;
         }
         public MsdfGenParams MsdfGenParams { get; set; }
 #if DEBUG
@@ -76,6 +82,27 @@ namespace ExtMsdfGen
             vxs.AddLineTo(x0 + vdiff.x, y0 + vdiff.y);
             vxs.AddCloseFigure();
         }
+        void CreateBorder(VertexStore vxs, Vertex2d prev, Vertex2d now, Vertex2d next0, Vertex2d next1)
+        {
+            //now we are on now
+            using (VxsTemp.Borrow(out var vxs1))
+            {
+                vxs.AddMoveTo(now.x, now.y);
+
+                //create outer line-join
+                _strokeMath.CreateJoin(vxs1, prev, now, next0);
+                vxs.AppendVertexStore(vxs1);
+                //create inner line join
+
+                //next outer line join
+                vxs1.Clear();//reuse
+                _strokeMath.CreateJoin(vxs1, now, next0, next1);
+                vxs.AppendVertexStore(vxs1);
+
+                vxs.AddLineTo(next0.x, next0.y);
+                vxs.AddCloseFigure();
+            }
+        }
 
         const int INNER_BORDER_W = 1;
         const int OUTER_BORDER_W = 1;
@@ -83,6 +110,9 @@ namespace ExtMsdfGen
 
         double _dx;
         double _dy;
+        bool _use_v3_1;
+
+        static Vertex2d ConvToV2d(PointD p) => new Vertex2d(p.X, p.Y); //temp
 
         /// <summary>
         /// fill inner and outer border from corner0 to corner1
@@ -118,18 +148,48 @@ namespace ExtMsdfGen
                 {
                     //1. inner-border, set fill mode to inform proper color encoding of inner border
                     _msdfEdgePxBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.InnerBorder;
-                    CreateInnerBorder(v1,
-                     c0.MiddlePoint.X, c0.MiddlePoint.Y,
-                     c1.MiddlePoint.X, c1.MiddlePoint.Y, INNER_BORDER_W);
-                    painter.Fill(v1, c0.InnerColor);
 
+
+
+                    //2020-03-13, version 3 fill is still better than v3.1, 
+                    //TODO: review version v3.1
+
+
+                    if (_use_v3_1)
+                    {
+                        //version 3.1 fill technique
+                        CreateBorder(v1, ConvToV2d(c1.RightPoint), ConvToV2d(c1.MiddlePoint), ConvToV2d(c0.MiddlePoint), ConvToV2d(c0.LeftPoint));
+                    }
+                    else
+                    {
+                        //version 3 fill technique
+                        CreateInnerBorder(v1,
+                         c0.MiddlePoint.X, c0.MiddlePoint.Y,
+                         c1.MiddlePoint.X, c1.MiddlePoint.Y, INNER_BORDER_W);
+                    }
+
+                    painter.Fill(v1, c0.InnerColor);
                     //-------------
                     v1.Clear(); //reuse
-                    //2. outer-border, set fill mode too.
+                                //2. outer-border, set fill mode too. 
+
+
                     _msdfEdgePxBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.OuterBorder;
-                    CreateOuterBorder(v1,
-                        c0.MiddlePoint.X, c0.MiddlePoint.Y,
-                        c1.MiddlePoint.X, c1.MiddlePoint.Y, OUTER_BORDER_W);
+
+                    if (_use_v3_1)
+                    {
+                        //version 3.1 fill technique
+                        CreateBorder(v1, ConvToV2d(c0.LeftPoint), ConvToV2d(c0.MiddlePoint), ConvToV2d(c1.MiddlePoint), ConvToV2d(c1.RightPoint));
+                    }
+                    else
+                    {
+                        //version 3 fill technique
+                        CreateOuterBorder(v1,
+                            c0.MiddlePoint.X, c0.MiddlePoint.Y,
+                            c1.MiddlePoint.X, c1.MiddlePoint.Y, OUTER_BORDER_W);
+                    }
+
+
                     painter.Fill(v1, c0.OuterColor);
                 }
             }
