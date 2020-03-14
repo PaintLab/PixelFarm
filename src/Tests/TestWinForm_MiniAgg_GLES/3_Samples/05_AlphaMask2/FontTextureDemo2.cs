@@ -4,8 +4,9 @@ using System;
 using System.Collections.Generic;
 
 using PixelFarm.Drawing;
-using PixelFarm.Drawing.BitmapAtlas;
+
 using PixelFarm.CpuBlit.PixelProcessing;
+using PixelFarm.CpuBlit.BitmapAtlas;
 
 using Typography.OpenFont;
 using Typography.Rendering;
@@ -48,7 +49,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             //2. create manager
             _bmpFontMx = new BitmapFontManager<MemBitmap>(
                 _textServices,
-                atlas => MemBitmap.CreateFromCopy(atlas.TotalGlyph)
+                atlas => MemBitmap.CreateFromCopy(atlas.MainBitmap)
             );
 
             //3.  
@@ -100,7 +101,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 
             // 
             float scaleFromTexture = _finalTextureScale;
-            Drawing.BitmapAtlas.TextureKind textureKind = _fontAtlas.TextureKind;
+            TextureKind textureKind = _fontAtlas.TextureKind;
 
             float gx = 0;
             float gy = 0;

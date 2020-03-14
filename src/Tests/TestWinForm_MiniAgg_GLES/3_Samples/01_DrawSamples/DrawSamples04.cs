@@ -42,7 +42,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             //2. create manager
             _bmpFontMx = new BitmapFontManager<MemBitmap>(
                 _textServices,
-                atlas => MemBitmap.CreateFromCopy(atlas.TotalGlyph)
+                atlas => MemBitmap.CreateFromCopy(atlas.MainBitmap)
             );
 
 
@@ -99,7 +99,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
             // 
             float scaleFromTexture = _finalTextureScale;
-            Drawing.BitmapAtlas.TextureKind textureKind = _fontAtlas.TextureKind;
+            TextureKind textureKind = _fontAtlas.TextureKind;
 
             float g_x = 0;
             float g_y = 0;

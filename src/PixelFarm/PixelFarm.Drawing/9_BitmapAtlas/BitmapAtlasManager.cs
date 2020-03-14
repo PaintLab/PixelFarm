@@ -127,7 +127,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
                         {
                             List<SimpleBitmapAtlas> atlasList = atlasBuilder.LoadAtlasInfo(dataStream);
                             foundAtlas = atlasList[0];
-                            foundAtlas.TotalGlyph = PixelFarm.CpuBlit.MemBitmap.LoadBitmap(fontImgStream);
+                            foundAtlas.MainBitmap = MemBitmap.LoadBitmap(fontImgStream);
                             _createdAtlases.Add(atlasName, foundAtlas);
                         }
                         catch (Exception ex)

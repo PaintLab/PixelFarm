@@ -6,8 +6,7 @@ using System.IO;
 using System.Windows.Forms;
 
 using PixelFarm.CpuBlit;
-using PixelFarm.Drawing.BitmapAtlas;
-
+using PixelFarm.CpuBlit.BitmapAtlas;
 
 namespace Mini
 {
@@ -229,7 +228,7 @@ namespace Mini
                 SimpleBitmapAtlas bitmapAtlas = bmpAtlasBuilder.LoadAtlasInfo(atlasInfoFile)[0];
                 //
                 MemBitmap totalAtlasImg = imgLoader(totalImgFile);
-                bitmapAtlas.TotalGlyph = totalAtlasImg;
+                bitmapAtlas.MainBitmap = imgLoader(totalImgFile);
 
                 //-----
                 for (int i = 0; i < index; ++i)

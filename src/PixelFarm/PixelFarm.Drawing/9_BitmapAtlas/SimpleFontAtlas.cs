@@ -25,6 +25,9 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
         public Dictionary<string, ushort> ImgUrlDict { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
+
+
+        //------------
         /// <summary>
         /// original font size in point unit
         /// </summary>
@@ -32,13 +35,15 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
         public TextureKind TextureKind { get; set; }
         public string FontFilename { get; set; }
         public int FontKey { get; set; }
+        //------------
+
 
         public void AddGlyph(ushort glyphIndex, TextureGlyphMapData glyphData)
         {
             _glyphLocations.Add(glyphIndex, glyphData);
         }
         public bool UseSharedGlyphImage { get; set; }
-        public PixelFarm.CpuBlit.MemBitmap TotalGlyph { get; set; }
+        public MemBitmap MainBitmap { get; set; }
         public bool TryGetGlyphMapData(ushort glyphIndex, out TextureGlyphMapData glyphdata)
         {
             if (!_glyphLocations.TryGetValue(glyphIndex, out glyphdata))

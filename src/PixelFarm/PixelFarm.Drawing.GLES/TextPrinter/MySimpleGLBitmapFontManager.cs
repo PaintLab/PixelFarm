@@ -15,15 +15,15 @@ namespace PixelFarm.DrawingGL
         {
             SetLoadNewBmpDel(atlas =>
             {
-                PixelFarm.CpuBlit.MemBitmap totalGlyphImg = atlas.TotalGlyph;
+                MemBitmap mainBmp = atlas.MainBitmap;
                 if (atlas.UseSharedGlyphImage)
                 {
-                    if (!_sharedGlyphImgs.TryGetValue(totalGlyphImg, out GLBitmap found))
+                    if (!_sharedGlyphImgs.TryGetValue(mainBmp, out GLBitmap found))
                     {
-                        found = new GLBitmap(MemBitmap.CreateFromCopy(totalGlyphImg), true);
+                        found = new GLBitmap(MemBitmap.CreateFromCopy(mainBmp), true);
                         //set true=> glbmp is the original owner of the membmp, when glbmp is disposed => the membmp is disposed too
                         found.IsYFlipped = false;
-                        _sharedGlyphImgs.Add(totalGlyphImg, found);
+                        _sharedGlyphImgs.Add(mainBmp, found);
                     }
                     return found;
                 }
@@ -31,7 +31,7 @@ namespace PixelFarm.DrawingGL
                 {
                     //create new one                     
                     //load to glbmp  
-                    GLBitmap bmp = new GLBitmap(MemBitmap.CreateFromCopy(totalGlyphImg), true);
+                    GLBitmap bmp = new GLBitmap(MemBitmap.CreateFromCopy(mainBmp), true);
                     //set true=> glbmp is the original owner of the membmp, when glbmp is disposed => the membmp is disposed too
                     bmp.IsYFlipped = false;
                     return bmp;

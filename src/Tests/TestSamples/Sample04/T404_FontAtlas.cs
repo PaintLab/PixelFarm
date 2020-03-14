@@ -8,7 +8,7 @@ using PixelFarm.Contours;
 using Typography.OpenFont;
 using Typography.Rendering;
 
-using PixelFarm.Drawing.BitmapAtlas;
+using PixelFarm.CpuBlit.BitmapAtlas;
 
 namespace OpenTkEssTest
 {
@@ -54,7 +54,7 @@ namespace OpenTkEssTest
             SimpleBitmapAtlasBuilder atlasBuilder = glyphTextureGen.CreateTextureFontFromBuildDetail(
                 _typeface,
                 reqFont.SizeInPoints,
-                PixelFarm.Drawing.BitmapAtlas.TextureKind.Msdf,
+                 TextureKind.Msdf,
                 GlyphTextureCustomConfigs.TryGetGlyphTextureBuildDetail(reqFont, false, false)
             );
 
@@ -72,7 +72,7 @@ namespace OpenTkEssTest
 
             //5. create a simple font atlas from information inside this atlas builder.
             _fontAtlas = atlasBuilder.CreateSimpleBitmapAtlas();
-            _fontAtlas.TotalGlyph = totalGlyphsImg;
+            _fontAtlas.MainBitmap = totalGlyphsImg;
 
             byte[] codepoint = System.Text.Encoding.UTF8.GetBytes("AB");
             _glyphIndex_0 = _typeface.GetGlyphIndex(codepoint[0]);
@@ -89,7 +89,7 @@ namespace OpenTkEssTest
             _pcx.ClearColorBuffer();
             if (!_resInit)
             {
-                _msdf_bmp = DemoHelper.LoadTexture(_fontAtlas.TotalGlyph);
+                _msdf_bmp = DemoHelper.LoadTexture(_fontAtlas.MainBitmap);
                 _resInit = true;
             }
 
