@@ -962,8 +962,8 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\GlyphImages.cs">
       <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\GlyphImages.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MsdfGlyphGen.cs">
-      <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MsdfGlyphGen.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MsdfImageGen.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MsdfImageGen.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MultiSizeFontAtlas.cs">
       <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MultiSizeFontAtlas.cs</Link>

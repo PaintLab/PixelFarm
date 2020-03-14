@@ -6,8 +6,10 @@ using PixelFarm.Contours;
 namespace PixelFarm.Drawing.BitmapAtlas
 {
 
-     
-    public static class MsdfGlyphGen
+    /// <summary>
+    /// msdf image generator
+    /// </summary>
+    public static class MsdfImageGen
     {
         public static Msdfgen.Shape CreateMsdfShape(ContourBuilder glyphToContour, float pxScale)
         {
