@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Contours;
-namespace Typography.Rendering
+namespace PixelFarm.Drawing.BitmapAtlas
 {
 
      

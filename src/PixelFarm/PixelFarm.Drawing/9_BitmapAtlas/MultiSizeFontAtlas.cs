@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic; 
 
-namespace PixelFarm.Drawing.Fonts
+namespace PixelFarm.Drawing.BitmapAtlas
 { 
     public class MultiSizeFontAtlas
     {

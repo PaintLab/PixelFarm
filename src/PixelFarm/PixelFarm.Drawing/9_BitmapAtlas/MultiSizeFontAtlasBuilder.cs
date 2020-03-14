@@ -4,10 +4,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Typography.Rendering;
 using PixelFarm.CpuBlit;
 
-namespace PixelFarm.Drawing.Fonts
+namespace PixelFarm.Drawing.BitmapAtlas
 {
     public class MultiSizeFontAtlasBuilder
     {

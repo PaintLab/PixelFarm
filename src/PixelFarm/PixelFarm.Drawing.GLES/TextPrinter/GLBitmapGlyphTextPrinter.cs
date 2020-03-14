@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using PixelFarm.CpuBlit;
 using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
+using PixelFarm.Drawing.BitmapAtlas;
 //
 using Typography.TextLayout;
 using Typography.OpenFont;
@@ -106,7 +107,7 @@ namespace PixelFarm.DrawingGL
     {
 
         MySimpleGLBitmapFontManager _myGLBitmapFontMx;
-        SimpleFontAtlas _fontAtlas;
+        PixelFarm.Drawing.BitmapAtlas.SimpleFontAtlas _fontAtlas;
         GLPainterContext _pcx;
         GLPainter _painter;
         GLBitmap _glBmp;
@@ -324,8 +325,7 @@ namespace PixelFarm.DrawingGL
             for (int i = 0; i < seqLen; ++i)
             {
                 UnscaledGlyphPlan glyph = glyphPlanSeq[i];
-                Typography.Rendering.TextureGlyphMapData glyphData;
-                if (!_fontAtlas.TryGetGlyphMapData(glyph.glyphIndex, out glyphData))
+                if (!_fontAtlas.TryGetGlyphMapData(glyph.glyphIndex, out TextureGlyphMapData glyphData))
                 {
                     //if no glyph data, we should render a missing glyph ***
                     continue;
@@ -674,7 +674,7 @@ namespace PixelFarm.DrawingGL
                 UnscaledGlyphPlan glyph = glyphPlanSeq[i];
 
                 if (!_fontAtlas.TryGetGlyphMapData(glyph.glyphIndex,
-                    out Typography.Rendering.TextureGlyphMapData glyphData))
+                    out TextureGlyphMapData glyphData))
                 {
                     //if no glyph data, we should render a missing glyph ***
                     continue;

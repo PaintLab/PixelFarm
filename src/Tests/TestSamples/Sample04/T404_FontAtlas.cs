@@ -8,6 +8,8 @@ using PixelFarm.Contours;
 using Typography.OpenFont;
 using Typography.Rendering;
 
+using PixelFarm.Drawing.BitmapAtlas;
+
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "404")]
@@ -56,7 +58,7 @@ namespace OpenTkEssTest
                 GlyphTextureCustomConfigs.TryGetGlyphTextureBuildDetail(reqFont, false, false)
             );
 
-            
+
 
 
             //3. set information before write to font-info
@@ -94,7 +96,7 @@ namespace OpenTkEssTest
             _painter.Clear(PixelFarm.Drawing.Color.White);
 
 
-            _fontAtlas.TryGetGlyphMapData(_glyphIndex_0, out Typography.Rendering.TextureGlyphMapData glyphData);
+            _fontAtlas.TryGetGlyphMapData(_glyphIndex_0, out TextureGlyphMapData glyphData);
             PixelFarm.Drawing.Rectangle r =
                    new PixelFarm.Drawing.Rectangle(glyphData.Left,
                    glyphData.Top,
@@ -108,7 +110,7 @@ namespace OpenTkEssTest
                    glyphData.Top,
                    glyphData.Width,
                    glyphData.Height);
-            _pcx.DrawSubImageWithMsdf(_msdf_bmp, ref r2, 100 + r.Width,40);
+            _pcx.DrawSubImageWithMsdf(_msdf_bmp, ref r2, 100 + r.Width, 40);
 
             //full image
             _pcx.DrawImage(_msdf_bmp, 0, 100);

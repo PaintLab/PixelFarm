@@ -950,14 +950,8 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\8_ImgReaders\ImageReaders.cs">
       <Link>PixelFarm\PixelFarm.Drawing\8_ImgReaders\ImageReaders.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\AtlasItemImage.cs">
-      <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\AtlasItemImage.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BinPacker.cs">
       <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BinPacker.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BitmapAtlasFile.cs">
-      <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BitmapAtlasFile.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BitmapAtlasManager.cs">
       <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BitmapAtlasManager.cs</Link>
@@ -976,12 +970,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MultiSizeFontAtlasBuilder.cs">
       <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MultiSizeFontAtlasBuilder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmapAtlasBuilder.cs">
-      <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmapAtlasBuilder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmaptAtlas.cs">
-      <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmaptAtlas.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleFontAtlas.cs">
       <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleFontAtlas.cs</Link>

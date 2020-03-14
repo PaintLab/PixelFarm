@@ -1,9 +1,7 @@
 ﻿//MIT, 2016-present, WinterDev
 using System;
-
-using PixelFarm.Contours;
-
-namespace Typography.Rendering
+ 
+namespace PixelFarm.Drawing.BitmapAtlas
 {
     public class GlyphImage
     {

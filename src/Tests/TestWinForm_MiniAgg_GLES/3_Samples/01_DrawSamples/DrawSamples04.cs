@@ -9,8 +9,7 @@ using System;
 using System.Collections.Generic;
 
 using PixelFarm.Drawing;
-using PixelFarm.Drawing.Fonts;
-
+using PixelFarm.Drawing.BitmapAtlas;
 
 using Typography.OpenFont;
 using Typography.Rendering;

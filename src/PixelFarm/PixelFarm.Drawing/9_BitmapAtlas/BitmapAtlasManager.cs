@@ -4,8 +4,6 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Platforms;
-using Typography.Rendering;
-using PixelFarm.Drawing.Fonts;
 
 namespace PixelFarm.Drawing.BitmapAtlas
 {
@@ -121,7 +119,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
                 if (StorageService.Provider.DataExists(textureInfoFile) &&
                     StorageService.Provider.DataExists(textureImgFilename))
                 {
-                    Typography.Rendering.SimpleFontAtlasBuilder atlasBuilder = new Typography.Rendering.SimpleFontAtlasBuilder();
+                    SimpleFontAtlasBuilder atlasBuilder = new SimpleFontAtlasBuilder();
                     using (System.IO.Stream dataStream = StorageService.Provider.ReadDataStream(textureInfoFile))
                     using (System.IO.Stream fontImgStream = StorageService.Provider.ReadDataStream(textureImgFilename))
                     {
