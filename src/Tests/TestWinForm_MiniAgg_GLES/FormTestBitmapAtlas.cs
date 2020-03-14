@@ -86,16 +86,16 @@ namespace Mini
         }
 
 
-        SimpleFontAtlasBuilder _bmpAtlasBuilder = new SimpleFontAtlasBuilder();
-        SimpleFontAtlas _bitmapAtlas;
+        SimpleBitmapAtlasBuilder _bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
+        SimpleBitmapAtlas _bitmapAtlas;
         MemBitmap _totalAtlasImg;
 
         private void cmdReadBmpAtlas_Click(object sender, EventArgs e)
         {
             string atlas_file = "test_bmpAtlas";
 
-            _bmpAtlasBuilder = new SimpleFontAtlasBuilder();
-            _bitmapAtlas = _bmpAtlasBuilder.LoadFontAtlasInfo(atlas_file + ".info")[0];//default atlas
+            _bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
+            _bitmapAtlas = _bmpAtlasBuilder.LoadAtlasInfo(atlas_file + ".info")[0];//default atlas
 
             _totalAtlasImg = LoadBmp(atlas_file + ".png");
             //-----
@@ -175,7 +175,7 @@ namespace Mini
             //demonstrate how to build a bitmap atlas
 
             //1. create builder
-            var bmpAtlasBuilder = new SimpleFontAtlasBuilder();
+            var bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
 
             //2. collect all image-files
             int imgdirNameLen = imgdir.Length;
@@ -189,7 +189,7 @@ namespace Mini
                 MemBitmap itemBmp = imgLoader(f);
                 //4. get information about it
 
-                var atlasItem = new GlyphImage(itemBmp.Width, itemBmp.Height);
+                var atlasItem = new BitmapAtlasItem(itemBmp.Width, itemBmp.Height);
                 atlasItem.SetImageBuffer(itemBmp);
                 //5. add to builder
                 //bmpAtlasBuilder.AddAtlasItemImage(index, atlasItem);
@@ -225,8 +225,8 @@ namespace Mini
             //----------------------
             if (test_extract)
             {
-                bmpAtlasBuilder = new SimpleFontAtlasBuilder();
-                SimpleFontAtlas bitmapAtlas = bmpAtlasBuilder.LoadFontAtlasInfo(atlasInfoFile)[0];
+                bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
+                SimpleBitmapAtlas bitmapAtlas = bmpAtlasBuilder.LoadAtlasInfo(atlasInfoFile)[0];
                 //
                 MemBitmap totalAtlasImg = imgLoader(totalImgFile);
                 bitmapAtlas.TotalGlyph = totalAtlasImg;

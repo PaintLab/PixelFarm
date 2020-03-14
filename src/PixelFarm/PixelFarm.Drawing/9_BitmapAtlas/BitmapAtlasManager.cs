@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Platforms;
 
-namespace PixelFarm.Drawing.BitmapAtlas
+namespace PixelFarm.CpuBlit.BitmapAtlas
 {
     public class AtlasImageBinder : LayoutFarm.ImageBinder
     {
@@ -72,12 +72,12 @@ namespace PixelFarm.Drawing.BitmapAtlas
     public class BitmapAtlasManager<B>
         where B : IDisposable
     {
-        BitmapCache<SimpleFontAtlas, B> _loadAtlases;
-        Dictionary<string, SimpleFontAtlas> _createdAtlases = new Dictionary<string, SimpleFontAtlas>();
+        BitmapCache<SimpleBitmapAtlas, B> _loadAtlases;
+        Dictionary<string, SimpleBitmapAtlas> _createdAtlases = new Dictionary<string, SimpleBitmapAtlas>();
         TextureKind _textureKind;
 
         public BitmapAtlasManager(TextureKind textureKind,
-            LoadNewBmpDelegate<SimpleFontAtlas, B> _createNewDel)
+            LoadNewBmpDelegate<SimpleBitmapAtlas, B> _createNewDel)
             : this(textureKind)
         {
             //glyph cahce for specific atlas 
@@ -87,9 +87,9 @@ namespace PixelFarm.Drawing.BitmapAtlas
         {
             _textureKind = textureKind;
         }
-        protected void SetLoadNewBmpDel(LoadNewBmpDelegate<SimpleFontAtlas, B> _createNewDel)
+        protected void SetLoadNewBmpDel(LoadNewBmpDelegate<SimpleBitmapAtlas, B> _createNewDel)
         {
-            _loadAtlases = new BitmapCache<SimpleFontAtlas, B>(_createNewDel);
+            _loadAtlases = new BitmapCache<SimpleBitmapAtlas, B>(_createNewDel);
         }
 
 #if DEBUG
@@ -100,7 +100,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
         /// </summary>
         /// <param name="reqFont"></param>
         /// <returns></returns>
-        public SimpleFontAtlas GetBitmapAtlas(string atlasName, out B outputBitmap)
+        public SimpleBitmapAtlas GetBitmapAtlas(string atlasName, out B outputBitmap)
         {
 
 #if DEBUG
@@ -109,7 +109,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
 #endif
 
 
-            if (!_createdAtlases.TryGetValue(atlasName, out SimpleFontAtlas foundAtlas))
+            if (!_createdAtlases.TryGetValue(atlasName, out SimpleBitmapAtlas foundAtlas))
             {
                 //check from pre-built cache (if availiable)   
                 string textureInfoFile = atlasName + ".info";
@@ -119,13 +119,13 @@ namespace PixelFarm.Drawing.BitmapAtlas
                 if (StorageService.Provider.DataExists(textureInfoFile) &&
                     StorageService.Provider.DataExists(textureImgFilename))
                 {
-                    SimpleFontAtlasBuilder atlasBuilder = new SimpleFontAtlasBuilder();
+                    SimpleBitmapAtlasBuilder atlasBuilder = new SimpleBitmapAtlasBuilder();
                     using (System.IO.Stream dataStream = StorageService.Provider.ReadDataStream(textureInfoFile))
                     using (System.IO.Stream fontImgStream = StorageService.Provider.ReadDataStream(textureImgFilename))
                     {
                         try
                         {
-                            List<SimpleFontAtlas> atlasList = atlasBuilder.LoadFontAtlasInfo(dataStream);
+                            List<SimpleBitmapAtlas> atlasList = atlasBuilder.LoadAtlasInfo(dataStream);
                             foundAtlas = atlasList[0];
                             foundAtlas.TotalGlyph = PixelFarm.CpuBlit.MemBitmap.LoadBitmap(fontImgStream);
                             _createdAtlases.Add(atlasName, foundAtlas);

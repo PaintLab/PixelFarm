@@ -20,7 +20,7 @@ namespace OpenTkEssTest
         bool _resInit;
         GLBitmap _msdf_bmp;
         GLPainter _painter;
-        SimpleFontAtlas _fontAtlas;
+        SimpleBitmapAtlas _fontAtlas;
 
 
         Typeface _typeface;
@@ -51,7 +51,7 @@ namespace OpenTkEssTest
             glyphTextureGen.MsdfGenVersion = 3;
 
             //2. generate the glyphs
-            SimpleFontAtlasBuilder atlasBuilder = glyphTextureGen.CreateTextureFontFromBuildDetail(
+            SimpleBitmapAtlasBuilder atlasBuilder = glyphTextureGen.CreateTextureFontFromBuildDetail(
                 _typeface,
                 reqFont.SizeInPoints,
                 PixelFarm.Drawing.BitmapAtlas.TextureKind.Msdf,
@@ -64,14 +64,14 @@ namespace OpenTkEssTest
             //3. set information before write to font-info
             atlasBuilder.FontFilename = reqFont.Name;//TODO: review here, check if we need 'filename' or 'fontname'
             atlasBuilder.FontKey = reqFont.FontKey;
-            atlasBuilder.SpaceCompactOption = SimpleFontAtlasBuilder.CompactOption.ArrangeByHeight;
+            atlasBuilder.SpaceCompactOption = SimpleBitmapAtlasBuilder.CompactOption.ArrangeByHeight;
 
             //4. merge all glyph in the builder into a single image
             PixelFarm.CpuBlit.MemBitmap totalGlyphsImg = atlasBuilder.BuildSingleImage();
             //-------------------------------------------------------------
 
             //5. create a simple font atlas from information inside this atlas builder.
-            _fontAtlas = atlasBuilder.CreateSimpleFontAtlas();
+            _fontAtlas = atlasBuilder.CreateSimpleBitmapAtlas();
             _fontAtlas.TotalGlyph = totalGlyphsImg;
 
             byte[] codepoint = System.Text.Encoding.UTF8.GetBytes("AB");

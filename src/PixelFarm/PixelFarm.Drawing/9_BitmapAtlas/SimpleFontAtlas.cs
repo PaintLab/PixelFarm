@@ -3,12 +3,12 @@
 
 using System;
 using System.Collections.Generic;
- 
 
-namespace PixelFarm.Drawing.BitmapAtlas
+
+namespace PixelFarm.CpuBlit.BitmapAtlas
 {
 
-    public class SimpleFontAtlas
+    public class SimpleBitmapAtlas
     {
 
         Dictionary<ushort, TextureGlyphMapData> _glyphLocations = new Dictionary<ushort, TextureGlyphMapData>();
@@ -17,9 +17,9 @@ namespace PixelFarm.Drawing.BitmapAtlas
         static int s_totalDebugId;
         public readonly int dbugId = s_totalDebugId++;
 #endif
-        public SimpleFontAtlas()
+        public SimpleBitmapAtlas()
         {
- 
+
         }
 
         public Dictionary<string, ushort> ImgUrlDict { get; set; }
@@ -29,7 +29,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
         /// original font size in point unit
         /// </summary>
         public float OriginalFontSizePts { get; set; }
-        public PixelFarm.Drawing.BitmapAtlas.TextureKind TextureKind { get; set; }
+        public TextureKind TextureKind { get; set; }
         public string FontFilename { get; set; }
         public int FontKey { get; set; }
 
@@ -50,6 +50,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
         }
         public bool TryGetGlyphMapData(string itemName, out TextureGlyphMapData glyphdata)
         {
+            //get img item by unique name
             throw new NotSupportedException();
             //if (!_glyphLocations.TryGetValue(glyphIndex, out glyphdata))
             //{
@@ -60,7 +61,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
         }
         public Dictionary<ushort, TextureGlyphMapData> GlyphDic => _glyphLocations;
 
-        public static Dictionary<ushort, TextureGlyphMapData> CloneLocationWithOffset(SimpleFontAtlas org, int dx, int dy)
+        public static Dictionary<ushort, TextureGlyphMapData> CloneLocationWithOffset(SimpleBitmapAtlas org, int dx, int dy)
         {
             Dictionary<ushort, TextureGlyphMapData> cloneDic = new Dictionary<ushort, TextureGlyphMapData>();
             foreach (var kp in org._glyphLocations)

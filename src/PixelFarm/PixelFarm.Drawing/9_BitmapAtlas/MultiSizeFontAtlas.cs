@@ -2,12 +2,11 @@
 //----------------------------------- 
 
 using System;
-using System.Collections.Generic; 
-
-namespace PixelFarm.Drawing.BitmapAtlas
+using System.Collections.Generic;
+namespace PixelFarm.CpuBlit.BitmapAtlas
 { 
     public class MultiSizeFontAtlas
     {
-        List<SimpleFontAtlas> _fontAtlas = new List<SimpleFontAtlas>(); 
+        List<SimpleBitmapAtlas> _fontAtlas = new List<SimpleBitmapAtlas>(); 
     }
 }

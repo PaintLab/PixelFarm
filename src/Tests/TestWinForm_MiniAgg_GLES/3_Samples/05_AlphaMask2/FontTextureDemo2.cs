@@ -27,7 +27,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 
         LayoutFarm.OpenFontTextService _textServices;
         BitmapFontManager<MemBitmap> _bmpFontMx;
-        SimpleFontAtlas _fontAtlas;
+        SimpleBitmapAtlas _fontAtlas;
         RequestFont _font;
         MemBitmap _fontBmp;
         MemBitmap _alphaBmp;

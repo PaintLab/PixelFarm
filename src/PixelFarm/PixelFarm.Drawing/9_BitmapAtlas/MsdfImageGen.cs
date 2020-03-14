@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Contours;
-namespace PixelFarm.Drawing.BitmapAtlas
+namespace PixelFarm.CpuBlit.BitmapAtlas
 {
 
     /// <summary>
@@ -124,14 +124,14 @@ namespace PixelFarm.Drawing.BitmapAtlas
         }
         //---------------------------------------------------------------------
 
-        public static GlyphImage CreateMsdfImage(ContourBuilder glyphToContour, Msdfgen.MsdfGenParams genParams)
+        public static BitmapAtlasItem CreateMsdfImage(ContourBuilder glyphToContour, Msdfgen.MsdfGenParams genParams)
         {
             // create msdf shape , then convert to actual image
             return CreateMsdfImage(CreateMsdfShape(glyphToContour, genParams.shapeScale), genParams);
         }
 
         const double MAX = 1e240;
-        public static GlyphImage CreateMsdfImage(Msdfgen.Shape shape, Msdfgen.MsdfGenParams genParams)
+        public static BitmapAtlasItem CreateMsdfImage(Msdfgen.Shape shape, Msdfgen.MsdfGenParams genParams)
         {
             double left = MAX;
             double bottom = MAX;
@@ -190,7 +190,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
             //-----------------------------------
             int[] buffer = Msdfgen.FloatRGBBmp.ConvertToIntBmp(frgbBmp, false);
 
-            GlyphImage img = new GlyphImage(w, h);
+            BitmapAtlasItem img = new BitmapAtlasItem(w, h);
             img.TextureOffsetX = (short)translate.x; //TODO: review here, rounding err
             img.TextureOffsetY = (short)translate.y; //TODO: review here, rounding err
             img.SetImageBuffer(buffer, false);

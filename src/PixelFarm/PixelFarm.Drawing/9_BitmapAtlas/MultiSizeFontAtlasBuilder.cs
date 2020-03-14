@@ -4,9 +4,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using PixelFarm.CpuBlit;
+using PixelFarm.Drawing;
 
-namespace PixelFarm.Drawing.BitmapAtlas
+namespace PixelFarm.CpuBlit.BitmapAtlas
 {
     public class MultiSizeFontAtlasBuilder
     {
@@ -17,16 +17,16 @@ namespace PixelFarm.Drawing.BitmapAtlas
             public int fontKey;
             public string simpleFontAtlasFile;
             public string imgFile;
-            public FontAtlasFile fontAtlasFile;
+            public BitmapAtlasFile fontAtlasFile;
             public Dictionary<ushort, TextureGlyphMapData> NewCloneLocations;
             public RequestFont reqFont;
-            public PixelFarm.Drawing.BitmapAtlas.TextureKind textureKind;
+            public TextureKind textureKind;
         }
         public void AddSimpleFontAtlasFile(RequestFont reqFont,
-            string simpleFontAtlasFile, string imgFile, PixelFarm.Drawing.BitmapAtlas.TextureKind textureKind)
+            string simpleFontAtlasFile, string imgFile, TextureKind textureKind)
         {
             //TODO: use 'File' provider to access system file
-            var fontAtlasFile = new FontAtlasFile();
+            var fontAtlasFile = new BitmapAtlasFile();
             using (FileStream fs = new FileStream(simpleFontAtlasFile, FileMode.Open))
             {
                 fontAtlasFile.Read(fs);
@@ -55,7 +55,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
             for (int i = 0; i < j; ++i)
             {
                 SimpleFontAtlasInfo atlasInfo = _simpleFontInfoList[i];
-                SimpleFontAtlas fontAtlas = atlasInfo.fontAtlasFile.ResultSimpleFontAtlasList[0];
+                SimpleBitmapAtlas fontAtlas = atlasInfo.fontAtlasFile.ResultSimpleFontAtlasList[0];
                 totalHeight += fontAtlas.Height + interAtlasSpace;
                 if (i == 0)
                 {
@@ -76,7 +76,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
             for (int i = j - 1; i >= 0; --i)
             {
                 SimpleFontAtlasInfo atlasInfo = _simpleFontInfoList[i];
-                SimpleFontAtlas fontAtlas = atlasInfo.fontAtlasFile.ResultSimpleFontAtlasList[0];
+                SimpleBitmapAtlas fontAtlas = atlasInfo.fontAtlasFile.ResultSimpleFontAtlasList[0];
                 offsetFromBottoms[i] = offsetFromBottom;
                 offsetFromBottom += fontAtlas.Height + interAtlasSpace;
             }
@@ -89,10 +89,10 @@ namespace PixelFarm.Drawing.BitmapAtlas
                 for (int i = 0; i < j; ++i)
                 {
                     SimpleFontAtlasInfo atlasInfo = _simpleFontInfoList[i];
-                    FontAtlasFile atlasFile = atlasInfo.fontAtlasFile;
-                    SimpleFontAtlas fontAtlas = atlasInfo.fontAtlasFile.ResultSimpleFontAtlasList[0];
+                    BitmapAtlasFile atlasFile = atlasInfo.fontAtlasFile;
+                    SimpleBitmapAtlas fontAtlas = atlasInfo.fontAtlasFile.ResultSimpleFontAtlasList[0];
 
-                    atlasInfo.NewCloneLocations = SimpleFontAtlas.CloneLocationWithOffset(fontAtlas, 0, offsetFromBottoms[i]);
+                    atlasInfo.NewCloneLocations = SimpleBitmapAtlas.CloneLocationWithOffset(fontAtlas, 0, offsetFromBottoms[i]);
 
                     using (System.IO.Stream fontImgStream = PixelFarm.Platforms.StorageService.Provider.ReadDataStream(atlasInfo.imgFile))
                     using (PixelFarm.CpuBlit.MemBitmap atlasBmp = PixelFarm.CpuBlit.MemBitmap.LoadBitmap(fontImgStream))
@@ -113,7 +113,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
                 //-----------
                 //overview
                 //total img info
-                FontAtlasFile fontAtlasFile = new FontAtlasFile();
+                BitmapAtlasFile fontAtlasFile = new BitmapAtlasFile();
                 fontAtlasFile.StartWrite(fs);
 
                 //1. simple atlas count

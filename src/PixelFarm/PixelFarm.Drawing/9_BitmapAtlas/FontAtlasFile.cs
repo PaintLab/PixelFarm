@@ -2,17 +2,16 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO; 
+using System.IO;
 
-namespace PixelFarm.Drawing.BitmapAtlas
+namespace PixelFarm.CpuBlit.BitmapAtlas
 {
 
-    public class FontAtlasFile
+    public class BitmapAtlasFile
     {
-        //Typography's custom font atlas file        
-        SimpleFontAtlas _atlas;
+        SimpleBitmapAtlas _atlas;
 
-        enum FontTextureObjectKind : ushort
+        enum ObjectKind : ushort
         {
             End,
             TotalImageInfo,
@@ -22,12 +21,12 @@ namespace PixelFarm.Drawing.BitmapAtlas
         }
 
 
-        public List<SimpleFontAtlas> ResultSimpleFontAtlasList { get; private set; }
+        public List<SimpleBitmapAtlas> ResultSimpleFontAtlasList { get; private set; }
 
         public void Read(Stream inputStream)
         {
             //custom font atlas file                        
-            ResultSimpleFontAtlasList = new List<SimpleFontAtlas>();
+            ResultSimpleFontAtlasList = new List<SimpleBitmapAtlas>();
             using (BinaryReader reader = new BinaryReader(inputStream, System.Text.Encoding.UTF8))
             {
                 //1. version
@@ -38,26 +37,26 @@ namespace PixelFarm.Drawing.BitmapAtlas
                 while (!stop)
                 {
                     //2. read object kind
-                    FontTextureObjectKind objKind = (FontTextureObjectKind)reader.ReadUInt16();
+                    ObjectKind objKind = (ObjectKind)reader.ReadUInt16();
                     switch (objKind)
                     {
                         default: throw new NotSupportedException();
-                        case FontTextureObjectKind.OverviewMultiSizeFontInfo:
+                        case ObjectKind.OverviewMultiSizeFontInfo:
                             listCount = reader.ReadUInt16();
                             break;
-                        case FontTextureObjectKind.OverviewFontInfo:
+                        case ObjectKind.OverviewFontInfo:
                             //start new atlas
-                            _atlas = new SimpleFontAtlas();
+                            _atlas = new SimpleBitmapAtlas();
                             ResultSimpleFontAtlasList.Add(_atlas);
                             ReadOverviewFontInfo(reader);
                             break;
-                        case FontTextureObjectKind.End:
+                        case ObjectKind.End:
                             stop = true;
                             break;
-                        case FontTextureObjectKind.GlyphList:
+                        case ObjectKind.GlyphList:
                             ReadGlyphList(reader);
                             break;
-                        case FontTextureObjectKind.TotalImageInfo:
+                        case ObjectKind.TotalImageInfo:
                             ReadTotalImageInfo(reader);
                             break;
                     }
@@ -73,7 +72,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
             _atlas.Width = reader.ReadUInt16();
             _atlas.Height = reader.ReadUInt16();
             byte colorComponent = reader.ReadByte(); //1 or 4
-            _atlas.TextureKind = (PixelFarm.Drawing.BitmapAtlas.TextureKind)reader.ReadByte();
+            _atlas.TextureKind = (TextureKind)reader.ReadByte();
         }
         void ReadGlyphList(BinaryReader reader)
         {
@@ -125,14 +124,14 @@ namespace PixelFarm.Drawing.BitmapAtlas
         internal void EndWrite()
         {
             //write end marker
-            _writer.Write((ushort)FontTextureObjectKind.End);
+            _writer.Write((ushort)ObjectKind.End);
             //
             _writer.Flush();
             _writer = null;
         }
         internal void WriteOverviewMultiSizeFontInfo(ushort count)
         {
-            _writer.Write((ushort)FontTextureObjectKind.OverviewMultiSizeFontInfo);
+            _writer.Write((ushort)ObjectKind.OverviewMultiSizeFontInfo);
             _writer.Write((ushort)count);
         }
         void WriteLengthPrefixUtf8String(string value)
@@ -160,14 +159,14 @@ namespace PixelFarm.Drawing.BitmapAtlas
 #endif
 
 
-            _writer.Write((ushort)FontTextureObjectKind.OverviewFontInfo);
+            _writer.Write((ushort)ObjectKind.OverviewFontInfo);
             WriteLengthPrefixUtf8String(fontFileName);
             _writer.Write(fontKey);
             _writer.Write(sizeInPt);
         }
-        internal void WriteTotalImageInfo(ushort width, ushort height, byte colorComponent, PixelFarm.Drawing.BitmapAtlas.TextureKind textureKind)
+        internal void WriteTotalImageInfo(ushort width, ushort height, byte colorComponent, TextureKind textureKind)
         {
-            _writer.Write((ushort)FontTextureObjectKind.TotalImageInfo);
+            _writer.Write((ushort)ObjectKind.TotalImageInfo);
             _writer.Write(width);
             _writer.Write(height);
             _writer.Write(colorComponent);
@@ -184,7 +183,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
 #endif
 
             //kind
-            _writer.Write((ushort)FontTextureObjectKind.GlyphList);
+            _writer.Write((ushort)ObjectKind.GlyphList);
             //count
             _writer.Write((ushort)totalNum);
             // 
@@ -200,7 +199,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
                 _writer.Write((ushort)g.area.Height);
 
                 //3. texture offset                
-                GlyphImage img = g.img;
+                BitmapAtlasItem img = g.img;
                 _writer.Write((short)img.TextureOffsetX);
                 _writer.Write((short)img.TextureOffsetY);
             }
@@ -217,7 +216,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
             }
 #endif
 
-            _writer.Write((ushort)FontTextureObjectKind.GlyphList);
+            _writer.Write((ushort)ObjectKind.GlyphList);
             //count
             _writer.Write((ushort)totalNum);
             // 

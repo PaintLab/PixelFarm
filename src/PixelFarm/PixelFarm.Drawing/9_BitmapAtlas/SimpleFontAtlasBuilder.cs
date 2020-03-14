@@ -2,30 +2,28 @@
 //----------------------------------- 
 
 using System.Collections.Generic;
-
-using PixelFarm.Drawing.Fonts;
-
-using PixelFarm.Contours;
-using PixelFarm.Drawing.BitmapAtlas;
-
-namespace PixelFarm.Drawing.BitmapAtlas
+using PixelFarm.Drawing;
+namespace PixelFarm.CpuBlit.BitmapAtlas
 {
 
-    public class SimpleFontAtlasBuilder
+    public class SimpleBitmapAtlasBuilder
     {
-        PixelFarm.CpuBlit.MemBitmap _latestGenGlyphImage;
+        MemBitmap _latestGenGlyphImage;
         Dictionary<ushort, CacheGlyph> _glyphs = new Dictionary<ushort, CacheGlyph>();
 
-        public SimpleFontAtlasBuilder()
+        public SimpleBitmapAtlasBuilder()
         {
             SpaceCompactOption = CompactOption.BinPack; //default
             MaxAtlasWidth = 800;
         }
         public int MaxAtlasWidth { get; set; }
-        public PixelFarm.Drawing.BitmapAtlas.TextureKind TextureKind { get; private set; }
+        public TextureKind TextureKind { get; private set; }
+
+        //information about font
         public float FontSizeInPoints { get; private set; }
         public string FontFilename { get; set; }
         public int FontKey { get; set; }
+
         public CompactOption SpaceCompactOption { get; set; }
         //
         public enum CompactOption
@@ -40,12 +38,12 @@ namespace PixelFarm.Drawing.BitmapAtlas
         /// </summary>
         /// <param name="glyphIndex"></param>
         /// <param name="img"></param>
-        public void AddGlyph(ushort glyphIndex, GlyphImage img)
+        public void AddGlyph(ushort glyphIndex, BitmapAtlasItem img)
         {
             _glyphs[glyphIndex] = new CacheGlyph(glyphIndex, img);
         }
 
-        public void SetAtlasInfo(PixelFarm.Drawing.BitmapAtlas.TextureKind textureKind, float fontSizeInPts)
+        public void SetAtlasInfo(TextureKind textureKind, float fontSizeInPts)
         {
             this.TextureKind = textureKind;
             this.FontSizeInPoints = fontSizeInPts;
@@ -53,12 +51,11 @@ namespace PixelFarm.Drawing.BitmapAtlas
         public PixelFarm.CpuBlit.MemBitmap BuildSingleImage()
         {
             //1. add to list 
-            var glyphList = new List<CacheGlyph>(_glyphs.Count);
-            foreach (CacheGlyph glyphImg in _glyphs.Values)
-            {
-                //sort data
-                glyphList.Add(glyphImg);
-            }
+            var glyphList = new List<CacheGlyph>(_glyphs.Values);
+            //foreach (CacheGlyph glyphImg in _glyphs.Values)
+            //{                
+            //    glyphList.Add(glyphImg);
+            //}
 
             int totalMaxLim = MaxAtlasWidth;
             int maxRowHeight = 0;
@@ -164,6 +161,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
             {
                 totalImgWidth = 0;//reset
                 //use bin packer
+                
                 BinPacker binPacker = new BinPacker(totalMaxLim, currentY);
                 for (int i = glyphList.Count - 1; i >= 0; --i)
                 {
@@ -190,7 +188,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
                 {
                     CacheGlyph g = glyphList[i];
                     //copy glyph image buffer to specific area of final result buffer
-                    GlyphImage img = g.img;
+                    BitmapAtlasItem img = g.img;
                     CopyToDest(img.GetImageBuffer(), img.Width, img.Height, mergeBmpBuffer, g.area.Left, g.area.Top, totalImgWidth);
                 }
             }
@@ -201,7 +199,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
                 {
                     CacheGlyph g = glyphList[i];
                     //copy glyph image buffer to specific area of final result buffer
-                    GlyphImage img = g.img;
+                    BitmapAtlasItem img = g.img;
                     CopyToDest(img.GetImageBuffer(), img.Width, img.Height, mergeBmpBuffer, g.area.Left, g.area.Top, totalImgWidth);
                 }
             }
@@ -245,19 +243,21 @@ namespace PixelFarm.Drawing.BitmapAtlas
                 throw new System.Exception("");
             }
 
-            FontAtlasFile fontAtlasFile = new FontAtlasFile();
-            fontAtlasFile.StartWrite(outputStream);
-            fontAtlasFile.WriteOverviewFontInfo(FontFilename, FontKey, FontSizeInPoints);
+            BitmapAtlasFile atlasFile = new BitmapAtlasFile();
+            atlasFile.StartWrite(outputStream);
+            atlasFile.WriteOverviewFontInfo(FontFilename, FontKey, FontSizeInPoints);
 
-            fontAtlasFile.WriteTotalImageInfo(
+            atlasFile.WriteTotalImageInfo(
                 (ushort)_latestGenGlyphImage.Width,
                 (ushort)_latestGenGlyphImage.Height, 4,
                 this.TextureKind);
             //
             //
-            fontAtlasFile.WriteGlyphList(_glyphs);
-            fontAtlasFile.EndWrite();
+            atlasFile.WriteGlyphList(_glyphs);
+            atlasFile.EndWrite();
         }
+
+        //name -> point to index
         public Dictionary<string, ushort> ImgUrlDict { get; set; }
 
         public void SaveAtlasInfo(string outputFilename)
@@ -268,20 +268,21 @@ namespace PixelFarm.Drawing.BitmapAtlas
                 SaveAtlasInfo(fs);
             }
         }
-        public List<SimpleFontAtlas> LoadFontAtlasInfo(string infoFilename)
+        public List<SimpleBitmapAtlas> LoadAtlasInfo(string infoFilename)
         {
             //TODO: review here, use extension method
             using (System.IO.FileStream fs = new System.IO.FileStream(infoFilename, System.IO.FileMode.Open))
             {
-                return LoadFontAtlasInfo(fs);
+                return LoadAtlasInfo(fs);
             }
         }
 
-        public SimpleFontAtlas CreateSimpleFontAtlas()
+        public SimpleBitmapAtlas CreateSimpleBitmapAtlas()
         {
-            SimpleFontAtlas simpleFontAtlas = new SimpleFontAtlas();
-            simpleFontAtlas.TextureKind = this.TextureKind;
-            simpleFontAtlas.OriginalFontSizePts = this.FontSizeInPoints;
+            SimpleBitmapAtlas atlas = new SimpleBitmapAtlas();
+            atlas.TextureKind = this.TextureKind;
+            atlas.OriginalFontSizePts = this.FontSizeInPoints;
+
             foreach (CacheGlyph cacheGlyph in _glyphs.Values)
             {
 
@@ -297,15 +298,15 @@ namespace PixelFarm.Drawing.BitmapAtlas
                 glyphData.TextureYOffset = cacheGlyph.img.TextureOffsetY;
 
 
-                simpleFontAtlas.AddGlyph(cacheGlyph.glyphIndex, glyphData);
+                atlas.AddGlyph(cacheGlyph.glyphIndex, glyphData);
             }
 
-            return simpleFontAtlas;
+            return atlas;
         }
 
-        public List<SimpleFontAtlas> LoadFontAtlasInfo(System.IO.Stream dataStream)
+        public List<SimpleBitmapAtlas> LoadAtlasInfo(System.IO.Stream dataStream)
         {
-            FontAtlasFile atlasFile = new FontAtlasFile();
+            BitmapAtlasFile atlasFile = new BitmapAtlasFile();
             //read font atlas from stream data
             atlasFile.Read(dataStream);
             return atlasFile.ResultSimpleFontAtlasList;

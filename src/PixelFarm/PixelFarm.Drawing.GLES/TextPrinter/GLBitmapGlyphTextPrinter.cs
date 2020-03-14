@@ -3,10 +3,9 @@ using System;
 using System.Collections.Generic;
 //
 using PixelFarm.CpuBlit;
-using PixelFarm.Drawing;
-using PixelFarm.Drawing.Fonts;
-using PixelFarm.Drawing.BitmapAtlas;
-//
+using PixelFarm.CpuBlit.BitmapAtlas;
+using PixelFarm.Drawing; 
+
 using Typography.TextLayout;
 using Typography.OpenFont;
 
@@ -107,7 +106,7 @@ namespace PixelFarm.DrawingGL
     {
 
         MySimpleGLBitmapFontManager _myGLBitmapFontMx;
-        PixelFarm.Drawing.BitmapAtlas.SimpleFontAtlas _fontAtlas;
+        SimpleBitmapAtlas _fontAtlas;
         GLPainterContext _pcx;
         GLPainter _painter;
         GLBitmap _glBmp;
@@ -166,9 +165,9 @@ namespace PixelFarm.DrawingGL
                 {
                     try
                     {
-                        FontAtlasFile fontAtlas = new FontAtlasFile();
+                        BitmapAtlasFile fontAtlas = new BitmapAtlasFile();
                         fontAtlas.Read(fontTextureInfoStream);
-                        SimpleFontAtlas[] resultAtlases = fontAtlas.ResultSimpleFontAtlasList.ToArray();
+                        SimpleBitmapAtlas[] resultAtlases = fontAtlas.ResultSimpleFontAtlasList.ToArray();
                         _myGLBitmapFontMx.AddSimpleFontAtlas(resultAtlases, fontTextureImgStream);
                     }
                     catch (Exception ex)
@@ -279,7 +278,7 @@ namespace PixelFarm.DrawingGL
 
             float scaleFromTexture = _font.SizeInPoints / _fontAtlas.OriginalFontSizePts;
 
-            PixelFarm.Drawing.BitmapAtlas.TextureKind textureKind = _fontAtlas.TextureKind;
+            TextureKind textureKind = _fontAtlas.TextureKind;
 
             float g_left = 0;
             float g_top = 0;
@@ -314,7 +313,7 @@ namespace PixelFarm.DrawingGL
             //UseVBO = s_dbugUseVBO;//for debug only 
 #endif
 
-            if (textureKind == PixelFarm.Drawing.BitmapAtlas.TextureKind.Msdf)
+            if (textureKind == TextureKind.Msdf)
             {
                 DrawingTechnique = GlyphTexturePrinterDrawingTechnique.Msdf;
             }
@@ -658,7 +657,7 @@ namespace PixelFarm.DrawingGL
 
             //-------------------------- 
 
-            Drawing.BitmapAtlas.TextureKind textureKind = _fontAtlas.TextureKind;
+            TextureKind textureKind = _fontAtlas.TextureKind;
             float g_left = 0;
             float g_top = 0;
 

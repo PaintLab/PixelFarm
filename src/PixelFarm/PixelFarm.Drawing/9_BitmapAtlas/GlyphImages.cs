@@ -1,16 +1,19 @@
 ﻿//MIT, 2016-present, WinterDev
 using System;
 
-namespace PixelFarm.Drawing.BitmapAtlas
+using PixelFarm.Drawing;
+namespace PixelFarm.CpuBlit.BitmapAtlas
 {
-    public class GlyphImage
+       
+    public class BitmapAtlasItem
     {
         int[] _pixelBuffer;
-        public GlyphImage(int w, int h)
+        public BitmapAtlasItem(int w, int h)
         {
             this.Width = w;
             this.Height = h;
         }
+
         public RectangleF OriginalGlyphBounds { get; set; }
 
         public int Width { get; private set; }
@@ -40,14 +43,19 @@ namespace PixelFarm.Drawing.BitmapAtlas
         /// texture offset Y from original glyph 
         /// </summary>
         public short TextureOffsetY { get; set; }
+
+        //-------------------
+
+
+
     }
 
     class CacheGlyph
     {
         public readonly ushort glyphIndex;
-        internal readonly GlyphImage img;
+        internal readonly BitmapAtlasItem img;
         public Rectangle area;
-        public CacheGlyph(ushort glyphIndex, GlyphImage img)
+        public CacheGlyph(ushort glyphIndex, BitmapAtlasItem img)
         {
             this.glyphIndex = glyphIndex;
             this.img = img;

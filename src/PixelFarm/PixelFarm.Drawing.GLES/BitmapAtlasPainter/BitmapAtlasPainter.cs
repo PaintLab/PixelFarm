@@ -3,14 +3,13 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
-using PixelFarm.Drawing.BitmapAtlas;
-using Typography.Rendering;
-using PixelFarm.Drawing.Fonts;
+using PixelFarm.CpuBlit.BitmapAtlas;
+
 namespace PixelFarm.DrawingGL
 {
     public class GLBitmapAtlasPainter
     {
-        SimpleFontAtlas _bmpAtlas;
+        SimpleBitmapAtlas _bmpAtlas;
         GLBitmap _glBmp;//current bitmap
         MySimpleGLBitmapAtlasManager _atlasManager;
         string _lastestImgFile = null;

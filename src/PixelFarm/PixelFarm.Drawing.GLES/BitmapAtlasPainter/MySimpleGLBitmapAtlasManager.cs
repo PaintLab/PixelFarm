@@ -3,7 +3,8 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.DrawingGL;
-namespace PixelFarm.Drawing.BitmapAtlas
+
+namespace PixelFarm.CpuBlit.BitmapAtlas
 {
     //TODO: review class and method names
 

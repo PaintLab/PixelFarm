@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 
 using PixelFarm.Drawing;
-using PixelFarm.Drawing.BitmapAtlas;
+using PixelFarm.CpuBlit.BitmapAtlas;
 
 using Typography.OpenFont;
 using Typography.Rendering;
@@ -26,7 +26,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
         LayoutFarm.OpenFontTextService _textServices;
         BitmapFontManager<MemBitmap> _bmpFontMx;
-        SimpleFontAtlas _fontAtlas;
+        SimpleBitmapAtlas _fontAtlas;
         RequestFont _font;
         MemBitmap _fontBmp;
 
