@@ -1,6 +1,6 @@
 ﻿//MIT, 2016-present, WinterDev
 using System;
- 
+
 namespace PixelFarm.Drawing.BitmapAtlas
 {
     public class GlyphImage
@@ -30,7 +30,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
         }
         public void SetImageBuffer(PixelFarm.CpuBlit.MemBitmap memBmp)
         {
-            throw new NotSupportedException();
+            _pixelBuffer = PixelFarm.CpuBlit.MemBitmap.CopyImgBuffer(memBmp);
         }
         /// <summary>
         /// texture offset X from original glyph
