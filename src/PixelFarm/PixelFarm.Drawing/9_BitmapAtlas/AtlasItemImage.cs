@@ -5,32 +5,39 @@ namespace PixelFarm.Drawing.BitmapAtlas
 {
     public class AtlasItemImage
     {
-        MemBitmap _bmp;
         public AtlasItemImage(int w, int h)
         {
             this.Width = w;
             this.Height = h;
         }
-        public RectangleF OriginalBounds { get; set; }
-        public int Width { get; }
-        public int Height { get; }
         public bool IsBigEndian { get; private set; }
-        public int BorderXY { get; set; }
-        public MemBitmap Bitmap => _bmp;
-        //
+      
+        /// <summary>
+        /// physical width of item
+        /// </summary>
+        public int Width { get; }
+        /// <summary>
+        /// physical height of item
+        /// </summary>
+        public int Height { get; }
+
+        public MemBitmap Bitmap { get; private set; } 
+
         public void SetBitmap(MemBitmap bmp, bool isBigEndian)
         {
-            _bmp = bmp;
+            Bitmap = bmp;
             this.IsBigEndian = isBigEndian;
         }
         /// <summary>
-        /// texture offset X from original glyph
+        /// texture offset X from original reference x
         /// </summary>
         public short TextureOffsetX { get; set; }
         /// <summary>
-        /// texture offset Y from original glyph 
+        /// texture offset Y from original reference y  
         /// </summary>
         public short TextureOffsetY { get; set; }
+
+
     }
 
     class CacheBmp

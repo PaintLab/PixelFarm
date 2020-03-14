@@ -89,7 +89,7 @@ namespace Mini
         SimpleBitmapAtlasBuilder _bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
         SimpleBitmaptAtlas _bitmapAtlas;
         MemBitmap _totalAtlasImg;
-        AtlasItemImage _atlasImg;
+      
         private void cmdReadBmpAtlas_Click(object sender, EventArgs e)
         {
             string atlas_file = "test_bmpAtlas";
@@ -100,9 +100,8 @@ namespace Mini
 
 
             //
-            _totalAtlasImg = LoadBmp(atlas_file + ".png");
-            _atlasImg = new AtlasItemImage(_totalAtlasImg.Width, _totalAtlasImg.Height);
-            _bitmapAtlas.TotalImg = _atlasImg;
+            _totalAtlasImg = LoadBmp(atlas_file + ".png"); 
+            _bitmapAtlas.TotalImg = _totalAtlasImg;
 
             //-----
             int count = _bitmapAtlas.ImgUrlDict.Count;
@@ -202,8 +201,7 @@ namespace Mini
                 //3. load a bitmap
                 MemBitmap itemBmp = imgLoader(f);
                 //4. get information about it
-                AtlasItemImage atlasItem = new AtlasItemImage(itemBmp.Width, itemBmp.Height);
-                atlasItem.OriginalBounds = new PixelFarm.Drawing.RectangleF(0, 0, itemBmp.Width, itemBmp.Height);
+                AtlasItemImage atlasItem = new AtlasItemImage(itemBmp.Width, itemBmp.Height);              
                 atlasItem.SetBitmap(itemBmp, false);
                 //5. add to builder
                 bmpAtlasBuilder.AddAtlasItemImage(index, atlasItem);
@@ -241,9 +239,8 @@ namespace Mini
                 bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
                 SimpleBitmaptAtlas bitmapAtlas = bmpAtlasBuilder.LoadAtlasInfo(atlasInfoFile);
                 //
-                MemBitmap totalAtlasImg = imgLoader(totalImgFile);
-                AtlasItemImage atlasImg = new AtlasItemImage(totalAtlasImg.Width, totalAtlasImg.Height);
-                bitmapAtlas.TotalImg = atlasImg;
+                MemBitmap totalAtlasImg = imgLoader(totalImgFile); 
+                bitmapAtlas.TotalImg = totalAtlasImg;
 
                 //-----
                 for (int i = 0; i < index; ++i)

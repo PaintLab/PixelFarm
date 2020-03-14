@@ -33,9 +33,8 @@ namespace PixelFarm.Drawing.BitmapAtlas
 
     public class SimpleBitmaptAtlas
     {
-        AtlasItemImage _totalImg;
-        Dictionary<ushort, BitmapMapData> _locations = new Dictionary<ushort, BitmapMapData>();
-
+        PixelFarm.CpuBlit.MemBitmap _totalImg;
+        Dictionary<ushort, BitmapMapData> _indexToLocations = new Dictionary<ushort, BitmapMapData>();
 
         public int Width { get; set; }
         public int Height { get; set; }
@@ -49,16 +48,16 @@ namespace PixelFarm.Drawing.BitmapAtlas
 
         public void AddBitmapMapData(ushort imgIndex, BitmapMapData bmpMapData)
         {
-            _locations.Add(imgIndex, bmpMapData);
+            _indexToLocations.Add(imgIndex, bmpMapData);
         }
-        public AtlasItemImage TotalImg
+        public PixelFarm.CpuBlit.MemBitmap TotalImg
         {
             get => _totalImg;
             set => _totalImg = value;
         }
         public bool TryGetBitmapMapData(ushort imgIndex, out BitmapMapData bmpMapData)
         {
-            if (!_locations.TryGetValue(imgIndex, out bmpMapData))
+            if (!_indexToLocations.TryGetValue(imgIndex, out bmpMapData))
             {
                 bmpMapData = null;
                 return false;

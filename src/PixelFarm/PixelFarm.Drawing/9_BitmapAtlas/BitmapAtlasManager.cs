@@ -105,11 +105,8 @@ namespace PixelFarm.Drawing.BitmapAtlas
                     {
                         try
                         {
-                            foundAtlas = atlasBuilder.LoadAtlasInfo(dataStream);
-                            PixelFarm.CpuBlit.MemBitmap memBmp = PixelFarm.CpuBlit.MemBitmap.LoadBitmap(fontImgStream);
-                            AtlasItemImage atlasImg = new AtlasItemImage(memBmp.Width, memBmp.Height); //TODO: review new .ctor
-                            atlasImg.SetBitmap(memBmp, false);
-                            foundAtlas.TotalImg = atlasImg;
+                            foundAtlas = atlasBuilder.LoadAtlasInfo(dataStream); 
+                            foundAtlas.TotalImg = PixelFarm.CpuBlit.MemBitmap.LoadBitmap(fontImgStream);
                             _createdAtlases.Add(atlasName, foundAtlas);
                         }
                         catch (Exception ex)
