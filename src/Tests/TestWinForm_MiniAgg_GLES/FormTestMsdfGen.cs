@@ -136,7 +136,8 @@ namespace Mini
 
             //just example, not need to open-read everytime.
             Typeface typeface = null;
-            string fontpath = "Samples/SourceSansPro-Regular.ttf";
+            //string fontpath = "Samples/SourceSansPro-Regular.ttf";
+            string fontpath = "Samples/Roboto-Regular.ttf";
             using (FileStream fs = new FileStream(fontpath, FileMode.Open, FileAccess.Read))
             {
                 OpenFontReader fontReader = new OpenFontReader();
@@ -292,7 +293,7 @@ namespace Mini
         string _scaled_lutFilename;
         private void button2_Click(object sender, EventArgs e)
         {
-            //test fake msdf (this is not real msdf gen)
+            //test msdf3 (this is not real msdf gen)
             //--------------------
             _scaled_lutFilename = null;//reset
             DisposeExistingPictureBoxImage(picLut);
