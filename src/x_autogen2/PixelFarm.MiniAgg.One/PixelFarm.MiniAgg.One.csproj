@@ -965,11 +965,8 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MsdfImageGen.cs">
       <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MsdfImageGen.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MultiSizeBitmapAtlas.cs">
-      <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MultiSizeBitmapAtlas.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MultiSizeBitmapAtlasBuilder.cs">
-      <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MultiSizeBitmapAtlasBuilder.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MultiGlyphSizeBitmapAtlasBuilder.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MultiGlyphSizeBitmapAtlasBuilder.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmapAtlas.cs">
       <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmapAtlas.cs</Link>

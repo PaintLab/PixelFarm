@@ -8,12 +8,13 @@ using PixelFarm.Drawing;
 
 namespace PixelFarm.CpuBlit.BitmapAtlas
 {
-    public class MultiSizeBitmapAtlasBuilder
+    /// <summary>
+    /// for build multiple font atlas
+    /// </summary>
+    public class MultiGlyphSizeBitmapAtlasBuilder
     {
-
-        List<SimpleAtlasInfo> _simpleFontInfoList = new List<SimpleAtlasInfo>();
-
-        class SimpleAtlasInfo
+        List<SimpleFontAtlasInfo> _atlasList = new List<SimpleFontAtlasInfo>();
+        class SimpleFontAtlasInfo
         {
             public int fontKey;
             public string simpleFontAtlasFile;
@@ -24,39 +25,39 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             public TextureKind textureKind;
         }
 
-        public void AddSimpleFontAtlasFile(RequestFont reqFont,
-            string simpleFontAtlasFile, string imgFile, TextureKind textureKind)
+        public void AddSimpleAtlasFile(RequestFont reqFont,
+            string bitmapAtlasFile, string imgFile, TextureKind textureKind)
         {
             //TODO: use 'File' provider to access system file
             var fontAtlasFile = new BitmapAtlasFile();
-            using (FileStream fs = new FileStream(simpleFontAtlasFile, FileMode.Open))
+            using (FileStream fs = new FileStream(bitmapAtlasFile, FileMode.Open))
             {
                 fontAtlasFile.Read(fs);
             }
 
-            var simpleFontAtlasInfo = new SimpleAtlasInfo()
+            var simpleFontAtlasInfo = new SimpleFontAtlasInfo()
             {
                 reqFont = reqFont,
-                simpleFontAtlasFile = simpleFontAtlasFile,
+                simpleFontAtlasFile = bitmapAtlasFile,
                 imgFile = imgFile,
                 fontAtlasFile = fontAtlasFile,
                 textureKind = textureKind
 
             };
-            _simpleFontInfoList.Add(simpleFontAtlasInfo);
+            _atlasList.Add(simpleFontAtlasInfo);
         }
-        public void BuildMultiFontSize(string multiFontSizrAtlasFilename, string imgOutputFilename)
+        public void BuildMultiFontSize(string multiFontSizeAtlasFilename, string imgOutputFilename)
         {
             //merge to the new one
             //1. ensure same atlas width
             int atlasW = 0;
-            int j = _simpleFontInfoList.Count;
+            int j = _atlasList.Count;
             int totalHeight = 0;
 
             const int interAtlasSpace = 2;
             for (int i = 0; i < j; ++i)
             {
-                SimpleAtlasInfo atlasInfo = _simpleFontInfoList[i];
+                SimpleFontAtlasInfo atlasInfo = _atlasList[i];
                 SimpleBitmapAtlas fontAtlas = atlasInfo.fontAtlasFile.ResultSimpleFontAtlasList[0];
                 totalHeight += fontAtlas.Height + interAtlasSpace;
                 if (i == 0)
@@ -77,7 +78,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             int offsetFromBottom = interAtlasSpace;//start offset 
             for (int i = j - 1; i >= 0; --i)
             {
-                SimpleAtlasInfo atlasInfo = _simpleFontInfoList[i];
+                SimpleFontAtlasInfo atlasInfo = _atlasList[i];
                 SimpleBitmapAtlas fontAtlas = atlasInfo.fontAtlasFile.ResultSimpleFontAtlasList[0];
                 offsetFromBottoms[i] = offsetFromBottom;
                 offsetFromBottom += fontAtlas.Height + interAtlasSpace;
@@ -85,12 +86,12 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             //--------------------------------------------
             //merge all img to one
             int top = 0;
-            using (PixelFarm.CpuBlit.MemBitmap memBitmap = new CpuBlit.MemBitmap(atlasW, totalHeight))
+            using (MemBitmap memBitmap = new MemBitmap(atlasW, totalHeight))
             {
-                PixelFarm.CpuBlit.AggPainter painter = PixelFarm.CpuBlit.AggPainter.Create(memBitmap);
+                AggPainter painter = AggPainter.Create(memBitmap);
                 for (int i = 0; i < j; ++i)
                 {
-                    SimpleAtlasInfo atlasInfo = _simpleFontInfoList[i];
+                    SimpleFontAtlasInfo atlasInfo = _atlasList[i];
                     BitmapAtlasFile atlasFile = atlasInfo.fontAtlasFile;
                     SimpleBitmapAtlas fontAtlas = atlasInfo.fontAtlasFile.ResultSimpleFontAtlasList[0];
 
@@ -109,7 +110,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             //--------------------------------------------
             //save merged font atlas
             //TODO: use 'File' provider to access system file
-            using (FileStream fs = new FileStream(multiFontSizrAtlasFilename, FileMode.Create))
+            using (FileStream fs = new FileStream(multiFontSizeAtlasFilename, FileMode.Create))
             using (BinaryWriter w = new BinaryWriter(fs))
             {
                 //-----------
@@ -123,7 +124,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
                 //2. 
                 for (int i = 0; i < j; ++i)
                 {
-                    SimpleAtlasInfo atlasInfo = _simpleFontInfoList[i];
+                    SimpleFontAtlasInfo atlasInfo = _atlasList[i];
                     RequestFont reqFont = atlasInfo.reqFont;
                     fontAtlasFile.WriteOverviewFontInfo(reqFont.Name, reqFont.FontKey, reqFont.SizeInPoints);//size in points
 

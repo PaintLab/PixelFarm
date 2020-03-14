@@ -799,8 +799,7 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BitmapAtlasItem.cs" Link="PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BitmapAtlasItem.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BitmapAtlasManager.cs" Link="PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BitmapAtlasManager.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MsdfImageGen.cs" Link="PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MsdfImageGen.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MultiSizeBitmapAtlas.cs" Link="PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MultiSizeBitmapAtlas.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MultiSizeBitmapAtlasBuilder.cs" Link="PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MultiSizeBitmapAtlasBuilder.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MultiGlyphSizeBitmapAtlasBuilder.cs" Link="PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MultiGlyphSizeBitmapAtlasBuilder.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmapAtlas.cs" Link="PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmapAtlas.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmapAtlasBuilder.cs" Link="PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmapAtlasBuilder.cs" />
     <Compile Include="..\..\..\..\Typography\Build\N20\Typography.OpenFont\System.Numerics.ForNet20.cs" Link="Typography\Build\N20\Typography.OpenFont\System.Numerics.ForNet20.cs" />
