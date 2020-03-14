@@ -9,7 +9,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
     public class SimpleBitmapAtlasBuilder
     {
         MemBitmap _latestGenGlyphImage;
-        Dictionary<ushort, CacheGlyph> _glyphs = new Dictionary<ushort, CacheGlyph>();
+        Dictionary<ushort, RelocationAtlasItem> _glyphs = new Dictionary<ushort, RelocationAtlasItem>();
 
         public SimpleBitmapAtlasBuilder()
         {
@@ -40,7 +40,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
         /// <param name="img"></param>
         public void AddGlyph(ushort glyphIndex, BitmapAtlasItem img)
         {
-            _glyphs[glyphIndex] = new CacheGlyph(glyphIndex, img);
+            _glyphs[glyphIndex] = new RelocationAtlasItem(glyphIndex, img);
         }
 
         public void SetAtlasInfo(TextureKind textureKind, float fontSizeInPts)
@@ -51,7 +51,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
         public PixelFarm.CpuBlit.MemBitmap BuildSingleImage()
         {
             //1. add to list 
-            var glyphList = new List<CacheGlyph>(_glyphs.Values);
+            var glyphList = new List<RelocationAtlasItem>(_glyphs.Values);
             //foreach (CacheGlyph glyphImg in _glyphs.Values)
             //{                
             //    glyphList.Add(glyphImg);
@@ -76,7 +76,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
                         //3. layout 
                         for (int i = glyphList.Count - 1; i >= 0; --i)
                         {
-                            CacheGlyph g = glyphList[i];
+                            RelocationAtlasItem g = glyphList[i];
                             if (g.img.Height > maxRowHeight)
                             {
                                 maxRowHeight = g.img.Height;
@@ -105,7 +105,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
                         int glyphCount = glyphList.Count;
                         for (int i = 0; i < glyphCount; ++i)
                         {
-                            CacheGlyph g = glyphList[i];
+                            RelocationAtlasItem g = glyphList[i];
                             if (g.img.Height > maxRowHeight)
                             {
                                 maxRowHeight = g.img.Height;
@@ -130,7 +130,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
                         int glyphCount = glyphList.Count;
                         for (int i = 0; i < glyphCount; ++i)
                         {
-                            CacheGlyph g = glyphList[i];
+                            RelocationAtlasItem g = glyphList[i];
                             if (g.img.Height > maxRowHeight)
                             {
                                 maxRowHeight = g.img.Height;
@@ -165,7 +165,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
                 BinPacker binPacker = new BinPacker(totalMaxLim, currentY);
                 for (int i = glyphList.Count - 1; i >= 0; --i)
                 {
-                    CacheGlyph g = glyphList[i];
+                    RelocationAtlasItem g = glyphList[i];
                     BinPackRect newRect = binPacker.Insert(g.img.Width, g.img.Height);
                     g.area = new Rectangle(newRect.X, newRect.Y, g.img.Width, g.img.Height);
 
@@ -186,7 +186,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             {
                 for (int i = glyphList.Count - 1; i >= 0; --i)
                 {
-                    CacheGlyph g = glyphList[i];
+                    RelocationAtlasItem g = glyphList[i];
                     //copy glyph image buffer to specific area of final result buffer
                     BitmapAtlasItem img = g.img;
                     CopyToDest(img.GetImageBuffer(), img.Width, img.Height, mergeBmpBuffer, g.area.Left, g.area.Top, totalImgWidth);
@@ -197,7 +197,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
                 int glyphCount = glyphList.Count;
                 for (int i = 0; i < glyphCount; ++i)
                 {
-                    CacheGlyph g = glyphList[i];
+                    RelocationAtlasItem g = glyphList[i];
                     //copy glyph image buffer to specific area of final result buffer
                     BitmapAtlasItem img = g.img;
                     CopyToDest(img.GetImageBuffer(), img.Width, img.Height, mergeBmpBuffer, g.area.Left, g.area.Top, totalImgWidth);
@@ -221,7 +221,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             //flipY on atlas info too
             for (int i = 0; i < glyphList.Count; ++i)
             {
-                CacheGlyph g = glyphList[i];
+                RelocationAtlasItem g = glyphList[i];
                 Rectangle rect = g.area;
                 g.area = new Rectangle(rect.X, imgH - (rect.Y + rect.Height), rect.Width, rect.Height);
             }
@@ -283,7 +283,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             atlas.TextureKind = this.TextureKind;
             atlas.OriginalFontSizePts = this.FontSizeInPoints;
 
-            foreach (CacheGlyph cacheGlyph in _glyphs.Values)
+            foreach (RelocationAtlasItem cacheGlyph in _glyphs.Values)
             {
 
                 Rectangle area = cacheGlyph.area;

@@ -7,6 +7,7 @@ using System.IO;
 namespace PixelFarm.CpuBlit.BitmapAtlas
 {
 
+    
     public class BitmapAtlasFile
     {
         SimpleBitmapAtlas _atlas;
@@ -172,7 +173,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             _writer.Write(colorComponent);
             _writer.Write((byte)textureKind);
         }
-        internal void WriteGlyphList(Dictionary<ushort, CacheGlyph> glyphs)
+        internal void WriteGlyphList(Dictionary<ushort, RelocationAtlasItem> glyphs)
         {
             int totalNum = glyphs.Count;
 #if DEBUG
@@ -187,7 +188,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             //count
             _writer.Write((ushort)totalNum);
             // 
-            foreach (CacheGlyph g in glyphs.Values)
+            foreach (RelocationAtlasItem g in glyphs.Values)
             {
                 //1. glyph index
                 _writer.Write((ushort)g.glyphIndex);

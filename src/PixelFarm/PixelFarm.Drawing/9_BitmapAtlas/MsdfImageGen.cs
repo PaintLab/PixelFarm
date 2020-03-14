@@ -11,9 +11,9 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
     /// </summary>
     public static class MsdfImageGen
     {
-        public static Msdfgen.Shape CreateMsdfShape(ContourBuilder glyphToContour, float pxScale)
+        public static Msdfgen.Shape CreateMsdfShape(ContourBuilder contourBuilder, float pxScale)
         {
-            List<Contour> cnts = glyphToContour.GetContours();
+            List<Contour> cnts = contourBuilder.GetContours();
             List<Contour> newFitContours = new List<Contour>();
             int j = cnts.Count;
             for (int i = 0; i < j; ++i)
@@ -124,10 +124,10 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
         }
         //---------------------------------------------------------------------
 
-        public static BitmapAtlasItem CreateMsdfImage(ContourBuilder glyphToContour, Msdfgen.MsdfGenParams genParams)
+        public static BitmapAtlasItem CreateMsdfImage(ContourBuilder contourBuilder, Msdfgen.MsdfGenParams genParams)
         {
             // create msdf shape , then convert to actual image
-            return CreateMsdfImage(CreateMsdfShape(glyphToContour, genParams.shapeScale), genParams);
+            return CreateMsdfImage(CreateMsdfShape(contourBuilder, genParams.shapeScale), genParams);
         }
 
         const double MAX = 1e240;

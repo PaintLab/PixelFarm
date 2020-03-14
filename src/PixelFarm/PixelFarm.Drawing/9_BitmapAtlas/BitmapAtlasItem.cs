@@ -31,7 +31,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             _pixelBuffer = pixelBuffer;
             this.IsBigEndian = isBigEndian;
         }
-        public void SetImageBuffer(PixelFarm.CpuBlit.MemBitmap memBmp)
+        public void SetImageBuffer(MemBitmap memBmp)
         {
             _pixelBuffer = PixelFarm.CpuBlit.MemBitmap.CopyImgBuffer(memBmp);
         }
@@ -43,19 +43,15 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
         /// texture offset Y from original glyph 
         /// </summary>
         public short TextureOffsetY { get; set; }
-
-        //-------------------
-
-
-
+ 
     }
 
-    class CacheGlyph
+    class RelocationAtlasItem
     {
         public readonly ushort glyphIndex;
         internal readonly BitmapAtlasItem img;
         public Rectangle area;
-        public CacheGlyph(ushort glyphIndex, BitmapAtlasItem img)
+        public RelocationAtlasItem(ushort glyphIndex, BitmapAtlasItem img)
         {
             this.glyphIndex = glyphIndex;
             this.img = img;

@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 namespace PixelFarm.CpuBlit.BitmapAtlas
 { 
-    public class MultiSizeFontAtlas
+    public class MultiSizeBitmapAtlas
     {
         List<SimpleBitmapAtlas> _fontAtlas = new List<SimpleBitmapAtlas>(); 
     }

@@ -8,11 +8,12 @@ using PixelFarm.Drawing;
 
 namespace PixelFarm.CpuBlit.BitmapAtlas
 {
-    public class MultiSizeFontAtlasBuilder
+    public class MultiSizeBitmapAtlasBuilder
     {
 
-        List<SimpleFontAtlasInfo> _simpleFontInfoList = new List<SimpleFontAtlasInfo>();
-        class SimpleFontAtlasInfo
+        List<SimpleAtlasInfo> _simpleFontInfoList = new List<SimpleAtlasInfo>();
+
+        class SimpleAtlasInfo
         {
             public int fontKey;
             public string simpleFontAtlasFile;
@@ -22,6 +23,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             public RequestFont reqFont;
             public TextureKind textureKind;
         }
+
         public void AddSimpleFontAtlasFile(RequestFont reqFont,
             string simpleFontAtlasFile, string imgFile, TextureKind textureKind)
         {
@@ -32,7 +34,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
                 fontAtlasFile.Read(fs);
             }
 
-            var simpleFontAtlasInfo = new SimpleFontAtlasInfo()
+            var simpleFontAtlasInfo = new SimpleAtlasInfo()
             {
                 reqFont = reqFont,
                 simpleFontAtlasFile = simpleFontAtlasFile,
@@ -54,7 +56,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             const int interAtlasSpace = 2;
             for (int i = 0; i < j; ++i)
             {
-                SimpleFontAtlasInfo atlasInfo = _simpleFontInfoList[i];
+                SimpleAtlasInfo atlasInfo = _simpleFontInfoList[i];
                 SimpleBitmapAtlas fontAtlas = atlasInfo.fontAtlasFile.ResultSimpleFontAtlasList[0];
                 totalHeight += fontAtlas.Height + interAtlasSpace;
                 if (i == 0)
@@ -75,7 +77,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             int offsetFromBottom = interAtlasSpace;//start offset 
             for (int i = j - 1; i >= 0; --i)
             {
-                SimpleFontAtlasInfo atlasInfo = _simpleFontInfoList[i];
+                SimpleAtlasInfo atlasInfo = _simpleFontInfoList[i];
                 SimpleBitmapAtlas fontAtlas = atlasInfo.fontAtlasFile.ResultSimpleFontAtlasList[0];
                 offsetFromBottoms[i] = offsetFromBottom;
                 offsetFromBottom += fontAtlas.Height + interAtlasSpace;
@@ -88,7 +90,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
                 PixelFarm.CpuBlit.AggPainter painter = PixelFarm.CpuBlit.AggPainter.Create(memBitmap);
                 for (int i = 0; i < j; ++i)
                 {
-                    SimpleFontAtlasInfo atlasInfo = _simpleFontInfoList[i];
+                    SimpleAtlasInfo atlasInfo = _simpleFontInfoList[i];
                     BitmapAtlasFile atlasFile = atlasInfo.fontAtlasFile;
                     SimpleBitmapAtlas fontAtlas = atlasInfo.fontAtlasFile.ResultSimpleFontAtlasList[0];
 
@@ -121,7 +123,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
                 //2. 
                 for (int i = 0; i < j; ++i)
                 {
-                    SimpleFontAtlasInfo atlasInfo = _simpleFontInfoList[i];
+                    SimpleAtlasInfo atlasInfo = _simpleFontInfoList[i];
                     RequestFont reqFont = atlasInfo.reqFont;
                     fontAtlasFile.WriteOverviewFontInfo(reqFont.Name, reqFont.FontKey, reqFont.SizeInPoints);//size in points
 
