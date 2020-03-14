@@ -89,7 +89,7 @@ namespace Mini
         SimpleBitmapAtlasBuilder _bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
         SimpleBitmaptAtlas _bitmapAtlas;
         MemBitmap _totalAtlasImg;
-      
+
         private void cmdReadBmpAtlas_Click(object sender, EventArgs e)
         {
             string atlas_file = "test_bmpAtlas";
@@ -100,7 +100,7 @@ namespace Mini
 
 
             //
-            _totalAtlasImg = LoadBmp(atlas_file + ".png"); 
+            _totalAtlasImg = LoadBmp(atlas_file + ".png");
             _bitmapAtlas.TotalImg = _totalAtlasImg;
 
             //-----
@@ -201,7 +201,8 @@ namespace Mini
                 //3. load a bitmap
                 MemBitmap itemBmp = imgLoader(f);
                 //4. get information about it
-                AtlasItemImage atlasItem = new AtlasItemImage(itemBmp.Width, itemBmp.Height);              
+
+                AtlasItemImage atlasItem = new AtlasItemImage(itemBmp.Width, itemBmp.Height);
                 atlasItem.SetBitmap(itemBmp, false);
                 //5. add to builder
                 bmpAtlasBuilder.AddAtlasItemImage(index, atlasItem);
@@ -224,12 +225,12 @@ namespace Mini
             string totalImgFile = outputFilename + ".png";
 
             //5. merge all small images into a bigone 
-            AtlasItemImage totalImg = bmpAtlasBuilder.BuildSingleImage();
+            MemBitmap totalImg = bmpAtlasBuilder.BuildSingleImage();
             bmpAtlasBuilder.ImgUrlDict = imgDic;
             bmpAtlasBuilder.SetAtlasInfo(TextureKind.Bitmap);
             //6. save atlas info and total-img (.png file)
             bmpAtlasBuilder.SaveAtlasInfo(atlasInfoFile);
-            totalImg.Bitmap.SaveImage(totalImgFile);
+            totalImg.SaveImage(totalImgFile);
 
             //----------------------
             //test, read data back
@@ -239,7 +240,7 @@ namespace Mini
                 bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
                 SimpleBitmaptAtlas bitmapAtlas = bmpAtlasBuilder.LoadAtlasInfo(atlasInfoFile);
                 //
-                MemBitmap totalAtlasImg = imgLoader(totalImgFile); 
+                MemBitmap totalAtlasImg = imgLoader(totalImgFile);
                 bitmapAtlas.TotalImg = totalAtlasImg;
 
                 //-----

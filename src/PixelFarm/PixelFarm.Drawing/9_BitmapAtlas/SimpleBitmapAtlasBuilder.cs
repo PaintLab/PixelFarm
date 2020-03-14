@@ -9,7 +9,11 @@ namespace PixelFarm.Drawing.BitmapAtlas
 
     public class SimpleBitmapAtlasBuilder
     {
-        AtlasItemImage _latestGenGlyphImage;
+        //this share the same characteristic with the FontAtlas
+        //so we will merge it together
+        //to simplify texture mx
+
+        MemBitmap _latestGenGlyphImage;
         Dictionary<ushort, CacheBmp> _items = new Dictionary<ushort, CacheBmp>();
         Dictionary<string, ushort> _imgUrlDict;
 
@@ -52,7 +56,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
         {
             this.TextureKind = textureKind;
         }
-        public AtlasItemImage BuildSingleImage()
+        public MemBitmap BuildSingleImage()
         {
             //1. add to list 
             var itemList = new List<CacheBmp>(_items.Count);
@@ -178,9 +182,10 @@ namespace PixelFarm.Drawing.BitmapAtlas
                 }
             }
             // ------------------------------- 
-            //4. create a mergeBmpBuffer
+            //4. create a single mem bitmap outpu
 
             MemBitmap totalBmp = new MemBitmap(totalImgWidth, imgH);
+
             if (SpaceCompactOption == CompactOption.BinPack) //again here?
             {
                 for (int i = itemList.Count - 1; i >= 0; --i)
@@ -204,7 +209,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
             }
 
             //new total glyph img
-            AtlasItemImage glyphImage = new AtlasItemImage(totalImgWidth, imgH);
+
             bool flipY = false;
             if (flipY)
             {
@@ -226,17 +231,13 @@ namespace PixelFarm.Drawing.BitmapAtlas
                         flipYPtr += strideInBytes;
                     }
                 }
-                glyphImage.SetBitmap(totalBmp2, true);
-                _latestGenGlyphImage = glyphImage;
 
                 totalBmp.Dispose();
-                return glyphImage;
+                return _latestGenGlyphImage = totalBmp2;
             }
             else
             {
-                glyphImage.SetBitmap(totalBmp, true);
-                _latestGenGlyphImage = glyphImage;
-                return glyphImage;
+                return _latestGenGlyphImage = totalBmp;
             }
         }
 
