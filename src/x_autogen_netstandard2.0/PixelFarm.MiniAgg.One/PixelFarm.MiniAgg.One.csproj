@@ -340,8 +340,15 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BinPacker.cs" Link="PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BinPacker.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BitmapAtlasFile.cs" Link="PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BitmapAtlasFile.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BitmapAtlasManager.cs" Link="PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BitmapAtlasManager.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\FontAtlasFile.cs" Link="PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\FontAtlasFile.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\GlyphImages.cs" Link="PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\GlyphImages.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MsdfGlyphGen.cs" Link="PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MsdfGlyphGen.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MultiSizeFontAtlas.cs" Link="PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MultiSizeFontAtlas.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MultiSizeFontAtlasBuilder.cs" Link="PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MultiSizeFontAtlasBuilder.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmapAtlasBuilder.cs" Link="PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmapAtlasBuilder.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmaptAtlas.cs" Link="PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmaptAtlas.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleFontAtlas.cs" Link="PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleFontAtlas.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleFontAtlasBuilder.cs" Link="PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleFontAtlasBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Color" />

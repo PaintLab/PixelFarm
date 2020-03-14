@@ -16,7 +16,7 @@ namespace PixelFarm.Drawing.BitmapAtlas
             {
                 //create new one 
                 //load to glbmp  
-                GLBitmap found = new GLBitmap(atlas.TotalImg, false);
+                GLBitmap found = new GLBitmap(atlas.TotalGlyph, false);
                 found.IsYFlipped = false;
                 return found;
             });

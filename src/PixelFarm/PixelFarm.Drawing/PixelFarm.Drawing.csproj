@@ -667,8 +667,15 @@
     <Compile Include="9_BitmapAtlas\BitmapAtlasFile.cs" />
     <Compile Include="9_BitmapAtlas\AtlasItemImage.cs" />
     <Compile Include="9_BitmapAtlas\BitmapAtlasManager.cs" />
+    <Compile Include="9_BitmapAtlas\FontAtlasFile.cs" />
+    <Compile Include="9_BitmapAtlas\GlyphImages.cs" />
+    <Compile Include="9_BitmapAtlas\MsdfGlyphGen.cs" />
+    <Compile Include="9_BitmapAtlas\MultiSizeFontAtlas.cs" />
+    <Compile Include="9_BitmapAtlas\MultiSizeFontAtlasBuilder.cs" />
     <Compile Include="9_BitmapAtlas\SimpleBitmaptAtlas.cs" />
     <Compile Include="9_BitmapAtlas\SimpleBitmapAtlasBuilder.cs" />
+    <Compile Include="9_BitmapAtlas\SimpleFontAtlas.cs" />
+    <Compile Include="9_BitmapAtlas\SimpleFontAtlasBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -86,22 +86,23 @@ namespace Mini
         }
 
 
-        SimpleBitmapAtlasBuilder _bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
-        SimpleBitmaptAtlas _bitmapAtlas;
+        Typography.Rendering.SimpleFontAtlasBuilder _bmpAtlasBuilder = new Typography.Rendering.SimpleFontAtlasBuilder();
+        PixelFarm.Drawing.Fonts.SimpleFontAtlas _bitmapAtlas;
         MemBitmap _totalAtlasImg;
 
         private void cmdReadBmpAtlas_Click(object sender, EventArgs e)
         {
             string atlas_file = "test_bmpAtlas";
 
-
-            _bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
-            _bitmapAtlas = _bmpAtlasBuilder.LoadAtlasInfo(atlas_file + ".info");
-
-
+            _bmpAtlasBuilder = new Typography.Rendering.SimpleFontAtlasBuilder();
+            using (FileStream fs = new FileStream(atlas_file + ".info", FileMode.Open))
+            {
+                var atlasList = _bmpAtlasBuilder.LoadFontAtlasInfo(fs);
+                _bitmapAtlas = atlasList[0];//default atlas
+            }
             //
             _totalAtlasImg = LoadBmp(atlas_file + ".png");
-            _bitmapAtlas.TotalImg = _totalAtlasImg;
+
 
             //-----
             int count = _bitmapAtlas.ImgUrlDict.Count;
@@ -152,13 +153,11 @@ namespace Mini
                 _pic2Gfx.DrawImage(pictureBox2.Image, 0, 0);
             }
 
-            if (_bitmapAtlas.TryGetBitmapMapData(imgUri, out BitmapMapData bmpMapData))
+            if (_bitmapAtlas.TryGetGlyphMapData(imgUri, out Typography.Rendering.TextureGlyphMapData bmpMapData))
             {
 
                 _pic2Gfx.DrawRectangle(Pens.Red,
                     new Rectangle(bmpMapData.Left, bmpMapData.Top, bmpMapData.Width, bmpMapData.Height));
-
-
 
                 //example
                 MemBitmap itemImg = _totalAtlasImg.CopyImgBuffer(bmpMapData.Left, bmpMapData.Top, bmpMapData.Width, bmpMapData.Height);
@@ -173,14 +172,8 @@ namespace Mini
 
                 DisposeExistingPictureBoxImage(pictureBox1);
                 pictureBox1.Image = test;
-
-
-
             }
         }
-
-
-
 
         public static void BuildBitmapAtlas(string imgdir, Func<string, MemBitmap> imgLoader, string outputFilename, bool test_extract = false)
         {
@@ -188,7 +181,7 @@ namespace Mini
             //demonstrate how to build a bitmap atlas
 
             //1. create builder
-            SimpleBitmapAtlasBuilder bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
+            var bmpAtlasBuilder = new Typography.Rendering.SimpleFontAtlasBuilder();
 
             //2. collect all image-files
             int imgdirNameLen = imgdir.Length;
@@ -202,10 +195,11 @@ namespace Mini
                 MemBitmap itemBmp = imgLoader(f);
                 //4. get information about it
 
-                AtlasItemImage atlasItem = new AtlasItemImage(itemBmp.Width, itemBmp.Height);
-                atlasItem.SetBitmap(itemBmp, false);
+                var atlasItem = new Typography.Rendering.GlyphImage(itemBmp.Width, itemBmp.Height);
+                atlasItem.SetImageBuffer(itemBmp);
                 //5. add to builder
-                bmpAtlasBuilder.AddAtlasItemImage(index, atlasItem);
+                //bmpAtlasBuilder.AddAtlasItemImage(index, atlasItem);
+                bmpAtlasBuilder.AddGlyph(index, atlasItem);
                 string imgPath = f.Substring(imgdirNameLen);
                 imgDic.Add(imgPath, index);
                 index++;
@@ -227,7 +221,7 @@ namespace Mini
             //5. merge all small images into a bigone 
             MemBitmap totalImg = bmpAtlasBuilder.BuildSingleImage();
             bmpAtlasBuilder.ImgUrlDict = imgDic;
-            bmpAtlasBuilder.SetAtlasInfo(TextureKind.Bitmap);
+            bmpAtlasBuilder.SetAtlasInfo(TextureKind.Bitmap, 0);//font size
             //6. save atlas info and total-img (.png file)
             bmpAtlasBuilder.SaveAtlasInfo(atlasInfoFile);
             totalImg.SaveImage(totalImgFile);
@@ -237,16 +231,16 @@ namespace Mini
             //----------------------
             if (test_extract)
             {
-                bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
-                SimpleBitmaptAtlas bitmapAtlas = bmpAtlasBuilder.LoadAtlasInfo(atlasInfoFile);
+                bmpAtlasBuilder = new Typography.Rendering.SimpleFontAtlasBuilder();
+                PixelFarm.Drawing.Fonts.SimpleFontAtlas bitmapAtlas = bmpAtlasBuilder.LoadFontAtlasInfo(atlasInfoFile)[0];
                 //
                 MemBitmap totalAtlasImg = imgLoader(totalImgFile);
-                bitmapAtlas.TotalImg = totalAtlasImg;
+                bitmapAtlas.TotalGlyph = totalAtlasImg;
 
                 //-----
                 for (int i = 0; i < index; ++i)
                 {
-                    if (bitmapAtlas.TryGetBitmapMapData((ushort)i, out BitmapMapData bmpMapData))
+                    if (bitmapAtlas.TryGetGlyphMapData((ushort)i, out Typography.Rendering.TextureGlyphMapData bmpMapData))
                     {
                         //test copy data from bitmap
                         MemBitmap itemImg = totalAtlasImg.CopyImgBuffer(bmpMapData.Left, bmpMapData.Top, bmpMapData.Width, bmpMapData.Height);
@@ -255,7 +249,7 @@ namespace Mini
                 }
                 //test,
                 {
-                    if (bitmapAtlas.TryGetBitmapMapData(@"\chk_checked.png", out BitmapMapData bmpMapData))
+                    if (bitmapAtlas.TryGetGlyphMapData(@"\chk_checked.png", out Typography.Rendering.TextureGlyphMapData bmpMapData))
                     {
                         MemBitmap itemImg = totalAtlasImg.CopyImgBuffer(bmpMapData.Left, bmpMapData.Top, bmpMapData.Width, bmpMapData.Height);
                         itemImg.SaveImage("test1_atlas_item_a.png");

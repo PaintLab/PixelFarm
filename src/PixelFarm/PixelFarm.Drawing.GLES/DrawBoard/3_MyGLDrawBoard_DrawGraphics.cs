@@ -168,7 +168,7 @@ namespace PixelFarm.Drawing.GLES2
         {
             //1. image from outside
             //resolve to internal presentation 
-            if (image is AtlasImageBinder atlasImg)
+            if (image is PixelFarm.Drawing.BitmapAtlas.AtlasImageBinder atlasImg)
             {
                 _gpuPainter.DrawImage(image, (float)destRect.X, (float)destRect.Y, (int)0, (int)0, (int)destRect.Width, (int)destRect.Height);
                 _latestFillCouldbeUsedAsTextBgHint = false;

@@ -962,11 +962,32 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BitmapAtlasManager.cs">
       <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BitmapAtlasManager.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\FontAtlasFile.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\FontAtlasFile.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\GlyphImages.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\GlyphImages.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MsdfGlyphGen.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MsdfGlyphGen.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MultiSizeFontAtlas.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MultiSizeFontAtlas.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MultiSizeFontAtlasBuilder.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MultiSizeFontAtlasBuilder.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmapAtlasBuilder.cs">
       <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmapAtlasBuilder.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmaptAtlas.cs">
       <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmaptAtlas.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleFontAtlas.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleFontAtlas.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleFontAtlasBuilder.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleFontAtlasBuilder.cs</Link>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

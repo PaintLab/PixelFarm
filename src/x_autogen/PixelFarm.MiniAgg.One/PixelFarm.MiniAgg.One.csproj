@@ -342,8 +342,15 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BinPacker.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BitmapAtlasFile.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BitmapAtlasManager.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\FontAtlasFile.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\GlyphImages.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MsdfGlyphGen.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MultiSizeFontAtlas.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MultiSizeFontAtlasBuilder.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmapAtlasBuilder.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmaptAtlas.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleFontAtlas.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleFontAtlasBuilder.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

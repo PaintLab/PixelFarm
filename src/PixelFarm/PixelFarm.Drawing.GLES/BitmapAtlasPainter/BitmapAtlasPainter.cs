@@ -4,12 +4,13 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 using PixelFarm.Drawing.BitmapAtlas;
-
+using Typography.Rendering;
+using PixelFarm.Drawing.Fonts;
 namespace PixelFarm.DrawingGL
 {
     public class GLBitmapAtlasPainter
     {
-        SimpleBitmaptAtlas _bmpAtlas;
+        SimpleFontAtlas _bmpAtlas;
         GLBitmap _glBmp;//current bitmap
         MySimpleGLBitmapAtlasManager _atlasManager;
         string _lastestImgFile = null;
@@ -28,7 +29,7 @@ namespace PixelFarm.DrawingGL
                         GLBitmap glbmp = LayoutFarm.ImageBinder.GetCacheInnerImage(atlasImgBinder) as GLBitmap;
                         if (glbmp != null)
                         {
-                            BitmapMapData mapData = atlasImgBinder.MapData;
+                            TextureGlyphMapData mapData = atlasImgBinder.MapData;
                             Rectangle srcRect =
                                new Rectangle(mapData.Left,
                                    mapData.Top,  //diff from font atlas***
@@ -72,7 +73,8 @@ namespace PixelFarm.DrawingGL
                             _lastestImgFile = atlasImgBinder.AtlasName;
                         }
                         //--------
-                        if (_bmpAtlas.TryGetBitmapMapData(atlasImgBinder.ImageName, out BitmapMapData mapData))
+
+                        if (_bmpAtlas.TryGetGlyphMapData(atlasImgBinder.ImageName, out TextureGlyphMapData mapData))
                         {
                             //found map data
                             Rectangle srcRect =

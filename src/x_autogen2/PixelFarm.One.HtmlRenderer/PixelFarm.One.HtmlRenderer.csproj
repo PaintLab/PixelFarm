@@ -2343,11 +2343,32 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BitmapAtlasManager.cs">
       <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\BitmapAtlasManager.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\FontAtlasFile.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\FontAtlasFile.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\GlyphImages.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\GlyphImages.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MsdfGlyphGen.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MsdfGlyphGen.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MultiSizeFontAtlas.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MultiSizeFontAtlas.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MultiSizeFontAtlasBuilder.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MultiSizeFontAtlasBuilder.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmapAtlasBuilder.cs">
       <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmapAtlasBuilder.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmaptAtlas.cs">
       <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmaptAtlas.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleFontAtlas.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleFontAtlas.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleFontAtlasBuilder.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleFontAtlasBuilder.cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\Typography\Build\N20\Typography.OpenFont\System.Numerics.ForNet20.cs">
       <Link>Typography\Build\N20\Typography.OpenFont\System.Numerics.ForNet20.cs</Link>
@@ -2402,27 +2423,6 @@
     </Compile>
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\TextPrinterBase.cs">
       <Link>Typography\PixelFarm.Typography\4_TextPrinter\TextPrinterBase.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\FontAtlas\FontAtlasFile.cs">
-      <Link>Typography\FontAtlas\FontAtlasFile.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\FontAtlas\GlyphImages.cs">
-      <Link>Typography\FontAtlas\GlyphImages.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\FontAtlas\MsdfGlyphGen.cs">
-      <Link>Typography\FontAtlas\MsdfGlyphGen.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\FontAtlas\MultiSizeFontAtlas.cs">
-      <Link>Typography\FontAtlas\MultiSizeFontAtlas.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\FontAtlas\MultiSizeFontAtlasBuilder.cs">
-      <Link>Typography\FontAtlas\MultiSizeFontAtlasBuilder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\FontAtlas\SimpleFontAtlas.cs">
-      <Link>Typography\FontAtlas\SimpleFontAtlas.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\FontAtlas\SimpleFontAtlasBuilder.cs">
-      <Link>Typography\FontAtlas\SimpleFontAtlasBuilder.cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\Typography\Typography.GlyphLayout\GlyphIndexList.cs">
       <Link>Typography\Typography.GlyphLayout\GlyphIndexList.cs</Link>
