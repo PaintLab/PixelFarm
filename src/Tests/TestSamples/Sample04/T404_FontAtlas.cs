@@ -42,11 +42,11 @@ namespace OpenTkEssTest
                 _typeface = new OpenFontReader().Read(fs);
             }
 
-            var reqFont = new PixelFarm.Drawing.RequestFont("Source Sans Pro", 18);
-
+            var reqFont = new PixelFarm.Drawing.RequestFont("Source Sans Pro", 32);
 
             //1. create glyph-texture-bitmap generator
             var glyphTextureGen = new GlyphTextureBitmapGenerator();
+            glyphTextureGen.MsdfGenVersion = 3;
 
             //2. generate the glyphs
             SimpleFontAtlasBuilder atlasBuilder = glyphTextureGen.CreateTextureFontFromBuildDetail(
@@ -55,6 +55,9 @@ namespace OpenTkEssTest
                 PixelFarm.Drawing.BitmapAtlas.TextureKind.Msdf,
                 GlyphTextureCustomConfigs.TryGetGlyphTextureBuildDetail(reqFont, false, false)
             );
+
+            
+
 
             //3. set information before write to font-info
             atlasBuilder.FontFilename = reqFont.Name;//TODO: review here, check if we need 'filename' or 'fontname'
@@ -98,17 +101,17 @@ namespace OpenTkEssTest
                    glyphData.Width,
                    glyphData.Height);
 
-            _pcx.DrawSubImageWithMsdf(_msdf_bmp, ref r, 100, 500);
+            _pcx.DrawSubImageWithMsdf(_msdf_bmp, ref r, 100, 40);
 
             _fontAtlas.TryGetGlyphMapData(_glyphIndex_1, out glyphData);
             PixelFarm.Drawing.Rectangle r2 = new PixelFarm.Drawing.Rectangle(glyphData.Left,
                    glyphData.Top,
                    glyphData.Width,
                    glyphData.Height);
-            _pcx.DrawSubImageWithMsdf(_msdf_bmp, ref r2, 100 + r.Width, 500);
+            _pcx.DrawSubImageWithMsdf(_msdf_bmp, ref r2, 100 + r.Width,40);
 
             //full image
-            _pcx.DrawImage(_msdf_bmp, 0, 0);
+            _pcx.DrawImage(_msdf_bmp, 0, 100);
             SwapBuffers();
         }
         static PixelFarm.Drawing.Rectangle ConvToRect(Rectangle r)
