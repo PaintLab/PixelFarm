@@ -218,6 +218,10 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="..\..\..\..\Typography\Demo\Windows\TestFonts\Roboto-Regular.ttf">
+      <Link>Samples\Roboto-Regular.ttf</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\..\..\Typography\Demo\Windows\TestFonts\SourceSansPro-Regular.ttf">
       <Link>Samples\SourceSansPro-Regular.ttf</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
