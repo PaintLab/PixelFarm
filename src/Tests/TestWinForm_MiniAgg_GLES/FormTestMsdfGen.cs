@@ -136,7 +136,8 @@ namespace Mini
 
             //just example, not need to open-read everytime.
             Typeface typeface = null;
-            string fontpath = "Samples/SourceSansPro-Regular.ttf";
+            //string fontpath = "Samples/SourceSansPro-Regular.ttf";
+            string fontpath = "Samples/Roboto-Regular.ttf";
             using (FileStream fs = new FileStream(fontpath, FileMode.Open, FileAccess.Read))
             {
                 OpenFontReader fontReader = new OpenFontReader();
