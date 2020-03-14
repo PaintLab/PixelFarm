@@ -75,7 +75,7 @@ namespace Mini
         private void cmdBuildBmpAtlas_Click(object sender, EventArgs e)
         {
 
-            string atlas_file = "test_bmpAtlas";
+            string atlas_file = "test1_atlas";
             OpenTkEssTest.TestBitmapAtlasBuilder.Test(_srcDir, LoadBmp, atlas_file);
 
             DisposeExistingPictureBoxImage(pictureBox2);
