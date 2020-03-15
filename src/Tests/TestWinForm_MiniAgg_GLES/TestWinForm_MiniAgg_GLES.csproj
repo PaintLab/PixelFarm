@@ -116,8 +116,6 @@
     <Compile Include="Experiment\GdiPlusPlatformFontMx.cs" />
     <Compile Include="Experiment\WinGdiPlusFont.cs" />
     <Compile Include="Experiment\WinGdiPlusFontStore.cs" />
-    <Compile Include="Experiment\xnotused\xDrawingGLFontPrinter.cs" />
-    <Compile Include="Experiment\xnotused\xTextureFontFace.cs" />
     <Compile Include="Experiment\xStrokeGen.cs" />
     <Compile Include="Experiment\x_notusedFromComplement\ImageClipProxyFloat.cs" />
     <Compile Include="Experiment\x_notusedFromComplement\KDTree.cs" />
@@ -177,7 +175,6 @@
     <Compile Include="MiniGUI\MySimpleVertexSourceWidget.cs" />
     <Compile Include="MiniGUI\PolygonWidget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Experiment\xnotused\TextPrinter.cs" />
     <Compile Include="x_notused\3_MyTopWindowBridgeSkia.cs" />
     <Compile Include="x_notused\BGRATexttureWithTransparentShader.cs" />
     <Compile Include="x_notused\CpuBlitTextSpanPrinter.cs" />

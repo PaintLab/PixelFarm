@@ -20,13 +20,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             Width = width;
             Height = height;
         }
-        public void GetRect(out int x, out int y, out int w, out int h)
-        {
-            x = Left;
-            y = Top;
-            w = Width;
-            h = Height;
-        }
+       
     }
 
 }
