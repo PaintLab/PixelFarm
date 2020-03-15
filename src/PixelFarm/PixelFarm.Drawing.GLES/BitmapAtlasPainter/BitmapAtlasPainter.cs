@@ -3,13 +3,13 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
-using PixelFarm.Drawing.BitmapAtlas;
+using PixelFarm.CpuBlit.BitmapAtlas;
 
 namespace PixelFarm.DrawingGL
 {
     public class GLBitmapAtlasPainter
     {
-        SimpleBitmaptAtlas _bmpAtlas;
+        SimpleBitmapAtlas _bmpAtlas;
         GLBitmap _glBmp;//current bitmap
         MySimpleGLBitmapAtlasManager _atlasManager;
         string _lastestImgFile = null;
@@ -25,15 +25,14 @@ namespace PixelFarm.DrawingGL
             {
                 case LayoutFarm.BinderState.Loaded:
                     {
-                        GLBitmap glbmp = LayoutFarm.ImageBinder.GetCacheInnerImage(atlasImgBinder) as GLBitmap;
-                        if (glbmp != null)
+                        if (LayoutFarm.ImageBinder.GetCacheInnerImage(atlasImgBinder) is GLBitmap glbmp)
                         {
-                            BitmapMapData mapData = atlasImgBinder.MapData;
+                            AtlasItem atlasItem = atlasImgBinder.AtlasItem;
                             Rectangle srcRect =
-                               new Rectangle(mapData.Left,
-                                   mapData.Top,  //diff from font atlas***
-                                   mapData.Width,
-                                   mapData.Height);
+                               new Rectangle(atlasItem.Left,
+                                   atlasItem.Top,  //diff from font atlas***
+                                   atlasItem.Width,
+                                   atlasItem.Height);
 
                             TextureKind textureKind = _bmpAtlas.TextureKind;
                             switch (textureKind)
@@ -46,7 +45,7 @@ namespace PixelFarm.DrawingGL
                                         atlasImgBinder.State = LayoutFarm.BinderState.Loaded;
                                         LayoutFarm.ImageBinder.SetCacheInnerImage(atlasImgBinder, _glBmp, false);
 
-                                        atlasImgBinder.MapData = mapData;
+                                        atlasImgBinder.AtlasItem = atlasItem;
                                         glPainter.PainterContext.DrawSubImage(_glBmp,
                                             ref srcRect,
                                             left,
@@ -72,14 +71,15 @@ namespace PixelFarm.DrawingGL
                             _lastestImgFile = atlasImgBinder.AtlasName;
                         }
                         //--------
-                        if (_bmpAtlas.TryGetBitmapMapData(atlasImgBinder.ImageName, out BitmapMapData mapData))
+
+                        if (_bmpAtlas.TryGetItem(atlasImgBinder.ImageName, out AtlasItem atlasItem))
                         {
                             //found map data
                             Rectangle srcRect =
-                                 new Rectangle(mapData.Left,
-                                     mapData.Top,  //diff from font atlas***
-                                     mapData.Width,
-                                     mapData.Height);
+                                 new Rectangle(atlasItem.Left,
+                                     atlasItem.Top,  //diff from font atlas***
+                                     atlasItem.Width,
+                                     atlasItem.Height);
 
                             TextureKind textureKind = _bmpAtlas.TextureKind;
                             switch (textureKind)
@@ -91,8 +91,8 @@ namespace PixelFarm.DrawingGL
                                     {
                                         atlasImgBinder.State = LayoutFarm.BinderState.Loaded;
                                         LayoutFarm.ImageBinder.SetCacheInnerImage(atlasImgBinder, _glBmp, false);
-                                        atlasImgBinder.MapData = mapData;
-                                        atlasImgBinder.SetPreviewImageSize(mapData.Width, mapData.Height);
+                                        atlasImgBinder.AtlasItem = atlasItem;
+                                        atlasImgBinder.SetPreviewImageSize(atlasItem.Width, atlasItem.Height);
                                         atlasImgBinder.RaiseImageChanged();
 
                                         glPainter.PainterContext.DrawSubImage(_glBmp,

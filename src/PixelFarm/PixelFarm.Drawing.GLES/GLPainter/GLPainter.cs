@@ -17,7 +17,7 @@ namespace PixelFarm.DrawingGL
 
         int _width;
         int _height;
-       
+
         FigureBuilder _pathRenderVxBuilder;
         PathRenderVxBuilder2 _pathRenderVxBuilder2;
 
@@ -174,9 +174,12 @@ namespace PixelFarm.DrawingGL
 #if DEBUG
                 //_msdfGen.dbugWriteMsdfTexture = true;
 #endif
-                Msdfgen.SpriteTextureMapData<MemBitmap> spriteTextureMap = _msdfGen.GenerateMsdfTexture(vxs);
-                TextureRenderVx textureRenderVx = new TextureRenderVx(spriteTextureMap);
-                return textureRenderVx;
+                CpuBlit.BitmapAtlas.BitmapAtlasItemSource item = _msdfGen.GenerateMsdfTexture(vxs);
+                var itemSrc = new CpuBlit.BitmapAtlas.AtlasItemSource<MemBitmap>(item.Left, item.Top, item.Width, item.Height);
+                itemSrc.TextureXOffset = item.TextureXOffset;
+                itemSrc.TextureYOffset = item.TextureYOffset;
+                itemSrc.Source = MemBitmap.CreateFromCopy(item.Width, item.Height, item.Source);
+                return new TextureRenderVx(itemSrc);
             }
         }
     }

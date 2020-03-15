@@ -1077,8 +1077,11 @@ namespace BuildMergeProject
                 root.AddImport(@"$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets");
             }
 
+            MergeAndSaveResultFullPath = null;
             root.Save(csprojFilename);
+            MergeAndSaveResultFullPath = root.FullPath;
         }
+        public string MergeAndSaveResultFullPath { get; private set; }
         static void AddItems(ProjectRootElement elem, string groupName, params string[] items)
         {
             ProjectItemGroupElement group = elem.AddItemGroup();

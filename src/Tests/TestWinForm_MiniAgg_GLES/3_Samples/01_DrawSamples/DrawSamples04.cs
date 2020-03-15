@@ -9,11 +9,9 @@ using System;
 using System.Collections.Generic;
 
 using PixelFarm.Drawing;
-using PixelFarm.Drawing.Fonts;
-
+using PixelFarm.CpuBlit.BitmapAtlas;
 
 using Typography.OpenFont;
-using Typography.Rendering;
 using Typography.TextLayout;
 
 using Mini;
@@ -27,7 +25,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
         LayoutFarm.OpenFontTextService _textServices;
         BitmapFontManager<MemBitmap> _bmpFontMx;
-        SimpleFontAtlas _fontAtlas;
+        SimpleBitmapAtlas _fontAtlas;
         RequestFont _font;
         MemBitmap _fontBmp;
 
@@ -43,7 +41,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             //2. create manager
             _bmpFontMx = new BitmapFontManager<MemBitmap>(
                 _textServices,
-                atlas => MemBitmap.CreateFromCopy(atlas.TotalGlyph)
+                atlas => MemBitmap.CreateFromCopy(atlas.MainBitmap)
             );
 
 
@@ -100,7 +98,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
             // 
             float scaleFromTexture = _finalTextureScale;
-            Drawing.BitmapAtlas.TextureKind textureKind = _fontAtlas.TextureKind;
+            TextureKind textureKind = _fontAtlas.TextureKind;
 
             float g_x = 0;
             float g_y = 0;
@@ -120,8 +118,8 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             for (int i = 0; i < seqLen; ++i)
             {
                 UnscaledGlyphPlan glyph = glyphPlanSeq[i];
-                TextureGlyphMapData glyphData;
-                if (!_fontAtlas.TryGetGlyphMapData(glyph.glyphIndex, out glyphData))
+                AtlasItem glyphData;
+                if (!_fontAtlas.TryGetItem(glyph.glyphIndex, out glyphData))
                 {
                     //if no glyph data, we should render a missing glyph ***
                     continue;

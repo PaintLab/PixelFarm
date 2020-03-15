@@ -227,8 +227,7 @@ namespace BuildMergeProject
             //set target to build output, set to x_autogen_projects dir
             //-----------------------------------
             string rootSlnFolder = _solutionMx.SolutionDir;
-            string rightPart;
-            string beginAt = _solutionMx.BuildPathRelativeToSolution(Application.ExecutablePath, out rightPart);
+            string beginAt = _solutionMx.BuildPathRelativeToSolution(Application.ExecutablePath, out string rightPart);
 
             string targetProjectName = _currentSelectedMergePro.ProjectName;
             string targetProjectFile = targetProjectName + ".csproj";

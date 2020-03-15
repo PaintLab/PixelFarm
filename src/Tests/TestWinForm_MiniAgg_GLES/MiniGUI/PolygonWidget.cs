@@ -518,20 +518,15 @@ namespace PixelFarm.CpuBlit.UI
 
     public class PolygonEditWidget : PolygonControl
     {
-        Color m_color;
         public PolygonEditWidget(int np) : this(np, 5) { }
 
         public PolygonEditWidget(int np, double point_radius)
             : base(np, point_radius)
         {
             //m_color = new ColorRGBAf(0.0, 0.0, 0.0);
-            m_color = Color.Black;
+            LineColor = Color.Black;
         }
-        public Color LineColor
-        {
-            get { return m_color; }
-            set { this.m_color = value; }
-        }
+        public Color LineColor { get; set; }
 
         public override void OnDraw(Painter p)
         {

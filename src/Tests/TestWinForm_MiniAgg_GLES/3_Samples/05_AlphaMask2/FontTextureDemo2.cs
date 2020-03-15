@@ -4,11 +4,10 @@ using System;
 using System.Collections.Generic;
 
 using PixelFarm.Drawing;
-using PixelFarm.Drawing.Fonts;
-using PixelFarm.CpuBlit.PixelProcessing;
 
-using Typography.OpenFont;
-using Typography.Rendering;
+using PixelFarm.CpuBlit.PixelProcessing;
+using PixelFarm.CpuBlit.BitmapAtlas;
+
 using Typography.TextLayout;
 
 using Mini;
@@ -27,7 +26,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 
         LayoutFarm.OpenFontTextService _textServices;
         BitmapFontManager<MemBitmap> _bmpFontMx;
-        SimpleFontAtlas _fontAtlas;
+        SimpleBitmapAtlas _fontAtlas;
         RequestFont _font;
         MemBitmap _fontBmp;
         MemBitmap _alphaBmp;
@@ -48,7 +47,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             //2. create manager
             _bmpFontMx = new BitmapFontManager<MemBitmap>(
                 _textServices,
-                atlas => MemBitmap.CreateFromCopy(atlas.TotalGlyph)
+                atlas => MemBitmap.CreateFromCopy(atlas.MainBitmap)
             );
 
             //3.  
@@ -100,7 +99,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 
             // 
             float scaleFromTexture = _finalTextureScale;
-            Drawing.BitmapAtlas.TextureKind textureKind = _fontAtlas.TextureKind;
+            TextureKind textureKind = _fontAtlas.TextureKind;
 
             float gx = 0;
             float gy = 0;
@@ -117,7 +116,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             for (int i = 0; i < seqLen; ++i)
             {
                 UnscaledGlyphPlan glyph = glyphPlanSeq[i];
-                if (!_fontAtlas.TryGetGlyphMapData(glyph.glyphIndex, out TextureGlyphMapData glyphData))
+                if (!_fontAtlas.TryGetItem(glyph.glyphIndex, out AtlasItem atlaItem))
                 {
                     //if no glyph data, we should render a missing glyph ***
                     continue;
@@ -125,8 +124,8 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
                 //--------------------------------------
                 //TODO: review precise height in float
                 //-------------------------------------- 
-                int srcX, srcY, srcW, srcH;
-                glyphData.GetRect(out srcX, out srcY, out srcW, out srcH);
+
+                atlaItem.GetRect(out int srcX, out int srcY, out int srcW, out int srcH);
 
                 float ngx = acc_x + (float)Math.Round(glyph.OffsetX * scale);
                 float ngy = acc_y + (float)Math.Round(glyph.OffsetY * scale);
@@ -134,8 +133,8 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
                 // -glyphData.TextureXOffset => restore to original pos
                 // -glyphData.TextureYOffset => restore to original pos 
                 //--------------------------
-                gx = (float)(x + (ngx - glyphData.TextureXOffset) * scaleFromTexture); //ideal x
-                gy = (float)(y + (ngy - glyphData.TextureYOffset - srcH + lineHeight) * scaleFromTexture);
+                gx = (float)(x + (ngx - atlaItem.TextureXOffset) * scaleFromTexture); //ideal x
+                gy = (float)(y + (ngy - atlaItem.TextureYOffset - srcH + lineHeight) * scaleFromTexture);
 
                 acc_x += (float)Math.Round(glyph.AdvanceX * scale);
                 gy = (float)Math.Floor(gy) + lineHeight;
