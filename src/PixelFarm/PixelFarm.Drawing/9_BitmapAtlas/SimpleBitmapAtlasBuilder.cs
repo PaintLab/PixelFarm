@@ -249,6 +249,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             {
                 atlasFile.WriteOverviewFontInfo(FontFilename, FontKey, FontSizeInPoints);
             }
+           
 
             atlasFile.WriteTotalImageInfo(
                 (ushort)_latestGenGlyphImage.Width,

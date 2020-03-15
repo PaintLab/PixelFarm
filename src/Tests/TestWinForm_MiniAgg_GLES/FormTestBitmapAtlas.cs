@@ -91,7 +91,7 @@ namespace Mini
 
         private void cmdReadBmpAtlas_Click(object sender, EventArgs e)
         {
-            string atlas_file = "test_bmpAtlas";
+            string atlas_file = "test1_atlas";
 
             _bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
             _bitmapAtlas = _bmpAtlasBuilder.LoadAtlasInfo(atlas_file + ".info")[0];//default atlas
