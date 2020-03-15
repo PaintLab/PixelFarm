@@ -16,7 +16,7 @@ namespace PixelFarm.DrawingGL
             SetLoadNewBmpDel(atlas =>
             {
                 MemBitmap mainBmp = atlas.MainBitmap;
-                if (atlas.UseSharedGlyphImage)
+                if (atlas.UseSharedImage)
                 {
                     if (!_sharedGlyphImgs.TryGetValue(mainBmp, out GLBitmap found))
                     {

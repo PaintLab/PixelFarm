@@ -94,7 +94,7 @@ namespace OpenTkEssTest
             _painter.Clear(PixelFarm.Drawing.Color.White);
 
 
-            _fontAtlas.TryGetGlyphMapData(_glyphIndex_0, out TextureGlyphMapData glyphData);
+            _fontAtlas.TryGetItem(_glyphIndex_0, out AtlasItem glyphData);
             PixelFarm.Drawing.Rectangle r =
                    new PixelFarm.Drawing.Rectangle(glyphData.Left,
                    glyphData.Top,
@@ -103,7 +103,7 @@ namespace OpenTkEssTest
 
             _pcx.DrawSubImageWithMsdf(_msdf_bmp, ref r, 100, 40);
 
-            _fontAtlas.TryGetGlyphMapData(_glyphIndex_1, out glyphData);
+            _fontAtlas.TryGetItem(_glyphIndex_1, out glyphData);
             PixelFarm.Drawing.Rectangle r2 = new PixelFarm.Drawing.Rectangle(glyphData.Left,
                    glyphData.Top,
                    glyphData.Width,

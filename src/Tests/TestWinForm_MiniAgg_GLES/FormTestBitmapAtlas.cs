@@ -146,7 +146,7 @@ namespace Mini
                 _pic2Gfx.DrawImage(pictureBox2.Image, 0, 0);
             }
 
-            if (_bitmapAtlas.TryGetGlyphMapData(imgUri, out TextureGlyphMapData bmpMapData))
+            if (_bitmapAtlas.TryGetItem(imgUri, out AtlasItem bmpMapData))
             {
 
                 _pic2Gfx.DrawRectangle(Pens.Red,
@@ -234,7 +234,7 @@ namespace Mini
                 //-----
                 for (int i = 0; i < index; ++i)
                 {
-                    if (bitmapAtlas.TryGetGlyphMapData((ushort)i, out TextureGlyphMapData bmpMapData))
+                    if (bitmapAtlas.TryGetItem((ushort)i, out AtlasItem bmpMapData))
                     {
                         //test copy data from bitmap
                         MemBitmap itemImg = totalAtlasImg.CopyImgBuffer(bmpMapData.Left, bmpMapData.Top, bmpMapData.Width, bmpMapData.Height);
@@ -243,7 +243,7 @@ namespace Mini
                 }
                 //test,
                 {
-                    if (bitmapAtlas.TryGetGlyphMapData(@"\chk_checked.png", out TextureGlyphMapData bmpMapData))
+                    if (bitmapAtlas.TryGetItem(@"\chk_checked.png", out AtlasItem bmpMapData))
                     {
                         MemBitmap itemImg = totalAtlasImg.CopyImgBuffer(bmpMapData.Left, bmpMapData.Top, bmpMapData.Width, bmpMapData.Height);
                         itemImg.SaveImage("test1_atlas_item_a.png");

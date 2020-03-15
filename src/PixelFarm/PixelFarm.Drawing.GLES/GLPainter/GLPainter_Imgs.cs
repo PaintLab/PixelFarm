@@ -53,9 +53,9 @@ namespace PixelFarm.DrawingGL
 
         public override void DrawImage(Image actualImage)
         {
-            if (actualImage is PixelFarm.CpuBlit.BitmapAtlas.AtlasImageBinder atlas)
+            if (actualImage is AtlasImageBinder binder)
             {
-                _bmpAtlasPainter.DrawImage(this, atlas, 0, 0);
+                _bmpAtlasPainter.DrawImage(this, binder, 0, 0);
             }
             else
             {
@@ -67,9 +67,9 @@ namespace PixelFarm.DrawingGL
         }
         public override void DrawImage(Image actualImage, double left, double top)
         {
-            if (actualImage is PixelFarm.CpuBlit.BitmapAtlas.AtlasImageBinder atlas)
+            if (actualImage is AtlasImageBinder binder)
             {
-                _bmpAtlasPainter.DrawImage(this, atlas, (float)left, (float)top);
+                _bmpAtlasPainter.DrawImage(this, binder, (float)left, (float)top);
             }
             else
             {
@@ -80,9 +80,9 @@ namespace PixelFarm.DrawingGL
         }
         public override void DrawImage(Image actualImage, double left, double top, int srcX, int srcY, int srcW, int srcH)
         {
-            if (actualImage is PixelFarm.CpuBlit.BitmapAtlas.AtlasImageBinder atlas)
+            if (actualImage is AtlasImageBinder binder)
             {
-                _bmpAtlasPainter.DrawImage(this, atlas, (float)left, (float)top);
+                _bmpAtlasPainter.DrawImage(this, binder, (float)left, (float)top);
             }
             else
             {

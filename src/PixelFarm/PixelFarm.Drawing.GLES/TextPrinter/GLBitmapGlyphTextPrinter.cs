@@ -167,7 +167,7 @@ namespace PixelFarm.DrawingGL
                     {
                         BitmapAtlasFile fontAtlas = new BitmapAtlasFile();
                         fontAtlas.Read(fontTextureInfoStream);
-                        SimpleBitmapAtlas[] resultAtlases = fontAtlas.ResultSimpleFontAtlasList.ToArray();
+                        SimpleBitmapAtlas[] resultAtlases = fontAtlas.AtlasList.ToArray();
                         _myGLBitmapFontMx.AddSimpleFontAtlas(resultAtlases, fontTextureImgStream);
                     }
                     catch (Exception ex)
@@ -324,7 +324,7 @@ namespace PixelFarm.DrawingGL
             for (int i = 0; i < seqLen; ++i)
             {
                 UnscaledGlyphPlan glyph = glyphPlanSeq[i];
-                if (!_fontAtlas.TryGetGlyphMapData(glyph.glyphIndex, out TextureGlyphMapData glyphData))
+                if (!_fontAtlas.TryGetItem(glyph.glyphIndex, out AtlasItem atlaItem))
                 {
                     //if no glyph data, we should render a missing glyph ***
                     continue;
@@ -334,11 +334,11 @@ namespace PixelFarm.DrawingGL
                 //--------------------------------------
                 //paint src rect
 
-                var srcRect = new Rectangle(glyphData.Left, glyphData.Top, glyphData.Width, glyphData.Height);
+                var srcRect = new Rectangle(atlaItem.Left, atlaItem.Top, atlaItem.Width, atlaItem.Height);
 
                 //offset length from 'base-line'
-                float x_offset = acc_x + (float)Math.Round(glyph.OffsetX * px_scale - glyphData.TextureXOffset * scaleFromTexture);
-                float y_offset = acc_y + (float)Math.Round(glyph.OffsetY * px_scale - glyphData.TextureYOffset * scaleFromTexture) + srcRect.Height; //***
+                float x_offset = acc_x + (float)Math.Round(glyph.OffsetX * px_scale - atlaItem.TextureXOffset * scaleFromTexture);
+                float y_offset = acc_y + (float)Math.Round(glyph.OffsetY * px_scale - atlaItem.TextureYOffset * scaleFromTexture) + srcRect.Height; //***
 
                 //NOTE:
                 // -glyphData.TextureXOffset => restore to original pos
@@ -672,8 +672,8 @@ namespace PixelFarm.DrawingGL
             {
                 UnscaledGlyphPlan glyph = glyphPlanSeq[i];
 
-                if (!_fontAtlas.TryGetGlyphMapData(glyph.glyphIndex,
-                    out TextureGlyphMapData glyphData))
+                if (!_fontAtlas.TryGetItem(glyph.glyphIndex,
+                    out AtlasItem atlasItem))
                 {
                     //if no glyph data, we should render a missing glyph ***
                     continue;
@@ -683,11 +683,11 @@ namespace PixelFarm.DrawingGL
                 //--------------------------------------  
                 //paint src rect
 
-                var srcRect = new Rectangle(glyphData.Left, glyphData.Top, glyphData.Width, glyphData.Height);
+                var srcRect = new Rectangle(atlasItem.Left, atlasItem.Top, atlasItem.Width, atlasItem.Height);
 
                 //offset length from 'base-line'
-                float x_offset = acc_x + (float)Math.Round(glyph.OffsetX * px_scale - glyphData.TextureXOffset);
-                float y_offset = acc_y + (float)Math.Round(glyph.OffsetY * px_scale - glyphData.TextureYOffset) + srcRect.Height; //***
+                float x_offset = acc_x + (float)Math.Round(glyph.OffsetX * px_scale - atlasItem.TextureXOffset);
+                float y_offset = acc_y + (float)Math.Round(glyph.OffsetY * px_scale - atlasItem.TextureYOffset) + srcRect.Height; //***
 
                 //NOTE:
                 // -glyphData.TextureXOffset => restore to original pos

@@ -118,8 +118,8 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             for (int i = 0; i < seqLen; ++i)
             {
                 UnscaledGlyphPlan glyph = glyphPlanSeq[i];
-                TextureGlyphMapData glyphData;
-                if (!_fontAtlas.TryGetGlyphMapData(glyph.glyphIndex, out glyphData))
+                AtlasItem glyphData;
+                if (!_fontAtlas.TryGetItem(glyph.glyphIndex, out glyphData))
                 {
                     //if no glyph data, we should render a missing glyph ***
                     continue;
