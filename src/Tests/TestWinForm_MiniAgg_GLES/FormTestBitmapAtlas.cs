@@ -193,7 +193,7 @@ namespace Mini
                 atlasItem.UniqueInt16Name = index;
                 //5. add to builder
                 //bmpAtlasBuilder.AddAtlasItemImage(index, atlasItem);
-                bmpAtlasBuilder.AddGlyph(atlasItem);
+                bmpAtlasBuilder.AddItemSource(atlasItem);
                 string imgPath = f.Substring(imgdirNameLen);
                 imgDic.Add(imgPath, index);
                 index++;
