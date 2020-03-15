@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using PixelFarm.CpuBlit;
-using PixelFarm.Drawing.BitmapAtlas;
+
 
 namespace Mini
 {

@@ -80,23 +80,19 @@ namespace PixelFarm.DrawingGL
     {
         //msdf texture-based render vx
         GLBitmap _glBmp;
-        Msdfgen.SpriteTextureMapData<PixelFarm.CpuBlit.MemBitmap> _spriteMapTextureData;
-        internal TextureRenderVx(Msdfgen.SpriteTextureMapData<PixelFarm.CpuBlit.MemBitmap> spriteTextureMapData)
+
+        internal TextureRenderVx(PixelFarm.CpuBlit.BitmapAtlas.AtlasItemSource<PixelFarm.CpuBlit.MemBitmap> itmSrc)
         {
-            _spriteMapTextureData = spriteTextureMapData;
+            SpriteSource = itmSrc;
         }
-        internal Msdfgen.SpriteTextureMapData<PixelFarm.CpuBlit.MemBitmap> SpriteMap
-        {
-            get => _spriteMapTextureData;
-            set => _spriteMapTextureData = value;
-        }
+        internal PixelFarm.CpuBlit.BitmapAtlas.AtlasItemSource<PixelFarm.CpuBlit.MemBitmap> SpriteSource { get; set; }
         internal GLBitmap GetBmp()
         {
             if (_glBmp == null)
             {
-                if (_spriteMapTextureData != null)
+                if (SpriteSource != null)
                 {
-                    _glBmp = new GLBitmap(_spriteMapTextureData.Source);
+                    _glBmp = new GLBitmap(SpriteSource.Source);
                     return _glBmp;
                 }
             }

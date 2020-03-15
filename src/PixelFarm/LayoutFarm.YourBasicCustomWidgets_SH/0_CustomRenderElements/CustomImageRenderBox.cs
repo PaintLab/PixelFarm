@@ -52,7 +52,7 @@ namespace LayoutFarm.CustomWidgets
                         {
                             _imageBinder.LazyLoadImage();
                         }
-                        else if (_imageBinder is AtlasImageBinder atlas)
+                        else if (_imageBinder is AtlasImageBinder)
                         {
                             //resolve this and draw
                             d.DrawImage(_imageBinder,

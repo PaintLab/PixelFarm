@@ -60,7 +60,7 @@
             // 
             this.cmdBuildBmpAtlas.Location = new System.Drawing.Point(172, 127);
             this.cmdBuildBmpAtlas.Name = "cmdBuildBmpAtlas";
-            this.cmdBuildBmpAtlas.Size = new System.Drawing.Size(97, 44);
+            this.cmdBuildBmpAtlas.Size = new System.Drawing.Size(111, 44);
             this.cmdBuildBmpAtlas.TabIndex = 3;
             this.cmdBuildBmpAtlas.Text = "Build BmpAtlas";
             this.cmdBuildBmpAtlas.UseVisualStyleBackColor = true;

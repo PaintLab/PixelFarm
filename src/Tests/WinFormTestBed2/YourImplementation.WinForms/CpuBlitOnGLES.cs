@@ -108,7 +108,7 @@ namespace YourImplementation
 
             //optional if we want to print text on agg surface
             _aggPainter.CurrentFont = MyFontSettings.DefaultRootGraphicsFont;//
-            _aggPainter.TextPrinter = new PixelFarm.Drawing.Fonts.FontAtlasTextPrinter(_aggPainter);
+            _aggPainter.TextPrinter = new PixelFarm.CpuBlit.BitmapAtlas.FontAtlasTextPrinter(_aggPainter);
 
             _memBitmapBinder = new MemBitmapBinder(_memBmp, false);
             //

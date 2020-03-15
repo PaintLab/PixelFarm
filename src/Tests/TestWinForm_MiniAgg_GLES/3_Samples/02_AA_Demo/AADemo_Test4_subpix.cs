@@ -356,7 +356,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
                 var builder = new Typography.Contours.GlyphOutlineBuilder(typeface);
                 builder.BuildFromGlyphIndex((ushort)typeface.GetGlyphIndex('C'), 24);
 
-                PixelFarm.Drawing.Fonts.GlyphTranslatorToVxs tovxs = new Drawing.Fonts.GlyphTranslatorToVxs();
+                Typography.Contours.GlyphTranslatorToVxs tovxs = new Typography.Contours.GlyphTranslatorToVxs();
                 builder.ReadShapes(tovxs);
 
                 using (VxsTemp.Borrow(out var vxs))

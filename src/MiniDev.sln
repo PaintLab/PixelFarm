@@ -135,8 +135,6 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Typography.TextServices", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Typography.One", "PixelFarm\Typography.One\Typography.One.csproj", "{5278FAB9-33F0-40E0-ADCA-7237EA0E935B}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "FontAtlas", "..\..\Typography\FontAtlas\FontAtlas.shproj", "{F6602808-F1D5-4E3B-BB8C-B9CA4AE77437}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.Typography", "PixelFarm\PixelFarm.Typography\PixelFarm.Typography.csproj", "{EC1307C6-309F-43EA-BFCC-5219E2F5A103}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.Cosmos.One", "x_merge_projects\PixelFarm.Cosmos.One\PixelFarm.Cosmos.One.csproj", "{A04F23A7-C5B6-4BB0-A98A-68432B71EF53}"
@@ -220,7 +218,6 @@ Global
 		Tests\WinFormTestBed2\WinFormTestBed2.projitems*{e8df35e8-8765-47c2-bc1a-b686a058062c}*SharedItemsImports = 4
 		PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\MiniOpenTK_Core1.projitems*{e9a5d738-bc13-4909-94d8-d7a13d7068ff}*SharedItemsImports = 4
 		PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\MiniOpenTK_Core2.projitems*{e9a5d738-bc13-4909-94d8-d7a13d7068ff}*SharedItemsImports = 4
-		..\..\Typography\FontAtlas\FontAtlas.projitems*{ec1307c6-309f-43ea-bfcc-5219e2f5a103}*SharedItemsImports = 4
 		..\..\Typography\Typography.GlyphLayout\Typography.GlyphLayout.projitems*{ec1307c6-309f-43ea-bfcc-5219e2f5a103}*SharedItemsImports = 4
 		..\..\Typography\Typography.OpenFont\Typography.OpenFont.projitems*{ec1307c6-309f-43ea-bfcc-5219e2f5a103}*SharedItemsImports = 4
 		..\..\Typography\Typography.TextBreak\Typography.TextBreak\Typography.TextBreak.projitems*{ec1307c6-309f-43ea-bfcc-5219e2f5a103}*SharedItemsImports = 4
@@ -229,7 +226,6 @@ Global
 		PixelFarm\PaintLab.AppHost\PaintLab.AppHost.projitems*{f45871bd-806e-487a-a0b3-1e95853f693b}*SharedItemsImports = 13
 		PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\MiniOpenTK_Core1.projitems*{f5a89623-87b9-42a3-a58c-abee7c9bbca2}*SharedItemsImports = 4
 		PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\MiniOpenTK_Core2.projitems*{f5a89623-87b9-42a3-a58c-abee7c9bbca2}*SharedItemsImports = 4
-		..\..\Typography\FontAtlas\FontAtlas.projitems*{f6602808-f1d5-4e3b-bb8c-b9ca4ae77437}*SharedItemsImports = 13
 		PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\MiniOpenTK_Core2.projitems*{ff741509-c054-49d1-aa4f-c3e10bb2a63e}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -7647,7 +7643,6 @@ Global
 		{7A8A63D2-2CB5-41F5-8E83-6F6E54398CF4} = {C1FD503F-59E2-4016-8AEA-831AC3231430}
 		{D07686EE-2618-4C20-8EB5-32AD4C4D3810} = {C1FD503F-59E2-4016-8AEA-831AC3231430}
 		{5278FAB9-33F0-40E0-ADCA-7237EA0E935B} = {C1FD503F-59E2-4016-8AEA-831AC3231430}
-		{F6602808-F1D5-4E3B-BB8C-B9CA4AE77437} = {C1FD503F-59E2-4016-8AEA-831AC3231430}
 		{EC1307C6-309F-43EA-BFCC-5219E2F5A103} = {C1FD503F-59E2-4016-8AEA-831AC3231430}
 		{A04F23A7-C5B6-4BB0-A98A-68432B71EF53} = {601D2DDA-967A-4913-A957-76CAC82ADD93}
 		{5CF69768-3249-45D4-8BE3-B686F88C4EA0} = {B106C6A9-1647-4267-824B-896486A6E697}

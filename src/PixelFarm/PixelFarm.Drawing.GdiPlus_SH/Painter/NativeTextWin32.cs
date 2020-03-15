@@ -5,7 +5,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Text;
-
+ 
 using PixelFarm.Drawing.Fonts;
 using Typography.FontManagement;
 using Typography.OpenFont;
@@ -469,7 +469,8 @@ namespace PixelFarm.Drawing.WinGdi
         {
             _style = f.Style;
             //resolve
-            InstalledTypeface foundInstalledFont = s_installedTypefaceProvider.GetInstalledTypeface(f.Name, _style.ConvToInstalledFontStyle());
+
+            InstalledTypeface foundInstalledFont = s_installedTypefaceProvider.GetInstalledTypeface(f.Name, ConvToInstalledFontStyle(_style));
             //TODO: review 
             if (foundInstalledFont == null)
             {
@@ -477,6 +478,24 @@ namespace PixelFarm.Drawing.WinGdi
 
             }
             _nopenTypeFontFace = OpenFontLoader.LoadFont(foundInstalledFont.FontPath);
+        }
+        static Typography.FontManagement.TypefaceStyle ConvToInstalledFontStyle(FontStyle style)
+        {
+            Typography.FontManagement.TypefaceStyle installedStyle = Typography.FontManagement.TypefaceStyle.Regular;//regular
+            switch (style)
+            {
+                default: break;
+                case FontStyle.Bold:
+                    installedStyle = Typography.FontManagement.TypefaceStyle.Bold;
+                    break;
+                case FontStyle.Italic:
+                    installedStyle = Typography.FontManagement.TypefaceStyle.Italic;
+                    break;
+                case FontStyle.Bold | FontStyle.Italic:
+                    installedStyle = Typography.FontManagement.TypefaceStyle.Italic;
+                    break;
+            }
+            return installedStyle;
         }
         //
         public override int RecommendedLineHeight => _nopenTypeFontFace.RecommendedLineHeight;
@@ -647,7 +666,7 @@ namespace PixelFarm.Drawing.WinGdi
             //then build it
             _ownerFace.VxsBuilder.BuildFromGlyphIndex((ushort)codepoint, _sizeInPoints);
 
-            var txToVxs = new Fonts.GlyphTranslatorToVxs();
+            var txToVxs = new GlyphTranslatorToVxs();
             _ownerFace.VxsBuilder.ReadShapes(txToVxs);
             //
             //create new one
@@ -661,5 +680,5 @@ namespace PixelFarm.Drawing.WinGdi
 
 
 
-    
+
 }
