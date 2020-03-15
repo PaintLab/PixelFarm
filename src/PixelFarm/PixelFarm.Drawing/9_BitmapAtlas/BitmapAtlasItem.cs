@@ -16,19 +16,17 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             Source = imgBuffer;
             IsBigEndian = isBigEndian;
         }
-
-        
     }
 
     class RelocationAtlasItem
     {
         public readonly ushort glyphIndex;
-        internal readonly BitmapAtlasItem img;
+        internal readonly BitmapAtlasItem atlasItem;
         public Rectangle area;
-        public RelocationAtlasItem(ushort glyphIndex, BitmapAtlasItem img)
+        public RelocationAtlasItem(ushort glyphIndex, BitmapAtlasItem atlasItem)
         {
             this.glyphIndex = glyphIndex;
-            this.img = img;
+            this.atlasItem = atlasItem;
         }
 #if DEBUG
         public override string ToString()
