@@ -25,7 +25,7 @@ namespace OpenTkEssTest
         float _scale = 1.0f;
         bool _showMsdf;
 
-        PixelFarm.CpuBlit.BitmapAtlas.AtlasItemSource<MemBitmap> _spriteMapData;
+        PixelFarm.CpuBlit.BitmapAtlas.AtlasItemSource<MemBitmap> _atlasItemSrc;
         public T401_MsdfTest1()
         {
             Mode = MsdfTest1Mode.Test2_Cache;
@@ -159,13 +159,13 @@ namespace OpenTkEssTest
                     Msdfgen.MsdfGen3 gen3 = new Msdfgen.MsdfGen3();
 
                     PixelFarm.CpuBlit.BitmapAtlas.BitmapAtlasItemSource msdf = gen3.GenerateMsdfTexture(v1);
-                    var map = new PixelFarm.CpuBlit.BitmapAtlas.AtlasItemSource<MemBitmap>(msdf.Left, msdf.Top, msdf.Width, msdf.Height);
-                    map.TextureXOffset = msdf.TextureXOffset;
-                    map.TextureYOffset = msdf.TextureYOffset;
-                    map.Source = MemBitmap.CreateFromCopy(msdf.Width, msdf.Height, msdf.Source);
+                    var src = new PixelFarm.CpuBlit.BitmapAtlas.AtlasItemSource<MemBitmap>(msdf.Left, msdf.Top, msdf.Width, msdf.Height);
+                    src.TextureXOffset = msdf.TextureXOffset;
+                    src.TextureYOffset = msdf.TextureYOffset;
+                    src.Source = MemBitmap.CreateFromCopy(msdf.Width, msdf.Height, msdf.Source);
 
-                    _spriteMapData = map;
-                    _msdf_bmp = new GLBitmap(_spriteMapData.Source, true);
+                    _atlasItemSrc = src;
+                    _msdf_bmp = new GLBitmap(_atlasItemSrc.Source, true);
                 }
                 _resInit = true;
             }
