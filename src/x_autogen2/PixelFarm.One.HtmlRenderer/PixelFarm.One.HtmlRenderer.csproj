@@ -2358,56 +2358,53 @@
     <Compile Include="..\..\..\..\Typography\Build\N20\Typography.OpenFont\System.Numerics.ForNet20.cs">
       <Link>Typography\Build\N20\Typography.OpenFont\System.Numerics.ForNet20.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\FontAtlasTextPrinter.cs">
-      <Link>Typography\PixelFarm.Typography\1.1_Drawing_Fonts\FontAtlasTextPrinter.cs</Link>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1_General\FontStyleExtensions.cs">
+      <Link>Typography\PixelFarm.Typography\1_General\FontStyleExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\FontStyleExtensions.cs">
-      <Link>Typography\PixelFarm.Typography\1.1_Drawing_Fonts\FontStyleExtensions.cs</Link>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1_General\OpenFontTextService.cs">
+      <Link>Typography\PixelFarm.Typography\1_General\OpenFontTextService.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphBitmapStore.cs">
-      <Link>Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphBitmapStore.cs</Link>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1_General\VxsTextPrinter.cs">
+      <Link>Typography\PixelFarm.Typography\1_General\VxsTextPrinter.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphMeshStore.cs">
-      <Link>Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphMeshStore.cs</Link>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\2_CpuBlit_BitmapAtlas\AggGlyphTextureGen.cs">
+      <Link>Typography\PixelFarm.Typography\2_CpuBlit_BitmapAtlas\AggGlyphTextureGen.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphPathBuilder.cs">
-      <Link>Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphPathBuilder.cs</Link>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\2_CpuBlit_BitmapAtlas\BitmapCacheForSvgGlyph.cs">
+      <Link>Typography\PixelFarm.Typography\2_CpuBlit_BitmapAtlas\BitmapCacheForSvgGlyph.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphSvgStore.cs">
-      <Link>Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphSvgStore.cs</Link>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\2_CpuBlit_BitmapAtlas\BitmapFontMx.cs">
+      <Link>Typography\PixelFarm.Typography\2_CpuBlit_BitmapAtlas\BitmapFontMx.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphTranslatorToVxs.cs">
-      <Link>Typography\PixelFarm.Typography\1.1_Drawing_Fonts\GlyphTranslatorToVxs.cs</Link>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\2_CpuBlit_BitmapAtlas\FontAtlasTextPrinter.cs">
+      <Link>Typography\PixelFarm.Typography\2_CpuBlit_BitmapAtlas\FontAtlasTextPrinter.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\OpenFontTextService.cs">
-      <Link>Typography\PixelFarm.Typography\1.1_Drawing_Fonts\OpenFontTextService.cs</Link>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\2_CpuBlit_BitmapAtlas\GlyphBitmapStore.cs">
+      <Link>Typography\PixelFarm.Typography\2_CpuBlit_BitmapAtlas\GlyphBitmapStore.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\VxsTextPrinter.cs">
-      <Link>Typography\PixelFarm.Typography\1.1_Drawing_Fonts\VxsTextPrinter.cs</Link>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\2_CpuBlit_BitmapAtlas\GlyphTextureBitmapGenerator.cs">
+      <Link>Typography\PixelFarm.Typography\2_CpuBlit_BitmapAtlas\GlyphTextureBitmapGenerator.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_FontFaceImpl\AggGlyphTextureGen.cs">
-      <Link>Typography\PixelFarm.Typography\3_FontFaceImpl\AggGlyphTextureGen.cs</Link>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_Typography_Contours\GlyphMeshCollection.cs">
+      <Link>Typography\PixelFarm.Typography\3_Typography_Contours\GlyphMeshCollection.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_FontFaceImpl\BitmapFontMx.cs">
-      <Link>Typography\PixelFarm.Typography\3_FontFaceImpl\BitmapFontMx.cs</Link>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_Typography_Contours\GlyphMeshStore.cs">
+      <Link>Typography\PixelFarm.Typography\3_Typography_Contours\GlyphMeshStore.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_FontFaceImpl\GlyphTextureBitmapGenerator.cs">
-      <Link>Typography\PixelFarm.Typography\3_FontFaceImpl\GlyphTextureBitmapGenerator.cs</Link>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_Typography_Contours\GlyphOutlineBuilderBase.cs">
+      <Link>Typography\PixelFarm.Typography\3_Typography_Contours\GlyphOutlineBuilderBase.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_FontFaceImpl\ScriptLangConv.cs">
-      <Link>Typography\PixelFarm.Typography\3_FontFaceImpl\ScriptLangConv.cs</Link>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_Typography_Contours\GlyphPathBuilder.cs">
+      <Link>Typography\PixelFarm.Typography\3_Typography_Contours\GlyphPathBuilder.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphMeshCollection.cs">
-      <Link>Typography\PixelFarm.Typography\4_TextPrinter\GlyphMeshCollection.cs</Link>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_Typography_Contours\TextPrinterBase.cs">
+      <Link>Typography\PixelFarm.Typography\3_Typography_Contours\TextPrinterBase.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphOutlineAnalyzer.cs">
-      <Link>Typography\PixelFarm.Typography\4_TextPrinter\GlyphOutlineAnalyzer.cs</Link>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_PixelFarm_Contours\GlyphOutlineAnalyzer.cs">
+      <Link>Typography\PixelFarm.Typography\4_PixelFarm_Contours\GlyphOutlineAnalyzer.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\GlyphOutlineBuilderBase.cs">
-      <Link>Typography\PixelFarm.Typography\4_TextPrinter\GlyphOutlineBuilderBase.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_TextPrinter\TextPrinterBase.cs">
-      <Link>Typography\PixelFarm.Typography\4_TextPrinter\TextPrinterBase.cs</Link>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_PixelFarm_Contours\GlyphTranslatorToVxs.cs">
+      <Link>Typography\PixelFarm.Typography\4_PixelFarm_Contours\GlyphTranslatorToVxs.cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\Typography\Typography.GlyphLayout\GlyphIndexList.cs">
       <Link>Typography\Typography.GlyphLayout\GlyphIndexList.cs</Link>
