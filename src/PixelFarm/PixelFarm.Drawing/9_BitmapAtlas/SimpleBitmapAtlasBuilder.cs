@@ -294,8 +294,8 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
                 glyphData.Top = area.Top;
                 glyphData.Height = area.Height;
 
-                glyphData.TextureXOffset = cacheGlyph.img.TextureOffsetX;
-                glyphData.TextureYOffset = cacheGlyph.img.TextureOffsetY;
+                glyphData.TextureXOffset = cacheGlyph.img.TextureXOffset;
+                glyphData.TextureYOffset = cacheGlyph.img.TextureYOffset;
 
 
                 atlas.AddGlyph(cacheGlyph.glyphIndex, glyphData);

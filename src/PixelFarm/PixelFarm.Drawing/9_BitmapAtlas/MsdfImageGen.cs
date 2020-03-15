@@ -122,79 +122,25 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             }
             return newc;
         }
-        //---------------------------------------------------------------------
+
 
         public static BitmapAtlasItem CreateMsdfImage(ContourBuilder contourBuilder, Msdfgen.MsdfGenParams genParams)
         {
             // create msdf shape , then convert to actual image
-            return CreateMsdfImage(CreateMsdfShape(contourBuilder, genParams.shapeScale), genParams);
-        }
+            Msdfgen.Shape shape = CreateMsdfShape(contourBuilder, genParams.shapeScale);
+            //int w, int h, Vector2 translate
+            Msdfgen.MsdfGen3.PreviewSizeAndLocation(shape, genParams, out int imgW, out int imgH, out Msdfgen.Vector2 translate);
+            SpriteTextureMapData<MemBitmap> p = Msdfgen.MsdfGen3.CreateMsdfImage(shape, genParams, imgW, imgH, translate, null);
 
-        const double MAX = 1e240;
-        public static BitmapAtlasItem CreateMsdfImage(Msdfgen.Shape shape, Msdfgen.MsdfGenParams genParams)
-        {
-            double left = MAX;
-            double bottom = MAX;
-            double right = -MAX;
-            double top = -MAX;
-
-            shape.findBounds(ref left, ref bottom, ref right, ref top);
-            int w = (int)Math.Ceiling((right - left));
-            int h = (int)Math.Ceiling((top - bottom));
-
-            if (w < genParams.minImgWidth)
+            return new BitmapAtlasItem(p.Width, p.Height)
             {
-                w = genParams.minImgWidth;
-            }
-            if (h < genParams.minImgHeight)
-            {
-                h = genParams.minImgHeight;
-            }
+                Left = p.Left,
+                Top = p.Top,
+                TextureXOffset = p.TextureXOffset,
+                TextureYOffset = p.TextureYOffset,
+                Source = MemBitmap.CopyImgBuffer(p.Source)
+            };
 
-
-            //temp, for debug with glyph 'I', tahoma font
-            //double edgeThreshold = 1.00000001;//default, if edgeThreshold < 0 then  set  edgeThreshold=1 
-            //Msdfgen.Vector2 scale = new Msdfgen.Vector2(0.98714652956298199, 0.98714652956298199);
-            //double pxRange = 4;
-            //translate = new Msdfgen.Vector2(12.552083333333332, 4.0520833333333330);
-            //double range = pxRange / Math.Min(scale.x, scale.y);
-
-
-            int borderW = (int)((float)w / 5f);
-
-            //org
-            //var translate = new Msdfgen.Vector2(left < 0 ? -left + borderW : borderW, bottom < 0 ? -bottom + borderW : borderW);
-            //test
-            var translate = new Msdfgen.Vector2(-left + borderW, -bottom + borderW);
-
-            w += borderW * 2; //borders,left- right
-            h += borderW * 2; //borders, top- bottom
-
-            double edgeThreshold = genParams.edgeThreshold;
-            if (edgeThreshold < 0)
-            {
-                edgeThreshold = 1.00000001; //use default if  edgeThreshold <0
-            }
-
-            var scale = new Msdfgen.Vector2(genParams.scaleX, genParams.scaleY); //scale               
-            double range = genParams.pxRange / Math.Min(scale.x, scale.y);
-            //---------
-            Msdfgen.FloatRGBBmp frgbBmp = new Msdfgen.FloatRGBBmp(w, h);
-            Msdfgen.EdgeColoring.edgeColoringSimple(shape, genParams.angleThreshold);
-            Msdfgen.MsdfGenerator.generateMSDF(frgbBmp,
-                shape,
-                range,
-                scale,
-                translate,//translate to positive quadrant
-                edgeThreshold);
-            //-----------------------------------
-            int[] buffer = Msdfgen.FloatRGBBmp.ConvertToIntBmp(frgbBmp, false);
-
-            BitmapAtlasItem img = new BitmapAtlasItem(w, h);
-            img.TextureOffsetX = (short)translate.x; //TODO: review here, rounding err
-            img.TextureOffsetY = (short)translate.y; //TODO: review here, rounding err
-            img.SetImageBuffer(buffer, false);
-            return img;
         }
 
     }

@@ -4,46 +4,18 @@ using System;
 using PixelFarm.Drawing;
 namespace PixelFarm.CpuBlit.BitmapAtlas
 {
-       
-    public class BitmapAtlasItem
+
+    public class BitmapAtlasItem : SpriteTextureMapData<int[]>
     {
-        int[] _pixelBuffer;
-        public BitmapAtlasItem(int w, int h)
+        public BitmapAtlasItem(int w, int h) : base(0, 0, w, h) { }
+
+        public int[] GetImageBuffer() => Source;
+        public bool IsBigEndian { get; set; }
+        public void SetImageBuffer(int[] imgBuffer, bool isBigEndian = false)
         {
-            this.Width = w;
-            this.Height = h;
+            Source = imgBuffer;
+            IsBigEndian = isBigEndian;
         }
-
-        public RectangleF OriginalGlyphBounds { get; set; }
-
-        public int Width { get; private set; }
-
-        public int Height { get; private set; }
-
-        public bool IsBigEndian { get; private set; }
-
-        public int BorderXY { get; set; }
-
-        public int[] GetImageBuffer() => _pixelBuffer;
-        //
-        public void SetImageBuffer(int[] pixelBuffer, bool isBigEndian)
-        {
-            _pixelBuffer = pixelBuffer;
-            this.IsBigEndian = isBigEndian;
-        }
-        public void SetImageBuffer(MemBitmap memBmp)
-        {
-            _pixelBuffer = PixelFarm.CpuBlit.MemBitmap.CopyImgBuffer(memBmp);
-        }
-        /// <summary>
-        /// texture offset X from original glyph
-        /// </summary>
-        public short TextureOffsetX { get; set; }
-        /// <summary>
-        /// texture offset Y from original glyph 
-        /// </summary>
-        public short TextureOffsetY { get; set; }
- 
     }
 
     class RelocationAtlasItem

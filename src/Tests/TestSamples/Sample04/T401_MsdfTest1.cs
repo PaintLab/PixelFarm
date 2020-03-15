@@ -25,7 +25,7 @@ namespace OpenTkEssTest
         float _scale = 1.0f;
         bool _showMsdf;
 
-        Msdfgen.SpriteTextureMapData<MemBitmap> _spriteMapData;
+        PixelFarm.CpuBlit.BitmapAtlas.SpriteTextureMapData<MemBitmap> _spriteMapData;
         public T401_MsdfTest1()
         {
             Mode = MsdfTest1Mode.Test2_Cache;

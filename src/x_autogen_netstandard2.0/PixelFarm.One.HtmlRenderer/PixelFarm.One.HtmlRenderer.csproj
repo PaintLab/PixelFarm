@@ -762,7 +762,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Msdf3\ContourCornerAndAnalyzingElems.cs" Link="PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Msdf3\ContourCornerAndAnalyzingElems.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Msdf3\EdgeBmpLut.cs" Link="PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Msdf3\EdgeBmpLut.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Msdf3\MsdfGen3.cs" Link="PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Msdf3\MsdfGen3.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Msdf3\SpriteTextureMapData.cs" Link="PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Msdf3\SpriteTextureMapData.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Msdf\BasicElements.cs" Link="PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Msdf\BasicElements.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Msdf\EdgeColor.cs" Link="PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Msdf\EdgeColor.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Msdf\EdgeColoring.cs" Link="PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Msdf\EdgeColoring.cs" />
@@ -802,6 +801,7 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MultiGlyphSizeBitmapAtlasBuilder.cs" Link="PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\MultiGlyphSizeBitmapAtlasBuilder.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmapAtlas.cs" Link="PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmapAtlas.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmapAtlasBuilder.cs" Link="PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SimpleBitmapAtlasBuilder.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SpriteTextureMapData.cs" Link="PixelFarm\PixelFarm.Drawing\9_BitmapAtlas\SpriteTextureMapData.cs" />
     <Compile Include="..\..\..\..\Typography\Build\N20\Typography.OpenFont\System.Numerics.ForNet20.cs" Link="Typography\Build\N20\Typography.OpenFont\System.Numerics.ForNet20.cs" />
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\FontAtlasTextPrinter.cs" Link="Typography\PixelFarm.Typography\1.1_Drawing_Fonts\FontAtlasTextPrinter.cs" />
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1.1_Drawing_Fonts\FontStyleExtensions.cs" Link="Typography\PixelFarm.Typography\1.1_Drawing_Fonts\FontStyleExtensions.cs" />

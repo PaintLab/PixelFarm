@@ -201,8 +201,8 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
 
                 //3. texture offset                
                 BitmapAtlasItem img = g.img;
-                _writer.Write((short)img.TextureOffsetX);
-                _writer.Write((short)img.TextureOffsetY);
+                _writer.Write((short)img.TextureXOffset);
+                _writer.Write((short)img.TextureYOffset);
             }
         }
         //--------------------

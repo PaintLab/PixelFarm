@@ -174,7 +174,7 @@ namespace PixelFarm.DrawingGL
 #if DEBUG
                 //_msdfGen.dbugWriteMsdfTexture = true;
 #endif
-                Msdfgen.SpriteTextureMapData<MemBitmap> spriteTextureMap = _msdfGen.GenerateMsdfTexture(vxs);
+                PixelFarm.CpuBlit.BitmapAtlas.SpriteTextureMapData<MemBitmap> spriteTextureMap = _msdfGen.GenerateMsdfTexture(vxs);
                 TextureRenderVx textureRenderVx = new TextureRenderVx(spriteTextureMap);
                 return textureRenderVx;
             }
