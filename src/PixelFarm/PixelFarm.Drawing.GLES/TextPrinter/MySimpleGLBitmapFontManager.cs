@@ -1,14 +1,14 @@
 ﻿////MIT, 2016-present, WinterDev
 
 using System.Collections.Generic;
-using Typography.Rendering;
+using PixelFarm.CpuBlit.BitmapAtlas;
 using PixelFarm.CpuBlit;
 
 namespace PixelFarm.DrawingGL
 {
     class MySimpleGLBitmapFontManager : BitmapFontManager<GLBitmap>
     {
-        Dictionary<PixelFarm.CpuBlit.MemBitmap, GLBitmap> _sharedGlyphImgs = new Dictionary<PixelFarm.CpuBlit.MemBitmap, GLBitmap>();
+        Dictionary<MemBitmap, GLBitmap> _sharedGlyphImgs = new Dictionary<MemBitmap, GLBitmap>();
 
         public MySimpleGLBitmapFontManager(LayoutFarm.OpenFontTextService textServices)
             : base(textServices)

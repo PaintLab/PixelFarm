@@ -1,9 +1,8 @@
 ﻿//BSD, 2018-present, WinterDev 
 
 using PixelFarm.Drawing;
-using PixelFarm.Drawing.Fonts;
+using PixelFarm.CpuBlit.BitmapAtlas;
 using Typography.Contours;
-
 using Mini;
 namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 {

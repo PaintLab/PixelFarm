@@ -3,12 +3,10 @@
 using System;
 using Mini;
 using PixelFarm.DrawingGL;
-using PixelFarm.Drawing.Fonts;
-using PixelFarm.Contours;
-using Typography.OpenFont;
-using Typography.Rendering;
-
 using PixelFarm.CpuBlit.BitmapAtlas;
+using PixelFarm.Contours;
+
+using Typography.OpenFont;
 
 namespace OpenTkEssTest
 {

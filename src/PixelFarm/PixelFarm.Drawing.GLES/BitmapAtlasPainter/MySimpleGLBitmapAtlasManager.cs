@@ -10,8 +10,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
 
     class MySimpleGLBitmapAtlasManager : BitmapAtlasManager<GLBitmap>
     {
-        public MySimpleGLBitmapAtlasManager(TextureKind textureKind)
-            : base(textureKind)
+        public MySimpleGLBitmapAtlasManager(TextureKind textureKind) 
         {
             SetLoadNewBmpDel(atlas =>
             {

@@ -8,8 +8,6 @@ using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.PixelProcessing;
 using PixelFarm.CpuBlit.BitmapAtlas;
 
-using Typography.OpenFont;
-using Typography.Rendering;
 using Typography.TextLayout;
 
 using Mini;
