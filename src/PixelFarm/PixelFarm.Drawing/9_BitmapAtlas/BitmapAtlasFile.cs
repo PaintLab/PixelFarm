@@ -19,6 +19,9 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             GlyphList,
             OverviewFontInfo,
             OverviewMultiSizeFontInfo,
+
+            OverviewBitmapInfo, 
+            ImgUrlDic,
         }
 
 
@@ -59,6 +62,9 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
                             break;
                         case ObjectKind.TotalImageInfo:
                             ReadTotalImageInfo(reader);
+                            break;
+                        case ObjectKind.ImgUrlDic:
+                            ReadImgUrlDict(reader);
                             break;
                     }
                 }
@@ -108,6 +114,22 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             _atlas.FontKey = reader.ReadInt32();
             _atlas.OriginalFontSizePts = reader.ReadSingle();
         }
+        void ReadImgUrlDict(BinaryReader reader)
+        {
+            Dictionary<string, ushort> imgUrlDict = new Dictionary<string, ushort>();
+            ushort count = reader.ReadUInt16();
+            for (int i = 0; i < count; ++i)
+            {
+
+                ushort urlNameLen = reader.ReadUInt16();
+                string urlName = System.Text.Encoding.UTF8.GetString(reader.ReadBytes(urlNameLen));
+
+                ushort index = reader.ReadUInt16();
+
+                imgUrlDict.Add(urlName, index);
+            }
+            _atlas.ImgUrlDict = imgUrlDict;
+        }
         static string ReadLengthPrefixUtf8String(BinaryReader reader)
         {
             ushort utf8BufferLen = reader.ReadUInt16();
@@ -130,6 +152,22 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             _writer.Flush();
             _writer = null;
         }
+        internal void WriteImgUrlDict(Dictionary<string, ushort> imgUrlDict)
+        {
+            _writer.Write((ushort)ObjectKind.ImgUrlDic);
+            //write key-value            
+            int count = imgUrlDict.Count;
+            _writer.Write((ushort)count);//***
+            foreach (var kp in imgUrlDict)
+            {
+                //write string for img url (utf8)
+                byte[] buffer = System.Text.Encoding.UTF8.GetBytes(kp.Key);
+                _writer.Write((ushort)buffer.Length); //***ushort *
+                _writer.Write(buffer);
+                //
+                _writer.Write((ushort)kp.Value);
+            }
+        } 
         internal void WriteOverviewMultiSizeFontInfo(ushort count)
         {
             _writer.Write((ushort)ObjectKind.OverviewMultiSizeFontInfo);
@@ -146,19 +184,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             _writer.Write(utf8Buffer);
         }
         internal void WriteOverviewFontInfo(string fontFileName, int fontKey, float sizeInPt)
-        {
-
-#if DEBUG
-            if (string.IsNullOrEmpty(fontFileName))
-            {
-                throw new NotSupportedException();
-            }
-            if (fontKey == 0)
-            {
-                throw new NotSupportedException();
-            }
-#endif
-
+        { 
 
             _writer.Write((ushort)ObjectKind.OverviewFontInfo);
             WriteLengthPrefixUtf8String(fontFileName);

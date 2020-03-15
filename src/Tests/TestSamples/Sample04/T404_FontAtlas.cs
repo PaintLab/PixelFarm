@@ -67,7 +67,7 @@ namespace OpenTkEssTest
             atlasBuilder.SpaceCompactOption = SimpleBitmapAtlasBuilder.CompactOption.ArrangeByHeight;
 
             //4. merge all glyph in the builder into a single image
-            PixelFarm.CpuBlit.MemBitmap totalGlyphsImg = atlasBuilder.BuildSingleImage();
+            PixelFarm.CpuBlit.MemBitmap totalGlyphsImg = atlasBuilder.BuildSingleImage(true);
             //-------------------------------------------------------------
 
             //5. create a simple font atlas from information inside this atlas builder.

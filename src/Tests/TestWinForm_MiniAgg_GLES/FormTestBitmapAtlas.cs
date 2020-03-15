@@ -212,7 +212,7 @@ namespace Mini
             string totalImgFile = outputFilename + ".png";
 
             //5. merge all small images into a bigone 
-            MemBitmap totalImg = bmpAtlasBuilder.BuildSingleImage();
+            MemBitmap totalImg = bmpAtlasBuilder.BuildSingleImage(false);
             bmpAtlasBuilder.ImgUrlDict = imgDic;
             bmpAtlasBuilder.SetAtlasInfo(TextureKind.Bitmap, 0);//font size
             //6. save atlas info and total-img (.png file)

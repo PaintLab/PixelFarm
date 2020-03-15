@@ -22,7 +22,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
 
         }
 
-        public Dictionary<string, ushort> ImgUrlDict { get; set; }
+
         public int Width { get; set; }
         public int Height { get; set; }
 
@@ -36,7 +36,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
         public string FontFilename { get; set; }
         public int FontKey { get; set; }
         //------------
-
+        public Dictionary<string, ushort> ImgUrlDict { get; set; }
 
         public void AddGlyph(ushort glyphIndex, TextureGlyphMapData glyphData)
         {
@@ -56,13 +56,14 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
         public bool TryGetGlyphMapData(string itemName, out TextureGlyphMapData glyphdata)
         {
             //get img item by unique name
-            throw new NotSupportedException();
-            //if (!_glyphLocations.TryGetValue(glyphIndex, out glyphdata))
-            //{
-            //    glyphdata = null;
-            //    return false;
-            //}
-            return true;
+            if (ImgUrlDict != null && 
+                ImgUrlDict.TryGetValue(itemName, out ushort foundIndex) &&
+                _glyphLocations.TryGetValue(foundIndex, out glyphdata))
+            {
+                return true;
+            }
+            glyphdata = null;
+            return false;
         }
         public Dictionary<ushort, TextureGlyphMapData> GlyphDic => _glyphLocations;
 

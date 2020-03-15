@@ -13,8 +13,9 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
     /// </summary>
     public class MultiGlyphSizeBitmapAtlasBuilder
     {
-        List<SimpleFontAtlasInfo> _atlasList = new List<SimpleFontAtlasInfo>();
-        class SimpleFontAtlasInfo
+        List<TempMerginhAtlasInfo> _atlasList = new List<TempMerginhAtlasInfo>();
+
+        class TempMerginhAtlasInfo
         {
             public int fontKey;
             public string simpleFontAtlasFile;
@@ -23,6 +24,8 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             public Dictionary<ushort, TextureGlyphMapData> NewCloneLocations;
             public RequestFont reqFont;
             public TextureKind textureKind;
+            public Dictionary<string, ushort> ImgUrlDict;
+
         }
 
         public void AddSimpleAtlasFile(RequestFont reqFont,
@@ -35,7 +38,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
                 fontAtlasFile.Read(fs);
             }
 
-            var simpleFontAtlasInfo = new SimpleFontAtlasInfo()
+            var simpleFontAtlasInfo = new TempMerginhAtlasInfo()
             {
                 reqFont = reqFont,
                 simpleFontAtlasFile = bitmapAtlasFile,
@@ -57,7 +60,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             const int interAtlasSpace = 2;
             for (int i = 0; i < j; ++i)
             {
-                SimpleFontAtlasInfo atlasInfo = _atlasList[i];
+                TempMerginhAtlasInfo atlasInfo = _atlasList[i];
                 SimpleBitmapAtlas fontAtlas = atlasInfo.fontAtlasFile.ResultSimpleFontAtlasList[0];
                 totalHeight += fontAtlas.Height + interAtlasSpace;
                 if (i == 0)
@@ -78,7 +81,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             int offsetFromBottom = interAtlasSpace;//start offset 
             for (int i = j - 1; i >= 0; --i)
             {
-                SimpleFontAtlasInfo atlasInfo = _atlasList[i];
+                TempMerginhAtlasInfo atlasInfo = _atlasList[i];
                 SimpleBitmapAtlas fontAtlas = atlasInfo.fontAtlasFile.ResultSimpleFontAtlasList[0];
                 offsetFromBottoms[i] = offsetFromBottom;
                 offsetFromBottom += fontAtlas.Height + interAtlasSpace;
@@ -91,11 +94,12 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
                 AggPainter painter = AggPainter.Create(memBitmap);
                 for (int i = 0; i < j; ++i)
                 {
-                    SimpleFontAtlasInfo atlasInfo = _atlasList[i];
+                    TempMerginhAtlasInfo atlasInfo = _atlasList[i];
                     BitmapAtlasFile atlasFile = atlasInfo.fontAtlasFile;
                     SimpleBitmapAtlas fontAtlas = atlasInfo.fontAtlasFile.ResultSimpleFontAtlasList[0];
 
                     atlasInfo.NewCloneLocations = SimpleBitmapAtlas.CloneLocationWithOffset(fontAtlas, 0, offsetFromBottoms[i]);
+                    atlasInfo.ImgUrlDict = fontAtlas.ImgUrlDict;
 
                     using (System.IO.Stream fontImgStream = PixelFarm.Platforms.StorageService.Provider.ReadDataStream(atlasInfo.imgFile))
                     using (PixelFarm.CpuBlit.MemBitmap atlasBmp = PixelFarm.CpuBlit.MemBitmap.LoadBitmap(fontImgStream))
@@ -124,7 +128,9 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
                 //2. 
                 for (int i = 0; i < j; ++i)
                 {
-                    SimpleFontAtlasInfo atlasInfo = _atlasList[i];
+                    TempMerginhAtlasInfo atlasInfo = _atlasList[i];
+
+
                     RequestFont reqFont = atlasInfo.reqFont;
                     fontAtlasFile.WriteOverviewFontInfo(reqFont.Name, reqFont.FontKey, reqFont.SizeInPoints);//size in points
 
@@ -134,8 +140,13 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
                         4,
                         atlasInfo.textureKind);
                     //
-                    //
+
                     fontAtlasFile.WriteGlyphList(atlasInfo.NewCloneLocations);
+
+                    if (atlasInfo.ImgUrlDict != null)
+                    {
+                        fontAtlasFile.WriteImgUrlDict(atlasInfo.ImgUrlDict);
+                    }
                 }
                 fontAtlasFile.EndWrite();
             }

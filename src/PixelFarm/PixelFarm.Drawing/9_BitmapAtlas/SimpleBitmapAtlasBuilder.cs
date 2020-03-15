@@ -9,13 +9,14 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
     public class SimpleBitmapAtlasBuilder
     {
         MemBitmap _latestGenGlyphImage;
-        Dictionary<ushort, RelocationAtlasItem> _glyphs = new Dictionary<ushort, RelocationAtlasItem>();
+        Dictionary<ushort, RelocationAtlasItem> _items = new Dictionary<ushort, RelocationAtlasItem>();
 
         public SimpleBitmapAtlasBuilder()
         {
             SpaceCompactOption = CompactOption.BinPack; //default
             MaxAtlasWidth = 800;
         }
+         
         public int MaxAtlasWidth { get; set; }
         public TextureKind TextureKind { get; private set; }
 
@@ -40,22 +41,19 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
         /// <param name="img"></param>
         public void AddGlyph(ushort glyphIndex, BitmapAtlasItem img)
         {
-            _glyphs[glyphIndex] = new RelocationAtlasItem(glyphIndex, img);
+            _items[glyphIndex] = new RelocationAtlasItem(glyphIndex, img);
         }
-
+        public Dictionary<string, ushort> ImgUrlDict { get; set; }
         public void SetAtlasInfo(TextureKind textureKind, float fontSizeInPts)
         {
             this.TextureKind = textureKind;
             this.FontSizeInPoints = fontSizeInPts;
         }
-        public PixelFarm.CpuBlit.MemBitmap BuildSingleImage()
+        public MemBitmap BuildSingleImage(bool flipY)
         {
             //1. add to list 
-            var glyphList = new List<RelocationAtlasItem>(_glyphs.Values);
-            //foreach (CacheGlyph glyphImg in _glyphs.Values)
-            //{                
-            //    glyphList.Add(glyphImg);
-            //}
+            var glyphList = new List<RelocationAtlasItem>(_items.Values);
+
 
             int totalMaxLim = MaxAtlasWidth;
             int maxRowHeight = 0;
@@ -69,10 +67,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
                 case CompactOption.BinPack:
                     {
                         //2. sort by glyph width
-                        glyphList.Sort((a, b) =>
-                        {
-                            return a.atlasItem.Width.CompareTo(b.atlasItem.Width);
-                        });
+                        glyphList.Sort((a, b) => a.atlasItem.Width.CompareTo(b.atlasItem.Width));
                         //3. layout 
                         for (int i = glyphList.Count - 1; i >= 0; --i)
                         {
@@ -97,10 +92,8 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
                 case CompactOption.ArrangeByHeight:
                     {
                         //2. sort by height
-                        glyphList.Sort((a, b) =>
-                        {
-                            return a.atlasItem.Height.CompareTo(b.atlasItem.Height);
-                        });
+                        glyphList.Sort((a, b) => a.atlasItem.Height.CompareTo(b.atlasItem.Height));
+
                         //3. layout 
                         int glyphCount = glyphList.Count;
                         for (int i = 0; i < glyphCount; ++i)
@@ -207,33 +200,38 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             //5. since the mergeBmpBuffer is head-down
             //we will flipY axis again to head-up, the head-up img is easy to read and debug
 
-            int[] totalBufferFlipY = new int[mergeBmpBuffer.Length];
-            int srcRowIndex = imgH - 1;
-            int strideInBytes = totalImgWidth * 4;//32 argb
-
-            for (int i = 0; i < imgH; ++i)
+            if (flipY)
             {
-                //copy each row from src to dst
-                System.Buffer.BlockCopy(mergeBmpBuffer, strideInBytes * srcRowIndex, totalBufferFlipY, strideInBytes * i, strideInBytes);
-                srcRowIndex--;
-            }
+                int[] totalBufferFlipY = new int[mergeBmpBuffer.Length];
+                int srcRowIndex = imgH - 1;
+                int strideInBytes = totalImgWidth * 4;//32 argb
 
-            //flipY on atlas info too
-            for (int i = 0; i < glyphList.Count; ++i)
+                for (int i = 0; i < imgH; ++i)
+                {
+                    //copy each row from src to dst
+                    System.Buffer.BlockCopy(mergeBmpBuffer, strideInBytes * srcRowIndex, totalBufferFlipY, strideInBytes * i, strideInBytes);
+                    srcRowIndex--;
+                }
+
+                //flipY on atlas info too
+                for (int i = 0; i < glyphList.Count; ++i)
+                {
+                    RelocationAtlasItem g = glyphList[i];
+                    Rectangle rect = g.area;
+                    g.area = new Rectangle(rect.X, imgH - (rect.Y + rect.Height), rect.Width, rect.Height);
+                }
+
+
+                //***
+                //6. generate final output
+                //TODO: rename GlyphImage to another name to distinquist
+                //between small glyph and a large one
+                return _latestGenGlyphImage = PixelFarm.CpuBlit.MemBitmap.CreateFromCopy(totalImgWidth, imgH, totalBufferFlipY);
+            }
+            else
             {
-                RelocationAtlasItem g = glyphList[i];
-                Rectangle rect = g.area;
-                g.area = new Rectangle(rect.X, imgH - (rect.Y + rect.Height), rect.Width, rect.Height);
+                return _latestGenGlyphImage = PixelFarm.CpuBlit.MemBitmap.CreateFromCopy(totalImgWidth, imgH, mergeBmpBuffer);
             }
-
-
-            //***
-            //6. generate final output
-            //TODO: rename GlyphImage to another name to distinquist
-            //between small glyph and a large one
-
-            return _latestGenGlyphImage = PixelFarm.CpuBlit.MemBitmap.CreateFromCopy(totalImgWidth, imgH, totalBufferFlipY);
-
         }
         public void SaveAtlasInfo(System.IO.Stream outputStream)
         {
@@ -249,7 +247,10 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             {
                 atlasFile.WriteOverviewFontInfo(FontFilename, FontKey, FontSizeInPoints);
             }
-           
+            else
+            {
+                atlasFile.WriteOverviewFontInfo("", 0, 0);
+            }
 
             atlasFile.WriteTotalImageInfo(
                 (ushort)_latestGenGlyphImage.Width,
@@ -257,12 +258,16 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
                 this.TextureKind);
             //
             //
-            atlasFile.WriteGlyphList(_glyphs);
+            atlasFile.WriteGlyphList(_items);
+
+            if (ImgUrlDict != null)
+            {
+                atlasFile.WriteImgUrlDict(ImgUrlDict);
+            }
             atlasFile.EndWrite();
         }
 
-        //name -> point to index
-        public Dictionary<string, ushort> ImgUrlDict { get; set; }
+
 
         public void SaveAtlasInfo(string outputFilename)
         {
@@ -287,7 +292,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             atlas.TextureKind = this.TextureKind;
             atlas.OriginalFontSizePts = this.FontSizeInPoints;
 
-            foreach (RelocationAtlasItem cacheGlyph in _glyphs.Values)
+            foreach (RelocationAtlasItem cacheGlyph in _items.Values)
             {
 
                 Rectangle area = cacheGlyph.area;
