@@ -3,10 +3,10 @@
 using System;
 using Mini;
 using PixelFarm.DrawingGL;
-using PixelFarm.Drawing.Fonts;
+using PixelFarm.CpuBlit.BitmapAtlas;
 using PixelFarm.Contours;
+
 using Typography.OpenFont;
-using Typography.Rendering;
 
 namespace OpenTkEssTest
 {
@@ -18,7 +18,7 @@ namespace OpenTkEssTest
         bool _resInit;
         GLBitmap _msdf_bmp;
         GLPainter _painter;
-        SimpleFontAtlas _fontAtlas;
+        SimpleBitmapAtlas _fontAtlas;
 
 
         Typeface _typeface;
@@ -49,28 +49,28 @@ namespace OpenTkEssTest
             glyphTextureGen.MsdfGenVersion = 3;
 
             //2. generate the glyphs
-            SimpleFontAtlasBuilder atlasBuilder = glyphTextureGen.CreateTextureFontFromBuildDetail(
+            SimpleBitmapAtlasBuilder atlasBuilder = glyphTextureGen.CreateTextureFontFromBuildDetail(
                 _typeface,
                 reqFont.SizeInPoints,
-                PixelFarm.Drawing.BitmapAtlas.TextureKind.Msdf,
+                 TextureKind.Msdf,
                 GlyphTextureCustomConfigs.TryGetGlyphTextureBuildDetail(reqFont, false, false)
             );
 
-            
+
 
 
             //3. set information before write to font-info
             atlasBuilder.FontFilename = reqFont.Name;//TODO: review here, check if we need 'filename' or 'fontname'
             atlasBuilder.FontKey = reqFont.FontKey;
-            atlasBuilder.SpaceCompactOption = SimpleFontAtlasBuilder.CompactOption.ArrangeByHeight;
+            atlasBuilder.SpaceCompactOption = SimpleBitmapAtlasBuilder.CompactOption.ArrangeByHeight;
 
             //4. merge all glyph in the builder into a single image
-            PixelFarm.CpuBlit.MemBitmap totalGlyphsImg = atlasBuilder.BuildSingleImage();
+            PixelFarm.CpuBlit.MemBitmap totalGlyphsImg = atlasBuilder.BuildSingleImage(true);
             //-------------------------------------------------------------
 
             //5. create a simple font atlas from information inside this atlas builder.
-            _fontAtlas = atlasBuilder.CreateSimpleFontAtlas();
-            _fontAtlas.TotalGlyph = totalGlyphsImg;
+            _fontAtlas = atlasBuilder.CreateSimpleBitmapAtlas();
+            _fontAtlas.MainBitmap = totalGlyphsImg;
 
             byte[] codepoint = System.Text.Encoding.UTF8.GetBytes("AB");
             _glyphIndex_0 = _typeface.GetGlyphIndex(codepoint[0]);
@@ -87,14 +87,14 @@ namespace OpenTkEssTest
             _pcx.ClearColorBuffer();
             if (!_resInit)
             {
-                _msdf_bmp = DemoHelper.LoadTexture(_fontAtlas.TotalGlyph);
+                _msdf_bmp = DemoHelper.LoadTexture(_fontAtlas.MainBitmap);
                 _resInit = true;
             }
 
             _painter.Clear(PixelFarm.Drawing.Color.White);
 
 
-            _fontAtlas.TryGetGlyphMapData(_glyphIndex_0, out Typography.Rendering.TextureGlyphMapData glyphData);
+            _fontAtlas.TryGetItem(_glyphIndex_0, out AtlasItem glyphData);
             PixelFarm.Drawing.Rectangle r =
                    new PixelFarm.Drawing.Rectangle(glyphData.Left,
                    glyphData.Top,
@@ -103,12 +103,12 @@ namespace OpenTkEssTest
 
             _pcx.DrawSubImageWithMsdf(_msdf_bmp, ref r, 100, 40);
 
-            _fontAtlas.TryGetGlyphMapData(_glyphIndex_1, out glyphData);
+            _fontAtlas.TryGetItem(_glyphIndex_1, out glyphData);
             PixelFarm.Drawing.Rectangle r2 = new PixelFarm.Drawing.Rectangle(glyphData.Left,
                    glyphData.Top,
                    glyphData.Width,
                    glyphData.Height);
-            _pcx.DrawSubImageWithMsdf(_msdf_bmp, ref r2, 100 + r.Width,40);
+            _pcx.DrawSubImageWithMsdf(_msdf_bmp, ref r2, 100 + r.Width, 40);
 
             //full image
             _pcx.DrawImage(_msdf_bmp, 0, 100);

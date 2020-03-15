@@ -8,7 +8,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using PixelFarm.CpuBlit;
-using PixelFarm.Drawing.BitmapAtlas;
+using PixelFarm.CpuBlit.BitmapAtlas;
 
 
 namespace Mini

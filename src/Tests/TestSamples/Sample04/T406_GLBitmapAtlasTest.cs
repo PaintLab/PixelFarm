@@ -4,10 +4,13 @@ using System;
 using System.Collections.Generic;
 using Mini;
 
+
 using PixelFarm.CpuBlit;
+using PixelFarm.CpuBlit.BitmapAtlas;
+
 using PixelFarm.DrawingGL;
 using PixelFarm.Drawing;
-using PixelFarm.Drawing.BitmapAtlas;
+
 
 namespace OpenTkEssTest
 {
@@ -52,7 +55,7 @@ namespace OpenTkEssTest
             SwapBuffers();
         }
     }
- 
+
 
 
 }
