@@ -156,10 +156,15 @@ namespace OpenTkEssTest
                     GetExampleVxs(v1);
                     //if v1 is too large we can scale down to ? some degree 
                     //that still preserve original detail for reconstruction 
-
-
                     Msdfgen.MsdfGen3 gen3 = new Msdfgen.MsdfGen3();
-                    _spriteMapData = gen3.GenerateMsdfTexture(v1);
+
+                    PixelFarm.CpuBlit.BitmapAtlas.BitmapAtlasItem msdf = gen3.GenerateMsdfTexture(v1);
+                    var map = new PixelFarm.CpuBlit.BitmapAtlas.SpriteTextureMapData<MemBitmap>(msdf.Left, msdf.Top, msdf.Width, msdf.Height);
+                    map.TextureXOffset = msdf.TextureXOffset;
+                    map.TextureYOffset = msdf.TextureYOffset;
+                    map.Source = MemBitmap.CreateFromCopy(msdf.Width, msdf.Height, msdf.Source);
+
+                    _spriteMapData = map;
                     _msdf_bmp = new GLBitmap(_spriteMapData.Source, true);
                 }
                 _resInit = true;

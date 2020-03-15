@@ -16,6 +16,8 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             Source = imgBuffer;
             IsBigEndian = isBigEndian;
         }
+
+        
     }
 
     class RelocationAtlasItem

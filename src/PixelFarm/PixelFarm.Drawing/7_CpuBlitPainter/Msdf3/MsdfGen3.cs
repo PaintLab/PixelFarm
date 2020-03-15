@@ -326,7 +326,7 @@ namespace Msdfgen
             translate1 = new Vector2(-left + borderW, -bottom + borderW);
         }
 
-        public PixelFarm.CpuBlit.BitmapAtlas.SpriteTextureMapData<MemBitmap> GenerateMsdfTexture(VertexStore vxs)
+        public PixelFarm.CpuBlit.BitmapAtlas.BitmapAtlasItem GenerateMsdfTexture(VertexStore vxs)
         {
 
             Shape shape = CreateShape(vxs, out EdgeBmpLut edgeBmpLut);
@@ -461,9 +461,13 @@ namespace Msdfgen
                     }
                     edgeBmpLut.SetBmpBuffer(bmpLut.Width, bmpLut.Height, lutBuffer5);
                     //generate actual sprite
-                    PixelFarm.CpuBlit.BitmapAtlas.SpriteTextureMapData<MemBitmap> spriteTextureMapData = CreateMsdfImage(shape, MsdfGenParams, imgW, imgH, translateVec, edgeBmpLut);
-                    //save msdf bitmap to file              
-                    spriteTextureMapData.Source.SaveImage(dbug_msdf_output);
+                    PixelFarm.CpuBlit.BitmapAtlas.BitmapAtlasItem spriteTextureMapData = CreateMsdfImage(shape, MsdfGenParams, imgW, imgH, translateVec, edgeBmpLut);
+                    //save msdf bitmap to file         
+                    using (MemBitmap memBmp = MemBitmap.CreateFromCopy(spriteTextureMapData.Width, spriteTextureMapData.Height, spriteTextureMapData.Source))
+                    {
+                        memBmp.SaveImage(dbug_msdf_output);
+                    }
+
                     return spriteTextureMapData;
                 }
 
@@ -806,7 +810,7 @@ namespace Msdfgen
             //}
         }
 
-        internal static PixelFarm.CpuBlit.BitmapAtlas.SpriteTextureMapData<MemBitmap> CreateMsdfImage(Shape shape, MsdfGenParams genParams, int w, int h, Vector2 translate, EdgeBmpLut lutBuffer = null)
+        internal static PixelFarm.CpuBlit.BitmapAtlas.BitmapAtlasItem CreateMsdfImage(Shape shape, MsdfGenParams genParams, int w, int h, Vector2 translate, EdgeBmpLut lutBuffer = null)
         {
             double edgeThreshold = genParams.edgeThreshold;
             if (edgeThreshold < 0)
@@ -844,8 +848,8 @@ namespace Msdfgen
                   edgeThreshold);
             }
 
-            var spriteData = new PixelFarm.CpuBlit.BitmapAtlas.SpriteTextureMapData<PixelFarm.CpuBlit.MemBitmap>(0, 0, w, h);
-            spriteData.Source = MemBitmap.CreateFromCopy(w, h, ConvertToIntBmp(frgbBmp, flipY));
+            var spriteData = new PixelFarm.CpuBlit.BitmapAtlas.BitmapAtlasItem(w, h);
+            spriteData.Source = ConvertToIntBmp(frgbBmp, flipY);
             spriteData.TextureXOffset = (float)translate.x;
             spriteData.TextureYOffset = (float)translate.y;
             return spriteData;

@@ -130,17 +130,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             Msdfgen.Shape shape = CreateMsdfShape(contourBuilder, genParams.shapeScale);
             //int w, int h, Vector2 translate
             Msdfgen.MsdfGen3.PreviewSizeAndLocation(shape, genParams, out int imgW, out int imgH, out Msdfgen.Vector2 translate);
-            SpriteTextureMapData<MemBitmap> p = Msdfgen.MsdfGen3.CreateMsdfImage(shape, genParams, imgW, imgH, translate, null);
-
-            return new BitmapAtlasItem(p.Width, p.Height)
-            {
-                Left = p.Left,
-                Top = p.Top,
-                TextureXOffset = p.TextureXOffset,
-                TextureYOffset = p.TextureYOffset,
-                Source = MemBitmap.CopyImgBuffer(p.Source)
-            };
-
+            return Msdfgen.MsdfGen3.CreateMsdfImage(shape, genParams, imgW, imgH, translate, null);
         }
 
     }
