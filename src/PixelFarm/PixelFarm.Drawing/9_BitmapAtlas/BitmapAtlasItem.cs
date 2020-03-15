@@ -11,6 +11,16 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
 
         public int[] GetImageBuffer() => Source;
         public bool IsBigEndian { get; set; }
+
+        /// <summary>
+        /// name of this item in int16 (eg. glyph index)
+        /// </summary>
+        public ushort UniqueInt16Name { get; set; }
+        /// <summary>
+        /// name of this item in string( eg. bitmap unqiue name)
+        /// </summary>
+        public string UniqueName { get; set; }
+
         public void SetImageBuffer(int[] imgBuffer, bool isBigEndian = false)
         {
             Source = imgBuffer;
@@ -20,45 +30,20 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
 
     class RelocationAtlasItem
     {
-        public readonly ushort glyphIndex;
         internal readonly BitmapAtlasItem atlasItem;
         public Rectangle area;
-        public RelocationAtlasItem(ushort glyphIndex, BitmapAtlasItem atlasItem)
+        public RelocationAtlasItem(BitmapAtlasItem atlasItem)
         {
-            this.glyphIndex = glyphIndex;
             this.atlasItem = atlasItem;
         }
 #if DEBUG
         public override string ToString()
         {
-            return glyphIndex.ToString();
+            return atlasItem.UniqueInt16Name.ToString();
         }
 #endif
     }
 
-    public class TextureGlyphMapData
-    {
-        public int Left { get; set; }
-        public int Top { get; set; }
-        public int Width { get; set; }
-        public int Height { get; set; }
 
-        public float TextureXOffset { get; set; }
-        public float TextureYOffset { get; set; }
-
-        public void GetRect(out int x, out int y, out int w, out int h)
-        {
-            x = Left;
-            y = Top;
-            w = Width;
-            h = Height;
-        }
-#if DEBUG
-        public override string ToString()
-        {
-            return "(" + Left + "," + Top + "," + Width + "," + Height + ")";
-        }
-#endif
-    }
 
 }

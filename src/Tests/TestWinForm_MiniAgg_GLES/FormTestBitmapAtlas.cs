@@ -190,9 +190,10 @@ namespace Mini
 
                 var atlasItem = new BitmapAtlasItem(itemBmp.Width, itemBmp.Height);
                 atlasItem.SetImageBuffer(MemBitmap.CopyImgBuffer(itemBmp));
+                atlasItem.UniqueInt16Name = index;
                 //5. add to builder
                 //bmpAtlasBuilder.AddAtlasItemImage(index, atlasItem);
-                bmpAtlasBuilder.AddGlyph(index, atlasItem);
+                bmpAtlasBuilder.AddGlyph(atlasItem);
                 string imgPath = f.Substring(imgdirNameLen);
                 imgDic.Add(imgPath, index);
                 index++;
