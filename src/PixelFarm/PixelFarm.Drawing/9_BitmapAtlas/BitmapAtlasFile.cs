@@ -214,7 +214,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             // 
             foreach (BitmapAtlasItemSource g in items.Values)
             {
-                //1. glyph index
+                //1. unique uint16 name
                 _writer.Write((ushort)g.UniqueInt16Name);
 
                 //2. area
