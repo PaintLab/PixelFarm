@@ -124,7 +124,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
         }
 
 
-        public static BitmapAtlasItem CreateMsdfImage(ContourBuilder contourBuilder, Msdfgen.MsdfGenParams genParams)
+        public static BitmapAtlasItemSource CreateMsdfImageV1(ContourBuilder contourBuilder, Msdfgen.MsdfGenParams genParams)
         {
             // create msdf shape , then convert to actual image
             Msdfgen.Shape shape = CreateMsdfShape(contourBuilder, genParams.shapeScale);
@@ -132,6 +132,14 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             Msdfgen.MsdfGen3.PreviewSizeAndLocation(shape, genParams, out int imgW, out int imgH, out Msdfgen.Vector2 translate);
             return Msdfgen.MsdfGen3.CreateMsdfImage(shape, genParams, imgW, imgH, translate, null);
         }
-
+        public static BitmapAtlasItemSource CreateMsdfImageV1(Msdfgen.Shape shape, Msdfgen.MsdfGenParams genParams)
+        {
+            //output is msdf v1,
+            //int w, int h, Vector2 translate
+            Msdfgen.MsdfGen3.PreviewSizeAndLocation(shape, genParams, out int imgW, out int imgH, out Msdfgen.Vector2 translate);
+            //output is msdf v1
+            return Msdfgen.MsdfGen3.CreateMsdfImage(shape, genParams, imgW, imgH, translate, null);//output is msdf v1, since we set lut=null
+         
+        }
     }
 }

@@ -25,7 +25,7 @@ namespace OpenTkEssTest
         float _scale = 1.0f;
         bool _showMsdf;
 
-        PixelFarm.CpuBlit.BitmapAtlas.SpriteTextureMapData<MemBitmap> _spriteMapData;
+        PixelFarm.CpuBlit.BitmapAtlas.AtlasItemSource<MemBitmap> _spriteMapData;
         public T401_MsdfTest1()
         {
             Mode = MsdfTest1Mode.Test2_Cache;
@@ -158,8 +158,8 @@ namespace OpenTkEssTest
                     //that still preserve original detail for reconstruction 
                     Msdfgen.MsdfGen3 gen3 = new Msdfgen.MsdfGen3();
 
-                    PixelFarm.CpuBlit.BitmapAtlas.BitmapAtlasItem msdf = gen3.GenerateMsdfTexture(v1);
-                    var map = new PixelFarm.CpuBlit.BitmapAtlas.SpriteTextureMapData<MemBitmap>(msdf.Left, msdf.Top, msdf.Width, msdf.Height);
+                    PixelFarm.CpuBlit.BitmapAtlas.BitmapAtlasItemSource msdf = gen3.GenerateMsdfTexture(v1);
+                    var map = new PixelFarm.CpuBlit.BitmapAtlas.AtlasItemSource<MemBitmap>(msdf.Left, msdf.Top, msdf.Width, msdf.Height);
                     map.TextureXOffset = msdf.TextureXOffset;
                     map.TextureYOffset = msdf.TextureYOffset;
                     map.Source = MemBitmap.CreateFromCopy(msdf.Width, msdf.Height, msdf.Source);

@@ -4,11 +4,12 @@ using System;
 using PixelFarm.Drawing;
 namespace PixelFarm.CpuBlit.BitmapAtlas
 {
-
-    public class BitmapAtlasItem : SpriteTextureMapData<int[]>
+    /// <summary>
+    /// Input for AtlasBuilder
+    /// </summary>
+    public class BitmapAtlasItemSource : AtlasItemSource<int[]>
     {
-        public BitmapAtlasItem(int w, int h) : base(0, 0, w, h) { }
-
+        public BitmapAtlasItemSource(int w, int h) : base(0, 0, w, h) { }
         public int[] GetImageBuffer() => Source;
         public bool IsBigEndian { get; set; }
 
@@ -26,13 +27,15 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             Source = imgBuffer;
             IsBigEndian = isBigEndian;
         }
+
+
     }
 
     class RelocationAtlasItem
     {
-        internal readonly BitmapAtlasItem atlasItem;
+        internal readonly BitmapAtlasItemSource atlasItem;
         public Rectangle area;
-        public RelocationAtlasItem(BitmapAtlasItem atlasItem)
+        public RelocationAtlasItem(BitmapAtlasItemSource atlasItem)
         {
             this.atlasItem = atlasItem;
         }

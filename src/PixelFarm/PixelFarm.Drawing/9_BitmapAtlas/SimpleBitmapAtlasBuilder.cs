@@ -39,7 +39,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
         /// </summary>
         /// <param name="itemIndex"></param>
         /// <param name="img"></param>
-        public void AddGlyph(BitmapAtlasItem img)
+        public void AddGlyph(BitmapAtlasItemSource img)
         {
             _items[img.UniqueInt16Name] = new RelocationAtlasItem(img);
         }
@@ -180,7 +180,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
                 {
                     RelocationAtlasItem g = itemList[i];
                     //copy glyph image buffer to specific area of final result buffer
-                    BitmapAtlasItem img = g.atlasItem;
+                    BitmapAtlasItemSource img = g.atlasItem;
                     CopyToDest(img.GetImageBuffer(), img.Width, img.Height, mergeBmpBuffer, g.area.Left, g.area.Top, totalImgWidth);
                 }
             }
@@ -191,7 +191,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
                 {
                     RelocationAtlasItem g = itemList[i];
                     //copy glyph image buffer to specific area of final result buffer
-                    BitmapAtlasItem img = g.atlasItem;
+                    BitmapAtlasItemSource img = g.atlasItem;
                     CopyToDest(img.GetImageBuffer(), img.Width, img.Height, mergeBmpBuffer, g.area.Left, g.area.Top, totalImgWidth);
                 }
             }

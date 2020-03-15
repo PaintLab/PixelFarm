@@ -174,8 +174,8 @@ namespace PixelFarm.DrawingGL
 #if DEBUG
                 //_msdfGen.dbugWriteMsdfTexture = true;
 #endif
-                CpuBlit.BitmapAtlas.BitmapAtlasItem item = _msdfGen.GenerateMsdfTexture(vxs);
-                var spriteTextureMap = new CpuBlit.BitmapAtlas.SpriteTextureMapData<MemBitmap>(item.Left, item.Top, item.Width, item.Height);
+                CpuBlit.BitmapAtlas.BitmapAtlasItemSource item = _msdfGen.GenerateMsdfTexture(vxs);
+                var spriteTextureMap = new CpuBlit.BitmapAtlas.AtlasItemSource<MemBitmap>(item.Left, item.Top, item.Width, item.Height);
                 spriteTextureMap.TextureXOffset = item.TextureXOffset;
                 spriteTextureMap.TextureYOffset = item.TextureYOffset;
                 spriteTextureMap.Source = MemBitmap.CreateFromCopy(item.Width, item.Height, item.Source);

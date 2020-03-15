@@ -188,7 +188,7 @@ namespace Mini
                 MemBitmap itemBmp = imgLoader(f);
                 //4. get information about it
 
-                var atlasItem = new BitmapAtlasItem(itemBmp.Width, itemBmp.Height);
+                var atlasItem = new BitmapAtlasItemSource(itemBmp.Width, itemBmp.Height);
                 atlasItem.SetImageBuffer(MemBitmap.CopyImgBuffer(itemBmp));
                 atlasItem.UniqueInt16Name = index;
                 //5. add to builder
