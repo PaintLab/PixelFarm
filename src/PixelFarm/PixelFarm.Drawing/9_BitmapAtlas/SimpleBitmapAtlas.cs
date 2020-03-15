@@ -32,7 +32,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
         public string FontFilename { get; set; }
         public int FontKey { get; set; }
         //------------
-
+        public Dictionary<ushort, AtlasItem> GlyphDic => _atlasItems;
         public Dictionary<string, ushort> ImgUrlDict { get; set; }
 
         internal void AddGlyph(ushort glyphIndex, AtlasItem glyphData)
@@ -74,7 +74,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             atlasItem = null;
             return false;
         }
-        public Dictionary<ushort, AtlasItem> GlyphDic => _atlasItems;
+       
 
         public static Dictionary<ushort, AtlasItem> CloneLocationWithOffset(SimpleBitmapAtlas org, int dx, int dy)
         {
