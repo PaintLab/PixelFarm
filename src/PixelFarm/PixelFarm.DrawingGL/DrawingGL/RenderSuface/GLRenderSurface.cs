@@ -854,7 +854,7 @@ namespace PixelFarm.DrawingGL
         {
             //special optimization for WordStrip creation
             //this verion not support overlap glyph (since overlap glyphs worstrip is not consider a transparent bg)
-
+           
             _lcdSubPixShaderForWordStripCreation.DrawSubImages(glBmp, vbo, count, x, y);
             //_lcdSubPixShaderV2.NewDrawSubImage4FromVBO(glBmp, vbo, count, x, y);
             //so, temp fix, swap to orignal 
@@ -863,7 +863,7 @@ namespace PixelFarm.DrawingGL
         public void DrawGlyphImageWithStencilRenderingTechnique4_FromVBO(GLBitmap glBmp, VertexBufferObject vbo, int count, float x, float y)
         {
             _lcdSubPixShader.SetColor(FontFillColor);
-            _lcdSubPixShader.DrawSubImagesWithStencil(glBmp, vbo, count, x, y);
+            _lcdSubPixShader.DrawSubImagesNoLcdEffect(glBmp, vbo, count, x, y);
         }
 
         public void DrawWordSpanWithStencilTechnique(GLBitmap bmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
@@ -881,7 +881,7 @@ namespace PixelFarm.DrawingGL
                 targetTop += srcH; //***
             }
             _lcdSubPixShader.SetColor(FontFillColor);
-            _lcdSubPixShader.DrawSubImageWithStencil(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
+            _lcdSubPixShader.DrawSubImageNoLcdEffect(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
         }
 
         public void DrawWordSpanWithLcdSubpixForSolidBgColor(GLBitmap bmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop, Color textBgColor)

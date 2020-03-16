@@ -1400,7 +1400,7 @@ namespace PixelFarm.DrawingGL
             _offset = _shaderProgram.GetUniform2("u_offset");
         }
         protected override void SetVarsBeforeRender() { }
-        public void NewDrawSubImage4FromVBO(GLBitmap glBmp, VertexBufferObject vbo, int elemCount, float x, float y)
+        public void DrawSubImages(GLBitmap glBmp, VertexBufferObject vbo, int elemCount, float x, float y)
         {
             SetCurrent();
             CheckViewMatrix();
