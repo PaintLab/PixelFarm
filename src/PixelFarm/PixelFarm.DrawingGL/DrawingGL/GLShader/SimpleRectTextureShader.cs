@@ -920,6 +920,9 @@ namespace PixelFarm.DrawingGL
             ushort[] indexList = vboBuilder._indexList.UnsafeInternalArray; //***
             int count1 = vboBuilder._indexList.Count; //***
 
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine("lcd3steps:");
+#endif
 
             //version 1
             //0. B , yellow  result
@@ -1346,6 +1349,8 @@ namespace PixelFarm.DrawingGL
         //for transparent background        
 
         ShaderUniformVar2 _offset;
+
+
         public LcdSubPixShaderForWordStripCreation(ShaderSharedResource shareRes)
             : base(shareRes)
         {
@@ -1364,19 +1369,29 @@ namespace PixelFarm.DrawingGL
                     v_texCoord =  a_texCoord;
                  }	 
                 ";
+
+            //
+            //gl_FragColor = vec4(u_bg[0] * (1.0 - c[0]) + u_color[0] * c[0],
+            //                    u_bg[1] * (1.0 - c[1]) + u_color[1] * c[1],
+            //                    u_bg[2] * (1.0 - c[2]) + u_color[2] * c[2],
+            //                    1.0);
+
             //-----------
-            //please note that we swap color channel R and B from input texture
+            //please note that 
+            //1. we swap color channel R and B from input texture
+            //2. this should work on transparent BG too, we will test next time
+
+            //3. for word-strip creation, we render white glyph on black bg, so u_color = vec4(1,1,1,1), we skip that
             string fs = @"
                       precision mediump float; 
-                      uniform sampler2D s_texture;
+                      uniform sampler2D s_texture; 
                       varying vec2 v_texCoord; 
                       void main()
                       {   
-                            vec4 c = texture2D(s_texture,v_texCoord);  
-                            gl_FragColor = vec4(c[2],c[1],c[0],c[3]);
+                            vec4 c = texture2D(s_texture,v_texCoord);
+                            gl_FragColor= vec4(c[2],c[1],c[0],c[3]);
                       }
                 ";
-
             BuildProgram(vs, fs);
         }
 
@@ -1393,24 +1408,113 @@ namespace PixelFarm.DrawingGL
             //
             _offset.SetValue(x, y);
 
-            //-------------------------------------------------------------------------------------          
-            //each vertex has 5 element (x,y,z,u,v), //interleave data
-            //(x,y,z) 3d location 
-            //(u,v) 2d texture coord  
-
             vbo.Bind();
             a_position.LoadLatest(5, 0);
             a_texCoord.LoadLatest(5, 3 * 4);
 
+            //we render this 2 times 
+            GL.BlendFunc(BlendingFactorSrc.Zero, BlendingFactorDest.OneMinusSrcColor);
             GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
 
+            GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.One);
+            GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
+            // 
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);//restore 
             vbo.UnBind();
         }
-
     }
+    sealed class LcdSubPixShaderV2 : SimpleRectTextureShader
+    {
+        //this shader is designed for subpixel shader
+        //for transparent background        
+
+        ShaderUniformVar2 _offset;
+        ShaderUniformVar4 _u_color;
+        public LcdSubPixShaderV2(ShaderSharedResource shareRes)
+            : base(shareRes)
+        {
+            string vs = @"
+                attribute vec4 a_position;
+                attribute vec2 a_texCoord;
+
+                uniform vec2 u_ortho_offset;
+                uniform vec2 u_offset;                
+                uniform mat4 u_mvpMatrix; 
+
+                varying vec2 v_texCoord;
+                void main()
+                {                      
+                    gl_Position = u_mvpMatrix* (a_position+ vec4(u_offset+u_ortho_offset,0,0));
+                    v_texCoord =  a_texCoord;
+                 }	 
+                ";
+
+            //
+            //gl_FragColor = vec4(u_bg[0] * (1.0 - c[0]) + u_color[0] * c[0],
+            //                    u_bg[1] * (1.0 - c[1]) + u_color[1] * c[1],
+            //                    u_bg[2] * (1.0 - c[2]) + u_color[2] * c[2],
+            //                    1.0);
+
+            //-----------
+            //please note that 
+            //1. we swap color channel R and B from input texture
+            //2. this should work on transparent BG too, we will test next time
+            string fs = @"
+                      precision mediump float; 
+                      uniform sampler2D s_texture; 
+                     
+                      uniform vec4 u_color;
+                      varying vec2 v_texCoord; 
+                      void main()
+                      {   
+                            vec4 c = texture2D(s_texture,v_texCoord);
+                            gl_FragColor= vec4(c[2] * u_color[0] ,c[1] * u_color[1]  ,c[0]* u_color[2] ,c[3]* u_color[3]);
+                      }
+                ";
+            BuildProgram(vs, fs);
+        }
+
+        protected override void OnProgramBuilt()
+        {
+            _offset = _shaderProgram.GetUniform2("u_offset");
+            _u_color = _shaderProgram.GetUniform4("u_color");
+            SetFillColor(Drawing.Color.Black);
+        }
+        protected override void SetVarsBeforeRender() { }
+
+        float _r, _g, _b, _a;
+        public void SetFillColor(PixelFarm.Drawing.Color color)
+        {
+            _r = color.R / 255f;
+            _g = color.G / 255f;
+            _b = color.B / 255f;
+            _a = color.A / 255f;
+        }
+        public void NewDrawSubImage4FromVBO(GLBitmap glBmp, VertexBufferObject vbo, int elemCount, float x, float y)
+        {
+            SetCurrent();
+            CheckViewMatrix();
+            LoadGLBitmap(glBmp);
+            //
+            _offset.SetValue(x, y);
+
+            vbo.Bind();
+            a_position.LoadLatest(5, 0);
+            a_texCoord.LoadLatest(5, 3 * 4);
+            _u_color.SetValue(_r, _g, _b, _a);
 
 
+            //we render this 2 times 
+            GL.BlendFunc(BlendingFactorSrc.Zero, BlendingFactorDest.OneMinusSrcColor);
+            GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
 
+            GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.One);
+            GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
+            // 
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);//restore 
+            vbo.UnBind();
+        }
+    }
     //--------------------------------------------------------
     static class SimpleRectTextureShaderExtensions
     {
