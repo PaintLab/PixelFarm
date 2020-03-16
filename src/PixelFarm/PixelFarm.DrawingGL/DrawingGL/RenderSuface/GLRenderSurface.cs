@@ -125,10 +125,9 @@ namespace PixelFarm.DrawingGL
         BGRAImageTextureShader _bgraImgTextureShader;
 
         LcdSubPixShader _lcdSubPixShader;
-
         LcdSubPixShaderForSolidBg _lcdSubPixForSolidBgShader;
         LcdSubPixShaderForWordStripCreation _lcdSubPixShaderForWordStripCreation;
-
+        LcdSubPixShaderV2 _lcdSubPixShaderV2;
 
         RGBATextureShader _rgbaTextureShader;
         RGBTextureShader _rgbTextureShader;
@@ -205,7 +204,8 @@ namespace PixelFarm.DrawingGL
             _lcdSubPixShader = new LcdSubPixShader(_shareRes);
             _lcdSubPixForSolidBgShader = new LcdSubPixShaderForSolidBg(_shareRes);
             _lcdSubPixShaderForWordStripCreation = new LcdSubPixShaderForWordStripCreation(_shareRes);
-
+            _lcdSubPixShaderV2 = new LcdSubPixShaderV2(_shareRes);
+            _lcdSubPixShaderV2.SetFillColor(Color.White);
 
             _blurShader = new BlurShader(_shareRes);
             //
@@ -856,9 +856,9 @@ namespace PixelFarm.DrawingGL
             //this verion not support overlap glyph (since overlap glyphs worstrip is not consider a transparent bg)
 
             _lcdSubPixShaderForWordStripCreation.NewDrawSubImage4FromVBO(glBmp, vbo, count, x, y);
-
+            //_lcdSubPixShaderV2.NewDrawSubImage4FromVBO(glBmp, vbo, count, x, y);
             //so, temp fix, swap to orignal 
-           //DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(glBmp, vbo, count, x, y);
+            //DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(glBmp, vbo, count, x, y);
         }
         public void DrawGlyphImageWithStencilRenderingTechnique4_FromVBO(GLBitmap glBmp, VertexBufferObject vbo, int count, float x, float y)
         {
