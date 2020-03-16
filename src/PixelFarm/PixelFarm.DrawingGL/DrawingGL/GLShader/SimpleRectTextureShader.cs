@@ -863,8 +863,8 @@ namespace PixelFarm.DrawingGL
             ThreeStepsDraw(elemCount);
 
             vbo.UnBind();
-        } 
-       
+        }
+
         /// <summary>
         /// DrawElements, use vertex-buffer and index-list
         /// </summary>
@@ -901,7 +901,7 @@ namespace PixelFarm.DrawingGL
             System.Diagnostics.Debug.WriteLine("lcd3steps:");
 #endif
             ThreeStepsDraw(count1);
-           
+
         }
 
         public void DrawSubImage(float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
@@ -1434,6 +1434,7 @@ namespace PixelFarm.DrawingGL
                             gl_FragColor= vec4(c[2] * u_color[0],c[1] * u_color[1]  ,c[0]* u_color[2] ,c[3]* u_color[3]);
                       }
                 ";
+
             BuildProgram(vs, fs);
         }
 
@@ -1445,13 +1446,20 @@ namespace PixelFarm.DrawingGL
         }
         protected override void SetVarsBeforeRender() { }
 
+        bool _colorChanged;
         float _r, _g, _b, _a;
+
+        PixelFarm.Drawing.Color _currentColor;
         public void SetFillColor(PixelFarm.Drawing.Color color)
         {
-            _r = color.R / 255f;
-            _g = color.G / 255f;
-            _b = color.B / 255f;
-            _a = color.A / 255f;
+            if (_currentColor != color)
+            {
+                _colorChanged = true;
+                _r = color.R / 255f;
+                _g = color.G / 255f;
+                _b = color.B / 255f;
+                _a = color.A / 255f;
+            }
         }
         public void NewDrawSubImage4FromVBO(GLBitmap glBmp, VertexBufferObject vbo, int elemCount, float x, float y)
         {
@@ -1461,10 +1469,17 @@ namespace PixelFarm.DrawingGL
             //
             _offset.SetValue(x, y);
 
+            if(_colorChanged)
+            {
+                _u_color.SetValue(_r, _g, _b, _a);
+                _colorChanged = false;
+            }
+            
+
             vbo.Bind();
             a_position.LoadLatest(5, 0);
             a_texCoord.LoadLatest(5, 3 * 4);
-            _u_color.SetValue(_r, _g, _b, _a);
+
 
 
             //we render this 2 times 
