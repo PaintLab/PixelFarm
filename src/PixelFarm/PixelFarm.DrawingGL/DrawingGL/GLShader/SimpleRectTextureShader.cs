@@ -822,8 +822,28 @@ namespace PixelFarm.DrawingGL
         }
         protected override void SetVarsBeforeRender() { }
 
-        void ThreeStepsDraw(int elemCount)
+
+        public void DrawSubImages(GLBitmap glBmp, VertexBufferObject vbo, int elemCount, float x, float y)
         {
+            SetCurrent();
+            CheckViewMatrix();
+            LoadGLBitmap(glBmp);
+            //
+            _offset.SetValue(x, y);
+            _hasSomeOffset = true;
+            //-------------------------------------------------------------------------------------          
+            //each vertex has 5 element (x,y,z,u,v), //interleave data
+            //(x,y,z) 3d location 
+            //(u,v) 2d texture coord  
+
+            vbo.Bind();
+            a_position.LoadLatest(5, 0);
+            a_texCoord.LoadLatest(5, 3 * 4);
+
+            //*** 
+
+            //_isBigEndian.SetValue(IsBigEndian);
+
             //version 1
             //0. B , yellow  result
             GL.ColorMask(false, false, true, false);
@@ -842,27 +862,9 @@ namespace PixelFarm.DrawingGL
 
             //restore
             GL.ColorMask(true, true, true, true);
-        }
-        public void DrawSubImages(GLBitmap glBmp, VertexBufferObject vbo, int elemCount, float x, float y)
-        {
-            SetCurrent();
-            CheckViewMatrix();
-            LoadGLBitmap(glBmp);
-            //
-            _offset.SetValue(x, y);
-            _hasSomeOffset = true;
-            //-------------------------------------------------------------------------------------          
-            //each vertex has 5 element (x,y,z,u,v), //interleave data
-            //(x,y,z) 3d location 
-            //(u,v) 2d texture coord  
-
-            vbo.Bind();
-            a_position.LoadLatest(5, 0);
-            a_texCoord.LoadLatest(5, 3 * 4);
-
-            ThreeStepsDraw(elemCount);
 
             vbo.UnBind();
+
         }
 
         /// <summary>
@@ -894,14 +896,31 @@ namespace PixelFarm.DrawingGL
             }
 
             //SHARED ARRAY 
-            //ushort[] indexList = vboBuilder._indexList.UnsafeInternalArray; //***
-            //int count1 = vboBuilder._indexList.Count; //***
+            ushort[] indexList = vboBuilder._indexList.UnsafeInternalArray; //***
+            int count1 = vboBuilder._indexList.Count; //***
 
 #if DEBUG
             System.Diagnostics.Debug.WriteLine("lcd3steps:");
 #endif
-            ThreeStepsDraw(vboBuilder._indexList.Count);
 
+            //version 1
+            //0. B , yellow  result
+            GL.ColorMask(false, false, true, false);
+            SetCompo(ColorCompo.C0);
+            GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, indexList);
+
+            //1. G , magenta result
+            GL.ColorMask(false, true, false, false);
+            SetCompo(ColorCompo.C1);
+            GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, indexList);
+
+            //2. R , cyan result 
+            GL.ColorMask(true, false, false, false);//     
+            SetCompo(ColorCompo.C2);
+            GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, indexList);
+
+            //restore
+            GL.ColorMask(true, true, true, true);
         }
 
         public void DrawSubImage(float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
@@ -973,32 +992,27 @@ namespace PixelFarm.DrawingGL
                 }
             }
 
-            ThreeStepsDraw(4);
+            ////version 1
+            ////0. B , yellow  result
+            GL.ColorMask(false, false, true, false);
+            SetCompo(ColorCompo.C0);
+            GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
+
+            ////1. G , magenta result
+            GL.ColorMask(false, true, false, false);
+            SetCompo(ColorCompo.C1);
+            GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
+
+            //2. R , cyan result 
+            GL.ColorMask(true, false, false, false);//     
+            SetCompo(ColorCompo.C2);
+            GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
+            //restore
+            GL.ColorMask(true, true, true, true);
         }
 
-        public void DrawSubImagesWithStencil(GLBitmap glBmp, VertexBufferObject vbo, int elemCount, float x, float y)
-        {
-            SetCurrent();
-            CheckViewMatrix();
-            LoadGLBitmap(glBmp);
-            //
-            _offset.SetValue(x, y);
-            _hasSomeOffset = true;
-            //-------------------------------------------------------------------------------------          
-            //each vertex has 5 element (x,y,z,u,v), //interleave data
-            //(x,y,z) 3d location 
-            //(u,v) 2d texture coord  
 
-            vbo.Bind();
-            a_position.LoadLatest(5, 0);
-            a_texCoord.LoadLatest(5, 3 * 4);
-            SetCompo(ColorCompo.C_ALL);
-            GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
-
-            vbo.UnBind();
-
-        }
-        public void DrawSubImageWithStencil(GLBitmap glBmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
+        public void DrawSubImageNoLcdEffect(GLBitmap glBmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
         {
 
             SetCurrent();
@@ -1072,6 +1086,28 @@ namespace PixelFarm.DrawingGL
 
             SetCompo(ColorCompo.C_ALL);
             GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
+        }
+        public void DrawSubImagesNoLcdEffect(GLBitmap glBmp, VertexBufferObject vbo, int elemCount, float x, float y)
+        {
+            SetCurrent();
+            CheckViewMatrix();
+            LoadGLBitmap(glBmp);
+            //
+            _offset.SetValue(x, y);
+            _hasSomeOffset = true;
+            //-------------------------------------------------------------------------------------          
+            //each vertex has 5 element (x,y,z,u,v), //interleave data
+            //(x,y,z) 3d location 
+            //(u,v) 2d texture coord  
+
+            vbo.Bind();
+            a_position.LoadLatest(5, 0);
+            a_texCoord.LoadLatest(5, 3 * 4);
+            SetCompo(ColorCompo.C_ALL);
+            GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
+
+            vbo.UnBind();
+
         }
     }
 
@@ -1364,8 +1400,7 @@ namespace PixelFarm.DrawingGL
             _offset = _shaderProgram.GetUniform2("u_offset");
         }
         protected override void SetVarsBeforeRender() { }
-
-        public void DrawSubImages(GLBitmap glBmp, VertexBufferObject vbo, int elemCount, float x, float y)
+        public void NewDrawSubImage4FromVBO(GLBitmap glBmp, VertexBufferObject vbo, int elemCount, float x, float y)
         {
             SetCurrent();
             CheckViewMatrix();
@@ -1426,16 +1461,16 @@ namespace PixelFarm.DrawingGL
             //2. this should work on transparent BG too, we will test next time
             string fs = @"
                       precision mediump float; 
-                      uniform sampler2D s_texture;                      
+                      uniform sampler2D s_texture; 
+                     
                       uniform vec4 u_color;
                       varying vec2 v_texCoord; 
                       void main()
                       {   
                             vec4 c = texture2D(s_texture,v_texCoord);
-                            gl_FragColor= vec4(c[2] * u_color[0],c[1] * u_color[1]  ,c[0]* u_color[2] ,c[3]* u_color[3]);
+                            gl_FragColor= vec4(c[2] * u_color[0] ,c[1] * u_color[1]  ,c[0]* u_color[2] ,c[3]* u_color[3]);
                       }
                 ";
-
             BuildProgram(vs, fs);
         }
 
@@ -1447,23 +1482,15 @@ namespace PixelFarm.DrawingGL
         }
         protected override void SetVarsBeforeRender() { }
 
-        bool _colorChanged;
         float _r, _g, _b, _a;
-
-        PixelFarm.Drawing.Color _currentColor;
         public void SetFillColor(PixelFarm.Drawing.Color color)
         {
-            if (_currentColor != color)
-            {
-                _currentColor = color;
-                _colorChanged = true;
-                _r = color.R / 255f;
-                _g = color.G / 255f;
-                _b = color.B / 255f;
-                _a = color.A / 255f;
-            }
+            _r = color.R / 255f;
+            _g = color.G / 255f;
+            _b = color.B / 255f;
+            _a = color.A / 255f;
         }
-        public void DrawSubImages(GLBitmap glBmp, VertexBufferObject vbo, int elemCount, float x, float y)
+        public void NewDrawSubImage4FromVBO(GLBitmap glBmp, VertexBufferObject vbo, int elemCount, float x, float y)
         {
             SetCurrent();
             CheckViewMatrix();
@@ -1471,17 +1498,10 @@ namespace PixelFarm.DrawingGL
             //
             _offset.SetValue(x, y);
 
-            if (_colorChanged)
-            {
-                _u_color.SetValue(_r, _g, _b, _a);
-                _colorChanged = false;
-            }
-
-
             vbo.Bind();
             a_position.LoadLatest(5, 0);
             a_texCoord.LoadLatest(5, 3 * 4);
-
+            _u_color.SetValue(_r, _g, _b, _a);
 
 
             //we render this 2 times 
@@ -1498,7 +1518,25 @@ namespace PixelFarm.DrawingGL
     //--------------------------------------------------------
     static class SimpleRectTextureShaderExtensions
     {
-         
+
+        public static void DrawSubImage(this SimpleRectTextureShader shader, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
+        {
+
+            unsafe
+            {
+                float* srcDestList = stackalloc float[6];
+                {
+                    srcDestList[0] = srcLeft;
+                    srcDestList[1] = srcTop;
+                    srcDestList[2] = srcW;
+                    srcDestList[3] = srcH;
+                    srcDestList[4] = targetLeft;
+                    srcDestList[5] = targetTop;
+                }
+                shader.UnsafeDrawSubImages(srcDestList, 6, 1);
+            }
+        }
+
         public static void DrawSubImage(this SimpleRectTextureShader shader, GLBitmap bmp,
             float srcLeft, float srcTop,
             float srcW, float srcH,
