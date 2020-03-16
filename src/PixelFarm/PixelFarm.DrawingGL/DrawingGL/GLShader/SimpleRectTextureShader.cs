@@ -1425,8 +1425,7 @@ namespace PixelFarm.DrawingGL
             //2. this should work on transparent BG too, we will test next time
             string fs = @"
                       precision mediump float; 
-                      uniform sampler2D s_texture; 
-                     
+                      uniform sampler2D s_texture;                      
                       uniform vec4 u_color;
                       varying vec2 v_texCoord; 
                       void main()
