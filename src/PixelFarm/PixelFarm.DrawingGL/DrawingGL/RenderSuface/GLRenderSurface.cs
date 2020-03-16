@@ -848,14 +848,14 @@ namespace PixelFarm.DrawingGL
         public void DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(GLBitmap glBmp, VertexBufferObject vbo, int count, float x, float y)
         {
             _lcdSubPixShader.SetColor(FontFillColor); //original
-            _lcdSubPixShader.NewDrawSubImage4FromVBO(glBmp, vbo, count, x, y);
+            _lcdSubPixShader.DrawSubImages(glBmp, vbo, count, x, y);
         }
         public void DrawGlyphImageWithSubPixelRenderingTechnique4_ForWordStrip_FromVBO(GLBitmap glBmp, VertexBufferObject vbo, int count, float x, float y)
         {
             //special optimization for WordStrip creation
             //this verion not support overlap glyph (since overlap glyphs worstrip is not consider a transparent bg)
-
-            _lcdSubPixShaderForWordStripCreation.NewDrawSubImage4FromVBO(glBmp, vbo, count, x, y);
+           
+            _lcdSubPixShaderForWordStripCreation.DrawSubImages(glBmp, vbo, count, x, y);
             //_lcdSubPixShaderV2.NewDrawSubImage4FromVBO(glBmp, vbo, count, x, y);
             //so, temp fix, swap to orignal 
             //DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(glBmp, vbo, count, x, y);
@@ -863,7 +863,7 @@ namespace PixelFarm.DrawingGL
         public void DrawGlyphImageWithStencilRenderingTechnique4_FromVBO(GLBitmap glBmp, VertexBufferObject vbo, int count, float x, float y)
         {
             _lcdSubPixShader.SetColor(FontFillColor);
-            _lcdSubPixShader.NewDrawSubImageStencilFromVBO(glBmp, vbo, count, x, y);
+            _lcdSubPixShader.DrawSubImagesNoLcdEffect(glBmp, vbo, count, x, y);
         }
 
         public void DrawWordSpanWithStencilTechnique(GLBitmap bmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
@@ -881,7 +881,7 @@ namespace PixelFarm.DrawingGL
                 targetTop += srcH; //***
             }
             _lcdSubPixShader.SetColor(FontFillColor);
-            _lcdSubPixShader.DrawSubImageWithStencil(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
+            _lcdSubPixShader.DrawSubImageNoLcdEffect(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
         }
 
         public void DrawWordSpanWithLcdSubpixForSolidBgColor(GLBitmap bmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop, Color textBgColor)
@@ -902,7 +902,7 @@ namespace PixelFarm.DrawingGL
 
         public void DrawGlyphImageWithSubPixelRenderingTechnique(
             GLBitmap bmp,
-            ref PixelFarm.Drawing.Rectangle srcRect,
+            ref Rectangle srcRect,
             float targetLeft,
             float targetTop)
         {
@@ -923,30 +923,42 @@ namespace PixelFarm.DrawingGL
             _lcdSubPixShader.LoadGLBitmap(bmp);
             _lcdSubPixShader.SetColor(this.FontFillColor);
 
-            //-------------------------
-            //draw a serie of image***
-            //-------------------------
+            unsafe
+            {
+                float* srcDestList = stackalloc float[6];
+                {
+                    srcDestList[0] = srcRect.Left;
+                    srcDestList[1] = srcRect.Top;
+                    srcDestList[2] = srcRect.Width;
+                    srcDestList[3] = srcRect.Height;
+                    srcDestList[4] = targetLeft;
+                    srcDestList[5] = targetTop;
+                }
 
-            //TODO: review performance here ***
-            //1. B , cyan result
-            GL.ColorMask(false, false, true, false);
-            _lcdSubPixShader.SetCompo(LcdSubPixShader.ColorCompo.C0);
-            SimpleRectTextureShaderExtensions.DrawSubImage(_lcdSubPixShader, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
-            //float subpixel_shift = 1 / 9f;
-            //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft - subpixel_shift, targetTop); //TODO: review this option
-            //---------------------------------------------------
-            //2. G , magenta result
-            GL.ColorMask(false, true, false, false);
-            _lcdSubPixShader.SetCompo(LcdSubPixShader.ColorCompo.C1);
-            SimpleRectTextureShaderExtensions.DrawSubImage(_lcdSubPixShader, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
-            //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop); //TODO: review this option
-            //3. R , yellow result 
-            _lcdSubPixShader.SetCompo(LcdSubPixShader.ColorCompo.C2);
-            GL.ColorMask(true, false, false, false);//             
-            SimpleRectTextureShaderExtensions.DrawSubImage(_lcdSubPixShader, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
-            //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft + subpixel_shift, targetTop); //TODO: review this option
-            //enable all color component
-            GL.ColorMask(true, true, true, true);
+                //------------
+                //TODO: review performance here ***
+                //1. B , cyan result
+                GL.ColorMask(false, false, true, false);
+                _lcdSubPixShader.SetCompo(LcdSubPixShader.ColorCompo.C0);
+                _lcdSubPixShader.UnsafeDrawSubImages(srcDestList, 6, 1);
+
+
+                //float subpixel_shift = 1 / 9f;
+                //---------------------------------------------------
+
+                //2. G , magenta result
+                GL.ColorMask(false, true, false, false);
+                _lcdSubPixShader.SetCompo(LcdSubPixShader.ColorCompo.C1);
+                _lcdSubPixShader.UnsafeDrawSubImages(srcDestList, 6, 1);
+
+                //3. R , yellow result 
+                _lcdSubPixShader.SetCompo(LcdSubPixShader.ColorCompo.C2);
+                GL.ColorMask(true, false, false, false);//             
+                _lcdSubPixShader.UnsafeDrawSubImages(srcDestList, 6, 1);
+
+                //enable all color component
+                GL.ColorMask(true, true, true, true);
+            }
         }
         //-----------------------------------
         public void DrawImageWithBlurY(GLBitmap bmp, float left, float top)
