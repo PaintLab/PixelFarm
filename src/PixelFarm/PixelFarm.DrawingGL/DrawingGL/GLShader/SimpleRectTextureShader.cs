@@ -1377,7 +1377,8 @@ namespace PixelFarm.DrawingGL
             //-----------
             //please note that 
             //1. we swap color channel R and B from input texture
-            //2. in this version, not support overlapped glyphs
+            //2. in this version, not support overlapped glyphs,
+            //TO support it, we need to load the background too
             string fs = @"
                       precision mediump float; 
                       uniform sampler2D s_texture;
