@@ -840,10 +840,12 @@ namespace PixelFarm.DrawingGL
             a_position.LoadLatest(5, 0);
             a_texCoord.LoadLatest(5, 3 * 4);
 
-            //*** 
+            ThreeStepsDraw(elemCount);
 
-            //_isBigEndian.SetValue(IsBigEndian);
-
+            vbo.UnBind();
+        }
+        void ThreeStepsDraw(int elemCount)
+        {
             //version 1
             //0. B , yellow  result
             GL.ColorMask(false, false, true, false);
@@ -861,9 +863,7 @@ namespace PixelFarm.DrawingGL
             GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
 
             //restore
-            GL.ColorMask(true, true, true, true);
-
-            vbo.UnBind();
+            GL.ColorMask(true, true, true, true); 
 
         }
         public void NewDrawSubImageStencilFromVBO(GLBitmap glBmp, VertexBufferObject vbo, int elemCount, float x, float y)
@@ -923,25 +923,8 @@ namespace PixelFarm.DrawingGL
 #if DEBUG
             System.Diagnostics.Debug.WriteLine("lcd3steps:");
 #endif
-
-            //version 1
-            //0. B , yellow  result
-            GL.ColorMask(false, false, true, false);
-            SetCompo(ColorCompo.C0);
-            GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, indexList);
-
-            //1. G , magenta result
-            GL.ColorMask(false, true, false, false);
-            SetCompo(ColorCompo.C1);
-            GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, indexList);
-
-            //2. R , cyan result 
-            GL.ColorMask(true, false, false, false);//     
-            SetCompo(ColorCompo.C2);
-            GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, indexList);
-
-            //restore
-            GL.ColorMask(true, true, true, true);
+            ThreeStepsDraw(count1);
+           
         }
 
         public void DrawSubImage(float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
@@ -1013,26 +996,8 @@ namespace PixelFarm.DrawingGL
                 }
             }
 
-            ////version 1
-            ////0. B , yellow  result
-            GL.ColorMask(false, false, true, false);
-            SetCompo(ColorCompo.C0);
-            GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
-
-            ////1. G , magenta result
-            GL.ColorMask(false, true, false, false);
-            SetCompo(ColorCompo.C1);
-            GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
-
-            //2. R , cyan result 
-            GL.ColorMask(true, false, false, false);//     
-            SetCompo(ColorCompo.C2);
-            GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
-            //restore
-            GL.ColorMask(true, true, true, true);
+            ThreeStepsDraw(4);
         }
-
-
 
         public void DrawSubImageWithStencil(GLBitmap glBmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
         {
