@@ -1367,8 +1367,17 @@ namespace PixelFarm.DrawingGL
                     v_texCoord =  a_texCoord;
                  }	 
                 ";
+
+            //
+            //gl_FragColor = vec4(u_bg[0] * (1.0 - c[0]) + u_color[0] * c[0],
+            //                    u_bg[1] * (1.0 - c[1]) + u_color[1] * c[1],
+            //                    u_bg[2] * (1.0 - c[2]) + u_color[2] * c[2],
+            //                    1.0);
+
             //-----------
-            //please note that we swap color channel R and B from input texture
+            //please note that 
+            //1. we swap color channel R and B from input texture
+            //2. in this version, not support overlapped glyphs
             string fs = @"
                       precision mediump float; 
                       uniform sampler2D s_texture;
