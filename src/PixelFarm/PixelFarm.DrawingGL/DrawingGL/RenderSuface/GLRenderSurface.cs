@@ -855,10 +855,10 @@ namespace PixelFarm.DrawingGL
             //special optimization for WordStrip creation
             //this verion not support overlap glyph (since overlap glyphs worstrip is not consider a transparent bg)
 
-            //_lcdSubPixShaderForWordStripCreation.NewDrawSubImage4FromVBO(glBmp, vbo, count, x, y);
+            _lcdSubPixShaderForWordStripCreation.NewDrawSubImage4FromVBO(glBmp, vbo, count, x, y);
 
             //so, temp fix, swap to orignal 
-            DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(glBmp, vbo, count, x, y);
+           //DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(glBmp, vbo, count, x, y);
         }
         public void DrawGlyphImageWithStencilRenderingTechnique4_FromVBO(GLBitmap glBmp, VertexBufferObject vbo, int count, float x, float y)
         {

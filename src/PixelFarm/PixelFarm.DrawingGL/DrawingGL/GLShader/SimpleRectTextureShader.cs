@@ -1349,6 +1349,8 @@ namespace PixelFarm.DrawingGL
         //for transparent background        
 
         ShaderUniformVar2 _offset;
+
+
         public LcdSubPixShaderForWordStripCreation(ShaderSharedResource shareRes)
             : base(shareRes)
         {
@@ -1377,19 +1379,17 @@ namespace PixelFarm.DrawingGL
             //-----------
             //please note that 
             //1. we swap color channel R and B from input texture
-            //2. in this version, not support overlapped glyphs,
-            //TO support it, we need to load the background too
+            //2. this should work on transparent BG too, we will test next time
             string fs = @"
                       precision mediump float; 
-                      uniform sampler2D s_texture;
+                      uniform sampler2D s_texture; 
                       varying vec2 v_texCoord; 
                       void main()
                       {   
-                            vec4 c = texture2D(s_texture,v_texCoord);  
-                            gl_FragColor = vec4(c[2],c[1],c[0],c[3]);
+                            vec4 c = texture2D(s_texture,v_texCoord);
+                            gl_FragColor= vec4(c[2],c[1],c[0],c[3]);
                       }
                 ";
-
             BuildProgram(vs, fs);
         }
 
@@ -1406,23 +1406,21 @@ namespace PixelFarm.DrawingGL
             //
             _offset.SetValue(x, y);
 
-            //-------------------------------------------------------------------------------------          
-            //each vertex has 5 element (x,y,z,u,v), //interleave data
-            //(x,y,z) 3d location 
-            //(u,v) 2d texture coord  
-
             vbo.Bind();
             a_position.LoadLatest(5, 0);
             a_texCoord.LoadLatest(5, 3 * 4);
 
+            //we render this 2 times 
+            GL.BlendFunc(BlendingFactorSrc.Zero, BlendingFactorDest.OneMinusSrcColor);
             GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
 
+            GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.One);
+            GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
+            // 
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);//restore 
             vbo.UnBind();
         }
-
-    }
-
-
+    } 
 
     //--------------------------------------------------------
     static class SimpleRectTextureShaderExtensions
