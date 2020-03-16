@@ -920,6 +920,9 @@ namespace PixelFarm.DrawingGL
             ushort[] indexList = vboBuilder._indexList.UnsafeInternalArray; //***
             int count1 = vboBuilder._indexList.Count; //***
 
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine("lcd3steps:");
+#endif
 
             //version 1
             //0. B , yellow  result
