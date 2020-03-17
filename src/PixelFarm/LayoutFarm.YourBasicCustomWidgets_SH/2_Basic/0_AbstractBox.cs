@@ -84,6 +84,14 @@ namespace LayoutFarm.CustomWidgets
         {
             _primElement = primElement;
         }
+        protected void SuspendGraphicsUpdate()
+        {
+            _primElement?.SuspendGraphicsUpdate();
+        }
+        protected void ResumeGraphicsUpdate()
+        {
+            _primElement?.ResumeGraphicsUpdate();
+        }
 
         protected void BuildChildrenRenderElement(RenderElement parent)
         {
