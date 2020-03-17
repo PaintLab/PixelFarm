@@ -217,7 +217,7 @@ namespace LayoutFarm.UI
             throw new System.Exception("empty!");
 #endif
         }
-        public virtual void AddChild(UIElement ui)
+        public virtual void Add(UIElement ui)
         {
 #if DEBUG
             throw new System.Exception("empty!");
@@ -231,7 +231,7 @@ namespace LayoutFarm.UI
                 //so we backup it before RemoveSelf
                 UIElement parentUI = _parent;
                 parentUI.RemoveChild(this);
-                parentUI.AddChild(this);
+                parentUI.Add(this);
                 this.InvalidateGraphics();
             }
         }

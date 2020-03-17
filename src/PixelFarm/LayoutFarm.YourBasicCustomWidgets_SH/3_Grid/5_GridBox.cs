@@ -98,7 +98,7 @@ namespace LayoutFarm.CustomWidgets
             _bodyBox = SetupHighlightBox();
 
             //----
-            targetGridView.AddChild(_bodyBox);
+            targetGridView.Add(_bodyBox);
 
             if (_gridSelectionStyle == GridSelectionStyle.FlowBox)
             {
@@ -107,8 +107,8 @@ namespace LayoutFarm.CustomWidgets
                 _headBox = SetupHighlightBox();
                 _tailBox = SetupHighlightBox();
                 // 
-                targetGridView.AddChild(_headBox);
-                targetGridView.AddChild(_tailBox);
+                targetGridView.Add(_headBox);
+                targetGridView.Add(_tailBox);
             }
 
         }

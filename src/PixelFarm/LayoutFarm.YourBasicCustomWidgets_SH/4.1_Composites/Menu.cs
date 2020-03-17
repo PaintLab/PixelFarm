@@ -238,7 +238,7 @@ namespace LayoutFarm.CustomWidgets
                 _childItems = new List<MenuItem>();
             }
             _childItems.Add(childItem);
-            _floatPart.AddChild(childItem);
+            _floatPart.Add(childItem);
             childItem.ParentMenuItem = this;
         }
     }

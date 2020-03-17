@@ -68,7 +68,7 @@ namespace LayoutFarm.CustomWidgets
             treeNode.SetLocation(0, _latestItemY);
             _latestItemY += treeNode.Height;
             treeNode.SetOwnerTreeView(this);
-            _panel.AddChild(treeNode);
+            _panel.Add(treeNode);
         }
         //----------------------------------------------------
         protected override void OnMouseDown(UIMouseEventArgs e)

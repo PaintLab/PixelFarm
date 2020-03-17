@@ -435,8 +435,9 @@ namespace LayoutFarm.CustomWidgets
                 ui.InvalidateLayout();
             }
         }
-        public void AddLast(UIElement ui) => AddChild(ui);
-        public override void AddChild(UIElement ui)
+      
+        public void AddLast(UIElement ui) => Add(ui);
+        public override void Add(UIElement ui)
         {
             if (_uiList == null)
             {
