@@ -4,7 +4,7 @@ using System.Collections.Generic;
 //
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.BitmapAtlas;
-using PixelFarm.Drawing; 
+using PixelFarm.Drawing;
 
 using Typography.TextLayout;
 using Typography.OpenFont;
@@ -150,8 +150,8 @@ namespace PixelFarm.DrawingGL
             DrawingTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering; //default 
             UseVBO = true;
 
-            TextBaseline = TextBaseline.Top;
-            //TextBaseline = TextBaseline.Alphabetic;
+            //TextBaseline = TextBaseline.Top;
+            TextBaseline = TextBaseline.Alphabetic;
             //TextBaseline = TextBaseline.Bottom;
         }
         public void LoadFontAtlas(string fontTextureInfoFile, string atlasImgFilename)
@@ -318,7 +318,7 @@ namespace PixelFarm.DrawingGL
                 DrawingTechnique = GlyphTexturePrinterDrawingTechnique.Msdf;
             }
 
-
+             
             //----------
             int seqLen = glyphPlanSeq.Count;
             for (int i = 0; i < seqLen; ++i)
@@ -347,6 +347,22 @@ namespace PixelFarm.DrawingGL
 
                 g_left = (float)(left + x_offset);
                 g_top = (float)(bottom - y_offset); //***
+
+                switch (TextBaseline)
+                {
+                    default:
+                    case TextBaseline.Alphabetic:
+                        //nothing todo
+                        break;
+                    case TextBaseline.Top:
+                        g_top += _font.DescentInPixels;
+                        break;
+                    case TextBaseline.Bottom:
+                      
+                        break;
+                }
+
+
 
                 acc_x += (float)Math.Round(glyph.AdvanceX * px_scale);
                 g_top = (float)Math.Floor(g_top);//adjust to integer num *** 
@@ -527,7 +543,7 @@ namespace PixelFarm.DrawingGL
                         switch (TextBaseline)
                         {
                             case TextBaseline.Alphabetic:
-                                base_offset = -(vxFmtStr.SpanHeight + vxFmtStr.DescendingInPx);
+                                //base_offset = -(vxFmtStr.SpanHeight + vxFmtStr.DescendingInPx);
                                 break;
                             case TextBaseline.Top:
                                 base_offset = vxFmtStr.DescendingInPx;
