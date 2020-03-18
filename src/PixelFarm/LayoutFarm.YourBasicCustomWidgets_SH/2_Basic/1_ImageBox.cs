@@ -60,7 +60,7 @@ namespace LayoutFarm.CustomWidgets
                 renderBox.PaddingTop = PaddingTop;
                 renderBox.PaddingBottom = PaddingBottom;
                 renderBox.SetVisible(this.Visible);
-
+                renderBox.TransparentForAllEvents = this.TransparentAllMouseEvents;
 
                 SetPrimaryRenderElement(renderBox);
                 _imgRenderBox = renderBox;
