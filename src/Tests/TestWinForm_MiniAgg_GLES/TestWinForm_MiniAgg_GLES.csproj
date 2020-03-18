@@ -281,6 +281,10 @@
       <Link>Samples\BmpAtlasItems\chk_unchecked.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\..\..\..\HtmlRenderer\Source\Test8_HtmlRenderer.Demo\Samples\0_acid1_dev\drop_down_button.png">
+      <Link>Samples\BmpAtlasItems\drop_down_button.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\..\..\..\HtmlRenderer\Source\Test8_HtmlRenderer.Demo\Samples\0_acid1_dev\favorites32.png">
       <Link>Samples\BmpAtlasItems\favorites32.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

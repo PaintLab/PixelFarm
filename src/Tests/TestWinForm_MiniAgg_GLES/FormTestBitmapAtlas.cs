@@ -77,6 +77,7 @@ namespace Mini
 
             string atlas_file = "test1_atlas";
             BuildBitmapAtlas(_srcDir, LoadBmp, atlas_file);
+            txtOutput.Text = "output:" + atlas_file;
 
             DisposeExistingPictureBoxImage(pictureBox2);
 
@@ -250,6 +251,8 @@ namespace Mini
                     }
                 }
             }
+
+
         }
 
     }

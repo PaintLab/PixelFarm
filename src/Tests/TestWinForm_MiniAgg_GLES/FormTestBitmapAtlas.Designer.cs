@@ -35,6 +35,7 @@
             this.lbl_src = new System.Windows.Forms.Label();
             this.cmdReadBmpAtlas = new System.Windows.Forms.Button();
             this.listBox2 = new System.Windows.Forms.ListBox();
+            this.txtOutput = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -102,11 +103,20 @@
             this.listBox2.Size = new System.Drawing.Size(206, 277);
             this.listBox2.TabIndex = 7;
             // 
+            // txtOutput
+            // 
+            this.txtOutput.Location = new System.Drawing.Point(9, 239);
+            this.txtOutput.Multiline = true;
+            this.txtOutput.Name = "txtOutput";
+            this.txtOutput.Size = new System.Drawing.Size(239, 117);
+            this.txtOutput.TabIndex = 8;
+            // 
             // FormTestBitmapAtlas
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1227, 721);
+            this.Controls.Add(this.txtOutput);
             this.Controls.Add(this.listBox2);
             this.Controls.Add(this.cmdReadBmpAtlas);
             this.Controls.Add(this.lbl_src);
@@ -132,5 +142,6 @@
         private System.Windows.Forms.Label lbl_src;
         private System.Windows.Forms.Button cmdReadBmpAtlas;
         private System.Windows.Forms.ListBox listBox2;
+        private System.Windows.Forms.TextBox txtOutput;
     }
 }
