@@ -150,8 +150,8 @@ namespace PixelFarm.DrawingGL
             DrawingTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering; //default 
             UseVBO = true;
 
-            //TextBaseline = TextBaseline.Top;
-            TextBaseline = TextBaseline.Alphabetic;
+            TextBaseline = TextBaseline.Top;
+            //TextBaseline = TextBaseline.Alphabetic;
             //TextBaseline = TextBaseline.Bottom;
         }
         public void LoadFontAtlas(string fontTextureInfoFile, string atlasImgFilename)
