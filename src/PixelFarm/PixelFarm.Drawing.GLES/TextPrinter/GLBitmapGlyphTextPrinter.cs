@@ -498,7 +498,7 @@ namespace PixelFarm.DrawingGL
                         switch (TextBaseline)
                         {
                             case TextBaseline.Alphabetic:
-                                base_offset = -(vxFmtStr.SpanHeight + vxFmtStr.DescendingInPx);
+                                //base_offset = -(vxFmtStr.SpanHeight + vxFmtStr.DescendingInPx);
                                 break;
                             case TextBaseline.Top:
                                 base_offset = vxFmtStr.DescendingInPx;
