@@ -15,8 +15,6 @@ namespace LayoutFarm.UI
         internal static void AddToLayoutQueue(UIElement ui)
         {
             if (ui.IsInLayoutQueue) return;
-
-             
             s_layoutQueue.Enqueue(ui);
             ui.IsInLayoutQueue = true;
         }
@@ -509,6 +507,16 @@ namespace LayoutFarm.UI
         public void InvalidateLayout()
         {
             //add to layout queue
+            UISystem.AddToLayoutQueue(this);
+        }
+        public void SuspendLayout()
+        {
+            //temp
+            UISystem.AddToLayoutQueue(this);
+        }
+        public void ResumeLayout()
+        {
+            //temp
             UISystem.AddToLayoutQueue(this);
         }
         public virtual void NotifyContentUpdate(UIElement childContent)
