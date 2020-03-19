@@ -28,11 +28,9 @@ namespace LayoutFarm
             var comboBox = new CustomWidgets.ComboBox(400, 20);
             comboBox.SetLocation(x, y);
             //--------------------
-            //1. create landing part
-            var landPart = new LayoutFarm.CustomWidgets.Box(400, 20);
-            landPart.BackColor = Color.Green;
-            comboBox.LandPart = landPart;
-            //--------------------------------------
+            //1. create landing part 
+            comboBox.BackColor = Color.Green;
+            
             //add small px to land part
             //image
             //load bitmap with gdi+                
@@ -68,7 +66,7 @@ namespace LayoutFarm
                     comboBox.CloseHinge();
                 }
             };
-            landPart.Add(imgBox);
+            comboBox.Add(imgBox);
             return comboBox;
         }
 

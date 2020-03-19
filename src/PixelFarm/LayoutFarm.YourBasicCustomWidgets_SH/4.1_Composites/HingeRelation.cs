@@ -1,91 +1,62 @@
 ﻿//Apache2, 2014-present, WinterDev
 
-
 using LayoutFarm.UI;
+using PixelFarm.Drawing;
+
 namespace LayoutFarm.CustomWidgets
 {
     public class HingeRelation
     {
         bool _isOpen;
-        //1. land part
-        AbstractRectUI _landPart;
-        //2. float part   
-        AbstractRectUI _floatPart;
         RenderElement _floatPartRenderElement;
         HingeFloatPartStyle _floatPartStyle;
 
+        public HingeRelation()
+        {
+
+        }
         //----------------------------------------------------  
-        public AbstractRectUI LandPart
-        {
-            get => _landPart;
-            set
-            {
-                _landPart = value;
-                if (value != null)
-                {
-                    //if new value not null
-                    //check existing land part
-                    if (_landPart != null)
-                    {
-                        //remove existing landpart 
-                    }
-                    //if (primElement != null)
-                    //{
-                    //    //add 
-                    //    var visualPlainLayer = primElement.Layers.GetLayer(0) as VisualPlainLayer;
-                    //    if (visualPlainLayer != null)
-                    //    {
-                    //        visualPlainLayer.AddChild(value.GetPrimaryRenderElement(primElement.Root));
-                    //    } 
-                    //} 
-                }
-                else
-                {
-                    if (_landPart != null)
-                    {
-                        //remove existing landpart 
-                    }
-                }
-            }
-        }
-        public AbstractRectUI FloatPart
-        {
-            get => _floatPart;
-            set
-            {
-                _floatPart = value;
-                if (value != null)
-                {
-                    //attach float part
-                }
-            }
-        }
+        public AbstractRectUI LandPart { get; set; }
+        public AbstractRectUI FloatPart { get; set; }
         //---------------------------------------------------- 
         public bool IsOpen => _isOpen;
         //----------------------------------------------------  
-
+        public void ToggleOpenOrClose()
+        {
+            if (_isOpen)
+            {
+                CloseHinge();
+            }
+            else
+            {
+                OpenHinge();
+            }
+        }
         public void OpenHinge()
         {
             if (_isOpen) return;
             _isOpen = true;
             //-----------------------------------
-            if (_landPart == null) return;
-            if (_floatPart == null) return;
+            if (LandPart == null) return;
+            if (FloatPart == null) return;
             switch (_floatPartStyle)
             {
                 default:
                 case HingeFloatPartStyle.Popup:
                     {
-                        //add float part to top window layer
-                        //var topRenderBox = primElement.GetTopWindowRenderBox();
-                        //if (topRenderBox != null)
-                        //{
-                        //    Point globalLocation = primElement.GetGlobalLocation();
-                        //    floatPart.SetLocation(globalLocation.X, globalLocation.Y + primElement.Height);
-                        //    this.floatPartRenderElement = this.floatPart.GetPrimaryRenderElement(primElement.Root);
-                        //    topRenderBox.AddChild(floatPartRenderElement);
-                        //}
 
+                        RenderElement renderE = LandPart.CurrentPrimaryRenderElement;
+                        if (renderE != null)
+                        {
+                            RenderElement topRenderBox = renderE.GetTopWindowRenderBox();
+                            if (topRenderBox != null)
+                            {
+                                Point globalLocation = LandPart.GetGlobalLocation();
+                                FloatPart.SetLocation(globalLocation.X, globalLocation.Y + LandPart.Height);
+                                _floatPartRenderElement = FloatPart.GetPrimaryRenderElement(topRenderBox.Root);
+                                topRenderBox.AddChild(_floatPartRenderElement);
+                            }
+                        }
                     }
                     break;
                 case HingeFloatPartStyle.Embeded:
@@ -98,8 +69,8 @@ namespace LayoutFarm.CustomWidgets
         {
             if (!_isOpen) return;
             _isOpen = false;
-            if (_landPart == null) return;
-            if (_floatPart == null) return;
+            if (LandPart == null) return;
+            if (FloatPart == null) return;
             switch (_floatPartStyle)
             {
                 default:
@@ -110,9 +81,11 @@ namespace LayoutFarm.CustomWidgets
                     {
                         if (_floatPartRenderElement != null)
                         {
-                            //temp
-                            var parentContainer = _floatPartRenderElement.ParentRenderElement as CustomRenderBox;
-                            parentContainer.RemoveChild(_floatPartRenderElement);
+                            var topRenderBox = _floatPartRenderElement.GetTopWindowRenderBox();
+                            if (topRenderBox != null)
+                            {
+                                topRenderBox.RemoveChild(_floatPartRenderElement);
+                            }                             
                         }
                     }
                     break;
