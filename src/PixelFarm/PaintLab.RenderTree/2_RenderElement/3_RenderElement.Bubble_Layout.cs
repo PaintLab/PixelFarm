@@ -19,13 +19,8 @@ namespace LayoutFarm
             return visualElement._uiLayoutFlags & 0x3;
         }
 
-        public bool HasCalculatedSize
-        {
-            get
-            {
-                return ((_uiLayoutFlags & RenderElementConst.LY_HAS_CALCULATED_SIZE) != 0);
-            }
-        }
+        public bool HasCalculatedSize => ((_uiLayoutFlags & RenderElementConst.LY_HAS_CALCULATED_SIZE) != 0);
+
         protected void MarkHasValidCalculateSize()
         {
             _uiLayoutFlags |= RenderElementConst.LY_HAS_CALCULATED_SIZE;
@@ -47,13 +42,8 @@ namespace LayoutFarm
         //    }
         //}
 
-        public bool NeedReCalculateContentSize
-        {
-            get
-            {
-                return (_uiLayoutFlags & RenderElementConst.LY_HAS_CALCULATED_SIZE) == 0;
-            }
-        }
+        public bool NeedReCalculateContentSize => (_uiLayoutFlags & RenderElementConst.LY_HAS_CALCULATED_SIZE) == 0;
+
 
         //        internal void MarkInvalidContentArrangement()
         //        {
@@ -79,25 +69,23 @@ namespace LayoutFarm
 
             _uiLayoutFlags |= RenderElementConst.LY_HAS_ARRANGED_CONTENT;
         }
-        public bool NeedContentArrangement
+
+        public bool NeedContentArrangement => (_uiLayoutFlags & RenderElementConst.LY_HAS_ARRANGED_CONTENT) == 0;
+
+#if DEBUG
+        internal bool dbugFirstArrangementPass
         {
             get
             {
-                return (_uiLayoutFlags & RenderElementConst.LY_HAS_ARRANGED_CONTENT) == 0;
-            }
-        }
-        internal bool FirstArrangementPass
-        {
-            get
-            {
-                return (_propFlags & RenderElementConst.FIRST_ARR_PASS) != 0;
+                return (_propFlags & RenderElementConst.dbugFIRST_ARR_PASS) != 0;
             }
             set
             {
                 _propFlags = value ?
-                   _propFlags | RenderElementConst.FIRST_ARR_PASS :
-                   _propFlags & ~RenderElementConst.FIRST_ARR_PASS;
+                   _propFlags | RenderElementConst.dbugFIRST_ARR_PASS :
+                   _propFlags & ~RenderElementConst.dbugFIRST_ARR_PASS;
             }
         }
+#endif
     }
 }

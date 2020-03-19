@@ -276,6 +276,8 @@ namespace LayoutFarm.CustomWidgets
                 element.SetController(this);
                 //
                 _listItemText = new CustomTextRun(rootgfx, 200, this.Height);
+                _listItemText.DrawTextTechnique = DrawTextTechnique.LcdSubPix;
+
                 if (_font != null)
                 {
                     _listItemText.RequestFont = _font;
