@@ -30,7 +30,7 @@ namespace LayoutFarm
             //--------------------
             //1. create landing part 
             comboBox.BackColor = Color.Green;
-            
+
             //add small px to land part
             //image
             //load bitmap with gdi+                
@@ -73,12 +73,9 @@ namespace LayoutFarm
         LayoutFarm.CustomWidgets.MenuItem CreateMenuItem(int x, int y)
         {
             var mnuItem = new CustomWidgets.MenuItem(150, 20);
+            mnuItem.BackColor = Color.OrangeRed;
             mnuItem.SetLocation(x, y);
-            //--------------------
-            //1. create landing part
-            var landPart = new LayoutFarm.CustomWidgets.Box(150, 20);
-            landPart.BackColor = Color.OrangeRed;
-            mnuItem.LandPart = landPart;
+             
             //--------------------------------------
             //add small px to land part
             //image
@@ -90,7 +87,7 @@ namespace LayoutFarm
             }
             LayoutFarm.CustomWidgets.ImageBox imgBox = new CustomWidgets.ImageBox(_arrowBmp.Width, _arrowBmp.Height);
             imgBox.ImageBinder = _arrowBmp;
-            landPart.Add(imgBox);
+            mnuItem.Add(imgBox);
             //--------------------------------------
             //if click on this image then
             imgBox.MouseDown += (s, e) =>
@@ -121,7 +118,7 @@ namespace LayoutFarm
             };
             //--------------------------------------
             //2. float part
-            var floatPart = new LayoutFarm.CustomWidgets.MenuBox(400, 100);
+            var floatPart = new LayoutFarm.CustomWidgets.Box(400, 100);
             floatPart.BackColor = Color.Gray;
             mnuItem.FloatPart = floatPart;
             return mnuItem;

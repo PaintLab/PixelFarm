@@ -6,7 +6,6 @@ namespace LayoutFarm.CustomWidgets
 {
     public class ComboBox : Box
     {
-
         HingeRelation _hingeRel = new HingeRelation();
         public ComboBox(int width, int height)
             : base(width, height)
