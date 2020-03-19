@@ -54,18 +54,44 @@ namespace LayoutFarm.CustomWidgets
                 BgIsNotOpaque = value.A < 255;
             }
         }
+
+        
         public string Text
         {
             get => new string(_textBuffer);
             set
             {
                 //TODO: review here
+                //if input string is null => textBuffer= null
+
+               
                 _textBuffer = (value == null) ? null : value.ToCharArray();
                 //reset 
                 if (_renderVxFormattedString != null)
                 {
+                    _contentChanged = true;
                     _renderVxFormattedString.Dispose();
                     _renderVxFormattedString = null;
+                    //----------
+
+                    //new text may change the size of this text run
+                    //similar to size change
+                    //for gfx-invalidation, we need a size before change and after change 
+
+                    TextBufferSpan textBufferSpan = new TextBufferSpan(_textBuffer);
+                    Size newSize = Root.TextServices.MeasureString(ref textBufferSpan, _font);//just measure
+                    int newW = Width;
+                    int newH = Height;
+                    if (!this.HasSpecificWidth)
+                    {
+                        newW = _contentLeft + (int)System.Math.Ceiling((float)newSize.Width) + _contentRight;
+                    }
+                    if (!this.HasSpecificHeight)
+                    {
+                        newH = _contentTop + (int)System.Math.Ceiling((float)newSize.Height) + _contentBottom;
+                    }
+
+                    SetSize(newW, newH);
                 }
                 NeedPreRenderEval = true;
             }
@@ -195,6 +221,7 @@ namespace LayoutFarm.CustomWidgets
                         {
                             //newsize
                             //...
+
                             int newW = this.Width;
                             int newH = this.Height;
 
@@ -253,7 +280,7 @@ namespace LayoutFarm.CustomWidgets
                 }
                 else
                 {
-                  
+
                     //for lcd-subpix, hint will help the performance
                     //label has transparent bg
 
