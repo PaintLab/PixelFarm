@@ -16,11 +16,7 @@ namespace LayoutFarm.UI
         {
             if (ui.IsInLayoutQueue) return;
 
-
-            //if (s_layoutQueue.Count > 200)
-            //{
-
-            //}
+             
             s_layoutQueue.Enqueue(ui);
             ui.IsInLayoutQueue = true;
         }
