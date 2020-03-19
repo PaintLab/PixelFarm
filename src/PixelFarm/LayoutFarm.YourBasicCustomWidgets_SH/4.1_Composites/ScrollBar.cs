@@ -1056,6 +1056,7 @@ namespace LayoutFarm.CustomWidgets
         void ReEvaluateScrollBar();
         float MaxValue { get; set; }
         float MinValue { get; set; }
+        int ScrollBoxSizeLimit { get; }
         float ScrollValue { get; set; }
         int PhysicalScrollLength { get; }
         void SetCustomScrollBarEvaluator(ScrollBarEvaluator scrollBarEvaluator);
