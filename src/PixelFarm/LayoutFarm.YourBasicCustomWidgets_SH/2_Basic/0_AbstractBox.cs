@@ -463,10 +463,13 @@ namespace LayoutFarm.CustomWidgets
 
             if (ui.NeedContentLayout)
             {
-                if (!this.IsInLayoutQueue)
+                if (!this.IsInLayoutQueue) //if this elem is in layout queue, the ui will be layout with this
                 {
                     if (this.ParentUI != null)
                     {
+                        //if this elem is add to the host
+                        //the parent UI is not null, 
+
                         ui.InvalidateLayout();
                     }
                 }
