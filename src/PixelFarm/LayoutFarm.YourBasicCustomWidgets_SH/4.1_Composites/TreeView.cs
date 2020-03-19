@@ -156,8 +156,7 @@ namespace LayoutFarm.CustomWidgets
                 element.BackColor = _backColor;
                 element.HasSpecificWidthAndHeight = true; 
                 //-----------------------------
-                // create default layer for node content 
-
+                // create default layer for node content  
                 //-----------------------------
                 _uiNodeIcon = new ImageBox(16, 16);//create with default size 
                 SetupNodeIconBehaviour(_uiNodeIcon);
@@ -244,7 +243,7 @@ namespace LayoutFarm.CustomWidgets
                     //below here
                     //create layers      
                     //add to layer 
-                    var tnRenderElement = treeNode.GetPrimaryRenderElement(_primElement.Root);
+                    RenderElement tnRenderElement = treeNode.GetPrimaryRenderElement(_primElement.Root);
                     tnRenderElement.SetLocation(_indentWidth, _newChildNodeY);
                     _primElement.AddChild(tnRenderElement);
                     _newChildNodeY += tnRenderElement.Height;
@@ -280,8 +279,8 @@ namespace LayoutFarm.CustomWidgets
                     int j = _childNodes.Count;
                     for (int i = 0; i < j; ++i)
                     {
-                        var childNode = _childNodes[i];
-                        childNode.PerformContentLayout();//manaul?
+                        TreeNode childNode = _childNodes[i];
+                        childNode.PerformContentLayout();//manual
                         //set new size 
                         childNode.SetLocationAndSize(_indentWidth,
                             _newChildNodeY,
