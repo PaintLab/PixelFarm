@@ -53,9 +53,6 @@ namespace LayoutFarm.UI
                 }
 #endif
             }
-
-
-
         }
     }
 
