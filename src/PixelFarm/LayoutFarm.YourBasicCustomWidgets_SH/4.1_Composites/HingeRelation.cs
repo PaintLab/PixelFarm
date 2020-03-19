@@ -5,22 +5,24 @@ using PixelFarm.Drawing;
 
 namespace LayoutFarm.CustomWidgets
 {
+    public enum HingeFloatPartStyle
+    {
+        Popup,
+        Embeded
+    }
     public class HingeRelation
     {
         bool _isOpen;
         RenderElement _floatPartRenderElement;
-        HingeFloatPartStyle _floatPartStyle;
 
         public HingeRelation()
         {
 
         }
-        //----------------------------------------------------  
+        
         public AbstractRectUI LandPart { get; set; }
-        public AbstractRectUI FloatPart { get; set; }
-        //---------------------------------------------------- 
-        public bool IsOpen => _isOpen;
-        //----------------------------------------------------  
+        public AbstractRectUI FloatPart { get; set; } 
+        public bool IsOpen => _isOpen; 
         public void ToggleOpenOrClose()
         {
             if (_isOpen)
@@ -39,7 +41,7 @@ namespace LayoutFarm.CustomWidgets
             //-----------------------------------
             if (LandPart == null) return;
             if (FloatPart == null) return;
-            switch (_floatPartStyle)
+            switch (FloatPartStyle)
             {
                 default:
                 case HingeFloatPartStyle.Popup:
@@ -71,7 +73,7 @@ namespace LayoutFarm.CustomWidgets
             _isOpen = false;
             if (LandPart == null) return;
             if (FloatPart == null) return;
-            switch (_floatPartStyle)
+            switch (FloatPartStyle)
             {
                 default:
                     {
@@ -96,10 +98,6 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
-        public HingeFloatPartStyle FloatPartStyle
-        {
-            get => _floatPartStyle;
-            set => _floatPartStyle = value;
-        }
+        public HingeFloatPartStyle FloatPartStyle { get; set; }
     }
 }

@@ -23,12 +23,8 @@ namespace LayoutFarm.CustomWidgets
         {
             get => _hingeRel.FloatPart;
             set => _hingeRel.FloatPart = value;
-        }
-        //---------------------------------------------------- 
-        public bool IsOpen => _hingeRel.IsOpen;
-        //---------------------------------------------------- 
-
-
+        } 
+        public bool IsOpen => _hingeRel.IsOpen; 
         public void OpenHinge() => _hingeRel.OpenHinge();
         public void CloseHinge() => _hingeRel.CloseHinge();
         public HingeFloatPartStyle FloatPartStyle
