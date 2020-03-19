@@ -69,7 +69,7 @@ namespace LayoutFarm.CustomWidgets
                 //reset 
                 if (_renderVxFormattedString != null)
                 {
-                    _contentChanged = true;
+                  
                     _renderVxFormattedString.Dispose();
                     _renderVxFormattedString = null;
                     //----------
