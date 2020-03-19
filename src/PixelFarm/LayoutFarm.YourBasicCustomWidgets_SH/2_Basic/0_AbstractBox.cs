@@ -435,7 +435,7 @@ namespace LayoutFarm.CustomWidgets
                 ui.InvalidateLayout();
             }
         }
-      
+
         public void AddLast(UIElement ui) => Add(ui);
         public override void Add(UIElement ui)
         {
@@ -463,7 +463,13 @@ namespace LayoutFarm.CustomWidgets
 
             if (ui.NeedContentLayout)
             {
-                ui.InvalidateLayout();
+                if (!this.IsInLayoutQueue)
+                {
+                    if (this.ParentUI != null)
+                    {
+                        ui.InvalidateLayout();
+                    }
+                }
             }
         }
         public override void RemoveChild(UIElement ui)

@@ -28,7 +28,7 @@ namespace LayoutFarm.CustomWidgets
         {
 
 #if DEBUG
-            dbugBreakMe = true;
+            //dbugBreakMe = true;
 #endif
             this.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
             this.BackColor = Color.LightGray;

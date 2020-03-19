@@ -15,6 +15,12 @@ namespace LayoutFarm.UI
         internal static void AddToLayoutQueue(UIElement ui)
         {
             if (ui.IsInLayoutQueue) return;
+
+
+            //if (s_layoutQueue.Count > 200)
+            //{
+
+            //}
             s_layoutQueue.Enqueue(ui);
             ui.IsInLayoutQueue = true;
         }
@@ -37,6 +43,11 @@ namespace LayoutFarm.UI
             //    }
             //    return;
             //}
+
+            if (count > 0)
+            {
+                //System.Diagnostics.Debug.WriteLine("layout_queue:" + count);
+            }
 #endif
 
 
