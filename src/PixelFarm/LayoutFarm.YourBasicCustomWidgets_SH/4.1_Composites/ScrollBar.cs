@@ -13,7 +13,7 @@ namespace LayoutFarm.CustomWidgets
         public static ScrollBar.ScrollBarSettings s_defaultScrollBarSettings = new ScrollBar.ScrollBarSettings();//default scr
     }
 
-    public delegate void ScrollBarEvaluator(SliderBox scBar, out double onePixelFore, out int scrollBoxHeight);
+    public delegate void ScrollBarEvaluator(ISliderBox scBar, out double onePixelFore, out int scrollBoxHeight);
 
     struct ScrollRangeLogic
     {
@@ -94,7 +94,7 @@ namespace LayoutFarm.CustomWidgets
 
     public delegate void UIEventHandler<S, T>(S sender, T arg);
 
-    public class SliderBox : AbstractRectUI
+    public class SliderBox : AbstractRectUI, ISliderBox
     {
 
         ScrollRangeLogic _scrollRangeLogic;
@@ -171,11 +171,7 @@ namespace LayoutFarm.CustomWidgets
             }
             return _mainBox;
         }
-        public ScrollBarType ScrollBarType
-        {
-            get;
-            set;
-        }
+        public ScrollBarType ScrollBarType { get; set; }
         //--------------------------------------------------------------------------
 
         public int ScrollBoxSizeLimit => SCROLL_BOX_SIZE_LIMIT;
@@ -1046,11 +1042,7 @@ namespace LayoutFarm.CustomWidgets
         {
             this.OwnerScrollBar = owner;
         }
-        IUIEventListener OwnerScrollBar
-        {
-            get;
-            set;
-        }
+        IUIEventListener OwnerScrollBar { get; set; }
         protected override void OnMouseWheel(UIMouseEventArgs e)
         {
             this.OwnerScrollBar.ListenMouseWheel(e);
@@ -1058,15 +1050,26 @@ namespace LayoutFarm.CustomWidgets
     }
 
 
+    public interface ISliderBox
+    {
+        ScrollBarType ScrollBarType { get; set; }
+        void ReEvaluateScrollBar();
+        float MaxValue { get; set; }
+        float MinValue { get; set; }
+        float ScrollValue { get; set; }
+        int PhysicalScrollLength { get; }
+        void SetCustomScrollBarEvaluator(ScrollBarEvaluator scrollBarEvaluator);
+        event EventHandler<EventArgs> UserScroll;
 
+    }
     /// <summary>
     /// instance that create and hold 'scrolling' relation between SliderBox and IScrollableElement
     /// </summary>
     public class ScrollingRelation
     {
-        SliderBox _slideBox;
+        ISliderBox _slideBox;
         IScrollable _scrollableSurface;
-        public ScrollingRelation(SliderBox slideBox, IScrollable scrollableSurface)
+        public ScrollingRelation(ISliderBox slideBox, IScrollable scrollableSurface)
         {
             _slideBox = slideBox;
             _scrollableSurface = scrollableSurface;
@@ -1088,7 +1091,7 @@ namespace LayoutFarm.CustomWidgets
         }
         void SetupVerticalScrollRelation()
         {
-            _slideBox.SetCustomScrollBarEvaluator((SliderBox sc, out double onePixelFor, out int scrollBoxLength) =>
+            _slideBox.SetCustomScrollBarEvaluator((ISliderBox sc, out double onePixelFor, out int scrollBoxLength) =>
             {
                 float physicalScrollLength = sc.PhysicalScrollLength;
                 onePixelFor = 1;
@@ -1152,7 +1155,7 @@ namespace LayoutFarm.CustomWidgets
         }
         void SetupHorizontalScrollRelation()
         {
-            _slideBox.SetCustomScrollBarEvaluator((SliderBox sc, out double onePixelFor, out int scrollBoxLength) =>
+            _slideBox.SetCustomScrollBarEvaluator((ISliderBox sc, out double onePixelFor, out int scrollBoxLength) =>
            {
                //horizontal scroll bar
                float physicalScrollLength = sc.PhysicalScrollLength;

@@ -5,6 +5,11 @@ using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
+    public class ComboBoxRelation
+    {
+
+    }
+
     public class ComboBox : AbstractRectUI
     {
         CustomRenderBox _primElement;//background 
