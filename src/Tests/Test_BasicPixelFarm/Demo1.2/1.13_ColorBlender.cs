@@ -120,7 +120,93 @@ namespace LayoutFarm.ColorBlenderSample
                 host.AddChild(_b_sampleBox);
             }
             _component_ready = true;
+
+            //---------
+            CreateChromaTestButtons(host, 20, 450);
         }
+        void CreateChromaTestButtons(AppHost host, int x, int y)
+        {
+
+            void ShowColorBoxs(Box colorBoxPanel, System.Drawing.Color[] colors)
+            {
+                //nested method
+                colorBoxPanel.ClearChildren();
+                for (int i = 0; i < colors.Length; ++i)
+                {
+                    Box colorBox = new Box(30, 30);
+
+                    System.Drawing.Color c = colors[i];
+                    colorBox.BackColor = new PixelFarm.Drawing.Color(c.R, c.G, c.B);
+                    colorBoxPanel.Add(colorBox);
+                }
+                colorBoxPanel.PerformContentLayout();
+            }
+
+            Box colorPanel = new Box(200, 40);
+            colorPanel.ContentLayoutKind = BoxContentLayoutKind.HorizontalStack;
+            colorPanel.BackColor = PixelFarm.Drawing.Color.White;
+            colorPanel.SetLocation(x, y);
+            host.AddChild(colorPanel); 
+
+            y += colorPanel.Height;
+
+            //----------------------------------
+            {
+                Label lblChromaDarken = new Label(50, 20);
+                lblChromaDarken.Text = "Darken";
+                lblChromaDarken.SetLocation(x, y);
+
+                UI.GeneralEventListener evListener = new UI.GeneralEventListener();
+                evListener.MouseDown += e =>
+                {
+                    System.Drawing.Color color = System.Drawing.Color.HotPink;
+                    ChromaJs.Chroma chroma = new ChromaJs.Chroma(color);
+
+                    System.Drawing.Color[] colors = new[] {
+                        color,
+                        chroma.Darken() ,
+                        chroma.Darken(2),
+                        chroma.Darken(2.6)
+                    };
+                    //present in the box                     
+                    ShowColorBoxs(colorPanel, colors);
+                };
+                lblChromaDarken.AttachExternalEventListener(evListener);
+                x += lblChromaDarken.Width + 5;
+
+                host.AddChild(lblChromaDarken);
+            }
+
+            //----------------------------------
+            {
+                Label lblLighten = new Label(50, 20);
+                lblLighten.Text = "Brighten";
+                lblLighten.SetLocation(x, y);
+                {
+                    UI.GeneralEventListener evListener = new UI.GeneralEventListener();
+                    evListener.MouseDown += e =>
+                    {
+                        System.Drawing.Color color = System.Drawing.Color.HotPink;
+                        ChromaJs.Chroma chroma = new ChromaJs.Chroma(color);
+
+                        System.Drawing.Color[] colors = new[] {
+                        color,
+                        chroma.Brighten(),
+                        chroma.Brighten(2),
+                        chroma.Brighten(3)
+                        };
+                        //present in the box                     
+                        ShowColorBoxs(colorPanel, colors);
+                    };
+                    lblLighten.AttachExternalEventListener(evListener);
+                }
+                x += lblLighten.Width + 5;
+
+                host.AddChild(lblLighten);
+            } 
+        }
+
+
 
         void CreateRBGVarBoxes(AppHost host, int x, int y)
         {
