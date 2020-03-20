@@ -146,9 +146,12 @@ namespace LayoutFarm.ColorBlenderSample
             colorPanel.ContentLayoutKind = BoxContentLayoutKind.HorizontalStack;
             colorPanel.BackColor = PixelFarm.Drawing.Color.White;
             colorPanel.SetLocation(x, y);
-            host.AddChild(colorPanel); 
+            host.AddChild(colorPanel);
 
             y += colorPanel.Height;
+
+
+
 
             //----------------------------------
             {
@@ -203,7 +206,7 @@ namespace LayoutFarm.ColorBlenderSample
                 x += lblLighten.Width + 5;
 
                 host.AddChild(lblLighten);
-            } 
+            }
         }
 
 
