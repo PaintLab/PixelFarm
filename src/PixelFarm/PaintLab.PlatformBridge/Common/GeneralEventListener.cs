@@ -47,11 +47,7 @@ namespace LayoutFarm.UI
 
         }
 
-        void IEventListener.ListenMouseClick(UIMouseEventArgs e)
-        {
-
-        }
-
+        
         void IEventListener.ListenMouseDoubleClick(UIMouseEventArgs e)
         {
 

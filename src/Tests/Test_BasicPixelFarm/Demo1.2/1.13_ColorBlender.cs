@@ -151,18 +151,16 @@ namespace LayoutFarm.ColorBlenderSample
             y += colorPanel.Height;
 
 
-
-
             //test1...
             var buttonBeh = new UI.GeneralUIElementBehaviour();
-            buttonBeh.MouseMove += e =>
+            buttonBeh.MouseMove += (b, e) =>
             {
                 if (e.CurrentContextElement is Label lbl)
                 {
                     lbl.BackColor = PixelFarm.Drawing.Color.Yellow;
                 }
             };
-            buttonBeh.MouseLeave += e =>
+            buttonBeh.MouseLeave += (b, e) =>
             {
                 if (e.CurrentContextElement is Label lbl)
                 {
@@ -205,6 +203,8 @@ namespace LayoutFarm.ColorBlenderSample
             //----------------------------------
             {
                 Label lblLighten = new Label(50, 20);
+                lblLighten.AttachUIBehaviour(buttonBeh);
+
                 lblLighten.Text = "Brighten";
                 lblLighten.SetLocation(x, y);
                 {

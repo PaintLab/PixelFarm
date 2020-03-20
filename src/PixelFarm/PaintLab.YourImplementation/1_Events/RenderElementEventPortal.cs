@@ -456,25 +456,25 @@ namespace LayoutFarm.UI
                 {
                     if (e.IsAlsoDoubleClick)
                     {
-                        //ForEachEventListenerBubbleUp(e, hitPointChain, listener =>
-                        //{
-                        //    listener.ListenMouseDoubleClick(e);
-                        //    //------------------------------------------------------- 
-                        //    //retrun true to stop this loop (no further bubble up)
-                        //    //return false to bubble this to upper control       
-                        //    return e.CancelBubbling || !listener.BypassAllMouseEvents;
-                        //});
-                    }
-                    else
-                    {
                         ForEachEventListenerBubbleUp(e, hitPointChain, listener =>
                         {
-                            listener.ListenMouseClick(e);
-
+                            listener.ListenMouseDoubleClick(e);
+                            //------------------------------------------------------- 
                             //retrun true to stop this loop (no further bubble up)
                             //return false to bubble this to upper control       
                             return e.CancelBubbling || !listener.BypassAllMouseEvents;
                         });
+                    }
+                    else
+                    {
+                        //ForEachEventListenerBubbleUp(e, hitPointChain, listener =>
+                        //{
+                        //    listener.ListenMouseClick(e);
+
+                        //    //retrun true to stop this loop (no further bubble up)
+                        //    //return false to bubble this to upper control       
+                        //    return e.CancelBubbling || !listener.BypassAllMouseEvents;
+                        //});
                     }
                 }
             }
