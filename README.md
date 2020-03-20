@@ -151,7 +151,7 @@ Apache2, 2012, Hernán J. González, https://github.com/leonbloy/pngcs
 
 Apache2, 2010, Sebastian Stehle, .NET Image Tools Development Group. , https://imagetools.codeplex.com/ 
 
-
+MIT, 2018, Tomáš Pažourek, Colourful, https://github.com/tompazourek/Colourful
 **Font**
 
 Apache2, 2016-2017, WinterDev, Samuel Carlsson, Sam Hocevar and others, https://github.com/LayoutFarm/Typography
