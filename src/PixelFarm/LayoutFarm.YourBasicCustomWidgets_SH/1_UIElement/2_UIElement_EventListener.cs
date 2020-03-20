@@ -105,13 +105,17 @@ namespace LayoutFarm.UI
             _externalEventListener?.ListenMouseUp(e);
             _uiElemBeh?.ListenMouseUp(e);
         }
+        void IEventListener.ListenMouseClick(UIMouseEventArgs e)
+        {
+            
+        }
         void IEventListener.ListenLostMouseFocus(UIMouseEventArgs e)
         {
             OnLostMouseFocus(e);
             _externalEventListener?.ListenLostMouseFocus(e);
             _uiElemBeh?.ListenLostMouseFocus(e);
         }
-       
+
         void IEventListener.ListenMouseDoubleClick(UIMouseEventArgs e)
         {
             OnDoubleClick(e);
@@ -206,7 +210,7 @@ namespace LayoutFarm.UI
         {
 
         }
- 
+
         void IEventListener.ListenMouseDoubleClick(UIMouseEventArgs e)
         {
 
@@ -216,6 +220,10 @@ namespace LayoutFarm.UI
         void IEventListener.ListenMouseLeave(UIMouseEventArgs e) => OnMouseLeave(e);
         void IEventListener.ListenMouseMove(UIMouseEventArgs e) => OnMouseMove(e);
         void IEventListener.ListenMouseUp(UIMouseEventArgs e) => OnMouseUp(e);
+        void IEventListener.ListenMouseClick(UIMouseEventArgs e)
+        {
+        }
+
         void IEventListener.ListenMouseWheel(UIMouseEventArgs e) => OnMouseWheel(e);
         bool IEventListener.ListenProcessDialogKey(UIKeyEventArgs args)
         {
