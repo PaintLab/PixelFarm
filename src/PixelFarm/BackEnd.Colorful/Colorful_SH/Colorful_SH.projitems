@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>d9f3bbd1-1fa0-4cbd-94dc-3d01807db3f3</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Colorful_SH</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Colors\HunterLabColor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Colors\IColorVector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Colors\Illuminants.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Colors\IRGBWorkingSpace.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Colors\LabColor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Colors\LChabColor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Colors\LChuvColor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Colors\LinearRGBColor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Colors\LMSColor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Colors\LuvColor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Colors\MacbethColorChecker.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Colors\RGBColor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Colors\RGBWorkingSpaces.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Colors\xyChromaticityCoordinates.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Colors\xyYColor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Colors\XYZColor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Conversion\ColourfulConverter.Adapt.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Conversion\ColourfulConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Conversion\ColourfulConverter.ToHunterLab.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Conversion\ColourfulConverter.ToLab.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Conversion\ColourfulConverter.ToLChab.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Conversion\ColourfulConverter.ToLChuv.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Conversion\ColourfulConverter.ToLinearRGB.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Conversion\ColourfulConverter.ToLMS.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Conversion\ColourfulConverter.ToLuv.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Conversion\ColourfulConverter.ToRGB.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Conversion\ColourfulConverter.ToxyY.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Conversion\ColourfulConverter.ToXYZ.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Conversion\IChromaticAdaptation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Conversion\VonKriesChromaticAdaptation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Difference\CIE76ColorDifference.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Difference\CIE94ColorDifference.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Difference\CIEDE2000ColorDifference.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Difference\CMCColorDifference.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Difference\IColorDifference.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Implementation\Conversion\CIEConstants.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Implementation\Conversion\HunterLab\HunterLabToXYZConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Implementation\Conversion\HunterLab\XYZAndHunterLabConverterBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Implementation\Conversion\HunterLab\XYZToHunterLabConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Implementation\Conversion\IColorConversion.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Implementation\Conversion\Lab\LabToXYZConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Implementation\Conversion\Lab\XYZToLabConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Implementation\Conversion\LChab\LabToLChabConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Implementation\Conversion\LChab\LChabToLabConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Implementation\Conversion\LChuv\LChuvToLuvConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Implementation\Conversion\LChuv\LuvToLChuvConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Implementation\Conversion\LMS\LMSTransformationMatrix.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Implementation\Conversion\LMS\XYZAndLMSConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Implementation\Conversion\Luv\LuvToXYZConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Implementation\Conversion\Luv\XYZToLuvConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Implementation\Conversion\RGB\LinearRGBAndXYZConverterBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Implementation\Conversion\RGB\LinearRGBToRGBConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Implementation\Conversion\RGB\LinearRGBToXYZConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Implementation\Conversion\RGB\RGBToLinearRGBConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Implementation\Conversion\RGB\XYZToLinearRGBConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Implementation\Conversion\xyY\xyYAndXYZConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Implementation\RGB\GammaCompanding.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Implementation\RGB\ICompanding.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Implementation\RGB\LCompanding.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Implementation\RGB\Rec2020Companding.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Implementation\RGB\Rec709Companding.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Implementation\RGB\RGBPrimariesChromaticityCoordinates.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Implementation\RGB\RGBWorkingSpace.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Implementation\RGB\sRGBCompanding.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Implementation\Utils\Angle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Implementation\Utils\Extensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Implementation\Utils\MathUtils.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Implementation\Utils\MatrixFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Other\CCTConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Other\SaturationLChFormulas.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NET20Impl.cs" />
+  </ItemGroup>
+</Project>
