@@ -534,9 +534,7 @@ namespace LayoutFarm.UI
         protected virtual void OnContentUpdate()
         {
         }
-        protected virtual void OnInterComponentMsg(object sender, int msgcode, string msg)
-        {
-        }
+       
         protected virtual void OnElementChanged()
         {
         }

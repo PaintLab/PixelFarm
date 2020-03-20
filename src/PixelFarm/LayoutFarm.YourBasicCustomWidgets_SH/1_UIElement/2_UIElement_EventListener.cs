@@ -112,11 +112,7 @@ namespace LayoutFarm.UI
 
 
         bool IUIEventListener.AutoStopMouseEventPropagation => this.AutoStopMouseEventPropagation;
-
-        void IEventListener.ListenInterComponentMsg(object sender, int msgcode, string msg)
-        {
-            this.OnInterComponentMsg(sender, msgcode, msg);
-        }
+               
 
         void IEventListener.ListenGuestMsg(UIGuestMsgEventArgs e)
         {

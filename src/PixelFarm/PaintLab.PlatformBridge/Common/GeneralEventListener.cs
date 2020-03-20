@@ -21,12 +21,7 @@ namespace LayoutFarm.UI
         {
 
         }
-
-        void IEventListener.ListenInterComponentMsg(object sender, int msgcode, string msg)
-        {
-
-        }
-
+ 
         void IEventListener.ListenKeyDown(UIKeyEventArgs e)
         {
             KeyDown?.Invoke(e);
