@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2009
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29911.84
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.CpuBlit", "PixelFarm\PixelFarm.CpuBlit\PixelFarm.CpuBlit.csproj", "{4D5CE655-58FA-4523-8E46-738B941E9E47}"
 EndProject
@@ -203,8 +203,10 @@ Global
 		..\..\Typography\Typography.TextFlow\Typography.TextFlow.projitems*{5278fab9-33f0-40e0-adca-7237ea0e935b}*SharedItemsImports = 4
 		..\..\Typography\Typography.TextServices\Typography.TextServices.projitems*{5278fab9-33f0-40e0-adca-7237ea0e935b}*SharedItemsImports = 4
 		Tests\WinFormTestBed2\WinFormTestBed2.projitems*{5cf69768-3249-45d4-8be3-b686f88c4ea0}*SharedItemsImports = 13
+		PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\MiniOpenTK_Core1.projitems*{62e625ec-1c72-4d92-8405-9dfee251d8bc}*SharedItemsImports = 5
 		PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\LayoutFarm.YourBasicCustomWidgets_SH.projitems*{6317f5f0-bc4b-4bfd-b3c0-73c05c2aa11e}*SharedItemsImports = 4
 		PixelFarm\BackEnd.PaintFx\PdnSharedProject\PdnSharedProject.projitems*{6ff96bfb-9e4b-4634-b682-7de60468da38}*SharedItemsImports = 13
+		PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\MiniOpenTK_Core2.projitems*{79d65c83-fafe-43c3-b49e-3e5eada1951e}*SharedItemsImports = 5
 		..\..\Typography\Typography.TextFlow\Typography.TextFlow.projitems*{7a8a63d2-2cb5-41f5-8e83-6f6e54398cf4}*SharedItemsImports = 13
 		..\..\Typography\Typography.TextBreak\Typography.TextBreak\Typography.TextBreak.projitems*{9a99f103-b119-4a4d-8093-6a03baa6d36b}*SharedItemsImports = 13
 		PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\LayoutFarm.YourBasicCustomWidgets_SH.projitems*{9ee24857-0686-4faf-9411-856904e88452}*SharedItemsImports = 13
