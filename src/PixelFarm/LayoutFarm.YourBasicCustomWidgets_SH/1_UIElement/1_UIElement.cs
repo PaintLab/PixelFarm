@@ -433,7 +433,7 @@ namespace LayoutFarm.UI
         //-------------------------------------------------------
         //events ...
         bool _transparentAllMouseEvents; //TODO: review here
-        public bool TransparentAllMouseEvents
+        public bool TransparentForMouseEvents
         {
             get => _transparentAllMouseEvents;
             set
@@ -441,7 +441,7 @@ namespace LayoutFarm.UI
                 _transparentAllMouseEvents = value;
                 if (this.HasReadyRenderElement)
                 {
-                    this.CurrentPrimaryRenderElement.TransparentForAllEvents = value;
+                    this.CurrentPrimaryRenderElement.TransparentForMouseEvents = value;
                 }
             }
         }

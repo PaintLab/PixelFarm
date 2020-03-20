@@ -108,7 +108,7 @@ namespace LayoutFarm.UI
             OnElementChanged();
         }
 
-        bool IUIEventListener.BypassAllMouseEvents => this.TransparentAllMouseEvents;
+        bool IUIEventListener.BypassAllMouseEvents => this.TransparentForMouseEvents;
 
 
         bool IUIEventListener.AutoStopMouseEventPropagation => this.AutoStopMouseEventPropagation;

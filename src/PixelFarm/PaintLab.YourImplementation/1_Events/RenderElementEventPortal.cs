@@ -39,8 +39,7 @@ namespace LayoutFarm.UI
 
             _previousChain = hitChain;
             //temp fix here 
-            _previousChain.ClearAll();
-
+            _previousChain.Reset();
         }
 
         static void SetEventOrigin(UIEventArgs e, HitChain hitChain)
@@ -114,7 +113,7 @@ namespace LayoutFarm.UI
         {
             //---------------------------------
             //test on previous chain first , find common element 
-            hitPointChain.ClearAll();
+            hitPointChain.Reset();
             hitPointChain.SetStartTestPoint(x, y);
 #if DEBUG
             hitPointChain.dbugHitPhase = _dbugHitChainPhase;
@@ -338,7 +337,7 @@ namespace LayoutFarm.UI
             _dbugHitChainPhase = dbugHitChainPhase.MouseMove;
 #endif
             HitTestCoreWithPrevChainHint(hitPointChain, _previousChain, e.X, e.Y);
-            _previousChain.ClearAll();
+            _previousChain.Reset();
             SetEventOrigin(e, hitPointChain);
             //-------------------------------------------------------
             ForEachOnlyEventPortalBubbleUp(e, hitPointChain, (portal) =>

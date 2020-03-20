@@ -64,7 +64,7 @@ namespace LayoutFarm.CustomWidgets
                     new CustomRenderBox(rootgfx, this.Width, this.Height);
                 renderE.SetLocation(this.Left, this.Top);
                 renderE.NeedClipArea = this.NeedClipArea;
-                renderE.TransparentForAllEvents = this.TransparentAllMouseEvents;
+                renderE.TransparentForMouseEvents = this.TransparentForMouseEvents;
                 renderE.SetVisible(this.Visible);
                 renderE.BackColor = _backColor;
                 renderE.BorderColor = _borderColor;

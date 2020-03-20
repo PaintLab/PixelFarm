@@ -118,7 +118,7 @@ namespace LayoutFarm.CustomWidgets
             var box = new Box(10, 10);
             box.BackColor = new Color(100, 255, 0, 0);
             box.Visible = false;
-            box.TransparentAllMouseEvents = true;
+            box.TransparentForMouseEvents = true;
             return box;
         }
         public GridSelectionStyle GridSelectionStyle

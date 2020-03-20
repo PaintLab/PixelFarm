@@ -259,7 +259,7 @@ namespace LayoutFarm.CustomWidgets
         public ListItem(int width, int height)
             : base(width, height)
         {
-            this.TransparentAllMouseEvents = true;
+            this.TransparentForMouseEvents = true;
 
         }
         //
@@ -289,7 +289,7 @@ namespace LayoutFarm.CustomWidgets
 
 
                 element.AddChild(_listItemText);
-                _listItemText.TransparentForAllEvents = true;
+                _listItemText.TransparentForMouseEvents = true;
                 if (_itemText != null)
                 {
                     _listItemText.Text = _itemText;
