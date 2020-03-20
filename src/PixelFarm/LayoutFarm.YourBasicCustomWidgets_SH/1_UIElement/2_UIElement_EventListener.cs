@@ -108,17 +108,13 @@ namespace LayoutFarm.UI
             OnElementChanged();
         }
 
-        bool IUIEventListener.BypassAllMouseEvents => this.TransparentAllMouseEvents;
+        bool IUIEventListener.BypassAllMouseEvents => this.TransparentForMouseEvents;
 
 
         bool IUIEventListener.AutoStopMouseEventPropagation => this.AutoStopMouseEventPropagation;
+               
 
-        void IEventListener.ListenInterComponentMsg(object sender, int msgcode, string msg)
-        {
-            this.OnInterComponentMsg(sender, msgcode, msg);
-        }
-
-        void IEventListener.ListenGuestTalk(UIGuestTalkEventArgs e)
+        void IEventListener.ListenGuestMsg(UIGuestMsgEventArgs e)
         {
             this.OnGuestTalk(e);
         }

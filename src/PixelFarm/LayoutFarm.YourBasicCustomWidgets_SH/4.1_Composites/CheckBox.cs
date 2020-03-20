@@ -34,7 +34,7 @@ namespace LayoutFarm.CustomWidgets
                     //toggle checked/unchecked
                     this.Checked = !this.Checked;
                 };
-                this.AddChild(_imageBox);
+                this.Add(_imageBox);
                 return baseRenderElement;
             }
             else

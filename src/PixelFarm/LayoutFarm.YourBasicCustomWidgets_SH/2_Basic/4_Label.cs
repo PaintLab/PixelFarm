@@ -45,7 +45,7 @@ namespace LayoutFarm.CustomWidgets
                 t_run.SetVisible(this.Visible);
                 t_run.SetLocation(this.Left, this.Top);
                 t_run.SetController(this);
-                t_run.TransparentForAllEvents = this.TransparentAllMouseEvents;
+                t_run.TransparentForMouseEvents = this.TransparentForMouseEvents;
 
                 //
                 if (_font != null)

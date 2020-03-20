@@ -29,8 +29,8 @@ namespace LayoutFarm.UI
         void ListenGotKeyboardFocus(UIFocusEventArgs e);
         void ListenLostKeyboardFocus(UIFocusEventArgs e);
         //--------------------------------------------------------------------------  
-        void ListenInterComponentMsg(object sender, int msgcode, string msg);
-        void ListenGuestTalk(UIGuestTalkEventArgs e);
+        
+        void ListenGuestMsg(UIGuestMsgEventArgs e);
         //-------------------------------------------------------------------------- 
 
     }

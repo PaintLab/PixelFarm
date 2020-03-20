@@ -46,7 +46,7 @@ namespace LayoutFarm.CustomWidgets
         public event EventHandler<UIMouseEventArgs> MouseDrag;
         public event EventHandler<UIMouseEventArgs> MouseWheel;
         public event EventHandler<UIMouseEventArgs> LostMouseFocus;
-        public event EventHandler<UIGuestTalkEventArgs> DragOver;
+        public event EventHandler<UIGuestMsgEventArgs> DragOver;
         public event EventHandler<UIKeyEventArgs> KeyDown;
         public event EventHandler<UIKeyEventArgs> KeyUp;
         // 
@@ -64,7 +64,7 @@ namespace LayoutFarm.CustomWidgets
                     new CustomRenderBox(rootgfx, this.Width, this.Height);
                 renderE.SetLocation(this.Left, this.Top);
                 renderE.NeedClipArea = this.NeedClipArea;
-                renderE.TransparentForAllEvents = this.TransparentAllMouseEvents;
+                renderE.TransparentForMouseEvents = this.TransparentForMouseEvents;
                 renderE.SetVisible(this.Visible);
                 renderE.BackColor = _backColor;
                 renderE.BorderColor = _borderColor;
@@ -83,6 +83,14 @@ namespace LayoutFarm.CustomWidgets
         protected void SetPrimaryRenderElement(CustomRenderBox primElement)
         {
             _primElement = primElement;
+        }
+        protected void SuspendGraphicsUpdate()
+        {
+            _primElement?.SuspendGraphicsUpdate();
+        }
+        protected void ResumeGraphicsUpdate()
+        {
+            _primElement?.ResumeGraphicsUpdate();
         }
 
         protected void BuildChildrenRenderElement(RenderElement parent)
@@ -427,8 +435,9 @@ namespace LayoutFarm.CustomWidgets
                 ui.InvalidateLayout();
             }
         }
-        public void AddLast(UIElement ui) => AddChild(ui);
-        public override void AddChild(UIElement ui)
+
+        public void AddLast(UIElement ui) => Add(ui);
+        public override void Add(UIElement ui)
         {
             if (_uiList == null)
             {
@@ -454,7 +463,16 @@ namespace LayoutFarm.CustomWidgets
 
             if (ui.NeedContentLayout)
             {
-                ui.InvalidateLayout();
+                if (!this.IsInLayoutQueue) //if this elem is in layout queue, the ui will be layout with this
+                {
+                    if (this.ParentUI != null)
+                    {
+                        //if this elem is add to the host
+                        //the parent UI is not null, 
+
+                        ui.InvalidateLayout();
+                    }
+                }
             }
         }
         public override void RemoveChild(UIElement ui)
@@ -684,7 +702,7 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
-        protected override void OnGuestTalk(UIGuestTalkEventArgs e)
+        protected override void OnGuestTalk(UIGuestMsgEventArgs e)
         {
             //?
             //this.DragOver?.Invoke(this, e);

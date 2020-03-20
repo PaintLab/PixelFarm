@@ -1490,7 +1490,7 @@ namespace PixelFarm.DrawingGL
             _b = color.B / 255f;
             _a = color.A / 255f;
         }
-        public void NewDrawSubImage4FromVBO(GLBitmap glBmp, VertexBufferObject vbo, int elemCount, float x, float y)
+        public void DrawSubImages(GLBitmap glBmp, VertexBufferObject vbo, int elemCount, float x, float y)
         {
             SetCurrent();
             CheckViewMatrix();

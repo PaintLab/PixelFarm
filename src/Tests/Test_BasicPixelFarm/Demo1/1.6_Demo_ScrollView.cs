@@ -56,7 +56,7 @@ namespace LayoutFarm
                 box1.HasSpecificHeight = true;
                 box1.BackColor = Color.OrangeRed;
                 box1.SetLocation(i * 20, i * 40);
-                panel.AddChild(box1);
+                panel.Add(box1);
             }
             //--------------------------   
             //panel.PerformContentLayout();
@@ -107,7 +107,7 @@ namespace LayoutFarm
 
 
                 lastY += imgbox.Height;
-                panel.AddChild(imgbox);
+                panel.Add(imgbox);
 
                 imgNo++;
                 if (imgNo == fileNames.Length) //last img

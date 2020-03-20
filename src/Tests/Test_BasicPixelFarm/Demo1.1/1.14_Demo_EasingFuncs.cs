@@ -71,14 +71,14 @@ namespace LayoutFarm
             {
                 Box box = new Box(5, 5);
                 box.SetLocation(5 * i, (int)calculatedValues[i]);
-                _animationBoard.AddChild(box);
+                _animationBoard.Add(box);
             }
 
             //-----
             //show animation
 
             Box sampleBox1 = new Box(600, 20);
-            _animationBoard.AddChild(sampleBox1);
+            _animationBoard.Add(sampleBox1);
             sampleBox1.BackColor = PixelFarm.Drawing.Color.Red;
             int step = 0;
             UIPlatform.RegisterTimerTask(10, tim =>

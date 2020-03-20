@@ -357,9 +357,6 @@
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\4.1_Composites\ComboBox.cs">
       <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\4.1_Composites\ComboBox.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\4.1_Composites\HingeBox.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\4.1_Composites\HingeBox.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\4.1_Composites\HingeRelation.cs">
       <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\4.1_Composites\HingeRelation.cs</Link>
     </Compile>

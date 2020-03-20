@@ -74,15 +74,16 @@ namespace LayoutFarm
             //TODO: move to extension method ***
             _controller = controller;
         }
-        public bool TransparentForAllEvents
+
+        public bool TransparentForMouseEvents
         {
-            get => (_propFlags & RenderElementConst.TRANSPARENT_FOR_ALL_EVENTS) != 0;
+            get => (_propFlags & RenderElementConst.TRANSPARENT_FOR_MOUSE_INPUT) != 0;
 
             set
             {
                 _propFlags = value ?
-                       _propFlags | RenderElementConst.TRANSPARENT_FOR_ALL_EVENTS :
-                       _propFlags & ~RenderElementConst.TRANSPARENT_FOR_ALL_EVENTS;
+                       _propFlags | RenderElementConst.TRANSPARENT_FOR_MOUSE_INPUT :
+                       _propFlags & ~RenderElementConst.TRANSPARENT_FOR_MOUSE_INPUT;
             }
         }
         internal static void TrackBubbleUpdateLocalStatus(RenderElement renderE)
@@ -405,7 +406,8 @@ namespace LayoutFarm
 
                 if (customHit) return customHitResult;
 
-                if ((_propFlags & RenderElementConst.TRANSPARENT_FOR_ALL_EVENTS) != 0 &&
+                if ((_propFlags & RenderElementConst.TRANSPARENT_FOR_MOUSE_INPUT) != 0 &&
+                    hitChain.Exclude_TransparentMouse_Element &&
                     hitChain.TopMostElement == this)
                 {
                     hitChain.RemoveCurrentHit();
@@ -468,7 +470,7 @@ namespace LayoutFarm
 
                 if (customHit) return customHitResult;
 
-                return this.TransparentForAllEvents ?
+                return this.TransparentForMouseEvents ?
                     false :                         //by-pass this element and go to next underlying sibling
                     hitChain.Count > preTestCount;
 

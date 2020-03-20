@@ -19,11 +19,12 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;PIXEL_FARM_NET20</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -51,6 +52,7 @@
     <Compile Include="Demo1.1\1.15_Demo_Drag2.cs" />
     <Compile Include="Demo1.1\PennerDoubleAnimation.cs" />
     <Compile Include="Demo1.2\1.13_ColorBlender.cs" />
+    <Compile Include="Demo1.2\Chroma.cs" />
     <Compile Include="Demo1.2\ColorBlender\Algorithms\Analogue.cs" />
     <Compile Include="Demo1.2\ColorBlender\Algorithms\ClassicBlend.cs" />
     <Compile Include="Demo1.2\ColorBlender\Algorithms\ColorExplorer.cs" />
@@ -65,6 +67,8 @@
     <Compile Include="Demo1.2\ColorBlender\IAlgorithm.cs" />
     <Compile Include="Demo1.2\ColorBlender\MathHelpers.cs" />
     <Compile Include="Demo1.2\ColorBlender\RGB.cs" />
+    <Compile Include="Demo1.2\LabConstants.cs" />
+    <Compile Include="Demo1.2\MyCustomColorSet.cs" />
     <Compile Include="Demo4\4.1_Demo_LionSprite.cs" />
     <Compile Include="Demo4\PxMotion.cs" />
     <Compile Include="Demo5\5_DemoSampleCharts.cs" />
@@ -215,10 +219,17 @@
       <Link>tiger.svg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Data\colorbrewer.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\GoogleMaterialDzColor.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup />
   <Import Project="..\WinFormTestBed2\WinFormTestBed2.projitems" Label="Shared" />
   <Import Project="..\..\PixelFarm\PaintLab.AppHost\PaintLab.AppHost.projitems" Label="Shared" />
+  <Import Project="..\..\PixelFarm\BackEnd.Colorful\Colorful_SH\Colorful_SH.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

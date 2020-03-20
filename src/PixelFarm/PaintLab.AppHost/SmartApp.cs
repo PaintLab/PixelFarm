@@ -25,7 +25,7 @@ namespace LayoutFarm
         {
             if (_primaryContainer != null)
             {
-                _primaryContainer.AddChild(ui);
+                _primaryContainer.Add(ui);
             }
             else
             {
