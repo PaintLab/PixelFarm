@@ -208,7 +208,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
         }
         void DrawC(Painter p)
         {
-            if (!(p is AggPainter aggPainter)) return;//temp
+            //if (!(p is AggPainter aggPainter)) return;//temp
 
 
             p.Clear(PixelFarm.Drawing.Color.White);
@@ -223,19 +223,23 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 _lineDashGen.SetDashPattern(4, 2, 2, 2);
             }
 
-            aggPainter.LineDashGen = _lineDashGen;
+
+
             //
             using (VectorToolBox.Borrow(out ShapeBuilder b))
             {
-
+                IDashGenerator tmp = p.LineDashGen;
+                p.LineDashGen = _lineDashGen;
                 b.MoveTo(20, 10);
                 b.LineTo(60, 10);
                 b.LineTo(20, 200);
                 b.CloseFigure();
                 p.Draw(b.CurrentSharedVxs);
+
+                p.LineDashGen = tmp;
             }
 
-            aggPainter.LineDashGen = null;
+
 
         }
         void DrawD(Painter p)

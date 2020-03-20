@@ -53,18 +53,56 @@ namespace PixelFarm.DrawingGL
                 using (VxsTemp.Borrow(out VertexStore v1))
                 using (VectorToolBox.Borrow(out Stroke stroke))
                 {
-                    //convert large stroke to vxs
-                    stroke.Width = StrokeWidth;
-                    stroke.MakeVxs(vxs, v1);
 
-                    Color prevColor = this.FillColor;
-                    FillColor = this.StrokeColor;
-                    Fill(v1);
-                    FillColor = prevColor;
+                    if (_lineDashGen == null)
+                    {
+                        //convert large stroke to vxs
+
+                        stroke.Width = StrokeWidth;
+                        stroke.MakeVxs(vxs, v1);
+
+                        Color prevColor = this.FillColor;
+                        FillColor = this.StrokeColor;
+                        Fill(v1);
+                        FillColor = prevColor;
+                    }
+                    else
+                    {
+
+                        _lineDashGen.CreateDash(vxs, v1);
+
+                        int n = v1.Count;
+                        double px = 0, py = 0;
+
+                        LineDashGenerator tmp = _lineDashGen;
+                        _lineDashGen = null;
+
+                        for (int i = 0; i < n; ++i)
+                        {
+                            VertexCmd cmd = v1.GetVertex(i, out double x, out double y);
+                            switch (cmd)
+                            {
+                                case VertexCmd.MoveTo:
+                                    px = x;
+                                    py = y;
+                                    break;
+                                case VertexCmd.LineTo:
+                                    this.DrawLine(px, py, x, y);
+                                    break;
+                            }
+                            px = x;
+                            py = y;
+                        }
+
+                        _lineDashGen = tmp;
+
+                    }
+
                 }
             }
             else
             {
+                //?
                 using (PathRenderVx vx = PathRenderVx.Create(_pathRenderVxBuilder.Build(vxs)))
                 {
                     _pcx.DrawGfxPath(_strokeColor, vx);
