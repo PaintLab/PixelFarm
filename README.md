@@ -145,6 +145,8 @@ MIT, 2008, dotPDN LLC, Rick Brewster, Chris Crosetto, Tom Jackson, Michael Kelse
 
 BSD, 2002-2005, Maxim Shemanarev, Anti-Grain Geometry - Version 2.4, http://www.antigrain.com
 
+MIT, 2016, Viktor Chlumsky, https://github.com/Chlumsky/msdfgen
+
 MIT, 2009-2015, Bill Reiss, Rene Schulte and WriteableBitmapEx Contributors, https://github.com/teichgraf/WriteableBitmapEx
 
 Apache2, 2012, Hernán J. González, https://github.com/leonbloy/pngcs
@@ -152,6 +154,7 @@ Apache2, 2012, Hernán J. González, https://github.com/leonbloy/pngcs
 Apache2, 2010, Sebastian Stehle, .NET Image Tools Development Group. , https://imagetools.codeplex.com/ 
 
 MIT, 2018, Tomáš Pažourek, Colourful, https://github.com/tompazourek/Colourful
+
 **Font**
 
 Apache2, 2016-2017, WinterDev, Samuel Carlsson, Sam Hocevar and others, https://github.com/LayoutFarm/Typography
@@ -162,8 +165,6 @@ MIT, 2015, Michael Popoloski, https://github.com/MikePopoloski/SharpFont
 
 The FreeType Project LICENSE (3-clauses BSD style),2003-2016, David Turner, Robert Wilhelm, and Werner Lemberg and others, https://www.freetype.org/
 
-MIT, 2016, Viktor Chlumsky, https://github.com/Chlumsky/msdfgen
-
 **Platforms**
 
 MIT, 2015-2015, Xamarin, Inc., https://github.com/mono/SkiaSharp
@@ -171,7 +172,6 @@ MIT, 2015-2015, Xamarin, Inc., https://github.com/mono/SkiaSharp
 MIT, 2006-2009,  Stefanos Apostolopoulos and other Open Tool Kit Contributors, https://github.com/opentk/opentk
 
 MIT, 2013, Antonie Blom,  https://github.com/andykorth/Pencil.Gaming
-
 
 **Demo**
 
