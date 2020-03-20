@@ -183,6 +183,8 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PaintLab.AppHost", "PixelFa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestGLES_GLFW_Example2", "Tests\TestGLES_GLFW_Example2\TestGLES_GLFW_Example2.csproj", "{B60987F9-9DA7-4129-9754-C6957E04DF10}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Colorful_SH", "PixelFarm\BackEnd.Colorful\Colorful_SH\Colorful_SH.shproj", "{D9F3BBD1-1FA0-4CBD-94DC-3D01807DB3F3}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\MiniOpenTK_Core2.projitems*{07b1aa01-3869-4af3-9439-329b96d8d3c1}*SharedItemsImports = 4
@@ -194,6 +196,7 @@ Global
 		Tests\WinFormTestBed2\WinFormTestBed2.projitems*{3e30e0d2-1cd7-42cc-9555-614105ef9c56}*SharedItemsImports = 4
 		PixelFarm\PixelFarm.Drawing.GdiPlus_SH\PixelFarm.Drawing.GdiPlus_SH.projitems*{4677024b-a1ab-4a8f-a074-70ff8f0e55da}*SharedItemsImports = 13
 		PixelFarm\BackEnd.Triangulation\Triangulation.projitems*{4f435da3-706a-4e6d-ae29-e1e95bd6f68a}*SharedItemsImports = 13
+		PixelFarm\BackEnd.Colorful\Colorful_SH\Colorful_SH.projitems*{51d63482-5697-4b16-8401-506965624657}*SharedItemsImports = 4
 		PixelFarm\BackEnd.PaintFx\PdnSharedProject\PdnSharedProject.projitems*{51d63482-5697-4b16-8401-506965624657}*SharedItemsImports = 4
 		..\..\Typography\Typography.GlyphLayout\Typography.GlyphLayout.projitems*{5278fab9-33f0-40e0-adca-7237ea0e935b}*SharedItemsImports = 4
 		..\..\Typography\Typography.OpenFont\Typography.OpenFont.projitems*{5278fab9-33f0-40e0-adca-7237ea0e935b}*SharedItemsImports = 4
@@ -213,6 +216,7 @@ Global
 		..\..\Typography\Typography.TextServices\Typography.TextServices.projitems*{d07686ee-2618-4c20-8eb5-32ad4c4d3810}*SharedItemsImports = 13
 		PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\MiniOpenTK_Core1.projitems*{d49440c2-785f-4bac-9f2e-fc93603fa647}*SharedItemsImports = 4
 		..\..\Typography\Typography.GlyphLayout\Typography.GlyphLayout.projitems*{d8861cf8-c506-472b-8a57-632bd6ca6496}*SharedItemsImports = 13
+		PixelFarm\BackEnd.Colorful\Colorful_SH\Colorful_SH.projitems*{d9f3bbd1-1fa0-4cbd-94dc-3d01807db3f3}*SharedItemsImports = 13
 		PixelFarm\PixelFarm.Drawing.GdiPlus_SH\PixelFarm.Drawing.GdiPlus_SH.projitems*{e5f2b317-2205-4727-92c4-6190a2fa3ddc}*SharedItemsImports = 4
 		PixelFarm\PaintLab.AppHost\PaintLab.AppHost.projitems*{e8df35e8-8765-47c2-bc1a-b686a058062c}*SharedItemsImports = 4
 		Tests\WinFormTestBed2\WinFormTestBed2.projitems*{e8df35e8-8765-47c2-bc1a-b686a058062c}*SharedItemsImports = 4
@@ -7666,6 +7670,7 @@ Global
 		{56DCAE82-671D-409E-A3B3-BF4834756D3F} = {ABA16C8F-2363-4B10-ADE5-C168383C13CC}
 		{F45871BD-806E-487A-A0B3-1E95853F693B} = {B106C6A9-1647-4267-824B-896486A6E697}
 		{B60987F9-9DA7-4129-9754-C6957E04DF10} = {AFD8230C-6B5D-4298-BBD3-B23644A5793C}
+		{D9F3BBD1-1FA0-4CBD-94DC-3D01807DB3F3} = {40520F7C-15E7-446F-8C15-E38A93A7B4B9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AD5DF903-2497-45EE-B3DC-1FAF5DA8F05C}
