@@ -27,6 +27,12 @@ namespace OpenTkEssTest
         {
             //example;
             //test1_atlas=> atlas filename
+
+
+            //the AtlasImageBinder will be resolved for actual image inside GLPainter's _bmpAtlasPainter.
+            //it use StorageService.Provider.
+            //-----
+
             _chk_checked = new AtlasImageBinder("test1_atlas", "\\chk_checked.png");
             _chk_unchecked = new AtlasImageBinder("test1_atlas", "\\chk_unchecked.png");
 
@@ -49,8 +55,17 @@ namespace OpenTkEssTest
             _pcx.SmoothMode = SmoothMode.Smooth;
             _pcx.ClearColorBuffer();
 
-            _painter.DrawImage(_chk_checked, 0, 0);
-            _painter.DrawImage(_chk_unchecked, 20, 0);
+            for (int y = 0; y < 10; ++y)
+            {
+                int x_pos = 0;
+                for (int x = 0; x < 10; ++x)
+                {
+                    _painter.DrawImage(_chk_checked, x_pos, y * 20);
+                    _painter.DrawImage(_chk_unchecked, x_pos + 20, y * 20);
+                    x_pos += 40;
+                }             
+            }
+
 
             SwapBuffers();
         }

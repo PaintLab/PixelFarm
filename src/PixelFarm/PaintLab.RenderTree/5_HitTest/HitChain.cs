@@ -83,6 +83,7 @@ namespace LayoutFarm.RenderBoxes
         int _testPointY;
         public HitChain()
         {
+
         }
 
         public Point TestPoint => new Point(_testPointX, _testPointY);
@@ -108,16 +109,16 @@ namespace LayoutFarm.RenderBoxes
             _testPointX += dx;
             _testPointY += dy;
         }
-        public void ClearAll()
+        public void Reset()
         {
 #if DEBUG
             dbugHitPhase = dbugHitChainPhase.Unknown;
 #endif
-            _testPointX = 0;
-            _testPointY = 0;
+            _testPointX = _testPointY = 0;
+            //skip reset  _startTestX and _startTestY
             _hitList.Clear();
+            Exclude_TransparentMouse_Element = true;
         }
-
 
 #if DEBUG
         dbugHitChainPhase _dbugHitChainPhase;
@@ -181,6 +182,7 @@ namespace LayoutFarm.RenderBoxes
             }
         }
 
+        public bool Exclude_TransparentMouse_Element { get; set; } = true;
 
 #if DEBUG
         public bool dbugBreak;

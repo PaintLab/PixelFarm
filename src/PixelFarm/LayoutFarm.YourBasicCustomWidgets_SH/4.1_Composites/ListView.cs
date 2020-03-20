@@ -28,7 +28,7 @@ namespace LayoutFarm.CustomWidgets
         {
 
 #if DEBUG
-            dbugBreakMe = true;
+            //dbugBreakMe = true;
 #endif
             this.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
             this.BackColor = Color.LightGray;
@@ -259,7 +259,7 @@ namespace LayoutFarm.CustomWidgets
         public ListItem(int width, int height)
             : base(width, height)
         {
-            this.TransparentAllMouseEvents = true;
+            this.TransparentForMouseEvents = true;
 
         }
         //
@@ -276,6 +276,8 @@ namespace LayoutFarm.CustomWidgets
                 element.SetController(this);
                 //
                 _listItemText = new CustomTextRun(rootgfx, 200, this.Height);
+                _listItemText.DrawTextTechnique = DrawTextTechnique.LcdSubPix;
+
                 if (_font != null)
                 {
                     _listItemText.RequestFont = _font;
@@ -287,7 +289,7 @@ namespace LayoutFarm.CustomWidgets
 
 
                 element.AddChild(_listItemText);
-                _listItemText.TransparentForAllEvents = true;
+                _listItemText.TransparentForMouseEvents = true;
                 if (_itemText != null)
                 {
                     _listItemText.Text = _itemText;

@@ -238,11 +238,12 @@ namespace LayoutFarm.UI
         Right = 1 << 2,
         Bottom = 1 << 3
     }
-    public class UIGuestTalkEventArgs : UIEventArgs
+    public class UIGuestMsgEventArgs : UIEventArgs
     {
-        public UIGuestTalkEventArgs()
+        public UIGuestMsgEventArgs()
         {
         }
+
         public object Sender { get; set; }
         public IUIEventListener SenderAsIEventListener => this.Sender as IUIEventListener;
         public object UserMsgContent { get; set; }

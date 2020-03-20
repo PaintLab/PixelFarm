@@ -37,6 +37,11 @@ namespace LayoutFarm.UI
             //    }
             //    return;
             //}
+
+            if (count > 0)
+            {
+                //System.Diagnostics.Debug.WriteLine("layout_queue:" + count);
+            }
 #endif
 
 
@@ -53,9 +58,6 @@ namespace LayoutFarm.UI
                 }
 #endif
             }
-
-
-
         }
     }
 
@@ -431,7 +433,7 @@ namespace LayoutFarm.UI
         //-------------------------------------------------------
         //events ...
         bool _transparentAllMouseEvents; //TODO: review here
-        public bool TransparentAllMouseEvents
+        public bool TransparentForMouseEvents
         {
             get => _transparentAllMouseEvents;
             set
@@ -439,7 +441,7 @@ namespace LayoutFarm.UI
                 _transparentAllMouseEvents = value;
                 if (this.HasReadyRenderElement)
                 {
-                    this.CurrentPrimaryRenderElement.TransparentForAllEvents = value;
+                    this.CurrentPrimaryRenderElement.TransparentForMouseEvents = value;
                 }
             }
         }
@@ -507,6 +509,16 @@ namespace LayoutFarm.UI
             //add to layout queue
             UISystem.AddToLayoutQueue(this);
         }
+        public void SuspendLayout()
+        {
+            //temp
+            UISystem.AddToLayoutQueue(this);
+        }
+        public void ResumeLayout()
+        {
+            //temp
+            UISystem.AddToLayoutQueue(this);
+        }
         public virtual void NotifyContentUpdate(UIElement childContent)
         {
             //
@@ -522,15 +534,13 @@ namespace LayoutFarm.UI
         protected virtual void OnContentUpdate()
         {
         }
-        protected virtual void OnInterComponentMsg(object sender, int msgcode, string msg)
-        {
-        }
+       
         protected virtual void OnElementChanged()
         {
         }
         //
         public abstract void Accept(UIVisitor visitor);
-        protected virtual void OnGuestTalk(UIGuestTalkEventArgs e)
+        protected virtual void OnGuestTalk(UIGuestMsgEventArgs e)
         {
         }
         public static void UnsafeRemoveLinkedNode(UIElement ui)

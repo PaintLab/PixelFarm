@@ -28,11 +28,9 @@ namespace LayoutFarm
             var comboBox = new CustomWidgets.ComboBox(400, 20);
             comboBox.SetLocation(x, y);
             //--------------------
-            //1. create landing part
-            var landPart = new LayoutFarm.CustomWidgets.Box(400, 20);
-            landPart.BackColor = Color.Green;
-            comboBox.LandPart = landPart;
-            //--------------------------------------
+            //1. create landing part 
+            comboBox.BackColor = Color.Green;
+
             //add small px to land part
             //image
             //load bitmap with gdi+                
@@ -68,19 +66,16 @@ namespace LayoutFarm
                     comboBox.CloseHinge();
                 }
             };
-            landPart.Add(imgBox);
+            comboBox.Add(imgBox);
             return comboBox;
         }
 
         LayoutFarm.CustomWidgets.MenuItem CreateMenuItem(int x, int y)
         {
             var mnuItem = new CustomWidgets.MenuItem(150, 20);
+            mnuItem.BackColor = Color.OrangeRed;
             mnuItem.SetLocation(x, y);
-            //--------------------
-            //1. create landing part
-            var landPart = new LayoutFarm.CustomWidgets.Box(150, 20);
-            landPart.BackColor = Color.OrangeRed;
-            mnuItem.LandPart = landPart;
+             
             //--------------------------------------
             //add small px to land part
             //image
@@ -92,7 +87,7 @@ namespace LayoutFarm
             }
             LayoutFarm.CustomWidgets.ImageBox imgBox = new CustomWidgets.ImageBox(_arrowBmp.Width, _arrowBmp.Height);
             imgBox.ImageBinder = _arrowBmp;
-            landPart.Add(imgBox);
+            mnuItem.Add(imgBox);
             //--------------------------------------
             //if click on this image then
             imgBox.MouseDown += (s, e) =>
@@ -123,7 +118,7 @@ namespace LayoutFarm
             };
             //--------------------------------------
             //2. float part
-            var floatPart = new LayoutFarm.CustomWidgets.MenuBox(400, 100);
+            var floatPart = new LayoutFarm.CustomWidgets.Box(400, 100);
             floatPart.BackColor = Color.Gray;
             mnuItem.FloatPart = floatPart;
             return mnuItem;

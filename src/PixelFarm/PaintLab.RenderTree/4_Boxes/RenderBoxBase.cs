@@ -239,9 +239,9 @@ namespace LayoutFarm
             bool isIncr = false;
             if (!this.NeedContentArrangement)
             {
-                if (!this.FirstArrangementPass)
+                if (!this.dbugFirstArrangementPass)
                 {
-                    this.FirstArrangementPass = true;
+                    this.dbugFirstArrangementPass = true;
                     dbug_WriteInfo(dbugVisitorMessage.PASS_FIRST_ARR);
                 }
                 else
