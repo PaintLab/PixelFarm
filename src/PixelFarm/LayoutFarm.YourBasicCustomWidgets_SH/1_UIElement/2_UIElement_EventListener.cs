@@ -12,7 +12,6 @@ namespace LayoutFarm.UI
 
             if (externalEventListener == null)
             {
-                //clear existing event listener
                 _externalEventListener = null;
                 return false;
             }
@@ -24,6 +23,11 @@ namespace LayoutFarm.UI
             }
             else
             {
+#if DEBUG
+                //please clear the old listener before set a new one
+                System.Diagnostics.Debugger.Break();
+#endif
+
                 return false;
             }
         }
@@ -68,7 +72,7 @@ namespace LayoutFarm.UI
         }
         void IEventListener.ListenMouseClick(UIMouseEventArgs e)
         {
-
+            //no mouse click, we have mouse down
         }
         void IEventListener.ListenMouseDoubleClick(UIMouseEventArgs e)
         {
@@ -112,7 +116,7 @@ namespace LayoutFarm.UI
 
 
         bool IUIEventListener.AutoStopMouseEventPropagation => this.AutoStopMouseEventPropagation;
-               
+
 
         void IEventListener.ListenGuestMsg(UIGuestMsgEventArgs e)
         {
