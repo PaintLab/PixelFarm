@@ -17,7 +17,7 @@ namespace LayoutFarm.UI
 
         }
 
-        void IEventListener.ListenGuestTalk(UIGuestTalkEventArgs e)
+        void IEventListener.ListenGuestMsg(UIGuestMsgEventArgs e)
         {
 
         }

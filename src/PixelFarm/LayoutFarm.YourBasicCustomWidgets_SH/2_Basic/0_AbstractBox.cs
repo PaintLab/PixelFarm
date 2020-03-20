@@ -46,7 +46,7 @@ namespace LayoutFarm.CustomWidgets
         public event EventHandler<UIMouseEventArgs> MouseDrag;
         public event EventHandler<UIMouseEventArgs> MouseWheel;
         public event EventHandler<UIMouseEventArgs> LostMouseFocus;
-        public event EventHandler<UIGuestTalkEventArgs> DragOver;
+        public event EventHandler<UIGuestMsgEventArgs> DragOver;
         public event EventHandler<UIKeyEventArgs> KeyDown;
         public event EventHandler<UIKeyEventArgs> KeyUp;
         // 
@@ -702,7 +702,7 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
-        protected override void OnGuestTalk(UIGuestTalkEventArgs e)
+        protected override void OnGuestTalk(UIGuestMsgEventArgs e)
         {
             //?
             //this.DragOver?.Invoke(this, e);

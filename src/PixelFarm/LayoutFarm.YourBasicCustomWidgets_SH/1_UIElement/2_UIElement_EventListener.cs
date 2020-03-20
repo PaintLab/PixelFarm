@@ -118,7 +118,7 @@ namespace LayoutFarm.UI
             this.OnInterComponentMsg(sender, msgcode, msg);
         }
 
-        void IEventListener.ListenGuestTalk(UIGuestTalkEventArgs e)
+        void IEventListener.ListenGuestMsg(UIGuestMsgEventArgs e)
         {
             this.OnGuestTalk(e);
         }

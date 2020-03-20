@@ -542,7 +542,7 @@ namespace LayoutFarm.UI
         }
         //
         public abstract void Accept(UIVisitor visitor);
-        protected virtual void OnGuestTalk(UIGuestTalkEventArgs e)
+        protected virtual void OnGuestTalk(UIGuestMsgEventArgs e)
         {
         }
         public static void UnsafeRemoveLinkedNode(UIElement ui)
