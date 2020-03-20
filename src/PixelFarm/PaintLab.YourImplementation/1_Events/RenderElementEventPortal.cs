@@ -356,7 +356,11 @@ namespace LayoutFarm.UI
                     if (e.CurrentMouseActive != null &&
                         e.CurrentMouseActive != listener)
                     {
+                        IUIEventListener tmp = e.CurrentContextElement;
+                        e.CurrentContextElement = e.CurrentMouseActive;
                         e.CurrentMouseActive.ListenMouseLeave(e);
+                        e.CurrentContextElement = tmp;//restore
+
                         isFirstMouseEnter = true;
                     }
 
@@ -372,11 +376,16 @@ namespace LayoutFarm.UI
                 });
                 if (!foundSomeHit && e.CurrentMouseActive != null)
                 {
+                    IUIEventListener prev = e.CurrentContextElement;
+                    e.CurrentContextElement = e.CurrentMouseActive;
                     e.CurrentMouseActive.ListenMouseLeave(e);
+                    e.CurrentContextElement = prev;
+
                     if (!e.IsCanceled)
                     {
                         e.CurrentMouseActive = null;
                     }
+
                 }
             }
             SwapHitChain(hitPointChain);

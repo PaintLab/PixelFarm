@@ -153,11 +153,33 @@ namespace LayoutFarm.ColorBlenderSample
 
 
 
+            //test1...
+            var buttonBeh = new UI.GeneralUIElementBehaviour();
+            buttonBeh.MouseMove += e =>
+            {
+                if (e.CurrentContextElement is Label lbl)
+                {
+                    lbl.BackColor = PixelFarm.Drawing.Color.Yellow;
+                }
+            };
+            buttonBeh.MouseLeave += e =>
+            {
+                if (e.CurrentContextElement is Label lbl)
+                {
+                    lbl.BackColor = PixelFarm.Drawing.Color.Gray;
+                }
+            };
+            //----------------------------------
+            //test2
+
+
             //----------------------------------
             {
                 Label lblChromaDarken = new Label(50, 20);
+                lblChromaDarken.BackColor = PixelFarm.Drawing.Color.Gray;
                 lblChromaDarken.Text = "Darken";
                 lblChromaDarken.SetLocation(x, y);
+                lblChromaDarken.AttachUIBehaviour(buttonBeh);
 
                 UI.GeneralEventListener evListener = new UI.GeneralEventListener();
                 evListener.MouseDown += e =>
