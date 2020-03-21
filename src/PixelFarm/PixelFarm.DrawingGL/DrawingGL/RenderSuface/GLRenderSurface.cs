@@ -1090,8 +1090,7 @@ namespace PixelFarm.DrawingGL
         //RenderVx
         public void FillRenderVx(Drawing.Brush brush, Drawing.RenderVx renderVx)
         {
-            PathRenderVx glRenderVx = renderVx as PathRenderVx;
-            if (glRenderVx == null) return;
+            if (!(renderVx is PathRenderVx glRenderVx)) return;
             //
             FillGfxPath(brush, glRenderVx);
         }
@@ -2125,7 +2124,7 @@ namespace PixelFarm.DrawingGL
 
 
 
-        public void AppendDegenerativeTrinagle()
+        public void AppendDegenerativeTriangle()
         {
 
             ushort indexCount = (ushort)_indexList.Count;
