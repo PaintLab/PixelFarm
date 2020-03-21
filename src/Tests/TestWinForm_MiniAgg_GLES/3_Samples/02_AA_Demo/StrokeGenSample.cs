@@ -178,7 +178,9 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 });
 
                 //then generate dash by walking along v1
-                _dashGenLineWalker.Walk(v1, v2);
+                VxsLineSegmentWalkerOutput walkerOutput = new VxsLineSegmentWalkerOutput();
+                walkerOutput.SetOutput(v2);
+                _dashGenLineWalker.Walk(v1, walkerOutput);
                 //aggPainter.Draw(vxs);
 
                 //test drawline

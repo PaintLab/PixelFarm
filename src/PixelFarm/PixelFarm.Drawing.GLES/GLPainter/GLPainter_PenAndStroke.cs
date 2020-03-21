@@ -89,14 +89,14 @@ namespace PixelFarm.DrawingGL
             //in this version we use software renderer to create a 
             //dash pattern 
 
-            LineDashGenerator.DashSegment[] prebuilt_patt = _lineDashGen.GetStaticDashSegments();
+            DashSegment[] prebuilt_patt = _lineDashGen.GetStaticDashSegments();
             SimpleBitmapAtlasBuilder _bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
             for (int i = 0; i < prebuilt_patt.Length; ++i)
             {
                 int padding_X = 4; //
                 int padding_Y = 4; // 
 
-                LineDashGenerator.DashSegment seg = prebuilt_patt[i];
+                DashSegment seg = prebuilt_patt[i];
                 if (seg.IsSolid)
                 {
                     int w = (int)Math.Ceiling(seg.Len + (padding_X * 2));
@@ -167,7 +167,7 @@ namespace PixelFarm.DrawingGL
                             //similar to text glyph
                             //we can cache the bmp pattern for later use too 
 
-                            LineDashGenerator.DashSegment[] prebuilt_patt = _lineDashGen.GetStaticDashSegments();
+                            DashSegment[] prebuilt_patt = _lineDashGen.GetStaticDashSegments();
 
                             DashPatternBmpCache dashPattBmpCache = GetCacheBmpDashOrCreate();
 

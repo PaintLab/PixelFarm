@@ -1,26 +1,43 @@
 ﻿//MIT, 2016-present, WinterDev 
 
+using System.Collections.Generic;
 using PixelFarm.Drawing;
 
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
+    public struct DashSegment
+    {
+        public readonly float Len;
+        public readonly bool IsSolid;
+        public DashSegment(float len, bool isSolid)
+        {
+            Len = len;
+            IsSolid = isSolid;
+        }
+        public override string ToString() => (IsSolid ? "s" : "b") + Len;
+    }
+   
+
+
+    public class VxsLineSegmentWalkerOutput : ILineSegmentWalkerOutput
+    {
+        VertexStore _vxs;
+        public VxsLineSegmentWalkerOutput()
+        {
+        }
+        public void SetOutput(VertexStore vsx)
+        {
+            _vxs = vsx;
+        }
+        public void AddLineTo(double x, double y) => _vxs.AddLineTo(x, y);
+        public void AddMoveTo(double x, double y) => _vxs.AddMoveTo(x, y);
+    }
 
     public class LineDashGenerator : IDashGenerator
     {
-        public struct DashSegment
-        {
-            public readonly float Len;
-            public readonly bool IsSolid;
-            public DashSegment(float len, bool isSolid)
-            {
-                Len = len;
-                IsSolid = isSolid;
-            }
-            public override string ToString() => (IsSolid ? "s" : "b") + Len;
-        }
-
         LineWalker _dashGenLineWalker;
         DashSegment[] _staicDashSegments = null;
+        VxsLineSegmentWalkerOutput _output = new VxsLineSegmentWalkerOutput();
         string _patternAsString;
 
         public LineDashGenerator()
@@ -56,6 +73,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
         public void SetDashPattern(LineWalker lineWalker)
         {
+            //this is a dynamic pattern
             IsStaticPattern = false;
             _staicDashSegments = null;
             _dashGenLineWalker = lineWalker;
@@ -83,14 +101,22 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
             return null;
         }
-        public void CreateDash(VertexStore srcVxs, VertexStore output)
+
+        public void CreateDash(VertexStore srcVxs, ILineSegmentWalkerOutput output)
         {
             if (_dashGenLineWalker == null)
             {
                 return;
             }
-            //-------------------------------
             _dashGenLineWalker.Walk(srcVxs, output);
         }
+        public void CreateDash(VertexStore srcVxs, VertexStore output)
+        {
+            _output.SetOutput(output);
+            CreateDash(srcVxs, _output);
+        }
     }
+
+
+
 }
