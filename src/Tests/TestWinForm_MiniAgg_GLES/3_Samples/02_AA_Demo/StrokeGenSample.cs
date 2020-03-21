@@ -159,6 +159,21 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             double _latestX;
             double _latestY;
             Painter _p;
+            VertexStore _vxs;
+
+            public ExampleVxsLineDash2Walker()
+            {
+                using (VxsTemp.Borrow(out var v1))
+                {
+                    v1 = new VertexStore();
+                    v1.AddMoveTo(0, -3);
+                    v1.AddLineTo(4, 0);
+                    v1.AddLineTo(0, 3);
+                    v1.AddCloseFigure();
+                    _vxs = v1.CreateTrim();
+                }
+
+            }
             public void SetPainter(Painter p)
             {
                 _p = p;
@@ -170,7 +185,19 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
                 if (marker.Index == 0)
                 {
-                    _p.FillRect(cx, cy, 4, 4, Color.Red);
+
+                    //_p.FillRect(cx, cy, 4, 4, Color.Red);
+                    Color prev = _p.FillColor;
+                    _p.SetOrigin((float)cx, (float)cy);
+                    _p.FillColor = Color.Red;
+
+                    using (VxsTemp.Borrow(out var v1))
+                    {
+                        _vxs.RotateRadToNewVxs(System.Math.Atan2(y - _latestY, x - _latestX), v1);
+                        _p.Fill(v1);
+                    } 
+                    _p.FillColor = prev;
+                    _p.SetOrigin(0, 0);//restore
                 }
                 else
                 {
@@ -281,8 +308,8 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 writer.CloseFigure();
                 //
                 _dashGenLineWalker.Reset();  //clear previous markers
-                                                  //***
-                                                  //you can customize what happend with the line segment
+                                             //***
+                                             //you can customize what happend with the line segment
 
                 _dashGenLineWalker.AddMark(3, (output, marker, cmd, x, y) =>
                 {
@@ -405,7 +432,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 var exampleWalker = new ExampleVxsLineDash2Walker();
                 exampleWalker.SetPainter(p);
                 _lineDashGen.GenerateDash(b.CurrentSharedVxs, exampleWalker);
-                 
+
             }
 
         }
