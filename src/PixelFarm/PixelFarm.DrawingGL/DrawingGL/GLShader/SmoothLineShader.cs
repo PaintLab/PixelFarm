@@ -55,19 +55,8 @@ namespace PixelFarm.DrawingGL
                 ";
 
 
-                //fragment source
-                //float factor= 1.0 /p0;            
-                //string fs = @"
-                //    precision mediump float;
-                //    uniform vec4 u_solidColor;
-                //    uniform float p0;
-                //    varying float v_distance;                    
-                //    void main()
-                //    {       
-                //        gl_FragColor =vec4(u_solidColor[0],u_solidColor[1],u_solidColor[2], u_solidColor[3] * abs(1.0-v_distance) * p0); 
-                //    }
-                //";
-
+                 
+                //version3
                 string fs = @"
                     precision mediump float;
                     uniform vec4 u_solidColor;
@@ -80,7 +69,7 @@ namespace PixelFarm.DrawingGL
                         gl_FragColor =vec4(u_solidColor[0],u_solidColor[1],u_solidColor[2], 
                                           u_solidColor[3] *((v_distance* (v_dir[0])+ (1.0-v_distance)* (v_dir[1]))  * (1.0/p0)) * 0.55);  
                     }
-                ";
+                "; 
 
                 ////old version 2
                 //string fs = @"
