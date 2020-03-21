@@ -33,8 +33,7 @@ namespace PixelFarm.DrawingGL
                     uniform vec2 u_ortho_offset; 
                      
                     uniform mat4 u_mvpMatrix; 
-                    uniform float u_linewidth; 
-                    uniform float p0;
+                    uniform float u_linewidth;                  
                     varying float v_distance; 
                     varying vec2 v_dir;
                 
