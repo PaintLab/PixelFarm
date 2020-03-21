@@ -215,7 +215,7 @@ namespace PixelFarm.DrawingGL
                                 py = y;
                             }
 
-                            _vboBuilder.AppendDegenerativeTrinagle();
+                            _vboBuilder.AppendDegenerativeTriangle();
 
                             Color prevColor = _pcx.FontFillColor;
                             _pcx.FontFillColor = this.StrokeColor;//***

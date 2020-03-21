@@ -723,7 +723,7 @@ namespace PixelFarm.DrawingGL
 
             if (seqLen > 1)
             {
-                _vboBuilder.AppendDegenerativeTrinagle();
+                _vboBuilder.AppendDegenerativeTriangle();
             }
 
             //---
