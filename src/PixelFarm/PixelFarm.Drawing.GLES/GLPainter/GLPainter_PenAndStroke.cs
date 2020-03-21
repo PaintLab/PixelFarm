@@ -2,6 +2,8 @@
 //Apache2, https://xmlgraphics.apache.org/
 
 using System;
+using System.Collections.Generic;
+
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
@@ -13,8 +15,8 @@ namespace PixelFarm.DrawingGL
     {
         Color _strokeColor;
         Pen _currentPen;
-        Stroke _stroke = new Stroke(1);
-        SimpleRectBorderBuilder _simpleBorderRectBuilder = new SimpleRectBorderBuilder();
+        readonly Stroke _stroke = new Stroke(1);
+        readonly SimpleRectBorderBuilder _simpleBorderRectBuilder = new SimpleRectBorderBuilder();
         LineDashGenerator _lineDashGen;
 
         float[] _reuseableRectBordersXYs = new float[16];
@@ -46,6 +48,92 @@ namespace PixelFarm.DrawingGL
 
         bool _dashGenV2 = true;
 
+        readonly Dictionary<string, DashPatternBmpCache> _bmpDashPatternsCache = new Dictionary<string, DashPatternBmpCache>();
+        readonly TextureCoordVboBuilder _vboBuilder = new TextureCoordVboBuilder();
+
+        class DashPatternBmpCache : IDisposable
+        {
+            public SimpleBitmapAtlas Atlas;
+            public GLBitmap glBmp;
+            public void Dispose()
+            {
+                if (Atlas != null)
+                {
+                    Atlas.Dispose();
+                    Atlas = null;
+                }
+
+                if (glBmp != null)
+                {
+                    glBmp.Dispose();
+                    glBmp = null;
+                }
+            }
+        }
+
+
+        DashPatternBmpCache GetCacheBmpDashOrCreate()
+        {
+
+            //this is staic pattern 
+            //check if we have a cache of its dash-pattern bitmap atlas
+            //if not the create a new one
+            string pattern_str = _lineDashGen.GetPatternAsString() + "w" + this.StrokeWidth;
+
+            if (_bmpDashPatternsCache.TryGetValue(pattern_str, out DashPatternBmpCache found))
+            {
+                return found;
+            }
+
+            //start with solid
+            //in this version we use software renderer to create a 
+            //dash pattern 
+
+            LineDashGenerator.DashSegment[] prebuilt_patt = _lineDashGen.GetStaticDashSegments();
+            SimpleBitmapAtlasBuilder _bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
+            for (int i = 0; i < prebuilt_patt.Length; ++i)
+            {
+                int padding_X = 4; //
+                int padding_Y = 4; // 
+
+                LineDashGenerator.DashSegment seg = prebuilt_patt[i];
+                if (seg.IsSolid)
+                {
+                    int w = (int)Math.Ceiling(seg.Len + (padding_X * 2));
+                    int h = (int)Math.Ceiling(StrokeWidth + (padding_Y * 2));
+
+                    using (MemBitmap tmpBmp = new MemBitmap(w, h))
+                    using (AggPainterPool.Borrow(tmpBmp, out AggPainter p))
+                    {
+                        p.Clear(Color.Black);
+                        p.StrokeColor = Color.White;
+                        p.StrokeWidth = this.StrokeWidth;
+
+                        p.Line(padding_X, padding_Y, padding_X + seg.Len, padding_Y, Color.White);
+
+                        var bmpAtlasItemSrc = new BitmapAtlasItemSource(w, h);
+                        bmpAtlasItemSrc.TextureXOffset = -padding_X;
+                        bmpAtlasItemSrc.TextureYOffset = -padding_Y;
+                        bmpAtlasItemSrc.UniqueInt16Name = (ushort)i;
+                        bmpAtlasItemSrc.SetImageBuffer(MemBitmap.CopyImgBuffer(tmpBmp));
+                        _bmpAtlasBuilder.AddItemSource(bmpAtlasItemSrc);
+                    }
+                }
+            }
+            //save bmp to test
+
+            //create bitmap atlas              
+            MemBitmap memBmp = _bmpAtlasBuilder.BuildSingleImage(false);
+            SimpleBitmapAtlas simpleBmpAtlas = _bmpAtlasBuilder.CreateSimpleBitmapAtlas();
+            simpleBmpAtlas.SetMainBitmap(memBmp, true);
+
+            DashPatternBmpCache cache = new DashPatternBmpCache();
+            cache.Atlas = simpleBmpAtlas;
+            cache.glBmp = new GLBitmap(memBmp);
+            _bmpDashPatternsCache.Add(pattern_str, cache);
+            return cache;
+        }
+
         /// <summary>
         /// we do NOT store vxs
         /// </summary>
@@ -73,62 +161,30 @@ namespace PixelFarm.DrawingGL
                     else
                     {
                         _lineDashGen.CreateDash(vxs, v1);
-                        if (_dashGenV2 && _lineDashGen.IsPrebuiltPattern)
+                        if (_dashGenV2 && _lineDashGen.IsStaticPattern)
                         {
                             //generate texture backend for a dash pattern
                             //similar to text glyph
                             //we can cache the bmp pattern for later use too 
-                            float[] prebuilt_patt = _lineDashGen.GetPrebuiltPattern();
 
-                            //start with solid
-                            //in this version we use software renderer to create a 
-                            //dash pattern 
+                            LineDashGenerator.DashSegment[] prebuilt_patt = _lineDashGen.GetStaticDashSegments();
 
-                            SimpleBitmapAtlasBuilder _bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
-                            for (int i = 0; i < prebuilt_patt.Length;)
-                            {
-                                int borderX = 4; //
-                                int borderY = 4; // 
+                            DashPatternBmpCache dashPattBmpCache = GetCacheBmpDashOrCreate();
 
-
-                                int w = (int)Math.Ceiling(prebuilt_patt[i] + (borderX * 2));
-                                int h = (int)Math.Ceiling(StrokeWidth + (borderY * 2));
-
-                                using (MemBitmap tmpBmp = new MemBitmap(w, h))
-                                using (AggPainterPool.Borrow(tmpBmp, out AggPainter p))
-                                {
-                                    p.Clear(Color.Black);
-                                    p.StrokeColor = Color.White;
-                                    p.StrokeWidth = this.StrokeWidth;
-                                    p.Line(borderX, borderY, borderX + prebuilt_patt[i], borderY, Color.White);
-
-                                    var bmpAtlasItemSrc = new BitmapAtlasItemSource(w, h);
-                                    bmpAtlasItemSrc.TextureXOffset = -borderX;
-                                    bmpAtlasItemSrc.TextureYOffset = -borderY;
-                                    bmpAtlasItemSrc.UniqueInt16Name = (ushort)i;
-                                    bmpAtlasItemSrc.SetImageBuffer(MemBitmap.CopyImgBuffer(tmpBmp));
-                                    _bmpAtlasBuilder.AddItemSource(bmpAtlasItemSrc);
-                                }
-                                i += 2;
-
-                            }
-                            //save bmp to test
-
-                            //create bitmap atlas  
-                            MemBitmap memBmp = _bmpAtlasBuilder.BuildSingleImage(false);
-                            SimpleBitmapAtlas simpleBmpAtlas = _bmpAtlasBuilder.CreateSimpleBitmapAtlas();
 #if DEBUG
                             //memBmp.SaveImage("dash_test.png");
 #endif
-
 
                             //now generate vbo for line
                             //we walk along to
                             int n = v1.Count;
                             double px = 0, py = 0;
 
-                            var vboBuilder = new TextureCoordVboBuilder();
-                            vboBuilder.SetTextureInfo(memBmp.Width, memBmp.Height, false, RenderSurfaceOrientation.LeftTop);
+                            GLBitmap glbmp = dashPattBmpCache.glBmp;
+                            SimpleBitmapAtlas simpleBmpAtlas = dashPattBmpCache.Atlas;
+
+                            _vboBuilder.Clear();
+                            _vboBuilder.SetTextureInfo(glbmp.Width, glbmp.Height, false, RenderSurfaceOrientation.LeftTop);
 
                             ushort patNo = 0;
                             for (int i = 0; i < n; ++i)
@@ -144,13 +200,9 @@ namespace PixelFarm.DrawingGL
                                             //select proper img for this segment
 
                                             simpleBmpAtlas.TryGetItem(patNo, out AtlasItem atlasItem);
-
                                             var srcRect = new Rectangle(atlasItem.Left - (int)atlasItem.TextureXOffset, atlasItem.Top - (int)atlasItem.TextureYOffset, atlasItem.Width - 8, atlasItem.Height - 8);
-
-
                                             //please note that : we start rect at (px,py)
-                                            vboBuilder.WriteRect(ref srcRect, (float)px, (float)py, 1, (float)Math.Atan2(y - py, x - px));
-
+                                            _vboBuilder.WriteRect(ref srcRect, (float)px, (float)py, 1, (float)Math.Atan2(y - py, x - px));
                                             patNo += 2;
                                             if (patNo >= prebuilt_patt.Length)
                                             {
@@ -163,13 +215,9 @@ namespace PixelFarm.DrawingGL
                                 py = y;
                             }
 
-                            vboBuilder.AppendDegenerativeTrinagle();
-                            GLBitmap glBmp = new GLBitmap(memBmp);
-
+                            _vboBuilder.AppendDegenerativeTrinagle();
                             _pcx.FontFillColor = Color.Red;
-
-                            _pcx.DrawGlyphImageWithStecil_VBO(glBmp, vboBuilder);
-                            glBmp.Dispose();
+                            _pcx.DrawGlyphImageWithStecil_VBO(glbmp, _vboBuilder);
 
                         }
                         else

@@ -43,8 +43,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     {
         public static void AddMark(this LineWalker walker, double len, LineSegmentDelegate segDel)
         {
-            var mark = new LineWalkerMark(len, segDel);
-            walker.AddWalkMark(mark);
+            walker.AddWalkMark(new LineWalkerMark(len, segDel));
         }
         public static void AddMark(this LineWalker walker, double len, LineWalkDashStyle daskStyle)
         {
@@ -141,7 +140,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             readonly List<LineWalkerMark> _marks = new List<LineWalkerMark>();
             LineWalkerMark _currentMark;
             int _nextMarkNo;
-
             double _expectedSegmentLen;
             WalkState _state;
             double _latest_X, _latest_Y;
@@ -161,19 +159,21 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             public void ClearAllMarkers()
             {
                 _marks.Clear();
+                
                 Reset();
             }
             public void Reset()
             {
-
                 _currentMark = null;
                 _nextMarkNo = 0;
-                _total_accum_len = 0;
                 _expectedSegmentLen = 0;
+               
                 _state = WalkState.Init;
                 _nextMarkNo = 0;
                 _latest_X = _latest_Y =
                     _latest_moveto_Y = _latest_moveto_Y = 0;
+                _total_accum_len = 0;
+                _tempPoints.Clear();
             }
             //-----------------------------------------------------
             void StepToNextMarkerSegment()
