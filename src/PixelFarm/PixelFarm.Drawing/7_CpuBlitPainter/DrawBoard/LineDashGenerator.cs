@@ -33,14 +33,17 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             _dashGenLineWalker.AddMark(solid1, LineWalkDashStyle.Solid);
             _dashGenLineWalker.AddMark(blank1, LineWalkDashStyle.Blank);
         }
-        public float[] GetPrebuiltPattern() => _preBuiltPattern;
-        public bool IsPrebuiltPattern { get; set; }
+
         public void SetDashPattern(LineWalker lineWalker)
         {
             IsPrebuiltPattern = false;
             _preBuiltPattern = null;
             _dashGenLineWalker = lineWalker;
         }
+
+        public float[] GetPrebuiltPattern() => _preBuiltPattern;
+
+        public bool IsPrebuiltPattern { get; set; }
 
         public void CreateDash(VertexStore srcVxs, VertexStore output)
         {

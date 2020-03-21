@@ -72,7 +72,6 @@ namespace PixelFarm.DrawingGL
                     }
                     else
                     {
-
                         _lineDashGen.CreateDash(vxs, v1);
                         if (_dashGenV2 && _lineDashGen.IsPrebuiltPattern)
                         {
@@ -88,11 +87,12 @@ namespace PixelFarm.DrawingGL
                             SimpleBitmapAtlasBuilder _bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
                             for (int i = 0; i < prebuilt_patt.Length;)
                             {
-                                int y = 4; // 
-                                int x = 4; //
+                                int borderX = 4; //
+                                int borderY = 4; // 
 
-                                int w = (int)Math.Ceiling(prebuilt_patt[i] + (x * 2));
-                                int h = (int)Math.Ceiling(StrokeWidth + (y * 2));
+
+                                int w = (int)Math.Ceiling(prebuilt_patt[i] + (borderX * 2));
+                                int h = (int)Math.Ceiling(StrokeWidth + (borderY * 2));
 
                                 using (MemBitmap tmpBmp = new MemBitmap(w, h))
                                 using (AggPainterPool.Borrow(tmpBmp, out AggPainter p))
@@ -100,11 +100,11 @@ namespace PixelFarm.DrawingGL
                                     p.Clear(Color.Black);
                                     p.StrokeColor = Color.White;
                                     p.StrokeWidth = this.StrokeWidth;
-                                    p.Line(x, y, x + prebuilt_patt[i], y, Color.White);
+                                    p.Line(borderX, borderY, borderX + prebuilt_patt[i], borderY, Color.White);
 
                                     var bmpAtlasItemSrc = new BitmapAtlasItemSource(w, h);
-                                    bmpAtlasItemSrc.TextureXOffset = x;
-                                    bmpAtlasItemSrc.TextureYOffset = y;
+                                    bmpAtlasItemSrc.TextureXOffset = -borderX;
+                                    bmpAtlasItemSrc.TextureYOffset = -borderY;
                                     bmpAtlasItemSrc.UniqueInt16Name = (ushort)i;
                                     bmpAtlasItemSrc.SetImageBuffer(MemBitmap.CopyImgBuffer(tmpBmp));
                                     _bmpAtlasBuilder.AddItemSource(bmpAtlasItemSrc);
@@ -142,14 +142,14 @@ namespace PixelFarm.DrawingGL
                                     case VertexCmd.LineTo:
                                         {
                                             //select proper img for this segment
+
                                             simpleBmpAtlas.TryGetItem(patNo, out AtlasItem atlasItem);
 
-                                            var srcRect = new Rectangle(atlasItem.Left + 4, atlasItem.Top + 4, atlasItem.Width - 8, atlasItem.Height - 8);
+                                            var srcRect = new Rectangle(atlasItem.Left - (int)atlasItem.TextureXOffset, atlasItem.Top - (int)atlasItem.TextureYOffset, atlasItem.Width - 8, atlasItem.Height - 8);
 
-                                            //vboBuilder.WriteRect(ref srcRect, (float)x, (float)y, 1);
-                                            //degree
 
-                                            vboBuilder.WriteRect(ref srcRect, (float)x, (float)y, 1, (float)Math.Atan2(y - py, x - px));
+                                            //please note that : we start rect at (px,py)
+                                            vboBuilder.WriteRect(ref srcRect, (float)px, (float)py, 1, (float)Math.Atan2(y - py, x - px));
 
                                             patNo += 2;
                                             if (patNo >= prebuilt_patt.Length)
