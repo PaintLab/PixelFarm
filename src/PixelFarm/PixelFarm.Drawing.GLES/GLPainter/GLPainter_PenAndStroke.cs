@@ -216,9 +216,11 @@ namespace PixelFarm.DrawingGL
                             }
 
                             _vboBuilder.AppendDegenerativeTrinagle();
-                            _pcx.FontFillColor = Color.Red;
-                            _pcx.DrawGlyphImageWithStecil_VBO(glbmp, _vboBuilder);
 
+                            Color prevColor = _pcx.FontFillColor;
+                            _pcx.FontFillColor = this.StrokeColor;//***
+                            _pcx.DrawGlyphImageWithStecil_VBO(glbmp, _vboBuilder); //TODO: review here. in this version, use glyph renderer
+                            _pcx.FontFillColor = prevColor; //restore
                         }
                         else
                         {
