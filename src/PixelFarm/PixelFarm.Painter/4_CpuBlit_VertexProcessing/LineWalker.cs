@@ -49,6 +49,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         {
             _lineSegDel.Invoke(output, this, VertexCmd.LineTo, x, y);
         }
+
+        public int Index { get; internal set; }
+        public string Name { get; set; }//optional
+        public object UserData { get; set; } //general user data
     }
 
     public enum LineWalkDashStyle
@@ -61,7 +65,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         public static LineWalkerMark AddMark(this LineWalker walker, double len, LineSegmentDelegate segDel)
         {
             var walkerMark = new LineWalkerMark(len, segDel);
-            walker.AddWalkMark(walkerMark);
+            walker.AddMark(walkerMark);
             return walkerMark;
         }
         public static LineWalkerMark AddMark(this LineWalker walker, double len, LineWalkDashStyle daskStyle)
@@ -77,7 +81,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     mark = new LineWalkerMark(len, SimpleBlankLine);
                     break;
             }
-            walker.AddWalkMark(mark);
+            walker.AddMark(mark);
             return mark;
         }
         static void SimpleSolidLine(ILineSegmentWalkerOutput output, LineWalkerMark walkerMark, VertexCmd cmd, double x, double y)
@@ -109,11 +113,12 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         public LineWalker()
         {
         }
-        public void ClearMarks()
+        public void Reset()
         {
             _walkStateMan.ClearAllMarkers();
+            _walkStateMan.Reset();
         }
-        public void AddWalkMark(LineWalkerMark walkerMark)
+        public void AddMark(LineWalkerMark walkerMark)
         {
             _walkStateMan.AddSegmentMark(walkerMark);
         }
@@ -180,12 +185,12 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
             public void AddSegmentMark(LineWalkerMark segMark)
             {
+                segMark.Index = _marks.Count;
                 _marks.Add(segMark);
             }
             public void ClearAllMarkers()
             {
                 _marks.Clear();
-                Reset();
             }
             public void Reset()
             {

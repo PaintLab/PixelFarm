@@ -34,8 +34,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
     public class LineDashGenerator : IDashGenerator
     {
-        LineWalker _dashGenLineWalker;
-        DashSegment[] _staicDashSegments = null;
+        LineWalker _dashGenLineWalker = new LineWalker();
+        DashSegment[] _staicDashSegments;
         VxsLineSegmentWalkerOutput _output = new VxsLineSegmentWalkerOutput();
         string _patternAsString;
 
@@ -43,31 +43,21 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         {
 
         }
-        public void SetDashPattern(float solid, float blank)
+
+
+        public void SetDashPattern(DashSegment[] segments)
         {
             IsStaticPattern = true;
-            _staicDashSegments = new DashSegment[] { new DashSegment(solid, true), new DashSegment(blank, false) };
+            _staicDashSegments = segments;
             _patternAsString = null;
-            _dashGenLineWalker = new LineWalker(); //TODO: reuse the walker
-            _dashGenLineWalker.AddMark(solid, LineWalkDashStyle.Solid);
-            _dashGenLineWalker.AddMark(blank, LineWalkDashStyle.Blank);
-        }
-        public void SetDashPattern(float solid0, float blank0, float solid1, float blank1)
-        {
-            IsStaticPattern = true;
-            _staicDashSegments = new DashSegment[] {
-                new DashSegment(solid0, true),
-                new DashSegment(blank0, false),
-                new DashSegment(solid1, true),
-                new DashSegment(blank1, false)
-            };
-            _patternAsString = null;
-            _dashGenLineWalker = new LineWalker(); //TODO: reuse the walker
-            _dashGenLineWalker.AddMark(solid0, LineWalkDashStyle.Solid);
-            _dashGenLineWalker.AddMark(blank0, LineWalkDashStyle.Blank);
-            //
-            _dashGenLineWalker.AddMark(solid1, LineWalkDashStyle.Solid);
-            _dashGenLineWalker.AddMark(blank1, LineWalkDashStyle.Blank);
+
+            _dashGenLineWalker.Reset();
+
+            for (int i = 0; i < segments.Length; ++i)
+            {
+                DashSegment seg = segments[i];
+                _dashGenLineWalker.AddMark(seg.Len, seg.IsSolid ? LineWalkDashStyle.Solid : LineWalkDashStyle.Blank);
+            }
         }
 
         public void SetDashPattern(LineWalker lineWalker)
@@ -101,7 +91,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             return null;
         }
 
-        public void CreateDash(VertexStore srcVxs, ILineSegmentWalkerOutput output)
+        public void GenerateDash(VertexStore srcVxs, ILineSegmentWalkerOutput output)
         {
             if (_dashGenLineWalker == null)
             {
@@ -112,10 +102,26 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         public void CreateDash(VertexStore srcVxs, VertexStore output)
         {
             _output.SetOutput(output);
-            CreateDash(srcVxs, _output);
+            GenerateDash(srcVxs, _output);
         }
+
     }
 
-
+    public static class LineDashGeneratorExtension
+    {
+        public static void SetDashPattern(this LineDashGenerator generator, float solid, float blank)
+        {
+            generator.SetDashPattern(new DashSegment[] { new DashSegment(solid, true), new DashSegment(blank, false) });
+        }
+        public static void SetDashPattern(this LineDashGenerator generator, float solid0, float blank0, float solid1, float blank1)
+        {
+            generator.SetDashPattern(new DashSegment[] {
+                new DashSegment(solid0, true),
+                new DashSegment(blank0, false),
+                new DashSegment(solid1, true),
+                new DashSegment(blank1, false)
+            });
+        }
+    }
 
 }
