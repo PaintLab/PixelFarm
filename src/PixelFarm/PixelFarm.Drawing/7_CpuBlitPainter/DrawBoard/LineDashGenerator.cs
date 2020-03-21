@@ -18,7 +18,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
 
 
-    public class VxsLineSegmentWalkerOutput : ILineSegmentWalkerOutput
+    class VxsLineSegmentWalkerOutput : ILineSegmentWalkerOutput
     {
         VertexStore _vxs;
         public VxsLineSegmentWalkerOutput()
@@ -28,8 +28,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         {
             _vxs = vsx;
         }
-        public void AddLineTo(double x, double y) => _vxs.AddLineTo(x, y);
-        public void AddMoveTo(double x, double y) => _vxs.AddMoveTo(x, y);
+        public void AddLineTo(LineWalkerMark maker, double x, double y) => _vxs.AddLineTo(x, y);
+        public void AddMoveTo(LineWalkerMark maker, double x, double y) => _vxs.AddMoveTo(x, y);
     }
 
     public class LineDashGenerator : IDashGenerator

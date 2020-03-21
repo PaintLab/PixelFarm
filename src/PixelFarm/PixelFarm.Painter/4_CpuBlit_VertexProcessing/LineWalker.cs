@@ -22,11 +22,11 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 {
     public interface ILineSegmentWalkerOutput
     {
-        void AddMoveTo(double x, double y);
-        void AddLineTo(double x, double y);
+        void AddMoveTo(LineWalkerMark marker, double x, double y);
+        void AddLineTo(LineWalkerMark marker, double x, double y);
     }
 
-    public delegate void LineSegmentDelegate(ILineSegmentWalkerOutput walkerOutput, VertexCmd cmd, double x, double y);
+    public delegate void LineSegmentDelegate(ILineSegmentWalkerOutput walkerOutput, LineWalkerMark markerSrc, VertexCmd cmd, double x, double y);
 
     public class LineWalkerMark
     {
@@ -43,11 +43,11 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
         internal void InvokeMoveTo(ILineSegmentWalkerOutput output, double x, double y)
         {
-            _lineSegDel.Invoke(output, VertexCmd.MoveTo, x, y);
+            _lineSegDel.Invoke(output, this, VertexCmd.MoveTo, x, y);
         }
         internal void InvokeLineTo(ILineSegmentWalkerOutput output, double x, double y)
         {
-            _lineSegDel.Invoke(output, VertexCmd.LineTo, x, y);
+            _lineSegDel.Invoke(output, this, VertexCmd.LineTo, x, y);
         }
     }
 
@@ -80,7 +80,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             walker.AddWalkMark(mark);
             return mark;
         }
-        static void SimpleSolidLine(ILineSegmentWalkerOutput output, VertexCmd cmd, double x, double y)
+        static void SimpleSolidLine(ILineSegmentWalkerOutput output, LineWalkerMark walkerMark, VertexCmd cmd, double x, double y)
         {
             //solid               
             switch (cmd)
@@ -88,14 +88,14 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 default: throw new NotSupportedException();
 
                 case VertexCmd.MoveTo:
-                    output.AddMoveTo(x, y);
+                    output.AddMoveTo(walkerMark, x, y);
                     break;
                 case VertexCmd.LineTo:
-                    output.AddLineTo(x, y);
+                    output.AddLineTo(walkerMark, x, y);
                     break;
             }
         }
-        static void SimpleBlankLine(ILineSegmentWalkerOutput output, VertexCmd cmd, double x, double y)
+        static void SimpleBlankLine(ILineSegmentWalkerOutput output, LineWalkerMark walkerMark, VertexCmd cmd, double x, double y)
         {
 
         }

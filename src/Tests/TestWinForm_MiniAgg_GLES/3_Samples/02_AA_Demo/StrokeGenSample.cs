@@ -132,6 +132,20 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             //} 
         }
 
+        class ExampleVxsLineDashSegmentWalkerOutput : ILineSegmentWalkerOutput
+        {
+            VertexStore _vxs;
+            public ExampleVxsLineDashSegmentWalkerOutput()
+            {
+            }
+            public void SetOutput(VertexStore vsx)
+            {
+                _vxs = vsx;
+            }
+            public void AddLineTo(LineWalkerMark maker, double x, double y) => _vxs.AddLineTo(x, y);
+            public void AddMoveTo(LineWalkerMark maker, double x, double y) => _vxs.AddMoveTo(x, y);
+        }
+
         void DrawB(Painter p)
         {
 
@@ -159,30 +173,30 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 _dashGenLineWalker.ClearMarks();  //clear previous markers
                 //***
                 //you can customize what happend with the line segment
-                _dashGenLineWalker.AddMark(10, (outputVxs, cmd, x, y) =>
+                _dashGenLineWalker.AddMark(10, (output, marker, cmd, x, y) =>
                 {
                     //solid               
                     switch (cmd)
                     {
                         case VertexCmd.MoveTo:
-                            outputVxs.AddMoveTo(x, y);
+                            output.AddMoveTo(marker, x, y);
                             break;
                         case VertexCmd.LineTo:
-                            outputVxs.AddLineTo(x, y);
+                            output.AddLineTo(marker, x, y);
                             break;
                     }
                 });
-                _dashGenLineWalker.AddMark(10, (outputVxs, cmd, x, y) =>
+                _dashGenLineWalker.AddMark(10, (output, marker, cmd, x, y) =>
                 {
                     //whitespace, do nothing
                 });
 
-                //then generate dash by walking along v1
-                VxsLineSegmentWalkerOutput walkerOutput = new VxsLineSegmentWalkerOutput();
-                walkerOutput.SetOutput(v2);
-                _dashGenLineWalker.Walk(v1, walkerOutput);
-                //aggPainter.Draw(vxs);
 
+                //-------------------------------------------
+                //then generate dash by walking along v1
+                ExampleVxsLineDashSegmentWalkerOutput walkerOutput = new ExampleVxsLineDashSegmentWalkerOutput();
+                walkerOutput.SetOutput(v2);
+                _dashGenLineWalker.Walk(v1, walkerOutput);                 
                 //test drawline
                 int n = v2.Count;
                 double px = 0, py = 0;
@@ -192,19 +206,16 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                     VertexCmd cmd = v2.GetVertex(i, out double x, out double y);
                     switch (cmd)
                     {
-                        case VertexCmd.MoveTo:
-                            px = x;
-                            py = y;
-
+                        case VertexCmd.MoveTo: 
                             break;
                         case VertexCmd.LineTo:
-                            p.DrawLine(px, py, x, y);
-
+                            p.DrawLine(px, py, x, y); 
                             break;
                     }
                     px = x;
                     py = y;
                 }
+                //-------------------------------------------
             }
             //aggPainter.Draw(newvxs);
         }
