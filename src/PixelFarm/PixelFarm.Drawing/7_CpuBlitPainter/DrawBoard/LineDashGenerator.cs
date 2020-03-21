@@ -1,6 +1,5 @@
 ﻿//MIT, 2016-present, WinterDev 
 
-using System.Collections.Generic;
 using PixelFarm.Drawing;
 
 namespace PixelFarm.CpuBlit.VertexProcessing
@@ -16,7 +15,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
         public override string ToString() => (IsSolid ? "s" : "b") + Len;
     }
-   
+
 
 
     public class VxsLineSegmentWalkerOutput : ILineSegmentWalkerOutput
