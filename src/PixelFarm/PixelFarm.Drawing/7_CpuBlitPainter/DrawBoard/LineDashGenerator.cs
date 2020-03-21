@@ -8,18 +8,24 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     {
 
         LineWalker _dashGenLineWalker;
+        float[] _preBuiltPattern = null;
         public LineDashGenerator()
         {
 
         }
         public void SetDashPattern(float solid, float blank)
         {
+            IsPrebuiltPattern = true;
+            _preBuiltPattern = new float[] { solid, blank };
             _dashGenLineWalker = new LineWalker();
             _dashGenLineWalker.AddMark(solid, LineWalkDashStyle.Solid);
             _dashGenLineWalker.AddMark(blank, LineWalkDashStyle.Blank);
         }
         public void SetDashPattern(float solid0, float blank0, float solid1, float blank1)
         {
+            IsPrebuiltPattern = true;
+            _preBuiltPattern = new float[] { solid0, blank0, solid1, blank1 };
+
             _dashGenLineWalker = new LineWalker();
             _dashGenLineWalker.AddMark(solid0, LineWalkDashStyle.Solid);
             _dashGenLineWalker.AddMark(blank0, LineWalkDashStyle.Blank);
@@ -27,8 +33,12 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             _dashGenLineWalker.AddMark(solid1, LineWalkDashStyle.Solid);
             _dashGenLineWalker.AddMark(blank1, LineWalkDashStyle.Blank);
         }
+        public float[] GetPrebuiltPattern() => _preBuiltPattern;
+        public bool IsPrebuiltPattern { get; set; }
         public void SetDashPattern(LineWalker lineWalker)
         {
+            IsPrebuiltPattern = false;
+            _preBuiltPattern = null;
             _dashGenLineWalker = lineWalker;
         }
 

@@ -230,9 +230,9 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             {
                 IDashGenerator tmp = p.LineDashGen;
                 p.LineDashGen = _lineDashGen;
-                b.MoveTo(20, 10);
-                b.LineTo(60, 10);
-                b.LineTo(20, 200);
+                b.MoveTo(20.5f, 10.5f);
+                b.LineTo(60.5f, 10.5f);
+                b.LineTo(20.5f, 200.5f);
                 b.CloseFigure();
                 p.Draw(b.CurrentSharedVxs);
 

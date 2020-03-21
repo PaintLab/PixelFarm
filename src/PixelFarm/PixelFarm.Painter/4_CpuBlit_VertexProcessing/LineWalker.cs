@@ -81,7 +81,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     }
     public class LineWalker
     {
-        WalkStateManager _walkStateMan = new WalkStateManager(); 
+        WalkStateManager _walkStateMan = new WalkStateManager();
         public LineWalker()
         {
         }
@@ -134,10 +134,11 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
 
 
+
         class WalkStateManager
         {
 
-            List<LineWalkerMark> _marks = new List<LineWalkerMark>();
+            readonly List<LineWalkerMark> _marks = new List<LineWalkerMark>();
             LineWalkerMark _currentMark;
             int _nextMarkNo;
 
@@ -147,7 +148,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             double _latest_moveto_X, _latest_moveto_Y;
 
             double _total_accum_len;
-            List<TmpPoint> _tempPoints = new List<TmpPoint>();
+            readonly List<VectorMath.Vector2> _tempPoints = new List<VectorMath.Vector2>();
 
 
             //-------------------------------
@@ -207,8 +208,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     for (int i = 0; i < j;)
                     {
                         //p0-p1
-                        TmpPoint p0 = _tempPoints[i];
-                        TmpPoint p1 = _tempPoints[i + 1];
+                        VectorMath.Vector2 p0 = _tempPoints[i];
+                        VectorMath.Vector2 p1 = _tempPoints[i + 1];
                         //-------------------------------
                         //a series of connected line
                         //if ((_nextMarkNo % 2) == 1)
@@ -314,8 +315,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     {
                         //***                        
                         //clear all previous collected points
-                        double tmp_expectedLen;
-                        ClearCollectedTmpPoints(out tmp_expectedLen);
+                        ClearCollectedTmpPoints(out double tmp_expectedLen);
                         //-----------------
                         //begin
                         if (tmp_expectedLen > 0)
@@ -340,25 +340,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
 
 
-            struct TmpPoint
-            {
-                public readonly double x;
-                public readonly double y;
-                public TmpPoint(double x, double y)
-                {
-
-                    this.x = x;
-                    this.y = y;
-                }
-#if DEBUG
-                public override string ToString()
-                {
-                    return "(" + x + "," + y + ")";
-                }
-#endif
-            }
-
-
             protected virtual void OnEndLineSegment(double x, double y, double remainingLen)
             {
                 //remainingLen of current segment
@@ -370,8 +351,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     //there are remaining segment that can be complete at this state
                     //so we just collect it                                        
                     _total_accum_len += remainingLen;
-                    _tempPoints.Add(new TmpPoint(_latest_X, _latest_Y));
-                    _tempPoints.Add(new TmpPoint(x, y));
+                    _tempPoints.Add(new VectorMath.Vector2(_latest_X, _latest_Y));
+                    _tempPoints.Add(new VectorMath.Vector2(x, y));
                 }
                 _latest_X = x;
                 _latest_Y = y;

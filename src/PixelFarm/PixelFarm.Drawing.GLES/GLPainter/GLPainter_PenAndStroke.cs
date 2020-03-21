@@ -5,6 +5,7 @@ using System;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
+using PixelFarm.CpuBlit.BitmapAtlas;
 
 namespace PixelFarm.DrawingGL
 {
@@ -42,6 +43,9 @@ namespace PixelFarm.DrawingGL
                 _stroke.Width = (float)value;
             }
         }
+
+        bool _dashGenV2 = true;
+
         /// <summary>
         /// we do NOT store vxs
         /// </summary>
@@ -70,32 +74,130 @@ namespace PixelFarm.DrawingGL
                     {
 
                         _lineDashGen.CreateDash(vxs, v1);
-
-                        int n = v1.Count;
-                        double px = 0, py = 0;
-
-                        LineDashGenerator tmp = _lineDashGen;
-                        _lineDashGen = null;
-
-                        for (int i = 0; i < n; ++i)
+                        if (_dashGenV2 && _lineDashGen.IsPrebuiltPattern)
                         {
-                            VertexCmd cmd = v1.GetVertex(i, out double x, out double y);
-                            switch (cmd)
+                            //generate texture backend for a dash pattern
+                            //similar to text glyph
+                            //we can cache the bmp pattern for later use too 
+                            float[] prebuilt_patt = _lineDashGen.GetPrebuiltPattern();
+
+                            //start with solid
+                            //in this version we use software renderer to create a 
+                            //dash pattern 
+
+                            SimpleBitmapAtlasBuilder _bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
+                            for (int i = 0; i < prebuilt_patt.Length;)
                             {
-                                case VertexCmd.MoveTo:
-                                    px = x;
-                                    py = y;
-                                    break;
-                                case VertexCmd.LineTo:
-                                    this.DrawLine(px, py, x, y);
-                                    break;
+                                int y = 4; // 
+                                int x = 4; //
+
+                                int w = (int)Math.Ceiling(prebuilt_patt[i] + (x * 2));
+                                int h = (int)Math.Ceiling(StrokeWidth + (y * 2));
+
+                                using (MemBitmap tmpBmp = new MemBitmap(w, h))
+                                using (AggPainterPool.Borrow(tmpBmp, out AggPainter p))
+                                {
+                                    p.Clear(Color.Black);
+                                    p.StrokeColor = Color.White;
+                                    p.StrokeWidth = this.StrokeWidth;
+                                    p.Line(x, y, x + prebuilt_patt[i], y, Color.White);
+
+                                    var bmpAtlasItemSrc = new BitmapAtlasItemSource(w, h);
+                                    bmpAtlasItemSrc.TextureXOffset = x;
+                                    bmpAtlasItemSrc.TextureYOffset = y;
+                                    bmpAtlasItemSrc.UniqueInt16Name = (ushort)i;
+                                    bmpAtlasItemSrc.SetImageBuffer(MemBitmap.CopyImgBuffer(tmpBmp));
+                                    _bmpAtlasBuilder.AddItemSource(bmpAtlasItemSrc);
+                                }
+                                i += 2;
+
                             }
-                            px = x;
-                            py = y;
+                            //save bmp to test
+
+                            //create bitmap atlas  
+                            MemBitmap memBmp = _bmpAtlasBuilder.BuildSingleImage(false);
+                            SimpleBitmapAtlas simpleBmpAtlas = _bmpAtlasBuilder.CreateSimpleBitmapAtlas();
+#if DEBUG
+                            //memBmp.SaveImage("dash_test.png");
+#endif
+
+
+                            //now generate vbo for line
+                            //we walk along to
+                            int n = v1.Count;
+                            double px = 0, py = 0;
+
+                            var vboBuilder = new TextureCoordVboBuilder();
+                            vboBuilder.SetTextureInfo(memBmp.Width, memBmp.Height, false, RenderSurfaceOrientation.LeftTop);
+
+                            ushort patNo = 0;
+                            for (int i = 0; i < n; ++i)
+                            {
+                                VertexCmd cmd = v1.GetVertex(i, out double x, out double y);
+                                switch (cmd)
+                                {
+                                    case VertexCmd.MoveTo:
+
+                                        break;
+                                    case VertexCmd.LineTo:
+                                        {
+                                            //select proper img for this segment
+                                            simpleBmpAtlas.TryGetItem(patNo, out AtlasItem atlasItem);
+
+                                            var srcRect = new Rectangle(atlasItem.Left + 4, atlasItem.Top + 4, atlasItem.Width - 8, atlasItem.Height - 8);
+
+                                            //vboBuilder.WriteRect(ref srcRect, (float)x, (float)y, 1);
+                                            //degree
+
+                                            vboBuilder.WriteRect(ref srcRect, (float)x, (float)y, 1, (float)Math.Atan2(y - py, x - px));
+
+                                            patNo += 2;
+                                            if (patNo >= prebuilt_patt.Length)
+                                            {
+                                                patNo = 0;//reset
+                                            }
+                                        }
+                                        break;
+                                }
+                                px = x;
+                                py = y;
+                            }
+
+                            vboBuilder.AppendDegenerativeTrinagle();
+                            GLBitmap glBmp = new GLBitmap(memBmp);
+
+                            _pcx.FontFillColor = Color.Red;
+
+                            _pcx.DrawGlyphImageWithStecil_VBO(glBmp, vboBuilder);
+                            glBmp.Dispose();
+
                         }
+                        else
+                        {
 
-                        _lineDashGen = tmp;
+                            int n = v1.Count;
+                            double px = 0, py = 0;
 
+                            LineDashGenerator tmp = _lineDashGen;
+                            _lineDashGen = null;
+
+                            for (int i = 0; i < n; ++i)
+                            {
+                                VertexCmd cmd = v1.GetVertex(i, out double x, out double y);
+                                switch (cmd)
+                                {
+                                    case VertexCmd.MoveTo:
+
+                                        break;
+                                    case VertexCmd.LineTo:
+                                        this.DrawLine(px, py, x, y);
+                                        break;
+                                }
+                                px = x;
+                                py = y;
+                            }
+                            _lineDashGen = tmp;
+                        }
                     }
 
                 }

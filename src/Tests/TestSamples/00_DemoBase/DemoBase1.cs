@@ -380,7 +380,7 @@ namespace Mini
             this.Type = t;
             this.Name = name;
             this.OrderCode = "";
-            var p1 = t.GetProperties();
+            //var p1 = t.GetProperties();
             InfoAttribute[] exInfoList = t.GetCustomAttributes(s_infoAttrType, false) as InfoAttribute[];
             int m = exInfoList.Length;
             if (m > 0)
