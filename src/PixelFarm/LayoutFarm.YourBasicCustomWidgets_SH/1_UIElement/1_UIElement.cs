@@ -61,6 +61,7 @@ namespace LayoutFarm.UI
         }
     }
 
+   
     public abstract partial class UIElement : IUIEventListener
     {
 
@@ -534,13 +535,13 @@ namespace LayoutFarm.UI
         protected virtual void OnContentUpdate()
         {
         }
-       
+
         protected virtual void OnElementChanged()
         {
         }
         //
         public abstract void Accept(UIVisitor visitor);
-        protected virtual void OnGuestTalk(UIGuestMsgEventArgs e)
+        protected virtual void OnGuestMsg(UIGuestMsgEventArgs e)
         {
         }
         public static void UnsafeRemoveLinkedNode(UIElement ui)
@@ -562,4 +563,6 @@ namespace LayoutFarm.UI
         }
 #endif
     }
+
+   
 }

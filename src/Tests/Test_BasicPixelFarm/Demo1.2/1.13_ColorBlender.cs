@@ -146,15 +146,38 @@ namespace LayoutFarm.ColorBlenderSample
             colorPanel.ContentLayoutKind = BoxContentLayoutKind.HorizontalStack;
             colorPanel.BackColor = PixelFarm.Drawing.Color.White;
             colorPanel.SetLocation(x, y);
-            host.AddChild(colorPanel); 
+            host.AddChild(colorPanel);
 
             y += colorPanel.Height;
+
+
+            //test1...
+            var buttonBeh = new UI.GeneralUIElementBehaviour();
+            buttonBeh.MouseMove += (b, e) =>
+            {
+                if (e.CurrentContextElement is Label lbl)
+                {
+                    lbl.BackColor = PixelFarm.Drawing.Color.Yellow;
+                }
+            };
+            buttonBeh.MouseLeave += (b, e) =>
+            {
+                if (e.CurrentContextElement is Label lbl)
+                {
+                    lbl.BackColor = PixelFarm.Drawing.Color.Gray;
+                }
+            };
+            //----------------------------------
+            //test2
+
 
             //----------------------------------
             {
                 Label lblChromaDarken = new Label(50, 20);
+                lblChromaDarken.BackColor = PixelFarm.Drawing.Color.Gray;
                 lblChromaDarken.Text = "Darken";
                 lblChromaDarken.SetLocation(x, y);
+                lblChromaDarken.AttachUIBehaviour(buttonBeh);
 
                 UI.GeneralEventListener evListener = new UI.GeneralEventListener();
                 evListener.MouseDown += e =>
@@ -180,6 +203,8 @@ namespace LayoutFarm.ColorBlenderSample
             //----------------------------------
             {
                 Label lblLighten = new Label(50, 20);
+                lblLighten.AttachUIBehaviour(buttonBeh);
+
                 lblLighten.Text = "Brighten";
                 lblLighten.SetLocation(x, y);
                 {
@@ -203,7 +228,7 @@ namespace LayoutFarm.ColorBlenderSample
                 x += lblLighten.Width + 5;
 
                 host.AddChild(lblLighten);
-            } 
+            }
         }
 
 

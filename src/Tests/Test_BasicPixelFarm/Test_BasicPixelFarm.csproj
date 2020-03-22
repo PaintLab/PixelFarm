@@ -31,7 +31,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;PIXEL_FARM_NET20</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -69,6 +69,7 @@
     <Compile Include="Demo1.2\ColorBlender\RGB.cs" />
     <Compile Include="Demo1.2\LabConstants.cs" />
     <Compile Include="Demo1.2\MyCustomColorSet.cs" />
+    <Compile Include="Demo3\3.4_CursorTest.cs" />
     <Compile Include="Demo4\4.1_Demo_LionSprite.cs" />
     <Compile Include="Demo4\PxMotion.cs" />
     <Compile Include="Demo5\5_DemoSampleCharts.cs" />

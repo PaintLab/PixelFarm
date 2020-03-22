@@ -246,8 +246,7 @@ namespace PixelFarm.CpuBlit
 
                         for (int i = 0; i < n; ++i)
                         {
-                            double x, y;
-                            VertexCmd cmd = v1.GetVertex(i, out x, out y);
+                            VertexCmd cmd = v1.GetVertex(i, out double x, out double y);
                             switch (cmd)
                             {
                                 case VertexCmd.MoveTo:

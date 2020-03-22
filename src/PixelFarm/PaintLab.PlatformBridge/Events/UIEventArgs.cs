@@ -218,6 +218,17 @@ namespace LayoutFarm.UI
     {
     }
 
+    public class CursorRequest
+    {
+        public CursorRequest(string url, int width = 0)
+        {
+            Url = url;
+            Width = 0;
+        }
+        public string Url { get; private set; }
+        public int Width { get; private set; }
+    }
+
     public enum MouseCursorStyle
     {
         Default,

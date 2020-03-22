@@ -6,16 +6,19 @@ namespace LayoutFarm
 
     public abstract class UIPlatform
     {
-        static UIPlatform s_ui_plaform;
+        static UIPlatform s_ui_platform;
         static bool s_Closing;
 
         public abstract void SetClipboardData(string textData);
         public abstract string GetClipboardData();
         public abstract void ClearClipboardData();
 
+        protected abstract Cursor CreateCursorImpl(CursorRequest curReq);
+        public static Cursor CreateCursor(CursorRequest curReq) => s_ui_platform.CreateCursorImpl(curReq);
+
         protected void SetAsDefaultPlatform()
         {
-            s_ui_plaform = this;
+            s_ui_platform = this;
         }
         public static void Close()
         {

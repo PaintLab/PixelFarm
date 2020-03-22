@@ -40,8 +40,7 @@ namespace LayoutFarm.UI
             if (s_initOpenTK) return;
 
             OpenTK.Platform.Factory.GetCustomPlatformFactory = () => OpenTK.Platform.Egl.EglAngle.NewFactory();
-            OpenTK.Toolkit.Init(new OpenTK.ToolkitOptions
-            {
+            OpenTK.Toolkit.Init(new OpenTK.ToolkitOptions {
                 Backend = OpenTK.PlatformBackend.PreferNative,
             });
             OpenTK.Graphics.PlatformAddressPortal.GetAddressDelegate = OpenTK.Platform.Utilities.CreateGetAddress();
@@ -109,7 +108,19 @@ namespace LayoutFarm.UI
         }
         int IGpuOpenGLSurfaceView.Width => _width;
         int IGpuOpenGLSurfaceView.Height => _width;
-     
+        public Cursor CurrentCursor
+        {
+            get
+            {
+                //TODO: review here
+                throw new NotSupportedException();
+            }
+            set
+            {
+                //TODO: review here
+                throw new NotSupportedException();
+            }
+        }
         public PixelFarm.Drawing.Size GetSize() => new PixelFarm.Drawing.Size(_width, _height);
         public void SetNativeHwnd(IntPtr nativeHwnd, bool isCpuSurface)
         {
