@@ -452,7 +452,7 @@ namespace PixelFarm
                 for (int i = 0; i < 1; i++)
                 {
 
-                    selectedVxs.RotateToNewVxs(i * (360 / 8), v1);
+                    selectedVxs.RotateDegToNewVxs(i * (360 / 8), v1);
                     p.Fill(v1);
 
                     v1.Clear();

@@ -111,10 +111,11 @@ namespace PixelFarm.DrawingGL
         GLPainter _painter;
         GLBitmap _glBmp;
         RequestFont _font;
-        LayoutFarm.OpenFontTextService _textServices;
-        float _px_scale = 1;
-        TextureCoordVboBuilder _vboBuilder = new TextureCoordVboBuilder();
+        
+        readonly LayoutFarm.OpenFontTextService _textServices; 
+        readonly TextureCoordVboBuilder _vboBuilder = new TextureCoordVboBuilder();
 
+        float _px_scale = 1;
 
 #if DEBUG
         public static GlyphTexturePrinterDrawingTechnique s_dbugDrawTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering;
@@ -318,7 +319,7 @@ namespace PixelFarm.DrawingGL
                 DrawingTechnique = GlyphTexturePrinterDrawingTechnique.Msdf;
             }
 
-             
+
             //----------
             int seqLen = glyphPlanSeq.Count;
             for (int i = 0; i < seqLen; ++i)
@@ -358,7 +359,7 @@ namespace PixelFarm.DrawingGL
                         g_top += _font.DescentInPixels;
                         break;
                     case TextBaseline.Bottom:
-                      
+
                         break;
                 }
 
@@ -722,7 +723,7 @@ namespace PixelFarm.DrawingGL
 
             if (seqLen > 1)
             {
-                _vboBuilder.AppendDegenerativeTrinagle();
+                _vboBuilder.AppendDegenerativeTriangle();
             }
 
             //---

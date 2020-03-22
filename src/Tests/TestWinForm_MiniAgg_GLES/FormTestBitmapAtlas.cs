@@ -230,7 +230,7 @@ namespace Mini
                 SimpleBitmapAtlas bitmapAtlas = bmpAtlasBuilder.LoadAtlasInfo(atlasInfoFile)[0];
                 //
                 MemBitmap totalAtlasImg = imgLoader(totalImgFile);
-                bitmapAtlas.MainBitmap = imgLoader(totalImgFile);
+                bitmapAtlas.SetMainBitmap(imgLoader(totalImgFile), true);
 
                 //-----
                 for (int i = 0; i < index; ++i)

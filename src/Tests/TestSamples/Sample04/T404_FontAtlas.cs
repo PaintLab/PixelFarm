@@ -70,7 +70,7 @@ namespace OpenTkEssTest
 
             //5. create a simple font atlas from information inside this atlas builder.
             _fontAtlas = atlasBuilder.CreateSimpleBitmapAtlas();
-            _fontAtlas.MainBitmap = totalGlyphsImg;
+            _fontAtlas.SetMainBitmap(totalGlyphsImg, true);
 
             byte[] codepoint = System.Text.Encoding.UTF8.GetBytes("AB");
             _glyphIndex_0 = _typeface.GetGlyphIndex(codepoint[0]);

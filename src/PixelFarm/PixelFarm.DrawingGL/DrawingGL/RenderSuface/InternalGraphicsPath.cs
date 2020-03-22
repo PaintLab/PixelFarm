@@ -153,7 +153,14 @@ namespace PixelFarm.DrawingGL
         {
             //
             float[] tessArea = GetAreaTess(tess, windingRuleType);
-            _tessAreaVboSeg = ownerVBOStream.CreateSegment(tessArea, TessAreaVertexCount, 2);
+            if (tessArea != null)
+            {
+                _tessAreaVboSeg = ownerVBOStream.CreateSegment(tessArea, TessAreaVertexCount, 2);
+            }
+            else
+            {
+                //??
+            }
             //
         }
 
