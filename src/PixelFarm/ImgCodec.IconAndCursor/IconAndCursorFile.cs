@@ -17,6 +17,7 @@ namespace IconMaker
 
         internal int DataToSaveByteCount => DataToSave.Length;
         internal byte[] DataToSave { get; set; }
+        internal abstract void PrepareOutput();
     }
 
     public class WindowBitmap : Bitmap
@@ -28,10 +29,11 @@ namespace IconMaker
             Height = h;
             BitPerPixel = 32;
         }
-        internal void PrepareOutput()
+        internal override void PrepareOutput()
         {
             DataToSave = GetImageData(this);
         }
+       
         static byte[] GetImageData(WindowBitmap image)
         {
             using (MemoryStream memoryStream = new MemoryStream())
@@ -158,6 +160,10 @@ namespace IconMaker
         {
             DataToSave = pngFileContent;
         }
+        internal override void PrepareOutput()
+        {
+             //nothing 
+        }
     }
 
 
@@ -166,8 +172,8 @@ namespace IconMaker
         public class CursorBitmapInfo
         {
             public Bitmap Bitmap { get; set; }
-            public int HotSpotX { get; set; }
-            public int HotSpotY { get; set; }
+            public ushort HotSpotX { get; set; }
+            public ushort HotSpotY { get; set; }
         }
         List<CursorBitmapInfo> _bitmaps = new List<CursorBitmapInfo>();
         public void AddBitmap(CursorBitmapInfo cursor)
@@ -175,7 +181,7 @@ namespace IconMaker
             _bitmaps.Add(cursor);
         }
 
-        public void AddBitmap(Bitmap bmp, int hotSpotX, int hotSpotY)
+        public void AddBitmap(Bitmap bmp, ushort hotSpotX, ushort hotSpotY)
         {
             AddBitmap(new CursorBitmapInfo() { Bitmap = bmp, HotSpotX = hotSpotX, HotSpotY = hotSpotY });
         }
@@ -216,11 +222,7 @@ namespace IconMaker
             foreach (CursorBitmapInfo cursorInfo in _bitmaps)
             {
                 Bitmap image = cursorInfo.Bitmap;
-                if (image is WindowBitmap windowBmp)
-                {
-                    windowBmp.PrepareOutput();
-                }
-
+                image.PrepareOutput();                 
 
                 //Offset# 	Size (in bytes) 	Purpose
                 //0         1               Specifies image width in pixels.Can be any number between 0 and 255.Value 0 means image width is 256 pixels.
@@ -238,8 +240,8 @@ namespace IconMaker
                 writer.Write((byte)image.Height);  // height
                 writer.Write((byte)0);  //0=> not use color palette
                 writer.Write((byte)0);  // must be 0,Reserved
-                writer.Write((ushort)1);    // Specifies the horizontal coordinates of the hotspot in number of pixels from the left
-                writer.Write((ushort)1);   // Specifies the vertical coordinates of the hotspot in number of pixels from the top. 
+                writer.Write((ushort)cursorInfo.HotSpotX);    // Specifies the horizontal coordinates of the hotspot in number of pixels from the left
+                writer.Write((ushort)cursorInfo.HotSpotY);   // Specifies the vertical coordinates of the hotspot in number of pixels from the top. 
                 writer.Write(image.DataToSaveByteCount);  // size of bitmap data in bytes
                 writer.Write(offset);   // bitmap data offset in file
 
@@ -311,15 +313,11 @@ namespace IconMaker
             writer.Write((ushort)0);    // must be 0
             writer.Write((ushort)1);    // 1 = ico file,2 =cur file
             writer.Write((ushort)_bitmaps.Count); // number of sizes
-
-
-
+             
             foreach (Bitmap image in _bitmaps)
             {
-                if (image is WindowBitmap windowBmp)
-                {
-                    windowBmp.PrepareOutput();
-                }
+                image.PrepareOutput();
+
                 writer.Write((byte)image.Width);  // width
                 writer.Write((byte)image.Height);  // height
                 writer.Write((byte)0);  // colors, 0 = more than 256
