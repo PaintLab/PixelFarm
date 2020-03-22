@@ -3,7 +3,6 @@
 
 using System;
 using System.Windows.Forms;
-
 using PixelFarm.Drawing;
 using Typography.FontManagement;
 
@@ -200,12 +199,26 @@ namespace LayoutFarm.UI
         UIMouseEventArgs _mouseEventArgs = new UIMouseEventArgs();
         UIKeyEventArgs _keyEventArgs = new UIKeyEventArgs();
 
+        Cursor _cursor;
 
         public MyWinFormsControl()
         {
         }
 
         public IntPtr NativeWindowHwnd => this.Handle;
+
+        public Cursor CurrentCursor
+        {
+            get => _cursor;
+            set
+            {
+                if (value is UIPlatformWinForm.MyCursor cur)
+                {
+                    _cursor = cur;
+                    this.Cursor = cur.WinFormCursor;
+                }
+            }
+        }
 
         internal IGpuOpenGLSurfaceView CreateWindowWrapper(AbstractTopWindowBridge topWindowBridge)
         {

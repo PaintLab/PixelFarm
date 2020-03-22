@@ -22,7 +22,7 @@ namespace ImgCodec.IconAndCursor
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //create a simple bitmap for our color
+            //create a simple bitmap for our cursor
             using (Bitmap temp = new Bitmap(16, 16, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
             using (Graphics g = Graphics.FromImage(temp))
             {

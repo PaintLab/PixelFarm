@@ -103,7 +103,7 @@ namespace LayoutFarm.UI
         public static UIPlatformWinForm GetDefault()
         {
             return s_platform;
-        } 
+        }
 
         public UIPlatformWinForm()
         {
@@ -126,7 +126,7 @@ namespace LayoutFarm.UI
             }
 
             //var installedTypefaces = new Typography.FontManagement.InstalledTypefaceCollection();
-             
+
 
             try
             {
@@ -175,5 +175,171 @@ namespace LayoutFarm.UI
                 System.Windows.Forms.Clipboard.Clear();
             }
         }
+
+
+        protected override Cursor CreateCursorImpl(CursorRequest cursorReq)
+        {
+            MyCursor myCursor = new MyCursor();
+            //load cursor from input file
+            //assume cursor is square
+            //resolve
+            if (cursorReq.Url.StartsWith("system:"))
+            {
+                System.Windows.Forms.Cursor selectedCursor = System.Windows.Forms.Cursors.Default;
+                switch (cursorReq.Url.Substring(7))
+                {
+                    case "Arrow":
+                        selectedCursor = System.Windows.Forms.Cursors.Arrow;
+                        break;
+                    case "Pointer":
+                        selectedCursor = System.Windows.Forms.Cursors.Hand;
+                        break;
+                    case "IBeam":
+                        selectedCursor = System.Windows.Forms.Cursors.IBeam;
+                        break;
+                }
+
+                myCursor.LoadSystemCursor(selectedCursor);
+            }
+            else
+            {
+                myCursor.LoadFromFile(cursorReq.Url, cursorReq.Width);
+            }
+            return myCursor;
+        }
+
+
+        public class MyCursor : Cursor, IDisposable
+        {
+            IntPtr _nativeCursorHandler;
+            System.Windows.Forms.Cursor _cursor;
+            bool _isSystemCur;
+            public void Dispose()
+            {
+                if (_isSystemCur)
+                {
+                    _cursor = null;
+                }
+                else
+                {
+                    if (_cursor != null)
+                    {
+                        _cursor.Dispose();
+                        _cursor = null;
+                    }
+                    if (_nativeCursorHandler != IntPtr.Zero)
+                    {
+                        DestroyCursor(_nativeCursorHandler);
+                        _nativeCursorHandler = IntPtr.Zero;
+                    }
+                }
+
+            }
+            internal void LoadFromFile(string cursorUrl, int width)
+            {
+                //TODO: review here,
+                //we should load from 'virtual disk'
+                _nativeCursorHandler = LoadImage(IntPtr.Zero, cursorUrl, 2, width, width, LR_DEFAULTSIZE | LR_LOADFROMFILE);
+                _cursor = new System.Windows.Forms.Cursor(_nativeCursorHandler);
+            }
+            internal void LoadSystemCursor(System.Windows.Forms.Cursor systemCur)
+            {
+                _isSystemCur = true;
+                _cursor = systemCur;
+            }
+
+            public System.Windows.Forms.Cursor WinFormCursor => _cursor;
+
+
+            [System.Runtime.InteropServices.DllImport("User32")]
+            static extern IntPtr LoadCursorFromFileA(string lpFileName);
+
+            [System.Runtime.InteropServices.DllImport("User32")]
+            static extern bool DestroyCursor(IntPtr hCursor);
+
+            [System.Runtime.InteropServices.DllImport("User32")]
+            static extern bool DestroyIcon(IntPtr hIcon);
+
+
+            [System.Runtime.InteropServices.DllImport("User32")]
+            static extern IntPtr LoadImage(
+                    IntPtr hInst,
+                    string name,
+
+                    uint type, //0=bitmap, 2=cursor,1=icon
+                    int cx, //request width
+                    int cy, //request height
+                    uint fuLoad
+            );
+
+            const uint LR_DEFAULTSIZE = 0x00000040;
+            const uint LR_LOADFROMFILE = 0x00000010;
+            //LR_CREATEDIBSECTION
+            //0x00002000
+
+            //	When the uType parameter specifies IMAGE_BITMAP, causes the function to return a DIB section bitmap rather than a compatible bitmap. This flag is useful for loading a bitmap without mapping it to the colors of the display device.
+
+            //LR_DEFAULTCOLOR
+            //0x00000000
+
+            //	The default flag; it does nothing. All it means is "not LR_MONOCHROME".
+
+            //LR_DEFAULTSIZE
+            //0x00000040
+
+            //	Uses the width or height specified by the system metric values for cursors or icons, if the cxDesired or cyDesired values are set to zero. If this flag is not specified and cxDesired and cyDesired are set to zero, the function uses the actual resource size. If the resource contains multiple images, the function uses the size of the first image.
+
+            //LR_LOADFROMFILE
+            //0x00000010
+
+            //	Loads the stand-alone image from the file specified by lpszName (icon, cursor, or bitmap file).
+
+            //LR_LOADMAP3DCOLORS
+            //0x00001000
+
+            //	Searches the color table for the image and replaces the following shades of gray with the corresponding 3-D color.
+
+            //    Dk Gray, RGB(128,128,128) with COLOR_3DSHADOW
+            //    Gray, RGB(192,192,192) with COLOR_3DFACE
+            //    Lt Gray, RGB(223,223,223) with COLOR_3DLIGHT
+
+            //Do not use this option if you are loading a bitmap with a color depth greater than 8bpp.
+
+            //LR_LOADTRANSPARENT
+            //0x00000020
+
+            //	Retrieves the color value of the first pixel in the image and replaces the corresponding entry in the color table with the default window color (COLOR_WINDOW). All pixels in the image that use that entry become the default window color. This value applies only to images that have corresponding color tables.
+
+            //Do not use this option if you are loading a bitmap with a color depth greater than 8bpp.
+
+            //If fuLoad includes both the LR_LOADTRANSPARENT and LR_LOADMAP3DCOLORS values, LR_LOADTRANSPARENT takes precedence. However, the color table entry is replaced with COLOR_3DFACE rather than COLOR_WINDOW.
+
+            //LR_MONOCHROME
+            //0x00000001
+
+            //	Loads the image in black and white.
+
+            //LR_SHARED
+            //0x00008000
+
+            //	Shares the image handle if the image is loaded multiple times. If LR_SHARED is not set, a second call to LoadImage for the same resource will load the image again and return a different handle.
+
+            //When you use this flag, the system will destroy the resource when it is no longer needed.
+
+            //Do not use LR_SHARED for images that have non-standard sizes, that may change after loading, or that are loaded from a file.
+
+            //When loading a system icon or cursor, you must use LR_SHARED or the function will fail to load the resource.
+
+            //This function finds the first image in the cache with the requested resource name, regardless of the size requested.
+
+            //LR_VGACOLOR
+            //0x00000080
+
+            //	Uses true VGA colors. 
+
+        }
+
     }
+
+
 }

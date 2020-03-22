@@ -13,10 +13,21 @@ namespace LayoutFarm.UI.OpenGL
         IGpuOpenGLSurfaceView _windowControl;
         OpenGLCanvasViewport _openGLViewport;
         RootGraphic _rootgfx;
+
+        Cursor _defaultCur;
+        Cursor _IBeamCur;
+        Cursor _pointerCur;
+        Cursor _arrowCur;
+
         public MyTopWindowBridgeOpenGL(RootGraphic root, ITopWindowEventRoot topWinEventRoot)
             : base(root, topWinEventRoot)
         {
             _rootgfx = root;
+
+            _defaultCur = UIPlatform.CreateCursor(new CursorRequest("system:Default"));
+            _IBeamCur = UIPlatform.CreateCursor(new CursorRequest("system:IBeam"));
+            _pointerCur = UIPlatform.CreateCursor(new CursorRequest("system:Pointer"));
+            _arrowCur = UIPlatform.CreateCursor(new CursorRequest("system:Arrow"));
         }
 
         public override void PaintToOutputWindow(Rectangle invalidateArea)
@@ -32,8 +43,6 @@ namespace LayoutFarm.UI.OpenGL
                 {
                     RootGraphic.InvalidateRectArea(_rootgfx, invalidateArea);
                     _rootgfx.FlushAccumGraphics();
-
-
                     //PaintToOutputWindow();
                 }
             }
@@ -104,26 +113,27 @@ namespace LayoutFarm.UI.OpenGL
             //if not support then just ignore
             return;
         }
+        protected override void ChangeCursor(Cursor cursor)
+        {
+            _windowControl.CurrentCursor = cursor;
+        }
         protected override void ChangeCursor(MouseCursorStyle cursorStyle)
         {
-            //switch (cursorStyle)
-            //{
-            //    case MouseCursorStyle.Pointer:
-            //        {
-            //            _windowControl.Cursor = Cursors.Hand;
-            //        }
-            //        break;
-            //    case MouseCursorStyle.IBeam:
-            //        {
-            //            _windowControl.Cursor = Cursors.IBeam;
-            //        }
-            //        break;
-            //    default:
-            //        {
-            //            _windowControl.Cursor = Cursors.Default;
-            //        }
-            //        break;
-            //}
+            switch (cursorStyle)
+            {
+                case MouseCursorStyle.Pointer:
+                    _windowControl.CurrentCursor = _pointerCur;
+                    break;
+                case MouseCursorStyle.IBeam:
+                    _windowControl.CurrentCursor = _IBeamCur;
+                    break;
+                case MouseCursorStyle.Arrow:
+                    _windowControl.CurrentCursor = _arrowCur;
+                    break;
+                default:
+                    _windowControl.CurrentCursor = _defaultCur;
+                    break;
+            }
         }
 
 #if DEBUG
