@@ -32,6 +32,12 @@ namespace TestGlfw
 
         public int Height => _form.Height;
 
+        public Cursor CurrentCursor
+        {
+            get => throw new NotImplementedException(); 
+            set => throw new NotImplementedException();
+        }
+
         public void Dispose()
         {
         }
@@ -242,8 +248,7 @@ namespace TestGlfw
 
             string versionStr3 = Marshal.PtrToStringAnsi(Glfw3.glfwGetVersionString());
             OpenTK.Platform.Factory.GetCustomPlatformFactory = () => OpenTK.Platform.Egl.EglAngle.NewFactory();
-            OpenTK.Toolkit.Init(new OpenTK.ToolkitOptions
-            {
+            OpenTK.Toolkit.Init(new OpenTK.ToolkitOptions {
                 Backend = OpenTK.PlatformBackend.PreferNative,
             });
             OpenTK.Graphics.PlatformAddressPortal.GetAddressDelegate = OpenTK.Platform.Utilities.CreateGetAddress();
