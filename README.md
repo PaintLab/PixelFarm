@@ -155,6 +155,8 @@ Apache2, 2010, Sebastian Stehle, .NET Image Tools Development Group. , https://i
 
 MIT, 2018, Tomáš Pažourek, Colourful, https://github.com/tompazourek/Colourful
 
+MIT, 2011, Inedo, https://github.com/Inedo/iconmaker
+
 **Font**
 
 Apache2, 2016-2017, WinterDev, Samuel Carlsson, Sam Hocevar and others, https://github.com/LayoutFarm/Typography

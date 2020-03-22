@@ -6,8 +6,6 @@
 
 
 using System;
-using ImageTools.Helpers;
-using ImageTools;
 namespace ImageTools.IO.Png
 {
     /// <summary>
