@@ -41,6 +41,9 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\ImgCodec.IconAndCursor\IconAndCursorFile.cs">
+      <Link>0_REF_IconAndCursor\IconAndCursorFile.cs</Link>
+    </Compile>
     <Compile Include="..\ImgCodec.PngCs\ImgCodec.PngCs\BufferedStreamReader.cs">
       <Link>0_REF_Pngcs\BufferedStreamReader.cs</Link>
     </Compile>

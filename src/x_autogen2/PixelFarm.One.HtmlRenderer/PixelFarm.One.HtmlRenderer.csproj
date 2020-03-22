@@ -471,6 +471,9 @@
     <Compile Include="..\..\PixelFarm\ImgCodec.Gif\LZWDecoder.cs">
       <Link>PixelFarm\ImgCodec.Gif\LZWDecoder.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\ImgCodec.IconAndCursor\IconAndCursorFile.cs">
+      <Link>PixelFarm\ImgCodec.IconAndCursor\IconAndCursorFile.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\DCT.cs">
       <Link>PixelFarm\ImgCodec.Jpeg\FluxJpeg.Core\DCT.cs</Link>
     </Compile>

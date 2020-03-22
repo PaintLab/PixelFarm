@@ -183,6 +183,7 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.ImgCodecs\..\ImgCodec.Gif\GifImageDescriptor.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.ImgCodecs\..\ImgCodec.Gif\GifLogicalScreenDescriptor.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.ImgCodecs\..\ImgCodec.Gif\LZWDecoder.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.ImgCodecs\..\ImgCodec.IconAndCursor\IconAndCursorFile.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.ImgCodecs\..\ImgCodec.Jpeg\FluxJpeg.Core\DCT.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.ImgCodecs\..\ImgCodec.Jpeg\FluxJpeg.Core\DecodedJpeg.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.ImgCodecs\..\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\HuffmanTable.cs" />
