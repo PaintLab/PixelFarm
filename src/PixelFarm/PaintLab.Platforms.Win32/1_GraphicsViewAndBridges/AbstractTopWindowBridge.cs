@@ -204,7 +204,7 @@ namespace LayoutFarm.UI
             _canvasViewport.FullMode = false;
             _topWinEventRoot.RootMouseDown(mouseEventArgs);
 
-            SetCurrent(mouseEventArgs);
+            UpdateCursor(mouseEventArgs);
 
             ReleaseUIMouseEventArgs(mouseEventArgs);
 
@@ -232,7 +232,7 @@ namespace LayoutFarm.UI
         public void HandleMouseMove(UIMouseEventArgs mouseEventArgs)
         {
             _topWinEventRoot.RootMouseMove(mouseEventArgs);
-            SetCurrent(mouseEventArgs);
+            UpdateCursor(mouseEventArgs);
             ReleaseUIMouseEventArgs(mouseEventArgs);
             PrepareRenderAndFlushAccumGraphics();
         }
@@ -242,13 +242,13 @@ namespace LayoutFarm.UI
             _canvasViewport.FullMode = false;
             _topWinEventRoot.RootMouseUp(mouseEventArgs);
 
-            SetCurrent(mouseEventArgs);
+            UpdateCursor(mouseEventArgs);
             ReleaseUIMouseEventArgs(mouseEventArgs);
             PrepareRenderAndFlushAccumGraphics();
         }
 
         Cursor _latestCustomCursor;
-        void SetCurrent(UIMouseEventArgs mouseEventArgs)
+        void UpdateCursor(UIMouseEventArgs mouseEventArgs)
         {
             if (mouseEventArgs.CustomMouseCursor != null)
             {
@@ -275,7 +275,7 @@ namespace LayoutFarm.UI
         {
             _canvasViewport.FullMode = true;
             _topWinEventRoot.RootMouseWheel(mouseEventArgs);
-            SetCurrent(mouseEventArgs);
+            UpdateCursor(mouseEventArgs);
 
             ReleaseUIMouseEventArgs(mouseEventArgs);
             PrepareRenderAndFlushAccumGraphics();
