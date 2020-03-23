@@ -694,6 +694,27 @@ namespace PixelFarm.DrawingGL
             PixelFarm.Drawing.RectangleF colorSrcRect = new RectangleF(0, 0, colorSrc.Width, colorSrc.Height);
             PixelFarm.Drawing.RectangleF maskSrcRect = new RectangleF(0, 0, mask.Width, mask.Height);
             _maskShader.DrawSubImage2(colorSrcRect, maskSrcRect, targetLeft, targetTop, 1);
+        }
+        public void DrawImageWithMask(GLBitmap colorSrc, GLBitmap mask,
+            in PixelFarm.Drawing.RectangleF colorSrcRect,
+            in PixelFarm.Drawing.RectangleF maskSrcRect,
+            float targetLeft, float targetTop)
+        {
+            //in this version bmp and mask size must be the same.
+            //this limitation will be removed later
+            if (OriginKind == RenderSurfaceOrientation.LeftTop)
+            {
+                //***
+                targetTop += colorSrc.Height;
+            }
+
+            _maskShader.LoadGLBitmap(mask);
+            _maskShader.LoadColorSourceBitmap(colorSrc);
+            _maskShader.DrawSubImage(0, 0, colorSrc.Width, colorSrc.Height, targetLeft, targetTop);
+
+            //_maskShader.DrawSubImage(0, 0, colorSrc.Width, colorSrc.Height, targetLeft, targetTop);
+             
+            //_maskShader.DrawSubImage2(colorSrcRect, maskSrcRect, targetLeft, targetTop, 1);
 
         }
         public void DrawImageWithMsdfMask(GLBitmap colorSrc, GLBitmap mask, float targetLeft, float targetTop)

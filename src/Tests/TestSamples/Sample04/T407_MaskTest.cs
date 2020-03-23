@@ -32,18 +32,28 @@ namespace OpenTkEssTest
         {
             //1. create color bmp  
             _colorBmp = new MemBitmap(32, 32);
-            using (VxsTemp.Borrow(out var v1))
+            using (VxsTemp.Borrow(out var v1, out var v2))
             using (AggPainterPool.Borrow(_colorBmp, out AggPainter painter))
             {
                 painter.Clear(Color.White);
                 //painter.FillRect(2, 2, 15, 15, Color.Red);
 
-                v1.AddMoveTo(0, 0);
-                v1.AddLineTo(20, 0);
-                v1.AddLineTo(10, 15);
+                //v1.AddMoveTo(0, 0);
+                //v1.AddLineTo(20, 0);
+                //v1.AddLineTo(10, 15);
+                //v1.AddCloseFigure();
+
+
+                v1.AddMoveTo(0, 32);
+                v1.AddLineTo(20, 32);
+                v1.AddLineTo(10, 5);
                 v1.AddCloseFigure();
 
+                //v1.ScaleToNewVxs(1, -1, v2);
+
                 painter.Fill(v1, Color.Red);
+
+                //_colorBmp.SaveImage("test_color.png");
             }
             //2. create mask bmp
             _maskBmp = new MemBitmap(32, 32);
@@ -52,7 +62,7 @@ namespace OpenTkEssTest
                 //white=> opaque
                 //black => transparent
                 painter.Clear(Color.Black);
-                painter.FillCircle(10, 10, 4, Color.White);
+                painter.FillCircle(10, 10, 5, Color.White);
             }
             _colorGLBmp = new GLBitmap(_colorBmp);
             _maskGLBmp = new GLBitmap(_maskBmp);

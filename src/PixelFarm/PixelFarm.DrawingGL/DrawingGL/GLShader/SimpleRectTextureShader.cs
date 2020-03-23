@@ -1535,11 +1535,13 @@ namespace PixelFarm.DrawingGL
                 uniform vec2 u_offset;                
                 uniform mat4 u_mvpMatrix; 
                 varying vec2 v_texCoord; 
+                varying vec2 v_color_texCoord; 
 
                 void main()
                 {                      
                     gl_Position = u_mvpMatrix* (a_position+ vec4(u_offset+u_ortho_offset,0,0));
                     v_texCoord =  a_texCoord;
+                    v_color_texCoord= a_texCoord_color;
                 }	 
                ";
 
@@ -1550,10 +1552,11 @@ namespace PixelFarm.DrawingGL
                       uniform sampler2D s_color_src;
                        
                       varying vec2 v_texCoord; 
+                      varying vec2 v_color_texCoord;
                       void main()
                       {   
                             vec4 m = texture2D(s_texture,v_texCoord);
-                            vec4 c = texture2D(s_color_src,v_texCoord);
+                            vec4 c = texture2D(s_color_src,v_color_texCoord);
                             
                             gl_FragColor= vec4(c[2], c[1], c[0] , c[3] * m[2]); 
                       }
