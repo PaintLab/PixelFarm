@@ -1520,6 +1520,9 @@ namespace PixelFarm.DrawingGL
         //this limitation will be fixed later.
 
         ShaderUniformVar2 _offset;
+        /// <summary>
+        /// color texture for color src
+        /// </summary>
         ShaderUniformVar1 _u_color_src;
         ShaderVtxAttrib2f _texCoord_color;
 
@@ -1534,6 +1537,7 @@ namespace PixelFarm.DrawingGL
                 uniform vec2 u_ortho_offset;
                 uniform vec2 u_offset;                
                 uniform mat4 u_mvpMatrix; 
+
                 varying vec2 v_texCoord; 
                 varying vec2 v_color_texCoord; 
 
@@ -1603,7 +1607,7 @@ namespace PixelFarm.DrawingGL
             _colorBmpH = bmp.Height;
         }
         public void DrawSubImage2(in PixelFarm.Drawing.RectangleF maskSrc,
-            float colorSrcX,float colorSrcY,
+            float colorSrcX, float colorSrcY,
             float targetLeft, float targetTop,
             float scale)
         {

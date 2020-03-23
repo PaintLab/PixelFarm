@@ -33,7 +33,7 @@ namespace OpenTkEssTest
         protected override void OnReadyForInitGLShaderProgram()
         {
             //1. create color bmp  
-            _colorBmp = new MemBitmap(28, 23);
+            _colorBmp = new MemBitmap(30, 30);
             using (AggPainterPool.Borrow(_colorBmp, out AggPainter painter))
             {
                 painter.Clear(Color.White);
@@ -76,8 +76,13 @@ namespace OpenTkEssTest
             _pcx.ClearColorBuffer();
 
 
-            _pcx.DrawImageWithMsdfMask(_msdfMaskGLBmp, _colorGLBmp, 0, 0);
+            //_pcx.DrawImageWithMsdfMask(_msdfMaskGLBmp, _colorGLBmp, 0, 0);
 
+             
+            RectangleF maskSrc = new RectangleF(0, 0, _msdfMaskBmp.Width, _msdfMaskBmp.Height);
+            _pcx.DrawImageWithMsdfMask(_msdfMaskGLBmp, _colorGLBmp, maskSrc,
+                5, 0,
+                0, 0);
 
             SwapBuffers();
         }

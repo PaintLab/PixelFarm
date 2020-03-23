@@ -79,8 +79,7 @@ namespace OpenTkEssTest
             _pcx.StrokeColor = PixelFarm.Drawing.Color.Blue;
             _pcx.ClearColorBuffer();
             _painter.FillColor = PixelFarm.Drawing.Color.Black;
-
-            //_pcx.DrawImageWithMask(_colorGLBmp, _maskGLBmp, 0, 0);
+             
             _painter.Clear(Color.Blue);
 
             PixelFarm.Drawing.RectangleF maskSrc = new RectangleF(0, 0, _maskBmp.Width, _maskBmp.Height);

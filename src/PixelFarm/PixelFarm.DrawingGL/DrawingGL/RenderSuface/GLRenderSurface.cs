@@ -718,6 +718,25 @@ namespace PixelFarm.DrawingGL
             _msdfMaskShader.LoadColorSourceBitmap(colorSrc);
             _msdfMaskShader.DrawSubImage(0, 0, mask.Width, mask.Height, targetLeft, targetTop);
         }
+        public void DrawImageWithMsdfMask(GLBitmap mask, GLBitmap colorSrc,
+            in PixelFarm.Drawing.RectangleF maskSrcRect,
+            float colorSrcX, float colorSrcY,
+            float targetLeft, float targetTop)
+        {
+            //in this version bmp and mask size must be the same.
+            //this limitation will be removed later
+            if (OriginKind == RenderSurfaceOrientation.LeftTop)
+            {
+                //***
+                targetTop += colorSrc.Height;
+            }
+
+            _msdfMaskShader.LoadGLBitmap(mask);
+            _msdfMaskShader.LoadColorSourceBitmap(colorSrc);
+            _msdfMaskShader.DrawSubImage2(maskSrcRect,
+                -colorSrcX, -colorSrcY,
+                targetLeft, targetTop, 1);
+        }
         public void DrawImage(GLBitmap bmp,
             float left, float top, float w, float h)
         {
@@ -750,6 +769,9 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawImageToQuad(GLBitmap bmp, PixelFarm.CpuBlit.VertexProcessing.Affine affine)
         {
+            //TODO: review here, reuse this quad
+            //or use stack-base struct
+
             float[] quad = null;
             if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
