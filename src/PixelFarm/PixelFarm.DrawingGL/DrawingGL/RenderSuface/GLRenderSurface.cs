@@ -135,6 +135,8 @@ namespace PixelFarm.DrawingGL
         Conv3x3TextureShader _conv3x3TextureShader;
         MsdfShader _msdfShader;
         SingleChannelSdf _sdfShader;
+        MsdfMaskShader _msdfMaskShader;
+
         MaskShader _maskShader;
         //-----------------------------------------------------------
         ShaderSharedResource _shareRes;
@@ -208,6 +210,7 @@ namespace PixelFarm.DrawingGL
             _lcdSubPixShaderV2 = new LcdSubPixShaderV2(_shareRes);
             _lcdSubPixShaderV2.SetFillColor(Color.White);
             _maskShader = new MaskShader(_shareRes);
+            _msdfMaskShader = new MsdfMaskShader(_shareRes);
 
 
             _blurShader = new BlurShader(_shareRes);
@@ -215,10 +218,10 @@ namespace PixelFarm.DrawingGL
             _invertAlphaLineSmoothShader = new InvertAlphaLineSmoothShader(_shareRes); //used with stencil  ***
 
             _conv3x3TextureShader = new Conv3x3TextureShader(_shareRes);
+
             _msdfShader = new MsdfShader(_shareRes);
             _sdfShader = new SingleChannelSdf(_shareRes);
-
-
+            _msdfMaskShader = new MsdfMaskShader(_shareRes);
 
             currentBinCache?.Close(); //close the cache, let other app use the shader cache file
             CachedBinaryShaderIO.ClearCurrentImpl();
@@ -407,8 +410,8 @@ namespace PixelFarm.DrawingGL
         internal GLBitmap ResolveForGLBitmap(Image image)
         {
             //1.
-            GLBitmap glBmp = image as GLBitmap;
-            if (glBmp != null)
+
+            if (image is GLBitmap glBmp)
             {
                 return glBmp;
             }
@@ -419,14 +422,13 @@ namespace PixelFarm.DrawingGL
                 return glBmp;
             }
             //
-            BitmapBufferProvider imgBinder = image as BitmapBufferProvider;
-            if (imgBinder != null)
+
+            if (image is BitmapBufferProvider bmpBuffProvider)
             {
-                glBmp = new GLBitmap(imgBinder);
+                glBmp = new GLBitmap(bmpBuffProvider);
             }
             else if (image is CpuBlit.MemBitmap memBmp)
             {
-
                 glBmp = new GLBitmap(memBmp, false);
             }
             else
@@ -688,7 +690,20 @@ namespace PixelFarm.DrawingGL
             _maskShader.LoadColorSourceBitmap(colorSrc);
             _maskShader.DrawSubImage(0, 0, colorSrc.Width, colorSrc.Height, targetLeft, targetTop);
         }
+        public void DrawImageWithMsdfMask(GLBitmap colorSrc, GLBitmap mask, float targetLeft, float targetTop)
+        {
+            //in this version bmp and mask size must be the same.
+            //this limitation will be removed later
+            if (OriginKind == RenderSurfaceOrientation.LeftTop)
+            {
+                //***
+                targetTop += colorSrc.Height;
+            }
 
+            _msdfMaskShader.LoadGLBitmap(mask); 
+            _msdfMaskShader.LoadColorSourceBitmap(colorSrc);
+            _msdfMaskShader.DrawSubImage(0, 0, colorSrc.Width, colorSrc.Height, targetLeft, targetTop);
+        }
         public void DrawImage(GLBitmap bmp,
             float left, float top, float w, float h)
         {

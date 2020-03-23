@@ -84,10 +84,7 @@ namespace PixelFarm.DrawingGL
                 _colorChanged = true;
             }
         }
-
     }
-
-
 
     sealed class MsdfShader : SimpleRectTextureShader
     {
@@ -167,6 +164,89 @@ namespace PixelFarm.DrawingGL
             base.SetVarsBeforeRender();
         }
     }
+     
+    sealed class MsdfMaskShader : SimpleRectTextureShader
+    {
 
-  
+        //TODO: review its name
+        //this shader is similar to original MsdfShader
+        //but this shader use color source from image instead of solid color
+
+        ShaderUniformVar1 _u_color_src;
+
+        public MsdfMaskShader(ShaderSharedResource shareRes)
+            : base(shareRes)
+        {
+            //credit: https://github.com/Chlumsky/msdfgen 
+
+            string vs = @"
+                attribute vec4 a_position;
+                attribute vec2 a_texCoord;
+                uniform vec2 u_ortho_offset;
+                uniform mat4 u_mvpMatrix;  
+                varying vec2 v_texCoord;  
+                void main()
+                {
+                    gl_Position = u_mvpMatrix* (a_position+vec4(u_ortho_offset,0,0));
+                    v_texCoord =  a_texCoord; 
+                 }	 
+                ";
+            //enable derivative extension  for fwidth() function
+            //see 
+            //https://www.khronos.org/registry/gles/extensions/OES/OES_standard_derivatives.txt
+            //https://github.com/AnalyticalGraphicsInc/cesium/issues/745
+            //https://developer.mozilla.org/en-US/docs/Web/API/OES_standard_derivatives
+            //https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Using_Extensions
+
+
+            //s_texture=> msdf texture
+            //
+            string fs = @"
+                        #ifdef GL_OES_standard_derivatives
+                            #extension GL_OES_standard_derivatives : enable
+                        #endif  
+                        precision mediump float; 
+                        varying vec2 v_texCoord;                
+                        uniform sampler2D s_texture;  
+                        uniform sampler2D u_color_src;                         
+
+                        float median(float r, float g, float b) {
+                            return max(min(r, g), min(max(r, g), b));
+                        }
+                        void main() {
+                            vec4 msk = texture2D(s_texture, v_texCoord);
+                            vec4 color = texture2D(u_color_src, v_texCoord);
+
+                            float sigDist = median(msk[0], msk[1], msk[2]) - 0.5;
+                            float opacity = clamp(sigDist/fwidth(sigDist) + 0.5, 0.0, 1.0);  
+                            gl_FragColor= vec4(color[0],color[1],color[2],opacity * color[3]);
+                            //gl_FragColor=color;
+                        }
+             ";
+            BuildProgram(vs, fs);
+        }
+        protected override void OnProgramBuilt()
+        {
+            _u_color_src = _shaderProgram.GetUniform1("u_color_src");
+        }
+
+        /// <summary>
+        /// load glbmp before draw
+        /// </summary>
+        /// <param name="bmp"></param>
+        public void LoadColorSourceBitmap(GLBitmap bmp)
+        {
+            //load base bitmap first
+            //load before use with RenderSubImage
+            SetCurrent();
+            CheckViewMatrix();
+            //-------------------------------------------------------------------------------------
+            // Bind the texture...
+            TextureContainter container = _shareRes.LoadGLBitmap(bmp);
+            //set color source bitmap
+            _u_color_src.SetValue(container.TextureUnitNo);
+        }
+      
+    }
+
 }
