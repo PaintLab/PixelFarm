@@ -80,9 +80,11 @@ namespace OpenTkEssTest
             _pcx.ClearColorBuffer();
             _painter.FillColor = PixelFarm.Drawing.Color.Black;
 
-            _pcx.DrawImageWithMask(_colorGLBmp, _maskGLBmp, 0, 0);
+            //_pcx.DrawImageWithMask(_colorGLBmp, _maskGLBmp, 0, 0);
 
-            //2. create mask img,
+            PixelFarm.Drawing.RectangleF colorSrc = new RectangleF(-2, 0, _colorBmp.Width, _colorBmp.Height);
+            PixelFarm.Drawing.RectangleF maskSrc = new RectangleF(0, 0, _maskBmp.Width, _maskBmp.Height);
+            _pcx.DrawImageWithMask(_colorGLBmp, _maskGLBmp, colorSrc, maskSrc, 0, 0);
 
             SwapBuffers();
         }
