@@ -688,7 +688,13 @@ namespace PixelFarm.DrawingGL
 
             _maskShader.LoadGLBitmap(mask);
             _maskShader.LoadColorSourceBitmap(colorSrc);
-            _maskShader.DrawSubImage(0, 0, colorSrc.Width, colorSrc.Height, targetLeft, targetTop);
+            //_maskShader.DrawSubImage(0, 0, colorSrc.Width, colorSrc.Height, targetLeft, targetTop);
+            //_maskShader.DrawSubImage(0, 0, colorSrc.Width, colorSrc.Height, targetLeft, targetTop);
+
+            PixelFarm.Drawing.RectangleF colorSrcRect = new RectangleF(0, 0, colorSrc.Width, colorSrc.Height);
+            PixelFarm.Drawing.RectangleF maskSrcRect = new RectangleF(0, 0, mask.Width, mask.Height);
+            _maskShader.DrawSubImage2(colorSrcRect, maskSrcRect, targetLeft, targetTop, 1);
+
         }
         public void DrawImageWithMsdfMask(GLBitmap colorSrc, GLBitmap mask, float targetLeft, float targetTop)
         {
@@ -700,7 +706,7 @@ namespace PixelFarm.DrawingGL
                 targetTop += colorSrc.Height;
             }
 
-            _msdfMaskShader.LoadGLBitmap(mask); 
+            _msdfMaskShader.LoadGLBitmap(mask);
             _msdfMaskShader.LoadColorSourceBitmap(colorSrc);
             _msdfMaskShader.DrawSubImage(0, 0, colorSrc.Width, colorSrc.Height, targetLeft, targetTop);
         }
