@@ -218,6 +218,8 @@ namespace PixelFarm.DrawingGL
             _msdfShader = new MsdfShader(_shareRes);
             _sdfShader = new SingleChannelSdf(_shareRes);
 
+
+
             currentBinCache?.Close(); //close the cache, let other app use the shader cache file
             CachedBinaryShaderIO.ClearCurrentImpl();
             //-----------------------------------------------------------------------
