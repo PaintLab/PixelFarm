@@ -772,8 +772,7 @@ namespace PixelFarm.DrawingGL
             //TODO: review here, reuse this quad
             //or use stack-base struct
 
-            Quad2f quad = new Quad2f();
-            quad.SetCornersFromRect(bmp.Width, OriginKind == RenderSurfaceOrientation.LeftTop ? bmp.Height : -bmp.Height);
+            Quad2f quad = new Quad2f(bmp.Width, OriginKind == RenderSurfaceOrientation.LeftTop ? bmp.Height : -bmp.Height);             
             quad.Transform(affine);
             DrawImageToQuad(bmp, quad);
         }
@@ -783,10 +782,8 @@ namespace PixelFarm.DrawingGL
             //TODO: review here, reuse this quad
             //or use stack-base struct
 
-            Quad2f quad = new Quad2f();
-            quad.SetCornersFromRect(bmp.Width, OriginKind == RenderSurfaceOrientation.LeftTop ? bmp.Height : -bmp.Height);
+            Quad2f quad = new Quad2f(bmp.Width, OriginKind == RenderSurfaceOrientation.LeftTop ? bmp.Height : -bmp.Height);             
             quad.Transform(affine);
-
             DrawImageToQuad(bmp, quad);
         }
 
