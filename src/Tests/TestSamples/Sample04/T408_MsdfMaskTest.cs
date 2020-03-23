@@ -45,11 +45,11 @@ namespace OpenTkEssTest
             using (VxsTemp.Borrow(out var v1, out var v2))
             {
                 var msdf = new Msdfgen.MsdfGen3();
-                 
+
                 v1.AddMoveTo(0, 0);
                 v1.AddLineTo(20, 0);
                 v1.AddLineTo(10, 15);
-                v1.AddCloseFigure(); 
+                v1.AddCloseFigure();
 
                 v1.ScaleToNewVxs(1, -1, v2); //flipY
 
@@ -76,7 +76,7 @@ namespace OpenTkEssTest
             _pcx.ClearColorBuffer();
 
 
-            _pcx.DrawImageWithMsdfMask(_colorGLBmp, _msdfMaskGLBmp, 0, 0);
+            _pcx.DrawImageWithMsdfMask(_msdfMaskGLBmp, _colorGLBmp, 0, 0);
 
 
             SwapBuffers();

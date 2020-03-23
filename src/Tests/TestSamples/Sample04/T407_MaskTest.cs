@@ -31,7 +31,7 @@ namespace OpenTkEssTest
         protected override void OnReadyForInitGLShaderProgram()
         {
             //1. create color bmp  
-            _colorBmp = new MemBitmap(32, 32);
+            _colorBmp = new MemBitmap(64, 64);
             using (VxsTemp.Borrow(out var v1, out var v2))
             using (AggPainterPool.Borrow(_colorBmp, out AggPainter painter))
             {
@@ -62,7 +62,7 @@ namespace OpenTkEssTest
                 //white=> opaque
                 //black => transparent
                 painter.Clear(Color.Black);
-                painter.FillCircle(10, 10, 5, Color.White);
+                painter.FillCircle(10, 10, 10, Color.White);
             }
             _colorGLBmp = new GLBitmap(_colorBmp);
             _maskGLBmp = new GLBitmap(_maskBmp);
@@ -81,10 +81,11 @@ namespace OpenTkEssTest
             _painter.FillColor = PixelFarm.Drawing.Color.Black;
 
             //_pcx.DrawImageWithMask(_colorGLBmp, _maskGLBmp, 0, 0);
+            _painter.Clear(Color.Blue);
 
-            PixelFarm.Drawing.RectangleF colorSrc = new RectangleF(-2, 0, _colorBmp.Width, _colorBmp.Height);
             PixelFarm.Drawing.RectangleF maskSrc = new RectangleF(0, 0, _maskBmp.Width, _maskBmp.Height);
-            _pcx.DrawImageWithMask(_colorGLBmp, _maskGLBmp, colorSrc, maskSrc, 0, 0);
+            _pcx.DrawImageWithMask(_maskGLBmp, _colorGLBmp, maskSrc, 5, 3, 0, 0);
+            _pcx.DrawImageWithMask(_maskGLBmp, _colorGLBmp, maskSrc, 5, 3, 30, 30);
 
             SwapBuffers();
         }

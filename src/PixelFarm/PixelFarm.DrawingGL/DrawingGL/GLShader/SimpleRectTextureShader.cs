@@ -1602,7 +1602,8 @@ namespace PixelFarm.DrawingGL
             _colorBmpW = bmp.Width;
             _colorBmpH = bmp.Height;
         }
-        public void DrawSubImage2(in PixelFarm.Drawing.RectangleF colorSrc, in PixelFarm.Drawing.RectangleF maskSrc,
+        public void DrawSubImage2(in PixelFarm.Drawing.RectangleF maskSrc,
+            float colorSrcX,float colorSrcY,
             float targetLeft, float targetTop,
             float scale)
         {
@@ -1613,7 +1614,7 @@ namespace PixelFarm.DrawingGL
             float orgBmpH = _latestBmpH;
 
 
-            //mask----
+            //mask src----
             float srcLeft = maskSrc.Left;
             float srcTop = maskSrc.Top;
             float srcW = maskSrc.Width;
@@ -1621,14 +1622,16 @@ namespace PixelFarm.DrawingGL
             float srcBottom = srcTop + srcH;
             float srcRight = srcLeft + srcW;
 
+
+            //----
             //src color
             float color_bmp_W = _colorBmpW;
             float color_bmp_H = _colorBmpH;
 
-            float color_left = colorSrc.Left;
-            float color_top = colorSrc.Top;
-            float color_right = color_left + colorSrc.Width;
-            float color_bottom = color_top + colorSrc.Height;
+            float color_left = colorSrcX;
+            float color_top = colorSrcY;
+            float color_right = color_left + srcW;
+            float color_bottom = color_top + srcH;
 
             unsafe
             {

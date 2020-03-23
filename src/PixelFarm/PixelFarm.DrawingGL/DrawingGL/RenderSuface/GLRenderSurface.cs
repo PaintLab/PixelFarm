@@ -676,16 +676,16 @@ namespace PixelFarm.DrawingGL
             _msdfShader.DrawSubImages(bmp, coords, scale);
         }
 
-        public void DrawImageWithMask(GLBitmap colorSrc, GLBitmap mask, float targetLeft, float targetTop)
+        public void DrawImageWithMask(GLBitmap mask, GLBitmap colorSrc, float targetLeft, float targetTop)
         {
-            DrawImageWithMask(colorSrc, mask,
-                new RectangleF(0, 0, colorSrc.Width, colorSrc.Height),
+            DrawImageWithMask(mask, colorSrc,
                 new RectangleF(0, 0, mask.Width, mask.Height),
+                0, 0,
                 targetLeft, targetTop);
         }
-        public void DrawImageWithMask(GLBitmap colorSrc, GLBitmap mask,
-            in PixelFarm.Drawing.RectangleF colorSrcRect,
+        public void DrawImageWithMask(GLBitmap mask, GLBitmap colorSrc,
             in PixelFarm.Drawing.RectangleF maskSrcRect,
+            float colorSrcX, float colorSrcY,
             float targetLeft, float targetTop)
         {
             //in this version bmp and mask size must be the same.
@@ -697,11 +697,14 @@ namespace PixelFarm.DrawingGL
             }
 
             _maskShader.LoadGLBitmap(mask);
-            _maskShader.LoadColorSourceBitmap(colorSrc); 
-            _maskShader.DrawSubImage2(colorSrcRect, maskSrcRect, targetLeft, targetTop, 1);
-
+            _maskShader.LoadColorSourceBitmap(colorSrc);
+            _maskShader.DrawSubImage2(maskSrcRect,
+                -colorSrcX, -colorSrcY,
+                targetLeft, targetTop, 1);
         }
-        public void DrawImageWithMsdfMask(GLBitmap colorSrc, GLBitmap mask, float targetLeft, float targetTop)
+
+        //-----------
+        public void DrawImageWithMsdfMask(GLBitmap mask, GLBitmap colorSrc, float targetLeft, float targetTop)
         {
             //in this version bmp and mask size must be the same.
             //this limitation will be removed later
