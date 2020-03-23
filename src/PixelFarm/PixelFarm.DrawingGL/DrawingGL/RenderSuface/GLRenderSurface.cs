@@ -716,7 +716,7 @@ namespace PixelFarm.DrawingGL
 
             _msdfMaskShader.LoadGLBitmap(mask);
             _msdfMaskShader.LoadColorSourceBitmap(colorSrc);
-            _msdfMaskShader.DrawSubImage(0, 0, colorSrc.Width, colorSrc.Height, targetLeft, targetTop);
+            _msdfMaskShader.DrawSubImage(0, 0, mask.Width, mask.Height, targetLeft, targetTop);
         }
         public void DrawImage(GLBitmap bmp,
             float left, float top, float w, float h)
