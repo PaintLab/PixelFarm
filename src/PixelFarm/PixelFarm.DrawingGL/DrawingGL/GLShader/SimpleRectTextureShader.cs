@@ -8,7 +8,7 @@ namespace PixelFarm.DrawingGL
         protected ShaderVtxAttrib3f a_position;
         protected ShaderVtxAttrib2f a_texCoord;
 
-        protected ShaderUniformVar1 s_texture;
+        protected ShaderUniformVar1 u_texture;
         protected static readonly ushort[] indices = new ushort[] { 0, 1, 2, 3 };
 
         public SimpleRectTextureShader(ShaderSharedResource shareRes)
@@ -36,20 +36,13 @@ namespace PixelFarm.DrawingGL
             // Bind the texture...
 
             TextureContainter container = _shareRes.LoadGLBitmap(bmp);
-            // Set the texture sampler to texture unit to 0     
-            s_texture.SetValue(container.TextureUnitNo);
 
-
+            u_texture.SetValue(container.TextureUnitNo);
             _latestBmpW = bmp.Width;
             _latestBmpH = bmp.Height;
             _latestBmpYFlipped = bmp.IsYFlipped;
         }
-        //internal void SetAssociatedTextureInfo(GLBitmap bmp)
-        //{
-        //    _latestBmpW = bmp.Width;
-        //    _latestBmpH = bmp.Height;
-        //    _latestBmpYFlipped = bmp.IsYFlipped;
-        //}
+
         internal unsafe void UnsafeDrawSubImages(float* srcDestList, int arrLen, float scale)
         {
             //-------------------------------------------------------------------------------------
@@ -251,7 +244,7 @@ namespace PixelFarm.DrawingGL
             //// Set the texture sampler to texture unit to 0     
             //s_texture.SetValue(0);
 
-            s_texture.SetValue(textureContainer.TextureUnitNo);
+            u_texture.SetValue(textureContainer.TextureUnitNo);
             SetVarsBeforeRender();
             GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
         }
@@ -352,7 +345,7 @@ namespace PixelFarm.DrawingGL
             //GL.ActiveTexture(TextureUnit.Texture0);
             //GL.BindTexture(TextureTarget.Texture2D, textureId);
             // Set the texture sampler to texture unit to 0     
-            s_texture.SetValue(container.TextureUnitNo);
+            u_texture.SetValue(container.TextureUnitNo);
 
             SetVarsBeforeRender();
             GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
@@ -379,7 +372,7 @@ namespace PixelFarm.DrawingGL
             a_texCoord = _shaderProgram.GetAttrV2f("a_texCoord");
             u_matrix = _shaderProgram.GetUniformMat4("u_mvpMatrix");
             u_orthov_offset = _shaderProgram.GetUniform2("u_ortho_offset");
-            s_texture = _shaderProgram.GetUniform1("s_texture");
+            u_texture = _shaderProgram.GetUniform1("s_texture");
             OnProgramBuilt();
             return true;
         }
@@ -656,6 +649,7 @@ namespace PixelFarm.DrawingGL
             }
         }
     }
+
 
     /// <summary>
     /// texture-based, lcd-subpix rendering shader for any background
@@ -1514,6 +1508,112 @@ namespace PixelFarm.DrawingGL
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);//restore 
             vbo.UnBind();
         }
+    }
+
+    sealed class MaskShader : SimpleRectTextureShader
+    {
+        //in this shader we have 2 textures
+        //1. for mask (default, similar to other SimpleRectTextureShaders)
+        //2. for color source (instead of vertex color)
+
+        //in this version, mask and color source size must be the same.
+        //this limitation will be fixed later.
+
+        ShaderUniformVar2 _offset;
+        ShaderUniformVar1 _u_color_src;
+        public MaskShader(ShaderSharedResource shareRes)
+            : base(shareRes)
+        {
+            string vs = @"                 
+                attribute vec4 a_position;
+                attribute vec2 a_texCoord;
+                uniform vec2 u_ortho_offset;
+                uniform vec2 u_offset;                
+                uniform mat4 u_mvpMatrix; 
+                varying vec2 v_texCoord; 
+
+                void main()
+                {                      
+                    gl_Position = u_mvpMatrix* (a_position+ vec4(u_offset+u_ortho_offset,0,0));
+                    v_texCoord =  a_texCoord;
+                }	 
+               ";
+
+
+            string fs = @"
+                      precision mediump float; 
+                      uniform sampler2D s_texture;
+                      uniform sampler2D s_color_src;
+                       
+                      varying vec2 v_texCoord; 
+                      void main()
+                      {   
+                            vec4 m = texture2D(s_texture,v_texCoord);
+                            vec4 c = texture2D(s_color_src,v_texCoord);
+                            
+                            gl_FragColor= vec4(c[0], c[1], c[2] , c[3] * m[2]); 
+                      }
+                ";
+            
+            //debug
+            //gl_FragColor= vec4(m[0],m[1],m[2],m[3]);
+            //gl_FragColor= vec4(c[2],c[1],c[0],c[3]);
+
+
+            BuildProgram(vs, fs);
+        }
+
+        protected override void OnProgramBuilt()
+        {
+            _offset = _shaderProgram.GetUniform2("u_offset");
+            _u_color_src = _shaderProgram.GetUniform1("s_color_src");
+
+        }
+        protected override void SetVarsBeforeRender()
+        {
+        }
+
+        /// <summary>
+        /// load glbmp before draw
+        /// </summary>
+        /// <param name="bmp"></param>
+        public void LoadColorSourceBitmap(GLBitmap bmp)
+        {
+            //load base bitmap first
+            //load before use with RenderSubImage
+            SetCurrent();
+            CheckViewMatrix();
+            //-------------------------------------------------------------------------------------
+            // Bind the texture...
+            TextureContainter container = _shareRes.LoadGLBitmap(bmp);
+            //set color source bitmap
+            _u_color_src.SetValue(container.TextureUnitNo);
+            //_latestBmpW = bmp.Width;
+            //_latestBmpH = bmp.Height;
+            //_latestBmpYFlipped = bmp.IsYFlipped;
+        }
+
+        //public void DrawSubImages(GLBitmap glBmp, VertexBufferObject vbo, int elemCount, float x, float y)
+        //{
+        //    SetCurrent();
+        //    CheckViewMatrix();
+        //    LoadGLBitmap(glBmp);
+        //    //
+        //    _offset.SetValue(x, y);
+
+        //    vbo.Bind();
+        //    a_position.LoadLatest(5, 0);
+        //    a_texCoord.LoadLatest(5, 3 * 4); 
+        //    //we render this 2 times 
+        //    GL.BlendFunc(BlendingFactorSrc.Zero, BlendingFactorDest.OneMinusSrcColor);
+        //    GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
+
+        //    GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.One);
+        //    GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
+        //    // 
+        //    GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);//restore 
+        //    vbo.UnBind();
+        //}
     }
     //--------------------------------------------------------
     static class SimpleRectTextureShaderExtensions

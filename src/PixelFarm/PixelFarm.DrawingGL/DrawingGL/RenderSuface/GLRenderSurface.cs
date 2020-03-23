@@ -135,6 +135,7 @@ namespace PixelFarm.DrawingGL
         Conv3x3TextureShader _conv3x3TextureShader;
         MsdfShader _msdfShader;
         SingleChannelSdf _sdfShader;
+        MaskShader _maskShader;
         //-----------------------------------------------------------
         ShaderSharedResource _shareRes;
         RenderSurfaceOrientation _originKind;
@@ -206,6 +207,8 @@ namespace PixelFarm.DrawingGL
             _lcdSubPixShaderForWordStripCreation = new LcdSubPixShaderForWordStripCreation(_shareRes);
             _lcdSubPixShaderV2 = new LcdSubPixShaderV2(_shareRes);
             _lcdSubPixShaderV2.SetFillColor(Color.White);
+            _maskShader = new MaskShader(_shareRes);
+
 
             _blurShader = new BlurShader(_shareRes);
             //
@@ -669,6 +672,20 @@ namespace PixelFarm.DrawingGL
             _msdfShader.DrawSubImages(bmp, coords, scale);
         }
 
+        public void DrawImageWithMask(GLBitmap colorSrc, GLBitmap mask, float targetLeft, float targetTop)
+        {
+            //in this version bmp and mask size must be the same.
+            //this limitation will be removed later
+            if (OriginKind == RenderSurfaceOrientation.LeftTop)
+            {
+                //***
+                targetTop += colorSrc.Height;
+            }
+
+            _maskShader.LoadGLBitmap(mask);
+            _maskShader.LoadColorSourceBitmap(colorSrc);
+            _maskShader.DrawSubImage(0, 0, colorSrc.Width, colorSrc.Height, targetLeft, targetTop);
+        }
 
         public void DrawImage(GLBitmap bmp,
             float left, float top, float w, float h)
@@ -2232,7 +2249,7 @@ namespace PixelFarm.DrawingGL
            float rotationRad
        )
         {
-             
+
 
             float srcBottom = srcTop + srcH;
             float srcRight = srcLeft + srcW;
@@ -2270,7 +2287,7 @@ namespace PixelFarm.DrawingGL
             aff1.Transform(ref right_top_x, ref right_top_y);
             aff1.Transform(ref left_bottom_x, ref left_bottom_y);
             aff1.Transform(ref right_bottom_x, ref right_botton_y);
- 
+
 
             if (bmpYFlipped)
             {
