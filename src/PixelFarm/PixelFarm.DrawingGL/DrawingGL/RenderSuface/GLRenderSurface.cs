@@ -772,49 +772,26 @@ namespace PixelFarm.DrawingGL
             //TODO: review here, reuse this quad
             //or use stack-base struct
 
-            float[] quad = null;
-            if (OriginKind == RenderSurfaceOrientation.LeftTop)
-            {
-                //left,top (NOT x,y) 
-                quad = new float[]
-                {
-                   0, 0, //left-top
-                   bmp.Width , 0, //right-top
-                   bmp.Width , bmp.Height , //right-bottom
-                   0, bmp.Height  //left bottom
-                };
-            }
-            else
-            {
-                quad = new float[]
-                {
-                  0, 0, //left-top
-                  bmp.Width , 0, //right-top
-                  bmp.Width , -bmp.Height , //right-bottom
-                  0, -bmp.Height  //left bottom
-                };
-            }
-
-            affine.Transform(ref quad[0], ref quad[1]);
-            affine.Transform(ref quad[2], ref quad[3]);
-            affine.Transform(ref quad[4], ref quad[5]);
-            affine.Transform(ref quad[6], ref quad[7]);
-
-
-            DrawImageToQuad(bmp,
-                            new PixelFarm.Drawing.PointF(quad[0], quad[1]),
-                            new PixelFarm.Drawing.PointF(quad[2], quad[3]),
-                            new PixelFarm.Drawing.PointF(quad[4], quad[5]),
-                            new PixelFarm.Drawing.PointF(quad[6], quad[7]));
+            Quad2f quad = new Quad2f();
+            quad.SetCornersFromRect(bmp.Width, OriginKind == RenderSurfaceOrientation.LeftTop ? bmp.Height : -bmp.Height);
+            quad.Transform(affine);
+            DrawImageToQuad(bmp, quad);
         }
-        public void DrawImageToQuad(GLBitmap bmp,
-            PointF left_top,
-            PointF right_top,
-            PointF right_bottom,
-            PointF left_bottom)
+
+        public void DrawImageToQuad(GLBitmap bmp, in AffineMat affine)
         {
+            //TODO: review here, reuse this quad
+            //or use stack-base struct
 
+            Quad2f quad = new Quad2f();
+            quad.SetCornersFromRect(bmp.Width, OriginKind == RenderSurfaceOrientation.LeftTop ? bmp.Height : -bmp.Height);
+            quad.Transform(affine);
 
+            DrawImageToQuad(bmp, quad);
+        }
+
+        public void DrawImageToQuad(GLBitmap bmp, in Quad2f quad)
+        {
             bool flipY = false;
             if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
@@ -825,28 +802,17 @@ namespace PixelFarm.DrawingGL
             switch (bmp.BitmapFormat)
             {
                 case BitmapBufferFormat.RGBA:
-                    _rgbaTextureShader.Render(bmp,
-                       left_top.X, left_top.Y,
-                       right_top.X, right_top.Y,
-                       right_bottom.X, right_bottom.Y,
-                       left_bottom.X, left_bottom.Y, flipY);
+                    _rgbaTextureShader.Render(bmp, quad, flipY);
                     break;
                 case BitmapBufferFormat.BGR:
-                    _bgrImgTextureShader.Render(bmp,
-                         left_top.X, left_top.Y,
-                         right_top.X, right_top.Y,
-                         right_bottom.X, right_bottom.Y,
-                         left_bottom.X, left_bottom.Y, flipY);
+                    _bgrImgTextureShader.Render(bmp, quad, flipY);
                     break;
                 case BitmapBufferFormat.BGRA:
-                    _bgraImgTextureShader.Render(bmp,
-                        left_top.X, left_top.Y,
-                        right_top.X, right_top.Y,
-                        right_bottom.X, right_bottom.Y,
-                        left_bottom.X, left_bottom.Y, flipY);
+                    _bgraImgTextureShader.Render(bmp, quad, flipY);
                     break;
             }
         }
+
         public void DrawGlyphImageWithSubPixelRenderingTechnique(GLBitmap bmp, float left, float top)
         {
             PixelFarm.Drawing.Rectangle srcRect = new Drawing.Rectangle(0, 0, bmp.Width, bmp.Height);

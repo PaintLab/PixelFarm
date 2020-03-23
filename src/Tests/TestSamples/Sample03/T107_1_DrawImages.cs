@@ -3,6 +3,7 @@
 
 using System;
 using Mini;
+using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.DrawingGL;
 namespace OpenTkEssTest
 {
@@ -131,27 +132,26 @@ namespace OpenTkEssTest
                     {
 
                         _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+
+                        Quad2f quad = new Quad2f();
+                        quad.SetCornersFromRect(0, 0, _glbmp.Width / 2, _glbmp.Height / 2);//half size
+
                         for (int i = 0; i < 400;)
                         {
-                            //left,top (NOT x,y) 
-                            _pcx.DrawImageToQuad(_glbmp,
-                                new PixelFarm.Drawing.PointF(i, i),
-                                new PixelFarm.Drawing.PointF(i + _glbmp.Width / 2, i),
-                                new PixelFarm.Drawing.PointF(i + _glbmp.Width / 2, i + _glbmp.Height / 2),
-                                new PixelFarm.Drawing.PointF(i, i + _glbmp.Height / 2));
+                            //left,top (NOT x,y)  
 
+                            _pcx.DrawImageToQuad(_glbmp, quad);
+
+                            quad.Offset(50, 50);
                             i += 50;
                         }
                         //
                         _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
+                        quad.SetCornersFromRect(0, 0, _glbmp.Width / 2, _glbmp.Height / 2);//half size
                         for (int i = 0; i < 400;)
                         {
-                            _pcx.DrawImageToQuad(_glbmp,
-                                       new PixelFarm.Drawing.PointF(i, i),
-                                       new PixelFarm.Drawing.PointF(i + _glbmp.Width / 2, i),
-                                       new PixelFarm.Drawing.PointF(i + _glbmp.Width / 2, i + _glbmp.Height / 2),
-                                       new PixelFarm.Drawing.PointF(i, i + _glbmp.Height / 2));
-
+                            _pcx.DrawImageToQuad(_glbmp, quad);
+                            quad.Offset(50, 50);
                             i += 50;
                         }
 
@@ -165,70 +165,43 @@ namespace OpenTkEssTest
 
                         float rotateDegree = 20;
 
+                        //float[] quad = new float[8];
+
+                        Quad2f quad = new Quad2f();
+
                         for (int i = 0; i < 400;)
                         {
                             //left,top (NOT x,y) 
-                            float[] quad = new float[]
-                            {
-                                0, 0, //left-top
-                                _glbmp.Width , 0, //right-top
-                                _glbmp.Width , _glbmp.Height , //right-bottom
-                                0, _glbmp.Height  //left bottom
-                            };
+                            quad.SetCornersFromRect(0, 0, _glbmp.Width, _glbmp.Height);
 
-                            PixelFarm.CpuBlit.VertexProcessing.Affine aff =
-                                 PixelFarm.CpuBlit.VertexProcessing.Affine.New(
-                                     PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(-_glbmp.Width / 2, -_glbmp.Height / 2),
-                                     PixelFarm.CpuBlit.VertexProcessing.AffinePlan.RotateDeg(rotateDegree),
-                                     PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(i + _glbmp.Width / 2, i + _glbmp.Height / 2));
+                            AffineMat aff = AffineMat.Iden;
+                            aff.Translate(-_glbmp.Width / 2, -_glbmp.Height / 2);//move to bitmap's center
+                            aff.RotateDeg(rotateDegree);
+                            aff.Translate(i + _glbmp.Width / 2, i + _glbmp.Height / 2);
 
+                            quad.Transform(aff);
 
-                            aff.Transform(ref quad[0], ref quad[1]);
-                            aff.Transform(ref quad[2], ref quad[3]);
-                            aff.Transform(ref quad[4], ref quad[5]);
-                            aff.Transform(ref quad[6], ref quad[7]);
-
-
-                            _pcx.DrawImageToQuad(_glbmp,
-                                new PixelFarm.Drawing.PointF(quad[0], quad[1]),
-                                new PixelFarm.Drawing.PointF(quad[2], quad[3]),
-                                new PixelFarm.Drawing.PointF(quad[4], quad[5]),
-                                new PixelFarm.Drawing.PointF(quad[6], quad[7]));
+                            _pcx.DrawImageToQuad(_glbmp, quad);
 
                             i += 50;
                         }
                         //
                         _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
+
+
                         for (int i = 0; i < 400;)
                         {
                             //left,top (NOT x,y) 
-                            float[] quad = new float[]
-                            {
-                                    0, 0, //left-top
-                                    _glbmp.Width , 0, //right-top
-                                    _glbmp.Width , -_glbmp.Height , //right-bottom
-                                    0, -_glbmp.Height //left bottom
-                            };
+                            quad.SetCornersFromRect(0, 0, _glbmp.Width, -_glbmp.Height);
 
-                            PixelFarm.CpuBlit.VertexProcessing.Affine aff =
-                                 PixelFarm.CpuBlit.VertexProcessing.Affine.New(
-                                     PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(-_glbmp.Width / 2, -_glbmp.Height / 2),
-                                     PixelFarm.CpuBlit.VertexProcessing.AffinePlan.RotateDeg(rotateDegree),
-                                     PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(i + _glbmp.Width / 2, i + _glbmp.Height / 2));
+                            AffineMat aff = AffineMat.Iden;
+                            aff.Translate(-_glbmp.Width / 2, -_glbmp.Height / 2);//move to bitmap's center
+                            aff.RotateDeg(rotateDegree);
+                            aff.Translate(i + _glbmp.Width / 2, i + _glbmp.Height / 2);
 
+                            quad.Transform(aff);
 
-                            aff.Transform(ref quad[0], ref quad[1]);
-                            aff.Transform(ref quad[2], ref quad[3]);
-                            aff.Transform(ref quad[4], ref quad[5]);
-                            aff.Transform(ref quad[6], ref quad[7]);
-
-
-                            _pcx.DrawImageToQuad(_glbmp,
-                                new PixelFarm.Drawing.PointF(quad[0], quad[1]),
-                                new PixelFarm.Drawing.PointF(quad[2], quad[3]),
-                                new PixelFarm.Drawing.PointF(quad[4], quad[5]),
-                                new PixelFarm.Drawing.PointF(quad[6], quad[7]));
-
+                            _pcx.DrawImageToQuad(_glbmp, quad);
 
                             i += 50;
                         }
@@ -244,15 +217,12 @@ namespace OpenTkEssTest
                         for (int i = 0; i < 400;)
                         {
 
-                            PixelFarm.CpuBlit.VertexProcessing.Affine aff =
-                                 PixelFarm.CpuBlit.VertexProcessing.Affine.New(
-                                     PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(-_glbmp.Width / 2, -_glbmp.Height / 2),
-                                     PixelFarm.CpuBlit.VertexProcessing.AffinePlan.RotateDeg(rotateDegree),
-                                     PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(i + _glbmp.Width / 2, i + _glbmp.Height / 2));
+                            AffineMat aff = AffineMat.Iden;
+                            aff.Translate(-_glbmp.Width / 2, -_glbmp.Height / 2);//move to bitmap's center
+                            aff.RotateDeg(rotateDegree);
+                            aff.Translate(i + _glbmp.Width / 2, i + _glbmp.Height / 2);
 
                             _pcx.DrawImageToQuad(_glbmp, aff);
-
-
                             i += 50;
                         }
                         //
@@ -260,12 +230,10 @@ namespace OpenTkEssTest
                         for (int i = 0; i < 400;)
                         {
 
-
-                            PixelFarm.CpuBlit.VertexProcessing.Affine aff =
-                                 PixelFarm.CpuBlit.VertexProcessing.Affine.New(
-                                     PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(-_glbmp.Width / 2, -_glbmp.Height / 2),
-                                     PixelFarm.CpuBlit.VertexProcessing.AffinePlan.RotateDeg(rotateDegree),
-                                     PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(i + _glbmp.Width / 2, i + _glbmp.Height / 2));
+                            AffineMat aff = AffineMat.Iden;
+                            aff.Translate(-_glbmp.Width / 2, -_glbmp.Height / 2);//move to bitmap's center
+                            aff.RotateDeg(rotateDegree);
+                            aff.Translate(i + _glbmp.Width / 2, i + _glbmp.Height / 2);
 
                             _pcx.DrawImageToQuad(_glbmp, aff);
 
