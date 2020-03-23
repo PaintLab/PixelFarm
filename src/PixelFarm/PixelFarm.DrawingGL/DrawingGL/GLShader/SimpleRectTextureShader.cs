@@ -1587,33 +1587,8 @@ namespace PixelFarm.DrawingGL
             // Bind the texture...
             TextureContainter container = _shareRes.LoadGLBitmap(bmp);
             //set color source bitmap
-            _u_color_src.SetValue(container.TextureUnitNo);
-            //_latestBmpW = bmp.Width;
-            //_latestBmpH = bmp.Height;
-            //_latestBmpYFlipped = bmp.IsYFlipped;
-        }
-
-        //public void DrawSubImages(GLBitmap glBmp, VertexBufferObject vbo, int elemCount, float x, float y)
-        //{
-        //    SetCurrent();
-        //    CheckViewMatrix();
-        //    LoadGLBitmap(glBmp);
-        //    //
-        //    _offset.SetValue(x, y);
-
-        //    vbo.Bind();
-        //    a_position.LoadLatest(5, 0);
-        //    a_texCoord.LoadLatest(5, 3 * 4); 
-        //    //we render this 2 times 
-        //    GL.BlendFunc(BlendingFactorSrc.Zero, BlendingFactorDest.OneMinusSrcColor);
-        //    GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
-
-        //    GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.One);
-        //    GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
-        //    // 
-        //    GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);//restore 
-        //    vbo.UnBind();
-        //}
+            _u_color_src.SetValue(container.TextureUnitNo); 
+        } 
     }
     //--------------------------------------------------------
     static class SimpleRectTextureShaderExtensions
