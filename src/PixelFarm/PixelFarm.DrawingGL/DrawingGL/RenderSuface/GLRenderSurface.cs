@@ -1121,8 +1121,8 @@ namespace PixelFarm.DrawingGL
             _msdfShader.SetColor(c);
             _msdfShader.Render(bmp, left * scale, top * scale, bmp.Width * scale, bmp.Height * scale);
         }
-        public void DrawImageWithMsdf(GLBitmap bmp, Quad2f quad, Color c,bool flipY=false)
-        {   
+        public void DrawImageWithMsdf(GLBitmap bmp, Quad2f quad, Color c, bool flipY = false)
+        {
             _msdfShader.SetColor(c);
             _msdfShader.Render(bmp, quad, flipY);
         }
@@ -1829,6 +1829,11 @@ namespace PixelFarm.DrawingGL
         int _scss_width;
         int _scss_height;
 
+        public Rectangle GetClipRect()
+        {
+            int bottom = OriginKind == RenderSurfaceOrientation.LeftTop ? _vwHeight - _scss_bottom : _scss_bottom;
+            return Rectangle.FromLTRB(_scss_left - _canvasOriginX, bottom - _scss_height, _scss_width + _scss_left, bottom);
+        }
         public void SetClipRect(int left, int top, int width, int height)
         {
 
@@ -1836,22 +1841,19 @@ namespace PixelFarm.DrawingGL
             //System.Diagnostics.Debug.WriteLine("clip:" + left + "," + top + "," + width + "," + height);
 #endif
 
-            int n_left = left + _canvasOriginX;
-            int n_bottom = (OriginKind == RenderSurfaceOrientation.LeftTop) ?
-                                _vwHeight - (_canvasOriginY + top + height) :
-                                _canvasOriginY + top + height;
+            int new_left = left + _canvasOriginX;
+            int bottom = _canvasOriginY + top + height;
+            int new_bottom = (OriginKind == RenderSurfaceOrientation.LeftTop) ? _vwHeight - bottom : bottom;
 
-            if (_scss_left != n_left || _scss_bottom != n_bottom || _scss_width != width || _scss_height != height)
+            if (_scss_left != new_left || _scss_bottom != new_bottom || _scss_width != width || _scss_height != height)
             {
                 GL.Scissor(
-                    _scss_left = n_left,
-                    _scss_bottom = n_bottom,
+                    _scss_left = new_left,
+                    _scss_bottom = new_bottom,
                     _scss_width = width,
                     _scss_height = height);
             }
         }
-
-
         internal TessTool GetTessTool() => _tessTool;
         internal SmoothBorderBuilder GetSmoothBorderBuilder() => _smoothBorderBuilder;
     }

@@ -178,15 +178,25 @@ namespace OpenTkEssTest
 
                         if (_maskRenderSurface2 == null)
                         {
+                            //before we switch to another GLRenderSurface.
+                            //we save current setting of current GLRenderSurface 
+
+
                             GLRenderSurface currentSurface = _pcx.CurrentRenderSurface;
                             _maskRenderSurface2 = new GLRenderSurface(100, 100);
+
                             _pcx.AttachToRenderSurface(_maskRenderSurface2);
+                            
                             //draw mask
                             _pcx.Clear(Color.Black);
                             //draw image to specific quad
                             _pcx.DrawImageWithMsdf(_msdfMaskGLBmp, quad, Color.White);
+                            
                             //switch back to normal surface                            
                             _pcx.AttachToRenderSurface(currentSurface);
+
+
+
                         }
 
 
