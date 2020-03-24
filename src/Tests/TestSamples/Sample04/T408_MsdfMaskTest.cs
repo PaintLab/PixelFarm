@@ -54,7 +54,7 @@ namespace OpenTkEssTest
             }
             //2. create mask bmp
 
-            using (VectorToolBox.Borrow(out Ellipse ellipse))
+            using (Tools.BorrowEllipse(out var ellipse))
             using (Tools.BorrowVxs(out var v1, out var v2))
             {
                 var msdf = new Msdfgen.MsdfGen3();

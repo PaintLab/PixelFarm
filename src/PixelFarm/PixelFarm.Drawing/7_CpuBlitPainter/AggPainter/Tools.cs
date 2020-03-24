@@ -6,6 +6,122 @@ using PixelFarm.CpuBlit.VertexProcessing;
 
 namespace PixelFarm.CpuBlit
 {
+    //BSD, 2014-present, WinterDev
+
+    //----------------------------------------------------------------------------
+    // Anti-Grain Geometry - Version 2.4
+    //
+    // C# Port port by: Lars Brubaker
+    //                  larsbrubaker@gmail.com
+    // Copyright (C) 2007-2011
+    //
+    // Permission to copy, use, modify, sell and distribute this software 
+    // is granted provided this copyright notice appears in all copies. 
+    // This software is provided "as is" without express or implied
+    // warranty, and with no claim as to its suitability for any purpose.
+    //
+    //----------------------------------------------------------------------------
+    //
+    // Class StringPrinter.cs
+    // 
+    // Class to output the vertex source of a string as a run of glyphs.
+    //----------------------------------------------------------------------------
+
+
+    public static class PainterExtensions
+    {
+
+        public static void Line(this Painter p, double x1, double y1, double x2, double y2, Color color)
+        {
+            Color prevColor = p.StrokeColor;
+            p.StrokeColor = color;
+            p.DrawLine(x1, y1, x2, y2);
+            p.StrokeColor = prevColor;
+        }
+        public static void DrawRectangle(this Painter p, double left, double top, double width, double height, Color color)
+        {
+            Color prevColor = p.StrokeColor;
+            p.StrokeColor = color;
+            p.DrawRect(left, top, width, height);
+            p.StrokeColor = prevColor;
+        }
+        public static void DrawCircle(this Painter p, double centerX, double centerY, double radius)
+        {
+            p.DrawEllipse(centerX - radius, centerY - radius, radius + radius, radius + radius);
+        }
+        public static void FillCircle(this Painter p, double centerX, double centerY, double radius)
+        {
+            p.FillEllipse(centerX - radius, centerY - radius, radius + radius, radius + radius);
+        }
+        public static void FillCircle(this Painter p, double x, double y, double radius, Color color)
+        {
+            Color prevColor = p.FillColor;
+            p.FillColor = color;
+            p.FillCircle(x, y, radius);
+            p.FillColor = prevColor;
+        }
+        public static void FillRect(this Painter p, double left, double top, double width, double height, Color color)
+        {
+            Color prevColor = p.FillColor;
+            p.FillColor = color;
+            p.FillRect(left, top, width, height);
+            p.FillColor = prevColor;
+        }
+        public static void Fill(this Painter p, VertexStore vxs, Color color)
+        {
+            Color prevColor = p.FillColor;
+            p.FillColor = color;
+            p.Fill(vxs);
+            p.FillColor = prevColor;
+        }
+        public static void Draw(this Painter p, VertexStore vxs, Color color)
+        {
+            Color prevColor = p.StrokeColor;
+            p.StrokeColor = color;
+            p.Draw(vxs);
+            p.StrokeColor = prevColor;
+        }
+        public static void Fill(this Painter p, Region rgn, Color color)
+        {
+            Color prevColor = p.FillColor;
+            p.FillColor = color;
+            p.Fill(rgn);
+            p.FillColor = prevColor;
+        }
+
+        /// <summary>
+        /// create stroke-vxs from a given vxs, and fill stroke-vxs with input color
+        /// </summary>
+        /// <param name="p"></param>
+        /// <param name="vxs"></param>
+        /// <param name="strokeW"></param>
+        /// <param name="color"></param>
+        public static void FillStroke(this Painter p, VertexStore vxs, float strokeW, Color color)
+        {
+            Color prevColor = p.FillColor;
+            p.FillColor = color;
+
+            using (Tools.BorrowStroke(out var s))
+            using (Tools.BorrowVxs(out var v1))
+            {
+                s.Width = strokeW;
+                s.MakeVxs(vxs, v1);
+                p.Fill(v1);
+            }
+
+            p.FillColor = prevColor;
+        }
+
+#if DEBUG
+        static int dbugId = 0;
+#endif
+
+
+    }
+
+
+
+
     public sealed class Tools
     {
         /// <summary>
@@ -54,6 +170,52 @@ namespace PixelFarm.CpuBlit
         public static VxsContext1 BorrowVxs(out VertexStore vxs) => new VxsContext1(out vxs);
         public static VxsContext2 BorrowVxs(out VertexStore vxs1, out VertexStore vxs2) => new VxsContext2(out vxs1, out vxs2);
         public static VxsContext3 BorrowVxs(out VertexStore vxs1, out VertexStore vxs2, out VertexStore vxs3) => new VxsContext3(out vxs1, out vxs2, out vxs3);
+
+        public static TempContext<Ellipse> BorrowEllipse(out Ellipse ellipse)
+        {
+            if (!Temp<Ellipse>.IsInit())
+            {
+                Temp<Ellipse>.SetNewHandler(() => new Ellipse());
+            }
+            return Temp<Ellipse>.Borrow(out ellipse);
+        }
+        public static TempContext<RoundedRect> BorrowRoundedRect(out RoundedRect roundRect)
+        {
+            if (!Temp<RoundedRect>.IsInit())
+            {
+                Temp<RoundedRect>.SetNewHandler(() => new RoundedRect());
+            }
+            return Temp<RoundedRect>.Borrow(out roundRect);
+        }
+
+        public static TempContext<SimpleRect> BorrowRect(out SimpleRect simpleRect)
+        {
+            if (!Temp<SimpleRect>.IsInit())
+            {
+                Temp<SimpleRect>.SetNewHandler(() => new SimpleRect());
+            }
+            return Temp<SimpleRect>.Borrow(out simpleRect);
+        }
+        
+        public static TempContext<Spiral> BorrowSpiral(out Spiral spiral)
+        {
+            if (!Temp<Spiral>.IsInit())
+            {
+                Temp<Spiral>.SetNewHandler(() => new Spiral());
+            }
+            return Temp<Spiral>.Borrow(out spiral);
+        }
+        public static TempContext<CurveFlattener> BorrowCurveFlattener(out CurveFlattener flattener)
+        {
+            if (!Temp<CurveFlattener>.IsInit())
+            {
+                Temp<CurveFlattener>.SetNewHandler(
+                    () => new CurveFlattener(),
+                    f => f.Reset());
+            }
+            return Temp<CurveFlattener>.Borrow(out flattener);
+        }
+           
     }
 
     public class ShapeBuilder
@@ -184,7 +346,7 @@ namespace PixelFarm.CpuBlit
         /// <returns></returns>
         public ShapeBuilder Flatten()
         {
-            using (VectorToolBox.Borrow(out CurveFlattener flattener))
+            using (Tools.BorrowCurveFlattener(out var flattener))
             {
                 return Flatten(flattener);
             }

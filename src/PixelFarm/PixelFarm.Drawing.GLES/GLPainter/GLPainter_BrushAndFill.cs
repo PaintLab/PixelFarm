@@ -170,7 +170,7 @@ namespace PixelFarm.DrawingGL
                         //resolve internal linear gradient brush impl
 
                         using (Tools.BorrowVxs(out var v1))
-                        using (VectorToolBox.Borrow(out SimpleRect rect))
+                        using (Tools.BorrowRect(out var rect))
                         {
                             rect.SetRectFromLTWH(left, top, width, height);
                             rect.MakeVxs(v1);
@@ -205,7 +205,7 @@ namespace PixelFarm.DrawingGL
             double rx = Math.Abs(width / 2);
             double ry = Math.Abs(height / 2);
             //
-            using (VectorToolBox.Borrow(out Ellipse ellipse))
+            using (Tools.BorrowEllipse(out var ellipse))
             using (Tools.BorrowVxs(out var vxs))
             {
                 ellipse.MakeVxs(vxs);

@@ -495,7 +495,7 @@ namespace PaintLab.Svg
                         {
                             //create rect path around img
 
-                            using (VectorToolBox.Borrow(out SimpleRect ss))
+                            using (Tools.BorrowRect(out var ss))
                             using (Tools.BorrowVxs(out VertexStore vxs))
                             {
                                 SvgImageSpec imgSpec = (SvgImageSpec)_visualSpec;

@@ -66,7 +66,7 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
             _polygonGradientBrush = new PolygonGradientBrush(vertices);
 
             using (Tools.BorrowVxs(out var v1))
-            using (VectorToolBox.Borrow(v1, out PathWriter p))
+            using (Tools.BorrowPathWriter(v1, out PathWriter p))
             {
                 p.MoveTo(0, 0);
                 p.LineToRel(100, 100);

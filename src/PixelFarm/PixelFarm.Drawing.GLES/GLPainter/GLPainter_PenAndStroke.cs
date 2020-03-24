@@ -269,8 +269,8 @@ namespace PixelFarm.DrawingGL
             double rx = Math.Abs(width / 2);
             double ry = Math.Abs(height / 2);
 
-            using (VectorToolBox.Borrow(out Ellipse ellipse))
-            using (VxsTemp.Borrow(out var v1, out var v2))
+            using (Tools.BorrowEllipse(out var ellipse))
+            using (Tools.BorrowVxs(out var v1, out var v2))
             {
                 ellipse.Set(x, y, rx, ry);
 
@@ -295,7 +295,7 @@ namespace PixelFarm.DrawingGL
                     {
                         _pcx.StrokeColor = this.StrokeColor;
                         using (Tools.BorrowVxs(out var v1))
-                        using (PixelFarm.Drawing.VectorToolBox.Borrow(out CpuBlit.VertexProcessing.SimpleRect r))
+                        using (Tools.BorrowRect(out var r))
                         {
                             r.SetRect(left + 0.5f, top + height + 0.5f, left + width - 0.5f, top - 0.5f);
                             r.MakeVxs(v1);

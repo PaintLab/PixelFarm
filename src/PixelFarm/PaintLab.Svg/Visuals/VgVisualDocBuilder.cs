@@ -394,7 +394,7 @@ namespace PaintLab.Svg
         {
 
             VgVisualElement vgEllipse = new VgVisualElement(WellknownSvgElementName.Ellipse, ellipseSpec, _vgVisualDoc);
-            using (VectorToolBox.Borrow(out Ellipse ellipse))
+            using (Tools.BorrowEllipse(out var ellipse))
             using (Tools.BorrowVxs(out var v1))
             {
                 ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix 
@@ -415,7 +415,8 @@ namespace PaintLab.Svg
         VgVisualElement CreateImage(VgVisualElement parentNode, SvgImageSpec imgspec)
         {
             VgVisualElement vgImg = new VgVisualElement(WellknownSvgElementName.Image, imgspec, _vgVisualDoc);
-            using (VectorToolBox.Borrow(out SimpleRect rectTool))
+
+            using (Tools.BorrowRect(out var rectTool))
             using (Tools.BorrowVxs(out var v1))
             {
                 ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
@@ -616,7 +617,7 @@ namespace PaintLab.Svg
 
             VgVisualElement cir = new VgVisualElement(WellknownSvgElementName.Circle, cirSpec, _vgVisualDoc);
 
-            using (VectorToolBox.Borrow(out Ellipse ellipse))
+            using (Tools.BorrowEllipse(out var ellipse))
             using (Tools.BorrowVxs(out var v1))
             {
                 ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
@@ -847,7 +848,7 @@ namespace PaintLab.Svg
             if (!rectSpec.CornerRadiusX.IsEmpty || !rectSpec.CornerRadiusY.IsEmpty)
             {
 
-                using (VectorToolBox.Borrow(out RoundedRect roundRect))
+                using (Tools.BorrowRoundedRect(out var roundRect))
                 using (Tools.BorrowVxs(out var v1))
                 {
                     ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
@@ -861,13 +862,13 @@ namespace PaintLab.Svg
                         ConvertToPx(rectSpec.CornerRadiusX, ref a),
                         ConvertToPx(rectSpec.CornerRadiusY, ref a));
 
-                    rect.VxsPath = roundRect.MakeVxs(v1).CreateTrim(); 
-                } 
+                    rect.VxsPath = roundRect.MakeVxs(v1).CreateTrim();
+                }
             }
             else
             {
 
-                using (VectorToolBox.Borrow(out SimpleRect rectTool))
+                using (Tools.BorrowRect(out var rectTool))
                 using (Tools.BorrowVxs(out var v1))
                 {
                     ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
@@ -895,9 +896,9 @@ namespace PaintLab.Svg
 
         VertexStore CreateVxsFromPathDefinition(char[] pathDefinition)
         {
-            using (VectorToolBox.Borrow(out CurveFlattener curveFlattener))
+            using (Tools.BorrowCurveFlattener(out var curveFlattener))
             using (Tools.BorrowVxs(out var v1, out var v2))
-            using (VectorToolBox.Borrow(v1, out PathWriter pathWriter))
+            using (Tools.BorrowPathWriter(v1, out PathWriter pathWriter))
             {
                 _pathDataParser.SetPathWriter(pathWriter);
                 _pathDataParser.Parse(pathDefinition);

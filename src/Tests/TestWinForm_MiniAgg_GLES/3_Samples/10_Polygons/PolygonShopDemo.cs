@@ -76,8 +76,8 @@ namespace PixelFarm
         public static VertexStore BuildCardinalSpline()
         {
             using (Tools.BorrowVxs(out var v1, out var v3))
-            using (VectorToolBox.Borrow(out CurveFlattener flatten))
-            using (VectorToolBox.Borrow(v1, out PathWriter w))
+            using (Tools.BorrowCurveFlattener(out var flatten))
+            using (Tools.BorrowPathWriter(v1, out var w))
 
             {
                 w.MoveTo(10, 10);
@@ -127,8 +127,8 @@ namespace PixelFarm
 
 
             using (Tools.BorrowVxs(out var v1, out var v2))
-            using (VectorToolBox.Borrow(v1, out PathWriter pw))
-            using (VectorToolBox.Borrow(out CurveFlattener flatten))
+            using (Tools.BorrowPathWriter(v1, out var pw))
+            using (Tools.BorrowCurveFlattener(out var flatten))
             {
 
                 pw.MoveTo(xyCoords[2], xyCoords[3]);//***
@@ -151,8 +151,8 @@ namespace PixelFarm
 
             using (Tools.BorrowVxs(out var v1, out var v2, out var v3))
             using (Tools.BorrowStroke(out var stroke))
-            using (VectorToolBox.Borrow(out CurveFlattener flattener))
-            using (Tools.BorrowArc(out Arc arc))
+            using (Tools.BorrowCurveFlattener(out var flattener))
+            using (Tools.BorrowArc(out var arc))
             {
                 arc.Init(50, 50, 10, 20, Math.PI, 0);
                 arc.SetStartEndLimit(40, 50, 60, 50);
@@ -298,7 +298,7 @@ namespace PixelFarm
 
         public static VertexStore BuildRoundedRect(bool outline)
         {
-            using (VectorToolBox.Borrow(out RoundedRect roundedRect))
+            using (Tools.BorrowRoundedRect(out var roundedRect))
             {
                 if (outline)
                 {
@@ -345,8 +345,8 @@ namespace PixelFarm
             {
 
                 using (Tools.BorrowVxs(out var v1, out var v2))
-                using (VectorToolBox.Borrow(v1, out PathWriter pw))
-                using (VectorToolBox.Borrow(out CurveFlattener flattener))
+                using (Tools.BorrowPathWriter(v1, out var pw))
+                using (Tools.BorrowCurveFlattener(out var flattener))
                 {
 
                     //for Catrom,
@@ -370,7 +370,7 @@ namespace PixelFarm
                     p.FillStroke(v2, 2, Color.Red);
                 }
             }
-             
+
         }
 
 

@@ -72,7 +72,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 
             int elliseFlattenStep = 64;
             using (Tools.BorrowVxs(out var v1))
-            using (VectorToolBox.Borrow(out Ellipse ellipseForMask))
+            using (Tools.BorrowEllipse(out var ellipseForMask))
             {
                 for (i = 0; i < num; i++)
                 {

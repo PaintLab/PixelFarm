@@ -1989,25 +1989,20 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
 
         public static void WriteGlyphObj(VertexStore vxs, double x, double y, Affine tx = null)
         {
-            using (VectorToolBox.Borrow(out CurveFlattener curveFlattener))
+            using (Tools.BorrowCurveFlattener(out var curveFlattener))
+            using (Tools.BorrowVxs(out var v1, out var v2))
             {
                 if (tx != null)
-                {
-                    using (Tools.BorrowVxs(out var v1, out var v2))
-                    {
-                        WriteGlyph_a_(v1, x, y);
-                        tx.TransformToVxs(v1, v2);
-                        curveFlattener.MakeVxs(v2, vxs);
-                    }
-
+                { 
+                    WriteGlyph_a_(v1, x, y);
+                    tx.TransformToVxs(v1, v2);
+                    curveFlattener.MakeVxs(v2, vxs); 
                 }
                 else
                 {
-                    using (Tools.BorrowVxs(out var v1, out var v2))
-                    {
-                        WriteGlyph_a_(v1, x, y);
-                        curveFlattener.MakeVxs(v1, vxs);
-                    }
+
+                    WriteGlyph_a_(v1, x, y);
+                    curveFlattener.MakeVxs(v1, vxs); 
                 }
             }
 
@@ -2136,7 +2131,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         }
         public static void WriteSpiral(VertexStore vxs, double x, double y, Affine tx = null)
         {
-            using (VectorToolBox.Borrow(out Spiral sp))
+            using (Tools.BorrowSpiral(out var sp))
             {
                 sp.SetParameters(x, y, 10, 150, 30, 0.0);
                 if (tx == null)

@@ -2,13 +2,11 @@
 
 using System;
 using System.Collections.Generic;
-using PixelFarm.CpuBlit.VertexProcessing;
+using PixelFarm.Drawing;
 
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
-    using PixelFarm.Drawing;
 
-    //-----------------------------------
     public struct VxsContext1 : IDisposable
     {
         internal readonly VertexStore _vxs;
@@ -66,12 +64,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     }
 
 
-}
-namespace PixelFarm.Drawing
-{
-
-    using PixelFarm.CpuBlit;
-
     public static class VxsTemp
     {
 
@@ -81,49 +73,8 @@ namespace PixelFarm.Drawing
 
         public static VxsContext3 Borrow(out VertexStore vxs1, out VertexStore vxs2, out VertexStore vxs3) => new VxsContext3(out vxs1, out vxs2, out vxs3);
 
-        /// <summary>
-        /// create contour(closed, open) from input flatten XYs,and put into output vxs
-        /// </summary>
-        /// <param name="flattenXYs"></param>
-        /// <param name="vxs"></param>
-        /// <param name="closedContour"></param>
-        /// <returns></returns>
-        public static VxsContext1 Borrow(float[] flattenXYs, out VertexStore vxs, bool closedContour = true)
-        {
-            VxsContext1 context1 = Borrow(out vxs);
-            using (VectorToolBox.Borrow(vxs, out PathWriter pw))
-            {
-                if (closedContour)
-                {
-                    pw.WritePolygon(flattenXYs);
-                }
-                else
-                {
-                    pw.WritePolylines(flattenXYs);
-                }
-            }
-            return context1;
-        }
-        public static VxsContext1 Borrow(double[] flattenXYs, out VertexStore vxs, bool closedContour = true)
-        {
-            VxsContext1 context1 = Borrow(out vxs);
-            using (VectorToolBox.Borrow(vxs, out PathWriter pw))
-            {
-                pw.MoveTo(flattenXYs[0], flattenXYs[1]);
-                for (int i = 2; i < flattenXYs.Length;)
-                {
-                    pw.LineTo(flattenXYs[i], flattenXYs[i + 1]);
-                    i += 2;
-                }
-                if (closedContour)
-                {
-                    pw.CloseFigure();
-                }
-            }
-            return context1;
-        }
-        //for net20 -- check this
-        //TODO: https://stackoverflow.com/questions/18333885/threadstatic-v-s-threadlocalt-is-generic-better-than-attribute
+        ////for net20 -- check this
+        ////TODO: https://stackoverflow.com/questions/18333885/threadstatic-v-s-threadlocalt-is-generic-better-than-attribute
 
         [System.ThreadStatic]
         static Stack<VertexStore> s_vxsPool = new Stack<VertexStore>();
@@ -210,38 +161,10 @@ namespace PixelFarm.Drawing
             }
             return Temp<SvgArcSegment>.Borrow(out arc);
         }
-        public static TempContext<Ellipse> Borrow(out Ellipse ellipse)
-        {
-            if (!Temp<Ellipse>.IsInit())
-            {
-                Temp<Ellipse>.SetNewHandler(() => new Ellipse());
-            }
-            return Temp<Ellipse>.Borrow(out ellipse);
-        }
-        public static TempContext<Spiral> Borrow(out Spiral spiral)
-        {
-            if (!Temp<Spiral>.IsInit())
-            {
-                Temp<Spiral>.SetNewHandler(() => new Spiral());
-            }
-            return Temp<Spiral>.Borrow(out spiral);
-        }
-        public static TempContext<SimpleRect> Borrow(out SimpleRect simpleRect)
-        {
-            if (!Temp<SimpleRect>.IsInit())
-            {
-                Temp<SimpleRect>.SetNewHandler(() => new SimpleRect());
-            }
-            return Temp<SimpleRect>.Borrow(out simpleRect);
-        }
-        public static TempContext<RoundedRect> Borrow(out RoundedRect roundRect)
-        {
-            if (!Temp<RoundedRect>.IsInit())
-            {
-                Temp<RoundedRect>.SetNewHandler(() => new RoundedRect());
-            }
-            return Temp<RoundedRect>.Borrow(out roundRect);
-        }
+         
+        
+       
+       
         public static TempContext<VxsClipper> Borrow(out VxsClipper clipper)
         {
             if (!Temp<VxsClipper>.IsInit())
@@ -252,16 +175,7 @@ namespace PixelFarm.Drawing
             }
             return Temp<VxsClipper>.Borrow(out clipper);
         }
-        public static TempContext<CurveFlattener> Borrow(out CurveFlattener flattener)
-        {
-            if (!Temp<CurveFlattener>.IsInit())
-            {
-                Temp<CurveFlattener>.SetNewHandler(
-                    () => new CurveFlattener(),
-                    f => f.Reset());
-            }
-            return Temp<CurveFlattener>.Borrow(out flattener);
-        }
+      
         public static TempContext<PolygonSimplifier> Borrow(out PolygonSimplifier flattener)
         {
             if (!Temp<PolygonSimplifier>.IsInit())

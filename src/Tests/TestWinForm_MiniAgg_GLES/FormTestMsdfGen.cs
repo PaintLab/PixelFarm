@@ -222,9 +222,9 @@ namespace Mini
         static void FillAndSave(VertexStore vxs, string filename)
         {
             using (MemBitmap bmp = new MemBitmap(300, 300)) //approximate
-            using (VectorToolBox.Borrow(out CurveFlattener flattener))
+            using (Tools.BorrowCurveFlattener(out var flattener))
             using (Tools.BorrowVxs(out var v1))
-            using (Tools.BorrowAggPainter(bmp, out AggPainter painter))
+            using (Tools.BorrowAggPainter(bmp, out var painter))
             {
                 painter.Clear(PixelFarm.Drawing.Color.White);//bg
                 painter.FillColor = PixelFarm.Drawing.Color.Black;

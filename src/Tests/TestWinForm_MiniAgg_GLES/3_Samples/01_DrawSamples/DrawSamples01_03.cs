@@ -168,7 +168,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             p.Clear(Drawing.Color.White);
 
             //Ellipse ellipseVxsGen = new Ellipse(0, 0, 100, 50);
-            using (VectorToolBox.Borrow(out Ellipse ellipseVxsGen))
+            using (Tools.BorrowEllipse(out var ellipseVxsGen))
             using (Tools.BorrowStroke(out var stroke))
             {
                 ellipseVxsGen.Set(0, 0, 100, 50);

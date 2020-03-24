@@ -337,7 +337,7 @@ namespace PixelFarm.CpuBlit
             //Agg
             //---------------------------------------------------------- 
 
-            using (VectorToolBox.Borrow(out Ellipse ellipseTool))
+            using (Tools.BorrowEllipse(out var ellipseTool))
             using (Tools.BorrowVxs(out var v1))
             {
                 ellipseTool.Set(ox,
@@ -393,7 +393,7 @@ namespace PixelFarm.CpuBlit
             //Agg 
             //---------------------------------------------------------- 
 
-            using (VectorToolBox.Borrow(out SimpleRect rectTool))
+            using (Tools.BorrowRect(out var rectTool))
             using (Tools.BorrowVxs(out var v1))
             {
                 if (_orientation == RenderSurfaceOriginKind.LeftBottom)
