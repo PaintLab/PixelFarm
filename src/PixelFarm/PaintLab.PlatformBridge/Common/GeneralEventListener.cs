@@ -21,7 +21,7 @@ namespace LayoutFarm.UI
         {
 
         }
- 
+
         void IEventListener.ListenKeyDown(UIKeyEventArgs e)
         {
             KeyDown?.Invoke(e);
@@ -47,10 +47,6 @@ namespace LayoutFarm.UI
 
         }
 
-        void IEventListener.ListenMouseClick(UIMouseEventArgs e)
-        {
-
-        }
 
         void IEventListener.ListenMouseDoubleClick(UIMouseEventArgs e)
         {
@@ -75,6 +71,10 @@ namespace LayoutFarm.UI
         void IEventListener.ListenMouseUp(UIMouseEventArgs e)
         {
             MouseUp?.Invoke(e);
+        }
+        void IEventListener.ListenMouseClick(UIMouseEventArgs e)
+        {
+
         }
         void IEventListener.ListenMouseWheel(UIMouseEventArgs e)
         {

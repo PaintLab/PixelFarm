@@ -139,11 +139,10 @@ namespace LayoutFarm.CustomWidgets
             set
             {
                 _textColor = value;
-                if (_myTextRun != null)
+                if (_myTextRun != null && _myTextRun.TextColor != value)
                 {
                     _myTextRun.TextColor = value;
-                    //?
-                    //_myTextRun.InvalidateGraphics();
+                    _myTextRun.InvalidateGraphics();
                 }
             }
         }
@@ -153,11 +152,10 @@ namespace LayoutFarm.CustomWidgets
             set
             {
                 _backColor = value;
-                if (_myTextRun != null)
+                if (_myTextRun != null && _myTextRun.BackColor != value)
                 {
                     _myTextRun.BackColor = value;
-                    //?
-                    //_myTextRun.InvalidateGraphics();
+                    _myTextRun.InvalidateGraphics();
                 }
             }
         }

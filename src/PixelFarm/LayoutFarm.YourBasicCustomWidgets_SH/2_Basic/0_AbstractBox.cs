@@ -702,11 +702,11 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
-        protected override void OnGuestTalk(UIGuestMsgEventArgs e)
+        protected override void OnGuestMsg(UIGuestMsgEventArgs e)
         {
             //?
             //this.DragOver?.Invoke(this, e);
-            base.OnGuestTalk(e);
+            base.OnGuestMsg(e);
         }
     }
 }

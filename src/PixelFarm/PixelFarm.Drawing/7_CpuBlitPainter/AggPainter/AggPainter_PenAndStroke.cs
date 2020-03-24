@@ -119,7 +119,7 @@ namespace PixelFarm.CpuBlit
             using (VectorToolBox.Borrow(v1, out PathWriter pw))
             {
                 pw.Clear();
-                if (_orientation == RenderSurfaceOrientation.LeftBottom)
+                if (_orientation == RenderSurfaceOriginKind.LeftBottom)
                 {
                     //as original 
                     pw.MoveTo(x1, y1);
@@ -246,8 +246,7 @@ namespace PixelFarm.CpuBlit
 
                         for (int i = 0; i < n; ++i)
                         {
-                            double x, y;
-                            VertexCmd cmd = v1.GetVertex(i, out x, out y);
+                            VertexCmd cmd = v1.GetVertex(i, out double x, out double y);
                             switch (cmd)
                             {
                                 case VertexCmd.MoveTo:
@@ -285,7 +284,7 @@ namespace PixelFarm.CpuBlit
             if (this.RenderQuality == RenderQuality.Fast)
             {
 
-                if (_orientation == RenderSurfaceOrientation.LeftBottom)
+                if (_orientation == RenderSurfaceOriginKind.LeftBottom)
                 {
 
                     _bxt.DrawRectangle(
@@ -318,7 +317,7 @@ namespace PixelFarm.CpuBlit
 
             using (VectorToolBox.Borrow(out SimpleRect rectTool))
             {
-                if (_orientation == RenderSurfaceOrientation.LeftBottom)
+                if (_orientation == RenderSurfaceOriginKind.LeftBottom)
                 {
                     double right = left + width;
                     double bottom = top + height;
@@ -355,7 +354,7 @@ namespace PixelFarm.CpuBlit
 
             double ox = (left + width / 2);
             double oy = (top + height / 2);
-            if (_orientation == RenderSurfaceOrientation.LeftTop)
+            if (_orientation == RenderSurfaceOriginKind.LeftTop)
             {
                 //modified
                 oy = this.Height - oy;

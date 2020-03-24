@@ -13,24 +13,25 @@ namespace PixelFarm.DrawingGL
         GLBitmapAtlasPainter _bmpAtlasPainter = new GLBitmapAtlasPainter();
         public override void ApplyFilter(PixelFarm.Drawing.IImageFilter imgFilter)
         {
+            //TODO: 
             throw new NotImplementedException();
         }
 
-        public override void DrawImage(Image actualImage, params AffinePlan[] affinePlans)
+        public override void DrawImage(Image img, params AffinePlan[] affinePlans)
         {
             //create gl bmp
             //TODO: affinePlans***
 
-            GLBitmap glBmp = _pcx.ResolveForGLBitmap(actualImage);
+            GLBitmap glBmp = _pcx.ResolveForGLBitmap(img);
             if (glBmp != null)
             {
                 _pcx.DrawImage(glBmp, 0, 0);
             }
         }
-        public override void DrawImage(Image actualImage, double left, double top, ICoordTransformer coordTx)
+        public override void DrawImage(Image img, double left, double top, ICoordTransformer coordTx)
         {
             //TODO: implement transformation matrix
-            GLBitmap glBmp = _pcx.ResolveForGLBitmap(actualImage);
+            GLBitmap glBmp = _pcx.ResolveForGLBitmap(img);
             if (glBmp != null)
             {
                 if (this.OriginX != 0 || this.OriginY != 0)
@@ -51,45 +52,54 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-        public override void DrawImage(Image actualImage)
+        public override void DrawImage(Image img)
         {
-            if (actualImage is AtlasImageBinder binder)
+            if (img is AtlasImageBinder binder)
             {
                 _bmpAtlasPainter.DrawImage(this, binder, 0, 0);
             }
             else
             {
-                GLBitmap glBmp = _pcx.ResolveForGLBitmap(actualImage);
+                GLBitmap glBmp = _pcx.ResolveForGLBitmap(img);
                 if (glBmp == null) return;
                 _pcx.DrawImage(glBmp, 0, 0);
             }
 
         }
-        public override void DrawImage(Image actualImage, double left, double top)
+        public override void DrawImage(Image img, double left, double top)
         {
-            if (actualImage is AtlasImageBinder binder)
+            if (img is AtlasImageBinder binder)
             {
                 _bmpAtlasPainter.DrawImage(this, binder, (float)left, (float)top);
             }
             else
             {
-                GLBitmap glBmp = _pcx.ResolveForGLBitmap(actualImage);
+                GLBitmap glBmp = _pcx.ResolveForGLBitmap(img);
                 if (glBmp == null) return;
                 _pcx.DrawImage(glBmp, (float)left, (float)top);
             }
         }
-        public override void DrawImage(Image actualImage, double left, double top, int srcX, int srcY, int srcW, int srcH)
+        public override void DrawImage(Image img, double left, double top, int srcX, int srcY, int srcW, int srcH)
         {
-            if (actualImage is AtlasImageBinder binder)
+            if (img is AtlasImageBinder binder)
             {
                 _bmpAtlasPainter.DrawImage(this, binder, (float)left, (float)top);
             }
             else
             {
-                GLBitmap glBmp = _pcx.ResolveForGLBitmap(actualImage);
+                GLBitmap glBmp = _pcx.ResolveForGLBitmap(img);
                 if (glBmp == null) return;
                 _pcx.DrawSubImage(glBmp, srcX, srcY, srcW, srcH, (float)left, (float)top);
             }
+        }
+
+
+        public void DrawImageWithMask(Image img, Image maskImg, double left, double top)
+        {
+            //experiment, see also our texture brush implementation
+
+
+
         }
     }
 }

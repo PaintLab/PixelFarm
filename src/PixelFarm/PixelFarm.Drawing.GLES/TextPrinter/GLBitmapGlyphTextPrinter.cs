@@ -111,10 +111,11 @@ namespace PixelFarm.DrawingGL
         GLPainter _painter;
         GLBitmap _glBmp;
         RequestFont _font;
-        LayoutFarm.OpenFontTextService _textServices;
-        float _px_scale = 1;
-        TextureCoordVboBuilder _vboBuilder = new TextureCoordVboBuilder();
 
+        readonly LayoutFarm.OpenFontTextService _textServices;
+        readonly TextureCoordVboBuilder _vboBuilder = new TextureCoordVboBuilder();
+
+        float _px_scale = 1;
 
 #if DEBUG
         public static GlyphTexturePrinterDrawingTechnique s_dbugDrawTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering;
@@ -318,7 +319,7 @@ namespace PixelFarm.DrawingGL
                 DrawingTechnique = GlyphTexturePrinterDrawingTechnique.Msdf;
             }
 
-             
+
             //----------
             int seqLen = glyphPlanSeq.Count;
             for (int i = 0; i < seqLen; ++i)
@@ -358,7 +359,7 @@ namespace PixelFarm.DrawingGL
                         g_top += _font.DescentInPixels;
                         break;
                     case TextBaseline.Bottom:
-                      
+
                         break;
                 }
 
@@ -392,7 +393,7 @@ namespace PixelFarm.DrawingGL
                 if (UseVBO)
                 {
                     _vboBuilder.WriteRect(
-                           ref srcRect,
+                           srcRect,
                            g_left, g_top, scaleFromTexture);
                 }
                 else
@@ -401,7 +402,7 @@ namespace PixelFarm.DrawingGL
                     {
                         case GlyphTexturePrinterDrawingTechnique.Msdf:
                             _pcx.DrawSubImageWithMsdf(_glBmp,
-                                 ref srcRect,
+                                  srcRect,
                                  g_left,
                                  g_top,
                                  scaleFromTexture);
@@ -409,14 +410,14 @@ namespace PixelFarm.DrawingGL
                         case GlyphTexturePrinterDrawingTechnique.Stencil:
                             //stencil gray scale with fill-color
                             _pcx.DrawGlyphImageWithStecil(_glBmp,
-                                ref srcRect,
+                                srcRect,
                                 g_left,
                                 g_top,
                                 scaleFromTexture);
                             break;
                         case GlyphTexturePrinterDrawingTechnique.Copy:
                             _pcx.DrawSubImage(_glBmp,
-                                ref srcRect,
+                                srcRect,
                                 g_left,
                                 g_top,
                                 1);
@@ -424,7 +425,7 @@ namespace PixelFarm.DrawingGL
                         case GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering:
                             _pcx.DrawGlyphImageWithSubPixelRenderingTechnique2_GlyphByGlyph(
                                 _glBmp,
-                                ref srcRect,
+                                srcRect,
                                 g_left,
                                 g_top,
                                 1);
@@ -717,12 +718,12 @@ namespace PixelFarm.DrawingGL
                 //g_x = (float)Math.Round(g_x); //***
                 g_top = (float)Math.Floor(g_top);//adjust to integer num *** 
                 //
-                _vboBuilder.WriteRect(ref srcRect, g_left, g_top, scaleFromTexture);
+                _vboBuilder.WriteRect(srcRect, g_left, g_top, scaleFromTexture);
             }
 
             if (seqLen > 1)
             {
-                _vboBuilder.AppendDegenerativeTrinagle();
+                _vboBuilder.AppendDegenerativeTriangle();
             }
 
             //---

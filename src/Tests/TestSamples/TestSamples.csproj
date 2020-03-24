@@ -52,12 +52,14 @@
     <Compile Include="Sample03\T107_1_DrawImages.cs" />
     <Compile Include="Sample03\T107_2_DrawGlyphs.cs" />
     <Compile Include="Sample03\T115_VBO_01.cs" />
+    <Compile Include="Sample04\T408_MsdfMaskTest.cs" />
     <Compile Include="Sample04\T406_GLBitmapAtlasTest.cs" />
     <Compile Include="Sample04\T401_MsdfTest1.cs" />
     <Compile Include="Sample04\T402_BrushTest2.cs" />
     <Compile Include="Sample04\T403_MsdfGenTest2.cs" />
     <Compile Include="Sample04\T404_FontAtlas.cs" />
     <Compile Include="Sample04\T405_DrawString.cs" />
+    <Compile Include="Sample04\T407_MaskTest.cs" />
     <Compile Include="Shapes\Base\DrawableShape.cs" />
     <Compile Include="Shapes\Base\VertexStructs.cs" />
     <Compile Include="Shapes\Capsule.cs" />

@@ -77,8 +77,6 @@ namespace PixelFarm.DrawingGL
         public bool IsPrimary { get; }
         public bool IsValid { get; private set; }
 
-        internal int FramebufferId => (_frameBuffer == null) ? 0 : _frameBuffer.FrameBufferId;
-
         public GLBitmap GetGLBitmap() => (_frameBuffer == null) ? null : _frameBuffer.GetGLBitmap();
 
         public InnerGLData GetInnerGLData() => (_frameBuffer != null) ? new InnerGLData(_frameBuffer.FrameBufferId, _frameBuffer.GetGLBitmap()) : new InnerGLData();
@@ -107,39 +105,46 @@ namespace PixelFarm.DrawingGL
         }
     }
 
+
+
+
+
     /// <summary>
     /// GLES2 render Context, This is not intended to be used directly from your code
     /// </summary>
     public sealed class GLPainterContext
     {
+        readonly int _painterContextId;
 
-        SolidColorFillShader _solidColorFillShader;
-        RectFillShader _rectFillShader;
-        RadialGradientFillShader _radialGradientShader;
+        readonly SolidColorFillShader _solidColorFillShader;
+        readonly RectFillShader _rectFillShader;
+        readonly RadialGradientFillShader _radialGradientShader;
 
-        SmoothLineShader _smoothLineShader;
-        InvertAlphaLineSmoothShader _invertAlphaLineSmoothShader;
+        readonly SmoothLineShader _smoothLineShader;
+        readonly InvertAlphaLineSmoothShader _invertAlphaLineSmoothShader;
 
-        GlyphImageStecilShader _glyphStencilShader;
-        BGRImageTextureShader _bgrImgTextureShader;
-        BGRAImageTextureShader _bgraImgTextureShader;
+        readonly GlyphImageStecilShader _glyphStencilShader;
+        readonly BGRImageTextureShader _bgrImgTextureShader;
+        readonly BGRAImageTextureShader _bgraImgTextureShader;
 
-        LcdSubPixShader _lcdSubPixShader;
-        LcdSubPixShaderForSolidBg _lcdSubPixForSolidBgShader;
-        LcdSubPixShaderForWordStripCreation _lcdSubPixShaderForWordStripCreation;
-        LcdSubPixShaderV2 _lcdSubPixShaderV2;
+        readonly LcdSubPixShader _lcdSubPixShader;
+        readonly LcdSubPixShaderForSolidBg _lcdSubPixForSolidBgShader;
+        readonly LcdSubPixShaderForWordStripCreation _lcdSubPixShaderForWordStripCreation;
+        readonly LcdSubPixShaderV2 _lcdSubPixShaderV2;
 
-        RGBATextureShader _rgbaTextureShader;
-        RGBTextureShader _rgbTextureShader;
-        BlurShader _blurShader;
-        Conv3x3TextureShader _conv3x3TextureShader;
-        MsdfShader _msdfShader;
-        SingleChannelSdf _sdfShader;
+        readonly RGBATextureShader _rgbaTextureShader;
+        readonly RGBTextureShader _rgbTextureShader;
+        readonly BlurShader _blurShader;
+        readonly Conv3x3TextureShader _conv3x3TextureShader;
+        readonly MsdfShader _msdfShader;
+        readonly SingleChannelSdf _sdfShader;
+
+
+        readonly MaskShader _maskShader;
         //-----------------------------------------------------------
-        ShaderSharedResource _shareRes;
-        RenderSurfaceOrientation _originKind;
+        readonly ShaderSharedResource _shareRes;
 
-
+        RenderSurfaceOriginKind _originKind;
         GLRenderSurface _rendersx;
         int _canvasOriginX = 0;
         int _canvasOriginY = 0;
@@ -149,9 +154,10 @@ namespace PixelFarm.DrawingGL
         MyMat4 _customCoordTransformer;
 
         //
-        TessTool _tessTool;
-        SmoothBorderBuilder _smoothBorderBuilder = new SmoothBorderBuilder();
-        int _painterContextId;
+        readonly TessTool _tessTool;
+        readonly SmoothBorderBuilder _smoothBorderBuilder = new SmoothBorderBuilder();
+
+
         FillingRule _fillingRule;
         Tesselate.Tesselator.WindingRuleType _tessWindingRuleType = Tesselate.Tesselator.WindingRuleType.NonZero;//default
 
@@ -172,7 +178,7 @@ namespace PixelFarm.DrawingGL
             GL.Viewport(0, 0, primRenderSx.Width, primRenderSx.Height);
             _vwHeight = primRenderSx.ViewportH;
 
-            if (_originKind == RenderSurfaceOrientation.LeftTop)
+            if (_originKind == RenderSurfaceOriginKind.LeftTop)
             {
                 _shareRes.OrthoView = _rendersx._orthoFlipY_and_PullDown;
                 _shareRes.IsFlipAndPulldownHint = true;
@@ -206,14 +212,19 @@ namespace PixelFarm.DrawingGL
             _lcdSubPixShaderForWordStripCreation = new LcdSubPixShaderForWordStripCreation(_shareRes);
             _lcdSubPixShaderV2 = new LcdSubPixShaderV2(_shareRes);
             _lcdSubPixShaderV2.SetFillColor(Color.White);
+            _maskShader = new MaskShader(_shareRes);
+
+
 
             _blurShader = new BlurShader(_shareRes);
             //
             _invertAlphaLineSmoothShader = new InvertAlphaLineSmoothShader(_shareRes); //used with stencil  ***
 
             _conv3x3TextureShader = new Conv3x3TextureShader(_shareRes);
+
             _msdfShader = new MsdfShader(_shareRes);
             _sdfShader = new SingleChannelSdf(_shareRes);
+
 
             currentBinCache?.Close(); //close the cache, let other app use the shader cache file
             CachedBinaryShaderIO.ClearCurrentImpl();
@@ -242,14 +253,14 @@ namespace PixelFarm.DrawingGL
             //2. but our GLRenderSurface use Html5Canvas/SvgCanvas coordinate model 
             // so (0,0) is on LEFT-UPPER => so we need to FlipY
 
-            OriginKind = RenderSurfaceOrientation.LeftTop;
+            OriginKind = RenderSurfaceOriginKind.LeftTop;
             EnableClipRect();
 
         }
 
 
 
-        static Dictionary<int, GLPainterContext> s_registeredPainterContexts = new Dictionary<int, GLPainterContext>();
+        readonly static Dictionary<int, GLPainterContext> s_registeredPainterContexts = new Dictionary<int, GLPainterContext>();
         static int s_painterContextTotalId;
 
         /// <summary>
@@ -301,7 +312,7 @@ namespace PixelFarm.DrawingGL
             GL.Viewport(0, 0, rendersx.Width, rendersx.Height);
             _vwHeight = rendersx.ViewportH;
 
-            if (_originKind == RenderSurfaceOrientation.LeftTop)
+            if (_originKind == RenderSurfaceOriginKind.LeftTop)
             {
                 //TODO: review here, 
                 //essential here
@@ -312,9 +323,14 @@ namespace PixelFarm.DrawingGL
             {
                 _shareRes.OrthoView = _rendersx._orthoView;
             }
+
             _shareRes.SetOrthoViewOffset(0, 0);
             rendersx.SetAsCurrentSurface();
+            SetClipRect(0, 0, rendersx.Height, rendersx.Height);
         }
+
+
+
         public GLRenderSurface CurrentRenderSurface => _rendersx;
         public int OriginX => _canvasOriginX;
         public int OriginY => _canvasOriginY;
@@ -375,7 +391,7 @@ namespace PixelFarm.DrawingGL
                 }
             }
         }
-        public RenderSurfaceOrientation OriginKind
+        public RenderSurfaceOriginKind OriginKind
         {
             get => _originKind;
             set
@@ -383,7 +399,7 @@ namespace PixelFarm.DrawingGL
                 _originKind = value;
                 if (_rendersx != null)
                 {
-                    if (_originKind == RenderSurfaceOrientation.LeftTop)
+                    if (_originKind == RenderSurfaceOriginKind.LeftTop)
                     {
                         if (!_shareRes.IsFlipAndPulldownHint)
                         {
@@ -402,8 +418,8 @@ namespace PixelFarm.DrawingGL
         internal GLBitmap ResolveForGLBitmap(Image image)
         {
             //1.
-            GLBitmap glBmp = image as GLBitmap;
-            if (glBmp != null)
+
+            if (image is GLBitmap glBmp)
             {
                 return glBmp;
             }
@@ -414,14 +430,13 @@ namespace PixelFarm.DrawingGL
                 return glBmp;
             }
             //
-            BitmapBufferProvider imgBinder = image as BitmapBufferProvider;
-            if (imgBinder != null)
+
+            if (image is BitmapBufferProvider bmpBuffProvider)
             {
-                glBmp = new GLBitmap(imgBinder);
+                glBmp = new GLBitmap(bmpBuffProvider);
             }
             else if (image is CpuBlit.MemBitmap memBmp)
             {
-
                 glBmp = new GLBitmap(memBmp, false);
             }
             else
@@ -564,7 +579,7 @@ namespace PixelFarm.DrawingGL
 
         public void DrawSubImage(GLBitmap bmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
         {
-            if (OriginKind == RenderSurfaceOrientation.LeftTop) //***
+            if (OriginKind == RenderSurfaceOriginKind.LeftTop) //***
             {
                 targetTop += srcH; //***
             }
@@ -582,14 +597,14 @@ namespace PixelFarm.DrawingGL
                     break;
             }
         }
-        public void DrawSubImage(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop)
+        public void DrawSubImage(GLBitmap bmp, in PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop)
         {
             DrawSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
         }
 
-        public void DrawSubImage(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
+        public void DrawSubImage(GLBitmap bmp, in PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
         {
-            if (OriginKind == RenderSurfaceOrientation.LeftTop) //***
+            if (OriginKind == RenderSurfaceOriginKind.LeftTop) //***
             {
                 //***
                 targetTop += srcRect.Height * scale;  //***
@@ -612,7 +627,7 @@ namespace PixelFarm.DrawingGL
         //---------------------------------------------------------------------------------------------------------------------------------
         public void DrawSubImageWithMsdf(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle r, float targetLeft, float targetTop)
         {
-            if (OriginKind == RenderSurfaceOrientation.LeftTop)
+            if (OriginKind == RenderSurfaceOriginKind.LeftTop)
             {
                 //***
                 targetTop += r.Height;
@@ -635,11 +650,11 @@ namespace PixelFarm.DrawingGL
             _msdfShader.SetColor(this.FontFillColor);
             _msdfShader.DrawWithVBO(vboBuilder);
         }
-        public void DrawSubImageWithMsdf(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
+        public void DrawSubImageWithMsdf(GLBitmap bmp, in PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
         {
             //we expect that the bmp supports alpha value
 
-            if (OriginKind == RenderSurfaceOrientation.LeftTop)
+            if (OriginKind == RenderSurfaceOriginKind.LeftTop)
             {
                 //***
                 targetTop += srcRect.Height;
@@ -669,6 +684,54 @@ namespace PixelFarm.DrawingGL
             _msdfShader.DrawSubImages(bmp, coords, scale);
         }
 
+        bool _repeatTexture = true;
+
+        public bool RepeatTexture
+        {
+            get => _repeatTexture;
+            set
+            {
+                //review here 
+                if (_repeatTexture)
+                {
+                    //default
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);//restore, assume org is default
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);//restore, assume org is default
+                }
+                else
+                {
+
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToBorder);
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToBorder);
+
+                }
+            }
+        }
+        public void DrawImageWithMask(GLBitmap mask, GLBitmap colorSrc, float targetLeft, float targetTop)
+        {
+            DrawImageWithMask(mask, colorSrc,
+                new RectangleF(0, 0, mask.Width, mask.Height),
+                0, 0,
+                targetLeft, targetTop);
+        }
+        public void DrawImageWithMask(GLBitmap mask, GLBitmap colorSrc,
+            in PixelFarm.Drawing.RectangleF maskSrcRect,
+            float colorSrcX, float colorSrcY,
+            float targetLeft, float targetTop)
+        {
+
+            if (OriginKind == RenderSurfaceOriginKind.LeftTop)
+            {
+                //***
+                targetTop += mask.Height;
+            }
+
+            _maskShader.LoadGLBitmap(mask);
+            _maskShader.LoadColorSourceBitmap(colorSrc);
+            _maskShader.DrawSubImage2(maskSrcRect,
+                -colorSrcX, -colorSrcY,
+                targetLeft, targetTop);
+        }
 
         public void DrawImage(GLBitmap bmp,
             float left, float top, float w, float h)
@@ -678,7 +741,7 @@ namespace PixelFarm.DrawingGL
             //Canvas' origin kind
             //see https://github.com/PaintLab/PixelFarm/issues/43
             //-----------
-            if (OriginKind == RenderSurfaceOrientation.LeftTop)
+            if (OriginKind == RenderSurfaceOriginKind.LeftTop)
             {
                 //***
                 top += h;
@@ -702,51 +765,22 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawImageToQuad(GLBitmap bmp, PixelFarm.CpuBlit.VertexProcessing.Affine affine)
         {
-            float[] quad = null;
-            if (OriginKind == RenderSurfaceOrientation.LeftTop)
-            {
-                //left,top (NOT x,y) 
-                quad = new float[]
-                {
-                   0, 0, //left-top
-                   bmp.Width , 0, //right-top
-                   bmp.Width , bmp.Height , //right-bottom
-                   0, bmp.Height  //left bottom
-                };
-            }
-            else
-            {
-                quad = new float[]
-                {
-                  0, 0, //left-top
-                  bmp.Width , 0, //right-top
-                  bmp.Width , -bmp.Height , //right-bottom
-                  0, -bmp.Height  //left bottom
-                };
-            }
-
-            affine.Transform(ref quad[0], ref quad[1]);
-            affine.Transform(ref quad[2], ref quad[3]);
-            affine.Transform(ref quad[4], ref quad[5]);
-            affine.Transform(ref quad[6], ref quad[7]);
-
-
-            DrawImageToQuad(bmp,
-                            new PixelFarm.Drawing.PointF(quad[0], quad[1]),
-                            new PixelFarm.Drawing.PointF(quad[2], quad[3]),
-                            new PixelFarm.Drawing.PointF(quad[4], quad[5]),
-                            new PixelFarm.Drawing.PointF(quad[6], quad[7]));
+            Quad2f quad = new Quad2f(bmp.Width, OriginKind == RenderSurfaceOriginKind.LeftTop ? bmp.Height : -bmp.Height);
+            quad.Transform(affine);
+            DrawImageToQuad(bmp, quad);
         }
-        public void DrawImageToQuad(GLBitmap bmp,
-            PointF left_top,
-            PointF right_top,
-            PointF right_bottom,
-            PointF left_bottom)
+
+        public void DrawImageToQuad(GLBitmap bmp, in AffineMat affine)
         {
+            Quad2f quad = new Quad2f(bmp.Width, OriginKind == RenderSurfaceOriginKind.LeftTop ? bmp.Height : -bmp.Height);
+            quad.Transform(affine);
+            DrawImageToQuad(bmp, quad);
+        }
 
-
+        public void DrawImageToQuad(GLBitmap bmp, in Quad2f quad)
+        {
             bool flipY = false;
-            if (OriginKind == RenderSurfaceOrientation.LeftTop)
+            if (OriginKind == RenderSurfaceOriginKind.LeftTop)
             {
                 flipY = true;
                 //***
@@ -755,37 +789,26 @@ namespace PixelFarm.DrawingGL
             switch (bmp.BitmapFormat)
             {
                 case BitmapBufferFormat.RGBA:
-                    _rgbaTextureShader.Render(bmp,
-                       left_top.X, left_top.Y,
-                       right_top.X, right_top.Y,
-                       right_bottom.X, right_bottom.Y,
-                       left_bottom.X, left_bottom.Y, flipY);
+                    _rgbaTextureShader.Render(bmp, quad, flipY);
                     break;
                 case BitmapBufferFormat.BGR:
-                    _bgrImgTextureShader.Render(bmp,
-                         left_top.X, left_top.Y,
-                         right_top.X, right_top.Y,
-                         right_bottom.X, right_bottom.Y,
-                         left_bottom.X, left_bottom.Y, flipY);
+                    _bgrImgTextureShader.Render(bmp, quad, flipY);
                     break;
                 case BitmapBufferFormat.BGRA:
-                    _bgraImgTextureShader.Render(bmp,
-                        left_top.X, left_top.Y,
-                        right_top.X, right_top.Y,
-                        right_bottom.X, right_bottom.Y,
-                        left_bottom.X, left_bottom.Y, flipY);
+                    _bgraImgTextureShader.Render(bmp, quad, flipY);
                     break;
             }
         }
+
         public void DrawGlyphImageWithSubPixelRenderingTechnique(GLBitmap bmp, float left, float top)
         {
-            PixelFarm.Drawing.Rectangle srcRect = new Drawing.Rectangle(0, 0, bmp.Width, bmp.Height);
-            DrawGlyphImageWithSubPixelRenderingTechnique(bmp, ref srcRect, left, top);
+            Rectangle srcRect = new Rectangle(bmp.Width, bmp.Height);
+            DrawGlyphImageWithSubPixelRenderingTechnique(bmp, srcRect, left, top);
         }
 
-        public void DrawGlyphImageWithStecil(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
+        public void DrawGlyphImageWithStecil(GLBitmap bmp, in PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
         {
-            if (OriginKind == RenderSurfaceOrientation.LeftTop) //***
+            if (OriginKind == RenderSurfaceOriginKind.LeftTop) //***
             {
                 //***
                 targetTop += srcRect.Height;  //***
@@ -819,12 +842,12 @@ namespace PixelFarm.DrawingGL
         /// <param name="scale"></param>
         public void DrawGlyphImageWithSubPixelRenderingTechnique2_GlyphByGlyph(
           GLBitmap glbmp,
-          ref Drawing.Rectangle srcRect,
+          in Drawing.Rectangle srcRect,
           float targetLeft,
           float targetTop,
           float scale)
         {
-            if (OriginKind == RenderSurfaceOrientation.LeftTop) //***
+            if (OriginKind == RenderSurfaceOriginKind.LeftTop) //***
             {
                 //***
                 targetTop += srcRect.Height;  //***
@@ -854,7 +877,7 @@ namespace PixelFarm.DrawingGL
         {
             //special optimization for WordStrip creation
             //this verion not support overlap glyph (since overlap glyphs worstrip is not consider a transparent bg)
-           
+
             _lcdSubPixShaderForWordStripCreation.DrawSubImages(glBmp, vbo, count, x, y);
             //_lcdSubPixShaderV2.NewDrawSubImage4FromVBO(glBmp, vbo, count, x, y);
             //so, temp fix, swap to orignal 
@@ -876,7 +899,7 @@ namespace PixelFarm.DrawingGL
             //   targetLeft,
             //   targetTop);
 
-            if (OriginKind == RenderSurfaceOrientation.LeftTop) //***
+            if (OriginKind == RenderSurfaceOriginKind.LeftTop) //***
             {
                 targetTop += srcH; //***
             }
@@ -889,7 +912,7 @@ namespace PixelFarm.DrawingGL
             //lcd-effect subpix rendering, optimized version for solid bg color
             //
 
-            if (OriginKind == RenderSurfaceOrientation.LeftTop) //***
+            if (OriginKind == RenderSurfaceOriginKind.LeftTop) //***
             {
                 targetTop += srcH; //***
             }
@@ -902,13 +925,13 @@ namespace PixelFarm.DrawingGL
 
         public void DrawGlyphImageWithSubPixelRenderingTechnique(
             GLBitmap bmp,
-            ref Rectangle srcRect,
+            in Rectangle srcRect,
             float targetLeft,
             float targetTop)
         {
 
             //
-            if (OriginKind == RenderSurfaceOrientation.LeftTop)
+            if (OriginKind == RenderSurfaceOriginKind.LeftTop)
             {
                 //***
                 targetTop += bmp.Height;
@@ -942,7 +965,6 @@ namespace PixelFarm.DrawingGL
                 _lcdSubPixShader.SetCompo(LcdSubPixShader.ColorCompo.C0);
                 _lcdSubPixShader.UnsafeDrawSubImages(srcDestList, 6, 1);
 
-
                 //float subpixel_shift = 1 / 9f;
                 //---------------------------------------------------
 
@@ -963,7 +985,7 @@ namespace PixelFarm.DrawingGL
         //-----------------------------------
         public void DrawImageWithBlurY(GLBitmap bmp, float left, float top)
         {
-            if (OriginKind == RenderSurfaceOrientation.LeftTop)
+            if (OriginKind == RenderSurfaceOriginKind.LeftTop)
             {
                 //***
                 top += bmp.Height;
@@ -976,7 +998,7 @@ namespace PixelFarm.DrawingGL
         public void DrawImageWithBlurX(GLBitmap bmp, float left, float top)
         {
 
-            if (OriginKind == RenderSurfaceOrientation.LeftTop)
+            if (OriginKind == RenderSurfaceOriginKind.LeftTop)
             {
                 //***
                 top += bmp.Height;
@@ -995,7 +1017,7 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawImageWithConv3x3(GLBitmap bmp, float[] kernel3x3, float top, float left)
         {
-            if (OriginKind == RenderSurfaceOrientation.LeftTop)
+            if (OriginKind == RenderSurfaceOriginKind.LeftTop)
             {
                 //***
                 top += bmp.Height;
@@ -1011,50 +1033,24 @@ namespace PixelFarm.DrawingGL
             _conv3x3TextureShader.SetConvolutionKernel(kernel3x3);
             _conv3x3TextureShader.Render(bmp, left, top, bmp.Width, bmp.Height);
         }
-        //public void DrawImageWithMsdf(GLBitmap bmp, float x, float y)
-        //{
-        //    //TODO: review x,y or lef,top ***  
-        //    _msdfShader.Render(bmp, x, y, bmp.Width, bmp.Height);
-        //}
-        //public void DrawImageWithMsdf(GLBitmap bmp, float x, float y, float scale)
-        //{
-        //    //TODO: review x,y or left,top *** 
-        //    _msdfShader.Render(bmp, x, y, bmp.Width * scale, bmp.Height * scale);
-        //}
         public void DrawImageWithMsdf(GLBitmap bmp, float left, float top, float scale, Color c)
         {
-            //TODO: review x,y or left,top *** 
-
-            if (OriginKind == RenderSurfaceOrientation.LeftTop)
+            if (OriginKind == RenderSurfaceOriginKind.LeftTop)
             {
                 //***
                 top += bmp.Height;
             }
-
             _msdfShader.SetColor(c);
             _msdfShader.Render(bmp, left * scale, top * scale, bmp.Width * scale, bmp.Height * scale);
         }
-        //public void DrawImageWithSubPixelRenderingMsdf(GLBitmap bmp, float x, float y)
-        //{
-        //    //TODO: review x,y or lef,top ***
-        //    //_msdfSubPixelRenderingShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
-        //    ////msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.Blue;//blue is suite for transparent bg
-        //    //_msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.White;//opaque white
-        //    //_msdfSubPixelRenderingShader.Render(bmp, x, y, bmp.Width, bmp.Height);
-        //}
-        //public void DrawImageWithSubPixelRenderingMsdf(GLBitmap bmp, float x, float y, float scale)
-        //{
-        //    //TODO: review x,y or lef,top ***
-
-        //    //_msdfSubPixelRenderingShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
-        //    ////msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.Blue;//blue is suite for transparent bg
-        //    //_msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.White;//opaque white
-        //    //_msdfSubPixelRenderingShader.Render(bmp, x, y, bmp.Width * scale, bmp.Height * scale);
-        //}
+        public void DrawImageWithMsdf(GLBitmap bmp, Quad2f quad, Color c, bool flipY = false)
+        {
+            _msdfShader.SetColor(c);
+            _msdfShader.Render(bmp, quad, flipY);
+        }
         public void DrawImageWithSdf(GLBitmap bmp, float x, float y, float scale)
         {
             //TODO: review x,y or lef,top ***
-
             _sdfShader.SetColor(PixelFarm.Drawing.Color.Black);
             _sdfShader.Render(bmp, x, y, bmp.Width * scale, bmp.Height * scale);
         }
@@ -1090,23 +1086,20 @@ namespace PixelFarm.DrawingGL
         //RenderVx
         public void FillRenderVx(Drawing.Brush brush, Drawing.RenderVx renderVx)
         {
-            PathRenderVx glRenderVx = renderVx as PathRenderVx;
-            if (glRenderVx == null) return;
+            if (!(renderVx is PathRenderVx glRenderVx)) return;
             //
             FillGfxPath(brush, glRenderVx);
         }
         public void FillRenderVx(Drawing.Color color, Drawing.RenderVx renderVx)
         {
-            PathRenderVx glRenderVx = renderVx as PathRenderVx;
-            if (glRenderVx == null) return;
+            if (!(renderVx is PathRenderVx glRenderVx)) return;
 
             FillGfxPath(color, glRenderVx);
 
         }
         public void DrawRenderVx(Drawing.Color color, Drawing.RenderVx renderVx)
         {
-            PathRenderVx glRenderVx = renderVx as PathRenderVx;
-            if (glRenderVx == null) return;
+            if (!(renderVx is PathRenderVx glRenderVx)) return;
 
             DrawGfxPath(color, glRenderVx);
         }
@@ -1269,7 +1262,8 @@ namespace PixelFarm.DrawingGL
                     {
                         //TODO: review here again
                         //use VBO?
-                        //
+                        //TODO: create mask on another render suface and use shader+mask is more simple
+
                         if (pathRenderVx._enableVBO)
                         {
 
@@ -1573,169 +1567,7 @@ namespace PixelFarm.DrawingGL
                     break;
             }
         }
-        //void FillGfxPath_OLD(Drawing.Brush brush, PathRenderVx pathRenderVx)
-        //{
-        //    switch (brush.BrushKind)
-        //    {
-        //        case Drawing.BrushKind.Solid:
-        //            {
-        //                var solidBrush = brush as PixelFarm.Drawing.SolidBrush;
-        //                FillGfxPath(solidBrush.Color, pathRenderVx);
-        //            }
-        //            break;
-        //        case Drawing.BrushKind.LinearGradient:
-        //        case Drawing.BrushKind.CircularGraident:
-        //        case Drawing.BrushKind.Texture:
-        //        case BrushKind.PolygonGradient:
-        //            {
-        //                //TODO: review here again
-        //                //use VBO?
-        //                //
 
-        //                int m = pathRenderVx.FigCount;
-        //                for (int b = 0; b < m; ++b)
-        //                {
-        //                    Figure fig = pathRenderVx.GetFig(b);
-        //                    GL.ClearStencil(0); //set value for clearing stencil buffer 
-        //                    //actual clear here
-        //                    GL.Clear(ClearBufferMask.StencilBufferBit);
-        //                    //-------------------
-        //                    //disable rendering to color buffer
-        //                    GL.ColorMask(false, false, false, false);
-        //                    //start using stencil
-        //                    GL.Enable(EnableCap.StencilTest);
-        //                    //place a 1 where rendered
-        //                    GL.StencilFunc(StencilFunction.Always, 1, 1);
-        //                    //replace where rendered
-        //                    GL.StencilOp(StencilOp.Replace, StencilOp.Replace, StencilOp.Replace);
-        //                    //render  to stencill buffer
-        //                    //-----------------
-        //                    float[] tessArea = fig.GetAreaTess(_tessTool, _tessWindingRuleType, TessTriangleTechnique.DrawArray);
-        //                    //-------------------------------------   
-        //                    if (tessArea != null)
-        //                    {
-        //                        //create a hole,
-        //                        //no AA at this step
-        //                        _basicFillShader.FillTriangles(tessArea, fig.TessAreaVertexCount, PixelFarm.Drawing.Color.Black);
-        //                    }
-        //                    //-------------------------------------- 
-        //                    //render color
-        //                    //--------------------------------------  
-        //                    //re-enable color buffer 
-        //                    GL.ColorMask(true, true, true, true);
-        //                    //where a 1 was not rendered
-        //                    GL.StencilFunc(StencilFunction.Equal, 1, 1);
-        //                    //freeze stencill buffer
-        //                    GL.StencilOp(StencilOp.Keep, StencilOp.Keep, StencilOp.Keep);
-        //                    //------------------------------------------
-        //                    //we already have valid ps from stencil step
-        //                    //------------------------------------------
-
-        //                    //-------------------------------------------------------------------------------------
-        //                    //1.  we draw only alpha chanel of this black color to destination color
-        //                    //so we use  BlendFuncSeparate  as follow ... 
-        //                    //-------------------------------------------------------------------------------------
-
-        //                    GL.ColorMask(false, false, false, true);
-        //                    //GL.BlendFuncSeparate(
-        //                    //     BlendingFactorSrc.DstColor, BlendingFactorDest.DstColor, //the same
-        //                    //     BlendingFactorSrc.One, BlendingFactorDest.Zero);
-        //                    //use alpha chanel from source***
-        //                    GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.Zero);
-
-
-        //                    //at this point alpha component is fill in to destination 
-        //                    {
-        //                        switch (brush.BrushKind)
-        //                        {
-        //                            case BrushKind.CircularGraident:
-        //                                {
-        //                                    RadialGradientBrush glGrBrush = RadialGradientBrush.Resolve((Drawing.RadialGradientBrush)brush);
-        //                                    if (glGrBrush._hasSignificateAlphaCompo)
-        //                                    {
-        //                                        _radialGradientShader.Render(
-        //                                            glGrBrush._v2f,
-        //                                            glGrBrush._cx,
-        //                                            _vwHeight - glGrBrush._cy,
-        //                                            glGrBrush._r,
-        //                                            glGrBrush._invertedAff,
-        //                                            glGrBrush._lookupBmp);
-
-        //                                    }
-        //                                    else
-        //                                    {
-        //                                        float[] smoothBorder = fig.GetSmoothBorders(_smoothBorderBuilder);
-        //                                        _invertAlphaFragmentShader.DrawTriangleStrips(smoothBorder, fig.BorderTriangleStripCount);
-        //                                    }
-        //                                }
-        //                                break;
-        //                            default:
-        //                                {
-        //                                    float[] smoothBorder = fig.GetSmoothBorders(_smoothBorderBuilder);
-        //                                    _invertAlphaFragmentShader.DrawTriangleStrips(smoothBorder, fig.BorderTriangleStripCount);
-        //                                }
-        //                                break;
-        //                        }
-        //                    }
-        //                    //-------------------------------------------------------------------------------------
-        //                    //2. then fill again!, 
-        //                    //we use alpha information from dest, 
-        //                    //so we set blend func to ... GL.BlendFunc(BlendingFactorSrc.DstAlpha, BlendingFactorDest.OneMinusDstAlpha)    
-        //                    GL.ColorMask(true, true, true, true);
-        //                    GL.BlendFunc(BlendingFactorSrc.DstAlpha, BlendingFactorDest.OneMinusDstAlpha);
-        //                    {
-        //                        //draw box*** of gradient color
-        //                        switch (brush.BrushKind)
-        //                        {
-        //                            case BrushKind.CircularGraident:
-        //                                {
-        //                                    //GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusDstAlpha);
-        //                                    //GL.Disable(EnableCap.StencilTest);
-
-        //                                    RadialGradientBrush glGrBrush = RadialGradientBrush.Resolve((Drawing.RadialGradientBrush)brush);
-        //                                    _radialGradientShader.Render(
-        //                                        glGrBrush._v2f,
-        //                                        glGrBrush._cx,
-        //                                        _vwHeight - glGrBrush._cy,
-        //                                        glGrBrush._r,
-        //                                        glGrBrush._invertedAff,
-        //                                        glGrBrush._lookupBmp);
-        //                                }
-        //                                break;
-        //                            case Drawing.BrushKind.LinearGradient:
-        //                                {
-        //                                    LinearGradientBrush glGrBrush = LinearGradientBrush.Resolve((Drawing.LinearGradientBrush)brush);
-        //                                    _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
-        //                                }
-        //                                break;
-        //                            case BrushKind.PolygonGradient:
-        //                                {
-
-        //                                    PolygonGradientBrush glGrBrush = PolygonGradientBrush.Resolve((Drawing.PolygonGradientBrush)brush, _tessTool);
-        //                                    _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
-        //                                }
-        //                                break;
-        //                            case Drawing.BrushKind.Texture:
-        //                                {
-        //                                    //draw texture image ***
-        //                                    PixelFarm.Drawing.TextureBrush tbrush = (PixelFarm.Drawing.TextureBrush)brush;
-        //                                    GLBitmap bmpTexture = PixelFarm.Drawing.Image.GetCacheInnerImage(tbrush.TextureImage) as GLBitmap;
-        //                                    //TODO: review here 
-        //                                    //where to start?
-        //                                    this.DrawImage(bmpTexture, 0, 300); //WHY 300=> fix this
-        //                                }
-        //                                break;
-        //                        }
-        //                    }
-        //                    //restore back 
-        //                    //3. switch to normal blending mode 
-        //                    GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-        //                    GL.Disable(EnableCap.StencilTest);
-        //                }
-        //            }
-        //            break;
-        //    }
-        //}
         public void DisableMask()
         {
             //restore back 
@@ -1743,6 +1575,7 @@ namespace PixelFarm.DrawingGL
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
             GL.Disable(EnableCap.StencilTest);
         }
+
         public void EnableMask(PathRenderVx pathRenderVx)
         {
 
@@ -1919,6 +1752,11 @@ namespace PixelFarm.DrawingGL
         int _scss_width;
         int _scss_height;
 
+        public Rectangle GetClipRect()
+        {
+            int bottom = OriginKind == RenderSurfaceOriginKind.LeftTop ? _vwHeight - _scss_bottom : _scss_bottom;
+            return Rectangle.FromLTRB(_scss_left - _canvasOriginX, bottom - _scss_height, _scss_width + _scss_left, bottom);
+        }
         public void SetClipRect(int left, int top, int width, int height)
         {
 
@@ -1926,25 +1764,53 @@ namespace PixelFarm.DrawingGL
             //System.Diagnostics.Debug.WriteLine("clip:" + left + "," + top + "," + width + "," + height);
 #endif
 
-            int n_left = left + _canvasOriginX;
-            int n_bottom = (OriginKind == RenderSurfaceOrientation.LeftTop) ?
-                                _vwHeight - (_canvasOriginY + top + height) :
-                                _canvasOriginY + top + height;
+            int new_left = left + _canvasOriginX;
+            int bottom = _canvasOriginY + top + height;
+            int new_bottom = (OriginKind == RenderSurfaceOriginKind.LeftTop) ? _vwHeight - bottom : bottom;
 
-            if (_scss_left != n_left || _scss_bottom != n_bottom || _scss_width != width || _scss_height != height)
+            if (_scss_left != new_left || _scss_bottom != new_bottom || _scss_width != width || _scss_height != height)
             {
                 GL.Scissor(
-                    _scss_left = n_left,
-                    _scss_bottom = n_bottom,
+                    _scss_left = new_left,
+                    _scss_bottom = new_bottom,
                     _scss_width = width,
                     _scss_height = height);
             }
         }
-
-
         internal TessTool GetTessTool() => _tessTool;
         internal SmoothBorderBuilder GetSmoothBorderBuilder() => _smoothBorderBuilder;
+
+        public void SaveContextData(out GLPainterContextData context)
+        {
+            context = new GLPainterContextData {
+                renderSurface = CurrentRenderSurface,
+                canvas_origin_X = _canvasOriginX,
+                canvas_origin_Y = _canvasOriginY,
+                originKind = OriginKind,
+                clipRect = GetClipRect()
+            };
+        }
+        public void RestoreContextData(in GLPainterContextData context)
+        {
+            AttachToRenderSurface(context.renderSurface);
+            this.OriginKind = context.originKind;
+            _canvasOriginX = context.canvas_origin_X;
+            _canvasOriginY = context.canvas_origin_Y;
+            Rectangle clipRect = context.clipRect;
+            SetClipRect(clipRect.Left, clipRect.Top, clipRect.Width, clipRect.Height);
+        }
     }
+
+
+    public struct GLPainterContextData
+    {
+        internal GLRenderSurface renderSurface;
+        internal int canvas_origin_X;
+        internal int canvas_origin_Y;
+        internal Rectangle clipRect;
+        internal RenderSurfaceOriginKind originKind;
+    }
+
 
     static class SimpleTessTool
     {
@@ -1975,7 +1841,7 @@ namespace PixelFarm.DrawingGL
         int _orgBmpH;
         bool _bmpYFlipped;
 
-        RenderSurfaceOrientation _pcxOrgKind;
+        RenderSurfaceOriginKind _pcxOrgKind;
 
         internal PixelFarm.CpuBlit.ArrayList<float> _buffer = new CpuBlit.ArrayList<float>();
         internal PixelFarm.CpuBlit.ArrayList<ushort> _indexList = new CpuBlit.ArrayList<ushort>();
@@ -1984,15 +1850,13 @@ namespace PixelFarm.DrawingGL
         {
 
         }
-        public void SetTextureInfo(int width, int height, bool isYFlipped, RenderSurfaceOrientation pcxOrgKind)
+        public void SetTextureInfo(int width, int height, bool isYFlipped, RenderSurfaceOriginKind pcxOrgKind)
         {
             _orgBmpW = width;
             _orgBmpH = height;
             _bmpYFlipped = isYFlipped;
             _pcxOrgKind = pcxOrgKind;
         }
-
-
         public void Clear()
         {
             _buffer.Clear();
@@ -2000,13 +1864,21 @@ namespace PixelFarm.DrawingGL
         }
 
         public void WriteRect(
-            ref PixelFarm.Drawing.Rectangle srcRect,
+            in PixelFarm.Drawing.Rectangle srcRect,
             float targetLeft,
             float targetTop,
             float scale)
         {
+           
+#if DEBUG
+            if (_orgBmpW == 0 || _orgBmpH == 0)
+            {
+                //please SetTextureInfo()
+                System.Diagnostics.Debugger.Break();
+            }
+#endif
 
-            if (_pcxOrgKind == RenderSurfaceOrientation.LeftTop) //***
+            if (_pcxOrgKind == RenderSurfaceOriginKind.LeftTop) //***
             {
                 //***
                 targetTop += srcRect.Height;  //***
@@ -2038,10 +1910,12 @@ namespace PixelFarm.DrawingGL
             }
 
             //---------
+            RectangleF normalizedSrc = srcRect.CreateNormalizedRect(_orgBmpW, _orgBmpH);
+            RectangleF target = new RectangleF(targetLeft, targetTop, srcRect.Width, srcRect.Height);
             WriteToVboStream(_buffer, indexCount > 0,
-                srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height,
-                targetLeft, targetTop,
-                _orgBmpW, _orgBmpH, _bmpYFlipped, scale);
+                normalizedSrc,
+                target,
+                _bmpYFlipped);
 
             _indexList.Append(indexCount);
             _indexList.Append((ushort)(indexCount + 1));
@@ -2049,7 +1923,82 @@ namespace PixelFarm.DrawingGL
             _indexList.Append((ushort)(indexCount + 3));
             //--- 
         }
-        public void AppendDegenerativeTrinagle()
+
+
+        public void WriteRectWithRotation(
+            in PixelFarm.Drawing.Rectangle srcRect,
+            float targetLeft,
+            float targetTop,
+            float srcRotation)
+        {
+
+#if DEBUG
+            if (_orgBmpW == 0 || _orgBmpH == 0)
+            {
+                //please SetTextureInfo()
+                System.Diagnostics.Debugger.Break();
+            }
+#endif
+
+            if (_pcxOrgKind == RenderSurfaceOriginKind.LeftTop) //***
+            {
+                //***
+                targetTop += srcRect.Height;  //***
+            }
+
+            // https://developer.apple.com/library/content/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/TechniquesforWorkingwithVertexData/TechniquesforWorkingwithVertexData.html
+
+            ushort indexCount = (ushort)_indexList.Count;
+
+            if (indexCount > 0)
+            {
+
+                //add degenerative triangle
+                int buff_count = _buffer.Count;
+                float prev_5 = _buffer[buff_count - 5];
+                float prev_4 = _buffer[buff_count - 4];
+                float prev_3 = _buffer[buff_count - 3];
+                float prev_2 = _buffer[buff_count - 2];
+                float prev_1 = _buffer[buff_count - 1];
+
+                _buffer.Append(prev_5); _buffer.Append(prev_4); _buffer.Append(prev_3);
+                _buffer.Append(prev_2); _buffer.Append(prev_1);
+
+
+                _indexList.Append((ushort)(indexCount));
+                _indexList.Append((ushort)(indexCount + 1));
+
+                indexCount += 2;
+            }
+
+            //---------
+
+            Quad2f quad = new Quad2f();
+            quad.SetCornersFromRect(srcRect);
+
+            AffineMat mat = AffineMat.Iden;
+            mat.Translate(-srcRect.Left, -(srcRect.Top + srcRect.Bottom) / 2); //*** in this case we move to left-most x amd mid-y of the srcRect
+            mat.Rotate(srcRotation);
+            mat.Translate(targetLeft, targetTop);
+
+            quad.Transform(mat);
+
+            RectangleF normalizedSrcRect = srcRect.CreateNormalizedRect(_orgBmpW, _orgBmpH);
+
+            WriteToVboStream(_buffer,
+                 indexCount > 0,
+                 normalizedSrcRect,
+                 quad,
+                 _bmpYFlipped);
+
+            _indexList.Append(indexCount);
+            _indexList.Append((ushort)(indexCount + 1));
+            _indexList.Append((ushort)(indexCount + 2));
+            _indexList.Append((ushort)(indexCount + 3));
+            //--- 
+        }
+
+        public void AppendDegenerativeTriangle()
         {
 
             ushort indexCount = (ushort)_indexList.Count;
@@ -2072,79 +2021,130 @@ namespace PixelFarm.DrawingGL
         }
 
         static void WriteToVboStream(
-            PixelFarm.CpuBlit.ArrayList<float> vboList,
-            bool duplicateFirst,
-            float srcLeft, float srcTop,
-            float srcW, float srcH,
-            float targetLeft, float targetTop,
-            float orgBmpW, float orgBmpH,
-            bool bmpYFlipped,
-            float scale
+            PixelFarm.CpuBlit.ArrayList<float> vboList, bool duplicateFirst,
+            in RectangleF normalizedSrc,
+            in RectangleF targetRect,
+            bool bmpYFlipped
         )
         {
 
-            unsafe
+            if (bmpYFlipped)
             {
-                float srcBottom = srcTop + srcH;
-                float srcRight = srcLeft + srcW;
+                vboList.Append(targetRect.Left); vboList.Append(targetRect.Top); vboList.Append(0); //coord 0 (left,top)                                                                                                       
+                vboList.Append(normalizedSrc.Left); vboList.Append(normalizedSrc.Top); //texture coord 0 (left,top)
 
-                unsafe
+                if (duplicateFirst)
                 {
-                    //TODO: review here again!
-
-                    if (bmpYFlipped)
-                    {
-                        vboList.Append(targetLeft); vboList.Append(targetTop); vboList.Append(0); //coord 0 (left,top)                                                                                                       
-                        vboList.Append(srcLeft / orgBmpW); vboList.Append(srcTop / orgBmpH); //texture coord 0 (left,top)
-
-                        if (duplicateFirst)
-                        {
-                            //for creating degenerative triangle 
-                            vboList.Append(targetLeft); vboList.Append(targetTop); vboList.Append(0); //coord 0 (left,top)                                                                                                       
-                            vboList.Append(srcLeft / orgBmpW); vboList.Append(srcTop / orgBmpH); //texture coord 0 (left,top)
-                        }
-                        //---------------------
-                        vboList.Append(targetLeft); vboList.Append(targetTop - (srcH * scale)); vboList.Append(0); //coord 1 (left,bottom)
-                        vboList.Append(srcLeft / orgBmpW); vboList.Append(srcBottom / orgBmpH); //texture coord 1 (left,bottom)
-
-                        //---------------------
-                        vboList.Append(targetLeft + (srcW * scale)); vboList.Append(targetTop); vboList.Append(0); //coord 2 (right,top)
-                        vboList.Append(srcRight / orgBmpW); vboList.Append(srcTop / orgBmpH); //texture coord 2 (right,top)
-
-                        //---------------------
-                        vboList.Append(targetLeft + (srcW * scale)); vboList.Append(targetTop - (srcH * scale)); vboList.Append(0);//coord 3 (right, bottom)
-                        vboList.Append(srcRight / orgBmpW); vboList.Append(srcBottom / orgBmpH); //texture coord 3  (right,bottom) 
-
-                    }
-                    else
-                    {
-
-
-                        vboList.Append(targetLeft); vboList.Append(targetTop); vboList.Append(0); //coord 0 (left,top)
-                        vboList.Append(srcLeft / orgBmpW); vboList.Append(srcBottom / orgBmpH); //texture coord 0  (left,bottom) 
-                        if (duplicateFirst)
-                        {
-                            //for creating degenerative triangle
-                            //https://developer.apple.com/library/content/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/TechniquesforWorkingwithVertexData/TechniquesforWorkingwithVertexData.html
-
-                            vboList.Append(targetLeft); vboList.Append(targetTop); vboList.Append(0); //coord 0 (left,top)
-                            vboList.Append(srcLeft / orgBmpW); vboList.Append(srcBottom / orgBmpH); //texture coord 0  (left,bottom)
-                        }
-
-                        //---------------------
-                        vboList.Append(targetLeft); vboList.Append(targetTop - (srcH * scale)); vboList.Append(0); //coord 1 (left,bottom)
-                        vboList.Append(srcLeft / orgBmpW); vboList.Append(srcTop / orgBmpH); //texture coord 1  (left,top)
-
-                        //---------------------
-                        vboList.Append(targetLeft + (srcW * scale)); vboList.Append(targetTop); vboList.Append(0); //coord 2 (right,top)
-                        vboList.Append(srcRight / orgBmpW); vboList.Append(srcBottom / orgBmpH); //texture coord 2  (right,bottom)
-
-                        //---------------------
-                        vboList.Append(targetLeft + (srcW * scale)); vboList.Append(targetTop - (srcH * scale)); vboList.Append(0); //coord 3 (right, bottom)
-                        vboList.Append(srcRight / orgBmpW); vboList.Append(srcTop / orgBmpH); //texture coord 3 (right,top) 
-                    }
+                    //for creating degenerative triangle 
+                    vboList.Append(targetRect.Left); vboList.Append(targetRect.Top); vboList.Append(0); //coord 0 (left,top)                                                                                                       
+                    vboList.Append(normalizedSrc.Left); vboList.Append(normalizedSrc.Top); //texture coord 0 (left,top)
                 }
+                //---------------------
+                vboList.Append(targetRect.Left); vboList.Append(targetRect.Top - targetRect.Height); vboList.Append(0); //coord 1 (left,bottom)
+                vboList.Append(normalizedSrc.Left); vboList.Append(normalizedSrc.Bottom); //texture coord 1 (left,bottom)
+
+                //---------------------
+                vboList.Append(targetRect.Right); vboList.Append(targetRect.Top); vboList.Append(0); //coord 2 (right,top)
+                vboList.Append(normalizedSrc.Right); vboList.Append(normalizedSrc.Top); //texture coord 2 (right,top)
+
+                //---------------------
+                vboList.Append(targetRect.Right); vboList.Append(targetRect.Top - targetRect.Height); vboList.Append(0);//coord 3 (right, bottom)
+                vboList.Append(normalizedSrc.Right); vboList.Append(normalizedSrc.Bottom); //texture coord 3  (right,bottom) 
+
+            }
+            else
+            {
+
+
+                vboList.Append(targetRect.Left); vboList.Append(targetRect.Top); vboList.Append(0); //coord 0 (left,top)
+                vboList.Append(normalizedSrc.Left); vboList.Append(normalizedSrc.Bottom); //texture coord 0  (left,bottom) 
+                if (duplicateFirst)
+                {
+                    //for creating degenerative triangle
+                    //https://developer.apple.com/library/content/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/TechniquesforWorkingwithVertexData/TechniquesforWorkingwithVertexData.html
+
+                    vboList.Append(targetRect.Left); vboList.Append(targetRect.Top); vboList.Append(0); //coord 0 (left,top)
+                    vboList.Append(normalizedSrc.Left); vboList.Append(normalizedSrc.Bottom); //texture coord 0  (left,bottom)
+                }
+
+                //---------------------
+                vboList.Append(targetRect.Left); vboList.Append(targetRect.Top - targetRect.Height); vboList.Append(0); //coord 1 (left,bottom)
+                vboList.Append(normalizedSrc.Left); vboList.Append(normalizedSrc.Top); //texture coord 1  (left,top)
+
+                //---------------------
+                vboList.Append(targetRect.Right); vboList.Append(targetRect.Top); vboList.Append(0); //coord 2 (right,top)
+                vboList.Append(normalizedSrc.Right); vboList.Append(normalizedSrc.Bottom); //texture coord 2  (right,bottom)
+
+                //---------------------
+                vboList.Append(targetRect.Right); vboList.Append(targetRect.Top - targetRect.Height); vboList.Append(0); //coord 3 (right, bottom)
+                vboList.Append(normalizedSrc.Right); vboList.Append(normalizedSrc.Top); //texture coord 3 (right,top) 
             }
         }
+
+
+        static void WriteToVboStream(
+           PixelFarm.CpuBlit.ArrayList<float> vboList,
+           bool duplicateFirst,
+           in RectangleF normalizedSrcRect,
+           in Quad2f quad,
+           bool bmpYFlipped
+        )
+        {
+
+            if (bmpYFlipped)
+            {
+                vboList.Append(quad.left_top_x); vboList.Append(quad.left_top_y); vboList.Append(0); //coord 0 (left,top)                                                                                                       
+                vboList.Append(normalizedSrcRect.Left); vboList.Append(normalizedSrcRect.Top); //texture coord 0 (left,top)
+
+                if (duplicateFirst)
+                {
+                    //for creating degenerative triangle 
+                    vboList.Append(quad.left_top_x); vboList.Append(quad.left_top_y); vboList.Append(0); //coord 0 (left,top)                                                                                                       
+                    vboList.Append(normalizedSrcRect.Left); vboList.Append(normalizedSrcRect.Top); //texture coord 0 (left,top)
+                }
+                //---------------------
+                vboList.Append(quad.left_bottom_x); vboList.Append(quad.left_bottom_y); vboList.Append(0); //coord 1 (left,bottom)
+                vboList.Append(normalizedSrcRect.Left); vboList.Append(normalizedSrcRect.Bottom); //texture coord 1 (left,bottom)
+
+                //---------------------
+                vboList.Append(quad.right_top_x); vboList.Append(quad.right_top_y); vboList.Append(0); //coord 2 (right,top)
+                vboList.Append(normalizedSrcRect.Right); vboList.Append(normalizedSrcRect.Top); //texture coord 2 (right,top)
+
+                //---------------------
+                vboList.Append(quad.right_bottom_x); vboList.Append(quad.right_bottom_y); vboList.Append(0);//coord 3 (right, bottom)
+                vboList.Append(normalizedSrcRect.Right); vboList.Append(normalizedSrcRect.Bottom); //texture coord 3  (right,bottom) 
+
+            }
+            else
+            {
+
+                vboList.Append(quad.left_top_x); vboList.Append(quad.left_top_y); vboList.Append(0); //coord 0 (left,top)
+                vboList.Append(normalizedSrcRect.Left); vboList.Append(normalizedSrcRect.Bottom); //texture coord 0  (left,bottom) 
+                if (duplicateFirst)
+                {
+                    //for creating degenerative triangle
+                    //https://developer.apple.com/library/content/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/TechniquesforWorkingwithVertexData/TechniquesforWorkingwithVertexData.html
+
+                    vboList.Append(quad.left_top_x); vboList.Append(quad.left_top_y); vboList.Append(0); //coord 0 (left,top)
+                    vboList.Append(normalizedSrcRect.Left); vboList.Append(normalizedSrcRect.Bottom); //texture coord 0  (left,bottom)
+                }
+
+                //---------------------
+                vboList.Append(quad.left_bottom_x); vboList.Append(quad.left_bottom_y); vboList.Append(0); //coord 1 (left,bottom)
+                vboList.Append(normalizedSrcRect.Left); vboList.Append(normalizedSrcRect.Top); //texture coord 1  (left,top)
+
+                //---------------------
+                vboList.Append(quad.right_top_x); vboList.Append(quad.right_top_y); vboList.Append(0); //coord 2 (right,top)
+                vboList.Append(normalizedSrcRect.Right); vboList.Append(normalizedSrcRect.Bottom); //texture coord 2  (right,bottom)
+
+                //---------------------
+                vboList.Append(quad.right_bottom_x); vboList.Append(quad.right_bottom_y); vboList.Append(0); //coord 3 (right, bottom)
+                vboList.Append(normalizedSrcRect.Right); vboList.Append(normalizedSrcRect.Top); //texture coord 3 (right,top) 
+            }
+
+        }
+
+
+
     }
 }

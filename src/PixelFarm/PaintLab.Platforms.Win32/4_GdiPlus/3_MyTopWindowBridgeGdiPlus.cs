@@ -5,6 +5,7 @@ using PixelFarm.Drawing;
 
 namespace LayoutFarm.UI.GdiPlus
 {
+    using LayoutFarm.UI;
     using LayoutFarm.UI.InputBridge;
     public class MyTopWindowBridgeGdiPlus : AbstractTopWindowBridge
     {
@@ -28,6 +29,10 @@ namespace LayoutFarm.UI.GdiPlus
             //use custom cursor 
             //if not support then just ignore
             return;
+        }
+        protected override void ChangeCursor(Cursor cursor)
+        {
+            throw new NotImplementedException();
         }
         public override void BindWindowControl(IGpuOpenGLSurfaceView windowControl)
         {
@@ -221,6 +226,11 @@ namespace LayoutFarm.UI.GdiPlus
             //        }
             //        break;
             //}
+        }
+
+        protected override void ChangeCursor(Cursor cursor)
+        {
+            _windowControl.CurrentCursor = cursor;
         }
     }
 }

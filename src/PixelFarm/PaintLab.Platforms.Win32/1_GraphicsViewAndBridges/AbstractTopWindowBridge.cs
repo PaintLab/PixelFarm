@@ -34,6 +34,7 @@ namespace LayoutFarm.UI
         //
         protected abstract void ChangeCursor(MouseCursorStyle cursorStyle);
         protected abstract void ChangeCursor(ImageBinder imgbinder);
+        protected abstract void ChangeCursor(Cursor cursor);
         //
         internal void SetBaseCanvasViewport(CanvasViewport canvasViewport)
         {
@@ -196,17 +197,14 @@ namespace LayoutFarm.UI
             PrepareRenderAndFlushAccumGraphics();
         }
         //------------------------------------------------------------------------
-       
+
 
         public void HandleMouseDown(UIMouseEventArgs mouseEventArgs)
-        {           
+        {
             _canvasViewport.FullMode = false;
             _topWinEventRoot.RootMouseDown(mouseEventArgs);
 
-            if (_currentCursorStyle != mouseEventArgs.MouseCursorStyle)
-            {
-                ChangeCursor(_currentCursorStyle = mouseEventArgs.MouseCursorStyle);
-            }
+            UpdateCursor(mouseEventArgs);
 
             ReleaseUIMouseEventArgs(mouseEventArgs);
 
@@ -234,10 +232,7 @@ namespace LayoutFarm.UI
         public void HandleMouseMove(UIMouseEventArgs mouseEventArgs)
         {
             _topWinEventRoot.RootMouseMove(mouseEventArgs);
-            if (_currentCursorStyle != mouseEventArgs.MouseCursorStyle)
-            {
-                ChangeCursor(_currentCursorStyle = mouseEventArgs.MouseCursorStyle);
-            }
+            UpdateCursor(mouseEventArgs);
             ReleaseUIMouseEventArgs(mouseEventArgs);
             PrepareRenderAndFlushAccumGraphics();
         }
@@ -247,24 +242,41 @@ namespace LayoutFarm.UI
             _canvasViewport.FullMode = false;
             _topWinEventRoot.RootMouseUp(mouseEventArgs);
 
-            if (_currentCursorStyle != mouseEventArgs.MouseCursorStyle)
-            {
-                ChangeCursor(_currentCursorStyle = mouseEventArgs.MouseCursorStyle);
-            }
-
+            UpdateCursor(mouseEventArgs);
             ReleaseUIMouseEventArgs(mouseEventArgs);
             PrepareRenderAndFlushAccumGraphics();
-            
         }
 
+        Cursor _latestCustomCursor;
+        void UpdateCursor(UIMouseEventArgs mouseEventArgs)
+        {
+            if (mouseEventArgs.CustomMouseCursor != null)
+            {
+                //specific custom cursor
+                _currentCursorStyle = MouseCursorStyle.CustomStyle;
+                if (_latestCustomCursor != mouseEventArgs.CustomMouseCursor)
+                {
+                    //some change                     
+                    ChangeCursor(_latestCustomCursor = mouseEventArgs.CustomMouseCursor);
+                }
+            }
+            else
+            {
+                _latestCustomCursor = null;
+                if (_currentCursorStyle != mouseEventArgs.MouseCursorStyle)
+                {
+                    ChangeCursor(_currentCursorStyle = mouseEventArgs.MouseCursorStyle);
+                }
+            }
+
+
+        }
         public void HandleMouseWheel(UIMouseEventArgs mouseEventArgs)
         {
             _canvasViewport.FullMode = true;
             _topWinEventRoot.RootMouseWheel(mouseEventArgs);
-            if (_currentCursorStyle != mouseEventArgs.MouseCursorStyle)
-            {
-                ChangeCursor(_currentCursorStyle = mouseEventArgs.MouseCursorStyle);
-            }
+            UpdateCursor(mouseEventArgs);
+
             ReleaseUIMouseEventArgs(mouseEventArgs);
             PrepareRenderAndFlushAccumGraphics();
         }

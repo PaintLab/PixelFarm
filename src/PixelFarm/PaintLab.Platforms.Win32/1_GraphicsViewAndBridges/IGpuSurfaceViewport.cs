@@ -21,8 +21,7 @@ namespace LayoutFarm.UI
         IntPtr GetEglDisplay();
         IntPtr GetEglSurface();
 
-        ////
-        ////TODO, review this again
-        //System.Windows.Forms.Cursor Cursor { get; set; }
+        //
+        Cursor CurrentCursor { get; set; }         
     }
 }
