@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
+using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
 
 namespace PixelFarm.DrawingGL
@@ -15,7 +16,7 @@ namespace PixelFarm.DrawingGL
         Brush _defaultBrush;
         float _fillOpacity;
         bool _hasFillOpacity;
-       
+
         public override Color FillColor
         {
             get => _fillColor;
@@ -98,7 +99,7 @@ namespace PixelFarm.DrawingGL
         public override void Fill(VertexStore vxs)
         {
 
-           
+
             using (PathRenderVx pathRenderVx = PathRenderVx.Create(_pathRenderVxBuilder.Build(vxs)))
             {
                 switch (_currentBrush.BrushKind)
@@ -141,7 +142,7 @@ namespace PixelFarm.DrawingGL
                     case BrushKind.Texture:
                         break;
                 }
-            } 
+            }
 
         }
 
@@ -168,7 +169,7 @@ namespace PixelFarm.DrawingGL
                     {
                         //resolve internal linear gradient brush impl
 
-                        using (VxsTemp.Borrow(out var v1))
+                        using (Tools.BorrowVxs(out var v1))
                         using (VectorToolBox.Borrow(out SimpleRect rect))
                         {
                             rect.SetRectFromLTWH(left, top, width, height);
@@ -205,7 +206,7 @@ namespace PixelFarm.DrawingGL
             double ry = Math.Abs(height / 2);
             //
             using (VectorToolBox.Borrow(out Ellipse ellipse))
-            using (VxsTemp.Borrow(out var vxs))
+            using (Tools.BorrowVxs(out var vxs))
             {
                 ellipse.MakeVxs(vxs);
                 //***

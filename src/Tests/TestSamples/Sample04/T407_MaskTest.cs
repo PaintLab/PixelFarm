@@ -32,7 +32,7 @@ namespace OpenTkEssTest
         {
             //1. create color bmp  
             _colorBmp = new MemBitmap(64, 64);
-            using (VxsTemp.Borrow(out var v1, out var v2))
+            using (Tools.BorrowVxs(out var v1, out var v2))
             using (Tools.BorrowAggPainter(_colorBmp, out var painter))
             {
                 painter.Clear(Color.White);

@@ -216,7 +216,7 @@ namespace PixelFarm.CpuBlit.UI
 
             int n_count = m_polygon.Length / 2;
 
-            using (VxsTemp.Borrow(out var v3))
+            using (Tools.BorrowVxs(out var v3))
             {
                 double x, y;
                 for (int m = 0; m < n_count; ++m)
@@ -252,7 +252,7 @@ namespace PixelFarm.CpuBlit.UI
             RectD localBounds = new RectD(double.PositiveInfinity, double.PositiveInfinity, double.NegativeInfinity, double.NegativeInfinity);
             this.RewindZero();
 
-            using (VxsTemp.Borrow(out var v1))
+            using (Tools.BorrowVxs(out var v1))
             {
                 this.MakeVxs(v1);
                 int j = v1.Count;
@@ -532,7 +532,7 @@ namespace PixelFarm.CpuBlit.UI
         {
             p.FillColor = LineColor;
 
-            using (VxsTemp.Borrow(out var v1))
+            using (Tools.BorrowVxs(out var v1))
             {
                 p.Draw(this.MakeVxs(v1));
             }

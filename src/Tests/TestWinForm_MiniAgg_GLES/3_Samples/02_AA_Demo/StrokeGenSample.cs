@@ -163,7 +163,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
             public ExampleVxsLineDash2Walker()
             {
-                using (VxsTemp.Borrow(out var v1))
+                using (Tools.BorrowVxs(out var v1))
                 {
                     v1 = new VertexStore();
                     v1.AddMoveTo(0, -3);
@@ -191,7 +191,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                     _p.SetOrigin((float)cx, (float)cy);
                     _p.FillColor = Color.Red;
 
-                    using (VxsTemp.Borrow(out var v1))
+                    using (Tools.BorrowVxs(out var v1))
                     {
                         _vxs.RotateRadToNewVxs(System.Math.Atan2(y - _latestY, x - _latestX), v1);
                         _p.Fill(v1);
@@ -225,7 +225,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             p.StrokeWidth = 2.0f;
 
 
-            using (VxsTemp.Borrow(out var v1, out var v2))
+            using (Tools.BorrowVxs(out var v1, out var v2))
             using (VectorToolBox.Borrow(v1, out PathWriter writer))
             {
                 writer.MoveTo(20, 10);
@@ -299,7 +299,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             p.StrokeWidth = 2.0f;
 
 
-            using (VxsTemp.Borrow(out var v1, out var v2))
+            using (Tools.BorrowVxs(out var v1, out var v2))
             using (VectorToolBox.Borrow(v1, out PathWriter writer))
             {
                 writer.MoveTo(20, 10);
@@ -459,7 +459,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             p.Clear(PixelFarm.Drawing.Color.White);
             p.StrokeColor = PixelFarm.Drawing.Color.Red;
 
-            using (VxsTemp.Borrow(out var v1, out var v2))
+            using (Tools.BorrowVxs(out var v1, out var v2))
             using (VectorToolBox.Borrow(v1, out PathWriter ps))
             {
                 ps.Clear();

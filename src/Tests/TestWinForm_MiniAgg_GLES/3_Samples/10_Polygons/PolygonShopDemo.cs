@@ -75,7 +75,7 @@ namespace PixelFarm
 
         public static VertexStore BuildCardinalSpline()
         {
-            using (VxsTemp.Borrow(out var v1, out var v3))
+            using (Tools.BorrowVxs(out var v1, out var v3))
             using (VectorToolBox.Borrow(out CurveFlattener flatten))
             using (VectorToolBox.Borrow(v1, out PathWriter w))
 
@@ -126,7 +126,7 @@ namespace PixelFarm
             };
 
 
-            using (VxsTemp.Borrow(out var v1, out var v2))
+            using (Tools.BorrowVxs(out var v1, out var v2))
             using (VectorToolBox.Borrow(v1, out PathWriter pw))
             using (VectorToolBox.Borrow(out CurveFlattener flatten))
             {
@@ -344,7 +344,7 @@ namespace PixelFarm
             if (xyCoords.Length > 4)
             {
 
-                using (VxsTemp.Borrow(out var v1, out var v2))
+                using (Tools.BorrowVxs(out var v1, out var v2))
                 using (VectorToolBox.Borrow(v1, out PathWriter pw))
                 using (VectorToolBox.Borrow(out CurveFlattener flattener))
                 {
@@ -370,11 +370,7 @@ namespace PixelFarm
                     p.FillStroke(v2, 2, Color.Red);
                 }
             }
-
-            //using (VxsTemp.Borrow(points, out var v1, false))
-            //{
-            //    p.FillStroke(v1, 2, Color.Red);
-            //}
+             
         }
 
 
@@ -446,7 +442,7 @@ namespace PixelFarm
             p.Fill(selectedVxs);
 
             //test transform the shape
-            using (VxsTemp.Borrow(out var v1))
+            using (Tools.BorrowVxs(out var v1))
             {
 
                 for (int i = 0; i < 1; i++)

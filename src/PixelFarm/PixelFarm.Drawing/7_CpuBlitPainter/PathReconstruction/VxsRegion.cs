@@ -26,7 +26,7 @@ namespace PixelFarm.PathReconstruction
         public VxsRegion(float left, float top, float width, float height)
         {
             _isSimpleRect = true;
-            using (VxsTemp.Borrow(out VertexStore v1))
+            using (Tools.BorrowVxs(out VertexStore v1))
             using (VectorToolBox.Borrow(out SimpleRect rect))
             {
                 rect.SetRectFromLTWH(left, top, width, height);

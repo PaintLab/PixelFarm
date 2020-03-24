@@ -1993,7 +1993,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
             {
                 if (tx != null)
                 {
-                    using (VxsTemp.Borrow(out var v1, out var v2))
+                    using (Tools.BorrowVxs(out var v1, out var v2))
                     {
                         WriteGlyph_a_(v1, x, y);
                         tx.TransformToVxs(v1, v2);
@@ -2003,7 +2003,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                 }
                 else
                 {
-                    using (VxsTemp.Borrow(out var v1, out var v2))
+                    using (Tools.BorrowVxs(out var v1, out var v2))
                     {
                         WriteGlyph_a_(v1, x, y);
                         curveFlattener.MakeVxs(v1, vxs);
@@ -2014,7 +2014,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         }
         static void WriteGlyph_a_(VertexStore vxs, double x, double y)
         {
-            using (VectorToolBox.Borrow(vxs, out PathWriter p))
+            using (Tools.Borrow(vxs, out PathWriter p))
             {
                 p.MoveTo(28.47, 6.45);
                 p.Curve3(21.58, 1.12, 19.82, 0.29);
@@ -2104,7 +2104,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         {
             if (tx != null)
             {
-                using (VxsTemp.Borrow(out var v1))
+                using (Tools.BorrowVxs(out var v1))
                 {
                     WriteArrow1(v1, x, y);
                     tx.TransformToVxs(v1, vxs);
@@ -2119,8 +2119,8 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         {
             if (tx != null)
             {
-                using (VxsTemp.Borrow(out var v1))
-                using (VectorToolBox.Borrow(v1, out PathWriter p))
+                using (Tools.BorrowVxs(out var v1))
+                using (Tools.BorrowPathWriter(v1, out var p))
                 {
                     GreatBritanPathStorage.Make(p);
                     tx.TransformToVxs(v1, vxs);
@@ -2128,7 +2128,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
             }
             else
             {
-                using (VectorToolBox.Borrow(vxs, out PathWriter p))
+                using (Tools.BorrowPathWriter(vxs, out var p))
                 {
                     GreatBritanPathStorage.Make(p);
                 }
@@ -2145,7 +2145,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                 }
                 else
                 {
-                    using (VxsTemp.Borrow(out var v1))
+                    using (Tools.BorrowVxs(out var v1))
                     {
                         sp.MakeVxs(v1);
                         tx.TransformToVxs(v1, vxs);

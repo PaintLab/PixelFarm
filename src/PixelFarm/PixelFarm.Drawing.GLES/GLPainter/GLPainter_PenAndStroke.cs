@@ -294,7 +294,7 @@ namespace PixelFarm.DrawingGL
                 case SmoothMode.Smooth:
                     {
                         _pcx.StrokeColor = this.StrokeColor;
-                        using (PixelFarm.Drawing.VxsTemp.Borrow(out Drawing.VertexStore v1))
+                        using (Tools.BorrowVxs(out var v1))
                         using (PixelFarm.Drawing.VectorToolBox.Borrow(out CpuBlit.VertexProcessing.SimpleRect r))
                         {
                             r.SetRect(left + 0.5f, top + height + 0.5f, left + width - 0.5f, top - 0.5f);

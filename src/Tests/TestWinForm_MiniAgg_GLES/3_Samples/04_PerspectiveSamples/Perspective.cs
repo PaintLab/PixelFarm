@@ -157,7 +157,7 @@ namespace PixelFarm.CpuBlit.Sample_Perspective
 
                 if (txBilinear.IsValid)
                 {
-                    using (VxsTemp.Borrow(out var trans_ell_vxs))
+                    using (Tools.BorrowVxs(out var trans_ell_vxs))
                     using (VectorToolBox.Borrow(out Ellipse ellipse))
                     {
                         _lionShape.Paint(painter, txBilinear); //transform before draw
@@ -211,7 +211,7 @@ namespace PixelFarm.CpuBlit.Sample_Perspective
                     //RectD lionBound = lionShape.Bounds;
 
                     using (VectorToolBox.Borrow(out Ellipse filledEllipse))
-                    using (VxsTemp.Borrow(out var trans_ell_vxs))
+                    using (Tools.BorrowVxs(out var trans_ell_vxs))
                     {
                         filledEllipse.Set((lionBound.Left + lionBound.Right) * 0.5,
                                       (lionBound.Bottom + lionBound.Top) * 0.5,

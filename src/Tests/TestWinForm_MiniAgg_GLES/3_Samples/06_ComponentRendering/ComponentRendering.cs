@@ -62,7 +62,7 @@ namespace PixelFarm.CpuBlit
                 DestBitmapRasterizer bmpRas = asx.BitmapRasterizer;
 
                 using (VectorToolBox.Borrow(out Ellipse ellipse))
-                using (VxsTemp.Borrow(out var v1))
+                using (Tools.BorrowVxs(out var v1))
                 {
                     ellipse.Set(Width / 2 - 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
                     sclineRas.AddPath(ellipse.MakeVxs(v1));

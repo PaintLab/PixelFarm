@@ -72,7 +72,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             }
 
 
-            using (VxsTemp.Borrow(out var vxs1, out var vxs2))
+            using (Tools.BorrowVxs(out var vxs1, out var vxs2))
             {
                 SimpleRect sRect = new SimpleRect();
                 int x = 0, y = 0, w = 100, h = 100;
@@ -198,7 +198,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             //----
             //
 
-            using (VxsTemp.Borrow(out var vxs1, out var vxs2))
+            using (Tools.BorrowVxs(out var vxs1, out var vxs2))
             {
                 SimpleRect sRect = new SimpleRect();
                 int x = 0, y = 0, w = 100, h = 100;

@@ -141,7 +141,7 @@ namespace Test_WinForm_TessGlyph
             
             var prevColor = painter.StrokeColor;
             painter.StrokeColor = Color.Black;
-            using (VxsTemp.Borrow(out var v1))
+            using (Tools.BorrowVxs(out var v1))
             using (VectorToolBox.Borrow(out CurveFlattener flattener))
             {
                 _glyphPathBuilder.ReadShapes(_tovxs);

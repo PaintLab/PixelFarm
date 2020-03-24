@@ -496,7 +496,7 @@ namespace PaintLab.Svg
                             //create rect path around img
 
                             using (VectorToolBox.Borrow(out SimpleRect ss))
-                            using (VxsTemp.Borrow(out VertexStore vxs))
+                            using (Tools.BorrowVxs(out VertexStore vxs))
                             {
                                 SvgImageSpec imgSpec = (SvgImageSpec)_visualSpec;
                                 ss.SetRect(0, imgSpec.Height.Number, imgSpec.Width.Number, 0);
@@ -529,7 +529,7 @@ namespace PaintLab.Svg
                         else
                         {
                             //have some tx
-                            using (VxsTemp.Borrow(out var v1))
+                            using (Tools.BorrowVxs(out var v1))
                             {
                                 currentTx.TransformToVxs(VxsPath, v1);
                                 visitor.Current = this;
@@ -930,7 +930,7 @@ namespace PaintLab.Svg
                     if (currentTx != null)
                     {
                         //have some tx
-                        using (VxsTemp.Borrow(out var v1))
+                        using (Tools.BorrowVxs(out var v1))
                         {
                             currentTx.TransformToVxs(clipVxs, v1);
                             p.SetClipRgn(v1);
@@ -1322,7 +1322,7 @@ namespace PaintLab.Svg
                         else
                         {
                             //have some tx
-                            using (VxsTemp.Borrow(out var v1))
+                            using (Tools.BorrowVxs(out var v1))
                             {
                                 currentTx.TransformToVxs(VxsPath, v1);
 

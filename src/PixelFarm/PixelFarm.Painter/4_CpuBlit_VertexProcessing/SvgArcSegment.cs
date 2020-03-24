@@ -469,7 +469,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
             //
             using (VectorToolBox.Borrow(out Arc arcTool))
-            using (VxsTemp.Borrow(out var v1, out var v2, out var v3))
+            using (Tools.BorrowVxs(out var v1, out var v2, out var v3))
             {
                 arcTool.Init(centerFormArc.cx, centerFormArc.cy, rx, ry,
                   centerFormArc.radStartAngle,

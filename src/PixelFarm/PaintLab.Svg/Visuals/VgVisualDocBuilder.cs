@@ -395,7 +395,7 @@ namespace PaintLab.Svg
 
             VgVisualElement vgEllipse = new VgVisualElement(WellknownSvgElementName.Ellipse, ellipseSpec, _vgVisualDoc);
             using (VectorToolBox.Borrow(out Ellipse ellipse))
-            using (VxsTemp.Borrow(out var v1))
+            using (Tools.BorrowVxs(out var v1))
             {
                 ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix 
                 double x = ConvertToPx(ellipseSpec.X, ref a);
@@ -416,7 +416,7 @@ namespace PaintLab.Svg
         {
             VgVisualElement vgImg = new VgVisualElement(WellknownSvgElementName.Image, imgspec, _vgVisualDoc);
             using (VectorToolBox.Borrow(out SimpleRect rectTool))
-            using (VxsTemp.Borrow(out var v1))
+            using (Tools.BorrowVxs(out var v1))
             {
                 ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
                 vgImg._imgX = ConvertToPx(imgspec.X, ref a);
@@ -446,7 +446,7 @@ namespace PaintLab.Svg
             int j = points.Length;
             if (j > 1)
             {
-                using (VxsTemp.Borrow(out var v1))
+                using (Tools.BorrowVxs(out var v1))
                 {
                     PointF p = points[0];
                     PointF p0 = p;
@@ -481,7 +481,7 @@ namespace PaintLab.Svg
             int j = points.Length;
             if (j > 1)
             {
-                using (VxsTemp.Borrow(out var v1))
+                using (Tools.BorrowVxs(out var v1))
                 {
                     PointF p = points[0];
                     v1.AddMoveTo(p.X, p.Y);
@@ -601,7 +601,7 @@ namespace PaintLab.Svg
         VgVisualElement CreateLine(VgVisualElement parentNode, SvgLineSpec linespec)
         {
             VgVisualElement lineVisualElem = new VgVisualElement(WellknownSvgElementName.Line, linespec, _vgVisualDoc);
-            using (VxsTemp.Borrow(out var v1))
+            using (Tools.BorrowVxs(out var v1))
             {
                 v1.AddMoveTo(linespec.X1.Number, linespec.Y1.Number);
                 v1.AddLineTo(linespec.X2.Number, linespec.Y2.Number);
@@ -617,7 +617,7 @@ namespace PaintLab.Svg
             VgVisualElement cir = new VgVisualElement(WellknownSvgElementName.Circle, cirSpec, _vgVisualDoc);
 
             using (VectorToolBox.Borrow(out Ellipse ellipse))
-            using (VxsTemp.Borrow(out var v1))
+            using (Tools.BorrowVxs(out var v1))
             {
                 ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
                 double x = ConvertToPx(cirSpec.X, ref a);
@@ -848,7 +848,7 @@ namespace PaintLab.Svg
             {
 
                 using (VectorToolBox.Borrow(out RoundedRect roundRect))
-                using (VxsTemp.Borrow(out var v1))
+                using (Tools.BorrowVxs(out var v1))
                 {
                     ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
                     roundRect.SetRect(
@@ -868,7 +868,7 @@ namespace PaintLab.Svg
             {
 
                 using (VectorToolBox.Borrow(out SimpleRect rectTool))
-                using (VxsTemp.Borrow(out var v1))
+                using (Tools.BorrowVxs(out var v1))
                 {
                     ReEvaluateArgs a = new ReEvaluateArgs(_containerWidth, _containerHeight, _emHeight); //temp fix
                     rectTool.SetRect(
@@ -896,7 +896,7 @@ namespace PaintLab.Svg
         VertexStore CreateVxsFromPathDefinition(char[] pathDefinition)
         {
             using (VectorToolBox.Borrow(out CurveFlattener curveFlattener))
-            using (VxsTemp.Borrow(out var v1, out var v2))
+            using (Tools.BorrowVxs(out var v1, out var v2))
             using (VectorToolBox.Borrow(v1, out PathWriter pathWriter))
             {
                 _pathDataParser.SetPathWriter(pathWriter);

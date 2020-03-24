@@ -220,7 +220,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
         public VertexStore CreateTrim()
         {
-            using (VxsTemp.Borrow(out var v1))
+            using (Tools.BorrowVxs(out var v1))
             {
                 return MakeVxs(v1).CreateTrim();
             }

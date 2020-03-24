@@ -90,7 +90,7 @@ namespace PixelFarm.CpuBlit.Sample_Gouraud
             grBuilder.GetArrangedVertices(out c0, out c1, out c2);
             gouraudSpanGen.SetColorAndCoords(c0, c1, c2);
 
-            using (VxsTemp.Borrow(out var v1))
+            using (Tools.BorrowVxs(out var v1))
             {
                 painter.Fill(grBuilder.MakeVxs(v1), gouraudSpanGen);
                 v1.Clear();

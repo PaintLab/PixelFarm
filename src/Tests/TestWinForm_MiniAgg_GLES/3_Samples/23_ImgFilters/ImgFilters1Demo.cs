@@ -136,7 +136,7 @@ namespace PixelFarm.CpuBlit.ImgFilterDemo
 
             int graph_width = 200;
             int graph_height = 50;
-            using (VxsTemp.Borrow(out var v1))
+            using (Tools.BorrowVxs(out var v1))
             {
 
                 float oneStepW = graph_width / (float)weightArr.Length;

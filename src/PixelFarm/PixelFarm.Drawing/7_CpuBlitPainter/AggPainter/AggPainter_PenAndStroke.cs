@@ -218,7 +218,7 @@ namespace PixelFarm.CpuBlit
 
                 if (LineRenderingTech == LineRenderingTechnique.StrokeVxsGenerator)
                 {
-                    using (VxsTemp.Borrow(out var v1))
+                    using (Tools.BorrowVxs(out var v1))
                     {
                         _aggsx.Render(_stroke.MakeVxs(vxs, v1), _strokeColor);
                     }
@@ -233,7 +233,7 @@ namespace PixelFarm.CpuBlit
                 if (LineRenderingTech == LineRenderingTechnique.StrokeVxsGenerator)
                 {
 
-                    using (VxsTemp.Borrow(out var v1))
+                    using (Tools.BorrowVxs(out var v1))
                     {
 
                         _lineDashGen.CreateDash(vxs, v1);
@@ -265,7 +265,7 @@ namespace PixelFarm.CpuBlit
                 }
                 else
                 {
-                    using (VxsTemp.Borrow(out var v1))
+                    using (Tools.BorrowVxs(out var v1))
                     {
 
                         //TODO: check lineDash
@@ -334,14 +334,14 @@ namespace PixelFarm.CpuBlit
 
                 if (LineRenderingTech == LineRenderingTechnique.StrokeVxsGenerator)
                 {
-                    using (VxsTemp.Borrow(out var v1, out var v2))
+                    using (Tools.BorrowVxs(out var v1, out var v2))
                     {
                         _aggsx.Render(_stroke.MakeVxs(rectTool.MakeVxs(v1), v2), _strokeColor);
                     }
                 }
                 else
                 {
-                    using (VxsTemp.Borrow(out var v1))
+                    using (Tools.BorrowVxs(out var v1))
                     {
                         _outlineRas.RenderVertexSnap(rectTool.MakeVxs(v1), _strokeColor);
                     }
@@ -385,14 +385,14 @@ namespace PixelFarm.CpuBlit
                        _ellipseGenNSteps);
                 if (LineRenderingTech == LineRenderingTechnique.StrokeVxsGenerator)
                 {
-                    using (VxsTemp.Borrow(out var v1, out var v2))
+                    using (Tools.BorrowVxs(out var v1, out var v2))
                     {
                         _aggsx.Render(_stroke.MakeVxs(ellipseTool.MakeVxs(v1), v2), _strokeColor);
                     }
                 }
                 else
                 {
-                    using (VxsTemp.Borrow(out var v1))
+                    using (Tools.BorrowVxs(out var v1))
                     {
                         _outlineRas.RenderVertexSnap(ellipseTool.MakeVxs(v1), _strokeColor);
                     }

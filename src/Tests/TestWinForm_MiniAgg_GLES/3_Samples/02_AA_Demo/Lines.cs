@@ -255,7 +255,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             _strokeMath.LineCap = this.LineCap;
             _strokeMath.InnerJoin = this.InnerJoin;
 
-            using (VxsTemp.Borrow(out var vxs1))
+            using (Tools.BorrowVxs(out var vxs1))
             {
                 switch (Step)
                 {
@@ -490,7 +490,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
             int stepCount = 0;
 
-            using (VxsTemp.Borrow(out var vxs1))
+            using (Tools.BorrowVxs(out var vxs1))
             {
                 switch (OutlineChoices)
                 { 
@@ -825,7 +825,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             {
                 //NESTED method
                 //outer join and inner join for each line
-                using (VxsTemp.Borrow(out var vxs1, out var vxs2))
+                using (Tools.BorrowVxs(out var vxs1, out var vxs2))
                 {
 
                     //now we are on now

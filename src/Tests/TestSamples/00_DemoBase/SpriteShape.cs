@@ -131,7 +131,7 @@ namespace PixelFarm.CpuBlit
 
                     m_painter.FillColor = m_painter.FillColor;
 
-                    using (VxsTemp.Borrow(out var v1))
+                    using (Tools.BorrowVxs(out var v1))
                     {
                         tx.TransformToVxs(vxs, v1);
                         m_painter.Fill(v1);

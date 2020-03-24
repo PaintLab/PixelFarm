@@ -134,7 +134,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         {
             //------------------------------------
             // Great Britain and Arrows
-            using (VxsTemp.Borrow(out var v1, out var v2))
+            using (Tools.BorrowVxs(out var v1, out var v2))
             {
                 PolygonClippingDemoHelper.WriteGBObject(v1, 0, 0);
                 _gb = v1.CreateTrim();
@@ -164,7 +164,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         {
 
             RectD bounds = vxs.GetBoundingRect();
-            using (VxsTemp.Borrow(out var v1))
+            using (Tools.BorrowVxs(out var v1))
             {
                 vxs.TranslateToNewVxs(-bounds.Left, -bounds.Bottom, v1);
                 bounds = v1.GetBoundingRect();
@@ -228,7 +228,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                     {
                         case RegionKind.VxsRegion:
                             {
-                                using (VxsTemp.Borrow(out var v1))
+                                using (Tools.BorrowVxs(out var v1))
                                 {
                                     Affine.NewTranslation(_x, _y).TransformToVxs(a, v1);
                                     //CreateAndRenderCombined(p, v1, b); 
@@ -241,7 +241,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                             {
                                 //this case, we create bitmap rgn from a and b
                                 //
-                                using (VxsTemp.Borrow(out var v1))
+                                using (Tools.BorrowVxs(out var v1))
                                 {
                                     Affine.NewTranslation(_x, _y).TransformToVxs(a, v1);
                                     _rgnA = new PathReconstruction.BitmapBasedRegion(CreateMaskBitmapFromVxs(v1));
@@ -275,7 +275,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
             }
             else
             {
-                using (VxsTemp.Borrow(out var v1))
+                using (Tools.BorrowVxs(out var v1))
                 {
                     //translate _simplepath2
                     Affine.NewTranslation(_x, _y).TransformToVxs(a, v1);

@@ -87,7 +87,7 @@ namespace Msdfgen
         void CreateBorder(VertexStore vxs, Vertex2d prev, Vertex2d now, Vertex2d next0, Vertex2d next1)
         {
             //now we are on now
-            using (VxsTemp.Borrow(out var vxs1))
+            using (Tools.BorrowVxs(out var vxs1))
             {
                 vxs.AddMoveTo(now.x, now.y);
 
@@ -146,7 +146,7 @@ namespace Msdfgen
                 //then we create an 'inner border' of a line from c0 to c1
                 //and we create an 'outer border' of a line from c0 to c1
                 //
-                using (VxsTemp.Borrow(out var v1))
+                using (Tools.BorrowVxs(out var v1))
                 {
                     //1. inner-border, set fill mode to inform proper color encoding of inner border
                     _msdfEdgePxBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.InnerBorder;

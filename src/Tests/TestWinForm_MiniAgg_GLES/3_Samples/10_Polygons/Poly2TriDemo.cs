@@ -55,7 +55,7 @@ namespace PixelFarm
             VertexStore arrow;
             VertexStore stem;
             using (PixelFarm.CpuBlit.Tools.BorrowStroke(out var stroke))
-            using (VxsTemp.Borrow(out var v1, out var v3, out var v4))
+            using (PixelFarm.CpuBlit.Tools.BorrowVxs(out var v1, out var v3, out var v4))
             {
                 if (solidHead)
                 {

@@ -359,7 +359,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
                 Typography.Contours.GlyphTranslatorToVxs tovxs = new Typography.Contours.GlyphTranslatorToVxs();
                 builder.ReadShapes(tovxs);
 
-                using (VxsTemp.Borrow(out var vxs))
+                using (Tools.BorrowVxs(out var vxs))
                 {
                     tovxs.WriteOutput(vxs);
                     p.Fill(vxs);

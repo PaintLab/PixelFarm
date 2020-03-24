@@ -75,8 +75,8 @@ namespace PixelFarm.CpuBlit.Samples
                     _builder.SmoothCoefficiency = this.SmoothCoefficientValue;
                     _builder.ReconstructionControllerArms(vxs, _output);
 
-                    using (VxsTemp.Borrow(out var tmpVxs1, out var tmpVxs2))
-                    using (VectorToolBox.Borrow(tmpVxs1, out PathWriter pw))
+                    using (Tools.BorrowVxs(out var tmpVxs1, out var tmpVxs2))
+                    using (Tools.BorrowPathWriter(tmpVxs1, out var pw))
                     {
 
                         int fig_count = _output.Count;
@@ -170,7 +170,7 @@ namespace PixelFarm.CpuBlit.Samples
         public override void Init()
         {
             //eg. lion
-            using (VxsTemp.Borrow(out var vxs1))
+            using (Tools.BorrowVxs(out var vxs1))
             {
                 vxs1.AddMoveTo(10, 10);
                 vxs1.AddLineTo(30, 40);
@@ -225,7 +225,7 @@ namespace PixelFarm.CpuBlit.Samples
             _builder.SmoothCoefficiency = this.SmoothCoefficientValue;
             _builder.ReconstructionControllerArms(_simpleStrip, _output);
 
-            using (VxsTemp.Borrow(out var tmpVxs1, out var tmpVxs2))
+            using (Tools.BorrowVxs(out var tmpVxs1, out var tmpVxs2))
             using (VectorToolBox.Borrow(tmpVxs1, out PathWriter pw))
             {
 

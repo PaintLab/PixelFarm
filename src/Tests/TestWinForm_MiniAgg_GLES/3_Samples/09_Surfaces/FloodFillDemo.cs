@@ -364,7 +364,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             //try tracing for vxs
             if (rgnData != null)
             {
-                using (VxsTemp.Borrow(out VertexStore v1))
+                using (Tools.BorrowVxs(out var v1))
                 {
                     RawOutline rawOutline = new RawOutline();
                     rgnData.ReconstructOutline(rawOutline);
@@ -415,7 +415,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
 
                 if (rgnData != null)
                 {
-                    using (VxsTemp.Borrow(out VertexStore v1))
+                    using (Tools.BorrowVxs(out VertexStore v1))
                     {
                         RawOutline rawOutline = new RawOutline();
                         rgnData.ReconstructOutline(rawOutline);
@@ -521,7 +521,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                 //try tracing for vxs
                 if (rgnData != null)
                 {
-                    using (VxsTemp.Borrow(out VertexStore v1))
+                    using (Tools.BorrowVxs(out VertexStore v1))
                     {
                         RawOutline rawOutline = new RawOutline();
                         rgnData.ReconstructOutline(rawOutline);

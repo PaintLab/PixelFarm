@@ -57,7 +57,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                     {
                         //------------------------------------
                         // Two simple paths
-                        using (VxsTemp.Borrow(out var v1, out var v2))
+                        using (Tools.BorrowVxs(out var v1, out var v2))
                         {
                             double x = _x - Width / 2 + 100;
                             double y = _y - Height / 2 + 100;
@@ -95,8 +95,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                     {
                         //------------------------------------
                         // Great Britain and Arrows
-                        using (VxsTemp.Borrow(out var v1_gb_poly, out var v2_arrows))
-                        using (VxsTemp.Borrow(out var v3))
+                        using (Tools.BorrowVxs(out var v1_gb_poly, out var v2_arrows))
                         {
                             Affine mtx1 = Affine.New(
                                     AffinePlan.Translate(-1150, -1150),

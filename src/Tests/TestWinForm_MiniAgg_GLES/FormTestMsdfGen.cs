@@ -223,7 +223,7 @@ namespace Mini
         {
             using (MemBitmap bmp = new MemBitmap(300, 300)) //approximate
             using (VectorToolBox.Borrow(out CurveFlattener flattener))
-            using (VxsTemp.Borrow(out var v1))
+            using (Tools.BorrowVxs(out var v1))
             using (Tools.BorrowAggPainter(bmp, out AggPainter painter))
             {
                 painter.Clear(PixelFarm.Drawing.Color.White);//bg
@@ -298,7 +298,7 @@ namespace Mini
             _scaled_lutFilename = null;//reset
             DisposeExistingPictureBoxImage(picLut);
 
-            using (VxsTemp.Borrow(out var v1))
+            using (Tools.BorrowVxs(out var v1))
             {
                 //--------
                 if (!(cmbCustomVxs.SelectedItem is CustomVxsExample customVxsExample))
