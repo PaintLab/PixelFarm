@@ -208,7 +208,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                 //lionShape.ApplyTransform(affTx); 
                 //---------------------
 
-                using (Tools.More.Borrow(aggPainter, out VgPaintArgs paintArgs))
+                using (Tools.More.BorrowVgPaintArgs(aggPainter, out var paintArgs))
                 {
                     paintArgs._currentTx = affTx;
                     paintArgs.PaintVisitHandler = (vxs, painterA) =>
@@ -239,7 +239,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
 
                     //------
 
-                    using (Tools.More.Borrow(aggPainter, out VgPaintArgs paintArgs))
+                    using (Tools.More.BorrowVgPaintArgs(aggPainter, out var paintArgs))
                     {
                         paintArgs._currentTx = affTx;
                         paintArgs.PaintVisitHandler = (vxs, painterA) =>
@@ -276,7 +276,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
 
                     //lionShape.ApplyTransform(affTx);
                     //----------------------------
-                    using (Tools.More.Borrow(aggPainter, out VgPaintArgs paintArgs))
+                    using (Tools.More.BorrowVgPaintArgs(aggPainter, out var paintArgs))
                     {
                         paintArgs._currentTx = affTx;
                         paintArgs.PaintVisitHandler = (vxs, painterA) =>

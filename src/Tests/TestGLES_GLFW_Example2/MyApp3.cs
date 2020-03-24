@@ -6,8 +6,8 @@ using OpenTK.Graphics.ES20;
 using PixelFarm;
 using PixelFarm.Forms;
 using PixelFarm.Drawing;
+using PixelFarm.CpuBlit;
 
-using Typography.FontManagement;
 using LayoutFarm;
 using LayoutFarm.UI;
 using PaintLab.Svg;
@@ -148,7 +148,7 @@ namespace TestGlfw
 
             //TODO: review here
             Painter p = d.GetPainter();
-            using (PixelFarm.CpuBlit.Tools.More.Borrow(p, out VgPaintArgs paintArgs))
+            using (Tools.More.BorrowVgPaintArgs(p, out var paintArgs))
             {
                 _renderVx.Paint(paintArgs);
             }

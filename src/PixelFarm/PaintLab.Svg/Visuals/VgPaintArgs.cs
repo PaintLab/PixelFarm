@@ -54,7 +54,7 @@ namespace PaintLab.Svg
 
     public static class VgPaintArgsPool
     {
-        public static PixelFarm.TempContext<VgPaintArgs> Borrow(
+        public static PixelFarm.TempContext<VgPaintArgs> BorrowVgPaintArgs(
             this PixelFarm.CpuBlit.Tools tools,
             Painter painter, out VgPaintArgs paintArgs)
         {

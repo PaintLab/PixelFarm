@@ -58,7 +58,7 @@ namespace PixelFarm.CpuBlit.Samples
                 return;
             }
 
-            using (Tools.More.Borrow(p, out VgPaintArgs paintArgs))
+            using (Tools.More.BorrowVgPaintArgs(p, out var paintArgs))
             {
                 paintArgs.PaintVisitHandler = (vxs, arg) =>
                 {
