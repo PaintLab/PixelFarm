@@ -214,7 +214,7 @@ namespace Msdfgen
                             //approximate 
                             CubicSegment cs = (CubicSegment)ownerSeg;
                             using (VxsTemp.Borrow(out var v1))
-                            using (VectorToolBox.Borrow(out ShapeBuilder b))
+                            using (Tools.Borrow(out ShapeBuilder b))
                             using (VectorToolBox.Borrow(out Stroke strk))
                             {
 
@@ -247,7 +247,7 @@ namespace Msdfgen
                     case EdgeSegmentKind.QuadraticSegment:
                         {
                             QuadraticSegment qs = (QuadraticSegment)ownerSeg;
-                            using (VectorToolBox.Borrow(out ShapeBuilder b))
+                            using (Tools.Borrow(out ShapeBuilder b))
                             using (VxsTemp.Borrow(out var v1))
                             using (VectorToolBox.Borrow(out Stroke strk))
                             {
@@ -354,8 +354,8 @@ namespace Msdfgen
 
             //
             using (MemBitmap bmpLut = new MemBitmap(imgW, imgH))
-            using (Tools.Borrow(bmpLut, out AggPainter painter))
-            using (VectorToolBox.Borrow(out ShapeBuilder sh))
+            using (Tools.BorrowAggPainter(bmpLut, out var painter))
+            using (Tools.Borrow(out ShapeBuilder sh))
             {
 
 

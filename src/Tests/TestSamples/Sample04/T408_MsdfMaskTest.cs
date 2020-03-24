@@ -47,7 +47,7 @@ namespace OpenTkEssTest
         {
             //1. create color bmp  
             _colorBmp = new MemBitmap(100, 100);
-            using (Tools.Borrow(_colorBmp, out AggPainter painter))
+            using (Tools.BorrowAggPainter(_colorBmp, out var painter))
             {
                 painter.Clear(Color.White);
                 painter.FillRect(2, 2, 80, 80, Color.Red);

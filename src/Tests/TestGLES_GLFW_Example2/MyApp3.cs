@@ -34,7 +34,7 @@ namespace TestGlfw
 
         public Cursor CurrentCursor
         {
-            get => throw new NotImplementedException(); 
+            get => throw new NotImplementedException();
             set => throw new NotImplementedException();
         }
 
@@ -148,7 +148,7 @@ namespace TestGlfw
 
             //TODO: review here
             Painter p = d.GetPainter();
-            using (VgPaintArgsPool.Borrow(p, out var paintArgs))
+            using (PixelFarm.CpuBlit.Tools.More.Borrow(p, out VgPaintArgs paintArgs))
             {
                 _renderVx.Paint(paintArgs);
             }

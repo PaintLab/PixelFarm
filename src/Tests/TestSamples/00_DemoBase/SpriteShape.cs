@@ -96,9 +96,9 @@ namespace PixelFarm.CpuBlit
         //    }
         //}
 
-        public Vector2 Center => _center; 
+        public Vector2 Center => _center;
 
-        public VgVisualElement GetVgVisualElem() => _vgVisElem; 
+        public VgVisualElement GetVgVisualElem() => _vgVisElem;
 
         public void ApplyNewAlpha(byte alphaValue0_255)
         {
@@ -106,7 +106,7 @@ namespace PixelFarm.CpuBlit
         }
         public void Paint(Painter p)
         {
-            using (VgPaintArgsPool.Borrow(p, out var paintArgs))
+            using (Tools.More.Borrow(p, out VgPaintArgs paintArgs))
             {
                 paintArgs._currentTx = _currentTx;
                 _vgVisElem.Paint(paintArgs);
@@ -120,7 +120,7 @@ namespace PixelFarm.CpuBlit
         {
             //in this version, I can't apply bilinear tx to current tx matrix
 
-            using (VgPaintArgsPool.Borrow(p, out var paintArgs))
+            using (Tools.More.Borrow(p, out VgPaintArgs paintArgs))
             {
                 paintArgs.PaintVisitHandler = (vxs, painterA) =>
                 {
@@ -148,7 +148,7 @@ namespace PixelFarm.CpuBlit
             //TODO: implement this...
             //use prefix command for render vx 
             //------
-            using (VgPaintArgsPool.Borrow(p, out var paintArgs))
+            using (Tools.More.Borrow(p, out VgPaintArgs paintArgs))
             {
                 paintArgs._currentTx = tx;
                 paintArgs.PaintVisitHandler = (vxs, arg) =>
@@ -209,7 +209,7 @@ namespace PixelFarm.CpuBlit
         {
             _vgVisElem.HitTest(hitChain);
         }
- 
+
     }
 
 

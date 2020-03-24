@@ -224,7 +224,7 @@ namespace Mini
             using (MemBitmap bmp = new MemBitmap(300, 300)) //approximate
             using (VectorToolBox.Borrow(out CurveFlattener flattener))
             using (VxsTemp.Borrow(out var v1))
-            using (Tools.Borrow(bmp, out AggPainter painter))
+            using (Tools.BorrowAggPainter(bmp, out AggPainter painter))
             {
                 painter.Clear(PixelFarm.Drawing.Color.White);//bg
                 painter.FillColor = PixelFarm.Drawing.Color.Black;

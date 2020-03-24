@@ -33,7 +33,7 @@ namespace OpenTkEssTest
             //1. create color bmp  
             _colorBmp = new MemBitmap(64, 64);
             using (VxsTemp.Borrow(out var v1, out var v2))
-            using (Tools.Borrow(_colorBmp, out AggPainter painter))
+            using (Tools.BorrowAggPainter(_colorBmp, out var painter))
             {
                 painter.Clear(Color.White);
                 //painter.FillRect(2, 2, 15, 15, Color.Red);
@@ -57,7 +57,7 @@ namespace OpenTkEssTest
             }
             //2. create mask bmp
             _maskBmp = new MemBitmap(32, 32);
-            using (Tools.Borrow(_maskBmp, out AggPainter painter))
+            using (Tools.BorrowAggPainter(_maskBmp, out var painter))
             {
                 //white=> opaque
                 //black => transparent

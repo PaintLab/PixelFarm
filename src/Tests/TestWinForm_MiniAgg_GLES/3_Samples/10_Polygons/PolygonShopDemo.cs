@@ -174,7 +174,7 @@ namespace PixelFarm
         }
         public static VertexStore BuildRoundCornerPolygon()
         {
-            using (VectorToolBox.Borrow(out ShapeBuilder b))
+            using (Tools.Borrow(out ShapeBuilder b))
             using (VectorToolBox.Borrow(out Stroke stroke))
             {
 
@@ -195,7 +195,7 @@ namespace PixelFarm
         public static VertexStore BuildGeneralLines()
         {
             //use this example with BuildOutsidePartOfLines() and  BuildInsidePartOfLines()
-            using (VectorToolBox.Borrow(out ShapeBuilder b))
+            using (Tools.Borrow(out ShapeBuilder b))
             using (VectorToolBox.Borrow(out Stroke stroke))
             {
 
@@ -213,7 +213,7 @@ namespace PixelFarm
         }
         public static VertexStore BuildOutsidePartOfLines()
         {
-            using (VectorToolBox.Borrow(out ShapeBuilder b))
+            using (Tools.Borrow(out ShapeBuilder b))
             using (VectorToolBox.Borrow(out Stroke stroke))
             {
                 stroke.StrokeSideForOpenShape = StrokeSideForOpenShape.Outside;
@@ -230,7 +230,7 @@ namespace PixelFarm
         }
         public static VertexStore BuildInsidePartOfLines()
         {
-            using (VectorToolBox.Borrow(out ShapeBuilder b))
+            using (Tools.Borrow(out ShapeBuilder b))
             using (VectorToolBox.Borrow(out Stroke stroke))
             {
                 stroke.StrokeSideForOpenShape = StrokeSideForOpenShape.Inside;

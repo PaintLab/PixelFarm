@@ -473,7 +473,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
 
                             Rectangle bounds = _tmpRgn.GetRectBounds();
                             using (MemBitmap bmp = new MemBitmap(bounds.Width, bounds.Height))
-                            using (Tools.Borrow(bmp, out var painter))
+                            using (Tools.BorrowAggPainter(bmp, out AggPainter painter))
                             {
                                 painter.Clear(Color.Transparent); //clear bg color
 

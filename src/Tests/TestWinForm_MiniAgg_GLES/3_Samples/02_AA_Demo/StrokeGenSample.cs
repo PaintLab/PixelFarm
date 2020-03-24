@@ -83,7 +83,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             p.StrokeWidth = 2.0f;
             p.FillColor = PixelFarm.Drawing.Color.Black;
             //
-            using (VectorToolBox.Borrow(out ShapeBuilder b))
+            using (Tools.Borrow(out ShapeBuilder b))
             {
                 b.MoveTo(30, 10);
                 b.LineTo(60, 10);
@@ -378,7 +378,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             }
 
             //
-            using (VectorToolBox.Borrow(out ShapeBuilder b))
+            using (Tools.Borrow(out ShapeBuilder b))
             {
                 IDashGenerator tmp = p.LineDashGen;
                 p.LineDashGen = _lineDashGen;
@@ -412,7 +412,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 _lineDashGen.SetDashPattern(4, 2, 2, 2);
             }
             //
-            using (VectorToolBox.Borrow(out ShapeBuilder b))
+            using (Tools.Borrow(out ShapeBuilder b))
             {
                 IDashGenerator tmp = p.LineDashGen;
                 p.LineDashGen = _lineDashGen;
@@ -441,7 +441,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             p.Clear(PixelFarm.Drawing.Color.White);
             p.StrokeColor = PixelFarm.Drawing.Color.Red;
 
-            using (VectorToolBox.Borrow(out ShapeBuilder b))
+            using (Tools.Borrow(out ShapeBuilder b))
             {
                 b.MoveTo(10, 10);
                 b.LineTo(50, 10);
