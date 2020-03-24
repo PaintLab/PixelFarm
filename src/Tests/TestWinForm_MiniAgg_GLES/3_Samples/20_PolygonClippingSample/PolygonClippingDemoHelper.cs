@@ -2014,7 +2014,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         }
         static void WriteGlyph_a_(VertexStore vxs, double x, double y)
         {
-            using (Tools.Borrow(vxs, out PathWriter p))
+            using (Tools.BorrowPathWriter(vxs, out PathWriter p))
             {
                 p.MoveTo(28.47, 6.45);
                 p.Curve3(21.58, 1.12, 19.82, 0.29);

@@ -152,7 +152,7 @@ namespace PixelFarm
             using (Tools.BorrowVxs(out var v1, out var v2, out var v3))
             using (Tools.BorrowStroke(out var stroke))
             using (VectorToolBox.Borrow(out CurveFlattener flattener))
-            using (VectorToolBox.Borrow(out Arc arc))
+            using (Tools.BorrowArc(out Arc arc))
             {
                 arc.Init(50, 50, 10, 20, Math.PI, 0);
                 arc.SetStartEndLimit(40, 50, 60, 50);

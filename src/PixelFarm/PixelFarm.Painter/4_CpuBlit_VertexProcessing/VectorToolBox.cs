@@ -201,6 +201,7 @@ namespace PixelFarm.Drawing
             }
             return Temp<Arc>.Borrow(out arc);
         }
+
         public static TempContext<SvgArcSegment> Borrow(out SvgArcSegment arc)
         {
             if (!Temp<SvgArcSegment>.IsInit())

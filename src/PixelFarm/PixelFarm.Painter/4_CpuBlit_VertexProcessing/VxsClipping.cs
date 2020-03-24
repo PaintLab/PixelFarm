@@ -80,7 +80,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                     {
                         //first one
                         IntPoint point = polygon[0];
-                        using (Tools.BorrowVxs(out VertexStore v1))
+                        using (VxsTemp.Borrow(out VertexStore v1))
                         using (VectorToolBox.Borrow(v1, out PathWriter pw))
                         {
                             pw.MoveTo(point.X / 1000.0, point.Y / 1000.0);
@@ -110,7 +110,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
             else
             {
-                using (Tools.BorrowVxs(out var v1))
+                using (VxsTemp.Borrow(out var v1))
                 using (VectorToolBox.Borrow(v1, out PathWriter pw))
                 {
                     foreach (List<IntPoint> polygon in _intersectedPolys)

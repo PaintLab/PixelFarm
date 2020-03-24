@@ -48,9 +48,8 @@ namespace PixelFarm.CpuBlit
         }
         public static TempContext<PathWriter> BorrowPathWriter(VertexStore vxs, out PathWriter pathWriter) => VectorToolBox.Borrow(vxs, out pathWriter);
 
-
         //TODO: add agressive inlining...
-
+        public static TempContext<Arc> BorrowArc(out Arc arc) => VectorToolBox.Borrow(out arc);
         public static TempContext<Stroke> BorrowStroke(out Stroke stroke) => VectorToolBox.Borrow(out stroke);
         public static VxsContext1 BorrowVxs(out VertexStore vxs) => new VxsContext1(out vxs);
         public static VxsContext2 BorrowVxs(out VertexStore vxs1, out VertexStore vxs2) => new VxsContext2(out vxs1, out vxs2);
