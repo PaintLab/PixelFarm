@@ -137,7 +137,7 @@ namespace PixelFarm.DrawingGL
         Conv3x3TextureShader _conv3x3TextureShader;
         MsdfShader _msdfShader;
         SingleChannelSdf _sdfShader;
-        MsdfMaskShader _msdfMaskShader;
+         
 
         MaskShader _maskShader;
         //-----------------------------------------------------------
@@ -212,7 +212,7 @@ namespace PixelFarm.DrawingGL
             _lcdSubPixShaderV2 = new LcdSubPixShaderV2(_shareRes);
             _lcdSubPixShaderV2.SetFillColor(Color.White);
             _maskShader = new MaskShader(_shareRes);
-            _msdfMaskShader = new MsdfMaskShader(_shareRes);
+            
 
 
             _blurShader = new BlurShader(_shareRes);
@@ -223,7 +223,7 @@ namespace PixelFarm.DrawingGL
 
             _msdfShader = new MsdfShader(_shareRes);
             _sdfShader = new SingleChannelSdf(_shareRes);
-            _msdfMaskShader = new MsdfMaskShader(_shareRes);
+             
 
             currentBinCache?.Close(); //close the cache, let other app use the shader cache file
             CachedBinaryShaderIO.ClearCurrentImpl();
@@ -731,88 +731,7 @@ namespace PixelFarm.DrawingGL
                 -colorSrcX, -colorSrcY,
                 targetLeft, targetTop);
         }
-
-        //-----------
-        public void DrawImageWithMsdfMask(GLBitmap mask, GLBitmap colorSrc, float targetLeft, float targetTop)
-        {
-
-            if (OriginKind == RenderSurfaceOriginKind.LeftTop)
-            {
-                //***
-                targetTop += colorSrc.Height;
-            }
-
-            _msdfMaskShader.LoadGLBitmap(mask);
-            _msdfMaskShader.LoadColorSourceBitmap(colorSrc);
-            _msdfMaskShader.DrawSubImage(0, 0, mask.Width, mask.Height, targetLeft, targetTop);
-        }
-        public void DrawImageWithMsdfMask(GLBitmap mask, GLBitmap colorSrc,
-            in PixelFarm.Drawing.RectangleF maskSrcRect,
-            float colorSrcX, float colorSrcY,
-            float targetLeft, float targetTop)
-        {
-
-            if (OriginKind == RenderSurfaceOriginKind.LeftTop)
-            {
-                //***
-                targetTop += colorSrc.Height;
-            }
-
-            _msdfMaskShader.LoadGLBitmap(mask);
-            _msdfMaskShader.LoadColorSourceBitmap(colorSrc);
-            _msdfMaskShader.DrawSubImage2(maskSrcRect,
-                -colorSrcX, -colorSrcY,
-                targetLeft, targetTop);
-        }
-        public void DrawImageWithMsdfMask(GLBitmap mask, GLBitmap colorSrc,
-            in PixelFarm.CpuBlit.VertexProcessing.Quad2f quad,
-            in PixelFarm.Drawing.RectangleF maskSrcRect,
-            float colorSrcX, float colorSrcY,
-            float targetLeft, float targetTop)
-        {
-
-            if (OriginKind == RenderSurfaceOriginKind.LeftTop)
-            {
-                //***
-                targetTop += colorSrc.Height;
-            }
-
-            _msdfMaskShader.LoadGLBitmap(mask);
-            _msdfMaskShader.LoadColorSourceBitmap(colorSrc);
-            _msdfMaskShader.DrawSubImage2(
-                quad,
-                maskSrcRect,
-                -colorSrcX, -colorSrcY,
-                targetLeft, targetTop);
-        }
-
-        public void DrawImageWithMsdfMaskV2(GLBitmap mask, GLBitmap colorSrc,
-            in PixelFarm.CpuBlit.VertexProcessing.Quad2f quad,
-            in PixelFarm.Drawing.RectangleF maskSrcRect,
-            in Color color,
-            float targetLeft, float targetTop)
-        {
-
-            if (OriginKind == RenderSurfaceOriginKind.LeftTop)
-            {
-                //***
-                targetTop += colorSrc.Height;
-            }
-
-            //this is a 2 steps draw=>
-            //1. apply alpha value to target surface
-            //2. apply color value to target surface
-
-            _msdfMaskShader.LoadGLBitmap(mask);
-            _msdfMaskShader.LoadColorSourceBitmap(colorSrc);
-
-            _msdfMaskShader.DrawSubImage2(
-                quad,
-                maskSrcRect,
-                0, 0,
-                targetLeft, targetTop);
-
-        }
+         
         public void DrawImage(GLBitmap bmp,
             float left, float top, float w, float h)
         {
@@ -845,19 +764,14 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawImageToQuad(GLBitmap bmp, PixelFarm.CpuBlit.VertexProcessing.Affine affine)
         {
-            //TODO: review here, reuse this quad
-            //or use stack-base struct
-
+            
             Quad2f quad = new Quad2f(bmp.Width, OriginKind == RenderSurfaceOriginKind.LeftTop ? bmp.Height : -bmp.Height);
             quad.Transform(affine);
             DrawImageToQuad(bmp, quad);
         }
 
         public void DrawImageToQuad(GLBitmap bmp, in AffineMat affine)
-        {
-            //TODO: review here, reuse this quad
-            //or use stack-base struct
-
+        { 
             Quad2f quad = new Quad2f(bmp.Width, OriginKind == RenderSurfaceOriginKind.LeftTop ? bmp.Height : -bmp.Height);
             quad.Transform(affine);
             DrawImageToQuad(bmp, quad);
