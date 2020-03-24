@@ -166,7 +166,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 p.RenderQuality = RenderQuality.HighQuality;
             }
 
-            p.Orientation = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
+            p.Orientation = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftBottom;
 
 
             //clear the image to white         

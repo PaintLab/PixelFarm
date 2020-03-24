@@ -68,20 +68,20 @@ namespace OpenTkEssTest
                 _isInit = true;
             }
 
-            PixelFarm.Drawing.RenderSurfaceOrientation prevOrgKind = _pcx.OriginKind; //save
+            PixelFarm.Drawing.RenderSurfaceOriginKind prevOrgKind = _pcx.OriginKind; //save
             switch (DrawSet)
             {
                 default:
                 case T107_1_DrawImageSet.Full:
                     {
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftTop;
                         for (int i = 0; i < 400;)
                         {
                             _pcx.DrawImage(_glbmp, i, i); //left,top (NOT x,y)
                             i += 50;
                         }
                         //
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftBottom;
                         for (int i = 0; i < 400;)
                         {
                             _pcx.DrawImage(_glbmp, i, i); //left,top (NOT x,y)
@@ -91,7 +91,7 @@ namespace OpenTkEssTest
                     break;
                 case T107_1_DrawImageSet.Half:
                     {
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftTop;
                         for (int i = 0; i < 400;)
                         {
                             //left,top (NOT x,y)
@@ -99,7 +99,7 @@ namespace OpenTkEssTest
                             i += 50;
                         }
                         //
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftBottom;
                         for (int i = 0; i < 400;)
                         {
                             _pcx.DrawImage(_glbmp, i, i, _glbmp.Width / 2, _glbmp.Height / 2); //left,top (NOT x,y)
@@ -110,7 +110,7 @@ namespace OpenTkEssTest
                 case T107_1_DrawImageSet.ToRect:
                     {
 
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftTop;
                         for (int i = 0; i < 400;)
                         {
                             //left,top (NOT x,y)
@@ -119,7 +119,7 @@ namespace OpenTkEssTest
                             i += 50;
                         }
                         //
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftBottom;
                         for (int i = 0; i < 400;)
                         {
                             //PixelFarm.Drawing.RectangleF srcRect = new PixelFarm.Drawing.RectangleF(i, i, _glbmp.Width, _glbmp.Height);
@@ -131,7 +131,7 @@ namespace OpenTkEssTest
                 case T107_1_DrawImageSet.ToQuad1:
                     {
 
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftTop;
 
                         Quad2f quad = new Quad2f();
                         quad.SetCornersFromRect(0, 0, _glbmp.Width / 2, _glbmp.Height / 2);//half size
@@ -146,7 +146,7 @@ namespace OpenTkEssTest
                             i += 50;
                         }
                         //
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftBottom;
                         quad.SetCornersFromRect(0, 0, _glbmp.Width / 2, _glbmp.Height / 2);//half size
                         for (int i = 0; i < 400;)
                         {
@@ -161,7 +161,7 @@ namespace OpenTkEssTest
                 case T107_1_DrawImageSet.ToQuad2:
                     {
 
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftTop;
 
                         float rotateDegree = 20;
 
@@ -186,7 +186,7 @@ namespace OpenTkEssTest
                             i += 50;
                         }
                         //
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftBottom;
 
 
                         for (int i = 0; i < 400;)
@@ -210,7 +210,7 @@ namespace OpenTkEssTest
                     break;
                 case T107_1_DrawImageSet.ToQuad3:
                     {
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftTop;
 
                         float rotateDegree = 60;
 
@@ -226,7 +226,7 @@ namespace OpenTkEssTest
                             i += 50;
                         }
                         //
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftBottom;
                         for (int i = 0; i < 400;)
                         {
 
@@ -244,19 +244,18 @@ namespace OpenTkEssTest
                     break;
                 case T107_1_DrawImageSet.SubImages0:
                     {
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftTop;
+                        PixelFarm.Drawing.Rectangle srcRect = new PixelFarm.Drawing.Rectangle(0, 0, _glbmp.Width, _glbmp.Height);
                         for (int i = 0; i < 400;)
                         {
-                            //left,top (NOT x,y)
-                            PixelFarm.Drawing.Rectangle srcRect = new PixelFarm.Drawing.Rectangle(0, 0, _glbmp.Width, _glbmp.Height);
+                            //left,top (NOT x,y)                           
                             _pcx.DrawSubImage(_glbmp, srcRect, i, i);
                             i += 50;
                         }
                         //
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftBottom;
                         for (int i = 0; i < 400;)
-                        {
-                            PixelFarm.Drawing.Rectangle srcRect = new PixelFarm.Drawing.Rectangle(0, 0, _glbmp.Width, _glbmp.Height);
+                        {                             
                             _pcx.DrawSubImage(_glbmp, srcRect, i, i);
                             i += 50;
                         }
@@ -264,19 +263,20 @@ namespace OpenTkEssTest
                     break;
                 case T107_1_DrawImageSet.SubImages1:
                     {
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftTop;
+                        PixelFarm.Drawing.Rectangle srcRect = new PixelFarm.Drawing.Rectangle(0, 0, _glbmp.Width / 2, _glbmp.Height / 2);
+
                         for (int i = 0; i < 400;)
                         {
                             //left,top (NOT x,y)
-                            PixelFarm.Drawing.Rectangle srcRect = new PixelFarm.Drawing.Rectangle(0, 0, _glbmp.Width / 2, _glbmp.Height / 2);
+                            
                             _pcx.DrawSubImage(_glbmp, srcRect, i, i);
                             i += 50;
                         }
                         //
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftBottom;
                         for (int i = 0; i < 400;)
-                        {
-                            PixelFarm.Drawing.Rectangle srcRect = new PixelFarm.Drawing.Rectangle(0, 0, _glbmp.Width / 2, _glbmp.Height / 2);
+                        {                            
                             _pcx.DrawSubImage(_glbmp, srcRect, i, i);
                             i += 50;
                         }
@@ -284,19 +284,20 @@ namespace OpenTkEssTest
                     break;
                 case T107_1_DrawImageSet.SubImages2:
                     {
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftTop;
+                        PixelFarm.Drawing.Rectangle srcRect = new PixelFarm.Drawing.Rectangle(20, 20, 50, 50);
+
                         for (int i = 0; i < 400;)
                         {
                             //left,top (NOT x,y)
-                            PixelFarm.Drawing.Rectangle srcRect = new PixelFarm.Drawing.Rectangle(20, 20, 50, 50);
+                            
                             _pcx.DrawSubImage(_glbmp, srcRect, i, i);
                             i += 50;
                         }
                         //
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftBottom;
                         for (int i = 0; i < 400;)
-                        {
-                            PixelFarm.Drawing.Rectangle srcRect = new PixelFarm.Drawing.Rectangle(20, 20, 50, 50);
+                        {                             
                             _pcx.DrawSubImage(_glbmp, srcRect, i, i);
                             i += 50;
                         }
@@ -304,19 +305,20 @@ namespace OpenTkEssTest
                     break;
                 case T107_1_DrawImageSet.SubImagesWithScale:
                     {
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftTop;
+                        PixelFarm.Drawing.Rectangle srcRect = new PixelFarm.Drawing.Rectangle(20, 20, 50, 50);
+
                         for (int i = 0; i < 400;)
                         {
-                            //left,top (NOT x,y)
-                            PixelFarm.Drawing.Rectangle srcRect = new PixelFarm.Drawing.Rectangle(20, 20, 50, 50);
+                            //left,top (NOT x,y) 
                             _pcx.DrawSubImage(_glbmp, srcRect, i, i, 2f);
                             i += 50;
                         }
                         //
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftBottom;
                         for (int i = 0; i < 400;)
                         {
-                            PixelFarm.Drawing.Rectangle srcRect = new PixelFarm.Drawing.Rectangle(20, 20, 50, 50);
+                         
                             _pcx.DrawSubImage(_glbmp, srcRect, i, i, 2f);
                             i += 50;
                         }
@@ -325,7 +327,7 @@ namespace OpenTkEssTest
                 case T107_1_DrawImageSet.SubImageWithBlurX:
                     {
 
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftTop;
                         for (int i = 0; i < 400;)
                         {
                             //left,top (NOT x,y) 
@@ -333,7 +335,7 @@ namespace OpenTkEssTest
                             i += 50;
                         }
                         //
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftBottom;
                         for (int i = 0; i < 400;)
                         {
                             _pcx.DrawImageWithBlurX(_glbmp, i, i);
@@ -344,7 +346,7 @@ namespace OpenTkEssTest
                 case T107_1_DrawImageSet.SubImageWithBlurY:
                     {
 
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftTop;
                         for (int i = 0; i < 400;)
                         {
                             //left,top (NOT x,y) 
@@ -352,7 +354,7 @@ namespace OpenTkEssTest
                             i += 50;
                         }
                         //
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftBottom;
                         for (int i = 0; i < 400;)
                         {
                             _pcx.DrawImageWithBlurY(_glbmp, i, i);
@@ -364,7 +366,7 @@ namespace OpenTkEssTest
                     break;
                 case T107_1_DrawImageSet.DrawWithConv3x3:
                     {
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftTop;
                         for (int i = 0; i < 400;)
                         {
                             //left,top (NOT x,y) 
@@ -372,7 +374,7 @@ namespace OpenTkEssTest
                             i += 50;
                         }
                         //
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftBottom;
                         for (int i = 0; i < 400;)
                         {
                             _pcx.DrawImageWithConv3x3(_glbmp, Mat3x3ConvGen.emboss, i, i);

@@ -102,20 +102,20 @@ namespace OpenTkEssTest
                 _needImgUpdate = false;
             }
 
-            PixelFarm.Drawing.RenderSurfaceOrientation prevOrgKind = _pcx.OriginKind; //save
+            PixelFarm.Drawing.RenderSurfaceOriginKind prevOrgKind = _pcx.OriginKind; //save
             switch (DrawSet)
             {
                 default:
                 case T107_2_DrawImageSet.Plain:
                     {
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftTop;
                         for (int i = 0; i < 400;)
                         {
                             _pcx.DrawImage(_glbmp, i, i); //left,top (NOT x,y)
                             i += 50;
                         }
                         //
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftBottom;
                         for (int i = 0; i < 400;)
                         {
                             _pcx.DrawImage(_glbmp, i, i); //left,top (NOT x,y)
@@ -125,7 +125,7 @@ namespace OpenTkEssTest
                     break;
                 case T107_2_DrawImageSet.LcdEffect1:
                     {
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftTop;
                         _pcx.FontFillColor = PixelFarm.Drawing.Color.Black;
                         for (int i = 0; i < 400;)
                         {
@@ -133,7 +133,7 @@ namespace OpenTkEssTest
                             i += 50;
                         }
                         //
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftBottom;
                         for (int i = 0; i < 400;)
                         {
                             _pcx.DrawGlyphImageWithSubPixelRenderingTechnique(_glbmp, i, i); //left,top (NOT x,y)

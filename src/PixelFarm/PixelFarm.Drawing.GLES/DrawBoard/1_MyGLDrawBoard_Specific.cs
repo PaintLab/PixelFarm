@@ -182,7 +182,7 @@ namespace PixelFarm.Drawing.GLES2
             MyGLBackbuffer glBackBuffer = (MyGLBackbuffer)backbuffer;
 
             _gpuPainter.PainterContext.AttachToRenderSurface(glBackBuffer.RenderSurface);
-            _gpuPainter.PainterContext.OriginKind = RenderSurfaceOrientation.LeftTop;
+            _gpuPainter.PainterContext.OriginKind = RenderSurfaceOriginKind.LeftTop;
             _gpuPainter.UpdatePainterContext();
 
             _left = 0;
@@ -212,7 +212,7 @@ namespace PixelFarm.Drawing.GLES2
             _currentClipRect = saveContext.prevClipRect;
 
             _gpuPainter.PainterContext.AttachToRenderSurface(saveContext.prevGLRenderSurface);
-            _gpuPainter.PainterContext.OriginKind = RenderSurfaceOrientation.LeftTop;
+            _gpuPainter.PainterContext.OriginKind = RenderSurfaceOriginKind.LeftTop;
             _gpuPainter.UpdatePainterContext();
 
             _left = 0;

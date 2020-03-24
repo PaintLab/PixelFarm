@@ -41,7 +41,7 @@ namespace OpenTkEssTest
             _pcx.Clear(PixelFarm.Drawing.Color.White);
             _pcx.ClearColorBuffer();
             //-------------------------------
-            _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+            _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftTop;
             if (!_isInit)
             {
                 _glbmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\logo-dark.png");
@@ -53,7 +53,7 @@ namespace OpenTkEssTest
                 {
                     //------------------------------------------------------------------------------------           
                     //framebuffer
-                    _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+                    _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftTop;
                     _pcx.AttachToRenderSurface(_surface1);
                     //after make the frameBuffer current
                     //then all drawing command will apply to frameBuffer
@@ -65,7 +65,7 @@ namespace OpenTkEssTest
                     //framebuffer2
 
                     _pcx.AttachToRenderSurface(_surface2);
-                    _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+                    _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftTop;
 
                     //GLBitmap bmp2 = new GLBitmap(_frameBuffer.TextureId, _frameBuffer.Width, _frameBuffer.Height);
                     //bmp2.IsYFlipped = true;

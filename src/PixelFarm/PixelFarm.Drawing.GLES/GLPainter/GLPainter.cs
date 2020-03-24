@@ -13,7 +13,7 @@ namespace PixelFarm.DrawingGL
     {
         GLPainterContext _pcx;
         SmoothingMode _smoothingMode; //smoothing mode of this  painter
-        RenderSurfaceOrientation _orientation = RenderSurfaceOrientation.LeftTop;
+        RenderSurfaceOriginKind _orientation = RenderSurfaceOriginKind.LeftTop;
 
         int _width;
         int _height;
@@ -87,7 +87,7 @@ namespace PixelFarm.DrawingGL
 
         public void DetachCurrentShader() => _pcx.DetachCurrentShader();
 
-        public override RenderSurfaceOrientation Orientation
+        public override RenderSurfaceOriginKind Orientation
         {
             get => _orientation;
             set => _orientation = value;

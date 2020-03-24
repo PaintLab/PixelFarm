@@ -184,7 +184,7 @@ namespace PixelFarm.DrawingGL
                             SimpleBitmapAtlas simpleBmpAtlas = dashPattBmpCache.Atlas;
 
                             _vboBuilder.Clear();
-                            _vboBuilder.SetTextureInfo(glbmp.Width, glbmp.Height, false, RenderSurfaceOrientation.LeftTop);
+                            _vboBuilder.SetTextureInfo(glbmp.Width, glbmp.Height, false, RenderSurfaceOriginKind.LeftTop);
 
                             ushort patNo = 0;
                             for (int i = 0; i < n; ++i)
