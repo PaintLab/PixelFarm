@@ -589,12 +589,12 @@ namespace PixelFarm.DrawingGL
                     break;
             }
         }
-        public void DrawSubImage(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop)
+        public void DrawSubImage(GLBitmap bmp, in PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop)
         {
             DrawSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
         }
 
-        public void DrawSubImage(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
+        public void DrawSubImage(GLBitmap bmp, in PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
         {
             if (OriginKind == RenderSurfaceOrientation.LeftTop) //***
             {
@@ -642,7 +642,7 @@ namespace PixelFarm.DrawingGL
             _msdfShader.SetColor(this.FontFillColor);
             _msdfShader.DrawWithVBO(vboBuilder);
         }
-        public void DrawSubImageWithMsdf(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
+        public void DrawSubImageWithMsdf(GLBitmap bmp, in PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
         {
             //we expect that the bmp supports alpha value
 
@@ -838,7 +838,7 @@ namespace PixelFarm.DrawingGL
             DrawGlyphImageWithSubPixelRenderingTechnique(bmp, ref srcRect, left, top);
         }
 
-        public void DrawGlyphImageWithStecil(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
+        public void DrawGlyphImageWithStecil(GLBitmap bmp, in PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
         {
             if (OriginKind == RenderSurfaceOrientation.LeftTop) //***
             {
@@ -874,7 +874,7 @@ namespace PixelFarm.DrawingGL
         /// <param name="scale"></param>
         public void DrawGlyphImageWithSubPixelRenderingTechnique2_GlyphByGlyph(
           GLBitmap glbmp,
-          ref Drawing.Rectangle srcRect,
+          in Drawing.Rectangle srcRect,
           float targetLeft,
           float targetTop,
           float scale)
@@ -2058,7 +2058,7 @@ namespace PixelFarm.DrawingGL
         }
 
         public void WriteRect(
-            ref PixelFarm.Drawing.Rectangle srcRect,
+            in PixelFarm.Drawing.Rectangle srcRect,
             float targetLeft,
             float targetTop,
             float scale)
@@ -2118,7 +2118,7 @@ namespace PixelFarm.DrawingGL
 
 
         public void WriteRect(
-            ref PixelFarm.Drawing.Rectangle srcRect,
+            in PixelFarm.Drawing.Rectangle srcRect,
             float targetLeft,
             float targetTop,
             float scale,

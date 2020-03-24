@@ -249,7 +249,7 @@ namespace OpenTkEssTest
                         {
                             //left,top (NOT x,y)
                             PixelFarm.Drawing.Rectangle srcRect = new PixelFarm.Drawing.Rectangle(0, 0, _glbmp.Width, _glbmp.Height);
-                            _pcx.DrawSubImage(_glbmp, ref srcRect, i, i);
+                            _pcx.DrawSubImage(_glbmp, srcRect, i, i);
                             i += 50;
                         }
                         //
@@ -257,7 +257,7 @@ namespace OpenTkEssTest
                         for (int i = 0; i < 400;)
                         {
                             PixelFarm.Drawing.Rectangle srcRect = new PixelFarm.Drawing.Rectangle(0, 0, _glbmp.Width, _glbmp.Height);
-                            _pcx.DrawSubImage(_glbmp, ref srcRect, i, i);
+                            _pcx.DrawSubImage(_glbmp, srcRect, i, i);
                             i += 50;
                         }
                     }
@@ -269,7 +269,7 @@ namespace OpenTkEssTest
                         {
                             //left,top (NOT x,y)
                             PixelFarm.Drawing.Rectangle srcRect = new PixelFarm.Drawing.Rectangle(0, 0, _glbmp.Width / 2, _glbmp.Height / 2);
-                            _pcx.DrawSubImage(_glbmp, ref srcRect, i, i);
+                            _pcx.DrawSubImage(_glbmp, srcRect, i, i);
                             i += 50;
                         }
                         //
@@ -277,7 +277,7 @@ namespace OpenTkEssTest
                         for (int i = 0; i < 400;)
                         {
                             PixelFarm.Drawing.Rectangle srcRect = new PixelFarm.Drawing.Rectangle(0, 0, _glbmp.Width / 2, _glbmp.Height / 2);
-                            _pcx.DrawSubImage(_glbmp, ref srcRect, i, i);
+                            _pcx.DrawSubImage(_glbmp, srcRect, i, i);
                             i += 50;
                         }
                     }
@@ -289,7 +289,7 @@ namespace OpenTkEssTest
                         {
                             //left,top (NOT x,y)
                             PixelFarm.Drawing.Rectangle srcRect = new PixelFarm.Drawing.Rectangle(20, 20, 50, 50);
-                            _pcx.DrawSubImage(_glbmp, ref srcRect, i, i);
+                            _pcx.DrawSubImage(_glbmp, srcRect, i, i);
                             i += 50;
                         }
                         //
@@ -297,7 +297,7 @@ namespace OpenTkEssTest
                         for (int i = 0; i < 400;)
                         {
                             PixelFarm.Drawing.Rectangle srcRect = new PixelFarm.Drawing.Rectangle(20, 20, 50, 50);
-                            _pcx.DrawSubImage(_glbmp, ref srcRect, i, i);
+                            _pcx.DrawSubImage(_glbmp, srcRect, i, i);
                             i += 50;
                         }
                     }
@@ -309,7 +309,7 @@ namespace OpenTkEssTest
                         {
                             //left,top (NOT x,y)
                             PixelFarm.Drawing.Rectangle srcRect = new PixelFarm.Drawing.Rectangle(20, 20, 50, 50);
-                            _pcx.DrawSubImage(_glbmp, ref srcRect, i, i, 2f);
+                            _pcx.DrawSubImage(_glbmp, srcRect, i, i, 2f);
                             i += 50;
                         }
                         //
@@ -317,7 +317,7 @@ namespace OpenTkEssTest
                         for (int i = 0; i < 400;)
                         {
                             PixelFarm.Drawing.Rectangle srcRect = new PixelFarm.Drawing.Rectangle(20, 20, 50, 50);
-                            _pcx.DrawSubImage(_glbmp, ref srcRect, i, i, 2f);
+                            _pcx.DrawSubImage(_glbmp, srcRect, i, i, 2f);
                             i += 50;
                         }
                     }
