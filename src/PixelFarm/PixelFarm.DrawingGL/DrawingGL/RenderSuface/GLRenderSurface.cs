@@ -114,37 +114,37 @@ namespace PixelFarm.DrawingGL
     /// </summary>
     public sealed class GLPainterContext
     {
+        readonly int _painterContextId;
 
-        SolidColorFillShader _solidColorFillShader;
-        RectFillShader _rectFillShader;
-        RadialGradientFillShader _radialGradientShader;
+        readonly SolidColorFillShader _solidColorFillShader;
+        readonly RectFillShader _rectFillShader;
+        readonly RadialGradientFillShader _radialGradientShader;
 
-        SmoothLineShader _smoothLineShader;
-        InvertAlphaLineSmoothShader _invertAlphaLineSmoothShader;
+        readonly SmoothLineShader _smoothLineShader;
+        readonly InvertAlphaLineSmoothShader _invertAlphaLineSmoothShader;
 
-        GlyphImageStecilShader _glyphStencilShader;
-        BGRImageTextureShader _bgrImgTextureShader;
-        BGRAImageTextureShader _bgraImgTextureShader;
+        readonly GlyphImageStecilShader _glyphStencilShader;
+        readonly BGRImageTextureShader _bgrImgTextureShader;
+        readonly BGRAImageTextureShader _bgraImgTextureShader;
 
-        LcdSubPixShader _lcdSubPixShader;
-        LcdSubPixShaderForSolidBg _lcdSubPixForSolidBgShader;
-        LcdSubPixShaderForWordStripCreation _lcdSubPixShaderForWordStripCreation;
-        LcdSubPixShaderV2 _lcdSubPixShaderV2;
+        readonly LcdSubPixShader _lcdSubPixShader;
+        readonly LcdSubPixShaderForSolidBg _lcdSubPixForSolidBgShader;
+        readonly LcdSubPixShaderForWordStripCreation _lcdSubPixShaderForWordStripCreation;
+        readonly LcdSubPixShaderV2 _lcdSubPixShaderV2;
 
-        RGBATextureShader _rgbaTextureShader;
-        RGBTextureShader _rgbTextureShader;
-        BlurShader _blurShader;
-        Conv3x3TextureShader _conv3x3TextureShader;
-        MsdfShader _msdfShader;
-        SingleChannelSdf _sdfShader;
-         
+        readonly RGBATextureShader _rgbaTextureShader;
+        readonly RGBTextureShader _rgbTextureShader;
+        readonly BlurShader _blurShader;
+        readonly Conv3x3TextureShader _conv3x3TextureShader;
+        readonly MsdfShader _msdfShader;
+        readonly SingleChannelSdf _sdfShader;
 
-        MaskShader _maskShader;
+
+        readonly MaskShader _maskShader;
         //-----------------------------------------------------------
-        ShaderSharedResource _shareRes;
+        readonly ShaderSharedResource _shareRes;
+
         RenderSurfaceOriginKind _originKind;
-
-
         GLRenderSurface _rendersx;
         int _canvasOriginX = 0;
         int _canvasOriginY = 0;
@@ -154,9 +154,10 @@ namespace PixelFarm.DrawingGL
         MyMat4 _customCoordTransformer;
 
         //
-        TessTool _tessTool;
-        SmoothBorderBuilder _smoothBorderBuilder = new SmoothBorderBuilder();
-        int _painterContextId;
+        readonly TessTool _tessTool;
+        readonly SmoothBorderBuilder _smoothBorderBuilder = new SmoothBorderBuilder();
+
+
         FillingRule _fillingRule;
         Tesselate.Tesselator.WindingRuleType _tessWindingRuleType = Tesselate.Tesselator.WindingRuleType.NonZero;//default
 
@@ -212,7 +213,7 @@ namespace PixelFarm.DrawingGL
             _lcdSubPixShaderV2 = new LcdSubPixShaderV2(_shareRes);
             _lcdSubPixShaderV2.SetFillColor(Color.White);
             _maskShader = new MaskShader(_shareRes);
-            
+
 
 
             _blurShader = new BlurShader(_shareRes);
@@ -223,7 +224,7 @@ namespace PixelFarm.DrawingGL
 
             _msdfShader = new MsdfShader(_shareRes);
             _sdfShader = new SingleChannelSdf(_shareRes);
-             
+
 
             currentBinCache?.Close(); //close the cache, let other app use the shader cache file
             CachedBinaryShaderIO.ClearCurrentImpl();
@@ -259,7 +260,7 @@ namespace PixelFarm.DrawingGL
 
 
 
-        static Dictionary<int, GLPainterContext> s_registeredPainterContexts = new Dictionary<int, GLPainterContext>();
+        readonly static Dictionary<int, GLPainterContext> s_registeredPainterContexts = new Dictionary<int, GLPainterContext>();
         static int s_painterContextTotalId;
 
         /// <summary>
@@ -731,7 +732,7 @@ namespace PixelFarm.DrawingGL
                 -colorSrcX, -colorSrcY,
                 targetLeft, targetTop);
         }
-         
+
         public void DrawImage(GLBitmap bmp,
             float left, float top, float w, float h)
         {
@@ -764,14 +765,14 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawImageToQuad(GLBitmap bmp, PixelFarm.CpuBlit.VertexProcessing.Affine affine)
         {
-            
+
             Quad2f quad = new Quad2f(bmp.Width, OriginKind == RenderSurfaceOriginKind.LeftTop ? bmp.Height : -bmp.Height);
             quad.Transform(affine);
             DrawImageToQuad(bmp, quad);
         }
 
         public void DrawImageToQuad(GLBitmap bmp, in AffineMat affine)
-        { 
+        {
             Quad2f quad = new Quad2f(bmp.Width, OriginKind == RenderSurfaceOriginKind.LeftTop ? bmp.Height : -bmp.Height);
             quad.Transform(affine);
             DrawImageToQuad(bmp, quad);
