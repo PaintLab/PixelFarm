@@ -94,8 +94,7 @@ namespace PixelFarm.DrawingGL
         }
         public override void Fill(Region rgn)
         {
-            var region = rgn as CpuBlitRegion;
-            if (region == null) return;
+            if (!(rgn is CpuBlitRegion region)) return;
             switch (region.Kind)
             {
                 case CpuBlitRegion.CpuBlitRegionKind.BitmapBasedRegion:

@@ -88,20 +88,20 @@ namespace OpenTkEssTest
 
 
             }
-            PixelFarm.Drawing.RenderSurfaceOrientation prevOrgKind = _pcx.OriginKind; //save
+            PixelFarm.Drawing.RenderSurfaceOriginKind prevOrgKind = _pcx.OriginKind; //save
             switch (DrawSet)
             {
                 default:
                 case T102_1_Set.Lines:
                     {
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftTop;
                         for (int i = 0; i < 400;)
                         {
                             _pcx.DrawLine(i + 10, i + 10, i + 30, i + 50);
                             i += 50;
                         }
                         //
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftBottom;
                         for (int i = 0; i < 400;)
                         {
                             _pcx.DrawLine(i + 10, i + 10, i + 30, i + 50);
@@ -111,14 +111,14 @@ namespace OpenTkEssTest
                     break;
                 case T102_1_Set.FillRect:
                     {
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftTop;
                         for (int i = 0; i < 400;)
                         {
                             _pcx.FillRect(PixelFarm.Drawing.Color.Red, i, i, 50, 50);
                             i += 50;
                         }
                         //
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftBottom;
                         for (int i = 0; i < 400;)
                         {
                             _pcx.FillRect(PixelFarm.Drawing.Color.Red, i, i, 50, 50);
@@ -128,14 +128,14 @@ namespace OpenTkEssTest
                     break;
                 case T102_1_Set.DrawRect:
                     {
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftTop;
                         for (int i = 0; i < 400;)
                         {
                             _painter.DrawRect(i, i, 50, 50);
                             i += 50;
                         }
                         //
-                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftBottom;
+                        _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftBottom;
                         for (int i = 0; i < 400;)
                         {
                             _painter.DrawRect(i, i, 50, 50);

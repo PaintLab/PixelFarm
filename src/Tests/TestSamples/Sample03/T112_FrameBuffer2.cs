@@ -67,8 +67,8 @@ namespace OpenTkEssTest
                 _isInit = true;
             }
 
-            PixelFarm.Drawing.RenderSurfaceOrientation prevOrgKind = _pcx.OriginKind; //save
-            _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+            PixelFarm.Drawing.RenderSurfaceOriginKind prevOrgKind = _pcx.OriginKind; //save
+            _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftTop;
 
             if (_surface1.IsValid)
             {
@@ -76,7 +76,7 @@ namespace OpenTkEssTest
                 {
                     _pcx.AttachToRenderSurface(_surface1);
 
-                    _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+                    _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftTop;
                     //------------------------------------------------------------------------------------  
                     //after make the frameBuffer current
                     //then all drawing command will apply to frameBuffer
@@ -88,7 +88,7 @@ namespace OpenTkEssTest
                     //after release current, we move back to default frame buffer again***
                     _frameBufferNeedUpdate = false;
                 }
-                _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+                _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftTop;
                 //_pcx.DrawFrameBuffer(_frameBuffer, 0, 0, true);
 
                 for (int i = 0; i < 1; ++i)
@@ -138,7 +138,7 @@ namespace OpenTkEssTest
             using (GLRenderSurface surface2 = new GLRenderSurface(rgba_result, false))
             {
                 _pcx.AttachToRenderSurface(surface1);
-                _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+                _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftTop;
                 //------------------------------------------------------------------------------------  
                 //after make the frameBuffer current
                 //then all drawing command will apply to frameBuffer
@@ -150,7 +150,7 @@ namespace OpenTkEssTest
                 //after release current, we move back to default frame buffer again***  
 
                 _pcx.AttachToRenderSurface(surface2);
-                _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+                _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftTop;
                 _pcx.Clear(PixelFarm.Drawing.Color.Black);
                 _pcx.DrawImage(surface1.GetGLBitmap(), 0, 0);
                 _pcx.AttachToRenderSurface(null);
@@ -170,10 +170,10 @@ namespace OpenTkEssTest
                 _isInit = true;
             }
 
-            PixelFarm.Drawing.RenderSurfaceOrientation prevOrgKind = _pcx.OriginKind; //save
-            _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+            PixelFarm.Drawing.RenderSurfaceOriginKind prevOrgKind = _pcx.OriginKind; //save
+            _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftTop;
 
-            _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOrientation.LeftTop;
+            _pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftTop;
             //_pcx.DrawFrameBuffer(_frameBuffer, 0, 0, true); 
             for (int i = 0; i < 1; ++i)
             {

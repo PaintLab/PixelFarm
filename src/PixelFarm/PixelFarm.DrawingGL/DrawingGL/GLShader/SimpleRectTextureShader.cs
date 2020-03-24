@@ -8,7 +8,7 @@ namespace PixelFarm.DrawingGL
         protected ShaderVtxAttrib3f a_position;
         protected ShaderVtxAttrib2f a_texCoord;
 
-        protected ShaderUniformVar1 s_texture;
+        protected ShaderUniformVar1 u_texture;
         protected static readonly ushort[] indices = new ushort[] { 0, 1, 2, 3 };
 
         public SimpleRectTextureShader(ShaderSharedResource shareRes)
@@ -36,20 +36,13 @@ namespace PixelFarm.DrawingGL
             // Bind the texture...
 
             TextureContainter container = _shareRes.LoadGLBitmap(bmp);
-            // Set the texture sampler to texture unit to 0     
-            s_texture.SetValue(container.TextureUnitNo);
 
-
+            u_texture.SetValue(container.TextureUnitNo);
             _latestBmpW = bmp.Width;
             _latestBmpH = bmp.Height;
             _latestBmpYFlipped = bmp.IsYFlipped;
         }
-        //internal void SetAssociatedTextureInfo(GLBitmap bmp)
-        //{
-        //    _latestBmpW = bmp.Width;
-        //    _latestBmpH = bmp.Height;
-        //    _latestBmpYFlipped = bmp.IsYFlipped;
-        //}
+
         internal unsafe void UnsafeDrawSubImages(float* srcDestList, int arrLen, float scale)
         {
             //-------------------------------------------------------------------------------------
@@ -148,96 +141,264 @@ namespace PixelFarm.DrawingGL
         {
             Render(bmp, left, top, w, h, bmp.IsYFlipped);
         }
-        public void Render(GLBitmap bmp,
-            float left_top_x, float left_top_y,
-            float right_top_x, float right_top_y,
-            float right_bottom_x, float right_bottom_y,
-            float left_bottom_x, float left_bottom_y, bool flipY = false)
 
+        protected static unsafe void AssignVertice5_4(
+              in PixelFarm.CpuBlit.VertexProcessing.Quad2f quad,
+              float* imgVertices,
+              bool flipY)
         {
 
-            bool isFlipped = flipY;
+            //user's coord
+            //(left,top) ----- (right,top)
+            //  |                   |
+            //  |                   |
+            //  |                   |
+            //(left,bottom) ---(right,bottom)
+
+            // 
+            //(0,1) ------------ (1,1)
+            //  |                   |
+            //  |   texture-img     |
+            //  |                   |
+            //(0,0) -------------(1,0)
+
+
+            if (flipY)
+            {
+                //since this is fliped in Y axis
+                //so we map 
+                //| user's coord    | texture-img |
+                //----------------------------------
+                //| left            | left
+                //| right           | right 
+                //----------------------------------
+                //| top             | bottom
+                //| bottom          | top
+                //----------------------------------  
+
+                imgVertices[0] = quad.left_top_x; imgVertices[1] = quad.left_top_y; imgVertices[2] = 0; //coord 0 (left,top)
+                imgVertices[3] = 0; imgVertices[4] = 0; //texture coord 0 (left,bottom)
+                                                        //---------------------
+                imgVertices[5] = quad.left_bottom_x; imgVertices[6] = quad.left_bottom_y; imgVertices[7] = 0; //coord 1 (left,bottom)
+                imgVertices[8] = 0; imgVertices[9] = 1; //texture coord 1  (left,top)
+
+                //---------------------
+                imgVertices[10] = quad.right_top_x; imgVertices[11] = quad.right_top_y; imgVertices[12] = 0; //coord 2 (right,top)
+                imgVertices[13] = 1; imgVertices[14] = 0; //texture coord 2  (right,bottom)
+
+                //---------------------
+                imgVertices[15] = quad.right_bottom_x; imgVertices[16] = quad.right_bottom_y; imgVertices[17] = 0; //coord 3 (right, bottom)
+                imgVertices[18] = 1; imgVertices[19] = 1; //texture coord 3 (right,top)
+
+            }
+            else
+            {    //since this is NOT fliped in Y axis
+                 //so we map 
+                 //| user's coord    | texture-img |
+                 //----------------------------------
+                 //| left            | left
+                 //| right           | right 
+                 //----------------------------------
+                 //| top             | top
+                 //| bottom          | bottom
+                 //---------------------------------- 
+
+                imgVertices[0] = quad.left_top_x; imgVertices[1] = quad.left_top_y; imgVertices[2] = 0; //coord 0 (left,top)                                                                                                       
+                imgVertices[3] = 0; imgVertices[4] = 1; //texture coord 0 (left,top)
+
+                //---------------------
+                imgVertices[5] = quad.left_bottom_x; imgVertices[6] = quad.left_bottom_y; imgVertices[7] = 0; //coord 1 (left,bottom)
+                imgVertices[8] = 0; imgVertices[9] = 0; //texture coord 1 (left,bottom)
+
+                //---------------------
+                imgVertices[10] = quad.right_top_x; imgVertices[11] = quad.right_top_y; imgVertices[12] = 0; //coord 2 (right,top)
+                imgVertices[13] = 1; imgVertices[14] = 1; //texture coord 2 (right,top)
+
+                //---------------------
+                imgVertices[15] = quad.right_bottom_x; imgVertices[16] = quad.right_bottom_y; imgVertices[17] = 0; //coord 3 (right, bottom)
+                imgVertices[18] = 1; imgVertices[19] = 0; //texture coord 3  (right,bottom)
+
+            }
+        }
+        protected static unsafe void AssignVertice5_4(
+             in PixelFarm.CpuBlit.VertexProcessing.Quad2f quad,
+             in PixelFarm.CpuBlit.VertexProcessing.Quad2f srcRect,
+             float* imgVertices,
+             bool flipY)
+        {
+
+            //user's coord
+            //(left,top) ----- (right,top)
+            //  |                   |
+            //  |                   |
+            //  |                   |
+            //(left,bottom) ---(right,bottom)
+
+            // 
+            //(0,1) ------------ (1,1)
+            //  |                   |
+            //  |   texture-img     |
+            //  |                   |
+            //(0,0) -------------(1,0)
+
+
+            if (flipY)
+            {
+                //since this is fliped in Y axis
+                //so we map 
+                //| user's coord    | texture-img |
+                //----------------------------------
+                //| left            | left
+                //| right           | right 
+                //----------------------------------
+                //| top             | bottom
+                //| bottom          | top
+                //---------------------------------- 
+
+
+                imgVertices[0] = quad.left_top_x; imgVertices[1] = quad.left_top_y; imgVertices[2] = 0; //coord 0 (left,top)
+                imgVertices[3] = srcRect.left_bottom_x; imgVertices[4] = srcRect.left_bottom_y; //texture coord 0 (left,bottom)
+                                                                                                //---------------------
+                imgVertices[5] = quad.left_bottom_x; imgVertices[6] = quad.left_bottom_y; imgVertices[7] = 0; //coord 1 (left,bottom)
+                imgVertices[8] = srcRect.left_top_x; imgVertices[9] = srcRect.left_top_y; //texture coord 1  (left,top)
+
+                //---------------------
+                imgVertices[10] = quad.right_top_x; imgVertices[11] = quad.right_top_y; imgVertices[12] = 0; //coord 2 (right,top)
+                imgVertices[13] = srcRect.right_bottom_x; imgVertices[14] = srcRect.right_bottom_y; //texture coord 2  (right,bottom)
+
+                //---------------------
+                imgVertices[15] = quad.right_bottom_x; imgVertices[16] = quad.right_bottom_y; imgVertices[17] = 0; //coord 3 (right, bottom)
+                imgVertices[18] = srcRect.right_top_x; imgVertices[19] = srcRect.right_top_y; //texture coord 3 (right,top)
+
+            }
+            else
+            {    //since this is NOT fliped in Y axis
+                 //so we map 
+                 //| user's coord    | texture-img |
+                 //----------------------------------
+                 //| left            | left
+                 //| right           | right 
+                 //----------------------------------
+                 //| top             | top
+                 //| bottom          | bottom
+                 //---------------------------------- 
+
+                imgVertices[0] = quad.left_top_x; imgVertices[1] = quad.left_top_y; imgVertices[2] = 0; //coord 0 (left,top)                                                                                                       
+                imgVertices[3] = srcRect.left_top_x; imgVertices[4] = srcRect.left_top_y; //texture coord 0 (left,top)
+
+                //---------------------
+                imgVertices[5] = quad.left_bottom_x; imgVertices[6] = quad.left_bottom_y; imgVertices[7] = 0; //coord 1 (left,bottom)
+                imgVertices[8] = srcRect.left_bottom_x; imgVertices[9] = srcRect.left_bottom_y; //texture coord 1 (left,bottom)
+
+                //---------------------
+                imgVertices[10] = quad.right_top_x; imgVertices[11] = quad.right_top_y; imgVertices[12] = 0; //coord 2 (right,top)
+                imgVertices[13] = srcRect.right_top_x; imgVertices[14] = srcRect.right_top_y; //texture coord 2 (right,top)
+
+                //---------------------
+                imgVertices[15] = quad.right_bottom_x; imgVertices[16] = quad.right_bottom_y; imgVertices[17] = 0; //coord 3 (right, bottom)
+                imgVertices[18] = srcRect.right_bottom_x; imgVertices[19] = srcRect.right_bottom_y; //texture coord 3  (right,bottom)
+
+            }
+        }
+        protected static unsafe void AssignVertice7_4(
+          in PixelFarm.CpuBlit.VertexProcessing.Quad2f quad,
+          in PixelFarm.CpuBlit.VertexProcessing.Quad2f srcRect,
+          in PixelFarm.CpuBlit.VertexProcessing.Quad2f colorRect,
+          float* imgVertices,
+          bool flipY)
+        {
+
+            //user's coord
+            //(left,top) ----- (right,top)
+            //  |                   |
+            //  |                   |
+            //  |                   |
+            //(left,bottom) ---(right,bottom)
+
+            // 
+            //(0,1) ------------ (1,1)
+            //  |                   |
+            //  |   texture-img     |
+            //  |                   |
+            //(0,0) -------------(1,0)
+
+
+            if (flipY)
+            {
+                //since this is fliped in Y axis
+                //so we map 
+                //| user's coord    | texture-img |
+                //----------------------------------
+                //| left            | left
+                //| right           | right 
+                //----------------------------------
+                //| top             | bottom
+                //| bottom          | top
+                //---------------------------------- 
+
+
+                imgVertices[0] = quad.left_top_x; imgVertices[1] = quad.left_top_y; imgVertices[2] = 0; //coord 0 (left,top)
+                imgVertices[3] = srcRect.left_bottom_x; imgVertices[4] = srcRect.left_bottom_y; //texture coord 0 (left,bottom)
+                imgVertices[5] = colorRect.left_bottom_x; imgVertices[6] = colorRect.left_bottom_y; //texture coord 0 (left,bottom)
+
+                //---------------------
+                imgVertices[7] = quad.left_bottom_x; imgVertices[8] = quad.left_bottom_y; imgVertices[9] = 0; //coord 1 (left,bottom)
+                imgVertices[10] = srcRect.left_top_x; imgVertices[11] = srcRect.left_top_y; //texture coord 1  (left,top)
+                imgVertices[12] = colorRect.left_top_x; imgVertices[13] = colorRect.left_top_y; //texture coord 1  (left,top)
+                //---------------------
+                imgVertices[14] = quad.right_top_x; imgVertices[15] = quad.right_top_y; imgVertices[16] = 0; //coord 2 (right,top)
+                imgVertices[17] = srcRect.right_bottom_x; imgVertices[18] = srcRect.right_bottom_y; //texture coord 2  (right,bottom)
+                imgVertices[19] = colorRect.right_bottom_x; imgVertices[20] = colorRect.right_bottom_y; //texture coord 2  (right,bottom)
+                //---------------------
+                imgVertices[21] = quad.right_bottom_x; imgVertices[22] = quad.right_bottom_y; imgVertices[23] = 0; //coord 3 (right, bottom)
+                imgVertices[24] = srcRect.right_top_x; imgVertices[25] = srcRect.right_top_y; //texture coord 3 (right,top)
+                imgVertices[26] = colorRect.right_top_x; imgVertices[27] = colorRect.right_top_y; //texture coord 3 (right,top)
+
+            }
+            else
+            {    //since this is NOT fliped in Y axis
+                 //so we map 
+                 //| user's coord    | texture-img |
+                 //----------------------------------
+                 //| left            | left
+                 //| right           | right 
+                 //----------------------------------
+                 //| top             | top
+                 //| bottom          | bottom
+                 //---------------------------------- 
+
+                imgVertices[0] = quad.left_top_x; imgVertices[1] = quad.left_top_y; imgVertices[2] = 0; //coord 0 (left,top)                                                                                                       
+                imgVertices[3] = srcRect.left_top_x; imgVertices[4] = srcRect.left_top_y; //texture coord 0 (left,top)
+                imgVertices[5] = colorRect.left_top_x; imgVertices[6] = colorRect.left_top_y; //texture coord 0 (left,top)
+                //---------------------
+                imgVertices[7] = quad.left_bottom_x; imgVertices[8] = quad.left_bottom_y; imgVertices[9] = 0; //coord 1 (left,bottom)
+                imgVertices[10] = srcRect.left_bottom_x; imgVertices[11] = srcRect.left_bottom_y; //texture coord 1 (left,bottom)
+                imgVertices[12] = colorRect.left_bottom_x; imgVertices[13] = colorRect.left_bottom_y; //texture coord 1 (left,bottom)
+                //---------------------
+                imgVertices[14] = quad.right_top_x; imgVertices[15] = quad.right_top_y; imgVertices[16] = 0; //coord 2 (right,top)
+                imgVertices[17] = srcRect.right_top_x; imgVertices[18] = srcRect.right_top_y; //texture coord 2 (right,top)
+                imgVertices[19] = colorRect.right_top_x; imgVertices[20] = colorRect.right_top_y; //texture coord 2 (right,top)
+                //---------------------
+                imgVertices[21] = quad.right_bottom_x; imgVertices[22] = quad.right_bottom_y; imgVertices[23] = 0; //coord 3 (right, bottom)
+                imgVertices[24] = srcRect.right_bottom_x; imgVertices[25] = srcRect.right_bottom_y; //texture coord 3  (right,bottom)
+                imgVertices[26] = colorRect.right_bottom_x; imgVertices[27] = colorRect.right_bottom_y; //texture coord 3  (right,bottom)
+
+            }
+        }
+
+        public void Render(GLBitmap bmp,
+            in PixelFarm.CpuBlit.VertexProcessing.Quad2f quad,
+            bool flipY = false)
+        {
+            //good read
+            //https://stackoverflow.com/questions/8679052/initialization-of-memory-allocated-with-stackalloc
+
             unsafe
             {
-                //user's coord
-                //(left,top) ----- (right,top)
-                //  |                   |
-                //  |                   |
-                //  |                   |
-                //(left,bottom) ---(right,bottom)
-
-                // 
-                //(0,1) ------------ (1,1)
-                //  |                   |
-                //  |   texture-img     |
-                //  |                   |
-                //(0,0) -------------(1,0)
-
-
-                if (isFlipped)
-                {
-                    //since this is fliped in Y axis
-                    //so we map 
-                    //| user's coord    | texture-img |
-                    //----------------------------------
-                    //| left            | left
-                    //| right           | right 
-                    //----------------------------------
-                    //| top             | bottom
-                    //| bottom          | top
-                    //----------------------------------
-
-                    float* imgVertices = stackalloc float[5 * 4];
-                    {
-
-                        imgVertices[0] = left_top_x; imgVertices[1] = left_top_y; imgVertices[2] = 0; //coord 0 (left,top)
-                        imgVertices[3] = 0; imgVertices[4] = 0; //texture coord 0 (left,bottom)
-                        //---------------------
-                        imgVertices[5] = left_bottom_x; imgVertices[6] = left_bottom_y; imgVertices[7] = 0; //coord 1 (left,bottom)
-                        imgVertices[8] = 0; imgVertices[9] = 1; //texture coord 1  (left,top)
-
-                        //---------------------
-                        imgVertices[10] = right_top_x; imgVertices[11] = right_top_y; imgVertices[12] = 0; //coord 2 (right,top)
-                        imgVertices[13] = 1; imgVertices[14] = 0; //texture coord 2  (right,bottom)
-
-                        //---------------------
-                        imgVertices[15] = right_bottom_x; imgVertices[16] = right_bottom_y; imgVertices[17] = 0; //coord 3 (right, bottom)
-                        imgVertices[18] = 1; imgVertices[19] = 1; //texture coord 3 (right,top)
-                    }
-                    a_position.UnsafeLoadMixedV3f(imgVertices, 5);
-                    a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
-                }
-                else
-                {    //since this is NOT fliped in Y axis
-                    //so we map 
-                    //| user's coord    | texture-img |
-                    //----------------------------------
-                    //| left            | left
-                    //| right           | right 
-                    //----------------------------------
-                    //| top             | top
-                    //| bottom          | bottom
-                    //----------------------------------
-                    float* imgVertices = stackalloc float[5 * 4];
-                    {
-                        imgVertices[0] = left_top_x; imgVertices[1] = left_top_y; imgVertices[2] = 0; //coord 0 (left,top)                                                                                                       
-                        imgVertices[3] = 0; imgVertices[4] = 1; //texture coord 0 (left,top)
-
-                        //---------------------
-                        imgVertices[5] = left_bottom_x; imgVertices[6] = left_bottom_y; imgVertices[7] = 0; //coord 1 (left,bottom)
-                        imgVertices[8] = 0; imgVertices[9] = 0; //texture coord 1 (left,bottom)
-
-                        //---------------------
-                        imgVertices[10] = right_top_x; imgVertices[11] = right_top_y; imgVertices[12] = 0; //coord 2 (right,top)
-                        imgVertices[13] = 1; imgVertices[14] = 1; //texture coord 2 (right,top)
-
-                        //---------------------
-                        imgVertices[15] = right_bottom_x; imgVertices[16] = right_bottom_y; imgVertices[17] = 0; //coord 3 (right, bottom)
-                        imgVertices[18] = 1; imgVertices[19] = 0; //texture coord 3  (right,bottom)
-                    }
-                    a_position.UnsafeLoadMixedV3f(imgVertices, 5);
-                    a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
-                }
+                float* imgVertices = stackalloc float[5 * 4];
+                AssignVertice5_4(quad, imgVertices, flipY);
+                a_position.UnsafeLoadMixedV3f(imgVertices, 5);
+                a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
             }
 
             SetCurrent();
@@ -246,101 +407,22 @@ namespace PixelFarm.DrawingGL
             // Bind the texture...
 
             TextureContainter textureContainer = _shareRes.LoadGLBitmap(bmp);
-            //GL.ActiveTexture(TextureUnit.Texture0);
-            //GL.BindTexture(TextureTarget.Texture2D, textureId);
-            //// Set the texture sampler to texture unit to 0     
-            //s_texture.SetValue(0);
 
-            s_texture.SetValue(textureContainer.TextureUnitNo);
+            u_texture.SetValue(textureContainer.TextureUnitNo);
             SetVarsBeforeRender();
             GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
         }
-
+         
         public void Render(GLBitmap glBmp, float left, float top, float w, float h, bool isFlipped = false)
         {
-            SetCurrent();
-            CheckViewMatrix();
             unsafe
             {
-                //user's coord
-                //(left,top) ----- (right,top)
-                //  |                   |
-                //  |                   |
-                //  |                   |
-                //(left,bottom) ---(right,bottom)
 
-                // 
-                //(0,1) ------------ (1,1)
-                //  |                   |
-                //  |   texture-img     |
-                //  |                   |
-                //(0,0) -------------(1,0)
-
-
-                if (isFlipped)
-                {
-                    //since this is fliped in Y axis
-                    //so we map 
-                    //| user's coord    | texture-img |
-                    //----------------------------------
-                    //| left            | left
-                    //| right           | right 
-                    //----------------------------------
-                    //| top             | bottom
-                    //| bottom          | top
-                    //----------------------------------
-
-                    float* imgVertices = stackalloc float[5 * 4];
-                    {
-
-                        imgVertices[0] = left; imgVertices[1] = top; imgVertices[2] = 0; //coord 0 (left,top)
-                        imgVertices[3] = 0; imgVertices[4] = 0; //texture coord 0 (left,bottom)
-                        //---------------------
-                        imgVertices[5] = left; imgVertices[6] = top - h; imgVertices[7] = 0; //coord 1 (left,bottom)
-                        imgVertices[8] = 0; imgVertices[9] = 1; //texture coord 1  (left,top)
-
-                        //---------------------
-                        imgVertices[10] = left + w; imgVertices[11] = top; imgVertices[12] = 0; //coord 2 (right,top)
-                        imgVertices[13] = 1; imgVertices[14] = 0; //texture coord 2  (right,bottom)
-
-                        //---------------------
-                        imgVertices[15] = left + w; imgVertices[16] = top - h; imgVertices[17] = 0; //coord 3 (right, bottom)
-                        imgVertices[18] = 1; imgVertices[19] = 1; //texture coord 3 (right,top)
-                    }
-                    a_position.UnsafeLoadMixedV3f(imgVertices, 5);
-                    a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
-                }
-                else
-                {    //since this is NOT fliped in Y axis
-                    //so we map 
-                    //| user's coord    | texture-img |
-                    //----------------------------------
-                    //| left            | left
-                    //| right           | right 
-                    //----------------------------------
-                    //| top             | top
-                    //| bottom          | bottom
-                    //----------------------------------
-                    float* imgVertices = stackalloc float[5 * 4];
-                    {
-                        imgVertices[0] = left; imgVertices[1] = top; imgVertices[2] = 0; //coord 0 (left,top)                                                                                                       
-                        imgVertices[3] = 0; imgVertices[4] = 1; //texture coord 0 (left,top)
-
-                        //---------------------
-                        imgVertices[5] = left; imgVertices[6] = top - h; imgVertices[7] = 0; //coord 1 (left,bottom)
-                        imgVertices[8] = 0; imgVertices[9] = 0; //texture coord 1 (left,bottom)
-
-                        //---------------------
-                        imgVertices[10] = left + w; imgVertices[11] = top; imgVertices[12] = 0; //coord 2 (right,top)
-                        imgVertices[13] = 1; imgVertices[14] = 1; //texture coord 2 (right,top)
-
-                        //---------------------
-                        imgVertices[15] = left + w; imgVertices[16] = top - h; imgVertices[17] = 0; //coord 3 (right, bottom)
-                        imgVertices[18] = 1; imgVertices[19] = 0; //texture coord 3  (right,bottom)
-                    }
-                    a_position.UnsafeLoadMixedV3f(imgVertices, 5);
-                    a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
-                }
+                float* imgVertices = stackalloc float[5 * 4];
+                var quad = new CpuBlit.VertexProcessing.Quad2f(left, top, w, -h); //** -h
+                AssignVertice5_4(quad, imgVertices, isFlipped);
+                a_position.UnsafeLoadMixedV3f(imgVertices, 5);
+                a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
             }
 
             SetCurrent();
@@ -348,12 +430,7 @@ namespace PixelFarm.DrawingGL
             //-------------------------------------------------------------------------------------
             // Bind the texture...
             TextureContainter container = _shareRes.LoadGLBitmap(glBmp);
-
-            //GL.ActiveTexture(TextureUnit.Texture0);
-            //GL.BindTexture(TextureTarget.Texture2D, textureId);
-            // Set the texture sampler to texture unit to 0     
-            s_texture.SetValue(container.TextureUnitNo);
-
+            u_texture.SetValue(container.TextureUnitNo);
             SetVarsBeforeRender();
             GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
         }
@@ -379,10 +456,11 @@ namespace PixelFarm.DrawingGL
             a_texCoord = _shaderProgram.GetAttrV2f("a_texCoord");
             u_matrix = _shaderProgram.GetUniformMat4("u_mvpMatrix");
             u_orthov_offset = _shaderProgram.GetUniform2("u_ortho_offset");
-            s_texture = _shaderProgram.GetUniform1("s_texture");
+            u_texture = _shaderProgram.GetUniform1("s_texture");
             OnProgramBuilt();
             return true;
         }
+
         protected virtual void SetVarsBeforeRender()
         {
         }
@@ -657,6 +735,7 @@ namespace PixelFarm.DrawingGL
         }
     }
 
+
     /// <summary>
     /// texture-based, lcd-subpix rendering shader for any background
     /// </summary>
@@ -928,6 +1007,7 @@ namespace PixelFarm.DrawingGL
 
             SetCurrent();
             CheckViewMatrix();
+
             if (_hasSomeOffset)
             {
                 _offset.SetValue(0f, 0f);
@@ -935,61 +1015,20 @@ namespace PixelFarm.DrawingGL
             }
 
             //-------------------------------------------------------------------------------------          
-            float orgBmpW = _latestBmpW;
-            float orgBmpH = _latestBmpH;
+
             float scale = 1;
 
-            //-------------------------------
-            float srcBottom = srcTop + srcH;
-            float srcRight = srcLeft + srcW;
+            var quad = new CpuBlit.VertexProcessing.Quad2f(targetLeft, targetTop, srcW * scale, -srcH * scale);
+            var srcRect = new CpuBlit.VertexProcessing.Quad2f(srcLeft, srcTop, srcW, srcH, _latestBmpW, _latestBmpH);
 
             unsafe
             {
-                if (!_latestBmpYFlipped)
-                {
 
-                    float* imgVertices = stackalloc float[5 * 4];
-                    {
-                        imgVertices[0] = targetLeft; imgVertices[1] = targetTop; imgVertices[2] = 0; //coord 0 (left,top)
-                        imgVertices[3] = srcLeft / orgBmpW; imgVertices[4] = srcBottom / orgBmpH; //texture coord 0  (left,bottom)
+                float* imgVertices = stackalloc float[5 * 4];
+                AssignVertice5_4(quad, srcRect, imgVertices, !_latestBmpYFlipped);
 
-                        //---------------------
-                        imgVertices[5] = targetLeft; imgVertices[6] = targetTop - (srcH * scale); imgVertices[7] = 0; //coord 1 (left,bottom)
-                        imgVertices[8] = srcLeft / orgBmpW; imgVertices[9] = srcTop / orgBmpH; //texture coord 1  (left,top)
-
-                        //---------------------
-                        imgVertices[10] = targetLeft + (srcW * scale); imgVertices[11] = targetTop; imgVertices[12] = 0; //coord 2 (right,top)
-                        imgVertices[13] = srcRight / orgBmpW; imgVertices[14] = srcBottom / orgBmpH; //texture coord 2  (right,bottom)
-
-                        //---------------------
-                        imgVertices[15] = targetLeft + (srcW * scale); imgVertices[16] = targetTop - (srcH * scale); imgVertices[17] = 0; //coord 3 (right, bottom)
-                        imgVertices[18] = srcRight / orgBmpW; imgVertices[19] = srcTop / orgBmpH; //texture coord 3 (right,top)
-                    }
-                    a_position.UnsafeLoadMixedV3f(imgVertices, 5);
-                    a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
-                }
-                else
-                {
-                    float* imgVertices = stackalloc float[5 * 4];
-                    {
-                        imgVertices[0] = targetLeft; imgVertices[1] = targetTop; imgVertices[2] = 0; //coord 0 (left,top)                                                                                                       
-                        imgVertices[3] = srcLeft / orgBmpW; imgVertices[4] = srcTop / orgBmpH; //texture coord 0 (left,top)
-
-                        //---------------------
-                        imgVertices[5] = targetLeft; imgVertices[6] = targetTop - (srcH * scale); imgVertices[7] = 0; //coord 1 (left,bottom)
-                        imgVertices[8] = srcLeft / orgBmpW; imgVertices[9] = srcBottom / orgBmpH; //texture coord 1 (left,bottom)
-
-                        //---------------------
-                        imgVertices[10] = targetLeft + (srcW * scale); imgVertices[11] = targetTop; imgVertices[12] = 0; //coord 2 (right,top)
-                        imgVertices[13] = srcRight / orgBmpW; imgVertices[14] = srcTop / orgBmpH; //texture coord 2 (right,top)
-
-                        //---------------------
-                        imgVertices[15] = targetLeft + (srcW * scale); imgVertices[16] = targetTop - (srcH * scale); imgVertices[17] = 0; //coord 3 (right, bottom)
-                        imgVertices[18] = srcRight / orgBmpW; imgVertices[19] = srcBottom / orgBmpH; //texture coord 3  (right,bottom)
-                    }
-                    a_position.UnsafeLoadMixedV3f(imgVertices, 5);
-                    a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
-                }
+                a_position.UnsafeLoadMixedV3f(imgVertices, 5);
+                a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
             }
 
             ////version 1
@@ -1026,63 +1065,21 @@ namespace PixelFarm.DrawingGL
                 _hasSomeOffset = false;//reset
             }
 
-            //-------------------------------------------------------------------------------------          
-            float orgBmpW = _latestBmpW;
-            float orgBmpH = _latestBmpH;
-            float scale = 1;
 
-            //-------------------------------
-            float srcBottom = srcTop + srcH;
-            float srcRight = srcLeft + srcW;
+            float scale = 1;
+            var quad = new CpuBlit.VertexProcessing.Quad2f(targetLeft, targetTop, srcW * scale, -srcH * scale);
+            var srcRect = new CpuBlit.VertexProcessing.Quad2f(srcLeft, srcTop, srcW, srcH, _latestBmpW, _latestBmpH);
 
             unsafe
             {
-                if (!_latestBmpYFlipped)
-                {
 
-                    float* imgVertices = stackalloc float[5 * 4];
-                    {
-                        imgVertices[0] = targetLeft; imgVertices[1] = targetTop; imgVertices[2] = 0; //coord 0 (left,top)
-                        imgVertices[3] = srcLeft / orgBmpW; imgVertices[4] = srcBottom / orgBmpH; //texture coord 0  (left,bottom)
+                float* imgVertices = stackalloc float[5 * 4];
+                AssignVertice5_4(quad, srcRect, imgVertices, !_latestBmpYFlipped);
 
-                        //---------------------
-                        imgVertices[5] = targetLeft; imgVertices[6] = targetTop - (srcH * scale); imgVertices[7] = 0; //coord 1 (left,bottom)
-                        imgVertices[8] = srcLeft / orgBmpW; imgVertices[9] = srcTop / orgBmpH; //texture coord 1  (left,top)
-
-                        //---------------------
-                        imgVertices[10] = targetLeft + (srcW * scale); imgVertices[11] = targetTop; imgVertices[12] = 0; //coord 2 (right,top)
-                        imgVertices[13] = srcRight / orgBmpW; imgVertices[14] = srcBottom / orgBmpH; //texture coord 2  (right,bottom)
-
-                        //---------------------
-                        imgVertices[15] = targetLeft + (srcW * scale); imgVertices[16] = targetTop - (srcH * scale); imgVertices[17] = 0; //coord 3 (right, bottom)
-                        imgVertices[18] = srcRight / orgBmpW; imgVertices[19] = srcTop / orgBmpH; //texture coord 3 (right,top)
-                    }
-                    a_position.UnsafeLoadMixedV3f(imgVertices, 5);
-                    a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
-                }
-                else
-                {
-                    float* imgVertices = stackalloc float[5 * 4];
-                    {
-                        imgVertices[0] = targetLeft; imgVertices[1] = targetTop; imgVertices[2] = 0; //coord 0 (left,top)                                                                                                       
-                        imgVertices[3] = srcLeft / orgBmpW; imgVertices[4] = srcTop / orgBmpH; //texture coord 0 (left,top)
-
-                        //---------------------
-                        imgVertices[5] = targetLeft; imgVertices[6] = targetTop - (srcH * scale); imgVertices[7] = 0; //coord 1 (left,bottom)
-                        imgVertices[8] = srcLeft / orgBmpW; imgVertices[9] = srcBottom / orgBmpH; //texture coord 1 (left,bottom)
-
-                        //---------------------
-                        imgVertices[10] = targetLeft + (srcW * scale); imgVertices[11] = targetTop; imgVertices[12] = 0; //coord 2 (right,top)
-                        imgVertices[13] = srcRight / orgBmpW; imgVertices[14] = srcTop / orgBmpH; //texture coord 2 (right,top)
-
-                        //---------------------
-                        imgVertices[15] = targetLeft + (srcW * scale); imgVertices[16] = targetTop - (srcH * scale); imgVertices[17] = 0; //coord 3 (right, bottom)
-                        imgVertices[18] = srcRight / orgBmpW; imgVertices[19] = srcBottom / orgBmpH; //texture coord 3  (right,bottom)
-                    }
-                    a_position.UnsafeLoadMixedV3f(imgVertices, 5);
-                    a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
-                }
+                a_position.UnsafeLoadMixedV3f(imgVertices, 5);
+                a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
             }
+
 
             SetCompo(ColorCompo.C_ALL);
             GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
@@ -1256,65 +1253,18 @@ namespace PixelFarm.DrawingGL
                 _hasSomeOffset = false;//reset
             }
 
-            //-------------------------------------------------------------------------------------          
-            float orgBmpW = _latestBmpW;
-            float orgBmpH = _latestBmpH;
             float scale = 1;
-
-            //-------------------------------
-            float srcBottom = srcTop + srcH;
-            float srcRight = srcLeft + srcW;
-
+            var quad = new CpuBlit.VertexProcessing.Quad2f(targetLeft, targetTop, srcW * scale, -srcH * scale);
+            var srcRect = new CpuBlit.VertexProcessing.Quad2f(srcLeft, srcTop, srcW, srcH, _latestBmpW, _latestBmpH);
             unsafe
             {
-                if (!_latestBmpYFlipped)
-                {
 
-                    float* imgVertices = stackalloc float[5 * 4];
-                    {
-                        imgVertices[0] = targetLeft; imgVertices[1] = targetTop; imgVertices[2] = 0; //coord 0 (left,top)
-                        imgVertices[3] = srcLeft / orgBmpW; imgVertices[4] = srcBottom / orgBmpH; //texture coord 0  (left,bottom)
+                float* imgVertices = stackalloc float[5 * 4];
+                AssignVertice5_4(quad, srcRect, imgVertices, !_latestBmpYFlipped);
 
-                        //---------------------
-                        imgVertices[5] = targetLeft; imgVertices[6] = targetTop - (srcH * scale); imgVertices[7] = 0; //coord 1 (left,bottom)
-                        imgVertices[8] = srcLeft / orgBmpW; imgVertices[9] = srcTop / orgBmpH; //texture coord 1  (left,top)
-
-                        //---------------------
-                        imgVertices[10] = targetLeft + (srcW * scale); imgVertices[11] = targetTop; imgVertices[12] = 0; //coord 2 (right,top)
-                        imgVertices[13] = srcRight / orgBmpW; imgVertices[14] = srcBottom / orgBmpH; //texture coord 2  (right,bottom)
-
-                        //---------------------
-                        imgVertices[15] = targetLeft + (srcW * scale); imgVertices[16] = targetTop - (srcH * scale); imgVertices[17] = 0; //coord 3 (right, bottom)
-                        imgVertices[18] = srcRight / orgBmpW; imgVertices[19] = srcTop / orgBmpH; //texture coord 3 (right,top)
-                    }
-                    a_position.UnsafeLoadMixedV3f(imgVertices, 5);
-                    a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
-                }
-                else
-                {
-                    float* imgVertices = stackalloc float[5 * 4];
-                    {
-                        imgVertices[0] = targetLeft; imgVertices[1] = targetTop; imgVertices[2] = 0; //coord 0 (left,top)                                                                                                       
-                        imgVertices[3] = srcLeft / orgBmpW; imgVertices[4] = srcTop / orgBmpH; //texture coord 0 (left,top)
-
-                        //---------------------
-                        imgVertices[5] = targetLeft; imgVertices[6] = targetTop - (srcH * scale); imgVertices[7] = 0; //coord 1 (left,bottom)
-                        imgVertices[8] = srcLeft / orgBmpW; imgVertices[9] = srcBottom / orgBmpH; //texture coord 1 (left,bottom)
-
-                        //---------------------
-                        imgVertices[10] = targetLeft + (srcW * scale); imgVertices[11] = targetTop; imgVertices[12] = 0; //coord 2 (right,top)
-                        imgVertices[13] = srcRight / orgBmpW; imgVertices[14] = srcTop / orgBmpH; //texture coord 2 (right,top)
-
-                        //---------------------
-                        imgVertices[15] = targetLeft + (srcW * scale); imgVertices[16] = targetTop - (srcH * scale); imgVertices[17] = 0; //coord 3 (right, bottom)
-                        imgVertices[18] = srcRight / orgBmpW; imgVertices[19] = srcBottom / orgBmpH; //texture coord 3  (right,bottom)
-                    }
-                    a_position.UnsafeLoadMixedV3f(imgVertices, 5);
-                    a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
-                }
+                a_position.UnsafeLoadMixedV3f(imgVertices, 5);
+                a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
             }
-
-
 
             if (_fillChanged)
             {
@@ -1513,6 +1463,153 @@ namespace PixelFarm.DrawingGL
             // 
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);//restore 
             vbo.UnBind();
+        }
+    }
+
+    sealed class MaskShader : SimpleRectTextureShader
+    {
+        //in this shader we have 2 textures
+        //1. for mask (default, similar to other SimpleRectTextureShaders)
+        //2. for color source (instead of vertex color)
+
+        //in this version, mask and color source size must be the same.
+        //this limitation will be fixed later.
+
+        ShaderUniformVar2 _offset;
+        /// <summary>
+        /// color texture for color src
+        /// </summary>
+        ShaderUniformVar1 _u_color_src;
+        ShaderVtxAttrib2f _texCoord_color;
+
+        public MaskShader(ShaderSharedResource shareRes)
+            : base(shareRes)
+        {
+            string vs = @"                 
+                attribute vec4 a_position;
+                attribute vec2 a_texCoord;
+                attribute vec2 a_texCoord_color;
+
+                uniform vec2 u_ortho_offset;
+                uniform vec2 u_offset;                
+                uniform mat4 u_mvpMatrix; 
+
+                varying vec2 v_texCoord; 
+                varying vec2 v_color_texCoord; 
+
+                void main()
+                {                      
+                    gl_Position = u_mvpMatrix* (a_position+ vec4(u_offset+u_ortho_offset,0,0));
+                    v_texCoord =  a_texCoord;
+                    v_color_texCoord= a_texCoord_color;
+                }	 
+               ";
+
+
+            string fs = @"
+                      precision mediump float; 
+                      uniform sampler2D s_texture;
+                      uniform sampler2D s_color_src;
+                       
+                      varying vec2 v_texCoord; 
+                      varying vec2 v_color_texCoord;
+                      void main()
+                      {   
+                            vec4 m = texture2D(s_texture,v_texCoord);
+                            vec4 c = texture2D(s_color_src,v_color_texCoord);
+                            
+                            gl_FragColor= vec4(c[2], c[1], c[0] , c[3] * m[2]); 
+                      }
+                ";
+
+            //debug
+            //gl_FragColor= vec4(m[0],m[1],m[2],m[3]);
+            //gl_FragColor= vec4(c[2],c[1],c[0],c[3]);
+
+
+            BuildProgram(vs, fs);
+        }
+
+        protected override void OnProgramBuilt()
+        {
+            _offset = _shaderProgram.GetUniform2("u_offset");
+            _u_color_src = _shaderProgram.GetUniform1("s_color_src");
+            _texCoord_color = _shaderProgram.GetAttrV2f("a_texCoord_color");
+        }
+        protected override void SetVarsBeforeRender()
+        {
+        }
+
+
+        int _colorBmpW;
+        int _colorBmpH;
+        /// <summary>
+        /// load glbmp before draw
+        /// </summary>
+        /// <param name="bmp"></param>
+        public void LoadColorSourceBitmap(GLBitmap bmp)
+        {
+            //load base bitmap first
+            //load before use with RenderSubImage
+            SetCurrent();
+            CheckViewMatrix();
+            //-------------------------------------------------------------------------------------
+            // Bind the texture...
+            TextureContainter container = _shareRes.LoadGLBitmap(bmp);
+            //set color source bitmap
+            _u_color_src.SetValue(container.TextureUnitNo);
+
+            _colorBmpW = bmp.Width;
+            _colorBmpH = bmp.Height;
+        }
+        public void DrawSubImage2(in PixelFarm.Drawing.RectangleF maskSrc,
+            float colorSrcX, float colorSrcY,
+            float targetLeft, float targetTop)
+        {
+            //-------------------------------------------------------------------------------------
+            SetVarsBeforeRender();
+            //-------------------------------------------------------------------------------------          
+
+            var quad = new CpuBlit.VertexProcessing.Quad2f(targetLeft, targetTop, maskSrc.Width, -maskSrc.Height);
+            var srcRect = new CpuBlit.VertexProcessing.Quad2f(maskSrc.Left, maskSrc.Top, maskSrc.Width, maskSrc.Height, _latestBmpW, _latestBmpH);
+            var colorSrc = new CpuBlit.VertexProcessing.Quad2f(colorSrcX, colorSrcY, maskSrc.Width, maskSrc.Height, _colorBmpW, _colorBmpH);
+
+            unsafe
+            {
+                float* imgVertices = stackalloc float[7 * 4];
+                AssignVertice7_4(quad, srcRect, colorSrc, imgVertices, !_latestBmpYFlipped);
+
+                a_position.UnsafeLoadMixedV3f(imgVertices, 7);
+                a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 7);
+                _texCoord_color.UnsafeLoadMixedV2f(imgVertices + 5, 7);
+            }
+
+
+            GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
+        }
+        public void DrawSubImage2(in CpuBlit.VertexProcessing.Quad2f quad,
+          in PixelFarm.Drawing.RectangleF maskSrc,
+          float colorSrcX, float colorSrcY,
+          float targetLeft, float targetTop)
+        {
+
+            //-------------------------------------------------------------------------------------
+            SetVarsBeforeRender();
+            //-------------------------------------------------------------------------------------           
+            var srcRect = new CpuBlit.VertexProcessing.Quad2f(maskSrc.Left, maskSrc.Top, maskSrc.Width, maskSrc.Height, _latestBmpW, _latestBmpH);
+            var colorSrc = new CpuBlit.VertexProcessing.Quad2f(colorSrcX, colorSrcY, maskSrc.Width, maskSrc.Height, _colorBmpW, _colorBmpH);
+
+            unsafe
+            {
+                float* imgVertices = stackalloc float[7 * 4];
+                AssignVertice7_4(quad, srcRect, colorSrc, imgVertices, !_latestBmpYFlipped);
+
+                a_position.UnsafeLoadMixedV3f(imgVertices, 7);
+                a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 7);
+                _texCoord_color.UnsafeLoadMixedV2f(imgVertices + 5, 7);
+            }
+
+            GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
         }
     }
     //--------------------------------------------------------

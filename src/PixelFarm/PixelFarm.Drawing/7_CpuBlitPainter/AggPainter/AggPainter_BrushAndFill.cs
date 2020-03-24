@@ -316,7 +316,7 @@ namespace PixelFarm.CpuBlit
         {
             double ox = (left + width / 2);
             double oy = (top + height / 2);
-            if (_orientation == RenderSurfaceOrientation.LeftTop)
+            if (_orientation == RenderSurfaceOriginKind.LeftTop)
             {
                 //modified
                 oy = this.Height - oy;
@@ -396,7 +396,7 @@ namespace PixelFarm.CpuBlit
             using (VectorToolBox.Borrow(out SimpleRect rectTool))
             using (VxsTemp.Borrow(out var v1))
             {
-                if (_orientation == RenderSurfaceOrientation.LeftBottom)
+                if (_orientation == RenderSurfaceOriginKind.LeftBottom)
                 {
                     double right = left + width;
                     double bottom = top - height;
