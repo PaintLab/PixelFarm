@@ -657,7 +657,7 @@
     <Compile Include="7_CpuBlitPainter\PathReconstruction\OutlineTracer.cs" />
     <Compile Include="7_CpuBlitPainter\PathReconstruction\ReconstructedRegionData.cs" />
     <Compile Include="7_CpuBlitPainter\PathReconstruction\VxsRegion.cs" />
-    <Compile Include="7_CpuBlitPainter\AggPainter\AggPainterPool.cs" />
+    <Compile Include="7_CpuBlitPainter\AggPainter\Tools.cs" />
     <Compile Include="7_CpuBlitPainter\RenderSurface\AggRenderSurface.cs" />
     <Compile Include="7_CpuBlitPainter\RenderSurface\AggRenderSurface_RenderImages.cs" />
     <Compile Include="4_IO\ImageReaders.cs" />
