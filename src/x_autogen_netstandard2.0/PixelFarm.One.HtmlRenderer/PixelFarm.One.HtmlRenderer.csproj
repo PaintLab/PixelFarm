@@ -668,7 +668,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\2_General\TextBaseline.cs" Link="PixelFarm\PixelFarm.Painter\2_General\TextBaseline.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\3_Cpu_Blit\ColorRGBAf.cs" Link="PixelFarm\PixelFarm.Painter\3_Cpu_Blit\ColorRGBAf.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\3_Cpu_Blit\MemBitmap.cs" Link="PixelFarm\PixelFarm.Painter\3_Cpu_Blit\MemBitmap.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\3_Cpu_Blit\PainterExtensions.cs" Link="PixelFarm\PixelFarm.Painter\3_Cpu_Blit\PainterExtensions.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\BoundingRect.cs" Link="PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\BoundingRect.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\CurveFlattener.cs" Link="PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\CurveFlattener.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\LineWalker.cs" Link="PixelFarm\PixelFarm.Painter\4_CpuBlit_VertexProcessing\LineWalker.cs" />
