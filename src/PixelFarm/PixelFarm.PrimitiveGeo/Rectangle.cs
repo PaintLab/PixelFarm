@@ -356,7 +356,7 @@ namespace PixelFarm.Drawing
         ///	Read only.
         /// </remarks>
 
-        public int Left => X;
+        public int Left => _x;
 
         /// <summary>
         ///	Location Property
