@@ -37,8 +37,9 @@ namespace Mini
 
         void InvalidateSampleViewPort()
         {
-            //_cpuBlitControl?.Invalidate();
+            
             _exampleBase.InvalidateGraphics();
+            _cpuBlitControl?.Invalidate();
         }
         public void SetUISurfaceViewportControl(LayoutFarm.UI.GraphicsViewRoot cpuBlitControl)
         {
@@ -291,10 +292,7 @@ namespace Mini
                                     radio.Checked = ofield.ValueAsInt32 == currentValue;
                                     radio.Click += delegate
                                     {
-                                        //if (radio.Checked)
-                                        //{
-                                           
-                                        //}
+                                         
                                         ofield.InvokeSet(configOwner);
                                         InvalidateSampleViewPort();
                                     };

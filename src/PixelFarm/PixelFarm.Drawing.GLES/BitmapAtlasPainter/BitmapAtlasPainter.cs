@@ -47,7 +47,7 @@ namespace PixelFarm.DrawingGL
 
                                         atlasImgBinder.AtlasItem = atlasItem;
                                         glPainter.PainterContext.DrawSubImage(_glBmp,
-                                            ref srcRect,
+                                            srcRect,
                                             left,
                                             top);
                                     }
@@ -96,7 +96,7 @@ namespace PixelFarm.DrawingGL
                                         atlasImgBinder.RaiseImageChanged();
 
                                         glPainter.PainterContext.DrawSubImage(_glBmp,
-                                            ref srcRect,
+                                            srcRect,
                                             left,
                                             top);
                                     }

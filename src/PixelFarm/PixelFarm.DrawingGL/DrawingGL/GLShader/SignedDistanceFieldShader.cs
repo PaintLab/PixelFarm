@@ -235,7 +235,6 @@ namespace PixelFarm.DrawingGL
         protected override void OnProgramBuilt()
         {
             _u_color_src = _shaderProgram.GetUniform1("u_color_src");
-
             _texCoord_color = _shaderProgram.GetAttrV2f("a_texCoord_color");
         }
 
@@ -264,90 +263,60 @@ namespace PixelFarm.DrawingGL
 
         public void DrawSubImage2(in PixelFarm.Drawing.RectangleF maskSrc,
            float colorSrcX, float colorSrcY,
-           float targetLeft, float targetTop,
-           float scale)
+           float targetLeft, float targetTop)
         {
             //-------------------------------------------------------------------------------------
             SetVarsBeforeRender();
             //-------------------------------------------------------------------------------------          
-            float orgBmpW = _latestBmpW;
-            float orgBmpH = _latestBmpH;
 
-
-            //mask src----
-            float srcLeft = maskSrc.Left;
-            float srcTop = maskSrc.Top;
-            float srcW = maskSrc.Width;
-            float srcH = maskSrc.Height;
-            float srcBottom = srcTop + srcH;
-            float srcRight = srcLeft + srcW;
-
-
-            //----
-            //src color
-            float color_bmp_W = _colorBmpW;
-            float color_bmp_H = _colorBmpH;
-
-            float color_left = colorSrcX;
-            float color_top = colorSrcY;
-            float color_right = color_left + srcW;
-            float color_bottom = color_top + srcH;
+            var quad = new CpuBlit.VertexProcessing.Quad2f(targetLeft, targetTop, maskSrc.Width, -maskSrc.Height);
+            var srcRect = new CpuBlit.VertexProcessing.Quad2f(maskSrc.Left, maskSrc.Top, maskSrc.Width, maskSrc.Height, _latestBmpW, _latestBmpH);
+            var colorSrc = new CpuBlit.VertexProcessing.Quad2f(colorSrcX, colorSrcY, maskSrc.Width, maskSrc.Height, _colorBmpW, _colorBmpH);
 
             unsafe
             {
-                if (!_latestBmpYFlipped)
-                {
-                    float* imgVertices = stackalloc float[7 * 4];
-                    {
-                        imgVertices[0] = targetLeft;                    /**/imgVertices[1] = targetTop;                  /**/imgVertices[2] = 0; //coord 0 (left,top)
-                        imgVertices[3] = srcLeft / orgBmpW;             /**/imgVertices[4] = srcBottom / orgBmpH;        /**///texture coord 0  (left,bottom)
-                        imgVertices[5] = color_left / color_bmp_W;      /**/imgVertices[6] = color_bottom / color_bmp_H; /**///texture coord 0  (left,bottom)
+                float* imgVertices = stackalloc float[7 * 4];
+                AssignVertice7_4(quad, srcRect, colorSrc, imgVertices, !_latestBmpYFlipped);
 
-                        //---------------------
-                        imgVertices[7] = targetLeft;                    /**/imgVertices[8] = targetTop - (srcH * scale); /**/imgVertices[9] = 0; //coord 1 (left,bottom)
-                        imgVertices[10] = srcLeft / orgBmpW;            /**/ imgVertices[11] = srcTop / orgBmpH;         /**///texture coord 1  (left,top)
-                        imgVertices[12] = color_left / color_bmp_W;     /**/ imgVertices[13] = color_top / color_bmp_H;  /**///texture coord 1  (left,top)
-
-                        //---------------------
-                        imgVertices[14] = targetLeft + (srcW * scale);  /**/ imgVertices[15] = targetTop;                /**/imgVertices[16] = 0; //coord 2 (right,top)
-                        imgVertices[17] = srcRight / orgBmpW;           /**/ imgVertices[18] = srcBottom / orgBmpH;      /**///texture coord 2  (right,bottom)
-                        imgVertices[19] = color_right / color_bmp_W;    /**/ imgVertices[20] = color_bottom / color_bmp_H;  /**///texture coord 2  (right,bottom)
-
-                        //---------------------
-                        imgVertices[21] = targetLeft + (srcW * scale);  /**/imgVertices[22] = targetTop - (srcH * scale); /**/imgVertices[23] = 0; //coord 3 (right, bottom)
-                        imgVertices[24] = srcRight / orgBmpW;           /**/imgVertices[25] = srcTop / orgBmpH;          /**///texture coord 3 (right,top)
-                        imgVertices[26] = color_right / color_bmp_W;    /**/ imgVertices[27] = color_top / color_bmp_H;  /**///texture coord 3 (right,top)
-                    }
-                    a_position.UnsafeLoadMixedV3f(imgVertices, 7);
-                    a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 7);
-                    _texCoord_color.UnsafeLoadMixedV2f(imgVertices + 5, 7);
-
-                }
-                else
-                {
-                    float* imgVertices = stackalloc float[7 * 4];
-                    {
-                        imgVertices[0] = targetLeft;                    /**/imgVertices[1] = targetTop;                   /**/imgVertices[2] = 0; //coord 0 (left,top)                                                                                                       
-                        imgVertices[3] = srcLeft / orgBmpW;             /**/imgVertices[4] = srcTop / orgBmpH;            /**/ //texture coord 0 (left,top)
-                        imgVertices[5] = color_left / color_bmp_W;      /**/imgVertices[6] = color_top / color_bmp_H;     /**/ //texture coord 0 (left,top)
-                        //---------------------
-                        imgVertices[7] = targetLeft;                    /**/imgVertices[8] = targetTop - (srcH * scale);  /**/imgVertices[9] = 0; //coord 1 (left,bottom)
-                        imgVertices[10] = srcLeft / orgBmpW;            /**/imgVertices[11] = srcBottom / orgBmpH;        /**/ //texture coord 1 (left,bottom)
-                        imgVertices[12] = color_left / color_bmp_W;     /**/imgVertices[13] = color_bottom / color_bmp_H; /**/   //texture coord 1 (left,bottom)
-                        //---------------------
-                        imgVertices[14] = targetLeft + (srcW * scale);  /**/imgVertices[15] = targetTop;                 /**/imgVertices[16] = 0; //coord 2 (right,top)
-                        imgVertices[17] = srcRight / orgBmpW;           /**/imgVertices[18] = srcTop / orgBmpH;            /**/    //texture coord 2 (right,top)
-                        imgVertices[19] = color_right / color_bmp_W;          /**/imgVertices[20] = color_top / color_bmp_H;  /**///texture coord 2 (right,top)
-                        //---------------------
-                        imgVertices[21] = targetLeft + (srcW * scale);  /**/imgVertices[22] = targetTop - (srcH * scale); /**/imgVertices[23] = 0; //coord 3 (right, bottom)
-                        imgVertices[24] = srcRight / orgBmpW;           /**/imgVertices[25] = srcBottom / orgBmpH;            /**///texture coord 3  (right,bottom)
-                        imgVertices[26] = color_right / color_bmp_W;    /**/imgVertices[27] = color_bottom / color_bmp_H;   /**///texture coord 3  (right,bottom)
-                    }
-                    a_position.UnsafeLoadMixedV3f(imgVertices, 7);
-                    a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 7);
-                    _texCoord_color.UnsafeLoadMixedV2f(imgVertices + 5, 7);
-                }
+                a_position.UnsafeLoadMixedV3f(imgVertices, 7);
+                a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 7);
+                _texCoord_color.UnsafeLoadMixedV2f(imgVertices + 5, 7);
             }
+
+
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToBorder);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToBorder);
+
+            GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
+
+
+            //TODO: review, this 
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);//restore, assume org is default
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);//restore, assume org is default
+        }
+
+        public void DrawSubImage2(in CpuBlit.VertexProcessing.Quad2f quad,
+          in PixelFarm.Drawing.RectangleF maskSrc,
+          float colorSrcX, float colorSrcY,
+          float targetLeft, float targetTop)
+        {
+
+            //-------------------------------------------------------------------------------------
+            SetVarsBeforeRender();
+            //-------------------------------------------------------------------------------------           
+            var srcRect = new CpuBlit.VertexProcessing.Quad2f(maskSrc.Left, maskSrc.Top, maskSrc.Width, maskSrc.Height, _latestBmpW, _latestBmpH);
+            var colorSrc = new CpuBlit.VertexProcessing.Quad2f(colorSrcX, colorSrcY, maskSrc.Width, maskSrc.Height, _colorBmpW, _colorBmpH);
+
+            unsafe
+            {
+                float* imgVertices = stackalloc float[7 * 4];
+                AssignVertice7_4(quad, srcRect, colorSrc, imgVertices, !_latestBmpYFlipped);
+
+                a_position.UnsafeLoadMixedV3f(imgVertices, 7);
+                a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 7);
+                _texCoord_color.UnsafeLoadMixedV2f(imgVertices + 5, 7);
+            }
+
 
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToBorder);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToBorder);

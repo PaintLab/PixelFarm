@@ -107,6 +107,27 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         public float left_bottom_x;
         public float left_bottom_y;
 
+        public Quad2f(float width, float height)
+        {
+            left_top_x = 0;              /**/left_top_y = 0;
+            right_top_x = 0 + width;     /**/right_top_y = 0;
+            right_bottom_x = right_top_x;   /**/right_bottom_y = 0 + height;
+            left_bottom_x = 0;           /**/left_bottom_y = right_bottom_y;
+        }
+        public Quad2f(float left, float top, float width, float height)
+        {
+            left_top_x = left;              /**/left_top_y = top;
+            right_top_x = left + width;     /**/right_top_y = top;
+            right_bottom_x = right_top_x;   /**/right_bottom_y = top + height;
+            left_bottom_x = left;           /**/left_bottom_y = right_bottom_y;
+        }
+        public Quad2f(float left, float top, float width, float height, float hostW, float hostH)
+        {
+            left_top_x = left / hostW;                /**/left_top_y = top / hostH;
+            right_top_x = (left + width) / hostW;     /**/right_top_y = left_top_y;
+            right_bottom_x = right_top_x;         /**/right_bottom_y = (top + height) / hostH;
+            left_bottom_x = left_top_x;           /**/left_bottom_y = right_bottom_y;
+        }
         /// <summary>
         /// set corners from simple rect
         /// </summary>
@@ -119,6 +140,23 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             right_bottom_x = right_top_x;   /**/right_bottom_y = top + height;
             left_bottom_x = left;           /**/left_bottom_y = right_bottom_y;
         }
+        /// <summary>
+        /// set corner from rect and normalize value with w and h
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="top"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="hostW"></param>
+        /// <param name="hostH"></param>
+        public void SetCornersFromRect(float left, float top, float width, float height, float hostW, float hostH)
+        {
+            left_top_x = left / hostW;                /**/left_top_y = top / hostH;
+            right_top_x = (left + width) / hostW;     /**/right_top_y = left_top_y;
+            right_bottom_x = right_top_x;         /**/right_bottom_y = (top + height) / hostH;
+            left_bottom_x = left_top_x;           /**/left_bottom_y = right_bottom_y;
+        }
+
         public void OffsetX(float dx)
         {
             left_top_x += dx;

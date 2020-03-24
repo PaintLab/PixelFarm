@@ -589,12 +589,12 @@ namespace PixelFarm.DrawingGL
                     break;
             }
         }
-        public void DrawSubImage(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop)
+        public void DrawSubImage(GLBitmap bmp, in PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop)
         {
             DrawSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
         }
 
-        public void DrawSubImage(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
+        public void DrawSubImage(GLBitmap bmp, in PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
         {
             if (OriginKind == RenderSurfaceOrientation.LeftTop) //***
             {
@@ -642,7 +642,7 @@ namespace PixelFarm.DrawingGL
             _msdfShader.SetColor(this.FontFillColor);
             _msdfShader.DrawWithVBO(vboBuilder);
         }
-        public void DrawSubImageWithMsdf(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
+        public void DrawSubImageWithMsdf(GLBitmap bmp, in PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
         {
             //we expect that the bmp supports alpha value
 
@@ -700,7 +700,7 @@ namespace PixelFarm.DrawingGL
             _maskShader.LoadColorSourceBitmap(colorSrc);
             _maskShader.DrawSubImage2(maskSrcRect,
                 -colorSrcX, -colorSrcY,
-                targetLeft, targetTop, 1);
+                targetLeft, targetTop);
         }
 
         //-----------
@@ -735,7 +735,29 @@ namespace PixelFarm.DrawingGL
             _msdfMaskShader.LoadColorSourceBitmap(colorSrc);
             _msdfMaskShader.DrawSubImage2(maskSrcRect,
                 -colorSrcX, -colorSrcY,
-                targetLeft, targetTop, 1);
+                targetLeft, targetTop);
+        }
+        public void DrawImageWithMsdfMask(GLBitmap mask, GLBitmap colorSrc,
+            in PixelFarm.CpuBlit.VertexProcessing.Quad2f quad,
+            in PixelFarm.Drawing.RectangleF maskSrcRect,
+            float colorSrcX, float colorSrcY,
+            float targetLeft, float targetTop)
+        {
+            //in this version bmp and mask size must be the same.
+            //this limitation will be removed later
+            if (OriginKind == RenderSurfaceOrientation.LeftTop)
+            {
+                //***
+                targetTop += colorSrc.Height;
+            }
+
+            _msdfMaskShader.LoadGLBitmap(mask);
+            _msdfMaskShader.LoadColorSourceBitmap(colorSrc);
+            _msdfMaskShader.DrawSubImage2(
+                quad,
+                maskSrcRect,
+                -colorSrcX, -colorSrcY,
+                targetLeft, targetTop);
         }
         public void DrawImage(GLBitmap bmp,
             float left, float top, float w, float h)
@@ -772,8 +794,7 @@ namespace PixelFarm.DrawingGL
             //TODO: review here, reuse this quad
             //or use stack-base struct
 
-            Quad2f quad = new Quad2f();
-            quad.SetCornersFromRect(bmp.Width, OriginKind == RenderSurfaceOrientation.LeftTop ? bmp.Height : -bmp.Height);
+            Quad2f quad = new Quad2f(bmp.Width, OriginKind == RenderSurfaceOrientation.LeftTop ? bmp.Height : -bmp.Height);
             quad.Transform(affine);
             DrawImageToQuad(bmp, quad);
         }
@@ -783,10 +804,8 @@ namespace PixelFarm.DrawingGL
             //TODO: review here, reuse this quad
             //or use stack-base struct
 
-            Quad2f quad = new Quad2f();
-            quad.SetCornersFromRect(bmp.Width, OriginKind == RenderSurfaceOrientation.LeftTop ? bmp.Height : -bmp.Height);
+            Quad2f quad = new Quad2f(bmp.Width, OriginKind == RenderSurfaceOrientation.LeftTop ? bmp.Height : -bmp.Height);
             quad.Transform(affine);
-
             DrawImageToQuad(bmp, quad);
         }
 
@@ -819,7 +838,7 @@ namespace PixelFarm.DrawingGL
             DrawGlyphImageWithSubPixelRenderingTechnique(bmp, ref srcRect, left, top);
         }
 
-        public void DrawGlyphImageWithStecil(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
+        public void DrawGlyphImageWithStecil(GLBitmap bmp, in PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
         {
             if (OriginKind == RenderSurfaceOrientation.LeftTop) //***
             {
@@ -855,7 +874,7 @@ namespace PixelFarm.DrawingGL
         /// <param name="scale"></param>
         public void DrawGlyphImageWithSubPixelRenderingTechnique2_GlyphByGlyph(
           GLBitmap glbmp,
-          ref Drawing.Rectangle srcRect,
+          in Drawing.Rectangle srcRect,
           float targetLeft,
           float targetTop,
           float scale)
@@ -2039,7 +2058,7 @@ namespace PixelFarm.DrawingGL
         }
 
         public void WriteRect(
-            ref PixelFarm.Drawing.Rectangle srcRect,
+            in PixelFarm.Drawing.Rectangle srcRect,
             float targetLeft,
             float targetTop,
             float scale)
@@ -2099,7 +2118,7 @@ namespace PixelFarm.DrawingGL
 
 
         public void WriteRect(
-            ref PixelFarm.Drawing.Rectangle srcRect,
+            in PixelFarm.Drawing.Rectangle srcRect,
             float targetLeft,
             float targetTop,
             float scale,
