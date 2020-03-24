@@ -1869,7 +1869,7 @@ namespace PixelFarm.DrawingGL
             float targetTop,
             float scale)
         {
-
+           
 #if DEBUG
             if (_orgBmpW == 0 || _orgBmpH == 0)
             {
@@ -1910,10 +1910,12 @@ namespace PixelFarm.DrawingGL
             }
 
             //---------
+            RectangleF normalizedSrc = srcRect.CreateNormalizedRect(_orgBmpW, _orgBmpH);
+            RectangleF target = new RectangleF(targetLeft, targetTop, srcRect.Width, srcRect.Height);
             WriteToVboStream(_buffer, indexCount > 0,
-                srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height,
-                targetLeft, targetTop,
-                _orgBmpW, _orgBmpH, _bmpYFlipped, scale);
+                normalizedSrc,
+                target,
+                _bmpYFlipped);
 
             _indexList.Append(indexCount);
             _indexList.Append((ushort)(indexCount + 1));
@@ -1923,11 +1925,10 @@ namespace PixelFarm.DrawingGL
         }
 
 
-        public void WriteRect(
+        public void WriteRectWithRotation(
             in PixelFarm.Drawing.Rectangle srcRect,
             float targetLeft,
             float targetTop,
-            float scale,
             float srcRotation)
         {
 
@@ -1971,10 +1972,24 @@ namespace PixelFarm.DrawingGL
             }
 
             //---------
-            WriteToVboStreamWithRotation(_buffer, indexCount > 0,
-                srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height,
-                targetLeft, targetTop,
-                _orgBmpW, _orgBmpH, _bmpYFlipped, scale, srcRotation);
+
+            Quad2f quad = new Quad2f();
+            quad.SetCornersFromRect(srcRect);
+
+            AffineMat mat = AffineMat.Iden;
+            mat.Translate(-srcRect.Left, -(srcRect.Top + srcRect.Bottom) / 2); //*** in this case we move to left-most x amd mid-y of the srcRect
+            mat.Rotate(srcRotation);
+            mat.Translate(targetLeft, targetTop);
+
+            quad.Transform(mat);
+
+            RectangleF normalizedSrcRect = srcRect.CreateNormalizedRect(_orgBmpW, _orgBmpH);
+
+            WriteToVboStream(_buffer,
+                 indexCount > 0,
+                 normalizedSrcRect,
+                 quad,
+                 _bmpYFlipped);
 
             _indexList.Append(indexCount);
             _indexList.Append((ushort)(indexCount + 1));
@@ -1982,8 +1997,6 @@ namespace PixelFarm.DrawingGL
             _indexList.Append((ushort)(indexCount + 3));
             //--- 
         }
-
-
 
         public void AppendDegenerativeTriangle()
         {
@@ -2007,183 +2020,131 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-
-
         static void WriteToVboStream(
-            PixelFarm.CpuBlit.ArrayList<float> vboList,
-            bool duplicateFirst,
-            float srcLeft, float srcTop,
-            float srcW, float srcH,
-            float targetLeft, float targetTop,
-            float orgBmpW, float orgBmpH,
-            bool bmpYFlipped,
-            float scale
+            PixelFarm.CpuBlit.ArrayList<float> vboList, bool duplicateFirst,
+            in RectangleF normalizedSrc,
+            in RectangleF targetRect,
+            bool bmpYFlipped
         )
         {
 
-            //TODO: use Quad2f
-
-            float srcBottom = srcTop + srcH;
-            float srcRight = srcLeft + srcW;
-
-
-            //TODO: review here again!
-
             if (bmpYFlipped)
             {
-                vboList.Append(targetLeft); vboList.Append(targetTop); vboList.Append(0); //coord 0 (left,top)                                                                                                       
-                vboList.Append(srcLeft / orgBmpW); vboList.Append(srcTop / orgBmpH); //texture coord 0 (left,top)
+                vboList.Append(targetRect.Left); vboList.Append(targetRect.Top); vboList.Append(0); //coord 0 (left,top)                                                                                                       
+                vboList.Append(normalizedSrc.Left); vboList.Append(normalizedSrc.Top); //texture coord 0 (left,top)
 
                 if (duplicateFirst)
                 {
                     //for creating degenerative triangle 
-                    vboList.Append(targetLeft); vboList.Append(targetTop); vboList.Append(0); //coord 0 (left,top)                                                                                                       
-                    vboList.Append(srcLeft / orgBmpW); vboList.Append(srcTop / orgBmpH); //texture coord 0 (left,top)
+                    vboList.Append(targetRect.Left); vboList.Append(targetRect.Top); vboList.Append(0); //coord 0 (left,top)                                                                                                       
+                    vboList.Append(normalizedSrc.Left); vboList.Append(normalizedSrc.Top); //texture coord 0 (left,top)
                 }
                 //---------------------
-                vboList.Append(targetLeft); vboList.Append(targetTop - (srcH * scale)); vboList.Append(0); //coord 1 (left,bottom)
-                vboList.Append(srcLeft / orgBmpW); vboList.Append(srcBottom / orgBmpH); //texture coord 1 (left,bottom)
+                vboList.Append(targetRect.Left); vboList.Append(targetRect.Top - targetRect.Height); vboList.Append(0); //coord 1 (left,bottom)
+                vboList.Append(normalizedSrc.Left); vboList.Append(normalizedSrc.Bottom); //texture coord 1 (left,bottom)
 
                 //---------------------
-                vboList.Append(targetLeft + (srcW * scale)); vboList.Append(targetTop); vboList.Append(0); //coord 2 (right,top)
-                vboList.Append(srcRight / orgBmpW); vboList.Append(srcTop / orgBmpH); //texture coord 2 (right,top)
+                vboList.Append(targetRect.Right); vboList.Append(targetRect.Top); vboList.Append(0); //coord 2 (right,top)
+                vboList.Append(normalizedSrc.Right); vboList.Append(normalizedSrc.Top); //texture coord 2 (right,top)
 
                 //---------------------
-                vboList.Append(targetLeft + (srcW * scale)); vboList.Append(targetTop - (srcH * scale)); vboList.Append(0);//coord 3 (right, bottom)
-                vboList.Append(srcRight / orgBmpW); vboList.Append(srcBottom / orgBmpH); //texture coord 3  (right,bottom) 
+                vboList.Append(targetRect.Right); vboList.Append(targetRect.Top - targetRect.Height); vboList.Append(0);//coord 3 (right, bottom)
+                vboList.Append(normalizedSrc.Right); vboList.Append(normalizedSrc.Bottom); //texture coord 3  (right,bottom) 
 
             }
             else
             {
 
 
-                vboList.Append(targetLeft); vboList.Append(targetTop); vboList.Append(0); //coord 0 (left,top)
-                vboList.Append(srcLeft / orgBmpW); vboList.Append(srcBottom / orgBmpH); //texture coord 0  (left,bottom) 
+                vboList.Append(targetRect.Left); vboList.Append(targetRect.Top); vboList.Append(0); //coord 0 (left,top)
+                vboList.Append(normalizedSrc.Left); vboList.Append(normalizedSrc.Bottom); //texture coord 0  (left,bottom) 
                 if (duplicateFirst)
                 {
                     //for creating degenerative triangle
                     //https://developer.apple.com/library/content/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/TechniquesforWorkingwithVertexData/TechniquesforWorkingwithVertexData.html
 
-                    vboList.Append(targetLeft); vboList.Append(targetTop); vboList.Append(0); //coord 0 (left,top)
-                    vboList.Append(srcLeft / orgBmpW); vboList.Append(srcBottom / orgBmpH); //texture coord 0  (left,bottom)
+                    vboList.Append(targetRect.Left); vboList.Append(targetRect.Top); vboList.Append(0); //coord 0 (left,top)
+                    vboList.Append(normalizedSrc.Left); vboList.Append(normalizedSrc.Bottom); //texture coord 0  (left,bottom)
                 }
 
                 //---------------------
-                vboList.Append(targetLeft); vboList.Append(targetTop - (srcH * scale)); vboList.Append(0); //coord 1 (left,bottom)
-                vboList.Append(srcLeft / orgBmpW); vboList.Append(srcTop / orgBmpH); //texture coord 1  (left,top)
+                vboList.Append(targetRect.Left); vboList.Append(targetRect.Top - targetRect.Height); vboList.Append(0); //coord 1 (left,bottom)
+                vboList.Append(normalizedSrc.Left); vboList.Append(normalizedSrc.Top); //texture coord 1  (left,top)
 
                 //---------------------
-                vboList.Append(targetLeft + (srcW * scale)); vboList.Append(targetTop); vboList.Append(0); //coord 2 (right,top)
-                vboList.Append(srcRight / orgBmpW); vboList.Append(srcBottom / orgBmpH); //texture coord 2  (right,bottom)
+                vboList.Append(targetRect.Right); vboList.Append(targetRect.Top); vboList.Append(0); //coord 2 (right,top)
+                vboList.Append(normalizedSrc.Right); vboList.Append(normalizedSrc.Bottom); //texture coord 2  (right,bottom)
 
                 //---------------------
-                vboList.Append(targetLeft + (srcW * scale)); vboList.Append(targetTop - (srcH * scale)); vboList.Append(0); //coord 3 (right, bottom)
-                vboList.Append(srcRight / orgBmpW); vboList.Append(srcTop / orgBmpH); //texture coord 3 (right,top) 
+                vboList.Append(targetRect.Right); vboList.Append(targetRect.Top - targetRect.Height); vboList.Append(0); //coord 3 (right, bottom)
+                vboList.Append(normalizedSrc.Right); vboList.Append(normalizedSrc.Top); //texture coord 3 (right,top) 
             }
-
-
         }
-        static void WriteToVboStreamWithRotation(
+
+
+        static void WriteToVboStream(
            PixelFarm.CpuBlit.ArrayList<float> vboList,
            bool duplicateFirst,
-           float srcLeft, float srcTop,
-           float srcW, float srcH,
-           float targetLeft, float targetTop,
-           float orgBmpW, float orgBmpH,
-           bool bmpYFlipped,
-           float scale,
-           float rotationRad
-       )
+           in RectangleF normalizedSrcRect,
+           in Quad2f quad,
+           bool bmpYFlipped
+        )
         {
-            float srcBottom = srcTop + srcH;
-            float srcRight = srcLeft + srcW;
-
-
-            float targetRight = targetLeft + (srcW * scale);
-            float targetBottom = targetTop - (srcH * scale);
-
-            //float centerX = (targetLeft + targetRight) / 2;
-            //float centerY = (targetTop + targetBottom) / 2;
-            float centerX = (targetLeft);
-            float centerY = (targetTop + targetBottom) / 2;
-
-
-            Affine aff1 = Affine.New(new AffinePlan[]
-            {
-                AffinePlan.Translate(-centerX,-centerY),
-                AffinePlan.Rotate(rotationRad),
-                AffinePlan.Translate(centerX,centerY),
-            });
-
-            float left_top_x = targetLeft;
-            float left_top_y = targetTop;
-
-            float right_top_x = targetRight;
-            float right_top_y = targetTop;
-
-            float left_bottom_x = targetLeft;
-            float left_bottom_y = targetBottom;
-
-            float right_bottom_x = targetRight;
-            float right_botton_y = targetBottom;
-
-            aff1.Transform(ref left_top_x, ref left_top_y);
-            aff1.Transform(ref right_top_x, ref right_top_y);
-            aff1.Transform(ref left_bottom_x, ref left_bottom_y);
-            aff1.Transform(ref right_bottom_x, ref right_botton_y);
-
 
             if (bmpYFlipped)
             {
-                vboList.Append(left_top_x); vboList.Append(left_top_y); vboList.Append(0); //coord 0 (left,top)                                                                                                       
-                vboList.Append(srcLeft / orgBmpW); vboList.Append(srcTop / orgBmpH); //texture coord 0 (left,top)
+                vboList.Append(quad.left_top_x); vboList.Append(quad.left_top_y); vboList.Append(0); //coord 0 (left,top)                                                                                                       
+                vboList.Append(normalizedSrcRect.Left); vboList.Append(normalizedSrcRect.Top); //texture coord 0 (left,top)
 
                 if (duplicateFirst)
                 {
                     //for creating degenerative triangle 
-                    vboList.Append(left_top_x); vboList.Append(left_top_y); vboList.Append(0); //coord 0 (left,top)                                                                                                       
-                    vboList.Append(srcLeft / orgBmpW); vboList.Append(srcTop / orgBmpH); //texture coord 0 (left,top)
+                    vboList.Append(quad.left_top_x); vboList.Append(quad.left_top_y); vboList.Append(0); //coord 0 (left,top)                                                                                                       
+                    vboList.Append(normalizedSrcRect.Left); vboList.Append(normalizedSrcRect.Top); //texture coord 0 (left,top)
                 }
                 //---------------------
-                vboList.Append(left_bottom_x); vboList.Append(left_bottom_y); vboList.Append(0); //coord 1 (left,bottom)
-                vboList.Append(srcLeft / orgBmpW); vboList.Append(srcBottom / orgBmpH); //texture coord 1 (left,bottom)
+                vboList.Append(quad.left_bottom_x); vboList.Append(quad.left_bottom_y); vboList.Append(0); //coord 1 (left,bottom)
+                vboList.Append(normalizedSrcRect.Left); vboList.Append(normalizedSrcRect.Bottom); //texture coord 1 (left,bottom)
 
                 //---------------------
-                vboList.Append(right_top_x); vboList.Append(right_top_y); vboList.Append(0); //coord 2 (right,top)
-                vboList.Append(srcRight / orgBmpW); vboList.Append(srcTop / orgBmpH); //texture coord 2 (right,top)
+                vboList.Append(quad.right_top_x); vboList.Append(quad.right_top_y); vboList.Append(0); //coord 2 (right,top)
+                vboList.Append(normalizedSrcRect.Right); vboList.Append(normalizedSrcRect.Top); //texture coord 2 (right,top)
 
                 //---------------------
-                vboList.Append(right_bottom_x); vboList.Append(right_botton_y); vboList.Append(0);//coord 3 (right, bottom)
-                vboList.Append(srcRight / orgBmpW); vboList.Append(srcBottom / orgBmpH); //texture coord 3  (right,bottom) 
+                vboList.Append(quad.right_bottom_x); vboList.Append(quad.right_bottom_y); vboList.Append(0);//coord 3 (right, bottom)
+                vboList.Append(normalizedSrcRect.Right); vboList.Append(normalizedSrcRect.Bottom); //texture coord 3  (right,bottom) 
 
             }
             else
             {
 
-                vboList.Append(left_top_x); vboList.Append(left_top_y); vboList.Append(0); //coord 0 (left,top)
-                vboList.Append(srcLeft / orgBmpW); vboList.Append(srcBottom / orgBmpH); //texture coord 0  (left,bottom) 
+                vboList.Append(quad.left_top_x); vboList.Append(quad.left_top_y); vboList.Append(0); //coord 0 (left,top)
+                vboList.Append(normalizedSrcRect.Left); vboList.Append(normalizedSrcRect.Bottom); //texture coord 0  (left,bottom) 
                 if (duplicateFirst)
                 {
                     //for creating degenerative triangle
                     //https://developer.apple.com/library/content/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/TechniquesforWorkingwithVertexData/TechniquesforWorkingwithVertexData.html
 
-                    vboList.Append(left_top_x); vboList.Append(left_top_y); vboList.Append(0); //coord 0 (left,top)
-                    vboList.Append(srcLeft / orgBmpW); vboList.Append(srcBottom / orgBmpH); //texture coord 0  (left,bottom)
+                    vboList.Append(quad.left_top_x); vboList.Append(quad.left_top_y); vboList.Append(0); //coord 0 (left,top)
+                    vboList.Append(normalizedSrcRect.Left); vboList.Append(normalizedSrcRect.Bottom); //texture coord 0  (left,bottom)
                 }
 
                 //---------------------
-                vboList.Append(left_bottom_x); vboList.Append(left_bottom_y); vboList.Append(0); //coord 1 (left,bottom)
-                vboList.Append(srcLeft / orgBmpW); vboList.Append(srcTop / orgBmpH); //texture coord 1  (left,top)
+                vboList.Append(quad.left_bottom_x); vboList.Append(quad.left_bottom_y); vboList.Append(0); //coord 1 (left,bottom)
+                vboList.Append(normalizedSrcRect.Left); vboList.Append(normalizedSrcRect.Top); //texture coord 1  (left,top)
 
                 //---------------------
-                vboList.Append(right_top_x); vboList.Append(right_top_y); vboList.Append(0); //coord 2 (right,top)
-                vboList.Append(srcRight / orgBmpW); vboList.Append(srcBottom / orgBmpH); //texture coord 2  (right,bottom)
+                vboList.Append(quad.right_top_x); vboList.Append(quad.right_top_y); vboList.Append(0); //coord 2 (right,top)
+                vboList.Append(normalizedSrcRect.Right); vboList.Append(normalizedSrcRect.Bottom); //texture coord 2  (right,bottom)
 
                 //---------------------
-                vboList.Append(right_bottom_x); vboList.Append(right_botton_y); vboList.Append(0); //coord 3 (right, bottom)
-                vboList.Append(srcRight / orgBmpW); vboList.Append(srcTop / orgBmpH); //texture coord 3 (right,top) 
+                vboList.Append(quad.right_bottom_x); vboList.Append(quad.right_bottom_y); vboList.Append(0); //coord 3 (right, bottom)
+                vboList.Append(normalizedSrcRect.Right); vboList.Append(normalizedSrcRect.Top); //texture coord 3 (right,top) 
             }
 
         }
+
+
+
     }
 }
