@@ -225,8 +225,8 @@ namespace PixelFarm.CpuBlit.Samples
             _builder.SmoothCoefficiency = this.SmoothCoefficientValue;
             _builder.ReconstructionControllerArms(_simpleStrip, _output);
 
-            using (Tools.BorrowVxs(out var tmpVxs1, out var tmpVxs2))
-            using (VectorToolBox.Borrow(tmpVxs1, out PathWriter pw))
+            using (Tools.BorrowVxs(out var v1, out var v2))
+            using (Tools.BorrowPathWriter(v1, out PathWriter pw))
             {
 
                 int fig_count = _output.Count;
@@ -272,15 +272,15 @@ namespace PixelFarm.CpuBlit.Samples
 
                     pw.CloseFigure();
 
-                    _curveflattener.MakeVxs(tmpVxs1, tmpVxs2);
+                    _curveflattener.MakeVxs(v1, v2);
 
                     //
-                    m_painter.Fill(tmpVxs2);  //draw to output
+                    m_painter.Fill(v2);  //draw to output
                                               //
 
                     //clear before reuse
-                    tmpVxs1.Clear();
-                    tmpVxs2.Clear();
+                    v1.Clear();
+                    v2.Clear();
                     pw.Clear();
                 }
             }

@@ -198,7 +198,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
             // and a little polygon
             using (Tools.BorrowVxs(out var v1))
-            using (VectorToolBox.Borrow(v1, out PathWriter littlePoly))
+            using (Tools.BorrowPathWriter(v1, out PathWriter littlePoly))
             {
                 littlePoly.MoveTo(50, 50);
                 littlePoly.LineTo(150, 50);

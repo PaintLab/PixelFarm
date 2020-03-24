@@ -123,7 +123,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest2
                 rasterizer.ResetGamma(new GammaNone());
 
                 using (Tools.BorrowVxs(out var v1, out var v2))
-                using (VectorToolBox.Borrow(v1, out PathWriter ps))
+                using (Tools.BorrowPathWriter(v1, out PathWriter ps))
                 {
                     ps.Clear();
                     ps.MoveTo(_x[0], _y[0]);

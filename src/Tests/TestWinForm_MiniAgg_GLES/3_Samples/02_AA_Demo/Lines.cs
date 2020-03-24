@@ -75,7 +75,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
         {
             _orgVxs = new VertexStore();
 
-            using (VectorToolBox.Borrow(_orgVxs, out PathWriter writer))
+            using (Tools.BorrowPathWriter(_orgVxs, out var writer))
             {
                 int y_offset = 20;
                 writer.MoveTo(120, y_offset + 0);

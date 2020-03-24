@@ -64,7 +64,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     }
 
 
-    public static class VxsTemp
+    static class VxsTemp
     {
 
         public static VxsContext1 Borrow(out VertexStore vxs) => new VxsContext1(out vxs);
@@ -109,7 +109,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
 
 
-    public static class VectorToolBox
+    static class VectorToolBox
     {
 
         public static TempContext<Stroke> Borrow(out Stroke stroke)
@@ -161,10 +161,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
             return Temp<SvgArcSegment>.Borrow(out arc);
         }
-         
-        
-       
-       
+
+
+
+
         public static TempContext<VxsClipper> Borrow(out VxsClipper clipper)
         {
             if (!Temp<VxsClipper>.IsInit())
@@ -175,7 +175,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
             return Temp<VxsClipper>.Borrow(out clipper);
         }
-      
+
         public static TempContext<PolygonSimplifier> Borrow(out PolygonSimplifier flattener)
         {
             if (!Temp<PolygonSimplifier>.IsInit())

@@ -226,7 +226,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
 
             using (Tools.BorrowVxs(out var v1, out var v2))
-            using (VectorToolBox.Borrow(v1, out PathWriter writer))
+            using (Tools.BorrowPathWriter(v1, out var writer))
             {
                 writer.MoveTo(20, 10);
                 writer.LineTo(60, 10);
@@ -300,7 +300,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
 
             using (Tools.BorrowVxs(out var v1, out var v2))
-            using (VectorToolBox.Borrow(v1, out PathWriter writer))
+            using (Tools.BorrowPathWriter(v1, out PathWriter writer))
             {
                 writer.MoveTo(20, 10);
                 writer.LineTo(60, 10);
@@ -460,12 +460,12 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             p.StrokeColor = PixelFarm.Drawing.Color.Red;
 
             using (Tools.BorrowVxs(out var v1, out var v2))
-            using (VectorToolBox.Borrow(v1, out PathWriter ps))
+            using (Tools.BorrowPathWriter(v1, out var w))
             {
-                ps.Clear();
-                ps.MoveTo(150, 10);
-                ps.LineTo(110, 10);
-                ps.LineTo(150, 20);
+                w.Clear();
+                w.MoveTo(150, 10);
+                w.LineTo(110, 10);
+                w.LineTo(150, 20);
 
 
                 StrokeGen2 gen2 = new StrokeGen2(); //under construction!

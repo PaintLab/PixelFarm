@@ -1942,7 +1942,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         }
         public static void WritePath1(VertexStore vxs, double x, double y)
         {
-            using (VectorToolBox.Borrow(vxs, out PathWriter p))
+            using (Tools.BorrowPathWriter(vxs, out PathWriter p))
             {
                 //1. triangle
                 p.MoveTo(x + 140, y + 145);
@@ -1977,7 +1977,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         }
         public static void WritePath2(VertexStore vxs, double x, double y)
         {
-            using (VectorToolBox.Borrow(vxs, out PathWriter p))
+            using (Tools.BorrowPathWriter(vxs, out PathWriter p))
             {
                 p.MoveTo(100 + 32, 100 + 77);
                 p.LineTo(100 + 473, 100 + 263);
@@ -2058,7 +2058,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         }
         static void WriteArrow1(VertexStore vxs, double x, double y)
         {
-            using (VectorToolBox.Borrow(vxs, out PathWriter p))
+            using (Tools.BorrowPathWriter(vxs, out PathWriter p))
             {
                 p.Clear();
                 p.MoveTo(1330.599999999999909, 1282.399999999999864);

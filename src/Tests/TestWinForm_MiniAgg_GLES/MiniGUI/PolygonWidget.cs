@@ -189,8 +189,7 @@ namespace PixelFarm.CpuBlit.UI
             this.RewindZero();
             //this polygon control has  2 subcontrol
             //stroke and ellipse 
-
-            using (VxsTemp.Borrow(out var v1, out var v2))
+            using (Tools.BorrowVxs(out var v1, out var v2))
             {
                 this.m_stroke.MakeVxs(this.m_vs.MakeVxs(v1), v2);
                 int j = v2.Count;

@@ -76,7 +76,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                     {
                         //------------------------------------
                         // Closed stroke 
-                        using (VxsTemp.Borrow(out var v1, out var v2))
+                        using (Tools.BorrowVxs(out var v1, out var v2))
                         {
                             double x = _x - Width / 2 + 100;
                             double y = _y - Height / 2 + 100;
@@ -122,7 +122,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                         // 
                         using (Tools.BorrowVxs(out var v1_gb_poly))
                         using (Tools.BorrowVxs(out var v2_spiral, out var v2_spiral_outline))
-                        using (Tools.BorrowStroke(out Stroke stroke))
+                        using (Tools.BorrowStroke(out var stroke))
                         {
                             Affine mtx = Affine.New(
                                     AffinePlan.Translate(-1150, -1150),
