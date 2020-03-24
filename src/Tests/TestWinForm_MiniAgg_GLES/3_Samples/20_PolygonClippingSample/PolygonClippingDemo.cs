@@ -121,8 +121,8 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                         //------------------------------------
                         // Great Britain and a Spiral
                         // 
-                        using (VxsTemp.Borrow(out var v1_gb_poly))
-                        using (VxsTemp.Borrow(out var v2_spiral, out var v2_spiral_outline))
+                        using (Tools.BorrowVxs(out var v1_gb_poly))
+                        using (Tools.BorrowVxs(out var v2_spiral, out var v2_spiral_outline))
                         using (Tools.BorrowStroke(out Stroke stroke))
                         {
                             Affine mtx = Affine.New(
@@ -146,8 +146,8 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                     {
                         //------------------------------------
                         // Spiral and glyph                         
-                        using (VxsTemp.Borrow(out var v1_spiral, out var v1_spiralOutline, out var v3))
-                        using (VxsTemp.Borrow(out var glyph_vxs))
+                        using (Tools.BorrowVxs(out var v1_spiral, out var v1_spiralOutline, out var v3))
+                        using (Tools.BorrowVxs(out var glyph_vxs))
                         using (Tools.BorrowStroke(out var stroke))
                         {
 

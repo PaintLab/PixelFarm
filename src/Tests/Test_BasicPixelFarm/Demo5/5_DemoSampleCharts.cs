@@ -129,7 +129,7 @@ namespace LayoutFarm.ColorBlenderSample
                 if (_lineRendeE == null)
                 {
                     using (Tools.BorrowStroke(out var stroke))
-                    using (VxsTemp.Borrow(out var vxs, out var strokeVxs))
+                    using (Tools.BorrowVxs(out var vxs, out var strokeVxs))
                     {
                         stroke.Width = 3;
                         vxs.AddMoveTo(p0.Left, p0.Top);

@@ -75,19 +75,12 @@ namespace PixelFarm.Drawing
     public static class VxsTemp
     {
 
-        public static VxsContext1 Borrow(out VertexStore vxs)
-        {
-            return new VxsContext1(out vxs);
-        }
-        public static VxsContext2 Borrow(out VertexStore vxs1, out VertexStore vxs2)
-        {
-            return new VxsContext2(out vxs1, out vxs2);
-        }
-        public static VxsContext3 Borrow(out VertexStore vxs1,
-            out VertexStore vxs2, out VertexStore vxs3)
-        {
-            return new VxsContext3(out vxs1, out vxs2, out vxs3);
-        }
+        public static VxsContext1 Borrow(out VertexStore vxs) => new VxsContext1(out vxs);
+
+        public static VxsContext2 Borrow(out VertexStore vxs1, out VertexStore vxs2) => new VxsContext2(out vxs1, out vxs2);
+
+        public static VxsContext3 Borrow(out VertexStore vxs1, out VertexStore vxs2, out VertexStore vxs3) => new VxsContext3(out vxs1, out vxs2, out vxs3);
+
         /// <summary>
         /// create contour(closed, open) from input flatten XYs,and put into output vxs
         /// </summary>
@@ -278,7 +271,7 @@ namespace PixelFarm.Drawing
             }
             return Temp<PolygonSimplifier>.Borrow(out flattener);
         }
-       
+
     }
 
 

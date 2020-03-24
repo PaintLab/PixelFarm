@@ -213,7 +213,7 @@ namespace Msdfgen
                         {
                             //approximate 
                             CubicSegment cs = (CubicSegment)ownerSeg;
-                            using (VxsTemp.Borrow(out var v1))
+                            using (Tools.BorrowVxs(out var v1))
                             using (Tools.BorrowShapeBuilder(out var b))
                             using (Tools.BorrowStroke(out var strk))
                             {
@@ -248,7 +248,7 @@ namespace Msdfgen
                         {
                             QuadraticSegment qs = (QuadraticSegment)ownerSeg;
 
-                            using (VxsTemp.Borrow(out var v1))
+                            using (Tools.BorrowVxs(out var v1))
                             using (Tools.BorrowShapeBuilder(out var b))                            
                             using (Tools.BorrowStroke(out var strk))
                             {

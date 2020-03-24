@@ -13,6 +13,7 @@ namespace PixelFarm.CpuBlit
         /// </summary>
         public static readonly Tools More = new Tools();
         private Tools() { }
+
         public static TempContext<AggPainter> BorrowAggPainter(MemBitmap bmp, out AggPainter painter)
         {
 
@@ -46,7 +47,13 @@ namespace PixelFarm.CpuBlit
             return context;
         }
 
-        public static TempContext<Stroke> BorrowStroke(out Stroke stroke) => VectorToolBox.Borrow(out stroke);
+
+        //TODO: add agressive inlining...
+
+        public static TempContext<Stroke> BorrowStroke(out Stroke stroke) => VectorToolBox.Borrow(out stroke);        
+        public static VxsContext1 BorrowVxs(out VertexStore vxs) => new VxsContext1(out vxs);
+        public static VxsContext2 BorrowVxs(out VertexStore vxs1, out VertexStore vxs2) => new VxsContext2(out vxs1, out vxs2);
+        public static VxsContext3 BorrowVxs(out VertexStore vxs1, out VertexStore vxs2, out VertexStore vxs3) => new VxsContext3(out vxs1, out vxs2, out vxs3);
     }
 
     public class ShapeBuilder

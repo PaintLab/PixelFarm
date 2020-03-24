@@ -149,7 +149,7 @@ namespace PixelFarm
         public static VertexStore BuildRoundCornerPolygon2()
         {
 
-            using (VxsTemp.Borrow(out var v1, out var v2, out var v3))
+            using (Tools.BorrowVxs(out var v1, out var v2, out var v3))
             using (Tools.BorrowStroke(out var stroke))
             using (VectorToolBox.Borrow(out CurveFlattener flattener))
             using (VectorToolBox.Borrow(out Arc arc))
@@ -251,7 +251,7 @@ namespace PixelFarm
             VertexStore arrow;
             VertexStore stem;
             using (Tools.BorrowStroke(out var stroke))
-            using (VxsTemp.Borrow(out var v1, out var v3, out var v4))
+            using (Tools.BorrowVxs(out var v1, out var v3, out var v4))
             {
                 if (solidHead)
                 {
@@ -286,7 +286,7 @@ namespace PixelFarm
 
         static void BuildLine(float x0, float y0, float x1, float y1, VertexStore output)
         {
-            using (VxsTemp.Borrow(out var v1))
+            using (Tools.BorrowVxs(out var v1))
             using (Tools.BorrowStroke(out var stroke))
             {
                 stroke.Width = 3;
@@ -304,7 +304,7 @@ namespace PixelFarm
                 {
                     roundedRect.SetRadius(5, 5, 0, 0, 5, 5, 0, 0);
                     roundedRect.SetRect(10, 10, 30, 30);
-                    using (VxsTemp.Borrow(out var v1))
+                    using (Tools.BorrowVxs(out var v1))
                     using (Tools.BorrowStroke(out var stroke))
                     {
                         stroke.LineJoin = LineJoin.Bevel;

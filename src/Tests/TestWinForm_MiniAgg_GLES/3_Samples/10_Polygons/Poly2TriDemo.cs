@@ -88,7 +88,7 @@ namespace PixelFarm
         }
         static void BuildLine(float x0, float y0, float x1, float y1, VertexStore output)
         {
-            using (VxsTemp.Borrow(out var v1))
+            using (PixelFarm.CpuBlit.Tools.BorrowVxs(out var v1))
             using (PixelFarm.CpuBlit.Tools.BorrowStroke(out var stroke))
             {
                 stroke.Width = 3;

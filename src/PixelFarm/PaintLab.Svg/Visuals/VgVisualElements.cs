@@ -1209,7 +1209,7 @@ namespace PaintLab.Svg
                                         //vxs caching 
                                         _latestStrokeW = (float)p.StrokeWidth;
 
-                                        using (VxsTemp.Borrow(out var v1))
+                                        using (Tools.BorrowVxs(out var v1))
                                         using (Tools.BorrowStroke(out var stroke))
                                         {
                                             stroke.Width = _latestStrokeW;
