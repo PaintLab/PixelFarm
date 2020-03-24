@@ -123,8 +123,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
         public Quad2f(float left, float top, float width, float height, float hostW, float hostH)
         {
-            left_top_x = left / hostW;                /**/left_top_y = top / hostH;
-            right_top_x = (left + width) / hostW;     /**/right_top_y = left_top_y;
+            left_top_x = left / hostW;            /**/left_top_y = top / hostH;
+            right_top_x = (left + width) / hostW; /**/right_top_y = left_top_y;
             right_bottom_x = right_top_x;         /**/right_bottom_y = (top + height) / hostH;
             left_bottom_x = left_top_x;           /**/left_bottom_y = right_bottom_y;
         }
@@ -139,6 +139,14 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             right_top_x = left + width;     /**/right_top_y = top;
             right_bottom_x = right_top_x;   /**/right_bottom_y = top + height;
             left_bottom_x = left;           /**/left_bottom_y = right_bottom_y;
+        }
+        public void SetCornersFromRect(in PixelFarm.Drawing.RectangleF rect)
+        {
+            SetCornersFromRect(rect.Left, rect.Top, rect.Width, rect.Height);
+        }
+        public void SetCornersFromRect(in PixelFarm.Drawing.Rectangle rect)
+        {
+            SetCornersFromRect(rect.Left, rect.Top, rect.Width, rect.Height);
         }
         /// <summary>
         /// set corner from rect and normalize value with w and h
