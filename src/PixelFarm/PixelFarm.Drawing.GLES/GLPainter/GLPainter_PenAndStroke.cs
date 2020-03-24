@@ -143,7 +143,7 @@ namespace PixelFarm.DrawingGL
             if (StrokeWidth > 1)
             {
                 using (VxsTemp.Borrow(out VertexStore v1))
-                using (VectorToolBox.Borrow(out Stroke stroke))
+                using (Tools.BorrowStroke(out Stroke stroke))
                 {
 
                     if (_lineDashGen == null)

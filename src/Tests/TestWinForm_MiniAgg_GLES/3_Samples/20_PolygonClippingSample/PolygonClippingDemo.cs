@@ -123,7 +123,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                         // 
                         using (VxsTemp.Borrow(out var v1_gb_poly))
                         using (VxsTemp.Borrow(out var v2_spiral, out var v2_spiral_outline))
-                        using (VectorToolBox.Borrow(out Stroke stroke))
+                        using (Tools.BorrowStroke(out Stroke stroke))
                         {
                             Affine mtx = Affine.New(
                                     AffinePlan.Translate(-1150, -1150),
@@ -148,7 +148,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                         // Spiral and glyph                         
                         using (VxsTemp.Borrow(out var v1_spiral, out var v1_spiralOutline, out var v3))
                         using (VxsTemp.Borrow(out var glyph_vxs))
-                        using (VectorToolBox.Borrow(out Stroke stroke))
+                        using (Tools.BorrowStroke(out var stroke))
                         {
 
                             Affine mtx = Affine.New(

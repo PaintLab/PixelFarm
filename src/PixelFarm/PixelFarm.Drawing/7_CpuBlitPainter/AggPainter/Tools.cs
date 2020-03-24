@@ -32,7 +32,7 @@ namespace PixelFarm.CpuBlit
             painter.RenderSurface.AttachDstBitmap(bmp);
             return tmpPainter;
         }
-        public static TempContext<ShapeBuilder> Borrow(out ShapeBuilder shapeBuilder)
+        public static TempContext<ShapeBuilder> BorrowShapeBuilder(out ShapeBuilder shapeBuilder)
         {
             if (!Temp<ShapeBuilder>.IsInit())
             {
@@ -45,6 +45,8 @@ namespace PixelFarm.CpuBlit
             shapeBuilder.InitVxs();//make it ready-to-use
             return context;
         }
+
+        public static TempContext<Stroke> BorrowStroke(out Stroke stroke) => VectorToolBox.Borrow(out stroke);
     }
 
     public class ShapeBuilder

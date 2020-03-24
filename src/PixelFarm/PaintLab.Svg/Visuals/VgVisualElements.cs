@@ -1210,7 +1210,7 @@ namespace PaintLab.Svg
                                         _latestStrokeW = (float)p.StrokeWidth;
 
                                         using (VxsTemp.Borrow(out var v1))
-                                        using (VectorToolBox.Borrow(out Stroke stroke))
+                                        using (Tools.BorrowStroke(out var stroke))
                                         {
                                             stroke.Width = _latestStrokeW;
                                             stroke.MakeVxs(VxsPath, v1);

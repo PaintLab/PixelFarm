@@ -150,7 +150,7 @@ namespace PixelFarm
         {
 
             using (VxsTemp.Borrow(out var v1, out var v2, out var v3))
-            using (VectorToolBox.Borrow(out Stroke stroke))
+            using (Tools.BorrowStroke(out var stroke))
             using (VectorToolBox.Borrow(out CurveFlattener flattener))
             using (VectorToolBox.Borrow(out Arc arc))
             {
@@ -174,8 +174,8 @@ namespace PixelFarm
         }
         public static VertexStore BuildRoundCornerPolygon()
         {
-            using (Tools.Borrow(out ShapeBuilder b))
-            using (VectorToolBox.Borrow(out Stroke stroke))
+            using (Tools.BorrowShapeBuilder(out var b))
+            using (Tools.BorrowStroke(out var stroke))
             {
 
                 b.MoveTo(5, 20);
@@ -195,8 +195,8 @@ namespace PixelFarm
         public static VertexStore BuildGeneralLines()
         {
             //use this example with BuildOutsidePartOfLines() and  BuildInsidePartOfLines()
-            using (Tools.Borrow(out ShapeBuilder b))
-            using (VectorToolBox.Borrow(out Stroke stroke))
+            using (Tools.BorrowShapeBuilder(out var b))
+            using (Tools.BorrowStroke(out var stroke))
             {
 
                 stroke.Width = 5;
@@ -213,8 +213,8 @@ namespace PixelFarm
         }
         public static VertexStore BuildOutsidePartOfLines()
         {
-            using (Tools.Borrow(out ShapeBuilder b))
-            using (VectorToolBox.Borrow(out Stroke stroke))
+            using (Tools.BorrowShapeBuilder(out var b))
+            using (Tools.BorrowStroke(out var stroke))
             {
                 stroke.StrokeSideForOpenShape = StrokeSideForOpenShape.Outside;
                 stroke.Width = 5;
@@ -230,8 +230,8 @@ namespace PixelFarm
         }
         public static VertexStore BuildInsidePartOfLines()
         {
-            using (Tools.Borrow(out ShapeBuilder b))
-            using (VectorToolBox.Borrow(out Stroke stroke))
+            using (Tools.BorrowShapeBuilder(out var b))
+            using (Tools.BorrowStroke(out Stroke stroke))
             {
                 stroke.StrokeSideForOpenShape = StrokeSideForOpenShape.Inside;
                 stroke.Width = 5;
@@ -250,7 +250,7 @@ namespace PixelFarm
         {
             VertexStore arrow;
             VertexStore stem;
-            using (VectorToolBox.Borrow(out Stroke stroke))
+            using (Tools.BorrowStroke(out var stroke))
             using (VxsTemp.Borrow(out var v1, out var v3, out var v4))
             {
                 if (solidHead)
@@ -287,7 +287,7 @@ namespace PixelFarm
         static void BuildLine(float x0, float y0, float x1, float y1, VertexStore output)
         {
             using (VxsTemp.Borrow(out var v1))
-            using (VectorToolBox.Borrow(out Stroke stroke))
+            using (Tools.BorrowStroke(out var stroke))
             {
                 stroke.Width = 3;
                 v1.AddMoveTo(x0, y0);
@@ -305,7 +305,7 @@ namespace PixelFarm
                     roundedRect.SetRadius(5, 5, 0, 0, 5, 5, 0, 0);
                     roundedRect.SetRect(10, 10, 30, 30);
                     using (VxsTemp.Borrow(out var v1))
-                    using (VectorToolBox.Borrow(out Stroke stroke))
+                    using (Tools.BorrowStroke(out var stroke))
                     {
                         stroke.LineJoin = LineJoin.Bevel;
                         stroke.Width = 3;

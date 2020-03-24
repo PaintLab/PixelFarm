@@ -94,6 +94,7 @@ namespace PixelFarm.CpuBlit
         {
             Color prevColor = p.FillColor;
             p.FillColor = color;
+             
             using (VectorToolBox.Borrow(out VertexProcessing.Stroke s))
             using (VxsTemp.Borrow(out var v1))
             {

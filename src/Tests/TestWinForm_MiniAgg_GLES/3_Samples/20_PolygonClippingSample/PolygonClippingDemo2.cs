@@ -111,7 +111,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
 
             using (VxsTemp.Borrow(out var v1, out var v2))
             using (VxsTemp.Borrow(out var v3, out var v4))
-            using (VectorToolBox.Borrow(out Stroke stroke))
+            using (Tools.BorrowStroke(out var stroke))
             {
 
                 double x = _x - Width / 2 + 100;
@@ -146,7 +146,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         void CreateSpiral()
         {
             using (VxsTemp.Borrow(out var v1, out var v2))
-            using (VectorToolBox.Borrow(out Stroke stroke))
+            using (Tools.BorrowStroke(out var stroke))
             {
 
                 PolygonClippingDemoHelper.WriteSpiral(v1, _x, _y);
@@ -189,7 +189,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
             VertexStore b = null;
 
             switch (PolygonSet)
-            {                
+            {
                 case PolygonExampleSet.TwoSimplePaths:
                     a = _simplePath1;
                     b = _simplePath2;

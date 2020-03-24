@@ -169,7 +169,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
             //Ellipse ellipseVxsGen = new Ellipse(0, 0, 100, 50);
             using (VectorToolBox.Borrow(out Ellipse ellipseVxsGen))
-            using (VectorToolBox.Borrow(out Stroke stroke))
+            using (Tools.BorrowStroke(out var stroke))
             {
                 ellipseVxsGen.Set(0, 0, 100, 50);
                 stroke.Width = 3;

@@ -158,7 +158,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
         {
             base.Init();
 
-            using (Tools.Borrow(out ShapeBuilder b))
+            using (Tools.BorrowShapeBuilder(out var b))
             {
                 int y_offset = 20;
 
@@ -496,8 +496,8 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 { 
                     case RawStrokeMath2Choices.Auto_OuterAndInner:
                         {
-                            using (VectorToolBox.Borrow(out Stroke stroke))
-                            using (Tools.Borrow(out ShapeBuilder b))
+                            using (Tools.BorrowStroke(out var stroke))
+                            using (Tools.BorrowShapeBuilder(out var b))
                             {
 
                                 stroke.Width = 10;
