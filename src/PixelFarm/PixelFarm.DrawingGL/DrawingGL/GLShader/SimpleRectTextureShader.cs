@@ -466,6 +466,7 @@ namespace PixelFarm.DrawingGL
             OnProgramBuilt();
             return true;
         }
+        
         protected virtual void SetVarsBeforeRender()
         {
         }
@@ -1569,14 +1570,13 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawSubImage2(in PixelFarm.Drawing.RectangleF maskSrc,
             float colorSrcX, float colorSrcY,
-            float targetLeft, float targetTop,
-            float scale)
+            float targetLeft, float targetTop )
         {
             //-------------------------------------------------------------------------------------
             SetVarsBeforeRender();
             //-------------------------------------------------------------------------------------          
 
-            var quad = new CpuBlit.VertexProcessing.Quad2f(targetLeft, targetTop, maskSrc.Width * scale, -maskSrc.Height * scale);
+            var quad = new CpuBlit.VertexProcessing.Quad2f(targetLeft, targetTop, maskSrc.Width, -maskSrc.Height);
             var srcRect = new CpuBlit.VertexProcessing.Quad2f(maskSrc.Left, maskSrc.Top, maskSrc.Width, maskSrc.Height, _latestBmpW, _latestBmpH);
             var colorSrc = new CpuBlit.VertexProcessing.Quad2f(colorSrcX, colorSrcY, maskSrc.Width, maskSrc.Height, _colorBmpW, _colorBmpH);
 
@@ -1592,6 +1592,30 @@ namespace PixelFarm.DrawingGL
 
 
             GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
+        }
+        public void DrawSubImage2(in CpuBlit.VertexProcessing.Quad2f quad,
+          in PixelFarm.Drawing.RectangleF maskSrc,
+          float colorSrcX, float colorSrcY,
+          float targetLeft, float targetTop)
+        {
+
+            //-------------------------------------------------------------------------------------
+            SetVarsBeforeRender();
+            //-------------------------------------------------------------------------------------           
+            var srcRect = new CpuBlit.VertexProcessing.Quad2f(maskSrc.Left, maskSrc.Top, maskSrc.Width, maskSrc.Height, _latestBmpW, _latestBmpH);
+            var colorSrc = new CpuBlit.VertexProcessing.Quad2f(colorSrcX, colorSrcY, maskSrc.Width, maskSrc.Height, _colorBmpW, _colorBmpH);
+
+            unsafe
+            {
+                float* imgVertices = stackalloc float[7 * 4];
+                AssignVertice7_4(quad, srcRect, colorSrc, imgVertices, !_latestBmpYFlipped);
+
+                a_position.UnsafeLoadMixedV3f(imgVertices, 7);
+                a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 7);
+                _texCoord_color.UnsafeLoadMixedV2f(imgVertices + 5, 7);
+            }
+             
+            GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices); 
         }
     }
     //--------------------------------------------------------

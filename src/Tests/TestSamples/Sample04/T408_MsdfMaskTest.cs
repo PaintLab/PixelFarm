@@ -77,12 +77,32 @@ namespace OpenTkEssTest
 
 
             //_pcx.DrawImageWithMsdfMask(_msdfMaskGLBmp, _colorGLBmp, 0, 0);
+            _painter.Clear(Color.Yellow);
 
-             
             RectangleF maskSrc = new RectangleF(0, 0, _msdfMaskBmp.Width, _msdfMaskBmp.Height);
-            _pcx.DrawImageWithMsdfMask(_msdfMaskGLBmp, _colorGLBmp, maskSrc,
-                5, 0,
-                0, 0);
+
+
+            //_pcx.DrawImageWithMsdfMask(_msdfMaskGLBmp, _colorGLBmp, maskSrc,
+            //    0, 0,
+            //    20, 60);
+
+
+            Quad2f quad = new Quad2f();
+            Rectangle rect = new Rectangle(10, 10, 120, 120);
+            quad.SetCornersFromRect(rect.Left, rect.Top, rect.Width, rect.Height);
+
+            AffineMat mat1 = AffineMat.Iden;
+            mat1.Translate(-rect.Width / 2, -rect.Height / 2);
+            mat1.RotateDeg(45);
+            mat1.Translate(rect.Width / 2, rect.Height / 2);
+
+            quad.Transform(mat1);//***test transform
+
+            _pcx.DrawImageWithMsdfMask(_msdfMaskGLBmp, _colorGLBmp,
+              quad,
+              maskSrc,
+              0, 0,
+              20, 60);
 
             SwapBuffers();
         }
