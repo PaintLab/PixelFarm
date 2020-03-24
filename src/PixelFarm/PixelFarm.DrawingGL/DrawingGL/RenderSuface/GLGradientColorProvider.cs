@@ -51,8 +51,8 @@ namespace PixelFarm.DrawingGL
 
             int pairCount = colorStops.Length - 1;
 
-            ColorStop c0 = ColorStop.Empty;
-            ColorStop c1 = ColorStop.Empty;
+            ColorStop c0;
+            ColorStop c1;
 
             //create a simple horizontal linear gradient bar 
             //and we will rotate and translate it to target pos

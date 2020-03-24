@@ -18,7 +18,6 @@ namespace OpenTkEssTest
         A,
         B,
         C,
-        D,
     }
 
     [Info(OrderCode = "408", AvailableOn = AvailableOn.GLES)]
@@ -47,11 +46,11 @@ namespace OpenTkEssTest
         protected override void OnReadyForInitGLShaderProgram()
         {
             //1. create color bmp  
-            _colorBmp = new MemBitmap(30, 30);
+            _colorBmp = new MemBitmap(100, 100);
             using (AggPainterPool.Borrow(_colorBmp, out AggPainter painter))
             {
                 painter.Clear(Color.White);
-                painter.FillRect(2, 2, 30, 30, Color.Red);
+                painter.FillRect(2, 2, 100, 100, Color.Red);
             }
             //2. create mask bmp
 
@@ -82,6 +81,10 @@ namespace OpenTkEssTest
         {
             _pcx.Dispose();
         }
+
+
+        GLRenderSurface _maskRenderSurface;
+
         protected override void OnGLRender(object sender, EventArgs args)
         {
             //reset
@@ -122,7 +125,7 @@ namespace OpenTkEssTest
                         AffineMat mat1 = AffineMat.Iden;
                         mat1.Translate(-rect.Width / 2, -rect.Height / 2);
                         mat1.RotateDeg(45);
-                        mat1.Translate(rect.Width / 2, rect.Height / 2); 
+                        mat1.Translate(rect.Width / 2, rect.Height / 2);
                         quad.Transform(mat1);//***test transform
 
                         _pcx.DrawImageWithMsdfMask(_msdfMaskGLBmp, _colorGLBmp,
@@ -140,33 +143,56 @@ namespace OpenTkEssTest
                         Quad2f quad = new Quad2f();
                         quad.SetCornersFromRect(rect);
 
-                        _pcx.DrawImageWithMsdfMaskV2(_msdfMaskGLBmp, _colorGLBmp,
-                          quad,
-                          maskSrc,
-                          Color.Red,
-                          20, 60);
-                    }
-                    break;
-                case T408_DrawSet.D:
-                    {
-                        RectangleF maskSrc = new RectangleF(0, 0, _msdfMaskBmp.Width, _msdfMaskBmp.Height);
-
-                        Rectangle rect = new Rectangle(10, 10, 120, 120);
-                        Quad2f quad = new Quad2f();
-                        quad.SetCornersFromRect(rect);
-
-
                         AffineMat mat1 = AffineMat.Iden;
                         mat1.Translate(-rect.Width / 2, -rect.Height / 2);
                         mat1.RotateDeg(45);
                         mat1.Translate(rect.Width / 2, rect.Height / 2);
                         quad.Transform(mat1);//***test transform
 
-                        _pcx.DrawImageWithMsdfMaskV2(_msdfMaskGLBmp, _colorGLBmp,
-                          quad,
-                          maskSrc,
-                          Color.Red,
-                          20, 60);
+                        //-----------------------
+                        //create mask surface, this quite low leve step.
+                        //user should use this through drawboard 
+                        //----------------------- 
+
+
+                        if (_maskRenderSurface == null)
+                        {
+                            GLRenderSurface currentSurface = _pcx.CurrentRenderSurface;
+                            _maskRenderSurface = new GLRenderSurface(100, 100);
+                            _pcx.AttachToRenderSurface(_maskRenderSurface);
+                            //draw mask
+                            _pcx.Clear(Color.Black);
+                            _pcx.DrawImageWithMsdf(_msdfMaskGLBmp, 0, 0, 5, Color.White);
+                            //switch back to normal surface                            
+                            _pcx.AttachToRenderSurface(currentSurface);
+                        }
+
+
+                        _pcx.DrawImageWithMask(
+                            _maskRenderSurface.GetInnerGLData().GLBmp,
+                            _colorGLBmp, 0, 0);
+                    }
+                    break;
+                case T408_DrawSet.D:
+                    {
+                        //RectangleF maskSrc = new RectangleF(0, 0, _msdfMaskBmp.Width, _msdfMaskBmp.Height);
+
+                        //Rectangle rect = new Rectangle(10, 10, 120, 120);
+                        //Quad2f quad = new Quad2f();
+                        //quad.SetCornersFromRect(rect);
+
+
+                        //AffineMat mat1 = AffineMat.Iden;
+                        //mat1.Translate(-rect.Width / 2, -rect.Height / 2);
+                        //mat1.RotateDeg(45);
+                        //mat1.Translate(rect.Width / 2, rect.Height / 2);
+                        //quad.Transform(mat1);//***test transform
+
+                        //_pcx.DrawImageWithMsdfMaskV2(_msdfMaskGLBmp, _colorGLBmp,
+                        //  quad,
+                        //  maskSrc,
+                        //  Color.Black,
+                        //  20, 60);
                     }
                     break;
             }

@@ -385,6 +385,7 @@ namespace PixelFarm.DrawingGL
 
             }
         }
+        
         public void Render(GLBitmap bmp,
             in PixelFarm.CpuBlit.VertexProcessing.Quad2f quad,
             bool flipY = false)
