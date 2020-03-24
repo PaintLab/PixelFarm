@@ -4,7 +4,7 @@ using System;
 using PixelFarm.CpuBlit.VertexProcessing;
 namespace PixelFarm.CpuBlit
 {
-    public static class AggPainterPool
+    public static class Tools
     {
         public static TempContext<AggPainter> Borrow(MemBitmap bmp, out AggPainter painter)
         {

@@ -174,7 +174,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
 
                 //
                 MemBitmap newbmp = new MemBitmap(width, height);
-                using (AggPainterPool.Borrow(newbmp, out var _reusablePainter))
+                using (Tools.Borrow(newbmp, out var _reusablePainter))
                 {
                     _reusablePainter.Clear(Color.Black);
                     _reusablePainter.Fill(v1, Color.White);

@@ -354,7 +354,7 @@ namespace Msdfgen
 
             //
             using (MemBitmap bmpLut = new MemBitmap(imgW, imgH))
-            using (AggPainterPool.Borrow(bmpLut, out AggPainter painter))
+            using (Tools.Borrow(bmpLut, out AggPainter painter))
             using (VectorToolBox.Borrow(out ShapeBuilder sh))
             {
 

@@ -712,7 +712,7 @@ namespace PaintLab.Svg
                             //TODO: review this num conversion
                             maskBmp = new MemBitmap((int)maskSpec.Width.Number, (int)maskSpec.Height.Number);
                             //use software renderer for mask-bitmap
-                            using (AggPainterPool.Borrow(maskBmp, out AggPainter painter))
+                            using (Tools.Borrow(maskBmp, out AggPainter painter))
                             using (VgPaintArgsPool.Borrow(painter, out VgPaintArgs paintArgs2))
                             {
                                 painter.FillColor = Color.Black;

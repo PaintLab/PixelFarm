@@ -28,7 +28,7 @@ namespace LayoutFarm
                     if (_myCursor == null)
                     {
                         using (MemBitmap temp = new MemBitmap(16, 16))
-                        using (AggPainterPool.Borrow(temp, out AggPainter p))
+                        using (Tools.Borrow(temp, out AggPainter p))
                         {
 
                             //1. create a simple bitmap for our cursor

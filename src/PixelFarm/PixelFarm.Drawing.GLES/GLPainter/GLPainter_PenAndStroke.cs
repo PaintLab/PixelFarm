@@ -103,7 +103,7 @@ namespace PixelFarm.DrawingGL
                     int h = (int)Math.Ceiling(StrokeWidth + (padding_Y * 2));
 
                     using (MemBitmap tmpBmp = new MemBitmap(w, h))
-                    using (AggPainterPool.Borrow(tmpBmp, out AggPainter p))
+                    using (Tools.Borrow(tmpBmp, out AggPainter p))
                     {
                         p.Clear(Color.Black);
                         p.StrokeColor = Color.White;
