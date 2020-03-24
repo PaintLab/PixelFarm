@@ -202,7 +202,7 @@ namespace PixelFarm.DrawingGL
                                             simpleBmpAtlas.TryGetItem(patNo, out AtlasItem atlasItem);
                                             var srcRect = new Rectangle(atlasItem.Left - (int)atlasItem.TextureXOffset, atlasItem.Top - (int)atlasItem.TextureYOffset, atlasItem.Width - 8, atlasItem.Height - 8);
                                             //please note that : we start rect at (px,py)
-                                            _vboBuilder.WriteRectWithRotation(srcRect, (float)px, (float)py, (float)Math.Atan2(y - py, x - px));
+                                            _vboBuilder.WriteRect(srcRect, (float)px, (float)py,1, (float)Math.Atan2(y - py, x - px));
                                             patNo += 2;
                                             if (patNo >= prebuilt_patt.Length)
                                             {
