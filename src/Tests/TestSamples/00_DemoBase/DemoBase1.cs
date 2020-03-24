@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 
-using PixelFarm.CpuBlit;
 using PixelFarm.Drawing;
 using PixelFarm.DrawingGL;
 
@@ -60,7 +59,7 @@ namespace Mini
         }
         protected virtual bool EnableAnimationTimer
         {
-            get { return false; }
+            get => false;
             set { }
         }
         public static void InvokeGLPainterReady(DemoBase demo, GLPainterContext pcx, GLPainter painter)
@@ -96,10 +95,7 @@ namespace Mini
         protected void SwapBuffers()
         {
             //manual swap buffer
-            if (_swapBufferDelegate != null)
-            {
-                _swapBufferDelegate();
-            }
+            _swapBufferDelegate?.Invoke();
         }
         public void SetEssentialGLHandlers(
             GLSwapBufferDelegate swapBufferDelegate,
@@ -267,8 +263,8 @@ namespace Mini
 
     public class ExampleConfigDesc
     {
-        System.Reflection.PropertyInfo _property;
-        List<ExampleConfigValue> _optionFields;
+        readonly System.Reflection.PropertyInfo _property;
+        readonly List<ExampleConfigValue> _optionFields;
         public ExampleConfigDesc(DemoConfigAttribute config, System.Reflection.PropertyInfo property)
         {
             _property = property;
@@ -367,13 +363,13 @@ namespace Mini
     }
     public class ExampleAndDesc
     {
-        static Type s_demoConfigAttrType = typeof(DemoConfigAttribute);
-        static Type s_infoAttrType = typeof(InfoAttribute);
-        static Type s_demoAction = typeof(DemoActionAttribute);
+        readonly static Type s_demoConfigAttrType = typeof(DemoConfigAttribute);
+        readonly static Type s_infoAttrType = typeof(InfoAttribute);
+        readonly static Type s_demoAction = typeof(DemoActionAttribute);
 
-        List<ExampleConfigDesc> _configList = new List<ExampleConfigDesc>();
-        List<ExampleAction> _actionList = new List<ExampleAction>();
-        List<ExampleGroupConfigDesc> _groupConfigs = new List<ExampleGroupConfigDesc>();
+        readonly List<ExampleConfigDesc> _configList = new List<ExampleConfigDesc>();
+        readonly List<ExampleAction> _actionList = new List<ExampleAction>();
+        readonly List<ExampleGroupConfigDesc> _groupConfigs = new List<ExampleGroupConfigDesc>();
 
         public ExampleAndDesc(Type t, string name)
         {
@@ -525,8 +521,8 @@ namespace Mini
     }
     public class ExampleConfigValue
     {
-        System.Reflection.FieldInfo _fieldInfo;
-        System.Reflection.PropertyInfo _property;
+        readonly System.Reflection.FieldInfo _fieldInfo;
+        readonly System.Reflection.PropertyInfo _property;
         public ExampleConfigValue(System.Reflection.PropertyInfo property, System.Reflection.FieldInfo fieldInfo, string name)
         {
             _property = property;
