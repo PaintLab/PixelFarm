@@ -16,11 +16,11 @@ namespace Msdfgen
     /// </summary>
     public class MsdfGen3
     {
-        PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable _prebuiltThresholdGamma_100;
-        PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable _prebuiltThresholdGamma_OverlappedBorder;
-        PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable _prebuiltThresholdGamma_50;
-        MsdfEdgePixelBlender _msdfEdgePxBlender = new MsdfEdgePixelBlender();
-        StrokeMath _strokeMath = new StrokeMath();
+        readonly PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable _prebuiltThresholdGamma_100;
+        readonly PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable _prebuiltThresholdGamma_OverlappedBorder;
+        readonly PixelFarm.CpuBlit.Rasterization.PrebuiltGammaTable _prebuiltThresholdGamma_50;
+        readonly MsdfEdgePixelBlender _msdfEdgePxBlender = new MsdfEdgePixelBlender();
+        readonly StrokeMath _strokeMath = new StrokeMath();
 
         public MsdfGen3()
         {
@@ -54,10 +54,10 @@ namespace Msdfgen
             //this will create overlapped area outside the shape.
 
             PixelFarm.VectorMath.Vector2 ext_vec = vector.NewLength(w);
-            x0 = x0 - ext_vec.x;
-            y0 = y0 - ext_vec.y;
-            x1 = x1 + ext_vec.x;
-            y1 = y1 + ext_vec.y;
+            x0 -= ext_vec.x;
+            y0 -= ext_vec.y;
+            x1 += ext_vec.x;
+            y1 += ext_vec.y;
 
             //rotate 90 degree to create a height vector that point to 'outside' of the 'rectbox' shape.
             //the box height= w
@@ -490,7 +490,7 @@ namespace Msdfgen
 
 
 
-        Dictionary<int, bool> _uniqueCorners = new Dictionary<int, bool>();
+        readonly Dictionary<int, bool> _uniqueCorners = new Dictionary<int, bool>();
 
         List<CornerList> MakeUniqueList(List<CornerList> primaryOverlappedList)
         {
@@ -848,12 +848,11 @@ namespace Msdfgen
                   edgeThreshold);
             }
 
-            return new PixelFarm.CpuBlit.BitmapAtlas.BitmapAtlasItemSource(w, h)
-            {
+            return new PixelFarm.CpuBlit.BitmapAtlas.BitmapAtlasItemSource(w, h) {
                 Source = ConvertToIntBmp(frgbBmp, flipY),
                 TextureXOffset = (float)translate.x,
                 TextureYOffset = (float)translate.y
-            };             
+            };
         }
 
         static int[] ConvertToIntBmp(FloatRGBBmp input, bool flipY)

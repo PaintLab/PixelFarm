@@ -385,6 +385,7 @@ namespace PixelFarm.DrawingGL
 
             }
         }
+
         public void Render(GLBitmap bmp,
             in PixelFarm.CpuBlit.VertexProcessing.Quad2f quad,
             bool flipY = false)
@@ -411,11 +412,9 @@ namespace PixelFarm.DrawingGL
             SetVarsBeforeRender();
             GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
         }
-
-
+         
         public void Render(GLBitmap glBmp, float left, float top, float w, float h, bool isFlipped = false)
         {
-
             unsafe
             {
 
@@ -431,12 +430,7 @@ namespace PixelFarm.DrawingGL
             //-------------------------------------------------------------------------------------
             // Bind the texture...
             TextureContainter container = _shareRes.LoadGLBitmap(glBmp);
-
-            //GL.ActiveTexture(TextureUnit.Texture0);
-            //GL.BindTexture(TextureTarget.Texture2D, textureId);
-            // Set the texture sampler to texture unit to 0     
             u_texture.SetValue(container.TextureUnitNo);
-
             SetVarsBeforeRender();
             GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
         }
@@ -466,7 +460,7 @@ namespace PixelFarm.DrawingGL
             OnProgramBuilt();
             return true;
         }
-        
+
         protected virtual void SetVarsBeforeRender()
         {
         }
@@ -1570,7 +1564,7 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawSubImage2(in PixelFarm.Drawing.RectangleF maskSrc,
             float colorSrcX, float colorSrcY,
-            float targetLeft, float targetTop )
+            float targetLeft, float targetTop)
         {
             //-------------------------------------------------------------------------------------
             SetVarsBeforeRender();
@@ -1614,8 +1608,8 @@ namespace PixelFarm.DrawingGL
                 a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 7);
                 _texCoord_color.UnsafeLoadMixedV2f(imgVertices + 5, 7);
             }
-             
-            GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices); 
+
+            GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
         }
     }
     //--------------------------------------------------------
