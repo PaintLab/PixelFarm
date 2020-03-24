@@ -765,7 +765,6 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawImageToQuad(GLBitmap bmp, PixelFarm.CpuBlit.VertexProcessing.Affine affine)
         {
-
             Quad2f quad = new Quad2f(bmp.Width, OriginKind == RenderSurfaceOriginKind.LeftTop ? bmp.Height : -bmp.Height);
             quad.Transform(affine);
             DrawImageToQuad(bmp, quad);
@@ -803,8 +802,8 @@ namespace PixelFarm.DrawingGL
 
         public void DrawGlyphImageWithSubPixelRenderingTechnique(GLBitmap bmp, float left, float top)
         {
-            PixelFarm.Drawing.Rectangle srcRect = new Drawing.Rectangle(0, 0, bmp.Width, bmp.Height);
-            DrawGlyphImageWithSubPixelRenderingTechnique(bmp, ref srcRect, left, top);
+            Rectangle srcRect = new Rectangle(bmp.Width, bmp.Height);
+            DrawGlyphImageWithSubPixelRenderingTechnique(bmp, srcRect, left, top);
         }
 
         public void DrawGlyphImageWithStecil(GLBitmap bmp, in PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop, float scale)
@@ -926,7 +925,7 @@ namespace PixelFarm.DrawingGL
 
         public void DrawGlyphImageWithSubPixelRenderingTechnique(
             GLBitmap bmp,
-            ref Rectangle srcRect,
+            in Rectangle srcRect,
             float targetLeft,
             float targetTop)
         {
@@ -965,7 +964,6 @@ namespace PixelFarm.DrawingGL
                 GL.ColorMask(false, false, true, false);
                 _lcdSubPixShader.SetCompo(LcdSubPixShader.ColorCompo.C0);
                 _lcdSubPixShader.UnsafeDrawSubImages(srcDestList, 6, 1);
-
 
                 //float subpixel_shift = 1 / 9f;
                 //---------------------------------------------------
@@ -1264,7 +1262,8 @@ namespace PixelFarm.DrawingGL
                     {
                         //TODO: review here again
                         //use VBO?
-                        //
+                        //TODO: create mask on another render suface and use shader+mask is more simple
+
                         if (pathRenderVx._enableVBO)
                         {
 
@@ -1783,12 +1782,13 @@ namespace PixelFarm.DrawingGL
 
         public void SaveContextData(out GLPainterContextData context)
         {
-            context = new GLPainterContextData();
-            context.renderSurface = CurrentRenderSurface;
-            context.canvas_origin_X = _canvasOriginX;
-            context.canvas_origin_Y = _canvasOriginY;
-            context.originKind = OriginKind;
-            context.clipRect = GetClipRect();
+            context = new GLPainterContextData {
+                renderSurface = CurrentRenderSurface,
+                canvas_origin_X = _canvasOriginX,
+                canvas_origin_Y = _canvasOriginY,
+                originKind = OriginKind,
+                clipRect = GetClipRect()
+            };
         }
         public void RestoreContextData(in GLPainterContextData context)
         {
@@ -1846,10 +1846,6 @@ namespace PixelFarm.DrawingGL
         internal PixelFarm.CpuBlit.ArrayList<float> _buffer = new CpuBlit.ArrayList<float>();
         internal PixelFarm.CpuBlit.ArrayList<ushort> _indexList = new CpuBlit.ArrayList<ushort>();
 
-#if DEBUG
-
-#endif
-
         public TextureCoordVboBuilder()
         {
 
@@ -1861,8 +1857,6 @@ namespace PixelFarm.DrawingGL
             _bmpYFlipped = isYFlipped;
             _pcxOrgKind = pcxOrgKind;
         }
-
-
         public void Clear()
         {
             _buffer.Clear();
@@ -2027,6 +2021,8 @@ namespace PixelFarm.DrawingGL
         )
         {
 
+            //TODO: use Quad2f
+
             float srcBottom = srcTop + srcH;
             float srcRight = srcLeft + srcW;
 
@@ -2099,8 +2095,6 @@ namespace PixelFarm.DrawingGL
            float rotationRad
        )
         {
-
-
             float srcBottom = srcTop + srcH;
             float srcRight = srcLeft + srcW;
 
