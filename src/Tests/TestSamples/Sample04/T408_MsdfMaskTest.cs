@@ -12,6 +12,15 @@ using PixelFarm.CpuBlit.VertexProcessing;
 
 namespace OpenTkEssTest
 {
+
+    public enum T408_DrawSet
+    {
+        A,
+        B,
+        C,
+        D,
+    }
+
     [Info(OrderCode = "408", AvailableOn = AvailableOn.GLES)]
     [Info("T408_MsdfMaskTest")]
     public class T408_MsdfMaskTest : DemoBase
@@ -24,6 +33,11 @@ namespace OpenTkEssTest
         MemBitmap _msdfMaskBmp;
         GLBitmap _colorGLBmp;
         GLBitmap _msdfMaskGLBmp;
+
+
+
+        [DemoConfig]
+        public T408_DrawSet DrawSet { get; set; }
 
         protected override void OnGLPainterReady(GLPainter painter)
         {
@@ -70,42 +84,96 @@ namespace OpenTkEssTest
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-
+            //reset
             _pcx.SmoothMode = SmoothMode.Smooth;
-            _pcx.StrokeColor = PixelFarm.Drawing.Color.Blue;
             _pcx.ClearColorBuffer();
-
-
-            //_pcx.DrawImageWithMsdfMask(_msdfMaskGLBmp, _colorGLBmp, 0, 0);
             _painter.Clear(Color.Yellow);
 
-            RectangleF maskSrc = new RectangleF(0, 0, _msdfMaskBmp.Width, _msdfMaskBmp.Height);
+            switch (DrawSet)
+            {
+                case T408_DrawSet.A:
+                    {
+                        RectangleF maskSrc = new RectangleF(0, 0, _msdfMaskBmp.Width, _msdfMaskBmp.Height);
+                        //_pcx.DrawImageWithMsdfMask(_msdfMaskGLBmp, _colorGLBmp, maskSrc,
+                        //    0, 0,
+                        //    20, 60);
 
 
-            //_pcx.DrawImageWithMsdfMask(_msdfMaskGLBmp, _colorGLBmp, maskSrc,
-            //    0, 0,
-            //    20, 60);
+                        Rectangle rect = new Rectangle(10, 10, 120, 120);
+                        Quad2f quad = new Quad2f();
+                        quad.SetCornersFromRect(rect);
+
+                        _pcx.DrawImageWithMsdfMask(_msdfMaskGLBmp, _colorGLBmp,
+                          quad,
+                          maskSrc,
+                          0, 0,
+                          20, 60);
+                    }
+                    break;
+                case T408_DrawSet.B:
+                    {
+                        RectangleF maskSrc = new RectangleF(0, 0, _msdfMaskBmp.Width, _msdfMaskBmp.Height);
 
 
-            Quad2f quad = new Quad2f();
-            Rectangle rect = new Rectangle(10, 10, 120, 120);
-            quad.SetCornersFromRect(rect.Left, rect.Top, rect.Width, rect.Height);
+                        Rectangle rect = new Rectangle(10, 10, 120, 120);
+                        Quad2f quad = new Quad2f();
+                        quad.SetCornersFromRect(rect);
 
-            AffineMat mat1 = AffineMat.Iden;
-            mat1.Translate(-rect.Width / 2, -rect.Height / 2);
-            mat1.RotateDeg(45);
-            mat1.Translate(rect.Width / 2, rect.Height / 2);
+                        AffineMat mat1 = AffineMat.Iden;
+                        mat1.Translate(-rect.Width / 2, -rect.Height / 2);
+                        mat1.RotateDeg(45);
+                        mat1.Translate(rect.Width / 2, rect.Height / 2); 
+                        quad.Transform(mat1);//***test transform
 
-            quad.Transform(mat1);//***test transform
+                        _pcx.DrawImageWithMsdfMask(_msdfMaskGLBmp, _colorGLBmp,
+                          quad,
+                          maskSrc,
+                          0, 0,
+                          20, 60);
+                    }
+                    break;
+                case T408_DrawSet.C:
+                    {
+                        RectangleF maskSrc = new RectangleF(0, 0, _msdfMaskBmp.Width, _msdfMaskBmp.Height);
 
-            _pcx.DrawImageWithMsdfMask(_msdfMaskGLBmp, _colorGLBmp,
-              quad,
-              maskSrc,
-              0, 0,
-              20, 60);
+                        Rectangle rect = new Rectangle(10, 10, 120, 120);
+                        Quad2f quad = new Quad2f();
+                        quad.SetCornersFromRect(rect);
+
+                        _pcx.DrawImageWithMsdfMaskV2(_msdfMaskGLBmp, _colorGLBmp,
+                          quad,
+                          maskSrc,
+                          Color.Red,
+                          20, 60);
+                    }
+                    break;
+                case T408_DrawSet.D:
+                    {
+                        RectangleF maskSrc = new RectangleF(0, 0, _msdfMaskBmp.Width, _msdfMaskBmp.Height);
+
+                        Rectangle rect = new Rectangle(10, 10, 120, 120);
+                        Quad2f quad = new Quad2f();
+                        quad.SetCornersFromRect(rect);
+
+
+                        AffineMat mat1 = AffineMat.Iden;
+                        mat1.Translate(-rect.Width / 2, -rect.Height / 2);
+                        mat1.RotateDeg(45);
+                        mat1.Translate(rect.Width / 2, rect.Height / 2);
+                        quad.Transform(mat1);//***test transform
+
+                        _pcx.DrawImageWithMsdfMaskV2(_msdfMaskGLBmp, _colorGLBmp,
+                          quad,
+                          maskSrc,
+                          Color.Red,
+                          20, 60);
+                    }
+                    break;
+            }
 
             SwapBuffers();
         }
+
     }
 }
 

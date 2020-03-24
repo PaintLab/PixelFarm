@@ -163,6 +163,25 @@ namespace PixelFarm.DrawingGL
             }
             base.SetVarsBeforeRender();
         }
+        public void DrawSubImage2(in CpuBlit.VertexProcessing.Quad2f quad,
+          in PixelFarm.Drawing.RectangleF maskSrc,
+          float targetLeft, float targetTop)
+        {
+            //-------------------------------------------------------------------------------------
+            SetVarsBeforeRender();
+            //-------------------------------------------------------------------------------------           
+            var srcRect = new CpuBlit.VertexProcessing.Quad2f(maskSrc.Left, maskSrc.Top, maskSrc.Width, maskSrc.Height, _latestBmpW, _latestBmpH);
+
+            unsafe
+            {
+                float* imgVertices = stackalloc float[5 * 4];
+                AssignVertice5_4(quad, srcRect, imgVertices, !_latestBmpYFlipped);
+
+                a_position.UnsafeLoadMixedV3f(imgVertices, 5);
+                a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
+            }
+            GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
+        }
     }
 
     sealed class MsdfMaskShader : SimpleRectTextureShader
@@ -330,5 +349,6 @@ namespace PixelFarm.DrawingGL
 
         }
     }
+
 
 }

@@ -688,8 +688,7 @@ namespace PixelFarm.DrawingGL
             float colorSrcX, float colorSrcY,
             float targetLeft, float targetTop)
         {
-            //in this version bmp and mask size must be the same.
-            //this limitation will be removed later
+
             if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 //***
@@ -706,8 +705,7 @@ namespace PixelFarm.DrawingGL
         //-----------
         public void DrawImageWithMsdfMask(GLBitmap mask, GLBitmap colorSrc, float targetLeft, float targetTop)
         {
-            //in this version bmp and mask size must be the same.
-            //this limitation will be removed later
+
             if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 //***
@@ -723,8 +721,7 @@ namespace PixelFarm.DrawingGL
             float colorSrcX, float colorSrcY,
             float targetLeft, float targetTop)
         {
-            //in this version bmp and mask size must be the same.
-            //this limitation will be removed later
+
             if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 //***
@@ -743,8 +740,7 @@ namespace PixelFarm.DrawingGL
             float colorSrcX, float colorSrcY,
             float targetLeft, float targetTop)
         {
-            //in this version bmp and mask size must be the same.
-            //this limitation will be removed later
+
             if (OriginKind == RenderSurfaceOrientation.LeftTop)
             {
                 //***
@@ -757,6 +753,31 @@ namespace PixelFarm.DrawingGL
                 quad,
                 maskSrcRect,
                 -colorSrcX, -colorSrcY,
+                targetLeft, targetTop);
+        }
+
+        public void DrawImageWithMsdfMaskV2(GLBitmap mask, GLBitmap colorSrc,
+            in PixelFarm.CpuBlit.VertexProcessing.Quad2f quad,
+            in PixelFarm.Drawing.RectangleF maskSrcRect,
+            in Color color,
+            float targetLeft, float targetTop)
+        {
+
+            if (OriginKind == RenderSurfaceOrientation.LeftTop)
+            {
+                //***
+                targetTop += colorSrc.Height;
+            }
+
+            //this is a 2 steps draw=>
+            //1. apply alpha value to target surface
+            //2. apply color value to target surface
+
+            _msdfShader.LoadGLBitmap(mask);
+            _msdfShader.SetColor(color);
+            _msdfShader.DrawSubImage2(
+                quad,
+                maskSrcRect,
                 targetLeft, targetTop);
         }
         public void DrawImage(GLBitmap bmp,
