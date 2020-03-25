@@ -433,16 +433,7 @@ namespace LayoutFarm.UI
         public virtual int InnerHeight => this.Height;
         //
         public virtual int InnerWidth => this.Width;
-        //
-        protected virtual void Describe(UIVisitor visitor)
-        {
-            visitor.Attribute("left", this.Left);
-            visitor.Attribute("top", this.Top);
-            visitor.Attribute("width", this.Width);
-            visitor.Attribute("height", this.Height);
-        }
         
-
         public bool HasSpecificWidth
         {
             get => _specificWidth;

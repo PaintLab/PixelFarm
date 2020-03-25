@@ -845,19 +845,7 @@ namespace LayoutFarm.CustomWidgets
             }
 #endif
         }
-        protected override void Describe(UIVisitor visitor)
-        {
-            //describe base properties
-            base.Describe(visitor);
-            //describe child content
-            if (_uiList != null)
-            {
-                foreach (UIElement ui in _uiList.GetIter())
-                {
-                    ui.AcceptVisitor(visitor);
-                }
-            }
-        }
+         
 
         protected override void OnGuestMsg(UIGuestMsgEventArgs e)
         {
