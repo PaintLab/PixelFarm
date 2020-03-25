@@ -128,10 +128,8 @@ namespace LayoutFarm.ColorBlenderSample
             {
                 if (_lineRendeE == null)
                 {
-
-
-                    using (VectorToolBox.Borrow(out PixelFarm.CpuBlit.VertexProcessing.Stroke stroke))
-                    using (VxsTemp.Borrow(out var vxs, out var strokeVxs))
+                    using (Tools.BorrowStroke(out var stroke))
+                    using (Tools.BorrowVxs(out var vxs, out var strokeVxs))
                     {
                         stroke.Width = 3;
                         vxs.AddMoveTo(p0.Left, p0.Top);

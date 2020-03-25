@@ -93,7 +93,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         VertexStore _simplePath2;
         void CreateTwoSimplePath()
         {
-            using (VxsTemp.Borrow(out var v1, out var v2))
+            using (Tools.BorrowVxs(out var v1, out var v2))
             {
                 double x = _x - Width / 2 + 100;
                 double y = _y - Height / 2 + 100;
@@ -109,9 +109,9 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         void CreateCloseStroke()
         {
 
-            using (VxsTemp.Borrow(out var v1, out var v2))
-            using (VxsTemp.Borrow(out var v3, out var v4))
-            using (VectorToolBox.Borrow(out Stroke stroke))
+            using (Tools.BorrowVxs(out var v1, out var v2))
+            using (Tools.BorrowVxs(out var v3, out var v4))
+            using (Tools.BorrowStroke(out var stroke))
             {
 
                 double x = _x - Width / 2 + 100;
@@ -134,7 +134,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         {
             //------------------------------------
             // Great Britain and Arrows
-            using (VxsTemp.Borrow(out var v1, out var v2))
+            using (Tools.BorrowVxs(out var v1, out var v2))
             {
                 PolygonClippingDemoHelper.WriteGBObject(v1, 0, 0);
                 _gb = v1.CreateTrim();
@@ -145,8 +145,8 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         }
         void CreateSpiral()
         {
-            using (VxsTemp.Borrow(out var v1, out var v2))
-            using (VectorToolBox.Borrow(out Stroke stroke))
+            using (Tools.BorrowVxs(out var v1, out var v2))
+            using (Tools.BorrowStroke(out var stroke))
             {
 
                 PolygonClippingDemoHelper.WriteSpiral(v1, _x, _y);
@@ -164,7 +164,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         {
 
             RectD bounds = vxs.GetBoundingRect();
-            using (VxsTemp.Borrow(out var v1))
+            using (Tools.BorrowVxs(out var v1))
             {
                 vxs.TranslateToNewVxs(-bounds.Left, -bounds.Bottom, v1);
                 bounds = v1.GetBoundingRect();
@@ -174,7 +174,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
 
                 //
                 MemBitmap newbmp = new MemBitmap(width, height);
-                using (AggPainterPool.Borrow(newbmp, out var _reusablePainter))
+                using (Tools.BorrowAggPainter(newbmp, out var _reusablePainter))
                 {
                     _reusablePainter.Clear(Color.Black);
                     _reusablePainter.Fill(v1, Color.White);
@@ -189,7 +189,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
             VertexStore b = null;
 
             switch (PolygonSet)
-            {                
+            {
                 case PolygonExampleSet.TwoSimplePaths:
                     a = _simplePath1;
                     b = _simplePath2;
@@ -228,7 +228,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                     {
                         case RegionKind.VxsRegion:
                             {
-                                using (VxsTemp.Borrow(out var v1))
+                                using (Tools.BorrowVxs(out var v1))
                                 {
                                     Affine.NewTranslation(_x, _y).TransformToVxs(a, v1);
                                     //CreateAndRenderCombined(p, v1, b); 
@@ -241,7 +241,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                             {
                                 //this case, we create bitmap rgn from a and b
                                 //
-                                using (VxsTemp.Borrow(out var v1))
+                                using (Tools.BorrowVxs(out var v1))
                                 {
                                     Affine.NewTranslation(_x, _y).TransformToVxs(a, v1);
                                     _rgnA = new PathReconstruction.BitmapBasedRegion(CreateMaskBitmapFromVxs(v1));
@@ -275,7 +275,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
             }
             else
             {
-                using (VxsTemp.Borrow(out var v1))
+                using (Tools.BorrowVxs(out var v1))
                 {
                     //translate _simplepath2
                     Affine.NewTranslation(_x, _y).TransformToVxs(a, v1);

@@ -81,7 +81,7 @@ namespace PixelFarm
 
             var prevColor = painter.StrokeColor;
             painter.StrokeColor = Color.Black;
-            using (VxsTemp.Borrow(out var v1))
+            using (Tools.BorrowVxs(out var v1))
             {
                 _glyphPathBuilder.ReadShapes(_tovxs);
                 _tovxs.WriteOutput(v1); //write content from GlyphTranslator to v1

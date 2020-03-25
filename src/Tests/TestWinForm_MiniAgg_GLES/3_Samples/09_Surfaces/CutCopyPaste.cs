@@ -34,7 +34,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                 }
             }
             //2. fill cut area
-            using (AggPainterPool.Borrow(_lionPng, out var painter))
+            using (Tools.BorrowAggPainter(_lionPng, out var painter))
             {
                 var prevColor = painter.FillColor;
                 painter.FillColor = Color.White;
@@ -65,7 +65,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                 PixelFarm.CpuBlit.BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(bmp, memBmp);
 
                 //...
-                using (AggPainterPool.Borrow(_lionPng, out var painter))
+                using (Tools.BorrowAggPainter(_lionPng, out var painter))
                 {
                     painter.DrawImage(memBmp);
                 }

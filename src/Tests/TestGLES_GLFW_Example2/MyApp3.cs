@@ -6,8 +6,8 @@ using OpenTK.Graphics.ES20;
 using PixelFarm;
 using PixelFarm.Forms;
 using PixelFarm.Drawing;
+using PixelFarm.CpuBlit;
 
-using Typography.FontManagement;
 using LayoutFarm;
 using LayoutFarm.UI;
 using PaintLab.Svg;
@@ -34,7 +34,7 @@ namespace TestGlfw
 
         public Cursor CurrentCursor
         {
-            get => throw new NotImplementedException(); 
+            get => throw new NotImplementedException();
             set => throw new NotImplementedException();
         }
 
@@ -148,7 +148,7 @@ namespace TestGlfw
 
             //TODO: review here
             Painter p = d.GetPainter();
-            using (VgPaintArgsPool.Borrow(p, out var paintArgs))
+            using (Tools.More.BorrowVgPaintArgs(p, out var paintArgs))
             {
                 _renderVx.Paint(paintArgs);
             }

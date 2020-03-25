@@ -72,7 +72,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             }
 
 
-            using (VxsTemp.Borrow(out var vxs1, out var vxs2))
+            using (Tools.BorrowVxs(out var vxs1, out var vxs2))
             {
                 SimpleRect sRect = new SimpleRect();
                 int x = 0, y = 0, w = 100, h = 100;
@@ -131,7 +131,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             //
             //1. create a new one
             MemBitmap smallBmp = new MemBitmap(orgBmp.Width / 2, orgBmp.Height / 2);
-            using (AggPainterPool.Borrow(smallBmp, out var painter))
+            using (Tools.BorrowAggPainter(smallBmp, out var painter))
             {
                 painter.DrawImage(orgBmp, AffinePlan.Scale(0.5, 0.5));
             }
@@ -198,7 +198,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             //----
             //
 
-            using (VxsTemp.Borrow(out var vxs1, out var vxs2))
+            using (Tools.BorrowVxs(out var vxs1, out var vxs2))
             {
                 SimpleRect sRect = new SimpleRect();
                 int x = 0, y = 0, w = 100, h = 100;

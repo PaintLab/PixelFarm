@@ -58,7 +58,7 @@ namespace PixelFarm.CpuBlit.Samples
                 return;
             }
 
-            using (VgPaintArgsPool.Borrow(p, out var paintArgs))
+            using (Tools.More.BorrowVgPaintArgs(p, out var paintArgs))
             {
                 paintArgs.PaintVisitHandler = (vxs, arg) =>
                 {
@@ -75,8 +75,8 @@ namespace PixelFarm.CpuBlit.Samples
                     _builder.SmoothCoefficiency = this.SmoothCoefficientValue;
                     _builder.ReconstructionControllerArms(vxs, _output);
 
-                    using (VxsTemp.Borrow(out var tmpVxs1, out var tmpVxs2))
-                    using (VectorToolBox.Borrow(tmpVxs1, out PathWriter pw))
+                    using (Tools.BorrowVxs(out var tmpVxs1, out var tmpVxs2))
+                    using (Tools.BorrowPathWriter(tmpVxs1, out var pw))
                     {
 
                         int fig_count = _output.Count;
@@ -170,7 +170,7 @@ namespace PixelFarm.CpuBlit.Samples
         public override void Init()
         {
             //eg. lion
-            using (VxsTemp.Borrow(out var vxs1))
+            using (Tools.BorrowVxs(out var vxs1))
             {
                 vxs1.AddMoveTo(10, 10);
                 vxs1.AddLineTo(30, 40);
@@ -212,85 +212,82 @@ namespace PixelFarm.CpuBlit.Samples
                 return;
             }
 
-            using (VgPaintArgsPool.Borrow(p, out var paintArgs))
+
+            //use external painter handler
+            //draw only outline with its fill-color.
+            Drawing.Painter m_painter = p;
+            Drawing.Color prevFillColor = m_painter.FillColor;
+            m_painter.FillColor = m_painter.FillColor;
+
+            //do other transform first
+
+            _output.Clear();
+            _builder.SmoothCoefficiency = this.SmoothCoefficientValue;
+            _builder.ReconstructionControllerArms(_simpleStrip, _output);
+
+            using (Tools.BorrowVxs(out var v1, out var v2))
+            using (Tools.BorrowPathWriter(v1, out PathWriter pw))
             {
 
-                //use external painter handler
-                //draw only outline with its fill-color.
-                Drawing.Painter m_painter = p;
-                Drawing.Color prevFillColor = m_painter.FillColor;
-                m_painter.FillColor = m_painter.FillColor;
-
-                //do other transform first
-
-                _output.Clear();
-                _builder.SmoothCoefficiency = this.SmoothCoefficientValue;
-                _builder.ReconstructionControllerArms(_simpleStrip, _output);
-
-                using (VxsTemp.Borrow(out var tmpVxs1, out var tmpVxs2))
-                using (VectorToolBox.Borrow(tmpVxs1, out PathWriter pw))
+                int fig_count = _output.Count;
+                for (int f = 0; f < fig_count; ++f)
                 {
+                    ReconstructedFigure fig = _output[f];
+                    List<BezierControllerArmPair> arms = fig._arms;
+                    int count = arms.Count;
 
-                    int fig_count = _output.Count;
-                    for (int f = 0; f < fig_count; ++f)
+                    int index = 0;
+                    BezierControllerArmPair arm0 = arms[index];
+                    BezierControllerArmPair arm1 = arms[index + 1];
+                    //start 
+
+                    pw.MoveTo(arm0.mid.X, arm0.mid.y);
+
+                    pw.Curve4(
+                        arm0.right.x, arm0.right.y,
+                        arm1.left.x, arm1.left.y,
+                        arm1.mid.x, arm1.mid.y);
+
+                    index++;
+                    arm0 = arm1;
+                    for (; index < count; ++index)
                     {
-                        ReconstructedFigure fig = _output[f];
-                        List<BezierControllerArmPair> arms = fig._arms;
-                        int count = arms.Count;
-
-                        int index = 0;
-                        BezierControllerArmPair arm0 = arms[index];
-                        BezierControllerArmPair arm1 = arms[index + 1];
-                        //start 
-
-                        pw.MoveTo(arm0.mid.X, arm0.mid.y);
-
-                        pw.Curve4(
-                            arm0.right.x, arm0.right.y,
-                            arm1.left.x, arm1.left.y,
-                            arm1.mid.x, arm1.mid.y);
-
-                        index++;
-                        arm0 = arm1;
-                        for (; index < count; ++index)
-                        {
-                            arm1 = arms[index];
-                            //
-                            pw.Curve4(
-                              arm0.right.x, arm0.right.y,
-                              arm1.left.x, arm1.left.y,
-                              arm1.mid.x, arm1.mid.y);
-                            //
-                            arm0 = arm1;
-                        }
-                        
-                        //the last curve
-
-                        arm1 = arms[0];
-                        pw.Curve4(
-                            arm0.right.x, arm0.right.y,
-                            arm1.left.x, arm1.left.y,
-                            arm1.mid.x, arm1.mid.y);
-
-                        pw.CloseFigure();
-
-                        _curveflattener.MakeVxs(tmpVxs1, tmpVxs2);
-
+                        arm1 = arms[index];
                         //
-                        m_painter.Fill(tmpVxs2);  //draw to output
-                                                  //
-
-                        //clear before reuse
-                        tmpVxs1.Clear();
-                        tmpVxs2.Clear();
-                        pw.Clear();
+                        pw.Curve4(
+                          arm0.right.x, arm0.right.y,
+                          arm1.left.x, arm1.left.y,
+                          arm1.mid.x, arm1.mid.y);
+                        //
+                        arm0 = arm1;
                     }
+
+                    //the last curve
+
+                    arm1 = arms[0];
+                    pw.Curve4(
+                        arm0.right.x, arm0.right.y,
+                        arm1.left.x, arm1.left.y,
+                        arm1.mid.x, arm1.mid.y);
+
+                    pw.CloseFigure();
+
+                    _curveflattener.MakeVxs(v1, v2);
+
+                    //
+                    m_painter.Fill(v2);  //draw to output
+                                              //
+
+                    //clear before reuse
+                    v1.Clear();
+                    v2.Clear();
+                    pw.Clear();
                 }
-                //m_painter.Fill(vxs); 
-                m_painter.FillColor = prevFillColor;
-
-
             }
+            //m_painter.Fill(vxs); 
+            m_painter.FillColor = prevFillColor;
+
+
 
 
         }

@@ -75,9 +75,9 @@ namespace PixelFarm
 
         public static VertexStore BuildCardinalSpline()
         {
-            using (VxsTemp.Borrow(out var v1, out var v3))
-            using (VectorToolBox.Borrow(out CurveFlattener flatten))
-            using (VectorToolBox.Borrow(v1, out PathWriter w))
+            using (Tools.BorrowVxs(out var v1, out var v3))
+            using (Tools.BorrowCurveFlattener(out var flatten))
+            using (Tools.BorrowPathWriter(v1, out var w))
 
             {
                 w.MoveTo(10, 10);
@@ -126,9 +126,9 @@ namespace PixelFarm
             };
 
 
-            using (VxsTemp.Borrow(out var v1, out var v2))
-            using (VectorToolBox.Borrow(v1, out PathWriter pw))
-            using (VectorToolBox.Borrow(out CurveFlattener flatten))
+            using (Tools.BorrowVxs(out var v1, out var v2))
+            using (Tools.BorrowPathWriter(v1, out var pw))
+            using (Tools.BorrowCurveFlattener(out var flatten))
             {
 
                 pw.MoveTo(xyCoords[2], xyCoords[3]);//***
@@ -149,10 +149,10 @@ namespace PixelFarm
         public static VertexStore BuildRoundCornerPolygon2()
         {
 
-            using (VxsTemp.Borrow(out var v1, out var v2, out var v3))
-            using (VectorToolBox.Borrow(out Stroke stroke))
-            using (VectorToolBox.Borrow(out CurveFlattener flattener))
-            using (VectorToolBox.Borrow(out Arc arc))
+            using (Tools.BorrowVxs(out var v1, out var v2, out var v3))
+            using (Tools.BorrowStroke(out var stroke))
+            using (Tools.BorrowCurveFlattener(out var flattener))
+            using (Tools.BorrowArc(out var arc))
             {
                 arc.Init(50, 50, 10, 20, Math.PI, 0);
                 arc.SetStartEndLimit(40, 50, 60, 50);
@@ -174,8 +174,8 @@ namespace PixelFarm
         }
         public static VertexStore BuildRoundCornerPolygon()
         {
-            using (VectorToolBox.Borrow(out ShapeBuilder b))
-            using (VectorToolBox.Borrow(out Stroke stroke))
+            using (Tools.BorrowShapeBuilder(out var b))
+            using (Tools.BorrowStroke(out var stroke))
             {
 
                 b.MoveTo(5, 20);
@@ -195,8 +195,8 @@ namespace PixelFarm
         public static VertexStore BuildGeneralLines()
         {
             //use this example with BuildOutsidePartOfLines() and  BuildInsidePartOfLines()
-            using (VectorToolBox.Borrow(out ShapeBuilder b))
-            using (VectorToolBox.Borrow(out Stroke stroke))
+            using (Tools.BorrowShapeBuilder(out var b))
+            using (Tools.BorrowStroke(out var stroke))
             {
 
                 stroke.Width = 5;
@@ -213,8 +213,8 @@ namespace PixelFarm
         }
         public static VertexStore BuildOutsidePartOfLines()
         {
-            using (VectorToolBox.Borrow(out ShapeBuilder b))
-            using (VectorToolBox.Borrow(out Stroke stroke))
+            using (Tools.BorrowShapeBuilder(out var b))
+            using (Tools.BorrowStroke(out var stroke))
             {
                 stroke.StrokeSideForOpenShape = StrokeSideForOpenShape.Outside;
                 stroke.Width = 5;
@@ -230,8 +230,8 @@ namespace PixelFarm
         }
         public static VertexStore BuildInsidePartOfLines()
         {
-            using (VectorToolBox.Borrow(out ShapeBuilder b))
-            using (VectorToolBox.Borrow(out Stroke stroke))
+            using (Tools.BorrowShapeBuilder(out var b))
+            using (Tools.BorrowStroke(out Stroke stroke))
             {
                 stroke.StrokeSideForOpenShape = StrokeSideForOpenShape.Inside;
                 stroke.Width = 5;
@@ -250,8 +250,8 @@ namespace PixelFarm
         {
             VertexStore arrow;
             VertexStore stem;
-            using (VectorToolBox.Borrow(out Stroke stroke))
-            using (VxsTemp.Borrow(out var v1, out var v3, out var v4))
+            using (Tools.BorrowStroke(out var stroke))
+            using (Tools.BorrowVxs(out var v1, out var v3, out var v4))
             {
                 if (solidHead)
                 {
@@ -286,8 +286,8 @@ namespace PixelFarm
 
         static void BuildLine(float x0, float y0, float x1, float y1, VertexStore output)
         {
-            using (VxsTemp.Borrow(out var v1))
-            using (VectorToolBox.Borrow(out Stroke stroke))
+            using (Tools.BorrowVxs(out var v1))
+            using (Tools.BorrowStroke(out var stroke))
             {
                 stroke.Width = 3;
                 v1.AddMoveTo(x0, y0);
@@ -298,14 +298,14 @@ namespace PixelFarm
 
         public static VertexStore BuildRoundedRect(bool outline)
         {
-            using (VectorToolBox.Borrow(out RoundedRect roundedRect))
+            using (Tools.BorrowRoundedRect(out var roundedRect))
             {
                 if (outline)
                 {
                     roundedRect.SetRadius(5, 5, 0, 0, 5, 5, 0, 0);
                     roundedRect.SetRect(10, 10, 30, 30);
-                    using (VxsTemp.Borrow(out var v1))
-                    using (VectorToolBox.Borrow(out Stroke stroke))
+                    using (Tools.BorrowVxs(out var v1))
+                    using (Tools.BorrowStroke(out var stroke))
                     {
                         stroke.LineJoin = LineJoin.Bevel;
                         stroke.Width = 3;
@@ -344,9 +344,9 @@ namespace PixelFarm
             if (xyCoords.Length > 4)
             {
 
-                using (VxsTemp.Borrow(out var v1, out var v2))
-                using (VectorToolBox.Borrow(v1, out PathWriter pw))
-                using (VectorToolBox.Borrow(out CurveFlattener flattener))
+                using (Tools.BorrowVxs(out var v1, out var v2))
+                using (Tools.BorrowPathWriter(v1, out var pw))
+                using (Tools.BorrowCurveFlattener(out var flattener))
                 {
 
                     //for Catrom,
@@ -371,10 +371,6 @@ namespace PixelFarm
                 }
             }
 
-            //using (VxsTemp.Borrow(points, out var v1, false))
-            //{
-            //    p.FillStroke(v1, 2, Color.Red);
-            //}
         }
 
 
@@ -446,7 +442,7 @@ namespace PixelFarm
             p.Fill(selectedVxs);
 
             //test transform the shape
-            using (VxsTemp.Borrow(out var v1))
+            using (Tools.BorrowVxs(out var v1))
             {
 
                 for (int i = 0; i < 1; i++)

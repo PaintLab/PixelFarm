@@ -168,19 +168,20 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             p.Clear(Drawing.Color.White);
 
             //Ellipse ellipseVxsGen = new Ellipse(0, 0, 100, 50);
-            using (VectorToolBox.Borrow(out Ellipse ellipseVxsGen))
-            using (VectorToolBox.Borrow(out Stroke stroke))
+            using (Tools.BorrowEllipse(out var ellipseVxsGen))
+            using (Tools.BorrowStroke(out var stroke))
             {
                 ellipseVxsGen.Set(0, 0, 100, 50);
                 stroke.Width = 3;
 
                 for (double angleDegrees = 0; angleDegrees < 180; angleDegrees += 22.5)
                 {
+                    //TODO: use AffineMat (stack-base matrix)
                     var mat = Affine.New(
                         AffinePlan.Rotate(MathHelper.DegreesToRadians(angleDegrees)),
                         AffinePlan.Translate(width / 2, 150));
 
-                    using (VxsTemp.Borrow(out var v1, out var v2, out var v3))
+                    using (Tools.BorrowVxs(out var v1, out var v2, out var v3))
                     {
 
                         ellipseVxsGen.MakeVxs(mat, v2);
@@ -196,8 +197,8 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
 
             // and a little polygon
-            using (VxsTemp.Borrow(out var v1))
-            using (VectorToolBox.Borrow(v1, out PathWriter littlePoly))
+            using (Tools.BorrowVxs(out var v1))
+            using (Tools.BorrowPathWriter(v1, out PathWriter littlePoly))
             {
                 littlePoly.MoveTo(50, 50);
                 littlePoly.LineTo(150, 50);

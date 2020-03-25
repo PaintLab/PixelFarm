@@ -200,7 +200,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
             using (MemBitmap glyphBmp = new MemBitmap(100, 100))
             {
                 int x = 10, y = 10;
-                using (AggPainterPool.Borrow(glyphBmp, out var painter))
+                using (Tools.BorrowAggPainter(glyphBmp, out var painter))
                 {
                     painter.StrokeColor = PixelFarm.Drawing.Color.Black;
                     painter.StrokeWidth = 2.0f * 3;
@@ -359,7 +359,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
                 Typography.Contours.GlyphTranslatorToVxs tovxs = new Typography.Contours.GlyphTranslatorToVxs();
                 builder.ReadShapes(tovxs);
 
-                using (VxsTemp.Borrow(out var vxs))
+                using (Tools.BorrowVxs(out var vxs))
                 {
                     tovxs.WriteOutput(vxs);
                     p.Fill(vxs);

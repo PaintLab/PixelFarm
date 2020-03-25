@@ -87,7 +87,7 @@ namespace Msdfgen
         void CreateBorder(VertexStore vxs, Vertex2d prev, Vertex2d now, Vertex2d next0, Vertex2d next1)
         {
             //now we are on now
-            using (VxsTemp.Borrow(out var vxs1))
+            using (Tools.BorrowVxs(out var vxs1))
             {
                 vxs.AddMoveTo(now.x, now.y);
 
@@ -146,7 +146,7 @@ namespace Msdfgen
                 //then we create an 'inner border' of a line from c0 to c1
                 //and we create an 'outer border' of a line from c0 to c1
                 //
-                using (VxsTemp.Borrow(out var v1))
+                using (Tools.BorrowVxs(out var v1))
                 {
                     //1. inner-border, set fill mode to inform proper color encoding of inner border
                     _msdfEdgePxBlender.FillMode = MsdfEdgePixelBlender.BlenderFillMode.InnerBorder;
@@ -213,9 +213,9 @@ namespace Msdfgen
                         {
                             //approximate 
                             CubicSegment cs = (CubicSegment)ownerSeg;
-                            using (VxsTemp.Borrow(out var v1))
-                            using (VectorToolBox.Borrow(out ShapeBuilder b))
-                            using (VectorToolBox.Borrow(out Stroke strk))
+                            using (Tools.BorrowVxs(out var v1))
+                            using (Tools.BorrowShapeBuilder(out var b))
+                            using (Tools.BorrowStroke(out var strk))
                             {
 
                                 b.MoveTo(cs.P0.x + _dx, cs.P0.y + _dy) //...
@@ -247,9 +247,10 @@ namespace Msdfgen
                     case EdgeSegmentKind.QuadraticSegment:
                         {
                             QuadraticSegment qs = (QuadraticSegment)ownerSeg;
-                            using (VectorToolBox.Borrow(out ShapeBuilder b))
-                            using (VxsTemp.Borrow(out var v1))
-                            using (VectorToolBox.Borrow(out Stroke strk))
+
+                            using (Tools.BorrowVxs(out var v1))
+                            using (Tools.BorrowShapeBuilder(out var b))                            
+                            using (Tools.BorrowStroke(out var strk))
                             {
 
                                 b.MoveTo(qs.P0.x + _dx, qs.P0.y + _dy)//...
@@ -354,8 +355,8 @@ namespace Msdfgen
 
             //
             using (MemBitmap bmpLut = new MemBitmap(imgW, imgH))
-            using (AggPainterPool.Borrow(bmpLut, out AggPainter painter))
-            using (VectorToolBox.Borrow(out ShapeBuilder sh))
+            using (Tools.BorrowAggPainter(bmpLut, out var painter))
+            using (Tools.BorrowShapeBuilder(out var sh))
             {
 
 

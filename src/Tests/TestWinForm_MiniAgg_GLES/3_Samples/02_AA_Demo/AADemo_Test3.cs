@@ -273,8 +273,8 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
                 aggsx.UseSubPixelLcdEffect = false;
                 //----------------------------------------
 
-                using (VxsTemp.Borrow(out var v1, out var v2))
-                using (VectorToolBox.Borrow(v1, out PathWriter ps))
+                using (Tools.BorrowVxs(out var v1, out var v2))
+                using (Tools.BorrowPathWriter(v1, out PathWriter ps))
                 {
                     ps.Clear();
                     

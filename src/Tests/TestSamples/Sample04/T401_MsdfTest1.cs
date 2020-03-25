@@ -151,7 +151,7 @@ namespace OpenTkEssTest
 
             if (!_resInit)
             {
-                using (VxsTemp.Borrow(out var v1))
+                using (Tools.BorrowVxs(out var v1))
                 {
                     GetExampleVxs(v1);
                     //if v1 is too large we can scale down to ? some degree 
