@@ -228,6 +228,7 @@
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\8.2_Canvas\MiniAggCanvasBox.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\8.2_Canvas\MiniAggCanvasRenderElement.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\9_TextContentSplitter\ContentTextSplitter.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\Accessories\KnownColors.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.Color\ChromaJs\Chroma.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.Color\ColorBlender\Algorithms\Analogue.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\BackEnd.Color\ColorBlender\Algorithms\ClassicBlend.cs" />
@@ -617,7 +618,6 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree\6_debug\dbugVisualLayoutTracer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree\6_debug\IdbugOutputWindow.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree\8_EventQueue\EventQueueSystem.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\Accessories\KnownColors.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\CanvasViewport.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\TempContext.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\CommonTextServiceSetup.cs" />

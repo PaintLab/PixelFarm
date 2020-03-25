@@ -219,6 +219,7 @@
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\8.2_Canvas\MiniAggCanvasBox.cs" Link="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\8.2_Canvas\MiniAggCanvasBox.cs" />
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\8.2_Canvas\MiniAggCanvasRenderElement.cs" Link="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\8.2_Canvas\MiniAggCanvasRenderElement.cs" />
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\9_TextContentSplitter\ContentTextSplitter.cs" Link="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\9_TextContentSplitter\ContentTextSplitter.cs" />
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\Accessories\KnownColors.cs" Link="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\Accessories\KnownColors.cs" />
     <Compile Include="..\..\PixelFarm\BackEnd.Color\ChromaJs\Chroma.cs" Link="PixelFarm\BackEnd.Color\ChromaJs\Chroma.cs" />
     <Compile Include="..\..\PixelFarm\BackEnd.Color\ColorBlender\Algorithms\Analogue.cs" Link="PixelFarm\BackEnd.Color\ColorBlender\Algorithms\Analogue.cs" />
     <Compile Include="..\..\PixelFarm\BackEnd.Color\ColorBlender\Algorithms\ClassicBlend.cs" Link="PixelFarm\BackEnd.Color\ColorBlender\Algorithms\ClassicBlend.cs" />
@@ -608,7 +609,6 @@
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\6_debug\dbugVisualLayoutTracer.cs" Link="PixelFarm\PaintLab.RenderTree\6_debug\dbugVisualLayoutTracer.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\6_debug\IdbugOutputWindow.cs" Link="PixelFarm\PaintLab.RenderTree\6_debug\IdbugOutputWindow.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\8_EventQueue\EventQueueSystem.cs" Link="PixelFarm\PaintLab.RenderTree\8_EventQueue\EventQueueSystem.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.AbstractPlatform\Accessories\KnownColors.cs" Link="PixelFarm\PaintLab.AbstractPlatform\Accessories\KnownColors.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.AbstractPlatform\CanvasViewport.cs" Link="PixelFarm\PaintLab.AbstractPlatform\CanvasViewport.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.AbstractPlatform\TempContext.cs" Link="PixelFarm\PaintLab.AbstractPlatform\TempContext.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\CommonTextServiceSetup.cs" Link="PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\CommonTextServiceSetup.cs" />
@@ -1067,6 +1067,7 @@
     <Folder Include="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\7_WindowUI" />
     <Folder Include="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\8.2_Canvas" />
     <Folder Include="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\9_TextContentSplitter" />
+    <Folder Include="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\Accessories" />
     <Folder Include="PixelFarm\BackEnd.Color\ChromaJs" />
     <Folder Include="PixelFarm\BackEnd.Color\ColorBlender\Algorithms" />
     <Folder Include="PixelFarm\BackEnd.Color\ColorBlender" />
@@ -1119,7 +1120,6 @@
     <Folder Include="PixelFarm\PaintLab.RenderTree\5_HitTest" />
     <Folder Include="PixelFarm\PaintLab.RenderTree\6_debug" />
     <Folder Include="PixelFarm\PaintLab.RenderTree\8_EventQueue" />
-    <Folder Include="PixelFarm\PaintLab.AbstractPlatform\Accessories" />
     <Folder Include="PixelFarm\PaintLab.AbstractPlatform" />
     <Folder Include="PixelFarm\PaintLab.YourImplementation\0_FrameworkInit" />
     <Folder Include="PixelFarm\PaintLab.YourImplementation\1_Events" />
