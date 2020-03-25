@@ -2,9 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // (from https://github.com/wieslawsoltes/ColorBlender)
 
-namespace ColorBlender.Algorithms
+using System;
+
+namespace PaintLab.ColorBlender.Algorithms
 {
-    public class SplitComplementary : IAlgorithm
+    public class Analogue : IAlgorithm
     {
         public Blend Match(HSV hsv)
         {
@@ -14,31 +16,32 @@ namespace ColorBlender.Algorithms
             var w = MathHelpers.HueToWheel(hsv.H);
             HSV z = new HSV
             {
-                H = hsv.H,
+                H = MathHelpers.WheelToHue((w + 30) % 360),
                 S = hsv.S,
                 V = hsv.V
             };
-
-            z.H = MathHelpers.WheelToHue((w + 150) % 360);
-            z.S = hsv.S;
-            z.V = hsv.V;
             outp.Colors[1] = new HSV(z);
 
-            z.H = MathHelpers.WheelToHue((w + 210) % 360);
-            z.S = hsv.S;
-            z.V = hsv.V;
+            z = new HSV
+            {
+                H = MathHelpers.WheelToHue((w + 60) % 360),
+                S = hsv.S,
+                V = hsv.V
+            };
             outp.Colors[2] = new HSV(z);
 
-            z.S = 0;
-            z.V = hsv.S;
+            z = new HSV
+            {
+                S = 0,
+                H = 0,
+                V = 100 - hsv.V
+            };
             outp.Colors[3] = new HSV(z);
 
-            z.S = 0;
-            z.V = hsv.V;
+            z.V = Math.Round(hsv.V * 1.3) % 100;
             outp.Colors[4] = new HSV(z);
 
-            z.S = 0;
-            z.V = (100 - hsv.V);
+            z.V = Math.Round(hsv.V / 1.3) % 100;
             outp.Colors[5] = new HSV(z);
 
             return outp;

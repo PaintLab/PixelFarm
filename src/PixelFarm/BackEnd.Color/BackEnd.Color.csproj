@@ -36,6 +36,29 @@
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ChromaJs\Chroma.cs" />
+    <Compile Include="ColorBlender\Algorithms\Analogue.cs" />
+    <Compile Include="ColorBlender\Algorithms\ClassicBlend.cs" />
+    <Compile Include="ColorBlender\Algorithms\ColorExplorer.cs" />
+    <Compile Include="ColorBlender\Algorithms\Complementary.cs" />
+    <Compile Include="ColorBlender\Algorithms\SingleHue.cs" />
+    <Compile Include="ColorBlender\Algorithms\SplitComplementary.cs" />
+    <Compile Include="ColorBlender\Algorithms\Square.cs" />
+    <Compile Include="ColorBlender\Algorithms\Triadic.cs" />
+    <Compile Include="ColorBlender\Blend.cs" />
+    <Compile Include="ColorBlender\ColorMatch.cs" />
+    <Compile Include="ColorBlender\HSV.cs" />
+    <Compile Include="ColorBlender\IAlgorithm.cs" />
+    <Compile Include="ColorBlender\MathHelpers.cs" />
+    <Compile Include="ColorBlender\RGB.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
+      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
+      <Name>PixelFarm.Drawing</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="Colorful_SH\Colorful_SH.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

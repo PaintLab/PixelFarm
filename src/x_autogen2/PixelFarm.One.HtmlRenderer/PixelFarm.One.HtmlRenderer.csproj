@@ -606,6 +606,51 @@
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\9_TextContentSplitter\ContentTextSplitter.cs">
       <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\9_TextContentSplitter\ContentTextSplitter.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Color\ChromaJs\Chroma.cs">
+      <Link>PixelFarm\BackEnd.Color\ChromaJs\Chroma.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Color\ColorBlender\Algorithms\Analogue.cs">
+      <Link>PixelFarm\BackEnd.Color\ColorBlender\Algorithms\Analogue.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Color\ColorBlender\Algorithms\ClassicBlend.cs">
+      <Link>PixelFarm\BackEnd.Color\ColorBlender\Algorithms\ClassicBlend.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Color\ColorBlender\Algorithms\ColorExplorer.cs">
+      <Link>PixelFarm\BackEnd.Color\ColorBlender\Algorithms\ColorExplorer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Color\ColorBlender\Algorithms\Complementary.cs">
+      <Link>PixelFarm\BackEnd.Color\ColorBlender\Algorithms\Complementary.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Color\ColorBlender\Algorithms\SingleHue.cs">
+      <Link>PixelFarm\BackEnd.Color\ColorBlender\Algorithms\SingleHue.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Color\ColorBlender\Algorithms\SplitComplementary.cs">
+      <Link>PixelFarm\BackEnd.Color\ColorBlender\Algorithms\SplitComplementary.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Color\ColorBlender\Algorithms\Square.cs">
+      <Link>PixelFarm\BackEnd.Color\ColorBlender\Algorithms\Square.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Color\ColorBlender\Algorithms\Triadic.cs">
+      <Link>PixelFarm\BackEnd.Color\ColorBlender\Algorithms\Triadic.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Color\ColorBlender\Blend.cs">
+      <Link>PixelFarm\BackEnd.Color\ColorBlender\Blend.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Color\ColorBlender\ColorMatch.cs">
+      <Link>PixelFarm\BackEnd.Color\ColorBlender\ColorMatch.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Color\ColorBlender\HSV.cs">
+      <Link>PixelFarm\BackEnd.Color\ColorBlender\HSV.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Color\ColorBlender\IAlgorithm.cs">
+      <Link>PixelFarm\BackEnd.Color\ColorBlender\IAlgorithm.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Color\ColorBlender\MathHelpers.cs">
+      <Link>PixelFarm\BackEnd.Color\ColorBlender\MathHelpers.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Color\ColorBlender\RGB.cs">
+      <Link>PixelFarm\BackEnd.Color\ColorBlender\RGB.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\ImgCodec.Core\Color.cs">
       <Link>PixelFarm\ImgCodec.Core\Color.cs</Link>
     </Compile>

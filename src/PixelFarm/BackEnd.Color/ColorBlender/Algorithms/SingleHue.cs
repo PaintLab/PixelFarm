@@ -2,11 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // (from https://github.com/wieslawsoltes/ColorBlender)
 
-using System;
 
-namespace ColorBlender.Algorithms
+namespace PaintLab.ColorBlender.Algorithms
 {
-    public class Complementary : IAlgorithm
+    public class SingleHue : IAlgorithm
     {
         public Blend Match(HSV hsv)
         {
@@ -16,30 +15,25 @@ namespace ColorBlender.Algorithms
             HSV z = new HSV
             {
                 H = hsv.H,
-                S = (hsv.S > 50) ? (hsv.S * 0.5) : (hsv.S * 2),
-                V = (hsv.V < 50) ? (Math.Min(hsv.V * 1.5, 100)) : (hsv.V / 1.5)
+                S = hsv.S,
+                V = hsv.V + ((hsv.V < 50) ? 20 : -20)
             };
             outp.Colors[1] = new HSV(z);
 
-            var w = MathHelpers.HueToWheel(hsv.H);
-            z.H = MathHelpers.WheelToHue((w + 180) % 360);
             z.S = hsv.S;
-            z.V = hsv.V;
+            z.V = hsv.V + ((hsv.V < 50) ? 40 : -40);
             outp.Colors[2] = new HSV(z);
 
-            z.S = (z.S > 50) ? (z.S * 0.5) : (z.S * 2);
-            z.V = (z.V < 50) ? (Math.Min(z.V * 1.5, 100)) : (z.V / 1.5);
+            z.S = hsv.S + ((hsv.S < 50) ? 20 : -20);
+            z.V = hsv.V;
             outp.Colors[3] = new HSV(z);
 
-            z = new HSV
-            {
-                S = 0,
-                H = 0,
-                V = hsv.V
-            };
+            z.S = hsv.S + ((hsv.S < 50) ? 40 : -40);
+            z.V = hsv.V;
             outp.Colors[4] = new HSV(z);
 
-            z.V = 100 - hsv.V;
+            z.S = hsv.S + ((hsv.S < 50) ? 40 : -40);
+            z.V = hsv.V + ((hsv.V < 50) ? 40 : -40);
             outp.Colors[5] = new HSV(z);
 
             return outp;

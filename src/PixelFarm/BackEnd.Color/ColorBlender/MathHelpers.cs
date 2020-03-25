@@ -4,7 +4,7 @@
 
 using System;
 
-namespace ColorBlender
+namespace PaintLab.ColorBlender
 {
     internal static class MathHelpers
     {

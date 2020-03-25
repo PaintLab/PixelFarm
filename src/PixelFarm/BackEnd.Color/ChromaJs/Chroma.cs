@@ -3,9 +3,8 @@
 using PaintLab.Colourful;
 using PaintLab.Colourful.Conversion;
 using System;
-using System.Drawing;
-
-namespace ChromaJs
+using PixelFarm.Drawing;
+namespace PaintLab.ChromaJs
 {
     public class Chroma
     {
@@ -143,5 +142,22 @@ namespace ChromaJs
         {
             return Color.FromArgb(alpha, (byte)(rgb.R * 255), (byte)(rgb.G * 255), (byte)(rgb.B * 255));
         }
+    }
+
+    public static class LabConsts
+    {
+        // Corresponds roughly to RGB brighter/darker
+        public const float Kn = 18;
+
+        //D65 standard referent
+        public const float Xn = 0.950470f;
+        public const float Yn = 1;
+        public const float Zn = 1.088830f;
+
+        public const float t0 = 4f / 29;
+        public const float t1 = 6f / 29;
+        public const float t2 = 3 * t1 * t1;
+        public const float t3 = t1 * t1 * t1;
+
     }
 }

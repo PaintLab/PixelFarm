@@ -3,9 +3,9 @@
 // (from https://github.com/wieslawsoltes/ColorBlender)
 
 using System.Collections.Generic; 
-using ColorBlender.Algorithms;
+using PaintLab.ColorBlender.Algorithms;
 
-namespace ColorBlender
+namespace PaintLab.ColorBlender
 {
     public class ColorMatch
     {

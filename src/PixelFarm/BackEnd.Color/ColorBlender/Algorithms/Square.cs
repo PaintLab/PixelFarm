@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // (from https://github.com/wieslawsoltes/ColorBlender)
 
-namespace ColorBlender.Algorithms
+namespace PaintLab.ColorBlender.Algorithms
 {
     public class Square : IAlgorithm
     {
