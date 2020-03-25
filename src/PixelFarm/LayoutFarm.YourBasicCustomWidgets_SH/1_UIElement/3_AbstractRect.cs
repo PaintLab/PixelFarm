@@ -64,10 +64,13 @@ namespace LayoutFarm.UI
         short _marginBottom;
         // 
 
-
         public AbstractRectUI(int width, int height)
         {
+            //default,           
+            HasSpecificWidthAndHeight = true;
+
             SetElementBoundsWH(width, height);
+
             //default for box
             this.AutoStopMouseEventPropagation = true;
         }
