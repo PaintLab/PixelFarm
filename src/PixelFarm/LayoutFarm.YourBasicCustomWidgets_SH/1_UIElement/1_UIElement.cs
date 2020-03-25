@@ -545,8 +545,22 @@ namespace LayoutFarm.UI
         }
 
         //---------
-        public virtual void AcceptVisitor(UIVisitor visitor)
+        protected virtual void OnAcceptVisitor(UIVisitor visitor)
         {
+
+        }
+        public static void AcceptVisitor(UIElement ui, UIVisitor visitor)
+        {
+            if (visitor.ReportEnterAndExit)
+            {
+                UIVisitor.InvokeOnEnter(visitor, ui);
+                ui.OnAcceptVisitor(visitor);
+                UIVisitor.InvokeOnExit(visitor, ui);
+            }
+            else
+            {
+                ui.OnAcceptVisitor(visitor);
+            }
 
         }
 #if DEBUG

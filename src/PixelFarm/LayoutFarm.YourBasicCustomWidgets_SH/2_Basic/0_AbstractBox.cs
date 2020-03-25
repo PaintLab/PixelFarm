@@ -129,7 +129,10 @@ namespace LayoutFarm.CustomWidgets
             _supportViewport = true;
             _needClipArea = true;
         }
+
         public bool EnableDoubleBuffer { get; set; }
+
+        //TODO: review this fields 
         public event EventHandler<UIMouseEventArgs> MouseDown;
         public event EventHandler<UIMouseEventArgs> MouseMove;
         public event EventHandler<UIMouseEventArgs> MouseUp;
@@ -144,7 +147,13 @@ namespace LayoutFarm.CustomWidgets
         // 
         public override RenderElement CurrentPrimaryRenderElement => _primElement;
 
-
+        protected override void OnAcceptVisitor(UIVisitor visitor)
+        {
+            if (_uiList != null)
+            {
+                UICollection.AcceptVisitor(_uiList, visitor);
+            }
+        }
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
             if (_primElement == null)
@@ -845,7 +854,7 @@ namespace LayoutFarm.CustomWidgets
             }
 #endif
         }
-         
+
 
         protected override void OnGuestMsg(UIGuestMsgEventArgs e)
         {

@@ -89,7 +89,7 @@ namespace LayoutFarm.UI
             LinkedListNode<UIElement> node = _uiList.First;
             while (node != null)
             {
-                UIElement ui = node.Value;               
+                UIElement ui = node.Value;
                 node = node.Next;
 
                 ui.ParentUI = null;
@@ -99,5 +99,14 @@ namespace LayoutFarm.UI
             _uiList.Clear();
         }
 
+        public static void AcceptVisitor(UICollection collecton, UIVisitor visitor)
+        {
+            var node = collecton._uiList.First;
+            while (node != null && !visitor.StopWalking)
+            {
+                UIElement.AcceptVisitor(node.Value, visitor);
+                node = node.Next;
+            }
+        }
     }
 }
