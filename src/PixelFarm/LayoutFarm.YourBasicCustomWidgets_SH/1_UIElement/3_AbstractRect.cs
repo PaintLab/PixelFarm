@@ -441,7 +441,7 @@ namespace LayoutFarm.UI
             visitor.Attribute("width", this.Width);
             visitor.Attribute("height", this.Height);
         }
-
+        
 
         public bool HasSpecificWidth
         {
@@ -481,9 +481,7 @@ namespace LayoutFarm.UI
                 }
             }
         }
-        public override void Accept(UIVisitor visitor)
-        {
-        }
+       
         public Rectangle Bounds => new Rectangle(this.Left, this.Top, this.Width, this.Height);
 
         //-----------------------

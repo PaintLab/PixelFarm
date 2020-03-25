@@ -82,14 +82,6 @@ namespace YourImplementation
                 _canvasRenderE.InvalidateGraphics();
             }
         }
-        public override void Accept(UIVisitor visitor)
-        {
-
-        }
-
-
-
-
 
         //----------------------------------------------
         public virtual DrawBoard GetDrawBoard() { return null; }
@@ -272,7 +264,7 @@ namespace YourImplementation
 
             //------------------------------------------------------------------------- 
             d.DrawImage(_glBmp, 0, 0);
-            
+
 
             //test print text from our GLTextPrinter 
             //_glPainter.FillColor = PixelFarm.Drawing.Color.Black;

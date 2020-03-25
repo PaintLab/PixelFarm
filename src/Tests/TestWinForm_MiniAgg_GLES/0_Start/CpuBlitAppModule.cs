@@ -89,12 +89,6 @@ namespace Mini
 
             public override void InvalidateGraphics() => _canvasRenderE?.InvalidateGraphics();
 
-
-            public override void Accept(UIVisitor visitor)
-            {
-
-            }
-
             //handle event
             protected override void OnMouseDown(UIMouseEventArgs e)
             {

@@ -854,7 +854,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 foreach (UIElement ui in _uiList.GetIter())
                 {
-                    ui.Accept(visitor);
+                    ui.AcceptVisitor(visitor);
                 }
             }
         }

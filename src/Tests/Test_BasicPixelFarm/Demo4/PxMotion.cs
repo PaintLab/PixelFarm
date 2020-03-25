@@ -19,10 +19,7 @@ namespace LayoutFarm.UI
         public double _spriteScale = 1.0;
         public double _skewX = 0;
         public double _skewY = 0;
-        public override void Accept(UIVisitor visitor)
-        {
-
-        }
+       
         public int Width { get; set; }
         public int Height { get; set; }
         public override object Tag { get; set; }

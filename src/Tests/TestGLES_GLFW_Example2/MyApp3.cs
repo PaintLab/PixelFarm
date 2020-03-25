@@ -99,9 +99,7 @@ namespace TestGlfw
 
         public override RenderElement CurrentPrimaryRenderElement => _renderElem;
 
-        public override void Accept(UIVisitor visitor)
-        {
-        }
+
 
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx) => _renderElem;
 
