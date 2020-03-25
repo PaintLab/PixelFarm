@@ -2,9 +2,9 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
-using Colourful.Implementation;
+using PaintLab.Colourful.Implementation;
 
-namespace Colourful.Difference
+namespace PaintLab.Colourful.Difference
 {
     /// <summary>
     /// CIE Delta-E 2000 formula

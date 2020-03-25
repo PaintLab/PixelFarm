@@ -2,9 +2,9 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using Colourful.Implementation;
+using PaintLab.Colourful.Implementation;
 
-namespace Colourful
+namespace PaintLab.Colourful
 {
     /// <summary>
     /// RGB color with specified <see cref="IRGBWorkingSpace">working space</see>, which has linear channels (not companded)

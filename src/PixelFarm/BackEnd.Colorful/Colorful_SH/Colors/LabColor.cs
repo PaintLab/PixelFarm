@@ -3,7 +3,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization; 
 
-namespace Colourful
+namespace PaintLab.Colourful
 {
     /// <summary>
     /// CIE L*a*b* (1976) color

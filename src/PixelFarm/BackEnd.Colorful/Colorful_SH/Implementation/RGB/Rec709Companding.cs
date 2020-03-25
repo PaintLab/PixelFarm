@@ -2,7 +2,7 @@
 
 using System;
 
-namespace Colourful.Implementation.RGB
+namespace PaintLab.Colourful.Implementation.RGB
 {
     /// <summary>
     /// Rec. 709 companding function

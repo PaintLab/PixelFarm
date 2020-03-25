@@ -1,6 +1,6 @@
 ﻿//MIT, 2018, Tomáš Pažourek, https://github.com/tompazourek/Colourful
 
-namespace Colourful.Implementation.Conversion
+namespace PaintLab.Colourful.Implementation.Conversion
 {
     /// <summary>
     /// Base class for converters between XYZ and Hunter Lab

@@ -1,7 +1,7 @@
 ﻿//MIT, 2018, Tomáš Pažourek, https://github.com/tompazourek/Colourful
 
 
-namespace Colourful
+namespace PaintLab.Colourful
 {
     /// <summary>
     /// Colors of the Macbeth ColorChecker

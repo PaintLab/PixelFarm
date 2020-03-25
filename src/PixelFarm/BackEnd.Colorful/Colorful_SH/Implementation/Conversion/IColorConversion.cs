@@ -2,7 +2,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-namespace Colourful.Implementation.Conversion
+namespace PaintLab.Colourful.Implementation.Conversion
 {
     /// <summary>
     /// Converts color between two color spaces.

@@ -1,9 +1,9 @@
 ﻿//MIT, 2018, Tomáš Pažourek, https://github.com/tompazourek/Colourful
 
 using System;
-using Colourful.Implementation;
+using PaintLab.Colourful.Implementation;
 
-namespace Colourful.Difference
+namespace PaintLab.Colourful.Difference
 {
     /// <summary>
     /// CIE Delta-E 1994 formula

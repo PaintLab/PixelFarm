@@ -1,9 +1,9 @@
 ﻿//MIT, 2018, Tomáš Pažourek, https://github.com/tompazourek/Colourful
 
 using System;
-using Colourful.Implementation;
+using PaintLab.Colourful.Implementation;
 
-namespace Colourful
+namespace PaintLab.Colourful
 {
     /// <summary>
     /// Can compute chromaticity from CCT (Correlated color temperature) and also

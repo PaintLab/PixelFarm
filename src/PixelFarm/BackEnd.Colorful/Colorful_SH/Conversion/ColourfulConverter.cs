@@ -1,7 +1,7 @@
 ﻿//MIT, 2018, Tomáš Pažourek, https://github.com/tompazourek/Colourful
 
-using Colourful.Implementation.Conversion;
-namespace Colourful.Conversion
+using PaintLab.Colourful.Implementation.Conversion;
+namespace PaintLab.Colourful.Conversion
 {
     /// <summary>
     /// Converts between color spaces and makes sure that the color is adapted using chromatic adaptation.

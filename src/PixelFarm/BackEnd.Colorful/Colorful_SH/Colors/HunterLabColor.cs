@@ -3,7 +3,7 @@
 using System.Globalization;
  
 
-namespace Colourful
+namespace PaintLab.Colourful
 {
     /// <summary>
     /// Hunter Lab color

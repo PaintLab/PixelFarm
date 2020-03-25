@@ -2,7 +2,7 @@
 
 using System;
 
-namespace Colourful.Implementation
+namespace PaintLab.Colourful.Implementation
 {
     /// <summary>
     /// Angle unit conversion helpers

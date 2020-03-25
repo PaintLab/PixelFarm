@@ -3,7 +3,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
-namespace Colourful
+namespace PaintLab.Colourful
 {
     /// <summary>
     /// CIE xyY color space (derived from <see cref="XYZColor" /> color space)

@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 
-namespace Colourful
+namespace PaintLab.Colourful
 {
     /// <summary>
     /// CIE 1931 XYZ color space

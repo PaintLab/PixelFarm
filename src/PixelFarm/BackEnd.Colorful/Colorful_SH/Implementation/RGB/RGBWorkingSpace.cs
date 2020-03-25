@@ -1,6 +1,6 @@
 ﻿//MIT, 2018, Tomáš Pažourek, https://github.com/tompazourek/Colourful
 
-namespace Colourful.Implementation.RGB
+namespace PaintLab.Colourful.Implementation.RGB
 {
     /// <summary>
     /// Trivial implementation of <see cref="IRGBWorkingSpace" />

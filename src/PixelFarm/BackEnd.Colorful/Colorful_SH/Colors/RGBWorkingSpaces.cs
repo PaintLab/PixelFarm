@@ -1,8 +1,8 @@
 ﻿//MIT, 2018, Tomáš Pažourek, https://github.com/tompazourek/Colourful
 
-using Colourful.Implementation.RGB;
+using PaintLab.Colourful.Implementation.RGB;
 
-namespace Colourful
+namespace PaintLab.Colourful
 {
     /// <remarks>
     /// Chromaticity coordinates taken from:

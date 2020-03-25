@@ -1,11 +1,11 @@
 ﻿//MIT, 2018, Tomáš Pažourek, https://github.com/tompazourek/Colourful
 
 using System;
-using Colourful.Implementation;
-using Colourful.Implementation.Conversion;
+using PaintLab.Colourful.Implementation;
+using PaintLab.Colourful.Implementation.Conversion;
 
 
-namespace Colourful.Conversion
+namespace PaintLab.Colourful.Conversion
 {
     /// <summary>
     /// Basic implementation of the von Kries chromatic adaptation model

@@ -2,7 +2,7 @@
 
 using System;
 
-namespace Colourful.Implementation
+namespace PaintLab.Colourful.Implementation
 {
     internal static class Extensions
     {

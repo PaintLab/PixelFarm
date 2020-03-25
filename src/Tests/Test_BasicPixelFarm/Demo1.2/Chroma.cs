@@ -1,7 +1,7 @@
 ﻿//BSD, 2011-2019, Gregor Aisch, Chroma.js, https://github.com/gka/chroma.js/blob/master/LICENSE
 
-using Colourful;
-using Colourful.Conversion;
+using PaintLab.Colourful;
+using PaintLab.Colourful.Conversion;
 using System;
 using System.Drawing;
 

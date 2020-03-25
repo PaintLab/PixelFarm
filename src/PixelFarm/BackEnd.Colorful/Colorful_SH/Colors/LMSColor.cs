@@ -3,7 +3,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
-namespace Colourful
+namespace PaintLab.Colourful
 {
     /// <summary>
     /// LMS color space represented by the response of the three types of cones of the human eye

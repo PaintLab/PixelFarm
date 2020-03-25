@@ -3,7 +3,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Colourful.Implementation.RGB
+namespace PaintLab.Colourful.Implementation.RGB
 {
     /// <summary>
     /// Gamma companding

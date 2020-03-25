@@ -1,6 +1,6 @@
 ﻿//MIT, 2018, Tomáš Pažourek, https://github.com/tompazourek/Colourful
 
-namespace Colourful.Implementation.Conversion
+namespace PaintLab.Colourful.Implementation.Conversion
 {
     /// <summary>
     /// Matrix used for transformation from XYZ to LMS, defining the cone response domain.

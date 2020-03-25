@@ -3,13 +3,13 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using Colourful.Implementation; 
+using PaintLab.Colourful.Implementation; 
 #if (DRAWING)
 using System.Drawing;
 
 #endif
 
-namespace Colourful
+namespace PaintLab.Colourful
 {
     /// <summary>
     /// RGB color with specified <see cref="IRGBWorkingSpace">working space</see>

@@ -1,6 +1,6 @@
 ﻿//MIT, 2018, Tomáš Pažourek, https://github.com/tompazourek/Colourful
 
-namespace Colourful.Implementation
+namespace PaintLab.Colourful.Implementation
 {
     internal static class MatrixFactory
     {

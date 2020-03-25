@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
  
 
-namespace Colourful
+namespace PaintLab.Colourful
 {
     /// <summary>
     /// CIE L*C*h°, cylindrical form of <see cref="LabColor">CIE L*a*b* (1976)</see>

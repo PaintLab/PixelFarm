@@ -4,7 +4,7 @@ namespace System.Runtime.CompilerServices
 {
     partial class ExtensionAttribute { }
 }
-namespace Colourful
+namespace PaintLab.Colourful
 {
     public class Vector : IReadOnlyList<double>
     {

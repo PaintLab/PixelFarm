@@ -1,6 +1,6 @@
 ﻿//MIT, 2018, Tomáš Pažourek, https://github.com/tompazourek/Colourful
 
-namespace Colourful.Difference
+namespace PaintLab.Colourful.Difference
 {
     /// <summary>
     /// Computes distance between two vectors in color space

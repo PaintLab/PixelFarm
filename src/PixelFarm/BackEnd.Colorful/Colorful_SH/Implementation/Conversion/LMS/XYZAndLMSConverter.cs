@@ -1,6 +1,6 @@
 ﻿//MIT, 2018, Tomáš Pažourek, https://github.com/tompazourek/Colourful
 
-namespace Colourful.Implementation.Conversion
+namespace PaintLab.Colourful.Implementation.Conversion
 {
     /// <summary>
     /// Converts from <see cref="XYZColor" /> to <see cref="LMSColor" /> and back.

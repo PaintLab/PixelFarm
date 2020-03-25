@@ -2,7 +2,7 @@
 
 using System;
 
-namespace Colourful.Conversion
+namespace PaintLab.Colourful.Conversion
 {
     public partial class ColourfulConverter
     {

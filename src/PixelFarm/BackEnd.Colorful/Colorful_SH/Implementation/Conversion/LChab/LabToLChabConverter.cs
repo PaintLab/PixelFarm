@@ -2,7 +2,7 @@
 
 using System;
 
-namespace Colourful.Implementation.Conversion
+namespace PaintLab.Colourful.Implementation.Conversion
 {
     /// <summary>
     /// Converts from <see cref="LabColor" /> to <see cref="LChabColor" />.

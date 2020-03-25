@@ -2,7 +2,7 @@
 
 using System;
 
-namespace Colourful.Difference
+namespace PaintLab.Colourful.Difference
 {
     /// <summary>
     /// CIE Delta-E 1976 formula
