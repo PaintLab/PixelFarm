@@ -54,9 +54,8 @@ namespace PixelFarm
         {
             VertexStore arrow;
             VertexStore stem;
-            using (VectorToolBox.Borrow(out Stroke stroke))
-            using (VxsTemp.Borrow(out var v1))
-            using (VxsTemp.Borrow(out var v3, out var v4))
+            using (PixelFarm.CpuBlit.Tools.BorrowStroke(out var stroke))
+            using (PixelFarm.CpuBlit.Tools.BorrowVxs(out var v1, out var v3, out var v4))
             {
                 if (solidHead)
                 {
@@ -89,8 +88,8 @@ namespace PixelFarm
         }
         static void BuildLine(float x0, float y0, float x1, float y1, VertexStore output)
         {
-            using (VxsTemp.Borrow(out var v1))
-            using (VectorToolBox.Borrow(out Stroke stroke))
+            using (PixelFarm.CpuBlit.Tools.BorrowVxs(out var v1))
+            using (PixelFarm.CpuBlit.Tools.BorrowStroke(out var stroke))
             {
                 stroke.Width = 3;
                 v1.AddMoveTo(x0, y0);
@@ -184,7 +183,7 @@ namespace PixelFarm
             using (Poly2TriTool.Borrow(out var p23tool))
             {
                 p23tool.YAxisPointDown = true; //since our vxs is create from Y axis point down world
-                
+
                 List<Poly2Tri.Polygon> polygons = new List<Poly2Tri.Polygon>();
                 p23tool.PreparePolygons(vxs, polygons);
 
@@ -192,7 +191,7 @@ namespace PixelFarm
                 {
                     //arrow-shape hole
                     bgBoxPolygon.AddHole(polygon);
-                } 
+                }
 
                 Poly2Tri.P2T.Triangulate(bgBoxPolygon);
 

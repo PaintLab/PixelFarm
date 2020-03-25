@@ -103,7 +103,7 @@ namespace PixelFarm.DrawingGL
                     int h = (int)Math.Ceiling(StrokeWidth + (padding_Y * 2));
 
                     using (MemBitmap tmpBmp = new MemBitmap(w, h))
-                    using (AggPainterPool.Borrow(tmpBmp, out AggPainter p))
+                    using (Tools.BorrowAggPainter(tmpBmp, out AggPainter p))
                     {
                         p.Clear(Color.Black);
                         p.StrokeColor = Color.White;
@@ -142,8 +142,8 @@ namespace PixelFarm.DrawingGL
         {
             if (StrokeWidth > 1)
             {
-                using (VxsTemp.Borrow(out VertexStore v1))
-                using (VectorToolBox.Borrow(out Stroke stroke))
+                using (Tools.BorrowVxs(out var v1))
+                using (Tools.BorrowStroke(out var stroke))
                 {
 
                     if (_lineDashGen == null)
@@ -269,8 +269,8 @@ namespace PixelFarm.DrawingGL
             double rx = Math.Abs(width / 2);
             double ry = Math.Abs(height / 2);
 
-            using (VectorToolBox.Borrow(out Ellipse ellipse))
-            using (VxsTemp.Borrow(out var v1, out var v2))
+            using (Tools.BorrowEllipse(out var ellipse))
+            using (Tools.BorrowVxs(out var v1, out var v2))
             {
                 ellipse.Set(x, y, rx, ry);
 
@@ -294,8 +294,8 @@ namespace PixelFarm.DrawingGL
                 case SmoothMode.Smooth:
                     {
                         _pcx.StrokeColor = this.StrokeColor;
-                        using (PixelFarm.Drawing.VxsTemp.Borrow(out Drawing.VertexStore v1))
-                        using (PixelFarm.Drawing.VectorToolBox.Borrow(out CpuBlit.VertexProcessing.SimpleRect r))
+                        using (Tools.BorrowVxs(out var v1))
+                        using (Tools.BorrowRect(out var r))
                         {
                             r.SetRect(left + 0.5f, top + height + 0.5f, left + width - 0.5f, top - 0.5f);
                             r.MakeVxs(v1);

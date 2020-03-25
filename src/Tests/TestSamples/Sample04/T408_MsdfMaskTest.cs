@@ -47,15 +47,15 @@ namespace OpenTkEssTest
         {
             //1. create color bmp  
             _colorBmp = new MemBitmap(100, 100);
-            using (AggPainterPool.Borrow(_colorBmp, out AggPainter painter))
+            using (Tools.BorrowAggPainter(_colorBmp, out var painter))
             {
                 painter.Clear(Color.White);
                 painter.FillRect(2, 2, 80, 80, Color.Red);
             }
             //2. create mask bmp
 
-            using (VectorToolBox.Borrow(out Ellipse ellipse))
-            using (VxsTemp.Borrow(out var v1, out var v2))
+            using (Tools.BorrowEllipse(out var ellipse))
+            using (Tools.BorrowVxs(out var v1, out var v2))
             {
                 var msdf = new Msdfgen.MsdfGen3();
 

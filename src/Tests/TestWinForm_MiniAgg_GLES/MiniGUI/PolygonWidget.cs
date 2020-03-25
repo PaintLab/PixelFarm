@@ -189,8 +189,7 @@ namespace PixelFarm.CpuBlit.UI
             this.RewindZero();
             //this polygon control has  2 subcontrol
             //stroke and ellipse 
-
-            using (VxsTemp.Borrow(out var v1, out var v2))
+            using (Tools.BorrowVxs(out var v1, out var v2))
             {
                 this.m_stroke.MakeVxs(this.m_vs.MakeVxs(v1), v2);
                 int j = v2.Count;
@@ -216,7 +215,7 @@ namespace PixelFarm.CpuBlit.UI
 
             int n_count = m_polygon.Length / 2;
 
-            using (VxsTemp.Borrow(out var v3))
+            using (Tools.BorrowVxs(out var v3))
             {
                 double x, y;
                 for (int m = 0; m < n_count; ++m)
@@ -252,7 +251,7 @@ namespace PixelFarm.CpuBlit.UI
             RectD localBounds = new RectD(double.PositiveInfinity, double.PositiveInfinity, double.NegativeInfinity, double.NegativeInfinity);
             this.RewindZero();
 
-            using (VxsTemp.Borrow(out var v1))
+            using (Tools.BorrowVxs(out var v1))
             {
                 this.MakeVxs(v1);
                 int j = v1.Count;
@@ -532,7 +531,7 @@ namespace PixelFarm.CpuBlit.UI
         {
             p.FillColor = LineColor;
 
-            using (VxsTemp.Borrow(out var v1))
+            using (Tools.BorrowVxs(out var v1))
             {
                 p.Draw(this.MakeVxs(v1));
             }

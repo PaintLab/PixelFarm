@@ -89,7 +89,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             builder.ReadShapes(txToVxs);
 
             VertexStore v2 = new VertexStore();
-            using (VxsTemp.Borrow(out var v0))
+            using (Tools.BorrowVxs(out var v0))
             {
                 txToVxs.WriteOutput(v0);
                 var mat = PixelFarm.CpuBlit.VertexProcessing.Affine.New(

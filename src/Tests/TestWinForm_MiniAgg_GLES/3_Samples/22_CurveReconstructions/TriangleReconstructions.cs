@@ -33,7 +33,7 @@ namespace PixelFarm.CpuBlit.Samples
         {
             ShowReconstructionCurve = true;
             SmoothCoefficientValue = 1;
-            using (VxsTemp.Borrow(out var vxs))
+            using (Tools.BorrowVxs(out var vxs))
             {
                 int xoffset = 50;
                 int yoffset = 50;
@@ -126,8 +126,8 @@ namespace PixelFarm.CpuBlit.Samples
 
 
             p.StrokeColor = Color.Blue;
-            using (VxsTemp.Borrow(out var tmpVxs1, out var tmpVxs2))
-            using (VectorToolBox.Borrow(tmpVxs1, out PathWriter pw))
+            using (Tools.BorrowVxs(out var tmpVxs1, out var tmpVxs2))
+            using (Tools.BorrowPathWriter(tmpVxs1, out var pw))
             {
                 pw.MoveTo(c0.mid.X, c0.mid.y);
 

@@ -1942,7 +1942,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         }
         public static void WritePath1(VertexStore vxs, double x, double y)
         {
-            using (VectorToolBox.Borrow(vxs, out PathWriter p))
+            using (Tools.BorrowPathWriter(vxs, out PathWriter p))
             {
                 //1. triangle
                 p.MoveTo(x + 140, y + 145);
@@ -1977,7 +1977,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         }
         public static void WritePath2(VertexStore vxs, double x, double y)
         {
-            using (VectorToolBox.Borrow(vxs, out PathWriter p))
+            using (Tools.BorrowPathWriter(vxs, out PathWriter p))
             {
                 p.MoveTo(100 + 32, 100 + 77);
                 p.LineTo(100 + 473, 100 + 263);
@@ -1989,32 +1989,27 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
 
         public static void WriteGlyphObj(VertexStore vxs, double x, double y, Affine tx = null)
         {
-            using (VectorToolBox.Borrow(out CurveFlattener curveFlattener))
+            using (Tools.BorrowCurveFlattener(out var curveFlattener))
+            using (Tools.BorrowVxs(out var v1, out var v2))
             {
                 if (tx != null)
-                {
-                    using (VxsTemp.Borrow(out var v1, out var v2))
-                    {
-                        WriteGlyph_a_(v1, x, y);
-                        tx.TransformToVxs(v1, v2);
-                        curveFlattener.MakeVxs(v2, vxs);
-                    }
-
+                { 
+                    WriteGlyph_a_(v1, x, y);
+                    tx.TransformToVxs(v1, v2);
+                    curveFlattener.MakeVxs(v2, vxs); 
                 }
                 else
                 {
-                    using (VxsTemp.Borrow(out var v1, out var v2))
-                    {
-                        WriteGlyph_a_(v1, x, y);
-                        curveFlattener.MakeVxs(v1, vxs);
-                    }
+
+                    WriteGlyph_a_(v1, x, y);
+                    curveFlattener.MakeVxs(v1, vxs); 
                 }
             }
 
         }
         static void WriteGlyph_a_(VertexStore vxs, double x, double y)
         {
-            using (VectorToolBox.Borrow(vxs, out PathWriter p))
+            using (Tools.BorrowPathWriter(vxs, out PathWriter p))
             {
                 p.MoveTo(28.47, 6.45);
                 p.Curve3(21.58, 1.12, 19.82, 0.29);
@@ -2063,7 +2058,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         }
         static void WriteArrow1(VertexStore vxs, double x, double y)
         {
-            using (VectorToolBox.Borrow(vxs, out PathWriter p))
+            using (Tools.BorrowPathWriter(vxs, out PathWriter p))
             {
                 p.Clear();
                 p.MoveTo(1330.599999999999909, 1282.399999999999864);
@@ -2104,7 +2099,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         {
             if (tx != null)
             {
-                using (VxsTemp.Borrow(out var v1))
+                using (Tools.BorrowVxs(out var v1))
                 {
                     WriteArrow1(v1, x, y);
                     tx.TransformToVxs(v1, vxs);
@@ -2119,8 +2114,8 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         {
             if (tx != null)
             {
-                using (VxsTemp.Borrow(out var v1))
-                using (VectorToolBox.Borrow(v1, out PathWriter p))
+                using (Tools.BorrowVxs(out var v1))
+                using (Tools.BorrowPathWriter(v1, out var p))
                 {
                     GreatBritanPathStorage.Make(p);
                     tx.TransformToVxs(v1, vxs);
@@ -2128,7 +2123,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
             }
             else
             {
-                using (VectorToolBox.Borrow(vxs, out PathWriter p))
+                using (Tools.BorrowPathWriter(vxs, out var p))
                 {
                     GreatBritanPathStorage.Make(p);
                 }
@@ -2136,7 +2131,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         }
         public static void WriteSpiral(VertexStore vxs, double x, double y, Affine tx = null)
         {
-            using (VectorToolBox.Borrow(out Spiral sp))
+            using (Tools.BorrowSpiral(out var sp))
             {
                 sp.SetParameters(x, y, 10, 150, 30, 0.0);
                 if (tx == null)
@@ -2145,7 +2140,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                 }
                 else
                 {
-                    using (VxsTemp.Borrow(out var v1))
+                    using (Tools.BorrowVxs(out var v1))
                     {
                         sp.MakeVxs(v1);
                         tx.TransformToVxs(v1, vxs);

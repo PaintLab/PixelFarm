@@ -42,8 +42,7 @@ namespace PixelFarm.CpuBlit.Samples
             //#endif 
 
 
-
-            using (VgPaintArgsPool.Borrow(p, out VgPaintArgs paintArgs))
+            using (Tools.More.BorrowVgPaintArgs(p, out var paintArgs))             
             {
                 _vgVisualElem.Paint(paintArgs);
             }
@@ -100,7 +99,7 @@ namespace PixelFarm.CpuBlit.Samples
                     painter.StrokeColor = Color.Transparent;
                     painter.StrokeWidth = 1;
 
-                    using (VgPaintArgsPool.Borrow(painter, out var paintArgs))
+                    using (Tools.More.BorrowVgPaintArgs(painter, out var paintArgs))
                     {
                         vgRenerVx.Paint(paintArgs);
                     }
@@ -139,7 +138,7 @@ namespace PixelFarm.CpuBlit.Samples
             //            _dbugSW.Reset();
             //            _dbugSW.Start();
             //#endif 
-            using (VgPaintArgsPool.Borrow(p, out VgPaintArgs paintArgs))
+            using (Tools.More.BorrowVgPaintArgs(p, out var paintArgs))
             {
                 for (int i = 0; i < _vgVisualElems.Count; ++i)
                 {
