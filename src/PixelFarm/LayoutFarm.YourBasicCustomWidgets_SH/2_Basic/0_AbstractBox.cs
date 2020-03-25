@@ -6,6 +6,98 @@ using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
+    struct MayBeEmptyTempContext<T> : IDisposable
+    {
+        internal readonly T _tool;
+        internal MayBeEmptyTempContext(out T tool)
+        {
+            MayBeEmptyTempContext<T>.GetFreeItem(out _tool);
+            tool = _tool;
+        }
+        public void Dispose()
+        {
+            if (_tool != null)
+            {
+                MayBeEmptyTempContext<T>.Release(_tool);
+            }
+        }
+
+        public static readonly MayBeEmptyTempContext<T> Empty = new MayBeEmptyTempContext<T>();
+
+
+        public delegate T CreateNewItemDelegate();
+        public delegate void ReleaseItemDelegate(T item);
+
+
+        [System.ThreadStatic]
+        static Stack<T> s_pool;
+        [System.ThreadStatic]
+        static CreateNewItemDelegate s_newHandler;
+        [System.ThreadStatic]
+        static ReleaseItemDelegate s_releaseCleanUp;
+
+        public static MayBeEmptyTempContext<T> Borrow(out T freeItem)
+        {
+            return new MayBeEmptyTempContext<T>(out freeItem);
+        }
+
+        public static void SetNewHandler(CreateNewItemDelegate newHandler, ReleaseItemDelegate releaseCleanUp = null)
+        {
+            //set new instance here, must set this first***
+            if (s_pool == null)
+            {
+                s_pool = new Stack<T>();
+            }
+            s_newHandler = newHandler;
+            s_releaseCleanUp = releaseCleanUp;
+        }
+        internal static void GetFreeItem(out T freeItem)
+        {
+            if (s_pool.Count > 0)
+            {
+                freeItem = s_pool.Pop();
+            }
+            else
+            {
+                freeItem = s_newHandler();
+            }
+        }
+        internal static void Release(T item)
+        {
+            s_releaseCleanUp?.Invoke(item);
+            s_pool.Push(item);
+            //... 
+        }
+        public static bool IsInit()
+        {
+            return s_pool != null;
+        }
+    }
+
+    static class LayoutTools
+    {
+        public static MayBeEmptyTempContext<LinkedList<T>> BorrowLinkedList<T>(out LinkedList<T> linkedlist)
+        {
+            if (!MayBeEmptyTempContext<LinkedList<T>>.IsInit())
+            {
+                MayBeEmptyTempContext<LinkedList<T>>.SetNewHandler(
+                    () => new LinkedList<T>(),
+                    list => list.Clear());
+            }
+            return MayBeEmptyTempContext<LinkedList<T>>.Borrow(out linkedlist);
+        }
+        public static MayBeEmptyTempContext<List<T>> BorrowList<T>(out List<T> linkedlist)
+        {
+            if (!MayBeEmptyTempContext<List<T>>.IsInit())
+            {
+                MayBeEmptyTempContext<List<T>>.SetNewHandler(
+                    () => new List<T>(),
+                    list => list.Clear());
+            }
+            return MayBeEmptyTempContext<List<T>>.Borrow(out linkedlist);
+        }
+    }
+
     /// <summary>
     /// abstract box ui element.
     /// this control provides 'primary-render-element', 
@@ -535,6 +627,7 @@ namespace LayoutFarm.CustomWidgets
             this.PerformContentLayout();
         }
 
+        public bool AllowAutoContentExpand { get; set; }
 
         public override void PerformContentLayout()
         {
@@ -576,27 +669,51 @@ namespace LayoutFarm.CustomWidgets
                     break;
                 case BoxContentLayoutKind.HorizontalStack:
                     {
-                        int count = this.ChildCount;
+
                         int maxBottom = 0;
+
+                        //experiment
+                        bool allowAutoContentExpand = this.AllowAutoContentExpand;
 
                         int xpos = this.PaddingLeft; //start X at paddingLeft
                         int ypos = this.PaddingTop; //start Y at padding top
                         if (ChildCount > 0)
                         {
-                            LinkedList<AbstractRectUI> alignToEnds = null;
+                            List<AbstractRectUI> alignToEnds = null;
+                            var alignToEndsContext = MayBeEmptyTempContext<List<AbstractRectUI>>.Empty;
+
+                            List<AbstractRectUI> notHaveSpecificWidthElems = null;
+                            var notHaveSpecificWidthElemsContext = MayBeEmptyTempContext<List<AbstractRectUI>>.Empty;
+
+                            int left_to_right_max_x = 0;
+
                             foreach (UIElement ui in GetChildIter())
                             {
                                 if (ui is AbstractRectUI element)
                                 {
                                     element.PerformContentLayout();
+
+                                    //TODO: review Middle again
                                     if (element.Alignment == RectUIAlignment.End)
                                     {
                                         //skip this
-                                        if (alignToEnds == null) alignToEnds = new LinkedList<AbstractRectUI>();
-                                        alignToEnds.AddLast(element);
+                                        if (alignToEnds == null)
+                                        {
+                                            alignToEndsContext = LayoutTools.BorrowList(out alignToEnds);
+                                        }
+                                        alignToEnds.Add(element);
                                     }
                                     else
                                     {
+                                        if (allowAutoContentExpand && !element.HasSpecificWidth)
+                                        {
+                                            if (notHaveSpecificWidthElems == null)
+                                            {
+                                                notHaveSpecificWidthElemsContext = LayoutTools.BorrowList(out notHaveSpecificWidthElems);
+                                            }
+                                            notHaveSpecificWidthElems.Add(element);
+                                        }
+
                                         element.SetLocationAndSize(xpos, ypos + element.MarginTop, element.Width, element.Height); //
                                         xpos += element.Width + element.MarginLeftRight;
                                         int tmp_bottom = element.Bottom;
@@ -607,15 +724,20 @@ namespace LayoutFarm.CustomWidgets
                                     }
                                 }
                             }
+
+                            left_to_right_max_x = xpos;
+
                             //--------
-                            //arrange alignToEnd again!
+                            //arrange alignToEnd again
                             if (alignToEnds != null)
                             {
-                                var node = alignToEnds.Last; //start from last node
+                                //var node = alignToEnds.Last; //start from last node
+                                int n = alignToEnds.Count;
                                 xpos = this.Width - PaddingRight;
-                                while (node != null)
+                                while (n > 0)
                                 {
-                                    AbstractRectUI rectUI = node.Value;
+                                    --n;
+                                    AbstractRectUI rectUI = alignToEnds[n];
                                     xpos -= rectUI.Width + rectUI.MarginLeft;
                                     rectUI.SetLocationAndSize(xpos, ypos + rectUI.MarginTop, rectUI.Width, rectUI.Height); //
 
@@ -625,10 +747,41 @@ namespace LayoutFarm.CustomWidgets
                                     {
                                         maxBottom = tmp_bottom;
                                     }
-
-                                    node = node.Previous;
                                 }
+
+                                //release back to pool
+                                alignToEndsContext.Dispose();
                             }
+                            //--------
+
+                            if (notHaveSpecificWidthElems != null && (xpos > left_to_right_max_x))
+                            {
+                                //this mean this allow content expand
+                                float avaliable_w = xpos - left_to_right_max_x;
+                                //distribute this 
+                                float avg_w = avaliable_w / notHaveSpecificWidthElems.Count;
+
+                                for (int m = notHaveSpecificWidthElems.Count - 1; m >= 0; --m)
+                                {
+                                    AbstractRectUI ui = notHaveSpecificWidthElems[m];
+                                    ui.SetWidth((int)(ui.Width + avg_w));
+                                }
+
+                                //arrange location again
+                                xpos = this.PaddingLeft; //start X at paddingLeft
+                                foreach (UIElement ui in GetChildIter())
+                                {
+                                    if (ui is AbstractRectUI element && element.Alignment != RectUIAlignment.End)
+                                    {
+                                        //TODO: review here again
+                                        element.SetLocation(xpos, ypos + element.MarginTop);
+                                        xpos += element.Width + element.MarginLeftRight;
+                                    }
+                                }
+
+                            }
+                            notHaveSpecificWidthElemsContext.Dispose();
+                            //--------
                         }
 
                         this.SetInnerContentSize(xpos, maxBottom);
@@ -675,18 +828,22 @@ namespace LayoutFarm.CustomWidgets
                     break;
             }
 
+#if DEBUG
             Rectangle postBounds = this.Bounds;
             if (preBounds != postBounds)
             {
 
             }
+#endif
             //------------------------------------------------
             base.RaiseLayoutFinished();
 
+#if DEBUG
             if (HasReadyRenderElement)
             {
                 // this.InvalidateGraphics();
             }
+#endif
         }
         protected override void Describe(UIVisitor visitor)
         {
