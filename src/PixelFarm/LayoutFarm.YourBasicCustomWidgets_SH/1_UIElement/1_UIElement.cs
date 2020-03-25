@@ -94,11 +94,7 @@ namespace LayoutFarm.UI
         protected virtual bool HasReadyRenderElement => CurrentPrimaryRenderElement != null;
         public abstract void InvalidateGraphics();
 
-        public bool AcceptKeyboardFocus
-        {
-            get;
-            set;
-        }
+        public bool AcceptKeyboardFocus { get; set; }
 
         public virtual object Tag
         {
