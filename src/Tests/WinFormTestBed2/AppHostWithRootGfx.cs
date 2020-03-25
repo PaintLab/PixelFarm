@@ -3,19 +3,21 @@ using System;
 using System.IO;
 using PaintLab.Svg;
 using PixelFarm.Drawing;
+using PixelFarm.CpuBlit;
+
 namespace LayoutFarm
 {
     public class AppHostWithRootGfx : AppHost
     {
         RootGraphic _rootgfx;
-        public AppHostWithRootGfx() { } 
+        public AppHostWithRootGfx() { }
         public void Setup(AppHostConfig appHostConfig)
         {
             _rootgfx = appHostConfig.RootGfx;
             _primaryScreenWorkingAreaW = appHostConfig.ScreenW;
             _primaryScreenWorkingAreaH = appHostConfig.ScreenH;
         }
-         
+
         public override RootGraphic RootGfx => _rootgfx;
         //
         public override void AddChild(RenderElement renderElement)
@@ -115,8 +117,8 @@ namespace LayoutFarm
 #endif
             //PixelFarm.CpuBlit.AggPainter painter = PixelFarm.CpuBlit.AggPainter.Create(backingBmp);
 
-            using (PixelFarm.CpuBlit.AggPainterPool.Borrow(backingBmp, out PixelFarm.CpuBlit.AggPainter painter))
-            using (VgPaintArgsPool.Borrow(painter, out VgPaintArgs paintArgs))
+            using (Tools.BorrowAggPainter(backingBmp, out AggPainter painter))
+            using (Tools.More.BorrowVgPaintArgs(painter, out VgPaintArgs paintArgs))
             {
                 double prevStrokeW = painter.StrokeWidth;
 

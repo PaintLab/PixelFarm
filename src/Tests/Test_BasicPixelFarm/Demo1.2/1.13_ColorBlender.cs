@@ -6,7 +6,7 @@
 using System;
 using LayoutFarm.CustomWidgets;
 //
-using ColorBlender;
+using PaintLab.ColorBlender;
 
 namespace LayoutFarm.ColorBlenderSample
 {
@@ -127,7 +127,7 @@ namespace LayoutFarm.ColorBlenderSample
         void CreateChromaTestButtons(AppHost host, int x, int y)
         {
 
-            void ShowColorBoxs(Box colorBoxPanel, System.Drawing.Color[] colors)
+            void ShowColorBoxs(Box colorBoxPanel, PixelFarm.Drawing.Color[] colors)
             {
                 //nested method
                 colorBoxPanel.ClearChildren();
@@ -135,7 +135,7 @@ namespace LayoutFarm.ColorBlenderSample
                 {
                     Box colorBox = new Box(30, 30);
 
-                    System.Drawing.Color c = colors[i];
+                    PixelFarm.Drawing.Color c = colors[i];
                     colorBox.BackColor = new PixelFarm.Drawing.Color(c.R, c.G, c.B);
                     colorBoxPanel.Add(colorBox);
                 }
@@ -182,10 +182,10 @@ namespace LayoutFarm.ColorBlenderSample
                 UI.GeneralEventListener evListener = new UI.GeneralEventListener();
                 evListener.MouseDown += e =>
                 {
-                    System.Drawing.Color color = System.Drawing.Color.HotPink;
-                    ChromaJs.Chroma chroma = new ChromaJs.Chroma(color);
+                    PixelFarm.Drawing.Color color = PixelFarm.Drawing.Color.DeepPink;
+                    PaintLab.ChromaJs.Chroma chroma = new PaintLab.ChromaJs.Chroma(color);
 
-                    System.Drawing.Color[] colors = new[] {
+                    PixelFarm.Drawing.Color[] colors = new[] {
                         color,
                         chroma.Darken() ,
                         chroma.Darken(2),
@@ -211,14 +211,14 @@ namespace LayoutFarm.ColorBlenderSample
                     UI.GeneralEventListener evListener = new UI.GeneralEventListener();
                     evListener.MouseDown += e =>
                     {
-                        System.Drawing.Color color = System.Drawing.Color.HotPink;
-                        ChromaJs.Chroma chroma = new ChromaJs.Chroma(color);
+                        PixelFarm.Drawing.Color color = PixelFarm.Drawing.Color.DeepPink;
+                        PaintLab.ChromaJs.Chroma chroma = new PaintLab.ChromaJs.Chroma(color);
 
-                        System.Drawing.Color[] colors = new[] {
-                        color,
-                        chroma.Brighten(),
-                        chroma.Brighten(2),
-                        chroma.Brighten(3)
+                        PixelFarm.Drawing.Color[] colors = new[] {
+                            color,
+                            chroma.Brighten(),
+                            chroma.Brighten(2),
+                            chroma.Brighten(3)
                         };
                         //present in the box                     
                         ShowColorBoxs(colorPanel, colors);

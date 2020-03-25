@@ -108,17 +108,18 @@ namespace LayoutFarm.UI
         }
         int IGpuOpenGLSurfaceView.Width => _width;
         int IGpuOpenGLSurfaceView.Height => _width;
+
+        Cursor _cursor;
         public Cursor CurrentCursor
         {
-            get
-            {
-                //TODO: review here
-                throw new NotSupportedException();
-            }
+            get => _cursor;
             set
             {
                 //TODO: review here
-                throw new NotSupportedException();
+                _cursor = value;
+#if DEBUG
+                System.Diagnostics.Debugger.Break();
+#endif
             }
         }
         public PixelFarm.Drawing.Size GetSize() => new PixelFarm.Drawing.Size(_width, _height);
