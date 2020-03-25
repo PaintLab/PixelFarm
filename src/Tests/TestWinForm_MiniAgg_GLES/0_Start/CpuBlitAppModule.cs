@@ -62,19 +62,12 @@ namespace Mini
             {
                 _width = width;
                 _height = height;
-
                 _exampleBase = exBase;
             }
-            public override RenderElement CurrentPrimaryRenderElement
-            {
-                get
-                {
-                    return _canvasRenderE;
-                }
-            }
+
+            public override RenderElement CurrentPrimaryRenderElement => _canvasRenderE;
 
             protected override bool HasReadyRenderElement => _canvasRenderE != null;
-
 
             public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
             {

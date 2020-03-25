@@ -69,22 +69,17 @@ namespace YourImplementation
         public override RenderElement CurrentPrimaryRenderElement => _canvasRenderE;
         //
 
+
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
-            //for this Elem  => please call CreatePrimaryRenderElement first  
+            //for this Elem  => please call CreatePrimaryRenderElement first 
             return _canvasRenderE;
         }
 
-        public override void InvalidateGraphics()
-        {
-            if (_canvasRenderE != null)
-            {
-                _canvasRenderE.InvalidateGraphics();
-            }
-        }
+        public override void InvalidateGraphics() => _canvasRenderE?.InvalidateGraphics();
 
         //----------------------------------------------
-        public virtual DrawBoard GetDrawBoard() { return null; }
+        public virtual DrawBoard GetDrawBoard() => null;
         //----------------------------------------------
         /// <summary>
         /// set-up CpuBlit(software-rendering surface) 
@@ -168,10 +163,8 @@ namespace YourImplementation
         {
 
         }
-        public override DrawBoard GetDrawBoard()
-        {
-            return _gdiDrawBoard;
-        }
+        public override DrawBoard GetDrawBoard() => _gdiDrawBoard;
+
         internal override void UpdateCpuBlitSurface(Rectangle updateArea)
         {
             //_gdiDrawBoard.RenderSurface.Win32DC.SetClipRect(updateArea.X, updateArea.Y, updateArea.Width, updateArea.Height);
