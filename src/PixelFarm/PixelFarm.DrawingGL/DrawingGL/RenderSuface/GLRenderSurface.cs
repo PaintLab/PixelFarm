@@ -763,7 +763,7 @@ namespace PixelFarm.DrawingGL
                     break;
             }
         }
-        public void DrawImageToQuad(GLBitmap bmp, PixelFarm.CpuBlit.VertexProcessing.Affine affine)
+        public void DrawImageToQuad(GLBitmap bmp, Affine affine)
         {
             Quad2f quad = new Quad2f(bmp.Width, OriginKind == RenderSurfaceOriginKind.LeftTop ? bmp.Height : -bmp.Height);
             quad.Transform(affine);
