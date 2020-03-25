@@ -79,7 +79,7 @@ namespace LayoutFarm.CustomWidgets
                 _placeHolder = new CustomTextRun(rootgfx, this.Width - 4, this.Height - 4);
                 _placeHolder.Text = _placeHolderText;
                 _placeHolder.SetLocation(1, 1);
-                _placeHolder.TextColor = Color.FromArgb(180, Color.LightGray);
+                _placeHolder.TextColor = Color.FromArgb(180, KnownColors.LightGray);
                 baseRenderElement.AddChild(_placeHolder);
 
 

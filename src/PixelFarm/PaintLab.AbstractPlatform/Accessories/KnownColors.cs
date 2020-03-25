@@ -212,8 +212,27 @@ namespace PixelFarm.Drawing
     }
     public static class KnownColors
     {
+
+        public static readonly Color LightGray = new Color(0xFF, 0xD3, 0xD3, 0xD3);
+        public static readonly Color Gray = new Color(0xFF, 0x80, 0x80, 0x80);
+        public static readonly Color OrangeRed = new Color(0xFF, 0xFF, 0x45, 0x00);//0xFF FF 45 00
+        public static readonly Color DeepPink = new Color(0xFF, 0xFF, 0x14, 0x93);
+
+        public static readonly Color Empty = new Color(0, 0, 0, 0);
+        public static readonly Color Transparent = new Color(0, 255, 255, 255);
+        public static readonly Color White = new Color(255, 255, 255, 255);
+        public static readonly Color Black = new Color(255, 0, 0, 0);
+
+        public static readonly Color Red = new Color(255, 255, 0, 0);
+        public static readonly Color Green = new Color(255, 0, 255, 0);
+        public static readonly Color Blue = new Color(255, 0, 0, 255);
+
+        public static readonly Color Aqua = new Color(255, 0, 255, 255);
+        public static readonly Color Yellow = new Color(255, 255, 255, 0);
+        public static readonly Color Magenta = new Color(255, 255, 0, 255);
+
         // FindColorMatch relies on the index + 1 == KnowColor match
-        static internal uint[] argbValues = new uint[] {
+        readonly static internal uint[] s_argbValues = new uint[] {
             0x00000000,	/* 000 - Empty */
             0xFFD4D0C8,	/* 001 - ActiveBorder */
             0xFF0054E3,	/* 002 - ActiveCaption */
@@ -393,7 +412,7 @@ namespace PixelFarm.Drawing
         static Dictionary<string, Color> colorsByName = new Dictionary<string, Color>();
         static KnownColors()
         {
-            int j = argbValues.Length;
+            int j = s_argbValues.Length;
             for (short i = 0; i < j; ++i)
             {
                 string colorName = GetName(i).ToUpper();
@@ -405,8 +424,7 @@ namespace PixelFarm.Drawing
         public static Color FromKnownColor(string colorName)
         {
             colorName = colorName.ToUpper();
-            Color c;
-            if (!colorsByName.TryGetValue(colorName.ToUpper(), out c))
+            if (!colorsByName.TryGetValue(colorName.ToUpper(), out Color c))
             {
                 return Color.Black;
             }
@@ -415,11 +433,11 @@ namespace PixelFarm.Drawing
         public static Color FromKnownColor(KnownColor kc)
         {
             int index = (int)kc;
-            if (index < 0 || index > argbValues.Length)
+            if (index < 0 || index > s_argbValues.Length)
             {
                 return Color.Black;
             }
-            uint colorValue = argbValues[index];
+            uint colorValue = s_argbValues[index];
             return new Color((byte)(colorValue >> 24),
                      (byte)((colorValue >> 16) & 0xFF),
                      (byte)((colorValue >> 8) & 0xFF),

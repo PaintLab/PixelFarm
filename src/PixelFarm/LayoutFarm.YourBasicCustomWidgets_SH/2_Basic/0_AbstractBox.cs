@@ -107,7 +107,7 @@ namespace LayoutFarm.CustomWidgets
     {
         BoxContentLayoutKind _boxContentLayoutKind;
         bool _needContentLayout;
-        Color _backColor = Color.LightGray;
+        Color _backColor = KnownColors.LightGray;
         Color _borderColor = Color.Transparent;
 
         int _innerWidth;

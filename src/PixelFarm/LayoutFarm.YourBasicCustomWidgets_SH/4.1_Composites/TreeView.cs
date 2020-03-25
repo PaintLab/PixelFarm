@@ -10,7 +10,7 @@ namespace LayoutFarm.CustomWidgets
     {
         //composite          
         CustomRenderBox _primElement;//background
-        Color _backColor = Color.LightGray;
+        Color _backColor = KnownColors.LightGray;
         int _viewportLeft, _viewportTop;
         UICollection _uiList;
         int _latestItemY;
@@ -22,7 +22,7 @@ namespace LayoutFarm.CustomWidgets
             //panel for listview items
             _panel = new Box(width, height);
             _panel.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
-            _panel.BackColor = Color.LightGray;
+            _panel.BackColor = KnownColors.LightGray;
             _panel.NeedClipArea = true;
             _uiList = new UICollection(this);
             _uiList.AddUI(_panel);

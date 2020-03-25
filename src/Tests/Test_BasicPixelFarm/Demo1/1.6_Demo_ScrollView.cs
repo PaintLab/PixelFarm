@@ -20,7 +20,7 @@ namespace LayoutFarm
             var panel = new LayoutFarm.CustomWidgets.Box(200, 175);
             panel.NeedClipArea = true;
             panel.SetLocation(x + 30, y + 30);
-            panel.BackColor = Color.LightGray;
+            panel.BackColor = KnownColors.LightGray;
             host.AddChild(panel);
             //-------------------------  
             {
@@ -54,7 +54,7 @@ namespace LayoutFarm
                 var box1 = new LayoutFarm.CustomWidgets.Box(400, 30);
                 box1.HasSpecificWidth = true;
                 box1.HasSpecificHeight = true;
-                box1.BackColor = Color.OrangeRed;
+                box1.BackColor = KnownColors.OrangeRed;
                 box1.SetLocation(i * 20, i * 40);
                 panel.Add(box1);
             }
@@ -68,7 +68,7 @@ namespace LayoutFarm
             panel.HasSpecificWidthAndHeight = true;
             panel.NeedClipArea = true;
             panel.SetLocation(x + 10, y + 30);
-            panel.BackColor = Color.LightGray;
+            panel.BackColor = KnownColors.LightGray;
             panel.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
             host.AddChild(panel);
             //-------------------------  
@@ -90,7 +90,7 @@ namespace LayoutFarm
             for (int i = 0; i < fileNames.Length * 4; ++i) //5 imgs
             {
                 var imgbox = new LayoutFarm.CustomWidgets.ImageBox(36, 36);
-                imgbox.BackColor = Color.OrangeRed;
+                imgbox.BackColor = KnownColors.OrangeRed;
                 imgbox.SetLocation(0, lastY);
                 imgbox.MouseUp += (s, e) =>
                 {

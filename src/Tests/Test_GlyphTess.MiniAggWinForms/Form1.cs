@@ -183,7 +183,7 @@ namespace Test_WinForm_TessGlyph
 
                 _tovxs.WriteOutput(v1, flattener); //write content from GlyphTranslator to v1
 
-                painter.Fill(v1, PixelFarm.Drawing.Color.Gray);
+                painter.Fill(v1, PixelFarm.Drawing.KnownColors.Gray);
                 _tovxs.Reset();
 
                 //tess the vxs 

@@ -86,7 +86,7 @@ namespace PixelFarm
                 _glyphPathBuilder.ReadShapes(_tovxs);
                 _tovxs.WriteOutput(v1); //write content from GlyphTranslator to v1
 
-                painter.Fill(v1, PixelFarm.Drawing.Color.Gray);
+                painter.Fill(v1, KnownColors.Gray);
                 _tovxs.Reset();
 
                 //tess the vxs 

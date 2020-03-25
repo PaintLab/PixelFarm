@@ -568,7 +568,7 @@ namespace LayoutFarm.UI
 
 #endif
 
-        Color _gridBorderColor = Color.Gray;
+        Color _gridBorderColor = KnownColors.Gray;
 
         public Color GridBorderColor
         {
