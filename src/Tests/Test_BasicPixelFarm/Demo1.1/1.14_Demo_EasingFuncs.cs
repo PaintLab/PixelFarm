@@ -81,7 +81,7 @@ namespace LayoutFarm
             _animationBoard.Add(sampleBox1);
             sampleBox1.BackColor = PixelFarm.Drawing.Color.Red;
             int step = 0;
-            UIPlatform.RegisterTimerTask(10, tim =>
+            UIPlatform.RegisterTimerTask(10, timTask =>
             {
                 //animate the box
                 sampleBox1.SetLocation(10, (int)calculatedValues[step]);
@@ -92,7 +92,7 @@ namespace LayoutFarm
                 else
                 {
                     //unregister and remove the task
-                    tim.Remove();
+                    timTask.RemoveSelf();
                 }
             });
         }
