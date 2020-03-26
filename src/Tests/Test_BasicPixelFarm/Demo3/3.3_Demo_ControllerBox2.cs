@@ -72,7 +72,7 @@ namespace LayoutFarm
             box.MouseUp += (s, e) =>
             {
                 e.MouseCursorStyle = MouseCursorStyle.Default;
-                box.BackColor = Color.LightGray;
+                box.BackColor = KnownColors.LightGray;
                 //hide controller
                 _controllerBox1.Visible = false;
                 _controllerBox1.TargetBox = null;

@@ -164,7 +164,7 @@ namespace LayoutFarm.ColorBlenderSample
             {
                 if (e.CurrentContextElement is Label lbl)
                 {
-                    lbl.BackColor = PixelFarm.Drawing.Color.Gray;
+                    lbl.BackColor = PixelFarm.Drawing.KnownColors.Gray;
                 }
             };
             //----------------------------------
@@ -174,7 +174,7 @@ namespace LayoutFarm.ColorBlenderSample
             //----------------------------------
             {
                 Label lblChromaDarken = new Label(50, 20);
-                lblChromaDarken.BackColor = PixelFarm.Drawing.Color.Gray;
+                lblChromaDarken.BackColor = PixelFarm.Drawing.KnownColors.Gray;
                 lblChromaDarken.Text = "Darken";
                 lblChromaDarken.SetLocation(x, y);
                 lblChromaDarken.AttachUIBehaviour(buttonBeh);
@@ -182,7 +182,7 @@ namespace LayoutFarm.ColorBlenderSample
                 UI.GeneralEventListener evListener = new UI.GeneralEventListener();
                 evListener.MouseDown += e =>
                 {
-                    PixelFarm.Drawing.Color color = PixelFarm.Drawing.Color.DeepPink;
+                    PixelFarm.Drawing.Color color = PixelFarm.Drawing.KnownColors.DeepPink;
                     PaintLab.ChromaJs.Chroma chroma = new PaintLab.ChromaJs.Chroma(color);
 
                     PixelFarm.Drawing.Color[] colors = new[] {
@@ -211,7 +211,7 @@ namespace LayoutFarm.ColorBlenderSample
                     UI.GeneralEventListener evListener = new UI.GeneralEventListener();
                     evListener.MouseDown += e =>
                     {
-                        PixelFarm.Drawing.Color color = PixelFarm.Drawing.Color.DeepPink;
+                        PixelFarm.Drawing.Color color = PixelFarm.Drawing.KnownColors.DeepPink;
                         PaintLab.ChromaJs.Chroma chroma = new PaintLab.ChromaJs.Chroma(color);
 
                         PixelFarm.Drawing.Color[] colors = new[] {

@@ -37,7 +37,7 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
                      {
                        new ColorStop(0.0f,  Drawing.Color.Black),
                        new ColorStop(0.20f, Drawing.Color.Red),
-                       new ColorStop(0.50f, Drawing.Color.OrangeRed),
+                       new ColorStop(0.50f, Drawing.KnownColors.OrangeRed),
                        new ColorStop(0.75f, Drawing.Color.Yellow)
                      });
 
@@ -58,7 +58,7 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
             //3. polygon gradient: this version, just a simple rect 
             PolygonGradientBrush.ColorVertex2d[] vertices = new PolygonGradientBrush.ColorVertex2d[]
             {
-                new PolygonGradientBrush.ColorVertex2d(0,0,Color.OrangeRed),
+                new PolygonGradientBrush.ColorVertex2d(0,0,KnownColors.OrangeRed),
                 new PolygonGradientBrush.ColorVertex2d(300,0,Color.Black),
                 new PolygonGradientBrush.ColorVertex2d(300,400,Color.Yellow),
                 new PolygonGradientBrush.ColorVertex2d(0,400,Color.Blue),
