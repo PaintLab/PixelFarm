@@ -31,7 +31,7 @@ namespace LayoutFarm.CustomWidgets
             //dbugBreakMe = true;
 #endif
             this.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
-            this.BackColor = Color.LightGray;
+            this.BackColor = KnownColors.LightGray;
             this.MouseDown += panel_MouseDown;
             this.MouseDoubleClick += panel_MouseDoubleClick;
             this.AcceptKeyboardFocus = true;
@@ -158,7 +158,7 @@ namespace LayoutFarm.CustomWidgets
                         if (_selectedIndex > -1)
                         {
                             //switch back    
-                            GetItem(_selectedIndex).BackColor = Color.LightGray;
+                            GetItem(_selectedIndex).BackColor = KnownColors.LightGray;
                         }
 
                         _selectedIndex = value;

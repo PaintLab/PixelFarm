@@ -61,7 +61,7 @@ namespace LayoutFarm.UI
         }
     }
 
-   
+
     public abstract partial class UIElement : IUIEventListener
     {
 
@@ -94,11 +94,7 @@ namespace LayoutFarm.UI
         protected virtual bool HasReadyRenderElement => CurrentPrimaryRenderElement != null;
         public abstract void InvalidateGraphics();
 
-        public bool AcceptKeyboardFocus
-        {
-            get;
-            set;
-        }
+        public bool AcceptKeyboardFocus { get; set; }
 
         public virtual object Tag
         {
@@ -539,14 +535,33 @@ namespace LayoutFarm.UI
         protected virtual void OnElementChanged()
         {
         }
-        //
-        public abstract void Accept(UIVisitor visitor);
+
         protected virtual void OnGuestMsg(UIGuestMsgEventArgs e)
         {
         }
         public static void UnsafeRemoveLinkedNode(UIElement ui)
         {
             ui._collectionLinkNode = null;
+        }
+
+        //---------
+        protected virtual void OnAcceptVisitor(UIVisitor visitor)
+        {
+
+        }
+        public static void AcceptVisitor(UIElement ui, UIVisitor visitor)
+        {
+            if (visitor.ReportEnterAndExit)
+            {
+                UIVisitor.InvokeOnEnter(visitor, ui);
+                ui.OnAcceptVisitor(visitor);
+                UIVisitor.InvokeOnExit(visitor, ui);
+            }
+            else
+            {
+                ui.OnAcceptVisitor(visitor);
+            }
+
         }
 #if DEBUG
         object dbugTagObject;
@@ -564,5 +579,5 @@ namespace LayoutFarm.UI
 #endif
     }
 
-   
+
 }

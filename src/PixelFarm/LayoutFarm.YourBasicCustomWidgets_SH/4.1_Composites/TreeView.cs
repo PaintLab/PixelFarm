@@ -10,7 +10,7 @@ namespace LayoutFarm.CustomWidgets
     {
         //composite          
         CustomRenderBox _primElement;//background
-        Color _backColor = Color.LightGray;
+        Color _backColor = KnownColors.LightGray;
         int _viewportLeft, _viewportTop;
         UICollection _uiList;
         int _latestItemY;
@@ -22,10 +22,18 @@ namespace LayoutFarm.CustomWidgets
             //panel for listview items
             _panel = new Box(width, height);
             _panel.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
-            _panel.BackColor = Color.LightGray;
+            _panel.BackColor = KnownColors.LightGray;
             _panel.NeedClipArea = true;
             _uiList = new UICollection(this);
             _uiList.AddUI(_panel);
+        }
+
+        protected override void OnAcceptVisitor(UIVisitor visitor)
+        {
+            if (_uiList != null)
+            {
+                UICollection.AcceptVisitor(_uiList, visitor);
+            }
         }
         //
         public override RenderElement CurrentPrimaryRenderElement => _primElement;
@@ -52,8 +60,7 @@ namespace LayoutFarm.CustomWidgets
                 renderE.SetController(this);
                 renderE.HasSpecificWidthAndHeight = true;
                 //------------------------------------------------
-                //create visual layer 
-                int n = _uiList.Count;
+                //create visual layer                  
                 foreach (UIElement ui in _uiList.GetIter())
                 {
                     renderE.AddChild(ui);
@@ -107,7 +114,7 @@ namespace LayoutFarm.CustomWidgets
             //here: arrange item in panel
             _panel.PerformContentLayout();
         }
-         
+
     }
 
     public class TreeNode : AbstractRectUI
@@ -154,7 +161,7 @@ namespace LayoutFarm.CustomWidgets
                 var element = new CustomRenderBox(rootgfx, this.Width, this.Height);
                 element.SetLocation(this.Left, this.Top);
                 element.BackColor = _backColor;
-                element.HasSpecificWidthAndHeight = true; 
+                element.HasSpecificWidthAndHeight = true;
                 //-----------------------------
                 // create default layer for node content  
                 //-----------------------------
@@ -310,6 +317,6 @@ namespace LayoutFarm.CustomWidgets
                 }
             };
         }
-       
+
     }
 }

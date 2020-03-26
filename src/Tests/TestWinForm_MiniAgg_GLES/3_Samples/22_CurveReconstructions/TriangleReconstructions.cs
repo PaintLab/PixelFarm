@@ -95,7 +95,7 @@ namespace PixelFarm.CpuBlit.Samples
             if (!ShowReconstructionCurve) return;
 
             //draw Ci line
-            p.StrokeColor = Color.OrangeRed;
+            p.StrokeColor = KnownColors.OrangeRed;
             DrawLine(p, a01, a12);
             DrawLine(p, a12, a20);
             DrawLine(p, a20, a01);

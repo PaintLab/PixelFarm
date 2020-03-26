@@ -159,7 +159,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             DrawString(p, "Hello World", 10, ypos);
             ypos += lineSpaceInPx;
 
-            p.FillColor = Color.Gray;
+            p.FillColor = KnownColors.Gray;
             DrawString(p, "Hello World", 10, ypos);
             ypos += lineSpaceInPx;
 

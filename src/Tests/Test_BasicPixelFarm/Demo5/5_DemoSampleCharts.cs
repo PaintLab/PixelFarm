@@ -99,8 +99,6 @@ namespace LayoutFarm.ColorBlenderSample
         class PlotLine : UIElement
         {
             LineRenderElement _lineRendeE;
-
-
             List<PointF> _points = new List<PointF>();
             List<PlotBox> _controls = new List<PlotBox>();
 
@@ -120,10 +118,8 @@ namespace LayoutFarm.ColorBlenderSample
                     this.CurrentPrimaryRenderElement.InvalidateGraphics();
                 }
             }
-            protected override bool HasReadyRenderElement
-            {
-                get { return _lineRendeE != null; }
-            }
+            protected override bool HasReadyRenderElement => _lineRendeE != null;
+
             public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
             {
                 if (_lineRendeE == null)
@@ -150,10 +146,7 @@ namespace LayoutFarm.ColorBlenderSample
                 }
                 return _lineRendeE;
             }
-            public override void Accept(UIVisitor visitor)
-            {
 
-            }
             public override RenderElement CurrentPrimaryRenderElement => _lineRendeE;
 
 

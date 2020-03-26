@@ -65,14 +65,14 @@ namespace OpenTkEssTest
             _painter.DrawCircle(100, 100, 25);
             _painter.DrawEllipse(200, 200, 225, 250);
             ////
-            _painter.FillColor = PixelFarm.Drawing.Color.OrangeRed;
+            _painter.FillColor = PixelFarm.Drawing.KnownColors.OrangeRed;
             _painter.FillCircle(100, 400, 25);
-            _pcx.StrokeColor = PixelFarm.Drawing.Color.OrangeRed;
+            _pcx.StrokeColor = PixelFarm.Drawing.KnownColors.OrangeRed;
             _painter.DrawCircle(100, 400, 25);
             ////
-            _painter.FillColor = PixelFarm.Drawing.Color.OrangeRed;
+            _painter.FillColor = PixelFarm.Drawing.KnownColors.OrangeRed;
             _painter.FillEllipse(200, 400, 225, 450);
-            _pcx.StrokeColor = PixelFarm.Drawing.Color.OrangeRed;
+            _pcx.StrokeColor = PixelFarm.Drawing.KnownColors.OrangeRed;
             _painter.DrawEllipse(200, 400, 225, 450);
             //-------------------------------------------
             SwapBuffers();

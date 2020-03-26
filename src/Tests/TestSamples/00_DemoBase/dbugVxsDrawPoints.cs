@@ -34,7 +34,7 @@ namespace Mini
                         break;
                     case VertexCmd.C4:
                         {
-                            p.FillColor = PixelFarm.Drawing.Color.Gray;
+                            p.FillColor = PixelFarm.Drawing.KnownColors.Gray;
                             p.FillRect(x, y, 5, 5);
                             p.DrawString(i.ToString(), x, y + 5);
                         }

@@ -4,14 +4,13 @@ namespace LayoutFarm.UI
 {
     public abstract class UIVisitor
     {
-        public abstract void BeginElement(string uiname);
-        public abstract void Attribute(string name, string value);
-        public abstract void Attribute(string name, int value);
-        public abstract void Attribute(string name, double value);
-        public abstract void Attribute(string name, bool value);
+        public bool ReportEnterAndExit { get; set; }
+        public bool StopWalking { get; set; }
 
-        public abstract void TextNode(string content);
-        public abstract void Comment(string content);
-        public abstract void EndElement();
+        protected virtual void OnEnter(object obj) { }
+        protected virtual void OnExit(object obj) { }
+
+        internal static void InvokeOnEnter(UIVisitor vis, object obj) => vis.OnEnter(obj);
+        internal static void InvokeOnExit(UIVisitor vis, object obj) => vis.OnExit(obj); 
     }
 }
