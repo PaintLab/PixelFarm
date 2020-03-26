@@ -219,7 +219,6 @@
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\8.2_Canvas\MiniAggCanvasBox.cs" Link="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\8.2_Canvas\MiniAggCanvasBox.cs" />
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\8.2_Canvas\MiniAggCanvasRenderElement.cs" Link="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\8.2_Canvas\MiniAggCanvasRenderElement.cs" />
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\9_TextContentSplitter\ContentTextSplitter.cs" Link="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\9_TextContentSplitter\ContentTextSplitter.cs" />
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\Accessories\KnownColors.cs" Link="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\Accessories\KnownColors.cs" />
     <Compile Include="..\..\PixelFarm\BackEnd.Color\ChromaJs\Chroma.cs" Link="PixelFarm\BackEnd.Color\ChromaJs\Chroma.cs" />
     <Compile Include="..\..\PixelFarm\BackEnd.Color\ColorBlender\Algorithms\Analogue.cs" Link="PixelFarm\BackEnd.Color\ColorBlender\Algorithms\Analogue.cs" />
     <Compile Include="..\..\PixelFarm\BackEnd.Color\ColorBlender\Algorithms\ClassicBlend.cs" Link="PixelFarm\BackEnd.Color\ColorBlender\Algorithms\ClassicBlend.cs" />
@@ -235,6 +234,7 @@
     <Compile Include="..\..\PixelFarm\BackEnd.Color\ColorBlender\IAlgorithm.cs" Link="PixelFarm\BackEnd.Color\ColorBlender\IAlgorithm.cs" />
     <Compile Include="..\..\PixelFarm\BackEnd.Color\ColorBlender\MathHelpers.cs" Link="PixelFarm\BackEnd.Color\ColorBlender\MathHelpers.cs" />
     <Compile Include="..\..\PixelFarm\BackEnd.Color\ColorBlender\RGB.cs" Link="PixelFarm\BackEnd.Color\ColorBlender\RGB.cs" />
+    <Compile Include="..\..\PixelFarm\BackEnd.Color\KnownColors.cs" Link="PixelFarm\BackEnd.Color\KnownColors.cs" />
     <Compile Include="..\..\PixelFarm\ImgCodec.Core\Color.cs" Link="PixelFarm\ImgCodec.Core\Color.cs" />
     <Compile Include="..\..\PixelFarm\ImgCodec.Core\ExtendedImage.cs" Link="PixelFarm\ImgCodec.Core\ExtendedImage.cs" />
     <Compile Include="..\..\PixelFarm\ImgCodec.Core\ExtraImageInfo.cs" Link="PixelFarm\ImgCodec.Core\ExtraImageInfo.cs" />
@@ -1067,10 +1067,10 @@
     <Folder Include="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\7_WindowUI" />
     <Folder Include="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\8.2_Canvas" />
     <Folder Include="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\9_TextContentSplitter" />
-    <Folder Include="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\Accessories" />
     <Folder Include="PixelFarm\BackEnd.Color\ChromaJs" />
     <Folder Include="PixelFarm\BackEnd.Color\ColorBlender\Algorithms" />
     <Folder Include="PixelFarm\BackEnd.Color\ColorBlender" />
+    <Folder Include="PixelFarm\BackEnd.Color" />
     <Folder Include="PixelFarm\ImgCodec.Core" />
     <Folder Include="PixelFarm\ImgCodec.Core\Helpers" />
     <Folder Include="PixelFarm\ImgCodec.Core\IO" />

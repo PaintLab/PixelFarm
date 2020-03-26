@@ -606,9 +606,6 @@
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\9_TextContentSplitter\ContentTextSplitter.cs">
       <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\9_TextContentSplitter\ContentTextSplitter.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\Accessories\KnownColors.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\Accessories\KnownColors.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.Color\ChromaJs\Chroma.cs">
       <Link>PixelFarm\BackEnd.Color\ChromaJs\Chroma.cs</Link>
     </Compile>
@@ -653,6 +650,9 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.Color\ColorBlender\RGB.cs">
       <Link>PixelFarm\BackEnd.Color\ColorBlender\RGB.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Color\KnownColors.cs">
+      <Link>PixelFarm\BackEnd.Color\KnownColors.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\ImgCodec.Core\Color.cs">
       <Link>PixelFarm\ImgCodec.Core\Color.cs</Link>
