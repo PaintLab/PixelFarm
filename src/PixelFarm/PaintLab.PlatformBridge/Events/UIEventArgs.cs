@@ -194,6 +194,7 @@ namespace LayoutFarm.UI
             this.IsDragging = false;
             this.DraggingElement = null;
             this.IsFirstMouseEnter = false;
+            CurrentMousePressMonitor = null;
         }
 
         public bool IsDragging { get; set; }
@@ -212,6 +213,11 @@ namespace LayoutFarm.UI
         public int CapturedMouseY { get; set; }
         public int DiffCapturedX => this.X - this.CapturedMouseX;
         public int DiffCapturedY => this.Y - this.CapturedMouseY;
+        public IUIEventListener CurrentMousePressMonitor { get; set; }
+        public void StartMonitorMousePress(IUIEventListener listener)
+        {
+            CurrentMousePressMonitor = listener;
+        }
     }
 
     public abstract class Cursor

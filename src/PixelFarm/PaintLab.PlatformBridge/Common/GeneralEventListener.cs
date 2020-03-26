@@ -11,6 +11,7 @@ namespace LayoutFarm.UI
         public event UIEventHandler<UIKeyEventArgs> KeyDown;
         public event UIEventHandler<UIKeyEventArgs> KeyPress;
         public event UIEventHandler<UIKeyEventArgs> KeyUp;
+        public event System.EventHandler ContinuousMousePress;
 
         void IEventListener.ListenGotKeyboardFocus(UIFocusEventArgs e)
         {
@@ -21,7 +22,10 @@ namespace LayoutFarm.UI
         {
 
         }
-
+        void IEventListener.ListenContinuousMousePress()
+        {
+            ContinuousMousePress?.Invoke(this, System.EventArgs.Empty);
+        }
         void IEventListener.ListenKeyDown(UIKeyEventArgs e)
         {
             KeyDown?.Invoke(e);

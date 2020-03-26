@@ -33,11 +33,13 @@ namespace LayoutFarm.UI
 
         void ListenGuestMsg(UIGuestMsgEventArgs e);
         //-------------------------------------------------------------------------- 
-
+        void ListenContinuousMousePress();
     }
     public interface IUIEventListener : IEventListener
     {
         //-------------------------------------------------------------------------- 
+       
+         
         void HandleContentLayout();
         void HandleContentUpdate();
         void HandleElementUpdate();

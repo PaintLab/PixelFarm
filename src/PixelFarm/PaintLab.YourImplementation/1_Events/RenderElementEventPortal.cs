@@ -13,9 +13,13 @@ namespace LayoutFarm.UI
         Stack<HitChain> _hitChainStack = new Stack<HitChain>();
         readonly RenderElement _topRenderElement;
 
+        readonly UITimerTask _mousePressMonitor;
+        int _mousePressCount;
+
 #if DEBUG
         int dbugMsgChainVersion;
 #endif
+
 
         public RenderElementEventPortal(RenderElement topRenderElement)
         {
@@ -23,6 +27,23 @@ namespace LayoutFarm.UI
 #if DEBUG
             dbugRootGraphics = (MyRootGraphic)topRenderElement.Root;
 #endif
+
+            _mousePressMonitor = new UITimerTask(t =>
+            {
+                if (_currentMousePressMonitor != null)
+                {
+                    if (_mousePressCount > 0)
+                    {
+                        _currentMousePressMonitor.ListenContinuousMousePress();
+                    }
+                    _mousePressCount++;
+                }
+
+            });
+            _mousePressMonitor.Enabled = true;
+            _mousePressMonitor.IntervalInMillisec = 40;
+            UIPlatform.RegisterTimerTask(_mousePressMonitor);
+
         }
 
         HitChain GetFreeHitChain()
@@ -194,7 +215,7 @@ namespace LayoutFarm.UI
                 {
                     e.CurrentContextElement = currentMouseWheel = null; //clear 
                     ForEachEventListenerBubbleUp(e, hitPointChain, (e1, listener) =>
-                    { 
+                    {
                         //please ensure=> no local var/pararmeter capture inside lambda
                         if (listener.BypassAllMouseEvents)
                         {
@@ -224,6 +245,8 @@ namespace LayoutFarm.UI
 
         IUIEventListener _prevMouseDownElement;
         IUIEventListener _currentMouseDown;
+        IUIEventListener _currentMousePressMonitor;
+
         void IEventPortal.PortalMouseDown(UIMouseEventArgs e)
         {
 #if DEBUG
@@ -285,8 +308,10 @@ namespace LayoutFarm.UI
                         //retrun true to stop this loop (no further bubble up)
                         //return false to bubble this to upper control       
                         return e1.CancelBubbling || !listener.BypassAllMouseEvents;
-
                     });
+
+                    _currentMousePressMonitor = e.CurrentMousePressMonitor;
+
                 }
 
                 if (_prevMouseDownElement != _currentMouseDown &&
@@ -323,7 +348,7 @@ namespace LayoutFarm.UI
 
             SwapHitChain(hitPointChain);
 
-            e.StopPropagation();
+            e.StopPropagation(); //TODO: review this again
 #if DEBUG
             if (local_msgVersion != dbugMsgChainVersion)
             {
@@ -423,6 +448,11 @@ namespace LayoutFarm.UI
 #if DEBUG
             _dbugHitChainPhase = dbugHitChainPhase.MouseUp;
 #endif
+            _currentMousePressMonitor = null;
+            _mousePressCount = 0;
+
+
+
             HitTestCoreWithPrevChainHint(hitPointChain, _previousChain, e.X, e.Y);
 
             if (hitPointChain.Count > 0)
@@ -430,7 +460,7 @@ namespace LayoutFarm.UI
                 SetEventOrigin(e, hitPointChain);
                 //--------------------------------------------------------------- 
                 ForEachOnlyEventPortalBubbleUp(e, hitPointChain, (e1, portal) =>
-                { 
+                {
                     //please ensure=> no local var/pararmeter capture inside lambda
                     portal.PortalMouseUp(e1);
                     return true;
@@ -456,7 +486,7 @@ namespace LayoutFarm.UI
                 if (e.IsAlsoDoubleClick)
                 {
                     ForEachEventListenerBubbleUp(e, hitPointChain, (e1, listener) =>
-                    { 
+                    {
                         //please ensure=> no local var/pararmeter capture inside lambda
                         listener.ListenMouseDoubleClick(e1);
                         //------------------------------------------------------- 
