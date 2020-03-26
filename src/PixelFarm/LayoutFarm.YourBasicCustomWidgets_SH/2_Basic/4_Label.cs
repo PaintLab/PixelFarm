@@ -11,7 +11,7 @@ namespace LayoutFarm.CustomWidgets
         Color _textColor; //text color
         Color _backColor;//actual filling color
 
-        Color _textBackgroundColorHint; //background color hint, 
+         
         //some time the label background is transparent
         //but its host has solid color, so this value will hint
 

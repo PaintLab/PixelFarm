@@ -28,7 +28,7 @@ namespace Mini
         //
         DemoUI _demoUI;
         DemoBase _demoBase;
-         
+
 
         public GLESAppModule()
         {
@@ -36,11 +36,11 @@ namespace Mini
         public void BindSurface(GraphicsViewRoot gfxViewRoot)
         {
             _gfxViewRoot = gfxViewRoot;
-            _rootGfx = gfxViewRoot.RootGfx; 
-            
+            _rootGfx = gfxViewRoot.RootGfx;
+
             _myWidth = gfxViewRoot.Width;
             _myHeight = gfxViewRoot.Height;
-             
+
             gfxViewRoot.MakeCurrent();
         }
 
@@ -81,7 +81,7 @@ namespace Mini
                 _gfxViewRoot.Close();
                 _gfxViewRoot = null;
             }
-            _rootGfx = null; 
+            _rootGfx = null;
         }
         //This is a simple UIElement for testing only
         class DemoUI : UIElement
@@ -131,12 +131,6 @@ namespace Mini
             {
 
             }
-
-            public override void Accept(UIVisitor visitor)
-            {
-
-            }
-
             //handle event
             protected override void OnMouseDown(UIMouseEventArgs e)
             {

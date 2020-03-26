@@ -81,7 +81,7 @@ namespace LayoutFarm
             {
                 mouseUpTime = System.DateTime.Now;
                 e.MouseCursorStyle = MouseCursorStyle.Default;
-                box.BackColor = Color.LightGray;
+                box.BackColor = KnownColors.LightGray;
 
                 if (mouseUpFromDragging)
                 {

@@ -167,7 +167,7 @@ namespace LayoutFarm
                     if (StringStartsWithChars(choice, currentLocalText))
                     {
                         CustomWidgets.ListItem item = new CustomWidgets.ListItem(listViewWidth, 17);
-                        item.BackColor = Color.LightGray;
+                        item.BackColor = KnownColors.LightGray;
                         item.Tag = item.Text = keywords[i];
                         _listView.AddItem(item);
                     }

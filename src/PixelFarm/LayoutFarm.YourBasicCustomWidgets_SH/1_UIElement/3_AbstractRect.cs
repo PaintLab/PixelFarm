@@ -64,10 +64,13 @@ namespace LayoutFarm.UI
         short _marginBottom;
         // 
 
-
         public AbstractRectUI(int width, int height)
         {
+            //default,           
+            HasSpecificWidthAndHeight = true;
+
             SetElementBoundsWH(width, height);
+
             //default for box
             this.AutoStopMouseEventPropagation = true;
         }
@@ -430,16 +433,7 @@ namespace LayoutFarm.UI
         public virtual int InnerHeight => this.Height;
         //
         public virtual int InnerWidth => this.Width;
-        //
-        protected virtual void Describe(UIVisitor visitor)
-        {
-            visitor.Attribute("left", this.Left);
-            visitor.Attribute("top", this.Top);
-            visitor.Attribute("width", this.Width);
-            visitor.Attribute("height", this.Height);
-        }
-
-
+        
         public bool HasSpecificWidth
         {
             get => _specificWidth;
@@ -478,9 +472,7 @@ namespace LayoutFarm.UI
                 }
             }
         }
-        public override void Accept(UIVisitor visitor)
-        {
-        }
+       
         public Rectangle Bounds => new Rectangle(this.Left, this.Top, this.Width, this.Height);
 
         //-----------------------

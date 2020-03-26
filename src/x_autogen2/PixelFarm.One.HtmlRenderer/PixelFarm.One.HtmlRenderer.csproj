@@ -651,6 +651,9 @@
     <Compile Include="..\..\PixelFarm\BackEnd.Color\ColorBlender\RGB.cs">
       <Link>PixelFarm\BackEnd.Color\ColorBlender\RGB.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\BackEnd.Color\KnownColors.cs">
+      <Link>PixelFarm\BackEnd.Color\KnownColors.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\ImgCodec.Core\Color.cs">
       <Link>PixelFarm\ImgCodec.Core\Color.cs</Link>
     </Compile>
@@ -1772,9 +1775,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\8_EventQueue\EventQueueSystem.cs">
       <Link>PixelFarm\PaintLab.RenderTree\8_EventQueue\EventQueueSystem.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.AbstractPlatform\Accessories\KnownColors.cs">
-      <Link>PixelFarm\PaintLab.AbstractPlatform\Accessories\KnownColors.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.AbstractPlatform\CanvasViewport.cs">
       <Link>PixelFarm\PaintLab.AbstractPlatform\CanvasViewport.cs</Link>

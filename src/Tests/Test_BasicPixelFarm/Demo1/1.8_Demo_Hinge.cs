@@ -73,7 +73,7 @@ namespace LayoutFarm
         LayoutFarm.CustomWidgets.MenuItem CreateMenuItem(int x, int y)
         {
             var mnuItem = new CustomWidgets.MenuItem(150, 20);
-            mnuItem.BackColor = Color.OrangeRed;
+            mnuItem.BackColor = KnownColors.OrangeRed;
             mnuItem.SetLocation(x, y);
              
             //--------------------------------------
@@ -119,7 +119,7 @@ namespace LayoutFarm
             //--------------------------------------
             //2. float part
             var floatPart = new LayoutFarm.CustomWidgets.Box(400, 100);
-            floatPart.BackColor = Color.Gray;
+            floatPart.BackColor = KnownColors.Gray;
             mnuItem.FloatPart = floatPart;
             return mnuItem;
         }

@@ -28,7 +28,7 @@ namespace LayoutFarm.CustomWidgets
         public CustomRenderBox(RootGraphic rootgfx, int width, int height)
             : base(rootgfx, width, height)
         {
-            this.BackColor = Color.LightGray;
+            this.BackColor = KnownColors.LightGray;
         }
         protected override PlainLayer CreateDefaultLayer()
         {

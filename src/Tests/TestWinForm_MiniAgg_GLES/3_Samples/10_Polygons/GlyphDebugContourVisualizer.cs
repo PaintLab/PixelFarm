@@ -190,7 +190,7 @@ namespace PixelFarm
             if (boneIndex == 0)
             {
                 //for first bone 
-                _painter.FillRect(_branchHeadPos.X * pxscale, _branchHeadPos.Y * pxscale, 5, 5, PixelFarm.Drawing.Color.DeepPink);
+                _painter.FillRect(_branchHeadPos.X * pxscale, _branchHeadPos.Y * pxscale, 5, 5, KnownColors.DeepPink);
             }
             if (!valid)
             {
