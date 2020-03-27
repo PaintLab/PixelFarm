@@ -12,7 +12,9 @@ namespace LayoutFarm.UI
     public class RenderElementEventPortal : IEventPortal
     {
 
-        //helper for handle mouse press
+        /// <summary>
+        /// a helper class for mouse press monitor
+        /// </summary>
         class MousePressMonitorHelper
         {
             int _ms;
@@ -44,16 +46,34 @@ namespace LayoutFarm.UI
                 _mousePressMonitor.IntervalInMillisec = ms; //interval for mouse press monitor
                 UIPlatform.RegisterTimerTask(_mousePressMonitor);
             }
+            public void Reset()
+            {
+                _currentMonitoredElem = null;
+                _mousePressCount = 0;
+            }
+            /// <summary>
+            /// set monitoed elem + invoke 1st mouse press event 
+            /// </summary>
+            /// <param name="ui"></param>
             public void SetMonitoredElement(IUIEventListener ui)
             {
+#if DEBUG
+                if (ui == null)
+                {
+                    System.Diagnostics.Debugger.Break();
+                }
+#endif
+
                 _currentMonitoredElem = ui;
                 _mousePressCount = 0;
+                _currentMonitoredElem.ListenMousePress(_mousePressEventArgs);
             }
             public void AddMousePressInformation(UIMouseEventArgs importInfo)
             {
                 _mousePressEventArgs.Button = importInfo.Button;
             }
             public bool HasMonitoredElem => _currentMonitoredElem != null;
+
         }
 
 
@@ -326,12 +346,16 @@ namespace LayoutFarm.UI
                         _currentMouseDown = listener;
                         listener.ListenMouseDown(e1);
 
-                        //------------------------------------------------------- 
-                        _mousePressMonitor.SetMonitoredElement(e.CurrentMousePressMonitor);
                         if (e.CurrentMousePressMonitor != null)
                         {
                             //set snapshot data
                             _mousePressMonitor.AddMousePressInformation(e);
+                            //set and invoke mouse press here                                
+                            _mousePressMonitor.SetMonitoredElement(e.CurrentMousePressMonitor);
+                        }
+                        else
+                        {
+                            _mousePressMonitor.Reset();
                         }
 
                         //------------------------------------------------------- 
@@ -488,7 +512,7 @@ namespace LayoutFarm.UI
             _dbugHitChainPhase = dbugHitChainPhase.MouseUp;
 #endif
 
-            _mousePressMonitor.SetMonitoredElement(null);
+            _mousePressMonitor.Reset();
             HitTestCoreWithPrevChainHint(hitPointChain, _previousChain, e.X, e.Y);
 
             if (hitPointChain.Count > 0)
