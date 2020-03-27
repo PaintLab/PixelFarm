@@ -423,7 +423,7 @@ namespace LayoutFarm.UI
 
         bool _isFirstMouseEnter = false;
         bool _mouseMoveFoundSomeHit = false;
-
+        IUIEventListener _latestMouseMove = null;
         void IEventPortal.PortalMouseMove(UIMouseEventArgs e)
         {
 
@@ -448,9 +448,12 @@ namespace LayoutFarm.UI
                 _mouseMoveFoundSomeHit = false;
                 ForEachEventListenerBubbleUp(e, hitPointChain, (e1, listener) =>
                 {
+
+                    
                     //please ensure=> no local var/pararmeter capture inside lambda
                     _mouseMoveFoundSomeHit = true;
                     _isFirstMouseEnter = false;
+
                     if (e1.CurrentMouseActive != null &&
                         e1.CurrentMouseActive != listener)
                     {
@@ -465,11 +468,19 @@ namespace LayoutFarm.UI
                     if (!e1.IsCanceled)
                     {
                         e1.CurrentMouseActive = listener;
-                        e1.IsFirstMouseEnter = _isFirstMouseEnter;
-                        e1.CurrentMouseActive.ListenMouseMove(e1);
-                        e1.IsFirstMouseEnter = false;
-                    }
+                        if (_isFirstMouseEnter)
+                        {
+                            e1.CurrentMouseActive.ListenMouseEnter(e1);
+                        }
+                        else if(_latestMouseMove != e1.CurrentContextElement)
+                        {
+                            e1.CurrentContextElement.ListenMouseEnter(e1);
+                        }
 
+                        e1.CurrentMouseActive.ListenMouseMove(e1);
+                        _latestMouseMove = e1.CurrentContextElement;
+                    }
+                    
                     return true;//stop
                 });
 

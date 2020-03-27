@@ -90,6 +90,9 @@ namespace LayoutFarm
             for (int i = 0; i < fileNames.Length * 4; ++i) //5 imgs
             {
                 var imgbox = new LayoutFarm.CustomWidgets.ImageBox();
+#if DEBUG
+                imgbox.dbugBreakMe = true;
+#endif
                 imgbox.BackColor = KnownColors.OrangeRed;
                 imgbox.SetLocation(0, lastY);
                 imgbox.MouseUp += (s, e) =>

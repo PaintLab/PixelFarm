@@ -28,6 +28,8 @@ namespace LayoutFarm
         int _prevLogicalMouseY;
         int _localMouseDownX;
         int _localMouseDownY;
+        UIMouseButtons _mouseDownButton = UIMouseButtons.None;
+
 
         public TopWindowEventRoot(RenderElement topRenderElement)
         {
@@ -59,7 +61,8 @@ namespace LayoutFarm
         {
             _rootgfx.CaretStopBlink();
         }
-        UIMouseButtons _mouseDownButton = UIMouseButtons.None;
+
+
         void ITopWindowEventRoot.RootMouseDown(UIMouseEventArgs e)
         {
             _prevLogicalMouseX = e.X;
@@ -137,8 +140,7 @@ namespace LayoutFarm
                     e.SetLocation(e.GlobalX - d_GlobalX, e.GlobalY - d_globalY);
                     e.CapturedMouseX = _localMouseDownX;
                     e.CapturedMouseY = _localMouseDownY;
-                    var iportal = _draggingElement as IEventPortal;
-                    if (iportal != null)
+                    if (_draggingElement is IEventPortal iportal)
                     {
                         iportal.PortalMouseUp(e);
                         if (!e.IsCanceled)
@@ -161,8 +163,6 @@ namespace LayoutFarm
                 }
                 _iTopBoxEventPortal.PortalMouseUp(e);
             }
-
-
             _localMouseDownX = _localMouseDownY = 0;
         }
 
@@ -171,15 +171,13 @@ namespace LayoutFarm
         {
             int xdiff = e.X - _prevLogicalMouseX;
             int ydiff = e.Y - _prevLogicalMouseY;
-            _prevLogicalMouseX = e.X;
-            _prevLogicalMouseY = e.Y;
-            
-
             if (xdiff == 0 && ydiff == 0)
             {
                 return;
             }
 
+            _prevLogicalMouseX = e.X;
+            _prevLogicalMouseY = e.Y;
             //-------------------------------------------------------
             //when mousemove -> reset hover!            
             _hoverMonitoringTask.Reset();
@@ -187,8 +185,8 @@ namespace LayoutFarm
             AddMouseEventArgsDetail(e);
             e.SetDiff(xdiff, ydiff);
             //-------------------------------------------------------
-            e.IsDragging = _isDragging = _isMouseDown;
-            if (_isDragging)
+
+            if (e.IsDragging = _isDragging = _isMouseDown)
             {
                 e.Button = _mouseDownButton;
                 if (_draggingElement != null)
@@ -206,8 +204,7 @@ namespace LayoutFarm
                         e.SetLocation(e.GlobalX - d_GlobalX + vwp_left, e.GlobalY - d_globalY + vwp_top);
                         e.CapturedMouseX = _localMouseDownX;
                         e.CapturedMouseY = _localMouseDownY;
-                        var iportal = _draggingElement as IEventPortal;
-                        if (iportal != null)
+                        if (_draggingElement is IEventPortal iportal)
                         {
                             iportal.PortalMouseMove(e);
                             if (!e.IsCanceled)

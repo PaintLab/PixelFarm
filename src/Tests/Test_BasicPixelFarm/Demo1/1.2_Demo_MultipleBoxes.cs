@@ -145,4 +145,81 @@ namespace LayoutFarm
         //    return binder;
         //}
     }
+
+
+    [DemoNote("1.2.1 BoxEvents")]
+    class Demo_BoxEvents : App
+    {
+        protected override void OnStart(AppHost host)
+        {
+            int x_pos = 0;
+
+            GeneralEventListener evListener = new GeneralEventListener();
+            evListener.MouseEnter += (e) =>
+            {
+                IUIEventListener ctx = e.CurrentContextElement;
+                LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;
+                box.BackColor = Color.Red;
+                System.Diagnostics.Debug.WriteLine("mouse_enter:" + box.dbugId);
+            };
+            evListener.MouseLeave += (e) =>
+            {
+                IUIEventListener ctx = e.CurrentContextElement;
+                LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;
+                box.BackColor = Color.Blue;
+                System.Diagnostics.Debug.WriteLine("mouse_leave:" + box.dbugId);
+            };
+
+            for (int i = 0; i < 10; ++i)
+            {
+                var sampleButton = new LayoutFarm.CustomWidgets.Box(30, 30);
+                sampleButton.BackColor = Color.Blue;
+                sampleButton.SetLocation(x_pos, 10);
+                sampleButton.AttachExternalEventListener(evListener);
+
+                host.AddChild(sampleButton);
+
+                x_pos += 30 + 5;
+            }
+
+        }
+    }
+
+    [DemoNote("1.2.1 BoxEvents")]
+    class Demo_BoxEvents2 : App
+    {
+        protected override void OnStart(AppHost host)
+        {
+            int x_pos = 0;
+
+            GeneralUIElementBehaviour evListener = new GeneralUIElementBehaviour();
+            evListener.MouseEnter += (s, e) =>
+            {
+                IUIEventListener ctx = e.CurrentContextElement;
+                LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;
+                box.BackColor = Color.Red;
+                System.Diagnostics.Debug.WriteLine("mouse_enter:" + box.dbugId);
+            };
+            evListener.MouseLeave += (s, e) =>
+            {
+                IUIEventListener ctx = e.CurrentContextElement;
+                LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;
+                box.BackColor = Color.Blue;
+                System.Diagnostics.Debug.WriteLine("mouse_leave:" + box.dbugId);
+            };
+
+            for (int i = 0; i < 10; ++i)
+            {
+                var sampleButton = new LayoutFarm.CustomWidgets.Box(30, 30);
+                sampleButton.BackColor = Color.Blue;
+                sampleButton.SetLocation(x_pos, 10);
+                sampleButton.AttachUIBehaviour(evListener);
+
+                host.AddChild(sampleButton);
+
+                x_pos += 30 + 5;
+            }
+
+        }
+    }
 }

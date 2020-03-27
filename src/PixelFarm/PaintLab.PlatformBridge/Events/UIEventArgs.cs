@@ -180,7 +180,7 @@ namespace LayoutFarm.UI
             Delta = delta;
         }
 
-        public bool IsFirstMouseEnter { get; set; }
+      
 
         public override void Clear()
         {
@@ -196,7 +196,7 @@ namespace LayoutFarm.UI
             this.MouseCursorStyle = UI.MouseCursorStyle.Default;
             this.IsDragging = false;
             this.DraggingElement = null;
-            this.IsFirstMouseEnter = false;
+          
             CurrentMousePressMonitor = null;
         }
 

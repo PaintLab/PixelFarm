@@ -33,12 +33,21 @@ namespace LayoutFarm.CustomWidgets
             this.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
             this.BackColor = KnownColors.LightGray;
             this.MouseDown += panel_MouseDown;
-            this.MouseDoubleClick += panel_MouseDoubleClick;
+             
             this.AcceptKeyboardFocus = true;
             this.KeyDown += simpleBox_KeyDown;
             this.NeedClipArea = true;
         }
-
+        protected override void OnDoubleClick(UIMouseEventArgs e)
+        {
+            base.OnDoubleClick(e);
+            //raise event mouse double click
+            if (e.SourceHitElement is ListItem src && ListItemMouseEvent != null)
+            {
+                e.UIEventName = UIEventName.DblClick;
+                ListItemMouseEvent(this, e);
+            }
+        }
 
         void simpleBox_KeyDown(object sender, UIKeyEventArgs e)
         {
@@ -50,13 +59,7 @@ namespace LayoutFarm.CustomWidgets
         }
         void panel_MouseDoubleClick(object sender, UIMouseEventArgs e)
         {
-            //raise event mouse double click
-            var src = e.SourceHitElement as ListItem;
-            if (src != null && ListItemMouseEvent != null)
-            {
-                e.UIEventName = UIEventName.DblClick;
-                ListItemMouseEvent(this, e);
-            }
+          
         }
         void panel_MouseDown(object sender, UIMouseEventArgs e)
         {
