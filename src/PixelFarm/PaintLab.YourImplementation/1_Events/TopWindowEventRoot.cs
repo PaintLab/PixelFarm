@@ -39,10 +39,8 @@ namespace LayoutFarm
         {
             _iTopBoxEventPortal = _topWinBoxEventPortal = new RenderElementEventPortal(topRenderElement);
             _rootgfx = topRenderElement.Root;
-
-
             _hoverMonitoringTask = new UIHoverMonitorTask();
-            _hoverMonitoringTask.IntervalInMillisec = 200;//ms
+            _hoverMonitoringTask.IntervalInMillisec = 100;//ms
             _hoverMonitoringTask.Enabled = true;
             UIPlatform.RegisterTimerTask(_hoverMonitoringTask);
         }
@@ -164,11 +162,8 @@ namespace LayoutFarm
             else
             {
                 e.IsAlsoDoubleClick = timediff.Milliseconds < _dblClickSense;
-                if (e.IsAlsoDoubleClick)
-                {
-
-                }
                 _iTopBoxEventPortal.PortalMouseUp(e);
+
             }
             _localMouseDownX = _localMouseDownY = 0;
         }
@@ -186,9 +181,7 @@ namespace LayoutFarm
             _prevLogicalMouseX = e.X;
             _prevLogicalMouseY = e.Y;
             //-------------------------------------------------------
-            //when mousemove -> reset hover!            
-            //_hoverMonitoringTask.Reset();
-            //_hoverMonitoringTask.Enabled = true;
+
             AddMouseEventArgsDetail(e);
             e.SetDiff(xdiff, ydiff);
             //-------------------------------------------------------

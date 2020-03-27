@@ -29,11 +29,14 @@ namespace LayoutFarm.UI
         }
         public override void InvokeAction()
         {
-            _mouseMoveCounter++;
-            if (_mouseMoveCounter > 2)
+            if (_elem != null)
             {
-                _mouseHoverEventArgs.CurrentContextElement = _elem;
-                _elem.ListenMouseHover(_mouseHoverEventArgs);
+                _mouseMoveCounter++;
+                if (_mouseMoveCounter > 1)
+                {
+                    _mouseHoverEventArgs.CurrentContextElement = _elem;
+                    _elem.ListenMouseHover(_mouseHoverEventArgs);
+                }
             }
         }
     }

@@ -6,11 +6,9 @@ using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
 namespace LayoutFarm.UI
 {
-
-
-
-    class RenderElementEventPortal : IEventPortal
+    public class RenderElementEventPortal : IEventPortal
     {
+
 
         /// <summary>
         /// a helper class for mouse press monitor
@@ -561,48 +559,22 @@ namespace LayoutFarm.UI
                         listener.ListenMouseUp(e1);
                         //retrun true to stop this loop (no further bubble up)
                         //return false to bubble this to upper control       
-                        return e1.CancelBubbling || !listener.BypassAllMouseEvents;
-
-                    });
-                }
-                //---------------------------------------------------------------
-                if (e.IsAlsoDoubleClick)
-                {
-                    ForEachEventListenerBubbleUp(e, hitPointChain, (e1, listener) =>
-                    {
-                        //please ensure=> no local var/pararmeter capture inside lambda
-                        listener.ListenMouseDoubleClick(e1);
-                        //------------------------------------------------------- 
-                        //retrun true to stop this loop (no further bubble up)
-                        //return false to bubble this to upper control       
-                        return e1.CancelBubbling || !listener.BypassAllMouseEvents;
-                    });
-                }
-                if (!e.CancelBubbling)
-                {
-                    if (e.IsAlsoDoubleClick)
-                    {
-                        ForEachEventListenerBubbleUp(e, hitPointChain, (e1, listener) =>
+                        //click or double click
+                        if (e1.CurrentContextElement == _currentMouseDown)
                         {
-                            //please ensure=> no local var/pararmeter capture inside lambda
-                            listener.ListenMouseDoubleClick(e1);
-                            //------------------------------------------------------- 
-                            //retrun true to stop this loop (no further bubble up)
-                            //return false to bubble this to upper control       
-                            return e1.CancelBubbling || !listener.BypassAllMouseEvents;
-                        });
-                    }
-                    else
-                    {
-                        //ForEachEventListenerBubbleUp(e, hitPointChain, listener =>
-                        //{
-                        //    listener.ListenMouseClick(e);
+                            //same elem
+                            if (e.IsAlsoDoubleClick)
+                            {
+                                listener.ListenMouseDoubleClick(e);
+                            }
+                            else
+                            {
+                                listener.ListenMouseClick(e);
+                            }
+                        }
 
-                        //    //retrun true to stop this loop (no further bubble up)
-                        //    //return false to bubble this to upper control       
-                        //    return e.CancelBubbling || !listener.BypassAllMouseEvents;
-                        //});
-                    }
+                        return e1.CancelBubbling || !listener.BypassAllMouseEvents;
+                    });
                 }
             }
             SwapHitChain(hitPointChain);
