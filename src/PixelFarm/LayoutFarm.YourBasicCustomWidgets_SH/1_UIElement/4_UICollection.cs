@@ -6,8 +6,8 @@ namespace LayoutFarm.UI
 {
     public class UICollection
     {
-        LinkedList<UIElement> _uiList = new LinkedList<UIElement>();
-        UIElement _owner;
+        readonly LinkedList<UIElement> _uiList = new LinkedList<UIElement>();
+        readonly UIElement _owner;
         public UICollection(UIElement owner)
         {
             _owner = owner;
