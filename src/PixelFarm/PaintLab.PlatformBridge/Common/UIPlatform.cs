@@ -1,4 +1,5 @@
 ﻿//Apache2, 2014-present, WinterDev 
+using System;
 using LayoutFarm.UI;
 namespace LayoutFarm
 {
@@ -28,14 +29,15 @@ namespace LayoutFarm
         {
             UIMsgQueueSystem.InternalMsgPumpRegister(uiTimerTask);
         }
-        public static void RegisterRunOnceTask(UITimerTask.TimerTick action)
+        public static void RegisterRunOnceTask(Action<UITimerTask> action)
         {
-            UI.UITimerTask uiTimerTask = new UI.UITimerTask(action);
-            uiTimerTask.Enabled = true;
-            uiTimerTask.RunOnce = true;
-            UIMsgQueueSystem.InternalMsgPumpRegister(uiTimerTask);
+
+            UIMsgQueueSystem.InternalMsgPumpRegister(new UI.UITimerTask(action) {
+                Enabled = true,
+                RunOnce = true
+            });
         }
-        public static void RegisterTimerTask(int intervalMillisec, UITimerTask.TimerTick timerTick)
+        public static void RegisterTimerTask(int intervalMillisec, Action<UITimerTask> timerTick)
         {
             UITimerTask timerTask = new UITimerTask(timerTick);
             timerTask.IntervalInMillisec = intervalMillisec;

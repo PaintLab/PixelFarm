@@ -15,13 +15,13 @@ namespace LayoutFarm
         IUIEventListener _currentMouseActiveElement;
         IUIEventListener _latestMouseDown;
         IUIEventListener _draggingElement;
-        IUIEventListener _latestMouseMoveElem;
+
 
 
         DateTime _lastTimeMouseUp;
         int _dblClickSense = 200;//ms         
         UIHoverMonitorTask _hoverMonitoringTask;
-        UIMouseHoverEventArgs _mouseHoverEventArgs;
+
 
         bool _isMouseDown;
         bool _isDragging;
@@ -38,19 +38,12 @@ namespace LayoutFarm
         public TopWindowEventRoot(RenderElement topRenderElement)
         {
             _iTopBoxEventPortal = _topWinBoxEventPortal = new RenderElementEventPortal(topRenderElement);
-            _rootgfx = topRenderElement.Root; 
+            _rootgfx = topRenderElement.Root;
 
-            _mouseHoverEventArgs = new UIMouseHoverEventArgs();
-            _hoverMonitoringTask = new UIHoverMonitorTask(tim_task =>
-            {
-                if (_latestMouseMoveElem != null)
-                {                    
-                    _mouseHoverEventArgs.CurrentContextElement = _latestMouseMoveElem;
-                    _latestMouseMoveElem.ListenMouseHover(_mouseHoverEventArgs);
-                }
-            });
+
+            _hoverMonitoringTask = new UIHoverMonitorTask();
             _hoverMonitoringTask.IntervalInMillisec = 200;//ms
-            _hoverMonitoringTask.Enabled = true; 
+            _hoverMonitoringTask.Enabled = true;
             UIPlatform.RegisterTimerTask(_hoverMonitoringTask);
         }
         public IUIEventListener CurrentKeyboardFocusedElement
@@ -200,7 +193,7 @@ namespace LayoutFarm
             e.SetDiff(xdiff, ydiff);
             //-------------------------------------------------------
 
-            _latestMouseMoveElem = null;
+
 
             if (e.IsDragging = _isDragging = _isMouseDown)
             {
@@ -240,8 +233,7 @@ namespace LayoutFarm
             else
             {
                 _iTopBoxEventPortal.PortalMouseMove(e);
-                _latestMouseMoveElem = e.CurrentContextElement;
-
+                _hoverMonitoringTask.SetMonitorElement(e.CurrentContextElement);
             }
         }
         void ITopWindowEventRoot.RootMouseWheel(UIMouseEventArgs e)
@@ -347,7 +339,7 @@ namespace LayoutFarm
             mouseEventArg.Shift = _lastKeydownWithShift;
             mouseEventArg.Ctrl = _lastKeydownWithControl;
         }
-        
+
 
     }
 }

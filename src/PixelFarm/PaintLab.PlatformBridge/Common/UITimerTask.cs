@@ -1,17 +1,17 @@
 ﻿//MIT, 2014-present, WinterDev
 
+using System;
+
 using System.Collections.Generic;
 namespace LayoutFarm.UI
 {
 
     public class UITimerTask
     {
-        TimerTick _tickAction;
+        Action<UITimerTask> _tickAction;         
         int _intervalInMillisec;
-        //
-        public delegate void TimerTick(UITimerTask timerTask);
-
-        public UITimerTask(TimerTick tickAction)
+       
+        public UITimerTask(Action<UITimerTask> tickAction)
         {
             _tickAction = tickAction;
             RunOnce = false;

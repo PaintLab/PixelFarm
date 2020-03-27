@@ -194,6 +194,7 @@ namespace LayoutFarm
 
             Color normalState = Color.FromArgb(100, Color.Blue);
             Color mouseEnterState = Color.FromArgb(100, Color.Red);
+            Color hoverState = Color.FromArgb(100, Color.Green);
 
             GeneralUIElementBehaviour beh = new GeneralUIElementBehaviour();
             beh.MouseEnter += (s, e) =>
@@ -214,7 +215,10 @@ namespace LayoutFarm
             beh.MouseHover += (s, e) =>
             {
                 //
-
+                IUIEventListener ctx = e.CurrentContextElement;
+                LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;
+                box.BackColor = hoverState;
+                System.Diagnostics.Debug.WriteLine("mouse_hover:" + box.dbugId);
             };
             beh.MouseDown += (s, e) =>
             {
