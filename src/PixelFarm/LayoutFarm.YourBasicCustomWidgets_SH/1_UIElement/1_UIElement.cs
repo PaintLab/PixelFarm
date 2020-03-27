@@ -486,7 +486,7 @@ namespace LayoutFarm.UI
         protected virtual void OnMouseWheel(UIMouseEventArgs e)
         {
         }
-        protected virtual void OnMouseHover(UIMouseEventArgs e)
+        protected virtual void OnMouseHover(UIMouseHoverEventArgs e)
         {
         }
 

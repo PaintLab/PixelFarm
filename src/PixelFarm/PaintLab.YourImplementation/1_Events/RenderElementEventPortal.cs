@@ -9,7 +9,7 @@ namespace LayoutFarm.UI
 
 
 
-    public class RenderElementEventPortal : IEventPortal
+    class RenderElementEventPortal : IEventPortal
     {
 
         /// <summary>
@@ -17,15 +17,18 @@ namespace LayoutFarm.UI
         /// </summary>
         class MousePressMonitorHelper
         {
-            int _ms;
+            /// <summary>
+            /// interval in millisec for mouse press
+            /// </summary>
+            int _intervalMs;
             int _mousePressCount;
             IUIEventListener _currentMonitoredElem;
             readonly UITimerTask _mousePressMonitor;
             readonly UIMousePressEventArgs _mousePressEventArgs;
 
-            public MousePressMonitorHelper(int ms)
+            public MousePressMonitorHelper(int intervalMs)
             {
-                _ms = ms;
+                _intervalMs = intervalMs;
                 _mousePressCount = 0;
                 _currentMonitoredElem = null;
                 _mousePressEventArgs = new UIMousePressEventArgs();
@@ -43,7 +46,7 @@ namespace LayoutFarm.UI
                     }
                 });
                 _mousePressMonitor.Enabled = true;
-                _mousePressMonitor.IntervalInMillisec = ms; //interval for mouse press monitor
+                _mousePressMonitor.IntervalInMillisec = intervalMs; //interval for mouse press monitor
                 UIPlatform.RegisterTimerTask(_mousePressMonitor);
             }
             public void Reset()
@@ -425,6 +428,7 @@ namespace LayoutFarm.UI
         bool _isFirstMouseEnter = false;
         bool _mouseMoveFoundSomeHit = false;
         IUIEventListener _latestMouseMove = null;
+
         void IEventPortal.PortalMouseMove(UIMouseEventArgs e)
         {
 
@@ -450,10 +454,11 @@ namespace LayoutFarm.UI
                 ForEachEventListenerBubbleUp(e, hitPointChain, (e1, listener) =>
                 {
 
-                    
+
                     //please ensure=> no local var/pararmeter capture inside lambda
                     _mouseMoveFoundSomeHit = true;
                     _isFirstMouseEnter = false;
+
 
                     if (e1.CurrentMouseActive != null &&
                         e1.CurrentMouseActive != listener)
@@ -473,7 +478,7 @@ namespace LayoutFarm.UI
                         {
                             e1.CurrentMouseActive.ListenMouseEnter(e1);
                         }
-                        else if(_latestMouseMove != e1.CurrentContextElement)
+                        else if (_latestMouseMove != e1.CurrentContextElement)
                         {
                             e1.CurrentContextElement.ListenMouseEnter(e1);
                         }
@@ -481,22 +486,28 @@ namespace LayoutFarm.UI
                         e1.CurrentMouseActive.ListenMouseMove(e1);
                         _latestMouseMove = e1.CurrentContextElement;
                     }
-                    
                     return true;//stop
                 });
 
-                if (!_mouseMoveFoundSomeHit && e.CurrentMouseActive != null)
+
+
+                if (!_mouseMoveFoundSomeHit)
                 {
-                    IUIEventListener prev = e.CurrentContextElement;
-                    e.CurrentContextElement = e.CurrentMouseActive;
-                    e.CurrentMouseActive.ListenMouseLeave(e);
-                    e.CurrentContextElement = prev;
+                    _latestMouseMove = null;
 
-                    if (!e.IsCanceled)
+
+                    if (e.CurrentMouseActive != null)
                     {
-                        e.CurrentMouseActive = null;
-                    }
+                        IUIEventListener prev = e.CurrentContextElement;
+                        e.CurrentContextElement = e.CurrentMouseActive;
+                        e.CurrentMouseActive.ListenMouseLeave(e);
+                        e.CurrentContextElement = prev;
 
+                        if (!e.IsCanceled)
+                        {
+                            e.CurrentMouseActive = null;
+                        }
+                    }
                 }
             }
             SwapHitChain(hitPointChain);

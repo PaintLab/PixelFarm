@@ -211,6 +211,11 @@ namespace LayoutFarm
                 box.BackColor = normalState;
                 System.Diagnostics.Debug.WriteLine("mouse_leave:" + box.dbugId);
             };
+            beh.MouseHover += (s, e) =>
+            {
+                //
+
+            };
             beh.MouseDown += (s, e) =>
             {
                 e.CurrentMousePressMonitor = e.CurrentContextElement;
@@ -220,7 +225,7 @@ namespace LayoutFarm
                 IUIEventListener ctx = e.CurrentContextElement;
                 LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;
                 Color back_color = box.BackColor;
-                box.BackColor = new Color((byte)System.Math.Min(back_color.A +10, 255), back_color.R, back_color.G, back_color.B);
+                box.BackColor = new Color((byte)System.Math.Min(back_color.A + 10, 255), back_color.R, back_color.G, back_color.B);
                 System.Diagnostics.Debug.WriteLine("mouse_press:" + box.dbugId);
             };
 

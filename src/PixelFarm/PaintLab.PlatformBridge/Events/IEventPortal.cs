@@ -21,8 +21,6 @@ namespace LayoutFarm.UI
         //---------------------------------------------- 
     }
 
-
-
     public delegate bool EventPortalAction(IEventPortal evPortal);
-    public delegate bool EventListenerAction();
+    
 }

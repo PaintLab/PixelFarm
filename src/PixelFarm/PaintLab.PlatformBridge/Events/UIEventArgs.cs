@@ -153,6 +153,10 @@ namespace LayoutFarm.UI
         public UIMouseButtons Button { get; set; }
         public IUIEventListener CurrentContextElement { get; set; }
     }
+    public class UIMouseHoverEventArgs : EventArgs
+    {   
+        public IUIEventListener CurrentContextElement { get; set; }
+    }
     public class UIMouseEventArgs : UIEventArgs
     {
         public UIMouseEventArgs()

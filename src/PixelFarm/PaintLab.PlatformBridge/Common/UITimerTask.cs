@@ -106,7 +106,13 @@ namespace LayoutFarm.UI
             //....
 
             if (timerTask.IsRegistered || timerTask.IntervalInMillisec <= 0)
+            {
+#if DEBUG
+                System.Diagnostics.Debugger.Break();
+#endif
+
                 return;
+            }
             //
             s_uiTimerTasks.Enqueue(timerTask);
             timerTask.IsRegistered = true;

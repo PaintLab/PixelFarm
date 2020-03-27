@@ -12,6 +12,7 @@ namespace LayoutFarm.UI
 
         public event UIEventHandler<UIMouseEventArgs> MouseEnter;
         public event UIEventHandler<UIMouseEventArgs> MouseLeave;
+        public event UIEventHandler<UIMouseHoverEventArgs> MouseHover;
 
         public event UIEventHandler<UIKeyEventArgs> KeyDown;
         public event UIEventHandler<UIKeyEventArgs> KeyPress;
@@ -71,7 +72,10 @@ namespace LayoutFarm.UI
         {
             MouseLeave?.Invoke(e);
         }
-
+        void IEventListener.ListenMouseHover(UIMouseHoverEventArgs e)
+        {
+            MouseHover?.Invoke(e);
+        }
         void IEventListener.ListenMouseMove(UIMouseEventArgs e)
         {
             MouseMove?.Invoke(e);

@@ -140,6 +140,12 @@ namespace LayoutFarm.UI
             _externalEventListener?.ListenMouseEnter(e);
             _uiElemBeh?.ListenMouseEnter(e);
         }
+        void IEventListener.ListenMouseHover(UIMouseHoverEventArgs e)
+        {
+            OnMouseHover(e);
+            _externalEventListener?.ListenMouseHover(e);
+            _uiElemBeh?.ListenMouseHover(e);
+        }
         void IEventListener.ListenMouseLeave(UIMouseEventArgs e)
         {
 
@@ -204,9 +210,12 @@ namespace LayoutFarm.UI
         public event UIBehEventHandler<UIMouseEventArgs> MouseUp;
         public event UIBehEventHandler<UIMouseEventArgs> MouseMove;
 
+        //----
         public event UIBehEventHandler<UIMouseEventArgs> MouseEnter;
         public event UIBehEventHandler<UIMousePressEventArgs> MousePress;
         public event UIBehEventHandler<UIMouseEventArgs> MouseLeave;
+        public event UIBehEventHandler<UIMouseHoverEventArgs> MouseHover;
+        //----
 
         public event UIBehEventHandler<UIKeyEventArgs> KeyDown;
         public event UIBehEventHandler<UIKeyEventArgs> KeyPress;
@@ -236,6 +245,8 @@ namespace LayoutFarm.UI
 
         void IEventListener.ListenMouseEnter(UIMouseEventArgs e) => OnMouseEnter(e);
         void IEventListener.ListenMouseLeave(UIMouseEventArgs e) => OnMouseLeave(e);
+        void IEventListener.ListenMouseHover(UIMouseHoverEventArgs e) => OnMouseHover(e);
+
 
         void IEventListener.ListenMouseMove(UIMouseEventArgs e) => OnMouseMove(e);
         void IEventListener.ListenMouseUp(UIMouseEventArgs e) => OnMouseUp(e);
@@ -269,6 +280,7 @@ namespace LayoutFarm.UI
 
         protected virtual void OnMouseEnter(UIMouseEventArgs e) => MouseEnter?.Invoke(this, e);
         protected virtual void OnMouseLeave(UIMouseEventArgs e) => MouseLeave?.Invoke(this, e);
+        protected virtual void OnMouseHover(UIMouseHoverEventArgs e) => MouseHover?.Invoke(this, e);
 
         protected virtual void OnMousePress(UIMousePressEventArgs e) => MousePress?.Invoke(this, e);
     }
