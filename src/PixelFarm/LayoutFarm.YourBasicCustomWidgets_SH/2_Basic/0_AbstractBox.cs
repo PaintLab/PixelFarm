@@ -139,23 +139,24 @@ namespace LayoutFarm.CustomWidgets
         public event EventHandler<UIMouseEventArgs> MouseDoubleClick;
         public event EventHandler<UIMouseEventArgs> MouseLeave;
         public event EventHandler<UIMouseEventArgs> MouseDrag;
-        public event EventHandler<UIGuestMsgEventArgs> DragOver;//secondary event, not exp
+        public event EventHandler<UIGuestMsgEventArgs> DragOver;
 
         public event EventHandler<UIMouseEventArgs> MouseWheel;
-        public event EventHandler<UIMousePressEventArgs> MousePress;
         public event EventHandler<UIMouseEventArgs> LostMouseFocus;
 
         
+        //some secondary event eg.
+        //mouse-press, mouse-hover,
+        //not expose in event fields
+        //TODO: add MouseDrag, mouse-double-click
+        //user must use it through ExternalEventListener / Behaviour
+
+
         public event EventHandler<UIKeyEventArgs> KeyDown;
         public event EventHandler<UIKeyEventArgs> KeyUp;
         // 
         public override RenderElement CurrentPrimaryRenderElement => _primElement;
 
-        protected override void OnMousePress(UIMousePressEventArgs e)
-        {
-             
-            MousePress?.Invoke(this, e);
-        }
         protected override void OnAcceptVisitor(UIVisitor visitor)
         {
             if (_uiList != null)
