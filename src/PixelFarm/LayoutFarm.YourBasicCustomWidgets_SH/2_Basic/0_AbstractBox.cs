@@ -140,7 +140,7 @@ namespace LayoutFarm.CustomWidgets
         public event EventHandler<UIMouseEventArgs> MouseLeave;
         public event EventHandler<UIMouseEventArgs> MouseDrag;
         public event EventHandler<UIMouseEventArgs> MouseWheel;
-        public event EventHandler<EventArgs> ContinuousMousePress;
+        public event EventHandler<UIMousePressEventArgs> MousePress;
         public event EventHandler<UIMouseEventArgs> LostMouseFocus;
         public event EventHandler<UIGuestMsgEventArgs> DragOver;
         public event EventHandler<UIKeyEventArgs> KeyDown;
@@ -148,11 +148,10 @@ namespace LayoutFarm.CustomWidgets
         // 
         public override RenderElement CurrentPrimaryRenderElement => _primElement;
 
-        protected override void OnContinuousMousePress()
+        protected override void OnMousePress(UIMousePressEventArgs e)
         {
-            ContinuousMousePress?.Invoke(this, EventArgs.Empty);
+            MousePress?.Invoke(this, e);
         }
-
         protected override void OnAcceptVisitor(UIVisitor visitor)
         {
             if (_uiList != null)

@@ -6,43 +6,74 @@ using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
 namespace LayoutFarm.UI
 {
+
+
+
     public class RenderElementEventPortal : IEventPortal
     {
+
+        //helper for handle mouse press
+        class MousePressMonitorHelper
+        {
+            int _ms;
+            int _mousePressCount;
+            IUIEventListener _currentMonitoredElem;
+            readonly UITimerTask _mousePressMonitor;
+            readonly UIMousePressEventArgs _mousePressEventArgs;
+
+            public MousePressMonitorHelper(int ms)
+            {
+                _ms = ms;
+                _mousePressCount = 0;
+                _currentMonitoredElem = null;
+                _mousePressEventArgs = new UIMousePressEventArgs();
+
+                _mousePressMonitor = new UITimerTask(t =>
+                {
+                    if (_currentMonitoredElem != null)
+                    {
+                        //invoke mouse press event
+                        if (_mousePressCount > 0)
+                        {
+                            _currentMonitoredElem.ListenMousePress(_mousePressEventArgs);
+                        }
+                        _mousePressCount++;
+                    }
+                });
+                _mousePressMonitor.Enabled = true;
+                _mousePressMonitor.IntervalInMillisec = ms; //interval for mouse press monitor
+                UIPlatform.RegisterTimerTask(_mousePressMonitor);
+            }
+            public void SetMonitoredElement(IUIEventListener ui)
+            {
+                _currentMonitoredElem = ui;
+                _mousePressCount = 0;
+            }
+            public void AddMousePressInformation(UIMouseEventArgs importInfo)
+            {
+                _mousePressEventArgs.Button = importInfo.Button;
+            }
+            public bool HasMonitoredElem => _currentMonitoredElem != null;
+        }
+
+
         //current hit chain        
         HitChain _previousChain = new HitChain();
         Stack<HitChain> _hitChainStack = new Stack<HitChain>();
         readonly RenderElement _topRenderElement;
-
-        readonly UITimerTask _mousePressMonitor;
-        int _mousePressCount;
+        readonly MousePressMonitorHelper _mousePressMonitor;
 
 #if DEBUG
         int dbugMsgChainVersion;
 #endif
-
-
         public RenderElementEventPortal(RenderElement topRenderElement)
         {
             _topRenderElement = topRenderElement;
 #if DEBUG
             dbugRootGraphics = (MyRootGraphic)topRenderElement.Root;
 #endif
+            _mousePressMonitor = new MousePressMonitorHelper(40);
 
-            _mousePressMonitor = new UITimerTask(t =>
-            {
-                if (_currentMousePressMonitor != null)
-                {
-                    if (_mousePressCount > 0)
-                    {
-                        _currentMousePressMonitor.ListenContinuousMousePress();
-                    }
-                    _mousePressCount++;
-                }
-
-            });
-            _mousePressMonitor.Enabled = true;
-            _mousePressMonitor.IntervalInMillisec = 40;
-            UIPlatform.RegisterTimerTask(_mousePressMonitor);
 
         }
 
@@ -245,7 +276,7 @@ namespace LayoutFarm.UI
 
         IUIEventListener _prevMouseDownElement;
         IUIEventListener _currentMouseDown;
-        IUIEventListener _currentMousePressMonitor;
+
 
         void IEventPortal.PortalMouseDown(UIMouseEventArgs e)
         {
@@ -292,10 +323,17 @@ namespace LayoutFarm.UI
                         {
                             return false;
                         }
-
-
                         _currentMouseDown = listener;
                         listener.ListenMouseDown(e1);
+
+                        //------------------------------------------------------- 
+                        _mousePressMonitor.SetMonitoredElement(e.CurrentMousePressMonitor);
+                        if (e.CurrentMousePressMonitor != null)
+                        {
+                            //set snapshot data
+                            _mousePressMonitor.AddMousePressInformation(e);
+                        }
+
                         //------------------------------------------------------- 
                         bool cancelMouseBubbling = e1.CancelBubbling;
                         if (_prevMouseDownElement != null &&
@@ -306,17 +344,17 @@ namespace LayoutFarm.UI
                         }
                         //------------------------------------------------------- 
                         //retrun true to stop this loop (no further bubble up)
-                        //return false to bubble this to upper control       
+                        //return false to bubble this to upper control 
                         return e1.CancelBubbling || !listener.BypassAllMouseEvents;
                     });
 
-                    _currentMousePressMonitor = e.CurrentMousePressMonitor;
 
                 }
 
                 if (_prevMouseDownElement != _currentMouseDown &&
                     _prevMouseDownElement != null)
                 {
+                    //TODO: review here, auto or manual
                     _prevMouseDownElement.ListenLostMouseFocus(e);
                     _prevMouseDownElement = null;
                 }
@@ -410,6 +448,7 @@ namespace LayoutFarm.UI
 
                     return true;//stop
                 });
+
                 if (!_mouseMoveFoundSomeHit && e.CurrentMouseActive != null)
                 {
                     IUIEventListener prev = e.CurrentContextElement;
@@ -448,11 +487,8 @@ namespace LayoutFarm.UI
 #if DEBUG
             _dbugHitChainPhase = dbugHitChainPhase.MouseUp;
 #endif
-            _currentMousePressMonitor = null;
-            _mousePressCount = 0;
 
-
-
+            _mousePressMonitor.SetMonitoredElement(null);
             HitTestCoreWithPrevChainHint(hitPointChain, _previousChain, e.X, e.Y);
 
             if (hitPointChain.Count > 0)

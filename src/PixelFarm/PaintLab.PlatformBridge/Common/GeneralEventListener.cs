@@ -1,6 +1,6 @@
 ﻿//Apache2, 2014-present, WinterDev
 
-
+using System;
 namespace LayoutFarm.UI
 {
     public class GeneralEventListener : IEventListener
@@ -11,8 +11,8 @@ namespace LayoutFarm.UI
         public event UIEventHandler<UIKeyEventArgs> KeyDown;
         public event UIEventHandler<UIKeyEventArgs> KeyPress;
         public event UIEventHandler<UIKeyEventArgs> KeyUp;
-        public event System.EventHandler ContinuousMousePress;
-
+        public event UIEventHandler<UIMousePressEventArgs> ContinuousMousePress;
+       
         void IEventListener.ListenGotKeyboardFocus(UIFocusEventArgs e)
         {
 
@@ -22,10 +22,7 @@ namespace LayoutFarm.UI
         {
 
         }
-        void IEventListener.ListenContinuousMousePress()
-        {
-            ContinuousMousePress?.Invoke(this, System.EventArgs.Empty);
-        }
+
         void IEventListener.ListenKeyDown(UIKeyEventArgs e)
         {
             KeyDown?.Invoke(e);
@@ -87,6 +84,10 @@ namespace LayoutFarm.UI
         bool IEventListener.ListenProcessDialogKey(UIKeyEventArgs args)
         {
             return false;
+        }
+        void IEventListener.ListenMousePress(UIMousePressEventArgs e)
+        {
+            ContinuousMousePress?.Invoke(e);
         }
     }
 

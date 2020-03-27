@@ -21,9 +21,9 @@ namespace PixelFarm.Forms
 
         public class GlfwEventBridge : GlfwWindowEventListener
         {
-            UIMouseEventArgs _mouseEventArgs = new UIMouseEventArgs();
-            UIKeyEventArgs _keyEventArgs = new UIKeyEventArgs();
-            UIPaintEventArgs _paintEventArgs = new UIPaintEventArgs();
+            readonly UIMouseEventArgs _mouseEventArgs = new UIMouseEventArgs();
+            readonly UIKeyEventArgs _keyEventArgs = new UIKeyEventArgs();
+            readonly UIPaintEventArgs _paintEventArgs = new UIPaintEventArgs();
             MyTopWindowBridgeOpenGL _myTopWindowBridge;
 
             int _mouseMoveX;

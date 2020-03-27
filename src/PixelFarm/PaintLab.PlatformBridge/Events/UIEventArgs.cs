@@ -146,8 +146,11 @@ namespace LayoutFarm.UI
         public int Top;
         public int Right;
         public int Bottom;
+    }
 
-
+    public class UIMousePressEventArgs : EventArgs
+    {
+        public UIMouseButtons Button { get; set; }
     }
     public class UIMouseEventArgs : UIEventArgs
     {

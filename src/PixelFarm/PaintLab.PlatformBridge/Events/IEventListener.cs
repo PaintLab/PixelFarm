@@ -23,8 +23,9 @@ namespace LayoutFarm.UI
         void ListenMouseLeave(UIMouseEventArgs e);
         void ListenMouseWheel(UIMouseEventArgs e);
         void ListenLostMouseFocus(UIMouseEventArgs e);
+        void ListenMousePress(UIMousePressEventArgs e);
         //-------------------------------------------------------------------------- 
-      
+
         void ListenMouseDoubleClick(UIMouseEventArgs e);
         //--------------------------------------------------------------------------
         void ListenGotKeyboardFocus(UIFocusEventArgs e);
@@ -33,13 +34,13 @@ namespace LayoutFarm.UI
 
         void ListenGuestMsg(UIGuestMsgEventArgs e);
         //-------------------------------------------------------------------------- 
-        void ListenContinuousMousePress();
+
     }
     public interface IUIEventListener : IEventListener
     {
         //-------------------------------------------------------------------------- 
-       
-         
+
+
         void HandleContentLayout();
         void HandleContentUpdate();
         void HandleElementUpdate();
@@ -54,5 +55,5 @@ namespace LayoutFarm.UI
     }
 
     public delegate void UIEventHandler<T>(T e);
-    
+
 }
