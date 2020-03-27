@@ -119,14 +119,7 @@ namespace LayoutFarm.CustomWidgets
                     _myTextRun.Text = value;
                     _myTextRun.InvalidateGraphics();
                 }
-                else
-                {
-                    //when run is not create
-                    if (HasSpecificWidthAndHeight)
-                    {
-                        //calculate size
-                    }
-                }
+                 
             }
         }
         public DrawTextTechnique DrawTextTechnique
