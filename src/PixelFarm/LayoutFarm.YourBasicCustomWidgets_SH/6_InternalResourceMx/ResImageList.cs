@@ -19,14 +19,12 @@ namespace LayoutFarm.CustomWidgets
         }
         public static Image GetImage(ImageName imageName)
         {
-            Image found;
-            s_images.TryGetValue(imageName, out found);
+            s_images.TryGetValue(imageName, out Image found);
             return found;
         }
         public static ImageBinder GetImageBinder(ImageName imageName)
         {
-            Image found;
-            s_images.TryGetValue(imageName, out found);
+            s_images.TryGetValue(imageName, out Image found);
             ImageBinder binder = new MyClientImageBinder(null);
             binder.SetLocalImage(found);
             binder.State = BinderState.Loaded;

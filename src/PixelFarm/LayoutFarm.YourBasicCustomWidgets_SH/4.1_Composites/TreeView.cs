@@ -165,7 +165,7 @@ namespace LayoutFarm.CustomWidgets
                 //-----------------------------
                 // create default layer for node content  
                 //-----------------------------
-                _uiNodeIcon = new ImageBox(16, 16);//create with default size 
+                _uiNodeIcon = new ImageBox();//create with default size 
                 SetupNodeIconBehaviour(_uiNodeIcon);
                 element.AddChild(_uiNodeIcon);
                 //-----------------------------
