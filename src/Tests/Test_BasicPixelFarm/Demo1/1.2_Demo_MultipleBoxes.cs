@@ -195,8 +195,8 @@ namespace LayoutFarm
             Color normalState = Color.FromArgb(100, Color.Blue);
             Color mouseEnterState = Color.FromArgb(100, Color.Red);
 
-            GeneralUIElementBehaviour evListener = new GeneralUIElementBehaviour();
-            evListener.MouseEnter += (s, e) =>
+            GeneralUIElementBehaviour beh = new GeneralUIElementBehaviour();
+            beh.MouseEnter += (s, e) =>
             {
                 IUIEventListener ctx = e.CurrentContextElement;
                 LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;
@@ -204,18 +204,18 @@ namespace LayoutFarm
 
                 System.Diagnostics.Debug.WriteLine("mouse_enter:" + box.dbugId);
             };
-            evListener.MouseLeave += (s, e) =>
+            beh.MouseLeave += (s, e) =>
             {
                 IUIEventListener ctx = e.CurrentContextElement;
                 LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;
                 box.BackColor = normalState;
                 System.Diagnostics.Debug.WriteLine("mouse_leave:" + box.dbugId);
             };
-            evListener.MouseDown += (s, e) =>
+            beh.MouseDown += (s, e) =>
             {
                 e.CurrentMousePressMonitor = e.CurrentContextElement;
             };
-            evListener.MousePress += (s, e) =>
+            beh.MousePress += (s, e) =>
             {
                 IUIEventListener ctx = e.CurrentContextElement;
                 LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;
@@ -231,7 +231,7 @@ namespace LayoutFarm
                 var sampleButton = new LayoutFarm.CustomWidgets.Box(30, 30);
                 sampleButton.BackColor = normalState;
                 sampleButton.SetLocation(x_pos, 10);
-                sampleButton.AttachUIBehaviour(evListener);
+                sampleButton.AttachUIBehaviour(beh);
 
                 host.AddChild(sampleButton);
 
