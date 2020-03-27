@@ -66,6 +66,7 @@ namespace LayoutFarm.UI
 
                 _currentMonitoredElem = ui;
                 _mousePressCount = 0;
+                _mousePressEventArgs.CurrentContextElement = ui;
                 _currentMonitoredElem.ListenMousePress(_mousePressEventArgs);
             }
             public void AddMousePressInformation(UIMouseEventArgs importInfo)

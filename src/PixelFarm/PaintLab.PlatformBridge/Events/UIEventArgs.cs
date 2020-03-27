@@ -151,6 +151,7 @@ namespace LayoutFarm.UI
     public class UIMousePressEventArgs : EventArgs
     {
         public UIMouseButtons Button { get; set; }
+        public IUIEventListener CurrentContextElement { get; set; }
     }
     public class UIMouseEventArgs : UIEventArgs
     {
@@ -180,7 +181,7 @@ namespace LayoutFarm.UI
             Delta = delta;
         }
 
-      
+
 
         public override void Clear()
         {
@@ -196,7 +197,7 @@ namespace LayoutFarm.UI
             this.MouseCursorStyle = UI.MouseCursorStyle.Default;
             this.IsDragging = false;
             this.DraggingElement = null;
-          
+
             CurrentMousePressMonitor = null;
         }
 

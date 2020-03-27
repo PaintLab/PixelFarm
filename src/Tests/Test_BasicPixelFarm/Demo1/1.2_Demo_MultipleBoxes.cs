@@ -192,26 +192,44 @@ namespace LayoutFarm
         {
             int x_pos = 0;
 
+            Color normalState = Color.FromArgb(100, Color.Blue);
+            Color mouseEnterState = Color.FromArgb(100, Color.Red);
+
             GeneralUIElementBehaviour evListener = new GeneralUIElementBehaviour();
             evListener.MouseEnter += (s, e) =>
             {
                 IUIEventListener ctx = e.CurrentContextElement;
                 LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;
-                box.BackColor = Color.Red;
+                box.BackColor = mouseEnterState;
+
                 System.Diagnostics.Debug.WriteLine("mouse_enter:" + box.dbugId);
             };
             evListener.MouseLeave += (s, e) =>
             {
                 IUIEventListener ctx = e.CurrentContextElement;
                 LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;
-                box.BackColor = Color.Blue;
+                box.BackColor = normalState;
                 System.Diagnostics.Debug.WriteLine("mouse_leave:" + box.dbugId);
             };
+            evListener.MouseDown += (s, e) =>
+            {
+                e.CurrentMousePressMonitor = e.CurrentContextElement;
+            };
+            evListener.MousePress += (s, e) =>
+            {
+                IUIEventListener ctx = e.CurrentContextElement;
+                LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;
+                Color back_color = box.BackColor;
+                box.BackColor = new Color((byte)System.Math.Min(back_color.A +10, 255), back_color.R, back_color.G, back_color.B);
+                System.Diagnostics.Debug.WriteLine("mouse_press:" + box.dbugId);
+            };
+
+
 
             for (int i = 0; i < 10; ++i)
             {
                 var sampleButton = new LayoutFarm.CustomWidgets.Box(30, 30);
-                sampleButton.BackColor = Color.Blue;
+                sampleButton.BackColor = normalState;
                 sampleButton.SetLocation(x_pos, 10);
                 sampleButton.AttachUIBehaviour(evListener);
 

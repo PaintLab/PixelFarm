@@ -205,6 +205,7 @@ namespace LayoutFarm.UI
         public event UIBehEventHandler<UIMouseEventArgs> MouseMove;
 
         public event UIBehEventHandler<UIMouseEventArgs> MouseEnter;
+        public event UIBehEventHandler<UIMousePressEventArgs> MousePress;
         public event UIBehEventHandler<UIMouseEventArgs> MouseLeave;
 
         public event UIBehEventHandler<UIKeyEventArgs> KeyDown;
@@ -269,10 +270,7 @@ namespace LayoutFarm.UI
         protected virtual void OnMouseEnter(UIMouseEventArgs e) => MouseEnter?.Invoke(this, e);
         protected virtual void OnMouseLeave(UIMouseEventArgs e) => MouseLeave?.Invoke(this, e);
 
-        protected virtual void OnMousePress(UIMousePressEventArgs e)
-        {
-        }
-
+        protected virtual void OnMousePress(UIMousePressEventArgs e) => MousePress?.Invoke(this, e);
     }
 
 }
