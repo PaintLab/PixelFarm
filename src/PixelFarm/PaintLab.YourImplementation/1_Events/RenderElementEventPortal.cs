@@ -471,6 +471,8 @@ namespace LayoutFarm.UI
 
                     if (!e1.IsCanceled)
                     {
+
+                        //TODO: review here
                         e1.CurrentMouseActive = listener;
                         if (_isFirstMouseEnter)
                         {
