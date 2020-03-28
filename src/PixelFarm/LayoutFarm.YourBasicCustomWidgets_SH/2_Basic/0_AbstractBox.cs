@@ -133,14 +133,14 @@ namespace LayoutFarm.CustomWidgets
         public bool EnableDoubleBuffer { get; set; }
 
         //TODO: review this fields 
-        public event EventHandler<UIMouseEventArgs> MouseDown;
-        public event EventHandler<UIMouseEventArgs> MouseMove;
-        public event EventHandler<UIMouseEventArgs> MouseUp;
-         
-        public event EventHandler<UIMouseEventArgs> MouseLeave;
-        public event EventHandler<UIMouseEventArgs> MouseDrag; 
+        public event EventHandler<UIMouseDownEventArgs> MouseDown;
+        public event EventHandler<UIMouseMoveEventArgs> MouseMove;
+        public event EventHandler<UIMouseUpEventArgs> MouseUp;
 
-        public event EventHandler<UIMouseEventArgs> MouseWheel;
+        public event EventHandler<UIMouseMoveEventArgs> MouseLeave;
+        public event EventHandler<UIMouseMoveEventArgs> MouseDrag;
+
+        public event EventHandler<UIMouseWheelEventArgs> MouseWheel;
         public event EventHandler<UIMouseEventArgs> LostMouseFocus;
 
 
@@ -227,7 +227,7 @@ namespace LayoutFarm.CustomWidgets
             parent.InvalidateGraphics();
         }
 
-        protected void RaiseMouseDrag(object sender, UIMouseEventArgs e)
+        protected void RaiseMouseDrag(object sender, UIMouseMoveEventArgs e)
         {
             MouseDrag?.Invoke(sender, e);
         }
@@ -318,7 +318,7 @@ namespace LayoutFarm.CustomWidgets
         }
 
         protected override void OnDoubleClick(UIMouseEventArgs e)
-        { 
+        {
             if (this.AcceptKeyboardFocus)
             {
                 this.Focus();
