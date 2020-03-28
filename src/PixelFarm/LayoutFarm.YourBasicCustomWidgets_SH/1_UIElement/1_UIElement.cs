@@ -467,8 +467,9 @@ namespace LayoutFarm.UI
         protected virtual void OnMouseDown(UIMouseEventArgs e)
         {
         }
-        protected virtual void OnContinuousMousePress()
+        protected virtual void OnMousePress(UIMousePressEventArgs e)
         {
+
         }
         protected virtual void OnMouseMove(UIMouseEventArgs e)
         {
@@ -485,7 +486,7 @@ namespace LayoutFarm.UI
         protected virtual void OnMouseWheel(UIMouseEventArgs e)
         {
         }
-        protected virtual void OnMouseHover(UIMouseEventArgs e)
+        protected virtual void OnMouseHover(UIMouseHoverEventArgs e)
         {
         }
 

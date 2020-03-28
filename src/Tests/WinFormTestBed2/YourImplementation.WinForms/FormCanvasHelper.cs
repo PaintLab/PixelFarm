@@ -196,8 +196,8 @@ namespace LayoutFarm.UI
         AbstractTopWindowBridge _topWindowBridge;
 
         GLESContext _myContext;
-        UIMouseEventArgs _mouseEventArgs = new UIMouseEventArgs();
-        UIKeyEventArgs _keyEventArgs = new UIKeyEventArgs();
+        readonly UIMouseEventArgs _mouseEventArgs = new UIMouseEventArgs();
+        readonly UIKeyEventArgs _keyEventArgs = new UIKeyEventArgs();
 
         Cursor _cursor;
 

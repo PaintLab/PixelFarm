@@ -3,9 +3,7 @@
 using System;
 namespace LayoutFarm.UI
 {
-    public delegate void UIMouseEventHandler(object sender, UIMouseEventArgs e);
-    public delegate void UIKeyEventHandler(object sender, UIKeyEventArgs e);
-    public delegate void UIKeyPressEventHandler(object sender, UIKeyEventArgs e);
+   
     public class UIKeyEventArgs : UIEventArgs
     {
         uint _keyData;
@@ -68,6 +66,7 @@ namespace LayoutFarm.UI
         /// request for custom mouse cursor
         /// </summary>
         public Cursor CustomMouseCursor { get; set; }
+
         /// <summary>
         /// exact hit object (include run)
         /// </summary>
@@ -146,9 +145,18 @@ namespace LayoutFarm.UI
         public int Top;
         public int Right;
         public int Bottom;
-
-
     }
+
+    public class UIMousePressEventArgs : EventArgs
+    {
+        public UIMouseButtons Button { get; set; }
+        public IUIEventListener CurrentContextElement { get; set; }
+    }
+    public class UIMouseHoverEventArgs : EventArgs
+    {   
+        public IUIEventListener CurrentContextElement { get; set; }
+    }
+
     public class UIMouseEventArgs : UIEventArgs
     {
         public UIMouseEventArgs()
@@ -177,7 +185,7 @@ namespace LayoutFarm.UI
             Delta = delta;
         }
 
-        public bool IsFirstMouseEnter { get; set; }
+
 
         public override void Clear()
         {
@@ -193,7 +201,7 @@ namespace LayoutFarm.UI
             this.MouseCursorStyle = UI.MouseCursorStyle.Default;
             this.IsDragging = false;
             this.DraggingElement = null;
-            this.IsFirstMouseEnter = false;
+
             CurrentMousePressMonitor = null;
         }
 

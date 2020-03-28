@@ -93,12 +93,7 @@ namespace LayoutFarm.UI
             _externalEventListener?.ListenMouseDown(e);
             _uiElemBeh?.ListenMouseDown(e);
         }
-        void IEventListener.ListenContinuousMousePress()
-        {
-            OnContinuousMousePress();
-            _externalEventListener?.ListenContinuousMousePress();
-            _uiElemBeh?.ListenContinuousMousePress();
-        }
+
         void IEventListener.ListenMouseMove(UIMouseEventArgs e)
         {
             OnMouseMove(e);
@@ -113,7 +108,12 @@ namespace LayoutFarm.UI
         }
         void IEventListener.ListenMouseClick(UIMouseEventArgs e)
         {
-
+        }
+        void IEventListener.ListenMousePress(UIMousePressEventArgs e)
+        {
+            OnMousePress(e);
+            _externalEventListener?.ListenMousePress(e);
+            _uiElemBeh?.ListenMousePress(e);
         }
         void IEventListener.ListenLostMouseFocus(UIMouseEventArgs e)
         {
@@ -134,8 +134,21 @@ namespace LayoutFarm.UI
             _externalEventListener?.ListenMouseWheel(e);
             _uiElemBeh?.ListenMouseWheel(e);
         }
+        void IEventListener.ListenMouseEnter(UIMouseEventArgs e)
+        {
+            OnMouseEnter(e);
+            _externalEventListener?.ListenMouseEnter(e);
+            _uiElemBeh?.ListenMouseEnter(e);
+        }
+        void IEventListener.ListenMouseHover(UIMouseHoverEventArgs e)
+        {
+            OnMouseHover(e);
+            _externalEventListener?.ListenMouseHover(e);
+            _uiElemBeh?.ListenMouseHover(e);
+        }
         void IEventListener.ListenMouseLeave(UIMouseEventArgs e)
         {
+
             OnMouseLeave(e);
             _externalEventListener?.ListenMouseLeave(e);
             _uiElemBeh?.ListenMouseLeave(e);
@@ -196,15 +209,19 @@ namespace LayoutFarm.UI
         public event UIBehEventHandler<UIMouseEventArgs> MouseDown;
         public event UIBehEventHandler<UIMouseEventArgs> MouseUp;
         public event UIBehEventHandler<UIMouseEventArgs> MouseMove;
+
+        //----
+        public event UIBehEventHandler<UIMouseEventArgs> MouseEnter;
+        public event UIBehEventHandler<UIMousePressEventArgs> MousePress;
         public event UIBehEventHandler<UIMouseEventArgs> MouseLeave;
+        public event UIBehEventHandler<UIMouseHoverEventArgs> MouseHover;
+        //----
 
         public event UIBehEventHandler<UIKeyEventArgs> KeyDown;
         public event UIBehEventHandler<UIKeyEventArgs> KeyPress;
         public event UIBehEventHandler<UIKeyEventArgs> KeyUp;
 
-        public event UIBehEventHandler<System.EventArgs> ContinuosMousePress;
 
-        void IEventListener.ListenContinuousMousePress() => OnContinuosMousePress();
         void IEventListener.ListenGotKeyboardFocus(UIFocusEventArgs e) => OnGotKeyboardFocus(e);
         void IEventListener.ListenGuestMsg(UIGuestMsgEventArgs e) => OnGuestMsg(e);
         void IEventListener.ListenKeyDown(UIKeyEventArgs e) => OnKeyDown(e);
@@ -217,20 +234,25 @@ namespace LayoutFarm.UI
         {
 
         }
-
         void IEventListener.ListenMouseDoubleClick(UIMouseEventArgs e)
         {
 
         }
-
-        void IEventListener.ListenMouseDown(UIMouseEventArgs e) => OnMouseDown(e);
-        void IEventListener.ListenMouseLeave(UIMouseEventArgs e) => OnMouseLeave(e);
-        void IEventListener.ListenMouseMove(UIMouseEventArgs e) => OnMouseMove(e);
-        void IEventListener.ListenMouseUp(UIMouseEventArgs e) => OnMouseUp(e);
         void IEventListener.ListenMouseClick(UIMouseEventArgs e)
         {
         }
+        void IEventListener.ListenMouseDown(UIMouseEventArgs e) => OnMouseDown(e);
 
+        void IEventListener.ListenMouseEnter(UIMouseEventArgs e) => OnMouseEnter(e);
+        void IEventListener.ListenMouseLeave(UIMouseEventArgs e) => OnMouseLeave(e);
+        void IEventListener.ListenMouseHover(UIMouseHoverEventArgs e) => OnMouseHover(e);
+
+
+        void IEventListener.ListenMouseMove(UIMouseEventArgs e) => OnMouseMove(e);
+        void IEventListener.ListenMouseUp(UIMouseEventArgs e) => OnMouseUp(e);
+
+
+        void IEventListener.ListenMousePress(UIMousePressEventArgs e) => OnMousePress(e);
         void IEventListener.ListenMouseWheel(UIMouseEventArgs e) => OnMouseWheel(e);
         bool IEventListener.ListenProcessDialogKey(UIKeyEventArgs args)
         {
@@ -255,9 +277,12 @@ namespace LayoutFarm.UI
         protected virtual void OnMouseMove(UIMouseEventArgs e) => MouseMove?.Invoke(this, e);
         protected virtual void OnMouseUp(UIMouseEventArgs e) => MouseUp?.Invoke(this, e);
         protected virtual void OnMouseDown(UIMouseEventArgs e) => MouseDown?.Invoke(this, e);
-        protected virtual void OnMouseLeave(UIMouseEventArgs e) => MouseLeave?.Invoke(this, e);
 
-        protected virtual void OnContinuosMousePress() => ContinuosMousePress?.Invoke(this, System.EventArgs.Empty);
+        protected virtual void OnMouseEnter(UIMouseEventArgs e) => MouseEnter?.Invoke(this, e);
+        protected virtual void OnMouseLeave(UIMouseEventArgs e) => MouseLeave?.Invoke(this, e);
+        protected virtual void OnMouseHover(UIMouseHoverEventArgs e) => MouseHover?.Invoke(this, e);
+
+        protected virtual void OnMousePress(UIMousePressEventArgs e) => MousePress?.Invoke(this, e);
     }
 
 }

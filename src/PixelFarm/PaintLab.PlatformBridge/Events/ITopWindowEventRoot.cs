@@ -9,9 +9,7 @@ namespace LayoutFarm.UI
             //---------------
             //bridge from platform-specific window event
             //to our abstract windows
-            //--------------- 
-
-           
+            //---------------            
             void RootMouseDown(UIMouseEventArgs mouseEventArgs);
             void RootMouseUp(UIMouseEventArgs mouseEventArgs);
             void RootMouseWheel(UIMouseEventArgs mouseEventArgs);

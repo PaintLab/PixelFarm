@@ -20,9 +20,4 @@ namespace LayoutFarm.UI
         void PortalLostFocus(UIFocusEventArgs e);
         //---------------------------------------------- 
     }
-
-
-
-    public delegate bool EventPortalAction(IEventPortal evPortal);
-    public delegate bool EventListenerAction();
 }

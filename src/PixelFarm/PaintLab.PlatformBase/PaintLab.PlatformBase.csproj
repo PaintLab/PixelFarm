@@ -39,7 +39,6 @@
     <Compile Include="OpenGLCanvasViewport.cs" />
     <Compile Include="dbugHelper.cs" />
     <Compile Include="InnerViewportKind.cs" />
-    <Compile Include="BootStrapSkia.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

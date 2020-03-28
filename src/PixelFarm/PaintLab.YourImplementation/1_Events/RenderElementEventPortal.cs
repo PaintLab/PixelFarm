@@ -8,41 +8,94 @@ namespace LayoutFarm.UI
 {
     public class RenderElementEventPortal : IEventPortal
     {
+
+
+        /// <summary>
+        /// a helper class for mouse press monitor
+        /// </summary>
+        class MousePressMonitorHelper
+        {
+            /// <summary>
+            /// interval in millisec for mouse press
+            /// </summary>
+            int _intervalMs;
+            int _mousePressCount;
+            IUIEventListener _currentMonitoredElem;
+            readonly UITimerTask _mousePressMonitor;
+            readonly UIMousePressEventArgs _mousePressEventArgs;
+
+            public MousePressMonitorHelper(int intervalMs)
+            {
+                _intervalMs = intervalMs;
+                _mousePressCount = 0;
+                _currentMonitoredElem = null;
+                _mousePressEventArgs = new UIMousePressEventArgs();
+
+                _mousePressMonitor = new UITimerTask(t =>
+                {
+                    if (_currentMonitoredElem != null)
+                    {
+                        //invoke mouse press event
+                        if (_mousePressCount > 0)
+                        {
+                            _currentMonitoredElem.ListenMousePress(_mousePressEventArgs);
+                        }
+                        _mousePressCount++;
+                    }
+                });
+                _mousePressMonitor.Enabled = true;
+                _mousePressMonitor.IntervalInMillisec = intervalMs; //interval for mouse press monitor
+                UIPlatform.RegisterTimerTask(_mousePressMonitor);
+            }
+            public void Reset()
+            {
+                _currentMonitoredElem = null;
+                _mousePressCount = 0;
+            }
+            /// <summary>
+            /// set monitoed elem + invoke 1st mouse press event 
+            /// </summary>
+            /// <param name="ui"></param>
+            public void SetMonitoredElement(IUIEventListener ui)
+            {
+#if DEBUG
+                if (ui == null)
+                {
+                    System.Diagnostics.Debugger.Break();
+                }
+#endif
+
+                _currentMonitoredElem = ui;
+                _mousePressCount = 0;
+                _mousePressEventArgs.CurrentContextElement = ui;
+                _currentMonitoredElem.ListenMousePress(_mousePressEventArgs);
+            }
+            public void AddMousePressInformation(UIMouseEventArgs importInfo)
+            {
+                _mousePressEventArgs.Button = importInfo.Button;
+            }
+            public bool HasMonitoredElem => _currentMonitoredElem != null;
+
+        }
+
+
         //current hit chain        
         HitChain _previousChain = new HitChain();
         Stack<HitChain> _hitChainStack = new Stack<HitChain>();
         readonly RenderElement _topRenderElement;
-
-        readonly UITimerTask _mousePressMonitor;
-        int _mousePressCount;
+        readonly MousePressMonitorHelper _mousePressMonitor;
 
 #if DEBUG
         int dbugMsgChainVersion;
 #endif
-
-
         public RenderElementEventPortal(RenderElement topRenderElement)
         {
             _topRenderElement = topRenderElement;
 #if DEBUG
             dbugRootGraphics = (MyRootGraphic)topRenderElement.Root;
 #endif
+            _mousePressMonitor = new MousePressMonitorHelper(40);
 
-            _mousePressMonitor = new UITimerTask(t =>
-            {
-                if (_currentMousePressMonitor != null)
-                {
-                    if (_mousePressCount > 0)
-                    {
-                        _currentMousePressMonitor.ListenContinuousMousePress();
-                    }
-                    _mousePressCount++;
-                }
-
-            });
-            _mousePressMonitor.Enabled = true;
-            _mousePressMonitor.IntervalInMillisec = 40;
-            UIPlatform.RegisterTimerTask(_mousePressMonitor);
 
         }
 
@@ -245,7 +298,7 @@ namespace LayoutFarm.UI
 
         IUIEventListener _prevMouseDownElement;
         IUIEventListener _currentMouseDown;
-        IUIEventListener _currentMousePressMonitor;
+
 
         void IEventPortal.PortalMouseDown(UIMouseEventArgs e)
         {
@@ -292,10 +345,21 @@ namespace LayoutFarm.UI
                         {
                             return false;
                         }
-
-
                         _currentMouseDown = listener;
                         listener.ListenMouseDown(e1);
+
+                        if (e.CurrentMousePressMonitor != null)
+                        {
+                            //set snapshot data
+                            _mousePressMonitor.AddMousePressInformation(e);
+                            //set and invoke mouse press here                                
+                            _mousePressMonitor.SetMonitoredElement(e.CurrentMousePressMonitor);
+                        }
+                        else
+                        {
+                            _mousePressMonitor.Reset();
+                        }
+
                         //------------------------------------------------------- 
                         bool cancelMouseBubbling = e1.CancelBubbling;
                         if (_prevMouseDownElement != null &&
@@ -306,17 +370,17 @@ namespace LayoutFarm.UI
                         }
                         //------------------------------------------------------- 
                         //retrun true to stop this loop (no further bubble up)
-                        //return false to bubble this to upper control       
+                        //return false to bubble this to upper control 
                         return e1.CancelBubbling || !listener.BypassAllMouseEvents;
                     });
 
-                    _currentMousePressMonitor = e.CurrentMousePressMonitor;
 
                 }
 
                 if (_prevMouseDownElement != _currentMouseDown &&
                     _prevMouseDownElement != null)
                 {
+                    //TODO: review here, auto or manual
                     _prevMouseDownElement.ListenLostMouseFocus(e);
                     _prevMouseDownElement = null;
                 }
@@ -361,6 +425,7 @@ namespace LayoutFarm.UI
 
         bool _isFirstMouseEnter = false;
         bool _mouseMoveFoundSomeHit = false;
+        IUIEventListener _latestMouseMove = null;
 
         void IEventPortal.PortalMouseMove(UIMouseEventArgs e)
         {
@@ -386,9 +451,13 @@ namespace LayoutFarm.UI
                 _mouseMoveFoundSomeHit = false;
                 ForEachEventListenerBubbleUp(e, hitPointChain, (e1, listener) =>
                 {
+
+
                     //please ensure=> no local var/pararmeter capture inside lambda
                     _mouseMoveFoundSomeHit = true;
                     _isFirstMouseEnter = false;
+
+
                     if (e1.CurrentMouseActive != null &&
                         e1.CurrentMouseActive != listener)
                     {
@@ -402,26 +471,43 @@ namespace LayoutFarm.UI
 
                     if (!e1.IsCanceled)
                     {
-                        e1.CurrentMouseActive = listener;
-                        e1.IsFirstMouseEnter = _isFirstMouseEnter;
-                        e1.CurrentMouseActive.ListenMouseMove(e1);
-                        e1.IsFirstMouseEnter = false;
-                    }
 
+                        //TODO: review here
+                        e1.CurrentMouseActive = listener;
+                        if (_isFirstMouseEnter)
+                        {
+                            e1.CurrentMouseActive.ListenMouseEnter(e1);
+                        }
+                        else if (_latestMouseMove != e1.CurrentContextElement)
+                        {
+                            e1.CurrentContextElement.ListenMouseEnter(e1);
+                        }
+
+                        e1.CurrentMouseActive.ListenMouseMove(e1);
+                        _latestMouseMove = e1.CurrentContextElement;
+                    }
                     return true;//stop
                 });
-                if (!_mouseMoveFoundSomeHit && e.CurrentMouseActive != null)
+
+
+
+                if (!_mouseMoveFoundSomeHit)
                 {
-                    IUIEventListener prev = e.CurrentContextElement;
-                    e.CurrentContextElement = e.CurrentMouseActive;
-                    e.CurrentMouseActive.ListenMouseLeave(e);
-                    e.CurrentContextElement = prev;
+                    _latestMouseMove = null;
 
-                    if (!e.IsCanceled)
+
+                    if (e.CurrentMouseActive != null)
                     {
-                        e.CurrentMouseActive = null;
-                    }
+                        IUIEventListener prev = e.CurrentContextElement;
+                        e.CurrentContextElement = e.CurrentMouseActive;
+                        e.CurrentMouseActive.ListenMouseLeave(e);
+                        e.CurrentContextElement = prev;
 
+                        if (!e.IsCanceled)
+                        {
+                            e.CurrentMouseActive = null;
+                        }
+                    }
                 }
             }
             SwapHitChain(hitPointChain);
@@ -448,11 +534,8 @@ namespace LayoutFarm.UI
 #if DEBUG
             _dbugHitChainPhase = dbugHitChainPhase.MouseUp;
 #endif
-            _currentMousePressMonitor = null;
-            _mousePressCount = 0;
 
-
-
+            _mousePressMonitor.Reset();
             HitTestCoreWithPrevChainHint(hitPointChain, _previousChain, e.X, e.Y);
 
             if (hitPointChain.Count > 0)
@@ -478,48 +561,22 @@ namespace LayoutFarm.UI
                         listener.ListenMouseUp(e1);
                         //retrun true to stop this loop (no further bubble up)
                         //return false to bubble this to upper control       
-                        return e1.CancelBubbling || !listener.BypassAllMouseEvents;
-
-                    });
-                }
-                //---------------------------------------------------------------
-                if (e.IsAlsoDoubleClick)
-                {
-                    ForEachEventListenerBubbleUp(e, hitPointChain, (e1, listener) =>
-                    {
-                        //please ensure=> no local var/pararmeter capture inside lambda
-                        listener.ListenMouseDoubleClick(e1);
-                        //------------------------------------------------------- 
-                        //retrun true to stop this loop (no further bubble up)
-                        //return false to bubble this to upper control       
-                        return e1.CancelBubbling || !listener.BypassAllMouseEvents;
-                    });
-                }
-                if (!e.CancelBubbling)
-                {
-                    if (e.IsAlsoDoubleClick)
-                    {
-                        ForEachEventListenerBubbleUp(e, hitPointChain, (e1, listener) =>
+                        //click or double click
+                        if (e1.CurrentContextElement == _currentMouseDown)
                         {
-                            //please ensure=> no local var/pararmeter capture inside lambda
-                            listener.ListenMouseDoubleClick(e1);
-                            //------------------------------------------------------- 
-                            //retrun true to stop this loop (no further bubble up)
-                            //return false to bubble this to upper control       
-                            return e1.CancelBubbling || !listener.BypassAllMouseEvents;
-                        });
-                    }
-                    else
-                    {
-                        //ForEachEventListenerBubbleUp(e, hitPointChain, listener =>
-                        //{
-                        //    listener.ListenMouseClick(e);
+                            //same elem
+                            if (e.IsAlsoDoubleClick)
+                            {
+                                listener.ListenMouseDoubleClick(e);
+                            }
+                            else
+                            {
+                                listener.ListenMouseClick(e);
+                            }
+                        }
 
-                        //    //retrun true to stop this loop (no further bubble up)
-                        //    //return false to bubble this to upper control       
-                        //    return e.CancelBubbling || !listener.BypassAllMouseEvents;
-                        //});
-                    }
+                        return e1.CancelBubbling || !listener.BypassAllMouseEvents;
+                    });
                 }
             }
             SwapHitChain(hitPointChain);

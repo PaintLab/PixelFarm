@@ -6,22 +6,37 @@ namespace LayoutFarm.UI
     class UIHoverMonitorTask : UITimerTask
     {
         int _mouseMoveCounter = -1;
-        TimerTick _targetEventHandler;
-        public UIHoverMonitorTask(TimerTick targetEventHandler)
-            : base(targetEventHandler)
+        UIMouseHoverEventArgs _mouseHoverEventArgs;
+        IUIEventListener _elem;
+        public UIHoverMonitorTask()
+            : base(null)
         {
-            _targetEventHandler = targetEventHandler;
+            _mouseHoverEventArgs = new UIMouseHoverEventArgs();
         }
         public override void Reset()
         {
             _mouseMoveCounter = -1;
+            _elem = null;
+        }
+        public void SetMonitorElement(IUIEventListener elem)
+        {
+            if (_elem != elem)
+            {
+                //reset count
+                _mouseMoveCounter = -1;//reset
+                _elem = elem;
+            }
         }
         public override void InvokeAction()
         {
-            _mouseMoveCounter++;
-            if (_mouseMoveCounter > 1)
+            if (_elem != null)
             {
-                base.InvokeAction();
+                _mouseMoveCounter++;
+                if (_mouseMoveCounter > 1)
+                {
+                    _mouseHoverEventArgs.CurrentContextElement = _elem;
+                    _elem.ListenMouseHover(_mouseHoverEventArgs);
+                }
             }
         }
     }
