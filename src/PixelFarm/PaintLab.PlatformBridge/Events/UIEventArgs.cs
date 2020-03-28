@@ -268,11 +268,17 @@ namespace LayoutFarm.UI
     /// </summary>
     public class PrimaryMouseEventArgs : EventArgs
     {
+        //accept input from external platform
+        //then we translate this primary-mouse-event-args
+        //to various UIMouseEventArgs
+
+
         public int Left { get; private set; }
         public int Top { get; private set; }
         public UIMouseButtons Button { get; private set; }
         public int Clicks { get; private set; }
         public int Delta { get; private set; }
+
         public PrimaryMouseEventArgs() { }
         public void SetMouseDownEventInfo(int x, int y, UIMouseButtons button, int clicks)
         {

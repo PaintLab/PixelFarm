@@ -155,14 +155,14 @@ namespace LayoutFarm
             int x_pos = 0;
 
             GeneralEventListener evListener = new GeneralEventListener();
-            evListener.MouseEnter += (e) =>
+            evListener.MouseEnter += (s, e) =>
             {
                 IUIEventListener ctx = e.CurrentContextElement;
                 LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;
                 box.BackColor = Color.Red;
                 System.Diagnostics.Debug.WriteLine("mouse_enter:" + box.dbugId);
             };
-            evListener.MouseLeave += (e) =>
+            evListener.MouseLeave += (s, e) =>
             {
                 IUIEventListener ctx = e.CurrentContextElement;
                 LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;
