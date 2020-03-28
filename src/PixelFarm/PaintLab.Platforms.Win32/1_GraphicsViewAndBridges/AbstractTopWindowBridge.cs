@@ -216,9 +216,7 @@ namespace LayoutFarm.UI
         void ReleaseUIMouseEventArgs(UIMouseEventArgs mouseEventArgs)
         {
             mouseEventArgs.Clear();
-#if DEBUG
-            System.Diagnostics.Debug.WriteLine("_mouseEventStack_count:" + _mouseEventStack.Count);
-#endif
+ 
 
         }
         //------------------

@@ -3,9 +3,7 @@
 using System;
 namespace LayoutFarm.UI
 {
-    public delegate void UIMouseEventHandler(object sender, UIMouseEventArgs e);
-    public delegate void UIKeyEventHandler(object sender, UIKeyEventArgs e);
-    public delegate void UIKeyPressEventHandler(object sender, UIKeyEventArgs e);
+   
     public class UIKeyEventArgs : UIEventArgs
     {
         uint _keyData;
@@ -68,6 +66,7 @@ namespace LayoutFarm.UI
         /// request for custom mouse cursor
         /// </summary>
         public Cursor CustomMouseCursor { get; set; }
+
         /// <summary>
         /// exact hit object (include run)
         /// </summary>
