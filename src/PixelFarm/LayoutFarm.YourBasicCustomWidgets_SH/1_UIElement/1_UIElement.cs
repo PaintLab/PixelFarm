@@ -464,28 +464,29 @@ namespace LayoutFarm.UI
         {
         }
         //-------------------------------------------------------
-        protected virtual void OnMouseDown(UIMouseEventArgs e)
+        protected virtual void OnMouseDown(UIMouseDownEventArgs e)
         {
         }
-        protected virtual void OnContinuousMousePress()
+        protected virtual void OnMousePress(UIMousePressEventArgs e)
+        {
+
+        }
+        protected virtual void OnMouseMove(UIMouseMoveEventArgs e)
         {
         }
-        protected virtual void OnMouseMove(UIMouseEventArgs e)
+        protected virtual void OnMouseUp(UIMouseUpEventArgs e)
         {
         }
-        protected virtual void OnMouseUp(UIMouseEventArgs e)
+        protected virtual void OnMouseEnter(UIMouseMoveEventArgs e)
         {
         }
-        protected virtual void OnMouseEnter(UIMouseEventArgs e)
+        protected virtual void OnMouseLeave(UIMouseMoveEventArgs e)
         {
         }
-        protected virtual void OnMouseLeave(UIMouseEventArgs e)
+        protected virtual void OnMouseWheel(UIMouseWheelEventArgs e)
         {
         }
-        protected virtual void OnMouseWheel(UIMouseEventArgs e)
-        {
-        }
-        protected virtual void OnMouseHover(UIMouseEventArgs e)
+        protected virtual void OnMouseHover(UIMouseHoverEventArgs e)
         {
         }
 

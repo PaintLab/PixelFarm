@@ -83,12 +83,12 @@ namespace Mini
             //-----------------------------------------------
             //***
             GeneralEventListener genEvListener = new GeneralEventListener();
-            genEvListener.MouseDown += e =>
+            genEvListener.MouseDown += (s, e) =>
             {
-                _demoBase.MouseDown(e.X, e.Y, e.Button == UIMouseButtons.Right);
+                _demoBase.MouseDown(e.X, e.Y, e.Buttons == UIMouseButtons.Right);
                 _bridgeUI.InvalidateGraphics();
             };
-            genEvListener.MouseMove += e =>
+            genEvListener.MouseMove += (s, e) =>
             {
                 if (e.IsDragging)
                 {
@@ -97,7 +97,7 @@ namespace Mini
                     _bridgeUI.InvalidateGraphics();
                 }
             };
-            genEvListener.MouseUp += e =>
+            genEvListener.MouseUp += (s, e) =>
             {
                 _demoBase.MouseUp(e.X, e.Y);
             };

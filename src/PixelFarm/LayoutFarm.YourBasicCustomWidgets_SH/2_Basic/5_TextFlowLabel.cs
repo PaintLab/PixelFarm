@@ -14,11 +14,19 @@ namespace LayoutFarm.CustomWidgets
         RunStyle _runStyle;
         RequestFont _font;
         protected TextFlowRenderBox _textFlowRenderBox;
+
         protected System.Collections.Generic.IEnumerable<PlainTextLine> _doc;
 
+        public TextFlowLabel() : this(16, 16)
+        {
+            //if user does not provide width and height,
+            //we use default first, and set HasSpecificWidthAndHeight=false
+            //(this feature  found in label, image box, and text-flow-label)
+
+            HasSpecificWidthAndHeight = false;
+        }
         public TextFlowLabel(int w, int h) : base(w, h)
         {
-             
             _textColor = PixelFarm.Drawing.Color.Black; //default?, use Theme?
             AcceptKeyboardFocus = true;
         }
@@ -31,8 +39,7 @@ namespace LayoutFarm.CustomWidgets
         {
             if (_runStyle == null)
             {
-                return _runStyle = new RunStyle()
-                {
+                return _runStyle = new RunStyle() {
                     FontColor = Color.Black,
                     ReqFont = _font
                 };
@@ -58,8 +65,7 @@ namespace LayoutFarm.CustomWidgets
 
                 var txtFlowRenderBox = new TextFlowRenderBox(rootgfx, this.Width, this.Height, true);
                 //txtFlowRenderBox.BackgroundColor = _backColor;
-                txtFlowRenderBox.CurrentTextSpanStyle = new TextSpanStyle()
-                {
+                txtFlowRenderBox.CurrentTextSpanStyle = new TextSpanStyle() {
                     ReqFont = _font,
                     FontColor = Color.Black
                 };
@@ -152,7 +158,7 @@ namespace LayoutFarm.CustomWidgets
                 _textFlowRenderBox.InvalidateGraphics();
             }
         }
-        protected override void OnMouseDown(UIMouseEventArgs e)
+        protected override void OnMouseDown(UIMouseDownEventArgs e)
         {
 
             this.Focus();
@@ -161,7 +167,7 @@ namespace LayoutFarm.CustomWidgets
             e.CurrentContextElement = this;
             _textFlowRenderBox.HandleMouseDown(e);
         }
-        protected override void OnMouseMove(UIMouseEventArgs e)
+        protected override void OnMouseMove(UIMouseMoveEventArgs e)
         {
             if (e.IsDragging)
             {
@@ -170,7 +176,7 @@ namespace LayoutFarm.CustomWidgets
                 e.MouseCursorStyle = MouseCursorStyle.IBeam;
             }
         }
-        protected override void OnMouseUp(UIMouseEventArgs e)
+        protected override void OnMouseUp(UIMouseUpEventArgs e)
         {
             if (e.IsDragging)
             {
@@ -183,7 +189,7 @@ namespace LayoutFarm.CustomWidgets
             e.MouseCursorStyle = MouseCursorStyle.Default;
             e.CancelBubbling = true;
         }
-        protected override void OnMouseWheel(UIMouseEventArgs e)
+        protected override void OnMouseWheel(UIMouseWheelEventArgs e)
         {
             //mouse wheel on  
             _textFlowRenderBox.HandleMouseWheel(e);
@@ -194,7 +200,7 @@ namespace LayoutFarm.CustomWidgets
             _textFlowRenderBox.HandleDoubleClick(e);
             e.CancelBubbling = true;
         }
-        protected override void OnMouseLeave(UIMouseEventArgs e)
+        protected override void OnMouseLeave(UIMouseMoveEventArgs e)
         {
             e.MouseCursorStyle = MouseCursorStyle.Arrow;
         }

@@ -79,14 +79,14 @@ namespace LayoutFarm
                 : base(w, h)
             {
             }
-            protected override void OnMouseDown(UIMouseEventArgs e)
+            protected override void OnMouseDown(UIMouseDownEventArgs e)
             {
                 ////test only!!!         
                 _lastX = e.X;
                 _lastY = e.Y;
                 _pointList.Add(new Point(_lastX, _lastY));
             }
-            protected override void OnMouseMove(UIMouseEventArgs e)
+            protected override void OnMouseMove(UIMouseMoveEventArgs e)
             {
                 //test
                 //draw on this canvas
@@ -113,7 +113,7 @@ namespace LayoutFarm
 
                 this.InvalidateCanvasContent();
             }
-            protected override void OnMouseUp(UIMouseEventArgs e)
+            protected override void OnMouseUp(UIMouseUpEventArgs e)
             {
             }
         }
@@ -144,5 +144,109 @@ namespace LayoutFarm
         //    binder.State = ImageBinderState.Loaded;
         //    return binder;
         //}
+    }
+
+
+    [DemoNote("1.2.1 BoxEvents")]
+    class Demo_BoxEvents : App
+    {
+        protected override void OnStart(AppHost host)
+        {
+            int x_pos = 0;
+
+            GeneralEventListener evListener = new GeneralEventListener();
+            evListener.MouseEnter += (s, e) =>
+            {
+                IUIEventListener ctx = e.CurrentContextElement;
+                LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;
+                box.BackColor = Color.Red;
+                System.Diagnostics.Debug.WriteLine("mouse_enter:" + box.dbugId);
+            };
+            evListener.MouseLeave += (s, e) =>
+            {
+                IUIEventListener ctx = e.CurrentContextElement;
+                LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;
+                box.BackColor = Color.Blue;
+                System.Diagnostics.Debug.WriteLine("mouse_leave:" + box.dbugId);
+            };
+
+            for (int i = 0; i < 10; ++i)
+            {
+                var sampleButton = new LayoutFarm.CustomWidgets.Box(30, 30);
+                sampleButton.BackColor = Color.Blue;
+                sampleButton.SetLocation(x_pos, 10);
+                sampleButton.AttachExternalEventListener(evListener);
+
+                host.AddChild(sampleButton);
+
+                x_pos += 30 + 5;
+            }
+
+        }
+    }
+
+    [DemoNote("1.2.1 BoxEvents")]
+    class Demo_BoxEvents2 : App
+    {
+        protected override void OnStart(AppHost host)
+        {
+            int x_pos = 0;
+
+            Color normalState = Color.FromArgb(100, Color.Blue);
+            Color mouseEnterState = Color.FromArgb(100, Color.Red);
+            Color hoverState = Color.FromArgb(100, Color.Green);
+
+            GeneralUIElementBehaviour beh = new GeneralUIElementBehaviour();
+            beh.MouseEnter += (s, e) =>
+            {
+                IUIEventListener ctx = e.CurrentContextElement;
+                LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;
+                box.BackColor = mouseEnterState;
+
+                System.Diagnostics.Debug.WriteLine("mouse_enter:" + box.dbugId);
+            };
+            beh.MouseLeave += (s, e) =>
+            {
+                IUIEventListener ctx = e.CurrentContextElement;
+                LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;
+                box.BackColor = normalState;
+                System.Diagnostics.Debug.WriteLine("mouse_leave:" + box.dbugId);
+            };
+            beh.MouseHover += (s, e) =>
+            {
+                //
+                IUIEventListener ctx = e.CurrentContextElement;
+                LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;
+                box.BackColor = hoverState;
+                System.Diagnostics.Debug.WriteLine("mouse_hover:" + box.dbugId);
+            };
+            beh.MouseDown += (s, e) =>
+            {
+                e.CurrentMousePressMonitor = e.CurrentContextElement;
+            };
+            beh.MousePress += (s, e) =>
+            {
+                IUIEventListener ctx = e.CurrentContextElement;
+                LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;
+                Color back_color = box.BackColor;
+                box.BackColor = new Color((byte)System.Math.Min(back_color.A + 10, 255), back_color.R, back_color.G, back_color.B);
+                System.Diagnostics.Debug.WriteLine("mouse_press:" + box.dbugId);
+            };
+
+
+
+            for (int i = 0; i < 10; ++i)
+            {
+                var sampleButton = new LayoutFarm.CustomWidgets.Box(30, 30);
+                sampleButton.BackColor = normalState;
+                sampleButton.SetLocation(x_pos, 10);
+                sampleButton.AttachUIBehaviour(beh);
+
+                host.AddChild(sampleButton);
+
+                x_pos += 30 + 5;
+            }
+
+        }
     }
 }

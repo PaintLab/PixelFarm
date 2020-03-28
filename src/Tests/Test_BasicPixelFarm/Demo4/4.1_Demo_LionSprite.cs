@@ -19,9 +19,9 @@ namespace LayoutFarm
             _vgVisElem = VgVisualDocHelper.CreateVgVisualDocFromFile(@"Samples\lion.svg").VgRootElem;
             _mySprite = new MyTestSprite(_vgVisElem);
             var evListener = new GeneralEventListener();
-            evListener.MouseDown += e =>
+            evListener.MouseDown += (s, e) =>
             {
-                if (e.Button == UIMouseButtons.Right)
+                if (e.Buttons == UIMouseButtons.Right)
                 {
                     VgVisualElement foundE = _mySprite.HitTest(e.X, e.Y, true);
                     if (foundE != null)
@@ -31,9 +31,9 @@ namespace LayoutFarm
                     }
                 }
             };
-            evListener.MouseMove += e =>
+            evListener.MouseMove += (s, e) =>
             {
-                if (e.Button == UIMouseButtons.Left && e.IsDragging)
+                if (e.Buttons == UIMouseButtons.Left && e.IsDragging)
                 {
 
                     if (e.Ctrl)

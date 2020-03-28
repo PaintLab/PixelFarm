@@ -78,13 +78,13 @@ namespace LayoutFarm.CustomWidgets
             _panel.Add(treeNode);
         }
         //----------------------------------------------------
-        protected override void OnMouseDown(UIMouseEventArgs e)
+        protected override void OnMouseDown(UIMouseDownEventArgs e)
         {
 
             MouseDown?.Invoke(this, e);
         }
 
-        protected override void OnMouseUp(UIMouseEventArgs e)
+        protected override void OnMouseUp(UIMouseUpEventArgs e)
         {
 
             MouseUp?.Invoke(this, e);
@@ -165,7 +165,7 @@ namespace LayoutFarm.CustomWidgets
                 //-----------------------------
                 // create default layer for node content  
                 //-----------------------------
-                _uiNodeIcon = new ImageBox(16, 16);//create with default size 
+                _uiNodeIcon = new ImageBox();//create with default size 
                 SetupNodeIconBehaviour(_uiNodeIcon);
                 element.AddChild(_uiNodeIcon);
                 //-----------------------------

@@ -196,8 +196,8 @@ namespace LayoutFarm.UI
         AbstractTopWindowBridge _topWindowBridge;
 
         GLESContext _myContext;
-        UIMouseEventArgs _mouseEventArgs = new UIMouseEventArgs();
-        UIKeyEventArgs _keyEventArgs = new UIKeyEventArgs();
+        readonly PrimaryMouseEventArgs _mouseEventArgs = new PrimaryMouseEventArgs();
+        readonly UIKeyEventArgs _keyEventArgs = new UIKeyEventArgs();
 
         Cursor _cursor;
 
@@ -285,8 +285,7 @@ namespace LayoutFarm.UI
                         buttons = UIMouseButtons.Right;
                         break;
                 }
-                _mouseEventArgs.UIEventName = UIEventName.MouseDown;
-                _mouseEventArgs.SetEventInfo(e.X, e.Y, buttons, e.Clicks, e.Delta);
+                _mouseEventArgs.SetMouseDownEventInfo(e.X, e.Y, buttons, e.Clicks);
                 _topWindowBridge.HandleMouseDown(_mouseEventArgs);
             }
             base.OnMouseDown(e);
@@ -295,8 +294,7 @@ namespace LayoutFarm.UI
         {
             if (_topWindowBridge != null)
             {
-                _mouseEventArgs.UIEventName = UIEventName.MouseMove;
-                _mouseEventArgs.SetEventInfo(e.X, e.Y, UIMouseButtons.None, e.Clicks, e.Delta);
+                _mouseEventArgs.SetMouseMoveEventInfo(e.X, e.Y);
                 _topWindowBridge.HandleMouseMove(_mouseEventArgs);
             }
             base.OnMouseMove(e);
@@ -318,8 +316,8 @@ namespace LayoutFarm.UI
                         buttons = UIMouseButtons.Right;
                         break;
                 }
-                _mouseEventArgs.UIEventName = UIEventName.MouseUp;
-                _mouseEventArgs.SetEventInfo(e.X, e.Y, buttons, e.Clicks, e.Delta);
+
+                _mouseEventArgs.SetMouseUpEventInfo(e.X, e.Y, buttons);
                 _topWindowBridge.HandleMouseUp(_mouseEventArgs);
             }
             base.OnMouseUp(e);
@@ -341,8 +339,8 @@ namespace LayoutFarm.UI
                         buttons = UIMouseButtons.Right;
                         break;
                 }
-                _mouseEventArgs.UIEventName = UIEventName.Wheel;
-                _mouseEventArgs.SetEventInfo(e.X, e.Y, buttons, e.Clicks, e.Delta);
+
+                _mouseEventArgs.SetMouseWheelEventInfo(e.X, e.Y, e.Delta);
                 _topWindowBridge.HandleMouseWheel(_mouseEventArgs);
             }
             base.OnMouseWheel(e);

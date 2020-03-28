@@ -91,7 +91,7 @@ namespace LayoutFarm.TextEditing
             _targetTextSurface = textSurfaceElement;
         }
 
-        internal static bool NotifyPreviewMouseWheel(TextSurfaceEventListener listener, UIMouseEventArgs e)
+        internal static bool NotifyPreviewMouseWheel(TextSurfaceEventListener listener, UIMouseWheelEventArgs e)
         {
             if (listener.PreviewMouseWheel != null)
             {

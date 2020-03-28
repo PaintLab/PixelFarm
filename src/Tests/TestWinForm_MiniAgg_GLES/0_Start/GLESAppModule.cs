@@ -132,12 +132,12 @@ namespace Mini
 
             }
             //handle event
-            protected override void OnMouseDown(UIMouseEventArgs e)
+            protected override void OnMouseDown(UIMouseDownEventArgs e)
             {
-                _demoBase.MouseDown(e.X, e.Y, e.Button == UIMouseButtons.Right);
+                _demoBase.MouseDown(e.X, e.Y, e.Buttons == UIMouseButtons.Right);
                 base.OnMouseDown(e);
             }
-            protected override void OnMouseMove(UIMouseEventArgs e)
+            protected override void OnMouseMove(UIMouseMoveEventArgs e)
             {
                 if (e.IsDragging)
                 {
@@ -147,7 +147,7 @@ namespace Mini
                 }
                 base.OnMouseMove(e);
             }
-            protected override void OnMouseUp(UIMouseEventArgs e)
+            protected override void OnMouseUp(UIMouseUpEventArgs e)
             {
                 _demoBase.MouseUp(e.X, e.Y);
                 base.OnMouseUp(e);

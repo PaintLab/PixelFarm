@@ -201,19 +201,20 @@ namespace LayoutFarm.UI
                     e.Right - e.Left,
                     e.Bottom - e.Top));
         }
-        protected virtual void OnMouseDown(UIMouseEventArgs e)
+        protected virtual void OnMouseDown(PrimaryMouseEventArgs e)
         {
             _topWinBridge.HandleMouseDown(e);
         }
-        protected virtual void OnMouseMove(UIMouseEventArgs e)
+        protected virtual void OnMouseMove(PrimaryMouseEventArgs e)
         {
             _topWinBridge.HandleMouseMove(e);
         }
-        protected virtual void OnMouseUp(UIMouseEventArgs e)
+        protected virtual void OnMouseUp(PrimaryMouseEventArgs e)
         {
             _topWinBridge.HandleMouseUp(e);
         }
-        protected virtual void OnWheel(UIMouseEventArgs e)
+
+        protected virtual void OnWheel(PrimaryMouseEventArgs e)
         {
             _topWinBridge.HandleMouseWheel(e);
         }
@@ -231,22 +232,23 @@ namespace LayoutFarm.UI
         }
 
         //------------
-        internal static void InvokeMouseDown(MyWin32WindowWrapper control, UIMouseEventArgs e)
+        internal static void InvokeMouseDown(MyWin32WindowWrapper control, PrimaryMouseEventArgs e)
         {
             control.OnMouseDown(e);
         }
-        internal static void InvokeMouseUp(MyWin32WindowWrapper control, UIMouseEventArgs e)
+        internal static void InvokeMouseUp(MyWin32WindowWrapper control, PrimaryMouseEventArgs e)
         {
             control.OnMouseUp(e);
         }
-        internal static void InvokeMouseMove(MyWin32WindowWrapper control, UIMouseEventArgs e)
+        internal static void InvokeMouseMove(MyWin32WindowWrapper control, PrimaryMouseEventArgs e)
         {
             control.OnMouseMove(e);
         }
-        internal static void InvokeWheel(MyWin32WindowWrapper control, UIMouseEventArgs e)
+        internal static void InvokeWheel(MyWin32WindowWrapper control, PrimaryMouseEventArgs e)
         {
             control.OnWheel(e);
         }
+        //------------
         internal static void InvokeOnPaint(MyWin32WindowWrapper control, UIPaintEventArgs e)
         {
             control.OnPaint(e);
@@ -379,9 +381,9 @@ namespace LayoutFarm.UI
     public class Win32EventBridge
     {
 
-        UIMouseEventArgs _mouseEventArgs = new UIMouseEventArgs();
-        UIKeyEventArgs _keyEventArgs = new UIKeyEventArgs();
-        UIPaintEventArgs _paintEventArgs = new UIPaintEventArgs();
+        readonly PrimaryMouseEventArgs _mouseArgs = new PrimaryMouseEventArgs();
+        readonly UIKeyEventArgs _keyEventArgs = new UIKeyEventArgs();
+        readonly UIPaintEventArgs _paintEventArgs = new UIPaintEventArgs();
 
         MyWin32WindowWrapper _myWindow;
 
@@ -406,22 +408,19 @@ namespace LayoutFarm.UI
         public void InvokeOnMouseDown(int x, int y, UIMouseButtons buttons)
         {
             s_mouseDown = true;
-            _mouseEventArgs.UIEventName = UIEventName.MouseDown;
-            _mouseEventArgs.SetEventInfo(x, y, buttons, 1, 0);
-            MyWin32WindowWrapper.InvokeMouseDown(_myWindow, _mouseEventArgs);
+            _mouseArgs.SetMouseDownEventInfo(x, y, buttons, 1);
+            MyWin32WindowWrapper.InvokeMouseDown(_myWindow, _mouseArgs);
         }
         public void InvokeOnMouseMove(int x, int y)
         {
-            _mouseEventArgs.UIEventName = UIEventName.MouseMove;
-            _mouseEventArgs.SetEventInfo(x, y, UIMouseButtons.Left, 1, 0);
-            MyWin32WindowWrapper.InvokeMouseMove(_myWindow, _mouseEventArgs);
+            _mouseArgs.SetMouseMoveEventInfo(x, y);
+            MyWin32WindowWrapper.InvokeMouseMove(_myWindow, _mouseArgs);
         }
         public void InvokeOnMouseUp(int x, int y, UIMouseButtons buttons)
         {
             s_mouseDown = false;
-            _mouseEventArgs.UIEventName = UIEventName.MouseUp;
-            _mouseEventArgs.SetEventInfo(x, y, buttons, 1, 0);
-            MyWin32WindowWrapper.InvokeMouseUp(_myWindow, _mouseEventArgs);
+            _mouseArgs.SetMouseUpEventInfo(x, y, buttons);
+            MyWin32WindowWrapper.InvokeMouseUp(_myWindow, _mouseArgs);
         }
 
         public bool CustomPanelMsgHandler(IntPtr hwnd, uint msg,
@@ -478,87 +477,65 @@ namespace LayoutFarm.UI
                         //3. essential parameter
 
                         int mouse_pos = lparams.ToInt32();
-                        int x = (mouse_pos & 0xffff);
-                        int y = ((mouse_pos >> 16) & 0xffff);
-
                         s_mouseDown = true;
-                        _mouseEventArgs.UIEventName = UIEventName.MouseDown;
-                        _mouseEventArgs.SetEventInfo(x, y, UIMouseButtons.Left, 1, 0);
-                        MyWin32WindowWrapper.InvokeMouseDown(_myWindow, _mouseEventArgs);
+                        _mouseArgs.SetMouseDownEventInfo((mouse_pos & 0xffff), ((mouse_pos >> 16) & 0xffff), UIMouseButtons.Left, 1);
+                        MyWin32WindowWrapper.InvokeMouseDown(_myWindow, _mouseArgs);
                     }
                     break;
                 case Win32.MyWin32.WM_LBUTTONUP:
                     {
                         //mouse up
                         int mouse_pos = lparams.ToInt32();
-                        int x = (mouse_pos & 0xffff);
-                        int y = ((mouse_pos >> 16) & 0xffff);
+                      
                         s_mouseDown = false;
-                        _mouseEventArgs.UIEventName = UIEventName.MouseUp;
-                        _mouseEventArgs.SetEventInfo(x, y, UIMouseButtons.Left, 1, 0);
-
-                        MyWin32WindowWrapper.InvokeMouseUp(_myWindow, _mouseEventArgs);
-
+                        _mouseArgs.SetMouseUpEventInfo((mouse_pos & 0xffff), ((mouse_pos >> 16) & 0xffff), UIMouseButtons.Left);
+                        MyWin32WindowWrapper.InvokeMouseUp(_myWindow, _mouseArgs);
                     }
                     break;
                 case Win32.MyWin32.WM_RBUTTONDOWN:
                     {
                         int mouse_pos = lparams.ToInt32();
-                        int x = (mouse_pos & 0xffff);
-                        int y = ((mouse_pos >> 16) & 0xffff);
+                       
                         s_mouseDown = true;
-                        _mouseEventArgs.UIEventName = UIEventName.MouseDown;
-                        _mouseEventArgs.SetEventInfo(x, y, UIMouseButtons.Right, 1, 0);
-                        MyWin32WindowWrapper.InvokeMouseDown(_myWindow, _mouseEventArgs);
+                        _mouseArgs.SetMouseDownEventInfo((mouse_pos & 0xffff), ((mouse_pos >> 16) & 0xffff), UIMouseButtons.Right, 1);
+                        MyWin32WindowWrapper.InvokeMouseDown(_myWindow, _mouseArgs);
 
                     }
                     break;
                 case Win32.MyWin32.WM_RBUTTONUP:
                     {
                         int mouse_pos = lparams.ToInt32();
-                        int x = (mouse_pos & 0xffff);
-                        int y = ((mouse_pos >> 16) & 0xffff);
+                        
                         s_mouseDown = false;
-                        _mouseEventArgs.UIEventName = UIEventName.MouseUp;
-                        _mouseEventArgs.SetEventInfo(x, y, UIMouseButtons.Right, 1, 0);
-                        MyWin32WindowWrapper.InvokeMouseUp(_myWindow, _mouseEventArgs);
-
+                        _mouseArgs.SetMouseUpEventInfo((mouse_pos & 0xffff), ((mouse_pos >> 16) & 0xffff), UIMouseButtons.Right);
+                        MyWin32WindowWrapper.InvokeMouseUp(_myWindow, _mouseArgs);
                     }
                     break;
                 case Win32.MyWin32.WM_MBUTTONDOWN:
                     {
                         int mouse_pos = lparams.ToInt32();
-                        int x = (mouse_pos & 0xffff);
-                        int y = ((mouse_pos >> 16) & 0xffff);
+                       
                         s_mouseDown = true;
-                        _mouseEventArgs.UIEventName = UIEventName.MouseDown;
-                        _mouseEventArgs.SetEventInfo(x, y, UIMouseButtons.Middle, 1, 0);
-                        MyWin32WindowWrapper.InvokeMouseDown(_myWindow, _mouseEventArgs);
+                        _mouseArgs.SetMouseDownEventInfo((mouse_pos & 0xffff), ((mouse_pos >> 16) & 0xffff), UIMouseButtons.Middle, 1);
+                        MyWin32WindowWrapper.InvokeMouseDown(_myWindow, _mouseArgs);
                         return true;
                     }
                 case Win32.MyWin32.WM_MBUTTONUP:
                     {
                         int mouse_pos = lparams.ToInt32();
-                        int x = (mouse_pos & 0xffff);
-                        int y = ((mouse_pos >> 16) & 0xffff);
+                     
                         s_mouseDown = false;
-                        _mouseEventArgs.UIEventName = UIEventName.MouseUp;
-                        _mouseEventArgs.SetEventInfo(x, y, UIMouseButtons.Middle, 1, 0);
-                        MyWin32WindowWrapper.InvokeMouseUp(_myWindow, _mouseEventArgs);
-
+                        _mouseArgs.SetMouseUpEventInfo((mouse_pos & 0xffff), ((mouse_pos >> 16) & 0xffff), UIMouseButtons.Middle);
+                        MyWin32WindowWrapper.InvokeMouseUp(_myWindow, _mouseArgs);
                     }
                     break;
                 case Win32.MyWin32.WM_MOUSEMOVE:
                     {
-                        int mouse_pos = lparams.ToInt32();
-                        int x = (mouse_pos & 0xffff);
-                        int y = ((mouse_pos >> 16) & 0xffff);
+                        int mouse_pos = lparams.ToInt32(); 
 
-
-                        //button depend on prev mouse down button?
-                        _mouseEventArgs.UIEventName = UIEventName.MouseMove;
-                        _mouseEventArgs.SetEventInfo(x, y, UIMouseButtons.None, 1, 0);
-                        MyWin32WindowWrapper.InvokeMouseMove(_myWindow, _mouseEventArgs);
+                        //button depend on prev mouse down button? 
+                        _mouseArgs.SetMouseMoveEventInfo((mouse_pos & 0xffff), ((mouse_pos >> 16) & 0xffff));
+                        MyWin32WindowWrapper.InvokeMouseMove(_myWindow, _mouseArgs);
 
                     }
                     break;
@@ -566,29 +543,25 @@ namespace LayoutFarm.UI
                     {
                         //if we derived directly from System.Windows.Control
                         int mouse_pos = lparams.ToInt32();
-                        int x = (mouse_pos & 0xffff);
-                        int y = ((mouse_pos >> 16) & 0xffff);
+                   
                         int delta = ((int)wparams.ToInt64() >> 16);
 
-                        //button depend on prev mouse down button?
-                        _mouseEventArgs.UIEventName = UIEventName.Wheel;
-                        _mouseEventArgs.SetEventInfo(x, y, UIMouseButtons.None, 0, delta);
-                        MyWin32WindowWrapper.InvokeWheel(_myWindow, _mouseEventArgs);
+                        //button depend on prev mouse down button?                         
+                        _mouseArgs.SetMouseWheelEventInfo((mouse_pos & 0xffff), ((mouse_pos >> 16) & 0xffff), delta);
+                        MyWin32WindowWrapper.InvokeWheel(_myWindow, _mouseArgs);
                     }
                     break;
                 case Win32.MyWin32.WM_MOUSEWHEEL:
                     {
                         //invoke mouse wheel 
                         int mouse_pos = lparams.ToInt32();
-                        int x = (mouse_pos & 0xffff);
-                        int y = ((mouse_pos >> 16) & 0xffff);
+                        
 
                         int delta = ((int)wparams.ToInt64() >> 16);
 
-                        //button depend on prev mouse down button?
-                        _mouseEventArgs.UIEventName = UIEventName.Wheel;
-                        _mouseEventArgs.SetEventInfo(x, y, UIMouseButtons.None, 0, delta);
-                        MyWin32WindowWrapper.InvokeWheel(_myWindow, _mouseEventArgs);
+                        //button depend on prev mouse down button?                         
+                        _mouseArgs.SetMouseWheelEventInfo((mouse_pos & 0xffff), ((mouse_pos >> 16) & 0xffff), delta);
+                        MyWin32WindowWrapper.InvokeWheel(_myWindow, _mouseArgs);
 
                     }
                     break;
