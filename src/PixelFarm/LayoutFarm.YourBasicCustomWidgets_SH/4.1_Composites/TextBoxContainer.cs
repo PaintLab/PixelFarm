@@ -253,7 +253,7 @@ namespace LayoutFarm.CustomWidgets
         {
             base.OnLostKeyboardFocus(e);
         }
-        protected override void OnLostMouseFocus(UIMouseEventArgs e)
+        protected override void OnLostMouseFocus(UIMouseLostFocusEventArgs e)
         {
             base.OnLostMouseFocus(e);
         }

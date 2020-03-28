@@ -137,11 +137,11 @@ namespace LayoutFarm.CustomWidgets
         public event EventHandler<UIMouseMoveEventArgs> MouseMove;
         public event EventHandler<UIMouseUpEventArgs> MouseUp;
 
-        public event EventHandler<UIMouseMoveEventArgs> MouseLeave;
+        public event EventHandler<UIMouseLeaveEventArgs> MouseLeave;
         public event EventHandler<UIMouseMoveEventArgs> MouseDrag;
 
         public event EventHandler<UIMouseWheelEventArgs> MouseWheel;
-        public event EventHandler<UIMouseEventArgs> LostMouseFocus;
+        public event EventHandler<UIMouseLostFocusEventArgs> LostMouseFocus;
 
 
         //some secondary event eg.
@@ -344,7 +344,7 @@ namespace LayoutFarm.CustomWidgets
                 MouseMove?.Invoke(this, e);
             }
         }
-        protected override void OnMouseLeave(UIMouseMoveEventArgs e)
+        protected override void OnMouseLeave(UIMouseLeaveEventArgs e)
         {
             MouseLeave?.Invoke(this, e);
         }
@@ -360,7 +360,7 @@ namespace LayoutFarm.CustomWidgets
         {
             MouseUp?.Invoke(this, e);
         }
-        protected override void OnLostMouseFocus(UIMouseEventArgs e)
+        protected override void OnLostMouseFocus(UIMouseLostFocusEventArgs e)
         {
             this.LostMouseFocus?.Invoke(this, e);
         }

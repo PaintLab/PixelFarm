@@ -19,11 +19,11 @@ namespace LayoutFarm.UI
         void ListenMouseWheel(UIMouseWheelEventArgs e);
 
         void ListenMouseEnter(UIMouseMoveEventArgs e);
-        void ListenMouseLeave(UIMouseMoveEventArgs e);
+        void ListenMouseLeave(UIMouseLeaveEventArgs e);
        
         void ListenMouseHover(UIMouseHoverEventArgs e); 
 
-        void ListenLostMouseFocus(UIMouseEventArgs e);
+        void ListenLostMouseFocus(UIMouseLostFocusEventArgs e);
         void ListenMousePress(UIMousePressEventArgs e);
          
         void ListenMouseClick(UIMouseEventArgs e);

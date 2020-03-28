@@ -157,6 +157,14 @@ namespace LayoutFarm.UI
         public IUIEventListener CurrentContextElement { get; set; }
     }
 
+    public class UIMouseLostFocusEventArgs : UIEventArgs
+    {
+        public UIMouseLostFocusEventArgs() { }
+    }
+    public class UIMouseLeaveEventArgs : UIEventArgs
+    {
+        public UIMouseLeaveEventArgs() { }
+    }
 
     public class UIMouseDownEventArgs : UIMouseEventArgs
     {

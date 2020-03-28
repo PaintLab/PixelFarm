@@ -11,7 +11,7 @@ namespace LayoutFarm.UI
         public event EventHandler<UIMouseEventArgs> MouseDoubleClick;
 
         public event EventHandler<UIMouseMoveEventArgs> MouseEnter;
-        public event EventHandler<UIMouseMoveEventArgs> MouseLeave;
+        public event EventHandler<UIMouseLeaveEventArgs> MouseLeave;
         public event EventHandler<UIMouseHoverEventArgs> MouseHover;
 
         public event EventHandler<UIKeyEventArgs> KeyDown;
@@ -49,7 +49,7 @@ namespace LayoutFarm.UI
 
         }
 
-        void IEventListener.ListenLostMouseFocus(UIMouseEventArgs e)
+        void IEventListener.ListenLostMouseFocus(UIMouseLostFocusEventArgs e)
         {
 
         }
@@ -68,7 +68,7 @@ namespace LayoutFarm.UI
         {
             MouseEnter?.Invoke(this, e);
         }
-        void IEventListener.ListenMouseLeave(UIMouseMoveEventArgs e)
+        void IEventListener.ListenMouseLeave(UIMouseLeaveEventArgs e)
         {
             MouseLeave?.Invoke(this, e);
         }
