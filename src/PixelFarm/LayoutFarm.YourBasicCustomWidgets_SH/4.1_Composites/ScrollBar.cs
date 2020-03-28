@@ -653,7 +653,7 @@ namespace LayoutFarm.CustomWidgets
 
         public event EventHandler<EventArgs> UserScroll;
         //tempfix here
-        internal void ChildNotifyMouseWheel(UIMouseEventArgs e)
+        internal void ChildNotifyMouseWheel(UIMouseWheelEventArgs e)
         {
             if (e.Delta < 0)
             {   //scroll down

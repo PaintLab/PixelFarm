@@ -161,27 +161,41 @@ namespace LayoutFarm.UI
     public class UIMouseDownEventArgs : UIMouseEventArgs
     {
         public UIMouseDownEventArgs() { }
+        public int Clicks => _click;
+        public UIMouseButtons Buttons
+        {
+            get => _buttons;
+            set => _buttons = value;
+        }
     }
     public class UIMouseMoveEventArgs : UIMouseEventArgs
     {
         public UIMouseMoveEventArgs() { }
+        public UIMouseButtons Buttons
+        {
+            get => _buttons;
+            set => _buttons = value;
+        }
     }
     public class UIMouseUpEventArgs : UIMouseEventArgs
     {
         public UIMouseUpEventArgs() { }
+        public bool IsAlsoDoubleClick { get; set; }
+        public UIMouseButtons Buttons => _buttons;
+
     }
     public class UIMouseWheelEventArgs : UIMouseEventArgs
     {
         public UIMouseWheelEventArgs() { }
+        public int Delta => _delta;
     }
     public abstract class UIMouseEventArgs : UIEventArgs
     {
         public UIMouseEventArgs()
         {
         }
-        public UIMouseButtons Buttons { get; set; }
-        public int Delta { get; private set; }
-        public int Clicks { get; private set; }
+
+
         public int GlobalX { get; private set; }
         public int GlobalY { get; private set; }
         public int XDiff { get; private set; }
@@ -197,18 +211,19 @@ namespace LayoutFarm.UI
             this.GlobalX = x;
             this.GlobalY = y;
             this.SetLocation(x, y);
-            Buttons = button;
-            Clicks = clicks;
-            Delta = delta;
+            _buttons = button;
+            _click = clicks;
+            _delta = delta;
         }
-
-
+        internal int _delta;
+        internal int _click;
+        internal UIMouseButtons _buttons;
 
         public override void Clear()
         {
             base.Clear();
-            this.Buttons = UIMouseButtons.Left;
-            this.Clicks =
+            _buttons = UIMouseButtons.Left;
+            _click =
                   this.XDiff =
                   this.YDiff =
                   this.GlobalX =
@@ -236,7 +251,7 @@ namespace LayoutFarm.UI
 
         public IUIEventListener CurrentMouseActive { get; set; }
         public IUIEventListener PreviousMouseDown { get; set; }
-        public bool IsAlsoDoubleClick { get; set; }
+
         public int CapturedMouseX { get; set; }
         public int CapturedMouseY { get; set; }
         public int DiffCapturedX => this.X - this.CapturedMouseX;

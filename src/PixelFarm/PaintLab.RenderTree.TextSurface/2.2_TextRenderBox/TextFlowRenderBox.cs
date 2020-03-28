@@ -294,7 +294,7 @@ namespace LayoutFarm.TextEditing
                 startAt = len = 0;
             }
         }
-        public virtual void HandleDrag(UIMouseEventArgs e)
+        public virtual void HandleDrag(UIMouseMoveEventArgs e)
         {
             if (!_isDragBegin)
             {
@@ -323,7 +323,7 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
-        public virtual void HandleDragEnd(UIMouseEventArgs e)
+        public virtual void HandleDragEnd(UIMouseUpEventArgs e)
         {
             _isDragBegin = false;
             if (e.Buttons == UIMouseButtons.Left)

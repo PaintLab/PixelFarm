@@ -169,7 +169,7 @@ namespace LayoutFarm
             }
             else
             {
-                e.IsAlsoDoubleClick = timediff.Milliseconds < _dblClickSense;
+                _mouseUpEventArgs.IsAlsoDoubleClick = timediff.Milliseconds < _dblClickSense;
                 _iTopBoxEventPortal.PortalMouseUp(_mouseUpEventArgs);
 
             }
@@ -199,7 +199,7 @@ namespace LayoutFarm
 
             if (e.IsDragging = _isDragging = _isMouseDown)
             {
-                e.Buttons = _mouseDownButton;
+                _mouseMoveEventArgs.Buttons = _mouseDownButton;
                 if (_draggingElement != null)
                 {
                     if (_draggingElement.DisableAutoMouseCapture)

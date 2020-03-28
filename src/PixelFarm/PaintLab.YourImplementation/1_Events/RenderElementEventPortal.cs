@@ -70,7 +70,7 @@ namespace LayoutFarm.UI
                 _mousePressEventArgs.CurrentContextElement = ui;
                 _currentMonitoredElem.ListenMousePress(_mousePressEventArgs);
             }
-            public void AddMousePressInformation(UIMouseEventArgs importInfo)
+            public void AddMousePressInformation(UIMouseDownEventArgs importInfo)
             {
                 _mousePressEventArgs.Button = importInfo.Buttons;
             }
