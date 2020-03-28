@@ -464,6 +464,7 @@ namespace LayoutFarm.UI
                     {
                         IUIEventListener tmp = e1.CurrentContextElement;
                         e1.CurrentContextElement = e1.CurrentMouseActive;
+                        _mouseLeaveEventArgs.SetDiff(e.XDiff, e.YDiff);
                         e1.CurrentMouseActive.ListenMouseLeave(_mouseLeaveEventArgs);
                         e1.CurrentContextElement = tmp;//restore
 
@@ -501,6 +502,8 @@ namespace LayoutFarm.UI
                     {
                         IUIEventListener prev = e.CurrentContextElement;
                         e.CurrentContextElement = e.CurrentMouseActive;
+                        _mouseLeaveEventArgs.IsDragging = e.IsDragging;
+                        _mouseLeaveEventArgs.SetDiff(e.XDiff, e.YDiff);
                         e.CurrentMouseActive.ListenMouseLeave(_mouseLeaveEventArgs);
                         e.CurrentContextElement = prev;
 
