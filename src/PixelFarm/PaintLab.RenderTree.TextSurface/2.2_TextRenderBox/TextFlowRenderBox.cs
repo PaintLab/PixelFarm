@@ -184,7 +184,7 @@ namespace LayoutFarm.TextEditing
 
         public virtual void HandleMouseDown(UIMouseEventArgs e)
         {
-            if (e.Button == UIMouseButtons.Left)
+            if (e.Buttons == UIMouseButtons.Left)
             {
                 InvalidateGraphicOfCurrentLineArea();
 
@@ -301,7 +301,7 @@ namespace LayoutFarm.TextEditing
                 //dbugMouseDragBegin++;
                 //first time
                 _isDragBegin = true;
-                if (e.Button == UIMouseButtons.Left)
+                if (e.Buttons == UIMouseButtons.Left)
                 {
                     _editSession.SetCaretPos(e.X, e.Y);
                     _editSession.StartSelect();
@@ -313,7 +313,7 @@ namespace LayoutFarm.TextEditing
             else
             {
                 //dbugMouseDragging++;
-                if (e.Button == UIMouseButtons.Left)
+                if (e.Buttons == UIMouseButtons.Left)
                 {
                     _editSession.StartSelectIfNoSelection();
                     _editSession.SetCaretPos(e.X, e.Y);
@@ -326,7 +326,7 @@ namespace LayoutFarm.TextEditing
         public virtual void HandleDragEnd(UIMouseEventArgs e)
         {
             _isDragBegin = false;
-            if (e.Button == UIMouseButtons.Left)
+            if (e.Buttons == UIMouseButtons.Left)
             {
                 _editSession.StartSelectIfNoSelection();
                 _editSession.SetCaretPos(e.X, e.Y);

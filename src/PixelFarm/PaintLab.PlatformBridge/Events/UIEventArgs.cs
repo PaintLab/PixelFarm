@@ -157,12 +157,29 @@ namespace LayoutFarm.UI
         public IUIEventListener CurrentContextElement { get; set; }
     }
 
-    public class UIMouseEventArgs : UIEventArgs
+
+    public class UIMouseDownEventArgs : UIMouseEventArgs
+    {
+        public UIMouseDownEventArgs() { }
+    }
+    public class UIMouseMoveEventArgs : UIMouseEventArgs
+    {
+        public UIMouseMoveEventArgs() { }
+    }
+    public class UIMouseUpEventArgs : UIMouseEventArgs
+    {
+        public UIMouseUpEventArgs() { }
+    }
+    public class UIMouseWheelEventArgs : UIMouseEventArgs
+    {
+        public UIMouseWheelEventArgs() { }
+    }
+    public abstract class UIMouseEventArgs : UIEventArgs
     {
         public UIMouseEventArgs()
         {
         }
-        public UIMouseButtons Button { get; set; }
+        public UIMouseButtons Buttons { get; set; }
         public int Delta { get; private set; }
         public int Clicks { get; private set; }
         public int GlobalX { get; private set; }
@@ -180,7 +197,7 @@ namespace LayoutFarm.UI
             this.GlobalX = x;
             this.GlobalY = y;
             this.SetLocation(x, y);
-            Button = button;
+            Buttons = button;
             Clicks = clicks;
             Delta = delta;
         }
@@ -190,7 +207,7 @@ namespace LayoutFarm.UI
         public override void Clear()
         {
             base.Clear();
-            this.Button = UIMouseButtons.Left;
+            this.Buttons = UIMouseButtons.Left;
             this.Clicks =
                   this.XDiff =
                   this.YDiff =

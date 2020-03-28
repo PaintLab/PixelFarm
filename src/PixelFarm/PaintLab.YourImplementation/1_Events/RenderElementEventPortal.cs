@@ -72,7 +72,7 @@ namespace LayoutFarm.UI
             }
             public void AddMousePressInformation(UIMouseEventArgs importInfo)
             {
-                _mousePressEventArgs.Button = importInfo.Button;
+                _mousePressEventArgs.Button = importInfo.Buttons;
             }
             public bool HasMonitoredElem => _currentMonitoredElem != null;
 
@@ -231,7 +231,7 @@ namespace LayoutFarm.UI
             commonElement.HitTestCore(hitPointChain);
             //this.topRenderElement.HitTestCore(hitPointChain);
         }
-        void IEventPortal.PortalMouseWheel(UIMouseEventArgs e)
+        void IEventPortal.PortalMouseWheel(UIMouseWheelEventArgs e)
         {
 #if DEBUG
             if (this.dbugRootGraphics.dbugEnableGraphicInvalidateTrace)
@@ -300,7 +300,7 @@ namespace LayoutFarm.UI
         IUIEventListener _currentMouseDown;
 
 
-        void IEventPortal.PortalMouseDown(UIMouseEventArgs e)
+        void IEventPortal.PortalMouseDown(UIMouseDownEventArgs e)
         {
 #if DEBUG
             if (this.dbugRootGraphics.dbugEnableGraphicInvalidateTrace)
@@ -427,7 +427,7 @@ namespace LayoutFarm.UI
         bool _mouseMoveFoundSomeHit = false;
         IUIEventListener _latestMouseMove = null;
 
-        void IEventPortal.PortalMouseMove(UIMouseEventArgs e)
+        void IEventPortal.PortalMouseMove(UIMouseMoveEventArgs e)
         {
 
             HitChain hitPointChain = GetFreeHitChain();
@@ -519,7 +519,7 @@ namespace LayoutFarm.UI
         void IEventPortal.PortalLostFocus(UIFocusEventArgs e)
         {
         }
-        void IEventPortal.PortalMouseUp(UIMouseEventArgs e)
+        void IEventPortal.PortalMouseUp(UIMouseUpEventArgs e)
         {
 #if DEBUG
             if (this.dbugRootGraphics.dbugEnableGraphicInvalidateTrace)

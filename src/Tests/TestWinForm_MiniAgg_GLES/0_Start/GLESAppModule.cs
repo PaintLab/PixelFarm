@@ -134,7 +134,7 @@ namespace Mini
             //handle event
             protected override void OnMouseDown(UIMouseEventArgs e)
             {
-                _demoBase.MouseDown(e.X, e.Y, e.Button == UIMouseButtons.Right);
+                _demoBase.MouseDown(e.X, e.Y, e.Buttons == UIMouseButtons.Right);
                 base.OnMouseDown(e);
             }
             protected override void OnMouseMove(UIMouseEventArgs e)

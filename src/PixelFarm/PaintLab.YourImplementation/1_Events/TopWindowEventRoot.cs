@@ -7,7 +7,11 @@ namespace LayoutFarm
 {
     class TopWindowEventRoot : ITopWindowEventRoot
     {
-        readonly UIMouseEventArgs _mouseEventArgs;
+        readonly UIMouseDownEventArgs _mouseDownEventArgs;
+        readonly UIMouseMoveEventArgs _mouseMoveEventArgs;
+        readonly UIMouseUpEventArgs _mouseUpEventArgs;
+        readonly UIMouseWheelEventArgs _wheelEventArgs;
+
         readonly RootGraphic _rootgfx;
         readonly RenderElementEventPortal _topWinBoxEventPortal;
         readonly IEventPortal _iTopBoxEventPortal;
@@ -35,7 +39,11 @@ namespace LayoutFarm
 
         public TopWindowEventRoot(RenderElement topRenderElement)
         {
-            _mouseEventArgs = new UIMouseEventArgs();
+            _mouseDownEventArgs = new UIMouseDownEventArgs();
+            _mouseMoveEventArgs = new UIMouseMoveEventArgs();
+            _mouseUpEventArgs = new UIMouseUpEventArgs();
+            _wheelEventArgs = new UIMouseWheelEventArgs();
+
             _iTopBoxEventPortal = _topWinBoxEventPortal = new RenderElementEventPortal(topRenderElement);
             _rootgfx = topRenderElement.Root;
             _hoverMonitoringTask = new UIHoverMonitorTask();
@@ -79,14 +87,14 @@ namespace LayoutFarm
             _mouseDownButton = primaryMouseEventArgs.Button;
             //-------------- 
 
-            UIMouseEventArgs e = _mouseEventArgs;
+            UIMouseEventArgs e = _mouseDownEventArgs;
             AddMouseEventArgsDetail(e, primaryMouseEventArgs);
 
-            _iTopBoxEventPortal.PortalMouseDown(e);
+            _iTopBoxEventPortal.PortalMouseDown(_mouseDownEventArgs);
             //
             _currentMouseActiveElement = _latestMouseDown = e.CurrentContextElement;
-            _localMouseDownX = _mouseEventArgs.X;
-            _localMouseDownY = _mouseEventArgs.Y;
+            _localMouseDownX = e.X;
+            _localMouseDownY = e.Y;
 
             _draggingElement = null;
 
@@ -101,7 +109,7 @@ namespace LayoutFarm
                     _localMouseDownX = e.GlobalX - globalX;
                     _localMouseDownY = e.GlobalY - globalY;
                 }
-                _draggingElement = _mouseEventArgs.DraggingElement;
+                _draggingElement = e.DraggingElement;
             }
             else
             {
@@ -120,7 +128,7 @@ namespace LayoutFarm
             _prevLogicalMouseX = primaryMouseEventArgs.Left;
             _prevLogicalMouseY = primaryMouseEventArgs.Top;
 
-            UIMouseEventArgs e = _mouseEventArgs;
+            UIMouseEventArgs e = _mouseUpEventArgs;
             AddMouseEventArgsDetail(e, primaryMouseEventArgs);
 
             e.SetDiff(xdiff, ydiff);
@@ -143,7 +151,7 @@ namespace LayoutFarm
                     e.CapturedMouseY = _localMouseDownY;
                     if (_draggingElement is IEventPortal iportal)
                     {
-                        iportal.PortalMouseUp(e);
+                        iportal.PortalMouseUp(_mouseUpEventArgs);
                         if (!e.IsCanceled)
                         {
                             _draggingElement.ListenMouseUp(e);
@@ -158,7 +166,7 @@ namespace LayoutFarm
             else
             {
                 e.IsAlsoDoubleClick = timediff.Milliseconds < _dblClickSense;
-                _iTopBoxEventPortal.PortalMouseUp(e);
+                _iTopBoxEventPortal.PortalMouseUp(_mouseUpEventArgs);
 
             }
             _localMouseDownX = _localMouseDownY = 0;
@@ -177,21 +185,21 @@ namespace LayoutFarm
             _prevLogicalMouseX = primaryMouseEventArgs.Left;
             _prevLogicalMouseY = primaryMouseEventArgs.Top;
             //-------------------------------------------------------
-            UIMouseEventArgs e = _mouseEventArgs;
+            UIMouseEventArgs e = _mouseMoveEventArgs;
             AddMouseEventArgsDetail(e, primaryMouseEventArgs);
             e.SetDiff(xdiff, ydiff);
             //-------------------------------------------------------
 
             if (e.IsDragging = _isDragging = _isMouseDown)
             {
-                e.Button = _mouseDownButton;
+                e.Buttons = _mouseDownButton;
                 if (_draggingElement != null)
                 {
                     if (_draggingElement.DisableAutoMouseCapture)
                     {
                         //TODO: review this
                         //find element under mouse position again
-                        _iTopBoxEventPortal.PortalMouseMove(e);
+                        _iTopBoxEventPortal.PortalMouseMove(_mouseMoveEventArgs);
                     }
                     else
                     {
@@ -203,7 +211,7 @@ namespace LayoutFarm
                         e.CapturedMouseY = _localMouseDownY;
                         if (_draggingElement is IEventPortal iportal)
                         {
-                            iportal.PortalMouseMove(e);
+                            iportal.PortalMouseMove(_mouseMoveEventArgs);
                             if (!e.IsCanceled)
                             {
                                 _draggingElement.ListenMouseMove(e);
@@ -219,20 +227,20 @@ namespace LayoutFarm
             }
             else
             {
-                _iTopBoxEventPortal.PortalMouseMove(e);
+                _iTopBoxEventPortal.PortalMouseMove(_mouseMoveEventArgs);
                 _hoverMonitoringTask.SetMonitorElement(e.CurrentContextElement);
             }
         }
         void ITopWindowEventRoot.RootMouseWheel(PrimaryMouseEventArgs primaryMouseEventArgs)
         {
-            UIMouseEventArgs e = _mouseEventArgs;
+            UIMouseEventArgs e = _wheelEventArgs;
             AddMouseEventArgsDetail(e, primaryMouseEventArgs);
             //find element            
 
             e.Shift = _lastKeydownWithShift;
             e.Alt = _lastKeydownWithAlt;
             e.Ctrl = _lastKeydownWithControl;
-            _iTopBoxEventPortal.PortalMouseWheel(e);
+            _iTopBoxEventPortal.PortalMouseWheel(_wheelEventArgs);
         }
         void ITopWindowEventRoot.RootGotFocus(UIFocusEventArgs e)
         {

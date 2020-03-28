@@ -21,7 +21,7 @@ namespace LayoutFarm
             var evListener = new GeneralEventListener();
             evListener.MouseDown += e =>
             {
-                if (e.Button == UIMouseButtons.Right)
+                if (e.Buttons == UIMouseButtons.Right)
                 {
                     VgVisualElement foundE = _mySprite.HitTest(e.X, e.Y, true);
                     if (foundE != null)
@@ -33,7 +33,7 @@ namespace LayoutFarm
             };
             evListener.MouseMove += e =>
             {
-                if (e.Button == UIMouseButtons.Left && e.IsDragging)
+                if (e.Buttons == UIMouseButtons.Left && e.IsDragging)
                 {
 
                     if (e.Ctrl)

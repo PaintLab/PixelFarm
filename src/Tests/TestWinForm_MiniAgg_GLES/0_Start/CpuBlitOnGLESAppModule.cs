@@ -85,7 +85,7 @@ namespace Mini
             GeneralEventListener genEvListener = new GeneralEventListener();
             genEvListener.MouseDown += e =>
             {
-                _demoBase.MouseDown(e.X, e.Y, e.Button == UIMouseButtons.Right);
+                _demoBase.MouseDown(e.X, e.Y, e.Buttons == UIMouseButtons.Right);
                 _bridgeUI.InvalidateGraphics();
             };
             genEvListener.MouseMove += e =>
