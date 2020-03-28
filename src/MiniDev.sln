@@ -35,7 +35,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.ImgCodecs", "PixelF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackEnd.Triangulation", "PixelFarm\BackEnd.Triangulation\BackEnd.Triangulation.csproj", "{C5E5802D-6A45-4FE9-BAE7-5F0AE91D72C1}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5.2_Typography", "5.2_Typography", "{C1FD503F-59E2-4016-8AEA-831AC3231430}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4_Typography", "4_Typography", "{C1FD503F-59E2-4016-8AEA-831AC3231430}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.Painter", "PixelFarm\PixelFarm.Painter\PixelFarm.Painter.csproj", "{0CC424D5-20AC-4849-993D-3A720DBAE94F}"
 EndProject
@@ -91,7 +91,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormTestBed", "Tests\Win
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaintLab.RenderTree.TextSurface", "PixelFarm\PaintLab.RenderTree.TextSurface\PaintLab.RenderTree.TextSurface.csproj", "{E6078FC1-3AE0-4E33-AE7C-75E7AAAC7A02}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4_YourImplementation", "4_YourImplementation", "{8BE95464-61A5-4C0A-99F8-DA6E32C52B78}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5_YourImplementation", "5_YourImplementation", "{8BE95464-61A5-4C0A-99F8-DA6E32C52B78}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.1_Drawing_Base", "2.1_Drawing_Base", "{1FFAB66A-292D-402A-9505-35FA36942F4B}"
 EndProject
