@@ -927,7 +927,7 @@ namespace LayoutFarm.CustomWidgets
         }
 
 
-        protected override void OnLostMouseFocus(UIMouseEventArgs e)
+        protected override void OnLostMouseFocus(UIMouseLostFocusEventArgs e)
         {
             //check if 
             if (ClearSelectionWhenLostFocus)

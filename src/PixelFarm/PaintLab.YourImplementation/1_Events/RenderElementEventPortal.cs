@@ -84,7 +84,8 @@ namespace LayoutFarm.UI
         Stack<HitChain> _hitChainStack = new Stack<HitChain>();
         readonly RenderElement _topRenderElement;
         readonly MousePressMonitorHelper _mousePressMonitor;
-
+        readonly UIMouseLeaveEventArgs _mouseLeaveEventArgs = new UIMouseLeaveEventArgs();
+        readonly UIMouseLostFocusEventArgs _mouseLostFocusArgs = new UIMouseLostFocusEventArgs();
 #if DEBUG
         int dbugMsgChainVersion;
 #endif
@@ -365,7 +366,7 @@ namespace LayoutFarm.UI
                         if (_prevMouseDownElement != null &&
                             _prevMouseDownElement != listener)
                         {
-                            _prevMouseDownElement.ListenLostMouseFocus(e1);
+                            _prevMouseDownElement.ListenLostMouseFocus(_mouseLostFocusArgs);
                             _prevMouseDownElement = null;//clear
                         }
                         //------------------------------------------------------- 
@@ -381,7 +382,7 @@ namespace LayoutFarm.UI
                     _prevMouseDownElement != null)
                 {
                     //TODO: review here, auto or manual
-                    _prevMouseDownElement.ListenLostMouseFocus(e);
+                    _prevMouseDownElement.ListenLostMouseFocus(_mouseLostFocusArgs);
                     _prevMouseDownElement = null;
                 }
             }
@@ -463,7 +464,8 @@ namespace LayoutFarm.UI
                     {
                         IUIEventListener tmp = e1.CurrentContextElement;
                         e1.CurrentContextElement = e1.CurrentMouseActive;
-                        e1.CurrentMouseActive.ListenMouseLeave(e1);
+                        _mouseLeaveEventArgs.SetDiff(e.XDiff, e.YDiff);
+                        e1.CurrentMouseActive.ListenMouseLeave(_mouseLeaveEventArgs);
                         e1.CurrentContextElement = tmp;//restore
 
                         _isFirstMouseEnter = true;
@@ -500,7 +502,9 @@ namespace LayoutFarm.UI
                     {
                         IUIEventListener prev = e.CurrentContextElement;
                         e.CurrentContextElement = e.CurrentMouseActive;
-                        e.CurrentMouseActive.ListenMouseLeave(e);
+                        _mouseLeaveEventArgs.IsDragging = e.IsDragging;
+                        _mouseLeaveEventArgs.SetDiff(e.XDiff, e.YDiff);
+                        e.CurrentMouseActive.ListenMouseLeave(_mouseLeaveEventArgs);
                         e.CurrentContextElement = prev;
 
                         if (!e.IsCanceled)

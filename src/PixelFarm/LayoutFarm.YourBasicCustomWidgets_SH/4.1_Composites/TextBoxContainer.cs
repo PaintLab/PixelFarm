@@ -20,7 +20,8 @@ namespace LayoutFarm.CustomWidgets
         bool _isMultiLine;
         bool _isEditable;
         TextEditing.TextSurfaceEventListener _textSurfaceEventListener;
-
+        public event EventHandler<UIKeyEventArgs> KeyDown;
+        public event EventHandler<UIKeyEventArgs> KeyUp;
         public TextBoxContainer(int w, int h, bool multiline, bool maskTextBox = false)
             : base(w, h)
         {
@@ -31,6 +32,9 @@ namespace LayoutFarm.CustomWidgets
 
             //NOTE: this version, maskTextBox=> not support multiline
         }
+        protected override void OnKeyDown(UIKeyEventArgs e) => KeyDown?.Invoke(this, e);
+        protected override void OnKeyUp(UIKeyEventArgs e) => KeyUp?.Invoke(this, e);
+
         public bool IsMultilineTextBox => _isMultiLine;
         public bool IsEditable
         {
@@ -253,7 +257,7 @@ namespace LayoutFarm.CustomWidgets
         {
             base.OnLostKeyboardFocus(e);
         }
-        protected override void OnLostMouseFocus(UIMouseEventArgs e)
+        protected override void OnLostMouseFocus(UIMouseLostFocusEventArgs e)
         {
             base.OnLostMouseFocus(e);
         }

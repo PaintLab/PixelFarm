@@ -130,7 +130,7 @@ namespace LayoutFarm.CustomWidgets
 
 
         //---------------------------------------------------------------- 
-        protected override void OnMouseLeave(UIMouseMoveEventArgs e)
+        protected override void OnMouseLeave(UIMouseLeaveEventArgs e)
         {
             e.MouseCursorStyle = MouseCursorStyle.Arrow;
         }

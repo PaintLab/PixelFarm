@@ -200,7 +200,7 @@ namespace LayoutFarm.CustomWidgets
             _textFlowRenderBox.HandleDoubleClick(e);
             e.CancelBubbling = true;
         }
-        protected override void OnMouseLeave(UIMouseMoveEventArgs e)
+        protected override void OnMouseLeave(UIMouseLeaveEventArgs e)
         {
             e.MouseCursorStyle = MouseCursorStyle.Arrow;
         }

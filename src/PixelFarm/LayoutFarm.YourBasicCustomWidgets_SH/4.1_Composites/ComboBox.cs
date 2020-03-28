@@ -12,7 +12,7 @@ namespace LayoutFarm.CustomWidgets
         {
             _hingeRel.LandPart = this;
         }
-        protected override void OnLostMouseFocus(UIMouseEventArgs e)
+        protected override void OnLostMouseFocus(UIMouseLostFocusEventArgs e)
         {
             _hingeRel.CloseHinge();
             base.OnLostMouseFocus(e);

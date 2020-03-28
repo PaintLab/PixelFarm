@@ -157,6 +157,23 @@ namespace LayoutFarm.UI
         public IUIEventListener CurrentContextElement { get; set; }
     }
 
+    public class UIMouseLostFocusEventArgs : UIEventArgs
+    {
+        public UIMouseLostFocusEventArgs() { }
+    }
+    public class UIMouseLeaveEventArgs : UIEventArgs
+    {
+        public UIMouseLeaveEventArgs() { }
+        public bool IsDragging { get; set; }
+        public int XDiff { get; private set; }
+        public int YDiff { get; private set; }
+
+        public void SetDiff(int xdiff, int ydiff)
+        {
+            this.XDiff = xdiff;
+            this.YDiff = ydiff;
+        }
+    }
 
     public class UIMouseDownEventArgs : UIMouseEventArgs
     {
