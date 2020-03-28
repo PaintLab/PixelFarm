@@ -5,13 +5,13 @@ namespace LayoutFarm.UI
 {
     public class GeneralEventListener : IEventListener
     {
-        public event UIEventHandler<UIMouseEventArgs> MouseDown;
-        public event UIEventHandler<UIMouseEventArgs> MouseUp;
-        public event UIEventHandler<UIMouseEventArgs> MouseMove;
+        public event UIEventHandler<UIMouseDownEventArgs> MouseDown;
+        public event UIEventHandler<UIMouseUpEventArgs> MouseUp;
+        public event UIEventHandler<UIMouseMoveEventArgs> MouseMove;
         public event UIEventHandler<UIMouseEventArgs> MouseDoubleClick;
 
-        public event UIEventHandler<UIMouseEventArgs> MouseEnter;
-        public event UIEventHandler<UIMouseEventArgs> MouseLeave;
+        public event UIEventHandler<UIMouseMoveEventArgs> MouseEnter;
+        public event UIEventHandler<UIMouseMoveEventArgs> MouseLeave;
         public event UIEventHandler<UIMouseHoverEventArgs> MouseHover;
 
         public event UIEventHandler<UIKeyEventArgs> KeyDown;
@@ -60,15 +60,15 @@ namespace LayoutFarm.UI
             MouseDoubleClick?.Invoke(e);
         }
 
-        void IEventListener.ListenMouseDown(UIMouseEventArgs e)
+        void IEventListener.ListenMouseDown(UIMouseDownEventArgs e)
         {
             MouseDown?.Invoke(e);
         }
-        void IEventListener.ListenMouseEnter(UIMouseEventArgs e)
+        void IEventListener.ListenMouseEnter(UIMouseMoveEventArgs e)
         {
             MouseEnter?.Invoke(e);
         }
-        void IEventListener.ListenMouseLeave(UIMouseEventArgs e)
+        void IEventListener.ListenMouseLeave(UIMouseMoveEventArgs e)
         {
             MouseLeave?.Invoke(e);
         }
@@ -76,22 +76,20 @@ namespace LayoutFarm.UI
         {
             MouseHover?.Invoke(e);
         }
-        void IEventListener.ListenMouseMove(UIMouseEventArgs e)
+        void IEventListener.ListenMouseMove(UIMouseMoveEventArgs e)
         {
             MouseMove?.Invoke(e);
         }
 
-        void IEventListener.ListenMouseUp(UIMouseEventArgs e)
+        void IEventListener.ListenMouseUp(UIMouseUpEventArgs e)
         {
             MouseUp?.Invoke(e);
         }
         void IEventListener.ListenMouseClick(UIMouseEventArgs e)
         {
-
         }
-        void IEventListener.ListenMouseWheel(UIMouseEventArgs e)
+        void IEventListener.ListenMouseWheel(UIMouseWheelEventArgs e)
         {
-
         }
         bool IEventListener.ListenProcessDialogKey(UIKeyEventArgs args)
         {

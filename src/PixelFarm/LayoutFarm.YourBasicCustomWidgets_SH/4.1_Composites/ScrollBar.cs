@@ -365,7 +365,7 @@ namespace LayoutFarm.CustomWidgets
             EvalNeedScrollBox();
 
         }
-        protected override void OnMouseDown(UIMouseEventArgs e)
+        protected override void OnMouseDown(UIMouseDownEventArgs e)
         {
             if (e.X < _scrollButton.Left)
             {
@@ -665,7 +665,7 @@ namespace LayoutFarm.CustomWidgets
                 this.StepSmallToMin();
             }
         }
-        protected override void OnMouseWheel(UIMouseEventArgs e)
+        protected override void OnMouseWheel(UIMouseWheelEventArgs e)
         {
             if (e.Delta < 0)
             {   //scroll down
@@ -967,7 +967,7 @@ namespace LayoutFarm.CustomWidgets
             set => _slideBox.ScrollValue = value;
         }
 
-        protected override void OnMouseWheel(UIMouseEventArgs e)
+        protected override void OnMouseWheel(UIMouseWheelEventArgs e)
         {
             if (e.Delta < 0)
             {   //scroll down
@@ -1008,7 +1008,7 @@ namespace LayoutFarm.CustomWidgets
             this.OwnerScrollBar = owner;
         }
         IUIEventListener OwnerScrollBar { get; set; }
-        protected override void OnMouseWheel(UIMouseEventArgs e)
+        protected override void OnMouseWheel(UIMouseWheelEventArgs e)
         {
             this.OwnerScrollBar.ListenMouseWheel(e);
         }

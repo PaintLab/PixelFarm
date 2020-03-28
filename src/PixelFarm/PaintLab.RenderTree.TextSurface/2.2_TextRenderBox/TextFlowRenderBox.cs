@@ -182,7 +182,7 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        public virtual void HandleMouseDown(UIMouseEventArgs e)
+        public virtual void HandleMouseDown(UIMouseDownEventArgs e)
         {
             if (e.Buttons == UIMouseButtons.Left)
             {
@@ -224,7 +224,7 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
-        public virtual void HandleMouseWheel(UIMouseEventArgs e)
+        public virtual void HandleMouseWheel(UIMouseWheelEventArgs e)
         {
 
             //
@@ -419,7 +419,7 @@ namespace LayoutFarm.TextEditing
         {
             //TODO: review this method
         }
-        public void HandleMouseUp(UIMouseEventArgs e)
+        public void HandleMouseUp(UIMouseUpEventArgs e)
         {
             //empty?
         }

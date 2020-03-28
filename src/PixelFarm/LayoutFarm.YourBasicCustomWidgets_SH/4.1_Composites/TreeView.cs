@@ -78,13 +78,13 @@ namespace LayoutFarm.CustomWidgets
             _panel.Add(treeNode);
         }
         //----------------------------------------------------
-        protected override void OnMouseDown(UIMouseEventArgs e)
+        protected override void OnMouseDown(UIMouseDownEventArgs e)
         {
 
             MouseDown?.Invoke(this, e);
         }
 
-        protected override void OnMouseUp(UIMouseEventArgs e)
+        protected override void OnMouseUp(UIMouseUpEventArgs e)
         {
 
             MouseUp?.Invoke(this, e);

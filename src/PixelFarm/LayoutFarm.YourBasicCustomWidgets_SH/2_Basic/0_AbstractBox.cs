@@ -324,9 +324,8 @@ namespace LayoutFarm.CustomWidgets
                 this.Focus();
             }
         }
-        protected override void OnMouseDown(UIMouseEventArgs e)
+        protected override void OnMouseDown(UIMouseDownEventArgs e)
         {
-
             MouseDown?.Invoke(this, e);
             if (this.AcceptKeyboardFocus)
             {
@@ -334,7 +333,7 @@ namespace LayoutFarm.CustomWidgets
             }
 
         }
-        protected override void OnMouseMove(UIMouseEventArgs e)
+        protected override void OnMouseMove(UIMouseMoveEventArgs e)
         {
             if (e.IsDragging)
             {
@@ -345,7 +344,7 @@ namespace LayoutFarm.CustomWidgets
                 MouseMove?.Invoke(this, e);
             }
         }
-        protected override void OnMouseLeave(UIMouseEventArgs e)
+        protected override void OnMouseLeave(UIMouseMoveEventArgs e)
         {
             MouseLeave?.Invoke(this, e);
         }
@@ -357,7 +356,7 @@ namespace LayoutFarm.CustomWidgets
         //{
         //    base.OnMouseHover(e);
         //}
-        protected override void OnMouseUp(UIMouseEventArgs e)
+        protected override void OnMouseUp(UIMouseUpEventArgs e)
         {
             MouseUp?.Invoke(this, e);
         }
@@ -392,7 +391,7 @@ namespace LayoutFarm.CustomWidgets
 
             }
         }
-        protected override void OnMouseWheel(UIMouseEventArgs e)
+        protected override void OnMouseWheel(UIMouseWheelEventArgs e)
         {
             //vertical scroll
 

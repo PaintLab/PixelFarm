@@ -154,12 +154,12 @@ namespace LayoutFarm
                         iportal.PortalMouseUp(_mouseUpEventArgs);
                         if (!e.IsCanceled)
                         {
-                            _draggingElement.ListenMouseUp(e);
+                            _draggingElement.ListenMouseUp(_mouseUpEventArgs);
                         }
                     }
                     else
                     {
-                        _draggingElement.ListenMouseUp(e);
+                        _draggingElement.ListenMouseUp(_mouseUpEventArgs);
                     }
                 }
             }
@@ -214,12 +214,12 @@ namespace LayoutFarm
                             iportal.PortalMouseMove(_mouseMoveEventArgs);
                             if (!e.IsCanceled)
                             {
-                                _draggingElement.ListenMouseMove(e);
+                                _draggingElement.ListenMouseMove(_mouseMoveEventArgs);
                             }
                         }
                         else
                         {
-                            _draggingElement.ListenMouseMove(e);
+                            _draggingElement.ListenMouseMove(_mouseMoveEventArgs);
                         }
 
                     }

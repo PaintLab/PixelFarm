@@ -53,7 +53,7 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-        protected override void OnMouseDown(UIMouseEventArgs e)
+        protected override void OnMouseDown(UIMouseDownEventArgs e)
         {
             base.OnMouseDown(e);
             //when mousedown on control

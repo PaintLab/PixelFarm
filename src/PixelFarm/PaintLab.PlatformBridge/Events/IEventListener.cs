@@ -16,17 +16,15 @@ namespace LayoutFarm.UI
         void ListenKeyUp(UIKeyEventArgs e);
         bool ListenProcessDialogKey(UIKeyEventArgs e);
         //--------------------------------------------------------------------------
-        void ListenMouseDown(UIMouseEventArgs e);
-        void ListenMouseMove(UIMouseEventArgs e);
-        void ListenMouseUp(UIMouseEventArgs e);
+        void ListenMouseDown(UIMouseDownEventArgs e);
+        void ListenMouseMove(UIMouseMoveEventArgs e);
+        void ListenMouseUp(UIMouseUpEventArgs e);
 
-
-        void ListenMouseEnter(UIMouseEventArgs e);
-        void ListenMouseLeave(UIMouseEventArgs e);
+        void ListenMouseEnter(UIMouseMoveEventArgs e);
+        void ListenMouseLeave(UIMouseMoveEventArgs e);
         void ListenMouseHover(UIMouseHoverEventArgs e);
-       
 
-        void ListenMouseWheel(UIMouseEventArgs e);
+        void ListenMouseWheel(UIMouseWheelEventArgs e);
 
         void ListenLostMouseFocus(UIMouseEventArgs e);
         void ListenMousePress(UIMousePressEventArgs e);
