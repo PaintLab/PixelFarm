@@ -190,14 +190,12 @@ namespace LayoutFarm.UI
         //------------------------------------------------------------------------
 
 
-        public void HandleMouseDown(UIMouseEventArgs mouseEventArgs)
+        public void HandleMouseDown(PrimaryMouseEventArgs mouseEventArgs)
         {
             _canvasViewport.FullMode = false;
             _topWinEventRoot.RootMouseDown(mouseEventArgs);
-
-            UpdateCursor(mouseEventArgs);
-
-            ReleaseUIMouseEventArgs(mouseEventArgs);
+            //
+            UpdateCursor();            
 
             PrepareRenderAndFlushAccumGraphics();
 #if DEBUG
@@ -210,66 +208,56 @@ namespace LayoutFarm.UI
             }
 #endif
         }
+         
 
-
-        //------------------
-        void ReleaseUIMouseEventArgs(UIMouseEventArgs mouseEventArgs)
-        {
-            mouseEventArgs.Clear();
- 
-
-        }
-        //------------------
-
-        public void HandleMouseMove(UIMouseEventArgs mouseEventArgs)
+        public void HandleMouseMove(PrimaryMouseEventArgs mouseEventArgs)
         {
             _topWinEventRoot.RootMouseMove(mouseEventArgs);
-            UpdateCursor(mouseEventArgs);
-            ReleaseUIMouseEventArgs(mouseEventArgs);
+            UpdateCursor();
             PrepareRenderAndFlushAccumGraphics();
         }
 
-        public void HandleMouseUp(UIMouseEventArgs mouseEventArgs)
+        public void HandleMouseUp(PrimaryMouseEventArgs mouseEventArgs)
         {
             _canvasViewport.FullMode = false;
             _topWinEventRoot.RootMouseUp(mouseEventArgs);
-
-            UpdateCursor(mouseEventArgs);
-            ReleaseUIMouseEventArgs(mouseEventArgs);
+            UpdateCursor();
+           
             PrepareRenderAndFlushAccumGraphics();
         }
 
         Cursor _latestCustomCursor;
-        void UpdateCursor(UIMouseEventArgs mouseEventArgs)
+        void UpdateCursor()
         {
-            if (mouseEventArgs.CustomMouseCursor != null)
+            
+            if (_topWinEventRoot.RequestCursor != null)
             {
                 //specific custom cursor
                 _currentCursorStyle = MouseCursorStyle.CustomStyle;
-                if (_latestCustomCursor != mouseEventArgs.CustomMouseCursor)
+                if (_latestCustomCursor != _topWinEventRoot.RequestCursor)
                 {
                     //some change                     
-                    ChangeCursor(_latestCustomCursor = mouseEventArgs.CustomMouseCursor);
+                    ChangeCursor(_latestCustomCursor = _topWinEventRoot.RequestCursor);
                 }
             }
             else
             {
                 _latestCustomCursor = null;
-                if (_currentCursorStyle != mouseEventArgs.MouseCursorStyle)
+                if (_currentCursorStyle != _topWinEventRoot.RequestCursorStyle)
                 {
-                    ChangeCursor(_currentCursorStyle = mouseEventArgs.MouseCursorStyle);
+                    ChangeCursor(_currentCursorStyle = _topWinEventRoot.RequestCursorStyle);
                 }
             }
 
 
         }
-        public void HandleMouseWheel(UIMouseEventArgs mouseEventArgs)
+        public void HandleMouseWheel(PrimaryMouseEventArgs mouseEventArgs)
         {
             _canvasViewport.FullMode = true;
             _topWinEventRoot.RootMouseWheel(mouseEventArgs);
-            UpdateCursor(mouseEventArgs);
+            UpdateCursor();
 
-            ReleaseUIMouseEventArgs(mouseEventArgs);
+          
             PrepareRenderAndFlushAccumGraphics();
         }
 

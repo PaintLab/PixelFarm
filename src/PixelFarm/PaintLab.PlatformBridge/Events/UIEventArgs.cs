@@ -3,7 +3,7 @@
 using System;
 namespace LayoutFarm.UI
 {
-   
+
     public class UIKeyEventArgs : UIEventArgs
     {
         uint _keyData;
@@ -153,7 +153,7 @@ namespace LayoutFarm.UI
         public IUIEventListener CurrentContextElement { get; set; }
     }
     public class UIMouseHoverEventArgs : EventArgs
-    {   
+    {
         public IUIEventListener CurrentContextElement { get; set; }
     }
 
@@ -227,6 +227,61 @@ namespace LayoutFarm.UI
             CurrentMousePressMonitor = listener;
         }
     }
+
+    /// <summary>
+    /// primary mouse input
+    /// </summary>
+    public class PrimaryMouseEventArgs : EventArgs
+    {
+        public int Left { get; private set; }
+        public int Top { get; private set; }
+        public UIMouseButtons Button { get; private set; }
+        public int Clicks { get; private set; }
+        public int Delta { get; private set; }
+        public PrimaryMouseEventArgs() { }
+        public void SetMouseDownEventInfo(int x, int y, UIMouseButtons button, int clicks)
+        {
+            UIEventName = UIEventName.KeyDown;
+            this.Left = x;
+            this.Top = y;
+            Button = button;
+            Clicks = clicks;
+            Delta = 0;
+        }
+        public void SetMouseMoveEventInfo(int x, int y)
+        {
+            UIEventName = UIEventName.MouseMove;
+            this.Left = x;
+            this.Top = y;
+            Button = UIMouseButtons.None;
+            Clicks = 0;
+            Delta = 0;
+        }
+        public void SetMouseUpEventInfo(int x, int y, UIMouseButtons button)
+        {
+            UIEventName = UIEventName.MouseUp;
+            this.Left = x;
+            this.Top = y;
+            Button = button;
+            Clicks = 0;
+            Delta = 0;
+        }
+        public void SetMouseWheelEventInfo(int x, int y, int delta)
+        {
+            UIEventName = UIEventName.Wheel;
+            this.Left = x;
+            this.Top = y;
+            Button = UIMouseButtons.None;
+            Clicks = 0;
+            Delta = delta;
+
+        }
+
+        public UIEventName UIEventName { get; private set; }
+    }
+
+
+
 
     public abstract class Cursor
     {
