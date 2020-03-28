@@ -212,10 +212,10 @@ namespace LayoutFarm.ColorBlenderSample
             var sampleButton = new LayoutFarm.CustomWidgets.Box(100, _chartHeight);
             host.AddChild(sampleButton);
             int count = 0;
-            sampleButton.MouseDown += new EventHandler<UIMouseEventArgs>((s, e2) =>
+            sampleButton.MouseDown += (s, e2) =>
             {
                 Console.WriteLine("click :" + (count++));
-            });
+            };
 
             TestSimplePlot1(host);
 

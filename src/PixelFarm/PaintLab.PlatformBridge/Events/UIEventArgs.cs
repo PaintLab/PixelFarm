@@ -215,7 +215,10 @@ namespace LayoutFarm.UI
                   this.GlobalY =
                   this.CapturedMouseX =
                   this.CapturedMouseY = 0;
+
             this.MouseCursorStyle = UI.MouseCursorStyle.Default;
+            CustomMouseCursor = null;
+
             this.IsDragging = false;
             this.DraggingElement = null;
 

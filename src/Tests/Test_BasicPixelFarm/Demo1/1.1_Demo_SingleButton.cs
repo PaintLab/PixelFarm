@@ -1,9 +1,6 @@
 ﻿//Apache2, 2014-present, WinterDev
 
 using System;
-using PixelFarm.Drawing;
-
-using LayoutFarm.UI;
 namespace LayoutFarm
 {
     [DemoNote("1.1 SingleButton")]
@@ -14,12 +11,12 @@ namespace LayoutFarm
             var sampleButton = new LayoutFarm.CustomWidgets.Box(30, 30);
             host.AddChild(sampleButton);
             int count = 0;
-            sampleButton.MouseDown += new EventHandler<UIMouseEventArgs>((s, e2) =>
+            sampleButton.MouseDown += (s, e2) =>
             {
                 Console.WriteLine("click :" + (count++));
-            });
+            };
         }
     }
 
-   
+
 }

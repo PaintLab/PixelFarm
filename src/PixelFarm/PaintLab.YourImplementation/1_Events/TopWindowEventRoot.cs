@@ -46,6 +46,7 @@ namespace LayoutFarm
 
             _iTopBoxEventPortal = _topWinBoxEventPortal = new RenderElementEventPortal(topRenderElement);
             _rootgfx = topRenderElement.Root;
+
             _hoverMonitoringTask = new UIHoverMonitorTask();
             _hoverMonitoringTask.IntervalInMillisec = 100;//ms
             _hoverMonitoringTask.Enabled = true;
@@ -120,6 +121,9 @@ namespace LayoutFarm
                     _draggingElement = _currentMouseActiveElement;
                 }
             }
+
+            RequestCursorStyle = e.MouseCursorStyle;
+            RequestCursor = e.CustomMouseCursor;
         }
         void ITopWindowEventRoot.RootMouseUp(PrimaryMouseEventArgs primaryMouseEventArgs)
         {
@@ -170,6 +174,9 @@ namespace LayoutFarm
 
             }
             _localMouseDownX = _localMouseDownY = 0;
+
+            RequestCursorStyle = e.MouseCursorStyle;
+            RequestCursor = e.CustomMouseCursor;
         }
 
 
@@ -230,6 +237,9 @@ namespace LayoutFarm
                 _iTopBoxEventPortal.PortalMouseMove(_mouseMoveEventArgs);
                 _hoverMonitoringTask.SetMonitorElement(e.CurrentContextElement);
             }
+
+            RequestCursorStyle = e.MouseCursorStyle;
+            RequestCursor = e.CustomMouseCursor;
         }
         void ITopWindowEventRoot.RootMouseWheel(PrimaryMouseEventArgs primaryMouseEventArgs)
         {
@@ -241,6 +251,9 @@ namespace LayoutFarm
             e.Alt = _lastKeydownWithAlt;
             e.Ctrl = _lastKeydownWithControl;
             _iTopBoxEventPortal.PortalMouseWheel(_wheelEventArgs);
+
+            RequestCursorStyle = e.MouseCursorStyle;
+            RequestCursor = e.CustomMouseCursor;
         }
         void ITopWindowEventRoot.RootGotFocus(UIFocusEventArgs e)
         {
