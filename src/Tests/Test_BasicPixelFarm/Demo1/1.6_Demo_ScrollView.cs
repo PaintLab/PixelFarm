@@ -97,7 +97,7 @@ namespace LayoutFarm
                 imgbox.SetLocation(0, lastY);
                 imgbox.MouseUp += (s, e) =>
                 {
-                    if (e.Button == UIMouseButtons.Right)
+                    if (e.Buttons == UIMouseButtons.Right)
                     {
                         //test remove this imgbox on right mouse click
                         panel.RemoveChild(imgbox);

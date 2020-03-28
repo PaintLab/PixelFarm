@@ -3,7 +3,7 @@
 using System;
 namespace LayoutFarm.UI
 {
-   
+
     public class UIKeyEventArgs : UIEventArgs
     {
         uint _keyData;
@@ -153,18 +153,49 @@ namespace LayoutFarm.UI
         public IUIEventListener CurrentContextElement { get; set; }
     }
     public class UIMouseHoverEventArgs : EventArgs
-    {   
+    {
         public IUIEventListener CurrentContextElement { get; set; }
     }
 
-    public class UIMouseEventArgs : UIEventArgs
+
+    public class UIMouseDownEventArgs : UIMouseEventArgs
+    {
+        public UIMouseDownEventArgs() { }
+        public int Clicks => _click;
+        public UIMouseButtons Buttons
+        {
+            get => _buttons;
+            set => _buttons = value;
+        }
+    }
+    public class UIMouseMoveEventArgs : UIMouseEventArgs
+    {
+        public UIMouseMoveEventArgs() { }
+        public UIMouseButtons Buttons
+        {
+            get => _buttons;
+            set => _buttons = value;
+        }
+    }
+    public class UIMouseUpEventArgs : UIMouseEventArgs
+    {
+        public UIMouseUpEventArgs() { }
+        public bool IsAlsoDoubleClick { get; set; }
+        public UIMouseButtons Buttons => _buttons;
+
+    }
+    public class UIMouseWheelEventArgs : UIMouseEventArgs
+    {
+        public UIMouseWheelEventArgs() { }
+        public int Delta => _delta;
+    }
+    public abstract class UIMouseEventArgs : UIEventArgs
     {
         public UIMouseEventArgs()
         {
         }
-        public UIMouseButtons Button { get; set; }
-        public int Delta { get; private set; }
-        public int Clicks { get; private set; }
+
+
         public int GlobalX { get; private set; }
         public int GlobalY { get; private set; }
         public int XDiff { get; private set; }
@@ -180,25 +211,29 @@ namespace LayoutFarm.UI
             this.GlobalX = x;
             this.GlobalY = y;
             this.SetLocation(x, y);
-            Button = button;
-            Clicks = clicks;
-            Delta = delta;
+            _buttons = button;
+            _click = clicks;
+            _delta = delta;
         }
-
-
+        internal int _delta;
+        internal int _click;
+        internal UIMouseButtons _buttons;
 
         public override void Clear()
         {
             base.Clear();
-            this.Button = UIMouseButtons.Left;
-            this.Clicks =
+            _buttons = UIMouseButtons.Left;
+            _click =
                   this.XDiff =
                   this.YDiff =
                   this.GlobalX =
                   this.GlobalY =
                   this.CapturedMouseX =
                   this.CapturedMouseY = 0;
+
             this.MouseCursorStyle = UI.MouseCursorStyle.Default;
+            CustomMouseCursor = null;
+
             this.IsDragging = false;
             this.DraggingElement = null;
 
@@ -216,7 +251,7 @@ namespace LayoutFarm.UI
 
         public IUIEventListener CurrentMouseActive { get; set; }
         public IUIEventListener PreviousMouseDown { get; set; }
-        public bool IsAlsoDoubleClick { get; set; }
+
         public int CapturedMouseX { get; set; }
         public int CapturedMouseY { get; set; }
         public int DiffCapturedX => this.X - this.CapturedMouseX;
@@ -227,6 +262,67 @@ namespace LayoutFarm.UI
             CurrentMousePressMonitor = listener;
         }
     }
+
+    /// <summary>
+    /// primary mouse input
+    /// </summary>
+    public class PrimaryMouseEventArgs : EventArgs
+    {
+        //accept input from external platform
+        //then we translate this primary-mouse-event-args
+        //to various UIMouseEventArgs
+
+
+        public int Left { get; private set; }
+        public int Top { get; private set; }
+        public UIMouseButtons Button { get; private set; }
+        public int Clicks { get; private set; }
+        public int Delta { get; private set; }
+
+        public PrimaryMouseEventArgs() { }
+        public void SetMouseDownEventInfo(int x, int y, UIMouseButtons button, int clicks)
+        {
+            UIEventName = UIEventName.KeyDown;
+            this.Left = x;
+            this.Top = y;
+            Button = button;
+            Clicks = clicks;
+            Delta = 0;
+        }
+        public void SetMouseMoveEventInfo(int x, int y)
+        {
+            UIEventName = UIEventName.MouseMove;
+            this.Left = x;
+            this.Top = y;
+            Button = UIMouseButtons.None;
+            Clicks = 0;
+            Delta = 0;
+        }
+        public void SetMouseUpEventInfo(int x, int y, UIMouseButtons button)
+        {
+            UIEventName = UIEventName.MouseUp;
+            this.Left = x;
+            this.Top = y;
+            Button = button;
+            Clicks = 0;
+            Delta = 0;
+        }
+        public void SetMouseWheelEventInfo(int x, int y, int delta)
+        {
+            UIEventName = UIEventName.Wheel;
+            this.Left = x;
+            this.Top = y;
+            Button = UIMouseButtons.None;
+            Clicks = 0;
+            Delta = delta;
+
+        }
+
+        public UIEventName UIEventName { get; private set; }
+    }
+
+
+
 
     public abstract class Cursor
     {

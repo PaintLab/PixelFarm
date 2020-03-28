@@ -5,19 +5,19 @@ namespace LayoutFarm.UI
 {
     public class GeneralEventListener : IEventListener
     {
-        public event UIEventHandler<UIMouseEventArgs> MouseDown;
-        public event UIEventHandler<UIMouseEventArgs> MouseUp;
-        public event UIEventHandler<UIMouseEventArgs> MouseMove;
-        public event UIEventHandler<UIMouseEventArgs> MouseDoubleClick;
+        public event EventHandler<UIMouseDownEventArgs> MouseDown;
+        public event EventHandler<UIMouseUpEventArgs> MouseUp;
+        public event EventHandler<UIMouseMoveEventArgs> MouseMove;
+        public event EventHandler<UIMouseEventArgs> MouseDoubleClick;
 
-        public event UIEventHandler<UIMouseEventArgs> MouseEnter;
-        public event UIEventHandler<UIMouseEventArgs> MouseLeave;
-        public event UIEventHandler<UIMouseHoverEventArgs> MouseHover;
+        public event EventHandler<UIMouseMoveEventArgs> MouseEnter;
+        public event EventHandler<UIMouseMoveEventArgs> MouseLeave;
+        public event EventHandler<UIMouseHoverEventArgs> MouseHover;
 
-        public event UIEventHandler<UIKeyEventArgs> KeyDown;
-        public event UIEventHandler<UIKeyEventArgs> KeyPress;
-        public event UIEventHandler<UIKeyEventArgs> KeyUp;
-        public event UIEventHandler<UIMousePressEventArgs> ContinuousMousePress;
+        public event EventHandler<UIKeyEventArgs> KeyDown;
+        public event EventHandler<UIKeyEventArgs> KeyPress;
+        public event EventHandler<UIKeyEventArgs> KeyUp;
+        public event EventHandler<UIMousePressEventArgs> MousePress;
 
         void IEventListener.ListenGotKeyboardFocus(UIFocusEventArgs e)
         {
@@ -31,17 +31,17 @@ namespace LayoutFarm.UI
 
         void IEventListener.ListenKeyDown(UIKeyEventArgs e)
         {
-            KeyDown?.Invoke(e);
+            KeyDown?.Invoke(this, e);
         }
 
         void IEventListener.ListenKeyPress(UIKeyEventArgs e)
         {
-            KeyPress?.Invoke(e);
+            KeyPress?.Invoke(this, e);
         }
 
         void IEventListener.ListenKeyUp(UIKeyEventArgs e)
         {
-            KeyUp?.Invoke(e);
+            KeyUp?.Invoke(this, e);
         }
 
         void IEventListener.ListenLostKeyboardFocus(UIFocusEventArgs e)
@@ -57,41 +57,39 @@ namespace LayoutFarm.UI
 
         void IEventListener.ListenMouseDoubleClick(UIMouseEventArgs e)
         {
-            MouseDoubleClick?.Invoke(e);
+            MouseDoubleClick?.Invoke(this, e);
         }
 
-        void IEventListener.ListenMouseDown(UIMouseEventArgs e)
+        void IEventListener.ListenMouseDown(UIMouseDownEventArgs e)
         {
-            MouseDown?.Invoke(e);
+            MouseDown?.Invoke(this, e);
         }
-        void IEventListener.ListenMouseEnter(UIMouseEventArgs e)
+        void IEventListener.ListenMouseEnter(UIMouseMoveEventArgs e)
         {
-            MouseEnter?.Invoke(e);
+            MouseEnter?.Invoke(this, e);
         }
-        void IEventListener.ListenMouseLeave(UIMouseEventArgs e)
+        void IEventListener.ListenMouseLeave(UIMouseMoveEventArgs e)
         {
-            MouseLeave?.Invoke(e);
+            MouseLeave?.Invoke(this, e);
         }
         void IEventListener.ListenMouseHover(UIMouseHoverEventArgs e)
         {
-            MouseHover?.Invoke(e);
+            MouseHover?.Invoke(this, e);
         }
-        void IEventListener.ListenMouseMove(UIMouseEventArgs e)
+        void IEventListener.ListenMouseMove(UIMouseMoveEventArgs e)
         {
-            MouseMove?.Invoke(e);
+            MouseMove?.Invoke(this, e);
         }
 
-        void IEventListener.ListenMouseUp(UIMouseEventArgs e)
+        void IEventListener.ListenMouseUp(UIMouseUpEventArgs e)
         {
-            MouseUp?.Invoke(e);
+            MouseUp?.Invoke(this, e);
         }
         void IEventListener.ListenMouseClick(UIMouseEventArgs e)
         {
-
         }
-        void IEventListener.ListenMouseWheel(UIMouseEventArgs e)
+        void IEventListener.ListenMouseWheel(UIMouseWheelEventArgs e)
         {
-
         }
         bool IEventListener.ListenProcessDialogKey(UIKeyEventArgs args)
         {
@@ -99,7 +97,7 @@ namespace LayoutFarm.UI
         }
         void IEventListener.ListenMousePress(UIMousePressEventArgs e)
         {
-            ContinuousMousePress?.Invoke(e);
+            MousePress?.Invoke(this, e);
         }
     }
 

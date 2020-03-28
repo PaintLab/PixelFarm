@@ -79,14 +79,14 @@ namespace LayoutFarm
                 : base(w, h)
             {
             }
-            protected override void OnMouseDown(UIMouseEventArgs e)
+            protected override void OnMouseDown(UIMouseDownEventArgs e)
             {
                 ////test only!!!         
                 _lastX = e.X;
                 _lastY = e.Y;
                 _pointList.Add(new Point(_lastX, _lastY));
             }
-            protected override void OnMouseMove(UIMouseEventArgs e)
+            protected override void OnMouseMove(UIMouseMoveEventArgs e)
             {
                 //test
                 //draw on this canvas
@@ -113,7 +113,7 @@ namespace LayoutFarm
 
                 this.InvalidateCanvasContent();
             }
-            protected override void OnMouseUp(UIMouseEventArgs e)
+            protected override void OnMouseUp(UIMouseUpEventArgs e)
             {
             }
         }
@@ -155,14 +155,14 @@ namespace LayoutFarm
             int x_pos = 0;
 
             GeneralEventListener evListener = new GeneralEventListener();
-            evListener.MouseEnter += (e) =>
+            evListener.MouseEnter += (s, e) =>
             {
                 IUIEventListener ctx = e.CurrentContextElement;
                 LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;
                 box.BackColor = Color.Red;
                 System.Diagnostics.Debug.WriteLine("mouse_enter:" + box.dbugId);
             };
-            evListener.MouseLeave += (e) =>
+            evListener.MouseLeave += (s, e) =>
             {
                 IUIEventListener ctx = e.CurrentContextElement;
                 LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;

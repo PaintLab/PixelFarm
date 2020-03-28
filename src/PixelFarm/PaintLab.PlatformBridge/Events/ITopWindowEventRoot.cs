@@ -10,10 +10,10 @@ namespace LayoutFarm.UI
             //bridge from platform-specific window event
             //to our abstract windows
             //---------------            
-            void RootMouseDown(UIMouseEventArgs mouseEventArgs);
-            void RootMouseUp(UIMouseEventArgs mouseEventArgs);
-            void RootMouseWheel(UIMouseEventArgs mouseEventArgs);
-            void RootMouseMove(UIMouseEventArgs mouseEventArgs);
+            void RootMouseDown(PrimaryMouseEventArgs mouseEventArgs);
+            void RootMouseUp(PrimaryMouseEventArgs mouseEventArgs);
+            void RootMouseWheel(PrimaryMouseEventArgs mouseEventArgs);
+            void RootMouseMove(PrimaryMouseEventArgs mouseEventArgs);
             //
             void RootGotFocus(UIFocusEventArgs e);
             void RootLostFocus(UIFocusEventArgs e);
@@ -24,6 +24,9 @@ namespace LayoutFarm.UI
             bool RootProcessDialogKey(UIKeyEventArgs key);
 
             //TODO: touch...
+
+            Cursor RequestCursor { get; }
+            MouseCursorStyle RequestCursorStyle { get; }
         }
         public interface ITopWindowEventRootProvider
         {

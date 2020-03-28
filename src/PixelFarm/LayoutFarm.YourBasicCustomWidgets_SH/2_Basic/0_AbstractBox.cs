@@ -133,14 +133,14 @@ namespace LayoutFarm.CustomWidgets
         public bool EnableDoubleBuffer { get; set; }
 
         //TODO: review this fields 
-        public event EventHandler<UIMouseEventArgs> MouseDown;
-        public event EventHandler<UIMouseEventArgs> MouseMove;
-        public event EventHandler<UIMouseEventArgs> MouseUp;
-         
-        public event EventHandler<UIMouseEventArgs> MouseLeave;
-        public event EventHandler<UIMouseEventArgs> MouseDrag; 
+        public event EventHandler<UIMouseDownEventArgs> MouseDown;
+        public event EventHandler<UIMouseMoveEventArgs> MouseMove;
+        public event EventHandler<UIMouseUpEventArgs> MouseUp;
 
-        public event EventHandler<UIMouseEventArgs> MouseWheel;
+        public event EventHandler<UIMouseMoveEventArgs> MouseLeave;
+        public event EventHandler<UIMouseMoveEventArgs> MouseDrag;
+
+        public event EventHandler<UIMouseWheelEventArgs> MouseWheel;
         public event EventHandler<UIMouseEventArgs> LostMouseFocus;
 
 
@@ -227,7 +227,7 @@ namespace LayoutFarm.CustomWidgets
             parent.InvalidateGraphics();
         }
 
-        protected void RaiseMouseDrag(object sender, UIMouseEventArgs e)
+        protected void RaiseMouseDrag(object sender, UIMouseMoveEventArgs e)
         {
             MouseDrag?.Invoke(sender, e);
         }
@@ -318,15 +318,14 @@ namespace LayoutFarm.CustomWidgets
         }
 
         protected override void OnDoubleClick(UIMouseEventArgs e)
-        { 
+        {
             if (this.AcceptKeyboardFocus)
             {
                 this.Focus();
             }
         }
-        protected override void OnMouseDown(UIMouseEventArgs e)
+        protected override void OnMouseDown(UIMouseDownEventArgs e)
         {
-
             MouseDown?.Invoke(this, e);
             if (this.AcceptKeyboardFocus)
             {
@@ -334,7 +333,7 @@ namespace LayoutFarm.CustomWidgets
             }
 
         }
-        protected override void OnMouseMove(UIMouseEventArgs e)
+        protected override void OnMouseMove(UIMouseMoveEventArgs e)
         {
             if (e.IsDragging)
             {
@@ -345,7 +344,7 @@ namespace LayoutFarm.CustomWidgets
                 MouseMove?.Invoke(this, e);
             }
         }
-        protected override void OnMouseLeave(UIMouseEventArgs e)
+        protected override void OnMouseLeave(UIMouseMoveEventArgs e)
         {
             MouseLeave?.Invoke(this, e);
         }
@@ -357,7 +356,7 @@ namespace LayoutFarm.CustomWidgets
         //{
         //    base.OnMouseHover(e);
         //}
-        protected override void OnMouseUp(UIMouseEventArgs e)
+        protected override void OnMouseUp(UIMouseUpEventArgs e)
         {
             MouseUp?.Invoke(this, e);
         }
@@ -392,7 +391,7 @@ namespace LayoutFarm.CustomWidgets
 
             }
         }
-        protected override void OnMouseWheel(UIMouseEventArgs e)
+        protected override void OnMouseWheel(UIMouseWheelEventArgs e)
         {
             //vertical scroll
 

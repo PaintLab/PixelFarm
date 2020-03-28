@@ -2,7 +2,7 @@
 
 namespace LayoutFarm.UI
 {
-    public enum UIEventName
+    public enum UIEventName : byte
     {
         Unknown,
         Click,
@@ -11,8 +11,8 @@ namespace LayoutFarm.UI
         MouseMove,
         MouseUp,
         MouseHover,
-       
-        KeyDown,       
+
+        KeyDown,
         KeyUp,
         KeyPress,
         ProcessDialogKey,
@@ -20,14 +20,14 @@ namespace LayoutFarm.UI
         MouseLostFocus,
         Wheel,
     }
-    public enum UIKeyEventName
+    public enum UIKeyEventName : byte
     {
         KeyDown,
         KeyUp,
         KeyPress,
         ProcessDialogKey
     }
-    public enum UIMouseEventName
+    public enum UIMouseEventName : byte
     {
         Click,
         DoubleClick,
@@ -39,13 +39,13 @@ namespace LayoutFarm.UI
         MouseHover,
         MouseWheel
     }
-    public enum UIDragEventName
+    public enum UIDragEventName : byte
     {
         DragStart,
         DragStop,
         Dragging
     }
-    public enum UIFocusEventName
+    public enum UIFocusEventName : byte
     {
         Focus,
         LossingFocus

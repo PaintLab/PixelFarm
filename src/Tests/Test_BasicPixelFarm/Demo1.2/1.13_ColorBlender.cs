@@ -180,7 +180,7 @@ namespace LayoutFarm.ColorBlenderSample
                 lblChromaDarken.AttachUIBehaviour(buttonBeh);
 
                 UI.GeneralEventListener evListener = new UI.GeneralEventListener();
-                evListener.MouseDown += e =>
+                evListener.MouseDown += (s, e) =>
                 {
                     PixelFarm.Drawing.Color color = PixelFarm.Drawing.KnownColors.DeepPink;
                     PaintLab.ChromaJs.Chroma chroma = new PaintLab.ChromaJs.Chroma(color);
@@ -209,7 +209,7 @@ namespace LayoutFarm.ColorBlenderSample
                 lblLighten.SetLocation(x, y);
                 {
                     UI.GeneralEventListener evListener = new UI.GeneralEventListener();
-                    evListener.MouseDown += e =>
+                    evListener.MouseDown += (s, e) =>
                     {
                         PixelFarm.Drawing.Color color = PixelFarm.Drawing.KnownColors.DeepPink;
                         PaintLab.ChromaJs.Chroma chroma = new PaintLab.ChromaJs.Chroma(color);
