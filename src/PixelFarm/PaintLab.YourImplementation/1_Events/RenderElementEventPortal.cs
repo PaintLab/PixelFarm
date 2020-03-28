@@ -563,12 +563,12 @@ namespace LayoutFarm.UI
                             return false;
                         }
                         listener.ListenMouseUp(e1);
-                        //retrun true to stop this loop (no further bubble up)
+                        
+                        //return true to stop this loop (no further bubble up)
                         //return false to bubble this to upper control       
                         //click or double click
                         if (e1.CurrentContextElement == _currentMouseDown)
-                        {
-                            //same elem
+                        {                             
                             if (e.IsAlsoDoubleClick)
                             {
                                 listener.ListenMouseDoubleClick(e);
