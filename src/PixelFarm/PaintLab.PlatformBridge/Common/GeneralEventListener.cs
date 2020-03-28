@@ -8,6 +8,7 @@ namespace LayoutFarm.UI
         public event EventHandler<UIMouseDownEventArgs> MouseDown;
         public event EventHandler<UIMouseUpEventArgs> MouseUp;
         public event EventHandler<UIMouseMoveEventArgs> MouseMove;
+        public event EventHandler<UIMouseMoveEventArgs> MouseDrag;
         public event EventHandler<UIMouseEventArgs> MouseDoubleClick;
 
         public event EventHandler<UIMouseMoveEventArgs> MouseEnter;
@@ -18,6 +19,7 @@ namespace LayoutFarm.UI
         public event EventHandler<UIKeyEventArgs> KeyPress;
         public event EventHandler<UIKeyEventArgs> KeyUp;
         public event EventHandler<UIMousePressEventArgs> MousePress;
+        public event EventHandler<UIMouseWheelEventArgs> MouseWheel;
 
         void IEventListener.ListenGotKeyboardFocus(UIFocusEventArgs e)
         {
@@ -78,7 +80,14 @@ namespace LayoutFarm.UI
         }
         void IEventListener.ListenMouseMove(UIMouseMoveEventArgs e)
         {
-            MouseMove?.Invoke(this, e);
+            if (e.IsDragging)
+            {
+                MouseDrag?.Invoke(this, e);
+            }
+            else
+            {
+                MouseMove?.Invoke(this, e);
+            }
         }
 
         void IEventListener.ListenMouseUp(UIMouseUpEventArgs e)
@@ -88,9 +97,8 @@ namespace LayoutFarm.UI
         void IEventListener.ListenMouseClick(UIMouseEventArgs e)
         {
         }
-        void IEventListener.ListenMouseWheel(UIMouseWheelEventArgs e)
-        {
-        }
+        void IEventListener.ListenMouseWheel(UIMouseWheelEventArgs e) => MouseWheel?.Invoke(this, e);
+
         bool IEventListener.ListenProcessDialogKey(UIKeyEventArgs args)
         {
             return false;

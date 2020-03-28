@@ -134,16 +134,15 @@ namespace LayoutFarm.CustomWidgets
 
         //TODO: review this fields 
         public event EventHandler<UIMouseDownEventArgs> MouseDown;
+
         public event EventHandler<UIMouseMoveEventArgs> MouseMove;
+        public event EventHandler<UIMouseMoveEventArgs> MouseEnter;
+        public event EventHandler<UIMouseMoveEventArgs> MouseDrag;
+        public event EventHandler<UIMouseWheelEventArgs> MouseWheel;
         public event EventHandler<UIMouseUpEventArgs> MouseUp;
 
         public event EventHandler<UIMouseLeaveEventArgs> MouseLeave;
-        public event EventHandler<UIMouseMoveEventArgs> MouseDrag;
-
-        public event EventHandler<UIMouseWheelEventArgs> MouseWheel;
         public event EventHandler<UIMouseLostFocusEventArgs> LostMouseFocus;
-
-
         //some secondary event eg.
         //mouse-press, mouse-hover,
         //not expose in event fields
@@ -151,9 +150,6 @@ namespace LayoutFarm.CustomWidgets
         //user must use it through ExternalEventListener / Behaviour
 
 
-        public event EventHandler<UIKeyEventArgs> KeyDown;
-        public event EventHandler<UIKeyEventArgs> KeyUp;
-        // 
         public override RenderElement CurrentPrimaryRenderElement => _primElement;
 
         protected override void OnAcceptVisitor(UIVisitor visitor)
@@ -227,10 +223,7 @@ namespace LayoutFarm.CustomWidgets
             parent.InvalidateGraphics();
         }
 
-        protected void RaiseMouseDrag(object sender, UIMouseMoveEventArgs e)
-        {
-            MouseDrag?.Invoke(sender, e);
-        }
+
         public bool NeedClipArea
         {
             get => _needClipArea;
@@ -324,6 +317,10 @@ namespace LayoutFarm.CustomWidgets
                 this.Focus();
             }
         }
+        protected override void OnMouseEnter(UIMouseMoveEventArgs e)
+        {
+            MouseEnter?.Invoke(this, e);
+        }
         protected override void OnMouseDown(UIMouseDownEventArgs e)
         {
             MouseDown?.Invoke(this, e);
@@ -331,7 +328,6 @@ namespace LayoutFarm.CustomWidgets
             {
                 this.Focus();
             }
-
         }
         protected override void OnMouseMove(UIMouseMoveEventArgs e)
         {
@@ -418,16 +414,13 @@ namespace LayoutFarm.CustomWidgets
                 _primElement.SetViewport(_viewportLeft, _viewportTop);
                 this.InvalidateGraphics();
             }
-            //
             MouseWheel?.Invoke(this, e);
-            //
         }
         //-------------------
         protected override bool OnProcessDialogKey(UIKeyEventArgs e)
         {
 
-            KeyDown?.Invoke(this, e);
-
+            //KeyDown?.Invoke(this, e);
             //return true if you want to stop event bubble to other 
             if (e.CancelBubbling)
             {
@@ -438,21 +431,7 @@ namespace LayoutFarm.CustomWidgets
                 return base.OnProcessDialogKey(e);
             }
         }
-        protected override void OnKeyDown(UIKeyEventArgs e)
-        {
-            base.OnKeyDown(e);
-            KeyDown?.Invoke(this, e);
-        }
-        protected override void OnKeyPress(UIKeyEventArgs e)
-        {
-            base.OnKeyPress(e);
-        }
-        protected override void OnKeyUp(UIKeyEventArgs e)
-        {
-            base.OnKeyUp(e);
-            KeyUp?.Invoke(this, e);
-        }
-        //-------------------
+
         public override int InnerWidth => _innerWidth;
         public override int InnerHeight => _innerHeight;
 
