@@ -45,22 +45,22 @@ namespace LayoutFarm.UI
 
     public abstract class UIEventArgs : EventArgs
     {
-        int _x;
-        int _y;
-        IUIEventListener _currContext;
-
         public UIEventArgs()
         {
         }
         public virtual void Clear()
         {
-            _x = _y = 0;
+            X = Y = 0;
 
             this.ExactHitObject = this.SourceHitElement = this.CurrentContextElement = null;
             this.Shift = this.Alt = this.Ctrl = this.CancelBubbling = false;
             MouseCursorStyle = MouseCursorStyle.Default;
             CustomMouseCursor = null;
         }
+
+        /// <summary>
+        /// request for custom mouse cursor
+        /// </summary>
         public MouseCursorStyle MouseCursorStyle { get; set; }
         /// <summary>
         /// request for custom mouse cursor
@@ -79,23 +79,19 @@ namespace LayoutFarm.UI
         //TODO: review here, ensure set this value 
 
 
-        public IUIEventListener CurrentContextElement
-        {
-            get => _currContext;
-            set => _currContext = value;
-        }
+        public IUIEventListener CurrentContextElement { get; set; }
         //TODO: review here, ensure set this value  
         public bool Shift { get; set; }
         public bool Alt { get; set; }
         public bool Ctrl { get; set; }
         public void SetLocation(int x, int y)
         {
-            _x = x;
-            _y = y;
+            X = x;
+            Y = y;
         }
 
-        public int X => _x;
-        public int Y => _y;
+        public int X { get; private set; }
+        public int Y { get; private set; }
 
         public bool IsCanceled { get; private set; }
         public void StopPropagation()
@@ -193,13 +189,26 @@ namespace LayoutFarm.UI
             get => _buttons;
             set => _buttons = value;
         }
+        public bool IsDragging { get; set; }
+        public override void Clear()
+        {
+            base.Clear();
+            IsDragging = false;
+        }
+
     }
     public class UIMouseUpEventArgs : UIMouseEventArgs
     {
         public UIMouseUpEventArgs() { }
         public bool IsAlsoDoubleClick { get; set; }
+        public bool IsDragging { get; set; }
         public UIMouseButtons Buttons => _buttons;
-
+        public override void Clear()
+        {
+            base.Clear();
+            IsAlsoDoubleClick = false;
+            IsDragging = false;
+        }
     }
     public class UIMouseWheelEventArgs : UIMouseEventArgs
     {
@@ -211,8 +220,6 @@ namespace LayoutFarm.UI
         public UIMouseEventArgs()
         {
         }
-
-
         public int GlobalX { get; private set; }
         public int GlobalY { get; private set; }
         public int XDiff { get; private set; }
@@ -251,24 +258,23 @@ namespace LayoutFarm.UI
             this.MouseCursorStyle = UI.MouseCursorStyle.Default;
             CustomMouseCursor = null;
 
-            this.IsDragging = false;
-            this.DraggingElement = null;
+            this.CapturedElement = null;
 
             CurrentMousePressMonitor = null;
         }
 
-        public bool IsDragging { get; set; }
-        //-------------------------------------------------------------------
-        public IUIEventListener DraggingElement { get; private set; }
-        public void SetMouseCaptureElement(IUIEventListener listener)
+
+        public IUIEventListener CapturedElement { get; private set; }
+        public void SetMouseCapturedElement(IUIEventListener listener)
         {
-            this.DraggingElement = listener;
+            this.CapturedElement = listener;
+            CapturedMouseX = X;
+            CapturedMouseY = Y;
         }
+
         //-------------------------------------------------------------------
 
-        public IUIEventListener CurrentMouseActive { get; set; }
-        public IUIEventListener PreviousMouseDown { get; set; }
-
+        public IUIEventListener CurrentMouseActive { get; set; } 
         public int CapturedMouseX { get; set; }
         public int CapturedMouseY { get; set; }
         public int DiffCapturedX => this.X - this.CapturedMouseX;
@@ -281,7 +287,7 @@ namespace LayoutFarm.UI
     }
 
     /// <summary>
-    /// primary mouse input
+    /// primary mouse input from the platform
     /// </summary>
     public class PrimaryMouseEventArgs : EventArgs
     {

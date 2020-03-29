@@ -91,26 +91,27 @@ namespace LayoutFarm
             UIMouseEventArgs e = _mouseDownEventArgs;
             AddMouseEventArgsDetail(e, primaryMouseEventArgs);
 
+            _topWinBoxEventPortal._prevMouseDownElement = _latestMouseDown;//set this before call portal mouse down
             _iTopBoxEventPortal.PortalMouseDown(_mouseDownEventArgs);
             //
-            _currentMouseActiveElement = _latestMouseDown = e.CurrentContextElement;
+            _currentMouseActiveElement = _latestMouseDown = e.CurrentContextElement; //
             _localMouseDownX = e.X;
             _localMouseDownY = e.Y;
 
             _draggingElement = null;
 
-            if (e.DraggingElement != null)
+            if (e.CapturedElement != null)
             {
-                if (e.DraggingElement != e.CurrentContextElement)
+                if (e.CapturedElement != e.CurrentContextElement)
                 {
                     //change captured element
 
-                    e.DraggingElement.GetGlobalLocation(out int globalX, out int globalY);
+                    e.CapturedElement.GetGlobalLocation(out int globalX, out int globalY);
                     //find new capture pos
                     _localMouseDownX = e.GlobalX - globalX;
                     _localMouseDownY = e.GlobalY - globalY;
                 }
-                _draggingElement = e.DraggingElement;
+                _draggingElement = e.CapturedElement;
             }
             else
             {
@@ -137,14 +138,14 @@ namespace LayoutFarm
 
             e.SetDiff(xdiff, ydiff);
             //----------------------------------
-            e.IsDragging = _isDragging;
+            _mouseUpEventArgs.IsDragging = _isDragging;
             _isMouseDown = _isDragging = false;
 
             DateTime snapMouseUpTime = DateTime.Now;
             TimeSpan timediff = snapMouseUpTime - _lastTimeMouseUp;
             _lastTimeMouseUp = snapMouseUpTime;
 
-            if (e.IsDragging)
+            if (_mouseUpEventArgs.IsDragging)
             {
                 if (_draggingElement != null)
                 {
@@ -197,7 +198,7 @@ namespace LayoutFarm
             e.SetDiff(xdiff, ydiff);
             //-------------------------------------------------------
 
-            if (e.IsDragging = _isDragging = _isMouseDown)
+            if (_mouseMoveEventArgs.IsDragging = _isDragging = _isMouseDown)
             {
                 _mouseMoveEventArgs.Buttons = _mouseDownButton;
                 if (_draggingElement != null)
@@ -243,17 +244,14 @@ namespace LayoutFarm
         }
         void ITopWindowEventRoot.RootMouseWheel(PrimaryMouseEventArgs primaryMouseEventArgs)
         {
-            UIMouseEventArgs e = _wheelEventArgs;
-            AddMouseEventArgsDetail(e, primaryMouseEventArgs);
+           
+            AddMouseEventArgsDetail(_wheelEventArgs, primaryMouseEventArgs);
             //find element            
-
-            e.Shift = _lastKeydownWithShift;
-            e.Alt = _lastKeydownWithAlt;
-            e.Ctrl = _lastKeydownWithControl;
+             
             _iTopBoxEventPortal.PortalMouseWheel(_wheelEventArgs);
 
-            RequestCursorStyle = e.MouseCursorStyle;
-            RequestCursor = e.CustomMouseCursor;
+            RequestCursorStyle = _wheelEventArgs.MouseCursorStyle;
+            RequestCursor = _wheelEventArgs.CustomMouseCursor;
         }
         void ITopWindowEventRoot.RootGotFocus(UIFocusEventArgs e)
         {
@@ -348,10 +346,11 @@ namespace LayoutFarm
             mouseEventArg.Clear();
             //TODO: review here
             mouseEventArg.SetEventInfo(primaryMouseEventArgs.Left, primaryMouseEventArgs.Top, primaryMouseEventArgs.Button, primaryMouseEventArgs.Clicks, primaryMouseEventArgs.Delta);
-            mouseEventArg.Alt = _lastKeydownWithAlt;
-            mouseEventArg.Shift = _lastKeydownWithShift;
+
             mouseEventArg.Ctrl = _lastKeydownWithControl;
-            mouseEventArg.PreviousMouseDown = _latestMouseDown;
+            mouseEventArg.Alt = _lastKeydownWithAlt;
+            mouseEventArg.Shift = _lastKeydownWithShift; 
+            
         }
     }
 }

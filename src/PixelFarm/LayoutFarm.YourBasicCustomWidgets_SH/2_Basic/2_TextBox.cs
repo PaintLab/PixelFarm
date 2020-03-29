@@ -127,8 +127,6 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-
-
         //---------------------------------------------------------------- 
         protected override void OnMouseLeave(UIMouseLeaveEventArgs e)
         {

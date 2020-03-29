@@ -297,9 +297,9 @@ namespace LayoutFarm.UI
         dbugHitChainPhase _dbugHitChainPhase;
 #endif
 
-        IUIEventListener _prevMouseDownElement;
-        IUIEventListener _currentMouseDown;
 
+        internal IUIEventListener _prevMouseDownElement;
+        IUIEventListener _currentMouseDown;
 
         void IEventPortal.PortalMouseDown(UIMouseDownEventArgs e)
         {
@@ -324,7 +324,7 @@ namespace LayoutFarm.UI
                 //1. origin object 
                 SetEventOrigin(e, hitPointChain);
                 //------------------------------ 
-                _prevMouseDownElement = e.PreviousMouseDown;
+
                 _currentMouseDown = null;
                 //portal                
                 ForEachOnlyEventPortalBubbleUp(e, hitPointChain, (e1, portal) =>
@@ -452,8 +452,6 @@ namespace LayoutFarm.UI
                 _mouseMoveFoundSomeHit = false;
                 ForEachEventListenerBubbleUp(e, hitPointChain, (e1, listener) =>
                 {
-
-
                     //please ensure=> no local var/pararmeter capture inside lambda
                     _mouseMoveFoundSomeHit = true;
                     _isFirstMouseEnter = false;
@@ -462,11 +460,11 @@ namespace LayoutFarm.UI
                     if (e1.CurrentMouseActive != null &&
                         e1.CurrentMouseActive != listener)
                     {
-                        IUIEventListener tmp = e1.CurrentContextElement;
-                        e1.CurrentContextElement = e1.CurrentMouseActive;
+                        //IUIEventListener tmp = e1.CurrentContextElement;
+                        _mouseLeaveEventArgs.CurrentContextElement = e1.CurrentMouseActive;
                         _mouseLeaveEventArgs.SetDiff(e.XDiff, e.YDiff);
                         e1.CurrentMouseActive.ListenMouseLeave(_mouseLeaveEventArgs);
-                        e1.CurrentContextElement = tmp;//restore
+                        //e1.CurrentContextElement = tmp;//restore
 
                         _isFirstMouseEnter = true;
                     }
@@ -500,12 +498,12 @@ namespace LayoutFarm.UI
 
                     if (e.CurrentMouseActive != null)
                     {
-                        IUIEventListener prev = e.CurrentContextElement;
-                        e.CurrentContextElement = e.CurrentMouseActive;
+
                         _mouseLeaveEventArgs.IsDragging = e.IsDragging;
                         _mouseLeaveEventArgs.SetDiff(e.XDiff, e.YDiff);
+                        _mouseLeaveEventArgs.CurrentContextElement = e.CurrentMouseActive;
                         e.CurrentMouseActive.ListenMouseLeave(_mouseLeaveEventArgs);
-                        e.CurrentContextElement = prev;
+
 
                         if (!e.IsCanceled)
                         {
@@ -563,12 +561,12 @@ namespace LayoutFarm.UI
                             return false;
                         }
                         listener.ListenMouseUp(e1);
-                        
+
                         //return true to stop this loop (no further bubble up)
                         //return false to bubble this to upper control       
                         //click or double click
                         if (e1.CurrentContextElement == _currentMouseDown)
-                        {                             
+                        {
                             if (e.IsAlsoDoubleClick)
                             {
                                 listener.ListenMouseDoubleClick(e);
