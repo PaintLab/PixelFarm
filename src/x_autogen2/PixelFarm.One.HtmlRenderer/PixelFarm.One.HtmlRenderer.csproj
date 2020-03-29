@@ -1785,6 +1785,9 @@
     <Compile Include="..\..\PixelFarm\PaintLab.PaintFx\BrightnesssAndContrast.cs">
       <Link>PixelFarm\PaintLab.PaintFx\BrightnesssAndContrast.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.PaintFx\IImageFilterFunc.cs">
+      <Link>PixelFarm\PaintLab.PaintFx\IImageFilterFunc.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.PaintFx\ImgFilters.cs">
       <Link>PixelFarm\PaintLab.PaintFx\ImgFilters.cs</Link>
     </Compile>
