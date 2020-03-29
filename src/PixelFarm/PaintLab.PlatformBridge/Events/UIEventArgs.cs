@@ -57,7 +57,9 @@ namespace LayoutFarm.UI
             }
             public static void ResetAll(this UIEventArgs e) => UIEventArgs.Clear(e);
 
-
+            public static void SetExactHitObject(this UIEventArgs e, object obj) => e.ExactHitObject = obj;
+            public static void SetSourceHitObject(this UIEventArgs e, IUIEventListener obj) => e.SourceHitElement = obj;
+            public static void SetCurrentContextElement(this UIEventArgs e, IUIEventListener obj) => e.CurrentContextElement = obj;
         }
     }
 
@@ -94,16 +96,16 @@ namespace LayoutFarm.UI
         /// <summary>
         /// exact hit object (include run)
         /// </summary>
-        public object ExactHitObject { get; set; }
+        public object ExactHitObject { get; internal set; }
 
         /// <summary>
         /// first hit IEventListener
         /// </summary>
-        public IUIEventListener SourceHitElement { get; set; }
+        public IUIEventListener SourceHitElement { get; internal set; }
         //TODO: review here, ensure set this value 
 
 
-        public IUIEventListener CurrentContextElement { get; set; }
+        public IUIEventListener CurrentContextElement { get; internal set; }
         //TODO: review here, ensure set this value  
         public bool Shift { get; set; }
         public bool Alt { get; set; }

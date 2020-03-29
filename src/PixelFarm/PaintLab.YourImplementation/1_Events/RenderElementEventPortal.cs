@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
+using LayoutFarm.UI.ForImplementator;
 namespace LayoutFarm.UI
 {
     public class RenderElementEventPortal : IEventPortal
@@ -122,8 +123,11 @@ namespace LayoutFarm.UI
             int count = hitChain.Count;
             if (count > 0)
             {
-                HitInfo hitInfo = hitChain.GetHitInfo(count - 1);
-                e.ExactHitObject = hitInfo.HitElemAsRenderElement;
+                e.SetExactHitObject(hitChain.GetHitInfo(count - 1).HitElemAsRenderElement);
+            }
+            else
+            {
+                e.SetExactHitObject(null);
             }
         }
 
@@ -232,6 +236,8 @@ namespace LayoutFarm.UI
             commonElement.HitTestCore(hitPointChain);
             //this.topRenderElement.HitTestCore(hitPointChain);
         }
+
+        IUIEventListener currentMouseWheel = null;
         void IEventPortal.PortalMouseWheel(UIMouseWheelEventArgs e)
         {
 #if DEBUG
@@ -267,7 +273,9 @@ namespace LayoutFarm.UI
                 //use events
                 if (!e.CancelBubbling)
                 {
-                    e.CurrentContextElement = currentMouseWheel = null; //clear 
+                    currentMouseWheel = null;
+                    e.SetCurrentContextElement(null);//clear
+
                     ForEachEventListenerBubbleUp(e, hitPointChain, (e1, listener) =>
                     {
                         //please ensure=> no local var/pararmeter capture inside lambda
@@ -338,7 +346,9 @@ namespace LayoutFarm.UI
                 //use events
                 if (!e.CancelBubbling)
                 {
-                    e.CurrentContextElement = _currentMouseDown = null; //clear 
+                    _currentMouseDown = null; //clear 
+                    e.SetCurrentContextElement(null);
+
                     ForEachEventListenerBubbleUp(e, hitPointChain, (e1, listener) =>
                     {
                         //please ensure=> no local var/pararmeter capture inside lambda
@@ -458,7 +468,7 @@ namespace LayoutFarm.UI
                     if (_latestMouseActive != null &&
                         _latestMouseActive != listener)
                     {
-                        _mouseLeaveEventArgs.CurrentContextElement = _latestMouseActive;
+                        _mouseLeaveEventArgs.SetCurrentContextElement(_latestMouseActive);
                         UIMouseLeaveEventArgs.SetDiff(_mouseLeaveEventArgs, e.XDiff, e.YDiff);
                         _latestMouseActive.ListenMouseLeave(_mouseLeaveEventArgs);
                         _isFirstMouseEnter = true;
@@ -497,8 +507,8 @@ namespace LayoutFarm.UI
                     {
                         _mouseLeaveEventArgs.IsDragging = e.IsDragging;
                         UIMouseLeaveEventArgs.SetDiff(_mouseLeaveEventArgs, e.XDiff, e.YDiff);
+                        _mouseLeaveEventArgs.SetCurrentContextElement(_latestMouseActive);
 
-                        _mouseLeaveEventArgs.CurrentContextElement = _latestMouseActive;
                         _latestMouseActive.ListenMouseLeave(_mouseLeaveEventArgs);
                         if (!e.IsCanceled)
                         {
@@ -606,7 +616,7 @@ namespace LayoutFarm.UI
                 if (currentHitElement is IEventPortal eventPortal)
                 {
                     Point p = hitPoint.point;
-                    e.CurrentContextElement = currentHitElement as IUIEventListener;
+                    e.SetCurrentContextElement(currentHitElement as IUIEventListener);
                     e.SetLocation(p.X, p.Y);
                     if (eventPortalAction(e, eventPortal))
                     {
@@ -626,12 +636,12 @@ namespace LayoutFarm.UI
                 {
                     if (e.SourceHitElement == null)
                     {
-                        e.SourceHitElement = listener;
+                        e.SetSourceHitObject(listener);
                     }
 
                     Point p = hitInfo.point;
                     e.SetLocation(p.X, p.Y);
-                    e.CurrentContextElement = listener;
+                    e.SetCurrentContextElement(listener);
                     if (listenerAction(e, listener))
                     {
                         return;

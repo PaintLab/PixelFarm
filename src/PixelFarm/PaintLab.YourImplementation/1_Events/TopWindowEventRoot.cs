@@ -277,7 +277,9 @@ namespace LayoutFarm
             }
 
             StopCaretBlink();
-            e.ExactHitObject = e.SourceHitElement = _currentKbFocusElem;
+            e.SetExactHitObject(_currentKbFocusElem);
+            e.SetCurrentContextElement(_currentKbFocusElem);
+             
             _currentKbFocusElem.ListenKeyPress(e);
             _iTopBoxEventPortal.PortalKeyPress(e);
 
@@ -290,7 +292,8 @@ namespace LayoutFarm
             }
             SetKeyData(e, UIEventName.KeyDown);
             StopCaretBlink();
-            e.ExactHitObject = e.SourceHitElement = _currentKbFocusElem;
+            e.SetExactHitObject(_currentKbFocusElem);
+            e.SetCurrentContextElement(_currentKbFocusElem);
             _currentKbFocusElem.ListenKeyDown(e);
             _iTopBoxEventPortal.PortalKeyDown(e);
         }
@@ -308,7 +311,8 @@ namespace LayoutFarm
 
             SetKeyData(e, UIEventName.KeyUp);
             //----------------------------------------------------
-            e.ExactHitObject = e.SourceHitElement = _currentKbFocusElem;
+            e.SetExactHitObject(_currentKbFocusElem);
+            e.SetCurrentContextElement(_currentKbFocusElem);
             _currentKbFocusElem.ListenKeyUp(e);
             _iTopBoxEventPortal.PortalKeyUp(e);
             //----------------------------------------------------
@@ -337,7 +341,8 @@ namespace LayoutFarm
                 _lastKeydownWithControl = ((k & UIKeys.Control) == UIKeys.Control),
                  UIEventName.ProcessDialogKey);
 
-            e.ExactHitObject = e.SourceHitElement = _currentKbFocusElem;
+            e.SetExactHitObject(_currentKbFocusElem);
+            e.SetCurrentContextElement(_currentKbFocusElem);
             return _currentKbFocusElem.ListenProcessDialogKey(e);
         }
         void SetKeyData(UIKeyEventArgs keyEventArgs, UIEventName evName)
