@@ -71,13 +71,11 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\BackEnd.Triangulation\util\PointGenerator.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\BackEnd.Triangulation\util\PolygonGenerator.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBuffer.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\AntialiasingExtensions.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\BaseExtensions.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\BlitExtensions.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\ConvertExtensions.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\FillExtensions.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\FilterExtensions.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\LineAaExtensions.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\LineExtensions.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\ShapeExtensions.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\SplineExtensions.cs" />

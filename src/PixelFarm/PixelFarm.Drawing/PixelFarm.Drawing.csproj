@@ -41,9 +41,6 @@
     <Compile Include="..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBuffer.cs">
       <Link>0_REF_BitmapBufferEx\BitmapBuffer.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\AntialiasingExtensions.cs">
-      <Link>0_REF_BitmapBufferEx\AntialiasingExtensions.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\BaseExtensions.cs">
       <Link>0_REF_BitmapBufferEx\BaseExtensions.cs</Link>
     </Compile>
@@ -58,9 +55,6 @@
     </Compile>
     <Compile Include="..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\FilterExtensions.cs">
       <Link>0_REF_BitmapBufferEx\FilterExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\LineAaExtensions.cs">
-      <Link>0_REF_BitmapBufferEx\LineAaExtensions.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\LineExtensions.cs">
       <Link>0_REF_BitmapBufferEx\LineExtensions.cs</Link>
