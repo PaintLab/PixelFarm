@@ -7,10 +7,7 @@ namespace PaintFx.Effects
 {
 
 
-    public interface ICpuBlitImgFilter
-    {
-        void SetTarget(PixelFarm.CpuBlit.PixelProcessing.BitmapBlenderBase targt);
-    }
+   
     public abstract class CpuBlitImgFilter : PixelFarm.Drawing.IImageFilter, ICpuBlitImgFilter
     {
         protected PixelFarm.CpuBlit.PixelProcessing.BitmapBlenderBase _target;

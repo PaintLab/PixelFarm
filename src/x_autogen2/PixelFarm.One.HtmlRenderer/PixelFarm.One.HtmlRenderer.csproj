@@ -1782,6 +1782,12 @@
     <Compile Include="..\..\PixelFarm\PaintLab.Color\KnownColors.cs">
       <Link>PixelFarm\PaintLab.Color\KnownColors.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.PaintFx\ImgFilters.cs">
+      <Link>PixelFarm\PaintLab.PaintFx\ImgFilters.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.PaintFx\SharpenFilter.cs">
+      <Link>PixelFarm\PaintLab.PaintFx\SharpenFilter.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\CommonTextServiceSetup.cs">
       <Link>PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\CommonTextServiceSetup.cs</Link>
     </Compile>
@@ -2520,9 +2526,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\GammaFuntions.cs">
       <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\GammaFuntions.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\ImgFilters.cs">
-      <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\ImgFilters.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\ProxyImage.cs">
       <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\ProxyImage.cs</Link>
     </Compile>
@@ -2540,9 +2543,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter\RecursiveBlur.cs">
       <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter\RecursiveBlur.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter\SharpenFilter.cs">
-      <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter\SharpenFilter.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter\StackBlur.cs">
       <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter\StackBlur.cs</Link>

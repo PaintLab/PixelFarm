@@ -26,6 +26,10 @@
 using System;
 namespace PixelFarm.CpuBlit.Imaging
 {
+    public interface ICpuBlitImgFilter
+    {
+        void SetTarget(PixelFarm.CpuBlit.PixelProcessing.BitmapBlenderBase targt);
+    }
 
     public struct ImageFilterBilinear : IImageFilterFunc
     {

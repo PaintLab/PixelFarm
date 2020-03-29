@@ -32,189 +32,6 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Color\ColorBgra.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Color\ColorBgra.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Color\HsvColor.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Color\HsvColor.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Color\RgbColor.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Color\RgbColor.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\PdnResources.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\PdnResources.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\PixelOps\BinaryPixelOp.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\PixelOps\BinaryPixelOp.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\PixelOps\BinaryPixelOps.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\PixelOps\BinaryPixelOps.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\PixelOps\IPixelOp.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\PixelOps\IPixelOp.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\PixelOps\PixelOp.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\PixelOps\PixelOp.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\PixelOps\UnaryPixelOp.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\PixelOps\UnaryPixelOp.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\PixelOps\UnaryPixelOps.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\PixelOps\UnaryPixelOps.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\RenderArgs.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\RenderArgs.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Renderer\GradientRenderer.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Renderer\GradientRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Renderer\GradientRenderers.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Renderer\GradientRenderers.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Renderer\Histogram.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Renderer\Histogram.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Renderer\HistogramLuminosity.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Renderer\HistogramLuminosity.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Renderer\HistogramRGB.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Renderer\HistogramRGB.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\ResamplingAlgorithm.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\ResamplingAlgorithm.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Scanline.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Scanline.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Surface.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Surface.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\UserBlendOps\UserBlendOp.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\UserBlendOps\UserBlendOp.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\UserBlendOps\UserBlendOps.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\UserBlendOps\UserBlendOps.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\UserBlendOps\UserBlendOps.Generated.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\UserBlendOps\UserBlendOps.Generated.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Utility.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Utility.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Blur\BrightnessAndContrastRenderer.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Blur\BrightnessAndContrastRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Blur\MotionBlurRenderer.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Blur\MotionBlurRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Blur\ZoomBlurEffRenderer.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Blur\ZoomBlurEffRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Convolution\ColorDiffEffect.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Convolution\ColorDiffEffect.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Convolution\ConvolutionRenderer.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Convolution\ConvolutionRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Convolution\EdgeDetectRenderer.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Convolution\EdgeDetectRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Convolution\EmbossRenderer.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Convolution\EmbossRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Convolution\GaussainBlurRenderer.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Convolution\GaussainBlurRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Convolution\ReliefEffectRenderer.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Convolution\ReliefEffectRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Histogram\HistogramRenderer.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Histogram\HistogramRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Histogram\MedianRenderer.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Histogram\MedianRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Histogram\OutlineRenderer.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Histogram\OutlineRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Histogram\ReduceNoiseRenderer.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Histogram\ReduceNoiseRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Histogram\SharpenRenderer.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Histogram\SharpenRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Histogram\UnfocusRenderer.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Histogram\UnfocusRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Levels\AutoLevelRenderer.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Levels\AutoLevelRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Levels\SepiaRenderer.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Levels\SepiaRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Material\BlugeEffectRenderer.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Material\BlugeEffectRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Material\CloudEffect.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Material\CloudEffect.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Material\GlowRenderer.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Material\GlowRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Material\OilPaintRenderer.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Material\OilPaintRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Material\PencilSketchRenderer.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Material\PencilSketchRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Material\TileRenderer.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Material\TileRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Material\TwistRenderer.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Material\TwistRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Others\InkSketchRenderer.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Others\InkSketchRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Others\JulianFractalRenderer.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Others\JulianFractalRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Others\PerlinNoise2D.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Others\PerlinNoise2D.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Others\RotateAndZoomRenderer.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Others\RotateAndZoomRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\PixelOps\HueAndSatRenderer.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\PixelOps\HueAndSatRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\PixelOps\InvertColorRenderer.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\PixelOps\InvertColorRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\PixelOps\PosterizeRenderer.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\PixelOps\PosterizeRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\TransformEffect\RotateZoomEffect.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\TransformEffect\RotateZoomEffect.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\TransformEffect\RotateZoomEffectConfigToken.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\TransformEffect\RotateZoomEffectConfigToken.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Wrap\PolarInversionEffect.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Wrap\PolarInversionEffect.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Wrap\WarpEdgeBehavior.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Wrap\WarpEdgeBehavior.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Wrap\WrapBasedEffRenderer.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\02_Fx\Wrap\WrapBasedEffRenderer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\EffectRendererBase.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\EffectRendererBase.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\PlatformMemory.cs">
-      <Link>PixelFarm\BackEnd.PaintFx\PdnSharedProject\PlatformMemory.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.BurningMineCurve\curveutils\CubicBezier.cs">
       <Link>PixelFarm\BackEnd.BurningMineCurve\curveutils\CubicBezier.cs</Link>
     </Compile>
@@ -881,9 +698,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\GammaFuntions.cs">
       <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\GammaFuntions.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\ImgFilters.cs">
-      <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\ImgFilters.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\ProxyImage.cs">
       <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\ProxyImage.cs</Link>
     </Compile>
@@ -901,9 +715,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter\RecursiveBlur.cs">
       <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter\RecursiveBlur.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter\SharpenFilter.cs">
-      <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter\SharpenFilter.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter\StackBlur.cs">
       <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter\StackBlur.cs</Link>
