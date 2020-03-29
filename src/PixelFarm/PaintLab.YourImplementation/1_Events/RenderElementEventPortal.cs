@@ -237,7 +237,7 @@ namespace LayoutFarm.UI
             //this.topRenderElement.HitTestCore(hitPointChain);
         }
 
-        IUIEventListener currentMouseWheel = null;
+        IUIEventListener _currentMouseWheel = null;
         void IEventPortal.PortalMouseWheel(UIMouseWheelEventArgs e)
         {
 #if DEBUG
@@ -260,20 +260,21 @@ namespace LayoutFarm.UI
                 //1. origin object 
                 SetEventOrigin(e, hitPointChain);
                 //------------------------------  
-                IUIEventListener currentMouseWheel = null;
+
                 //portal                
                 ForEachOnlyEventPortalBubbleUp(e, hitPointChain, (e1, portal) =>
                 {
+                    //please ensure=> no local var/pararmeter capture inside lambda
                     portal.PortalMouseWheel(e1);
                     //*****
-                    currentMouseWheel = e1.CurrentContextElement;
+                    _currentMouseWheel = e1.CurrentContextElement;
                     return true;
                 });
                 //------------------------------
                 //use events
                 if (!e.CancelBubbling)
                 {
-                    currentMouseWheel = null;
+                    _currentMouseWheel = null;
                     e.SetCurrentContextElement(null);//clear
 
                     ForEachEventListenerBubbleUp(e, hitPointChain, (e1, listener) =>
@@ -283,11 +284,16 @@ namespace LayoutFarm.UI
                         {
                             return false;
                         }
-                        currentMouseWheel = listener;
+                        _currentMouseWheel = listener;
                         listener.ListenMouseWheel(e1);
-                        //------------------------------------------------------- 
-                        bool cancelMouseBubbling = e1.CancelBubbling;
-                        //------------------------------------------------------- 
+
+#if DEBUG
+                        if (e1.CancelBubbling)
+                        {
+
+                        }
+#endif
+
                         //retrun true to stop this loop (no further bubble up)
                         //return false to bubble this to upper control       
                         return e1.CancelBubbling || !listener.BypassAllMouseEvents;
@@ -337,6 +343,7 @@ namespace LayoutFarm.UI
                 //portal                
                 ForEachOnlyEventPortalBubbleUp(e, hitPointChain, (e1, portal) =>
                 {
+                    //please ensure=> no local var/pararmeter capture inside lambda
                     portal.PortalMouseDown(e1);
                     //*****
                     _currentMouseDown = e1.CurrentContextElement;
@@ -435,7 +442,6 @@ namespace LayoutFarm.UI
 
 
         internal IUIEventListener _latestMouseActive;
-        IUIEventListener _latestMouseMove = null;
 
         void IEventPortal.PortalMouseMove(UIMouseMoveEventArgs e)
         {
@@ -459,6 +465,7 @@ namespace LayoutFarm.UI
             if (!e.CancelBubbling)
             {
                 _mouseMoveFoundSomeHit = false;
+
                 ForEachEventListenerBubbleUp(e, hitPointChain, (e1, listener) =>
                 {
                     //please ensure=> no local var/pararmeter capture inside lambda
@@ -491,17 +498,13 @@ namespace LayoutFarm.UI
                         }
                         listener.ListenMouseMove(e1);
 
-                        _latestMouseActive = _latestMouseMove = e1.CurrentContextElement;
+                        _latestMouseActive = e1.CurrentContextElement;
                     }
                     return true;//stop
                 });
 
-
-
                 if (!_mouseMoveFoundSomeHit)
                 {
-                    _latestMouseMove = null;
-
 
                     if (_latestMouseActive != null)
                     {
@@ -510,10 +513,7 @@ namespace LayoutFarm.UI
                         _mouseLeaveEventArgs.SetCurrentContextElement(_latestMouseActive);
 
                         _latestMouseActive.ListenMouseLeave(_mouseLeaveEventArgs);
-                        if (!e.IsCanceled)
-                        {
-                            _latestMouseActive = null;
-                        }
+                        _latestMouseActive = null;
                     }
                 }
             }

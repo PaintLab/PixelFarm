@@ -206,7 +206,7 @@ namespace LayoutFarm
 
             if (_mouseMoveEventArgs.IsDragging = _isDragging = _isMouseDown)
             {
-                _mouseMoveEventArgs.Buttons = _mouseDownButton;
+               
                 if (_draggingElement != null)
                 {
                     if (_draggingElement.DisableAutoMouseCapture)

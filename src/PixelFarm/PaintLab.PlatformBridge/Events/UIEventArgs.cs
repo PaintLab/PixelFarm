@@ -60,6 +60,9 @@ namespace LayoutFarm.UI
             public static void SetExactHitObject(this UIEventArgs e, object obj) => e.ExactHitObject = obj;
             public static void SetSourceHitObject(this UIEventArgs e, IUIEventListener obj) => e.SourceHitElement = obj;
             public static void SetCurrentContextElement(this UIEventArgs e, IUIEventListener obj) => e.CurrentContextElement = obj;
+
+            public static void SetIsDragging(this UIMouseMoveEventArgs e, bool isDragging) => e.IsDragging = isDragging;
+            public static void SetIsDragging(this UIMouseUpEventArgs e, bool isDragging) => e.IsDragging = isDragging;
         }
     }
 
@@ -82,7 +85,6 @@ namespace LayoutFarm.UI
         {
             e.OnClearData();
         }
-
 
         /// <summary>
         /// request for custom mouse cursor
@@ -110,8 +112,6 @@ namespace LayoutFarm.UI
         public bool Shift { get; set; }
         public bool Alt { get; set; }
         public bool Ctrl { get; set; }
-
-
         public int X { get; private set; }
         public int Y { get; private set; }
 
@@ -214,12 +214,8 @@ namespace LayoutFarm.UI
     public class UIMouseMoveEventArgs : UIMouseEventArgs
     {
         public UIMouseMoveEventArgs() { }
-        public UIMouseButtons Buttons
-        {
-            get => _buttons;
-            set => _buttons = value;
-        }
-        public bool IsDragging { get; set; }
+        public UIMouseButtons Buttons => _buttons;
+        public bool IsDragging { get; internal set; }
         protected override void OnClearData()
         {
             base.OnClearData();
@@ -230,8 +226,8 @@ namespace LayoutFarm.UI
     public class UIMouseUpEventArgs : UIMouseEventArgs
     {
         public UIMouseUpEventArgs() { }
-        public bool IsAlsoDoubleClick { get; set; }
-        public bool IsDragging { get; set; }
+        public bool IsAlsoDoubleClick { get; internal set; }
+        public bool IsDragging { get; internal set; }
         public UIMouseButtons Buttons => _buttons;
         public override UIEventName UIEventName => UIEventName.MouseUp;
         protected override void OnClearData()
