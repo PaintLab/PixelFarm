@@ -1782,11 +1782,29 @@
     <Compile Include="..\..\PixelFarm\PaintLab.Color\KnownColors.cs">
       <Link>PixelFarm\PaintLab.Color\KnownColors.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.PaintFx\BrightnesssAndContrast.cs">
+      <Link>PixelFarm\PaintLab.PaintFx\BrightnesssAndContrast.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.PaintFx\ImgFilters.cs">
       <Link>PixelFarm\PaintLab.PaintFx\ImgFilters.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.PaintFx\InternalBrightnessAndContrastAdjustment.cs">
+      <Link>PixelFarm\PaintLab.PaintFx\InternalBrightnessAndContrastAdjustment.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.PaintFx\PatternFilterBilnearColorRGBA.cs">
+      <Link>PixelFarm\PaintLab.PaintFx\PatternFilterBilnearColorRGBA.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.PaintFx\RecursiveBlur.cs">
+      <Link>PixelFarm\PaintLab.PaintFx\RecursiveBlur.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.PaintFx\SharpenFilter.cs">
       <Link>PixelFarm\PaintLab.PaintFx\SharpenFilter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.PaintFx\StackBlur.cs">
+      <Link>PixelFarm\PaintLab.PaintFx\StackBlur.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.PaintFx\Transposer.cs">
+      <Link>PixelFarm\PaintLab.PaintFx\Transposer.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\CommonTextServiceSetup.cs">
       <Link>PixelFarm\PaintLab.YourImplementation\0_FrameworkInit\CommonTextServiceSetup.cs</Link>
@@ -2517,38 +2535,20 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Msdf\SignedDistance.cs">
       <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Msdf\SignedDistance.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\BorderDouble.cs">
-      <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\BorderDouble.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\BorderDouble.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\BorderDouble.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\ClipProxyImage.cs">
-      <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\ClipProxyImage.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\ClipProxyImage.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\ClipProxyImage.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\GammaFuntions.cs">
-      <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\GammaFuntions.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\GammaFuntions.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\GammaFuntions.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\ProxyImage.cs">
-      <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\1_Base\ProxyImage.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\ICpuBlitImageFilter.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\ICpuBlitImageFilter.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter\BrightnesssAndContrast.cs">
-      <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter\BrightnesssAndContrast.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter\ImageFilters.cs">
-      <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter\ImageFilters.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter\InternalBrightnessAndContrastAdjustment.cs">
-      <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter\InternalBrightnessAndContrastAdjustment.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter\PatternFilterBilnearColorRGBA.cs">
-      <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter\PatternFilterBilnearColorRGBA.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter\RecursiveBlur.cs">
-      <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter\RecursiveBlur.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter\StackBlur.cs">
-      <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter\StackBlur.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter\Transposer.cs">
-      <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\3_Filter\Transposer.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\ProxyImage.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\Others\ProxyImage.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\PathReconstruction\BezierCurveReconstruction.cs">
       <Link>PixelFarm\PixelFarm.Drawing\7_CpuBlitPainter\PathReconstruction\BezierCurveReconstruction.cs</Link>

@@ -38,6 +38,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BrightnesssAndContrast.cs" />
+    <Compile Include="InternalBrightnessAndContrastAdjustment.cs" />
+    <Compile Include="PatternFilterBilnearColorRGBA.cs" />
+    <Compile Include="RecursiveBlur.cs" />
+    <Compile Include="StackBlur.cs" />
+    <Compile Include="Transposer.cs" />
     <Compile Include="ImgFilters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SharpenFilter.cs" />
