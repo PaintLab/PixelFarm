@@ -157,6 +157,8 @@ namespace LayoutFarm.UI
     {
         public UIMouseLostFocusEventArgs() { }
     }
+
+
     public class UIMouseLeaveEventArgs : UIEventArgs
     {
         public UIMouseLeaveEventArgs() { }
@@ -164,10 +166,10 @@ namespace LayoutFarm.UI
         public int XDiff { get; private set; }
         public int YDiff { get; private set; }
 
-        public void SetDiff(int xdiff, int ydiff)
+        public static void SetDiff(UIMouseLeaveEventArgs e, int xdiff, int ydiff)
         {
-            this.XDiff = xdiff;
-            this.YDiff = ydiff;
+            e.XDiff = xdiff;
+            e.YDiff = ydiff;
         }
     }
 
@@ -175,11 +177,7 @@ namespace LayoutFarm.UI
     {
         public UIMouseDownEventArgs() { }
         public int Clicks => _click;
-        public UIMouseButtons Buttons
-        {
-            get => _buttons;
-            set => _buttons = value;
-        }
+        public UIMouseButtons Buttons => _buttons;
     }
     public class UIMouseMoveEventArgs : UIMouseEventArgs
     {
@@ -195,7 +193,6 @@ namespace LayoutFarm.UI
             base.Clear();
             IsDragging = false;
         }
-
     }
     public class UIMouseUpEventArgs : UIMouseEventArgs
     {
@@ -220,25 +217,38 @@ namespace LayoutFarm.UI
         public UIMouseEventArgs()
         {
         }
+        /// <summary>
+        /// root-level left 
+        /// </summary>
         public int GlobalX { get; private set; }
+        /// <summary>
+        /// root-level top
+        /// </summary>
         public int GlobalY { get; private set; }
+        /// <summary>
+        /// x diff from previouse mouse pos
+        /// </summary>
         public int XDiff { get; private set; }
+        /// <summary>
+        /// y diff from previous mouse pos
+        /// </summary>
         public int YDiff { get; private set; }
 
-        public void SetDiff(int xdiff, int ydiff)
+        public static void SetDiff(UIMouseEventArgs e, int xdiff, int ydiff)
         {
-            this.XDiff = xdiff;
-            this.YDiff = ydiff;
+            e.XDiff = xdiff;
+            e.YDiff = ydiff;
         }
-        public void SetEventInfo(int x, int y, UIMouseButtons button, int clicks, int delta)
+        public static void SetEventInfo(UIMouseEventArgs e, int x, int y, UIMouseButtons button, int clicks, int delta)
         {
-            this.GlobalX = x;
-            this.GlobalY = y;
-            this.SetLocation(x, y);
-            _buttons = button;
-            _click = clicks;
-            _delta = delta;
+            e.GlobalX = x;
+            e.GlobalY = y;
+            e.SetLocation(x, y);
+            e._buttons = button;
+            e._click = clicks;
+            e._delta = delta;
         }
+
         internal int _delta;
         internal int _click;
         internal UIMouseButtons _buttons;
@@ -259,10 +269,7 @@ namespace LayoutFarm.UI
             CustomMouseCursor = null;
 
             this.CapturedElement = null;
-
-            CurrentMousePressMonitor = null;
         }
-
 
         public IUIEventListener CapturedElement { get; private set; }
         public void SetMouseCapturedElement(IUIEventListener listener)
@@ -271,17 +278,12 @@ namespace LayoutFarm.UI
             CapturedMouseX = X;
             CapturedMouseY = Y;
         }
-         
-      
+
         public int CapturedMouseX { get; set; }
         public int CapturedMouseY { get; set; }
         public int DiffCapturedX => this.X - this.CapturedMouseX;
         public int DiffCapturedY => this.Y - this.CapturedMouseY;
-        public IUIEventListener CurrentMousePressMonitor { get; set; }
-        public void StartMonitorMousePress(IUIEventListener listener)
-        {
-            CurrentMousePressMonitor = listener;
-        }
+       
     }
 
     /// <summary>

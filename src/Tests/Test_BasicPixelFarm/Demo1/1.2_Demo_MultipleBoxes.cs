@@ -220,10 +220,7 @@ namespace LayoutFarm
                 box.BackColor = hoverState;
                 System.Diagnostics.Debug.WriteLine("mouse_hover:" + box.dbugId);
             };
-            beh.MouseDown += (s, e) =>
-            {
-                e.CurrentMousePressMonitor = e.CurrentContextElement;
-            };
+             
             beh.MousePress += (s, e) =>
             {
                 IUIEventListener ctx = e.CurrentContextElement;

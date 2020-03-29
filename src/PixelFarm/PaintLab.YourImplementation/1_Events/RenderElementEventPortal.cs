@@ -349,18 +349,10 @@ namespace LayoutFarm.UI
                         _currentMouseDown = listener;
                         listener.ListenMouseDown(e1);
 
-                        if (e.CurrentMousePressMonitor != null)
-                        {
-                            //set snapshot data
-                            _mousePressMonitor.AddMousePressInformation(e);
-                            //set and invoke mouse press here                                
-                            _mousePressMonitor.SetMonitoredElement(e.CurrentMousePressMonitor);
-                        }
-                        else
-                        {
-                            _mousePressMonitor.Reset();
-                        }
-
+                        //------------------------------------------------------- 
+                        //auto begin monitor mouse press 
+                        _mousePressMonitor.AddMousePressInformation(e);
+                        _mousePressMonitor.SetMonitoredElement(listener);
                         //------------------------------------------------------- 
                         bool cancelMouseBubbling = e1.CancelBubbling;
                         if (_prevMouseDownElement != null &&
@@ -375,6 +367,10 @@ namespace LayoutFarm.UI
                         return e1.CancelBubbling || !listener.BypassAllMouseEvents;
                     });
 
+                    if (_currentMouseDown == null)
+                    {
+                        _mousePressMonitor.Reset();
+                    }
 
                 }
 
@@ -463,7 +459,7 @@ namespace LayoutFarm.UI
                         _latestMouseActive != listener)
                     {
                         _mouseLeaveEventArgs.CurrentContextElement = _latestMouseActive;
-                        _mouseLeaveEventArgs.SetDiff(e.XDiff, e.YDiff);
+                        UIMouseLeaveEventArgs.SetDiff(_mouseLeaveEventArgs, e.XDiff, e.YDiff);
                         _latestMouseActive.ListenMouseLeave(_mouseLeaveEventArgs);
                         _isFirstMouseEnter = true;
 
@@ -500,7 +496,8 @@ namespace LayoutFarm.UI
                     if (_latestMouseActive != null)
                     {
                         _mouseLeaveEventArgs.IsDragging = e.IsDragging;
-                        _mouseLeaveEventArgs.SetDiff(e.XDiff, e.YDiff);
+                        UIMouseLeaveEventArgs.SetDiff(_mouseLeaveEventArgs, e.XDiff, e.YDiff);
+
                         _mouseLeaveEventArgs.CurrentContextElement = _latestMouseActive;
                         _latestMouseActive.ListenMouseLeave(_mouseLeaveEventArgs);
                         if (!e.IsCanceled)

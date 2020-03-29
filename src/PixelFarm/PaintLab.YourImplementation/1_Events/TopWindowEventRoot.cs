@@ -135,8 +135,7 @@ namespace LayoutFarm
 
             UIMouseEventArgs e = _mouseUpEventArgs;
             AddMouseEventArgsDetail(e, primaryMouseEventArgs);
-
-            e.SetDiff(xdiff, ydiff);
+            UIMouseEventArgs.SetDiff(e, xdiff, ydiff);
             //----------------------------------
             _mouseUpEventArgs.IsDragging = _isDragging;
             _isMouseDown = _isDragging = false;
@@ -195,7 +194,7 @@ namespace LayoutFarm
             //-------------------------------------------------------
             UIMouseEventArgs e = _mouseMoveEventArgs;
             AddMouseEventArgsDetail(e, primaryMouseEventArgs);
-            e.SetDiff(xdiff, ydiff);
+            UIMouseEventArgs.SetDiff(e, xdiff, ydiff);
             //-------------------------------------------------------
 
             if (_mouseMoveEventArgs.IsDragging = _isDragging = _isMouseDown)
@@ -244,10 +243,10 @@ namespace LayoutFarm
         }
         void ITopWindowEventRoot.RootMouseWheel(PrimaryMouseEventArgs primaryMouseEventArgs)
         {
-           
+
             AddMouseEventArgsDetail(_wheelEventArgs, primaryMouseEventArgs);
             //find element            
-             
+
             _iTopBoxEventPortal.PortalMouseWheel(_wheelEventArgs);
 
             RequestCursorStyle = _wheelEventArgs.MouseCursorStyle;
@@ -345,12 +344,11 @@ namespace LayoutFarm
         {
             mouseEventArg.Clear();
             //TODO: review here
-            mouseEventArg.SetEventInfo(primaryMouseEventArgs.Left, primaryMouseEventArgs.Top, primaryMouseEventArgs.Button, primaryMouseEventArgs.Clicks, primaryMouseEventArgs.Delta);
+            UIMouseEventArgs.SetEventInfo(mouseEventArg, primaryMouseEventArgs.Left, primaryMouseEventArgs.Top, primaryMouseEventArgs.Button, primaryMouseEventArgs.Clicks, primaryMouseEventArgs.Delta);
 
             mouseEventArg.Ctrl = _lastKeydownWithControl;
             mouseEventArg.Alt = _lastKeydownWithAlt;
-            mouseEventArg.Shift = _lastKeydownWithShift; 
-            
+            mouseEventArg.Shift = _lastKeydownWithShift;
         }
     }
 }
