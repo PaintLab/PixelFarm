@@ -426,6 +426,9 @@ namespace LayoutFarm.UI
 
         bool _isFirstMouseEnter = false;
         bool _mouseMoveFoundSomeHit = false;
+
+
+        internal IUIEventListener _latestMouseActive;
         IUIEventListener _latestMouseMove = null;
 
         void IEventPortal.PortalMouseMove(UIMouseMoveEventArgs e)
@@ -456,35 +459,33 @@ namespace LayoutFarm.UI
                     _mouseMoveFoundSomeHit = true;
                     _isFirstMouseEnter = false;
 
-
-                    if (e1.CurrentMouseActive != null &&
-                        e1.CurrentMouseActive != listener)
+                    if (_latestMouseActive != null &&
+                        _latestMouseActive != listener)
                     {
-                        //IUIEventListener tmp = e1.CurrentContextElement;
-                        _mouseLeaveEventArgs.CurrentContextElement = e1.CurrentMouseActive;
+                        _mouseLeaveEventArgs.CurrentContextElement = _latestMouseActive;
                         _mouseLeaveEventArgs.SetDiff(e.XDiff, e.YDiff);
-                        e1.CurrentMouseActive.ListenMouseLeave(_mouseLeaveEventArgs);
-                        //e1.CurrentContextElement = tmp;//restore
+                        _latestMouseActive.ListenMouseLeave(_mouseLeaveEventArgs);
+                        _isFirstMouseEnter = true;
 
+                        _latestMouseActive = listener;
+                    }
+                    else if (_latestMouseActive == null)
+                    {
                         _isFirstMouseEnter = true;
                     }
 
+
+
                     if (!e1.IsCanceled)
                     {
-
                         //TODO: review here
-                        e1.CurrentMouseActive = listener;
                         if (_isFirstMouseEnter)
                         {
-                            e1.CurrentMouseActive.ListenMouseEnter(e1);
+                            listener.ListenMouseEnter(e1);
                         }
-                        else if (_latestMouseMove != e1.CurrentContextElement)
-                        {
-                            e1.CurrentContextElement.ListenMouseEnter(e1);
-                        }
+                        listener.ListenMouseMove(e1);
 
-                        e1.CurrentMouseActive.ListenMouseMove(e1);
-                        _latestMouseMove = e1.CurrentContextElement;
+                        _latestMouseActive = _latestMouseMove = e1.CurrentContextElement;
                     }
                     return true;//stop
                 });
@@ -496,18 +497,15 @@ namespace LayoutFarm.UI
                     _latestMouseMove = null;
 
 
-                    if (e.CurrentMouseActive != null)
+                    if (_latestMouseActive != null)
                     {
-
                         _mouseLeaveEventArgs.IsDragging = e.IsDragging;
                         _mouseLeaveEventArgs.SetDiff(e.XDiff, e.YDiff);
-                        _mouseLeaveEventArgs.CurrentContextElement = e.CurrentMouseActive;
-                        e.CurrentMouseActive.ListenMouseLeave(_mouseLeaveEventArgs);
-
-
+                        _mouseLeaveEventArgs.CurrentContextElement = _latestMouseActive;
+                        _latestMouseActive.ListenMouseLeave(_mouseLeaveEventArgs);
                         if (!e.IsCanceled)
                         {
-                            e.CurrentMouseActive = null;
+                            _latestMouseActive = null;
                         }
                     }
                 }

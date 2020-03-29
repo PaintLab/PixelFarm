@@ -271,10 +271,8 @@ namespace LayoutFarm.UI
             CapturedMouseX = X;
             CapturedMouseY = Y;
         }
-
-        //-------------------------------------------------------------------
-
-        public IUIEventListener CurrentMouseActive { get; set; } 
+         
+      
         public int CapturedMouseX { get; set; }
         public int CapturedMouseY { get; set; }
         public int DiffCapturedX => this.X - this.CapturedMouseX;
