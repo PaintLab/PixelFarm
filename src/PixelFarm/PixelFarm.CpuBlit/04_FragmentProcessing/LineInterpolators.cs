@@ -82,8 +82,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
 
         //----------------------
         //this need to be class ***
-        //----------------------
-
+        //---------------------- 
         readonly int _cnt;
         readonly int _lft;
         readonly int _rem;

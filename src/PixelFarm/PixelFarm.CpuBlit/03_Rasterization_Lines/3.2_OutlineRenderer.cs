@@ -42,7 +42,9 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         double _smoother_width;
 
 
-        static byte[] s_gamma_none;
+        readonly static byte[] s_gamma_none;
+        readonly static byte[] s_gamma_50;
+
         static LineProfileAnitAlias()
         {
             //GammaNone => just return i***
@@ -50,6 +52,12 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             for (int i = AA_SCALE - 1; i >= 0; --i)
             {
                 s_gamma_none[i] = (byte)(AggMath.uround(((float)(i) / AA_MASK) * AA_MASK));
+            }
+
+            s_gamma_50 = new byte[AA_SCALE];
+            for (int i = AA_SCALE - 1; i >= (AA_SCALE / 2); --i)
+            {
+                s_gamma_50[i] = 255;
             }
         }
 
@@ -114,7 +122,8 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             //TODO:review gamma again***
             if (gamma_function == null)
             {
-                _gamma = s_gamma_none;
+                //_gamma = s_gamma_none;
+                _gamma = s_gamma_50;
             }
             else
             {
@@ -217,8 +226,6 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             }
         }
     }
-
-
 
 
     //======================================================renderer_outline_aa
@@ -326,8 +333,10 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         public override void SemiDot(CompareFunction cmp, int xc1, int yc1, int xc2, int yc2)
         {
             if (_doClipping && ClipLiangBarsky.Flags(xc1, yc1, _clippingRectangle) != 0) return;
+            
             int r = ((SubPixelWidth + LineAA.SUBPIXEL_MARK) >> LineAA.SUBPIXEL_SHIFT);
             if (r < 1) r = 1;
+
             EllipseBresenhamInterpolator ei = new EllipseBresenhamInterpolator(r, r);
             int dx = 0;
             int dy = -r;
@@ -356,6 +365,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                        int xh1, int yh1, int xh2)
         {
             if (_doClipping && ClipLiangBarsky.Flags(xc, yc, _clippingRectangle) != 0) return;
+
             byte[] covers = new byte[MAX_HALF_WIDTH * 2 + 4];
             int index0 = 0;
             int index1 = 0;
@@ -423,7 +433,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
 
             //recursive
             if (lp.len > LineAA.MAX_LENGTH)
-            { 
+            {
                 if (lp.Divide(out LineParameters lp1, out LineParameters lp2))
                 {
                     //recursive
@@ -467,7 +477,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         void Line1NoClip(LineParameters lp, int sx, int sy)
         {
             if (lp.len > LineAA.MAX_LENGTH)
-            { 
+            {
                 if (lp.Divide(out LineParameters lp1, out LineParameters lp2))
                 {
                     Line1NoClip(lp1, (lp.x1 + sx) >> 1, (lp.y1 + sy) >> 1);
@@ -764,4 +774,6 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             _freeConvPool.Push(convArray);
         }
     }
+
+
 }

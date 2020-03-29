@@ -42,7 +42,6 @@ namespace PixelFarm.CpuBlit
             get => _lineRenderingTech;
             set
             {
-
                 if (value == LineRenderingTechnique.OutlineAARenderer && _outlineRas == null)
                 {
                     _lineProfileAA = new Rasterization.Lines.LineProfileAnitAlias(this.StrokeWidth, null);
