@@ -615,7 +615,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             set => _pattern = value;
         }
         //---------------------------------------------------------------------
-        public void ResetClipping() { _clipping = false; }
+        public void ResetClipping() => _clipping = false;
 
         public void SetClipBox(double x1, double y1, double x2, double y2)
         {
@@ -679,19 +679,19 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         {
         }
 
-        public override void Line0(LineParameters lp)
+        public override void Line0(in LineParameters lp)
         {
         }
 
-        public override void Line1(LineParameters lp, int sx, int sy)
+        public override void Line1(in LineParameters lp, int sx, int sy)
         {
         }
 
-        public override void Line2(LineParameters lp, int ex, int ey)
+        public override void Line2(in LineParameters lp, int ex, int ey)
         {
         }
 
-        public void Line3NoClip(LineParameters lp,
+        public void Line3NoClip(in LineParameters lp,
                            int sx, int sy, int ex, int ey)
         {
             throw new NotImplementedException();
@@ -725,7 +725,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
              */
         }
 
-        public override void Line3(LineParameters lp,
+        public override void Line3(in LineParameters lp,
                    int sx, int sy, int ex, int ey)
         {
             throw new NotImplementedException();

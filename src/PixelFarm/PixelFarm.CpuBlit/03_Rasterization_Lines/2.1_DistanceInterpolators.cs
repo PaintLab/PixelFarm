@@ -37,7 +37,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             }
         }
         //
-        public void IncX() { _dist += _dy; }
+        public void IncX() => _dist += _dy;
         //
         public int Distance => _dist;
         //
