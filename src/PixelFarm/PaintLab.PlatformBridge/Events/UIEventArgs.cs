@@ -4,29 +4,7 @@ using System;
 namespace LayoutFarm.UI
 {
 
-    public class UIKeyEventArgs : UIEventArgs
-    {
-        public UIKeyEventArgs()
-        {
-        }
-        public bool HasKeyData => true;
-        public uint KeyData { get; internal set; }
-        public char KeyChar { get; internal set; }
-        public void SetKeyChar(char c) => KeyChar = c;
-        //
-        protected override void OnClearData()
-        {
-            base.OnClearData();
-            KeyChar = '\0';
-            KeyData = 0;
-        }
-        public bool IsControlCharacter => Char.IsControl(KeyChar);
-        public UIKeys KeyCode => (UIKeys)this.KeyData & UIKeys.KeyCode;
 
-
-        internal UIEventName _eventName;
-        public override UIEventName UIEventName => _eventName;
-    }
 
     namespace ForImplementator
     {
@@ -63,9 +41,65 @@ namespace LayoutFarm.UI
 
             public static void SetIsDragging(this UIMouseMoveEventArgs e, bool isDragging) => e.IsDragging = isDragging;
             public static void SetIsDragging(this UIMouseUpEventArgs e, bool isDragging) => e.IsDragging = isDragging;
+
+
+            public static void SetLocation(this UIEventArgs e, int x, int y)
+            {
+                e.X = x;
+                e.Y = y;
+            }
+            public static void SetDiff(this UIMouseEventArgs e, int xdiff, int ydiff)
+            {
+                e.XDiff = xdiff;
+                e.YDiff = ydiff;
+            }
+            public static void SetEventInfo(this UIMouseEventArgs e, bool ctrl, bool alt, bool shift)
+            {
+                e.Ctrl = ctrl;
+                e.Alt = alt;
+                e.Shift = shift;
+            }
+            public static void SetEventInfo(this UIMouseEventArgs e, int x, int y, UIMouseButtons button, int clicks, int delta)
+            {
+                e.GlobalX = x;
+                e.GlobalY = y;
+                e.X = x;
+                e.Y = y;
+                e._buttons = button;
+                e._click = clicks;
+                e._delta = delta;
+            }
+            public static void SetMouseDoubleClick(this UIMouseUpEventArgs e, bool isAlsoDoubleClick)
+            {
+                e.IsAlsoDoubleClick = isAlsoDoubleClick;
+            }
         }
     }
 
+
+    public class UIKeyEventArgs : UIEventArgs
+    {
+        public UIKeyEventArgs()
+        {
+        }
+        public bool HasKeyData => true;
+        public uint KeyData { get; internal set; }
+        public char KeyChar { get; internal set; }
+        public void SetKeyChar(char c) => KeyChar = c;
+        //
+        protected override void OnClearData()
+        {
+            base.OnClearData();
+            KeyChar = '\0';
+            KeyData = 0;
+        }
+        public bool IsControlCharacter => Char.IsControl(KeyChar);
+        public UIKeys KeyCode => (UIKeys)this.KeyData & UIKeys.KeyCode;
+        
+
+        internal UIEventName _eventName;
+        public override UIEventName UIEventName => _eventName;
+    }
 
 
     public abstract class UIEventArgs : EventArgs
@@ -90,6 +124,7 @@ namespace LayoutFarm.UI
         /// request for custom mouse cursor
         /// </summary>
         public MouseCursorStyle MouseCursorStyle { get; set; }
+
         /// <summary>
         /// request for custom mouse cursor
         /// </summary>
@@ -109,13 +144,13 @@ namespace LayoutFarm.UI
 
         public IUIEventListener CurrentContextElement { get; internal set; }
         //TODO: review here, ensure set this value  
-        public bool Shift { get; set; }
-        public bool Alt { get; set; }
-        public bool Ctrl { get; set; }
-        public int X { get; private set; }
-        public int Y { get; private set; }
+        public bool Shift { get; internal set; }
+        public bool Alt { get; internal set; }
+        public bool Ctrl { get; internal set; }
+
 
         public bool IsCanceled { get; private set; }
+
         public void StopPropagation()
         {
             this.IsCanceled = true;
@@ -125,13 +160,12 @@ namespace LayoutFarm.UI
             get => this.IsCanceled;
             set => this.IsCanceled = value;
         }
+        public int X { get; internal set; }
+        public int Y { get; internal set; }
 
         public abstract UIEventName UIEventName { get; }
-        public void SetLocation(int x, int y)
-        {
-            X = x;
-            Y = y;
-        }
+
+
     }
 
     public enum FocusEventType
@@ -251,34 +285,19 @@ namespace LayoutFarm.UI
         /// <summary>
         /// root-level left 
         /// </summary>
-        public int GlobalX { get; private set; }
+        public int GlobalX { get; internal set; }
         /// <summary>
         /// root-level top
         /// </summary>
-        public int GlobalY { get; private set; }
+        public int GlobalY { get; internal set; }
         /// <summary>
         /// x diff from previouse mouse pos
         /// </summary>
-        public int XDiff { get; private set; }
+        public int XDiff { get; internal set; }
         /// <summary>
         /// y diff from previous mouse pos
         /// </summary>
-        public int YDiff { get; private set; }
-
-        public static void SetDiff(UIMouseEventArgs e, int xdiff, int ydiff)
-        {
-            e.XDiff = xdiff;
-            e.YDiff = ydiff;
-        }
-        public static void SetEventInfo(UIMouseEventArgs e, int x, int y, UIMouseButtons button, int clicks, int delta)
-        {
-            e.GlobalX = x;
-            e.GlobalY = y;
-            e.SetLocation(x, y);
-            e._buttons = button;
-            e._click = clicks;
-            e._delta = delta;
-        }
+        public int YDiff { get; internal set; }
 
         internal int _delta;
         internal int _click;

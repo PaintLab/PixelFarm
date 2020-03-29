@@ -612,11 +612,11 @@ namespace LayoutFarm.UI
             for (int i = hitPointChain.Count - 1; i >= 0; --i)
             {
                 HitInfo hitPoint = hitPointChain.GetHitInfo(i);
-                object currentHitElement = hitPoint.HitElemAsRenderElement.GetController();
-                if (currentHitElement is IEventPortal eventPortal)
+                object currentHitObj = hitPoint.HitElemAsRenderElement.GetController();
+                if (currentHitObj is IEventPortal eventPortal)
                 {
                     Point p = hitPoint.point;
-                    e.SetCurrentContextElement(currentHitElement as IUIEventListener);
+                    e.SetCurrentContextElement(currentHitObj as IUIEventListener);
                     e.SetLocation(p.X, p.Y);
                     if (eventPortalAction(e, eventPortal))
                     {

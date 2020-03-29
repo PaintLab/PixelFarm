@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 
 using PixelFarm.Drawing;
-using LayoutFarm.UI.InputBridge;
 using LayoutFarm.UI.ForImplementator;
 
 namespace LayoutFarm.UI

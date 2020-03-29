@@ -88,7 +88,7 @@ namespace LayoutFarm.UI
         static AbstractTopWindowBridge GetTopWindowBridge(
             InnerViewportKind innerViewportKind,
             RootGraphic rootgfx,
-            LayoutFarm.UI.InputBridge.ITopWindowEventRoot topWindowEventRoot)
+            ITopWindowEventRoot topWindowEventRoot)
         {
             switch (innerViewportKind)
             {

@@ -2,7 +2,7 @@
 using System;
 using LayoutFarm.UI;
 using LayoutFarm.UI.ForImplementator;
-using LayoutFarm.UI.InputBridge;
+
 
 
 namespace LayoutFarm
@@ -139,9 +139,11 @@ namespace LayoutFarm
 
             UIMouseEventArgs e = _mouseUpEventArgs;
             AddMouseEventArgsDetail(e, primaryMouseEventArgs);
-            UIMouseEventArgs.SetDiff(e, xdiff, ydiff);
+            e.SetDiff(xdiff, ydiff);
+             
             //----------------------------------
-            _mouseUpEventArgs.IsDragging = _isDragging;
+             
+            _mouseUpEventArgs.SetIsDragging(_isDragging);
             _isMouseDown = _isDragging = false;
 
             DateTime snapMouseUpTime = DateTime.Now;
@@ -175,8 +177,8 @@ namespace LayoutFarm
                 }
             }
             else
-            {
-                _mouseUpEventArgs.IsAlsoDoubleClick = timediff.Milliseconds < _dblClickSense;
+            {                 
+                _mouseUpEventArgs.SetMouseDoubleClick(timediff.Milliseconds < _dblClickSense);
                 _iTopBoxEventPortal.PortalMouseUp(_mouseUpEventArgs);
 
             }
@@ -201,12 +203,13 @@ namespace LayoutFarm
             //-------------------------------------------------------
             UIMouseEventArgs e = _mouseMoveEventArgs;
             AddMouseEventArgsDetail(e, primaryMouseEventArgs);
-            UIMouseEventArgs.SetDiff(e, xdiff, ydiff);
-            //-------------------------------------------------------
+            e.SetDiff(xdiff, ydiff);
 
-            if (_mouseMoveEventArgs.IsDragging = _isDragging = _isMouseDown)
+            //-------------------------------------------------------
+            _mouseMoveEventArgs.SetIsDragging(_isMouseDown);
+            if (_isDragging = _isMouseDown)
             {
-               
+
                 if (_draggingElement != null)
                 {
                     if (_draggingElement.DisableAutoMouseCapture)
@@ -279,7 +282,7 @@ namespace LayoutFarm
             StopCaretBlink();
             e.SetExactHitObject(_currentKbFocusElem);
             e.SetCurrentContextElement(_currentKbFocusElem);
-             
+
             _currentKbFocusElem.ListenKeyPress(e);
             _iTopBoxEventPortal.PortalKeyPress(e);
 
@@ -357,12 +360,9 @@ namespace LayoutFarm
         void AddMouseEventArgsDetail(UIMouseEventArgs mouseEventArg, PrimaryMouseEventArgs primaryMouseEventArgs)
         {
             mouseEventArg.ResetAll();
-            //TODO: review here
-            UIMouseEventArgs.SetEventInfo(mouseEventArg, primaryMouseEventArgs.Left, primaryMouseEventArgs.Top, primaryMouseEventArgs.Button, primaryMouseEventArgs.Clicks, primaryMouseEventArgs.Delta);
-
-            mouseEventArg.Ctrl = _lastKeydownWithControl;
-            mouseEventArg.Alt = _lastKeydownWithAlt;
-            mouseEventArg.Shift = _lastKeydownWithShift;
+            //TODO: review here             
+            mouseEventArg.SetEventInfo(primaryMouseEventArgs.Left, primaryMouseEventArgs.Top, primaryMouseEventArgs.Button, primaryMouseEventArgs.Clicks, primaryMouseEventArgs.Delta);
+            mouseEventArg.SetEventInfo(_lastKeydownWithControl, _lastKeydownWithAlt, _lastKeydownWithShift);
         }
     }
 }

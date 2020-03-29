@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
-using LayoutFarm.UI.InputBridge;
-
 namespace LayoutFarm.UI
 {
     public static class MyFontSettings
@@ -137,7 +135,7 @@ namespace LayoutFarm.UI
         {
             //eg. clear waiting layout 
             InvokePreRenderEvent();
-             
+
             ManageRenderElementRequests(); //eg. add some waiting render element
 
             //other event after manage render element request
