@@ -198,7 +198,7 @@ namespace Msdfgen
             else
             {
 
-                painter.CurrentBxtBlendOp = null;
+                //painter.CurrentBxtBlendOp = null;
 
                 //**
                 //c0 is touch line,

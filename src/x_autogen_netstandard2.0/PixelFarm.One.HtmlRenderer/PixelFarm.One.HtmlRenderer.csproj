@@ -611,6 +611,18 @@
     <Compile Include="..\..\PixelFarm\PaintLab.Color\ColorBlender\MathHelpers.cs" Link="PixelFarm\PaintLab.Color\ColorBlender\MathHelpers.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.Color\ColorBlender\RGB.cs" Link="PixelFarm\PaintLab.Color\ColorBlender\RGB.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.Color\KnownColors.cs" Link="PixelFarm\PaintLab.Color\KnownColors.cs" />
+    <Compile Include="..\..\PixelFarm\pixelfarm.bitmapbufferex\bitmapbufferex\BitmapBuffer.cs" Link="PixelFarm\pixelfarm.bitmapbufferex\bitmapbufferex\BitmapBuffer.cs" />
+    <Compile Include="..\..\PixelFarm\pixelfarm.bitmapbufferex\bitmapbufferex\bitmapbufferextensions\BaseExtensions.cs" Link="PixelFarm\pixelfarm.bitmapbufferex\bitmapbufferex\bitmapbufferextensions\BaseExtensions.cs" />
+    <Compile Include="..\..\PixelFarm\pixelfarm.bitmapbufferex\bitmapbufferex\bitmapbufferextensions\BlitExtensions.cs" Link="PixelFarm\pixelfarm.bitmapbufferex\bitmapbufferex\bitmapbufferextensions\BlitExtensions.cs" />
+    <Compile Include="..\..\PixelFarm\pixelfarm.bitmapbufferex\bitmapbufferex\bitmapbufferextensions\ConvertExtensions.cs" Link="PixelFarm\pixelfarm.bitmapbufferex\bitmapbufferex\bitmapbufferextensions\ConvertExtensions.cs" />
+    <Compile Include="..\..\PixelFarm\pixelfarm.bitmapbufferex\bitmapbufferex\bitmapbufferextensions\FillExtensions.cs" Link="PixelFarm\pixelfarm.bitmapbufferex\bitmapbufferex\bitmapbufferextensions\FillExtensions.cs" />
+    <Compile Include="..\..\PixelFarm\pixelfarm.bitmapbufferex\bitmapbufferex\bitmapbufferextensions\FilterExtensions.cs" Link="PixelFarm\pixelfarm.bitmapbufferex\bitmapbufferex\bitmapbufferextensions\FilterExtensions.cs" />
+    <Compile Include="..\..\PixelFarm\pixelfarm.bitmapbufferex\bitmapbufferex\bitmapbufferextensions\LineExtensions.cs" Link="PixelFarm\pixelfarm.bitmapbufferex\bitmapbufferex\bitmapbufferextensions\LineExtensions.cs" />
+    <Compile Include="..\..\PixelFarm\pixelfarm.bitmapbufferex\bitmapbufferex\bitmapbufferextensions\ShapeExtensions.cs" Link="PixelFarm\pixelfarm.bitmapbufferex\bitmapbufferex\bitmapbufferextensions\ShapeExtensions.cs" />
+    <Compile Include="..\..\PixelFarm\pixelfarm.bitmapbufferex\bitmapbufferex\bitmapbufferextensions\SplineExtensions.cs" Link="PixelFarm\pixelfarm.bitmapbufferex\bitmapbufferex\bitmapbufferextensions\SplineExtensions.cs" />
+    <Compile Include="..\..\PixelFarm\pixelfarm.bitmapbufferex\bitmapbufferex\bitmapbufferextensions\TransformationExtensions.cs" Link="PixelFarm\pixelfarm.bitmapbufferex\bitmapbufferex\bitmapbufferextensions\TransformationExtensions.cs" />
+    <Compile Include="..\..\PixelFarm\pixelfarm.bitmapbufferex\bitmapbufferex\BitmapBufferFactory.cs" Link="PixelFarm\pixelfarm.bitmapbufferex\bitmapbufferex\BitmapBufferFactory.cs" />
+    <Compile Include="..\..\PixelFarm\pixelfarm.bitmapbufferex\bitmapbufferex\BitmapContext.cs" Link="PixelFarm\pixelfarm.bitmapbufferex\bitmapbufferex\BitmapContext.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.PaintFx\BrightnesssAndContrast.cs" Link="PixelFarm\PaintLab.PaintFx\BrightnesssAndContrast.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.PaintFx\IImageFilterFunc.cs" Link="PixelFarm\PaintLab.PaintFx\IImageFilterFunc.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.PaintFx\ImgFilters.cs" Link="PixelFarm\PaintLab.PaintFx\ImgFilters.cs" />
@@ -639,21 +651,9 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_Transform\3_Perspective.cs" Link="PixelFarm\PixelFarm.Vectors\3_Transform\3_Perspective.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_Transform\4_SimulEqGeneral.cs" Link="PixelFarm\PixelFarm.Vectors\3_Transform\4_SimulEqGeneral.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\00_Porting\NativeMethods.cs" Link="PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\00_Porting\NativeMethods.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBuffer.cs" Link="PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBuffer.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\AntialiasingExtensions.cs" Link="PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\AntialiasingExtensions.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\BaseExtensions.cs" Link="PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\BaseExtensions.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\BlitExtensions.cs" Link="PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\BlitExtensions.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\ConvertExtensions.cs" Link="PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\ConvertExtensions.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\FillExtensions.cs" Link="PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\FillExtensions.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\FilterExtensions.cs" Link="PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\FilterExtensions.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\LineAaExtensions.cs" Link="PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\LineAaExtensions.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\LineExtensions.cs" Link="PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\LineExtensions.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\ShapeExtensionAA.cs" Link="PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\ShapeExtensionAA.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\ShapeExtensions.cs" Link="PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\ShapeExtensions.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\SplineExtensions.cs" Link="PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\SplineExtensions.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\TransformationExtensions.cs" Link="PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\TransformationExtensions.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferFactory.cs" Link="PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferFactory.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapContext.cs" Link="PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapContext.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\EsUtils\ES2Utils.cs" Link="PixelFarm\PixelFarm.DrawingGL\DrawingGL\EsUtils\ES2Utils.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\EsUtils\ES3Utils.cs" Link="PixelFarm\PixelFarm.DrawingGL\DrawingGL\EsUtils\ES3Utils.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\EsUtils\GeometryUtils.cs" Link="PixelFarm\PixelFarm.DrawingGL\DrawingGL\EsUtils\GeometryUtils.cs" />
@@ -1123,6 +1123,8 @@
     <Folder Include="PixelFarm\PaintLab.Color\ColorBlender\Algorithms" />
     <Folder Include="PixelFarm\PaintLab.Color\ColorBlender" />
     <Folder Include="PixelFarm\PaintLab.Color" />
+    <Folder Include="PixelFarm\pixelfarm.bitmapbufferex\bitmapbufferex" />
+    <Folder Include="PixelFarm\pixelfarm.bitmapbufferex\bitmapbufferex\bitmapbufferextensions" />
     <Folder Include="PixelFarm\PaintLab.PaintFx" />
     <Folder Include="PixelFarm\PaintLab.YourImplementation\0_FrameworkInit" />
     <Folder Include="PixelFarm\PaintLab.YourImplementation\1_Events" />
@@ -1130,8 +1132,6 @@
     <Folder Include="PixelFarm\PaintLab.YourImplementation\3_RenderTreeRoot" />
     <Folder Include="PixelFarm\PixelFarm.Vectors\3_Transform" />
     <Folder Include="PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\00_Porting" />
-    <Folder Include="PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx" />
-    <Folder Include="PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions" />
     <Folder Include="PixelFarm\PixelFarm.DrawingGL\DrawingGL\EsUtils" />
     <Folder Include="PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLShader" />
     <Folder Include="PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLTexture" />

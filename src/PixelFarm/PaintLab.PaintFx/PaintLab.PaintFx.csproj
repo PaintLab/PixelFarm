@@ -38,6 +38,42 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\pixelfarm.bitmapbufferex\bitmapbufferex\BitmapBuffer.cs">
+      <Link>0_REF_BitmapBufferEx\BitmapBuffer.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.bitmapbufferex\bitmapbufferex\bitmapbufferextensions\BaseExtensions.cs">
+      <Link>0_REF_BitmapBufferEx\BaseExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.bitmapbufferex\bitmapbufferex\bitmapbufferextensions\BlitExtensions.cs">
+      <Link>0_REF_BitmapBufferEx\BlitExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.bitmapbufferex\bitmapbufferex\bitmapbufferextensions\ConvertExtensions.cs">
+      <Link>0_REF_BitmapBufferEx\ConvertExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.bitmapbufferex\bitmapbufferex\bitmapbufferextensions\FillExtensions.cs">
+      <Link>0_REF_BitmapBufferEx\FillExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.bitmapbufferex\bitmapbufferex\bitmapbufferextensions\FilterExtensions.cs">
+      <Link>0_REF_BitmapBufferEx\FilterExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.bitmapbufferex\bitmapbufferex\bitmapbufferextensions\LineExtensions.cs">
+      <Link>0_REF_BitmapBufferEx\LineExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.bitmapbufferex\bitmapbufferex\bitmapbufferextensions\ShapeExtensions.cs">
+      <Link>0_REF_BitmapBufferEx\ShapeExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.bitmapbufferex\bitmapbufferex\bitmapbufferextensions\SplineExtensions.cs">
+      <Link>0_REF_BitmapBufferEx\SplineExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.bitmapbufferex\bitmapbufferex\bitmapbufferextensions\TransformationExtensions.cs">
+      <Link>0_REF_BitmapBufferEx\TransformationExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.bitmapbufferex\bitmapbufferex\BitmapBufferFactory.cs">
+      <Link>0_REF_BitmapBufferEx\BitmapBufferFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.bitmapbufferex\bitmapbufferex\BitmapContext.cs">
+      <Link>0_REF_BitmapBufferEx\BitmapContext.cs</Link>
+    </Compile>
     <Compile Include="BrightnesssAndContrast.cs" />
     <Compile Include="InternalBrightnessAndContrastAdjustment.cs" />
     <Compile Include="PatternFilterBilnearColorRGBA.cs" />
@@ -52,9 +88,9 @@
     <Compile Include="IImageFilterFunc.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Typography\x_autogen2\PixelFarm.MiniAgg.One\PixelFarm.MiniAgg.One.csproj">
-      <Project>{fb5f78f5-c921-405d-8f21-42f7c15c2ad9}</Project>
-      <Name>PixelFarm.MiniAgg.One</Name>
+    <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
+      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
+      <Name>PixelFarm.Drawing</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\BackEnd.PaintFx\PdnSharedProject\PdnSharedProject.projitems" Label="Shared" />
