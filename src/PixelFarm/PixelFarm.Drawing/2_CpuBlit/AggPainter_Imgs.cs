@@ -246,11 +246,11 @@ namespace PixelFarm.CpuBlit
         public override void ApplyFilter(PixelFarm.Drawing.IImageFilter imgFilter)
         {
             //check if we can use this imgFilter
-            if (!(imgFilter is PixelFarm.CpuBlit.Imaging.ICpuBlitImgFilter cpuBlitImgFx)) return;
+            if (!(imgFilter is PixelFarm.CpuBlit.FragmentProcessing.ICpuBlitImgFilter cpuBlitImgFx)) return;
             // 
             cpuBlitImgFx.SetTarget(_aggsx.DestBitmapBlender);
             imgFilter.Apply();
         }
-        
+
     }
 }
