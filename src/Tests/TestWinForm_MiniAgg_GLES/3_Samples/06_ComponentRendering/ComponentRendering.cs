@@ -5,6 +5,8 @@ using System;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.CpuBlit.PixelProcessing;
+using PixelFarm.CpuBlit.FragmentProcessing;
+
 using PixelFarm.CpuBlit.Imaging;
 using PixelFarm.CpuBlit.Rasterization;
 

@@ -47,6 +47,7 @@ using System.Collections.Generic;
 
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.Imaging;
+using PixelFarm.CpuBlit.FragmentProcessing;
 
 using Mini;
 
