@@ -231,7 +231,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
     //======================================================renderer_outline_aa
     public class OutlineRenderer : LineRenderer
     {
-        const int MAX_HALF_WIDTH = 64;
+        internal const int MAX_HALF_WIDTH = 64;
         PixelProcessing.IBitmapBlender _destImageSurface;
         LineProfileAnitAlias _lineProfile;
         RectInt _clippingRectangle;
@@ -333,7 +333,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         public override void SemiDot(CompareFunction cmp, int xc1, int yc1, int xc2, int yc2)
         {
             if (_doClipping && ClipLiangBarsky.Flags(xc1, yc1, _clippingRectangle) != 0) return;
-            
+
             int r = ((SubPixelWidth + LineAA.SUBPIXEL_MARK) >> LineAA.SUBPIXEL_SHIFT);
             if (r < 1) r = 1;
 
@@ -442,7 +442,11 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                 }
                 return;
             }
-            (new LineInterpolatorAA0(this, lp)).Loop();
+
+            using (var aa0 = new LineInterpolatorAA0(this, lp))
+            {
+                aa0.Loop();
+            }
         }
 
         public override void Line0(LineParameters lp)
@@ -730,49 +734,9 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         //m_dist = new int[MAX_HALF_WIDTH + 1];
         //    m_covers = new byte[MAX_HALF_WIDTH * 2 + 4];
 
-        Stack<int[]> _freeDistPool = new Stack<int[]>();
-        Stack<byte[]> _freeConvPool = new Stack<byte[]>();
-
-        internal int[] GetFreeDistArray()
-        {
-            if (_freeDistPool.Count > 0)
-            {
-                return _freeDistPool.Pop();
-            }
-            else
-            {
-                //m_dist = new int[MAX_HALF_WIDTH + 1];
-                //m_covers = new byte[MAX_HALF_WIDTH * 2 + 4];
 
 
-                return new int[LineInterpolatorAAData.MAX_HALF_WIDTH + 1];
-            }
-        }
-        internal void ReleaseDistArray(int[] distArray)
-        {
-            //clear and add to list
-            Array.Clear(distArray, 0, distArray.Length);
-            _freeDistPool.Push(distArray);
-        }
-        internal byte[] GetFreeConvArray()
-        {
-            if (_freeConvPool.Count > 0)
-            {
-                return _freeConvPool.Pop();
-            }
-            else
-            {
-                //m_dist = new int[MAX_HALF_WIDTH + 1];
-                //m_covers = new byte[MAX_HALF_WIDTH * 2 + 4];
-                return new byte[(MAX_HALF_WIDTH + 1) * 2];
-            }
-        }
-        internal void ReleaseConvArray(byte[] convArray)
-        {
-            //clear and add to list
-            Array.Clear(convArray, 0, convArray.Length);
-            _freeConvPool.Push(convArray);
-        }
+
     }
 
 

@@ -81,23 +81,31 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
     {
 
         //----------------------
-        //this need to be class ***
+        //this need to be class ***?
         //---------------------- 
-        readonly int _cnt;
-        readonly int _lft;
-        readonly int _rem;
+        int _cnt;
+        int _lft;
+        int _rem;
         int _mod;
         int _y;
         //-------------------------------------------- Forward-adjusted line
+
+        public LineInterpolatorDDA2()
+        {
+        }
         public LineInterpolatorDDA2(int y1, int y2, int count)
+        {
+            Set(y1, y2, count);
+        }
+        public void Set(int y1, int y2, int count)
         {
             //dbugIdN = 0;
             _cnt = (count <= 0 ? 1 : count);
             _lft = ((y2 - y1) / _cnt);
             _rem = ((y2 - y1) % _cnt);
-
             _mod = (_rem);
             _y = (y1);
+
             if (_mod <= 0)
             {
                 _mod += count;
@@ -106,7 +114,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             }
             _mod -= count;
         }
-        public LineInterpolatorDDA2(int y, int count)
+        public void Set(int y, int count)
         {
             //dbugIdN = 0;
             _cnt = (count <= 0 ? 1 : count);
@@ -121,6 +129,8 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                 _lft--;
             }
         }
+
+
 #if DEBUG
         //static int dbugIdN;
 #endif
@@ -246,6 +256,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             }
 
             _inc = (_ver ? ((y2 > y1) ? 1 : -1) : ((x2 > x1) ? 1 : -1));
+
             _interpolator = new LineInterpolatorDDA2(_ver ? x1 : y1,
                            _ver ? x2 : y2,
                            _len);

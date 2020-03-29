@@ -49,8 +49,8 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         public static int DblHr(int x) => x << SUBPIXEL_SHIFT;
 
 
-        public static void Bisectrix(LineParameters l1,
-                   LineParameters l2,
+        public static void Bisectrix(in LineParameters l1,
+                   in LineParameters l2,
                    out int x, out int y)
         {
             double k = (double)(l2.len) / (double)(l1.len);
@@ -85,7 +85,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         /// <param name="lp"></param>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        public static void FixDegenBisectrixStart(LineParameters lp,
+        public static void FixDegenBisectrixStart(in LineParameters lp,
                                                ref int x, ref int y)
         {
             int d = AggMath.iround(((double)(x - lp.x2) * (double)(lp.y2 - lp.y1) -
@@ -102,7 +102,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         /// <param name="lp"></param>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        public static void FixDegenBisectrixEnd(LineParameters lp,
+        public static void FixDegenBisectrixEnd(in LineParameters lp,
                                              ref int x, ref int y)
         {
             int d = AggMath.iround(((double)(x - lp.x2) * (double)(lp.y2 - lp.y1) -

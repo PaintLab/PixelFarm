@@ -17,9 +17,85 @@
 
 using System;
 using PixelFarm.CpuBlit.FragmentProcessing;
+using System.Collections.Generic;
+
 
 namespace PixelFarm.CpuBlit.Rasterization.Lines
 {
+
+    static class LineAADataPool
+    {
+        [ThreadStatic]
+        static Stack<int[]> _freeDistPool;
+        [ThreadStatic]
+        static Stack<byte[]> _freeConvPool;
+
+
+        internal static int[] GetFreeDistArray()
+        {
+            if (_freeDistPool == null) _freeDistPool = new Stack<int[]>();
+
+            if (_freeDistPool.Count > 0)
+            {
+                return _freeDistPool.Pop();
+            }
+            else
+            {
+                //m_dist = new int[MAX_HALF_WIDTH + 1];
+                //m_covers = new byte[MAX_HALF_WIDTH * 2 + 4];
+                return new int[LineInterpolatorAAData.MAX_HALF_WIDTH + 1];
+            }
+        }
+        internal static void ReleaseDistArray(int[] distArray)
+        {
+            //clear and add to list
+            Array.Clear(distArray, 0, distArray.Length);
+            _freeDistPool.Push(distArray);
+        }
+        internal static byte[] GetFreeConvArray()
+        {
+            if (_freeConvPool == null) _freeConvPool = new Stack<byte[]>();
+            if (_freeConvPool.Count > 0)
+            {
+                return _freeConvPool.Pop();
+            }
+            else
+            {
+                //m_dist = new int[MAX_HALF_WIDTH + 1];
+                //m_covers = new byte[MAX_HALF_WIDTH * 2 + 4];
+                return new byte[(OutlineRenderer.MAX_HALF_WIDTH + 1) * 2];
+            }
+        }
+        internal static void ReleaseConvArray(byte[] convArray)
+        {
+            //clear and add to list
+            Array.Clear(convArray, 0, convArray.Length);
+            _freeConvPool.Push(convArray);
+        }
+
+        [ThreadStatic]
+        static Stack<LineInterpolatorDDA2> _freeInterpolatorDDA2Pool;
+        internal static LineInterpolatorDDA2 GetFreeInterpolatorDDA2()
+        {
+            if (_freeInterpolatorDDA2Pool == null) _freeInterpolatorDDA2Pool = new Stack<LineInterpolatorDDA2>();
+
+            if (_freeInterpolatorDDA2Pool.Count > 0)
+            {
+                return _freeInterpolatorDDA2Pool.Pop();
+            }
+            else
+            {
+                return new LineInterpolatorDDA2();
+            }
+        }
+        internal static void ReleaseInterpolatorDDA2(LineInterpolatorDDA2 dda2)
+        {
+            _freeInterpolatorDDA2Pool.Push(dda2);
+        }
+
+    }
+
+
     //================================================line_interpolator_aa_base
     struct LineInterpolatorAAData : IDisposable
     {
@@ -44,20 +120,28 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         public const int MAX_HALF_WIDTH = 64;
 
         OutlineRenderer _ren;
-        public LineInterpolatorAAData(OutlineRenderer ren, LineParameters lp)
+
+        public LineInterpolatorAAData(OutlineRenderer ren, in LineParameters lp)
         {
 
             _ren = ren;
+
             //TODO: consider resuable array
-            _dist = ren.GetFreeDistArray();// new int[MAX_HALF_WIDTH + 1];
-            _covers = ren.GetFreeConvArray(); // new byte[MAX_HALF_WIDTH * 2 + 4];
+            _dist = LineAADataPool.GetFreeDistArray();// new int[MAX_HALF_WIDTH + 1];
+            _covers = LineAADataPool.GetFreeConvArray(); // new byte[MAX_HALF_WIDTH * 2 + 4];
 
 
-            _li = new LineInterpolatorDDA2(
-                lp.vertical ? LineAA.DblHr(lp.x2 - lp.x1) :
-                              LineAA.DblHr(lp.y2 - lp.y1),
-                lp.vertical ? Math.Abs(lp.y2 - lp.y1) :
-                              Math.Abs(lp.x2 - lp.x1) + 1);
+            _li = LineAADataPool.GetFreeInterpolatorDDA2();
+
+            if (lp.vertical)
+            {
+                _li.Set(LineAA.DblHr(lp.x2 - lp.x1), Math.Abs(lp.y2 - lp.y1));
+            }
+            else
+            {
+                _li.Set(LineAA.DblHr(lp.y2 - lp.y1), Math.Abs(lp.x2 - lp.x1) + 1);
+            }
+
 
             //---------------------------------------------------------
             _lp = lp;
@@ -97,11 +181,11 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             }
             _dist[i++] = 0x7FFF0000;
         }
-
         public void Dispose()
         {
-            _ren.ReleaseConvArray(_covers);
-            _ren.ReleaseDistArray(_dist); 
+            LineAADataPool.ReleaseConvArray(_covers);
+            LineAADataPool.ReleaseDistArray(_dist);
+            LineAADataPool.ReleaseInterpolatorDDA2(_li);
         }
 
         public void AdjustForward()

@@ -54,15 +54,6 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             _li_x = new LineInterpolatorDDA2(x1, x2, len);
             _li_y = new LineInterpolatorDDA2(y1, y2, len);
         }
-
-        ////----------------------------------------------------------------
-        //public void ReSync(double xe, double ye, int len)
-        //{
-        //    m_trans.Transform(ref xe, ref ye);
-        //    m_li_x = new LineInterpolatorDDA2(m_li_x.Y, AggMath.iround(xe * SUB_PIXEL_SCALE), len);
-        //    m_li_y = new LineInterpolatorDDA2(m_li_y.Y, AggMath.iround(ye * SUB_PIXEL_SCALE), len);
-        //} 
-
         public void Next()
         {
             _li_x.Next();
