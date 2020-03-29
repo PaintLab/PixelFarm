@@ -555,8 +555,8 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         {
             if (lp.len > LineAA.MAX_LENGTH)
             {
-                LineParameters lp1, lp2;
-                if (lp.Divide(out lp1, out lp2))
+
+                if (lp.Divide(out LineParameters lp1, out LineParameters lp2))
                 {
                     Line2NoClip(lp1, lp1.x2 + (lp1.y2 - lp1.y1), lp1.y2 - (lp1.x2 - lp1.x1));
                     Line2NoClip(lp2, (lp.x2 + ex) >> 1, (lp.y2 + ey) >> 1);
@@ -631,8 +631,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         {
             if (lp.len > LineAA.MAX_LENGTH)
             {
-                LineParameters lp1, lp2;
-                if (lp.Divide(out lp1, out lp2))
+                if (lp.Divide(out LineParameters lp1, out LineParameters lp2))
                 {
                     int mx = lp1.x2 + (lp1.y2 - lp1.y1);
                     int my = lp1.y2 - (lp1.x2 - lp1.x1);
@@ -729,15 +728,5 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                 Line3NoClip(lp, sx, sy, ex, ey);
             }
         }
-
-        //LineInterpolatorAAData.max
-        //m_dist = new int[MAX_HALF_WIDTH + 1];
-        //    m_covers = new byte[MAX_HALF_WIDTH * 2 + 4];
-
-
-
-
     }
-
-
 }

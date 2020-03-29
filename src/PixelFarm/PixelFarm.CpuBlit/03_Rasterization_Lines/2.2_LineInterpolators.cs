@@ -119,7 +119,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
 
         public const int MAX_HALF_WIDTH = 64;
 
-        OutlineRenderer _ren;
+        readonly OutlineRenderer _ren;
 
         public LineInterpolatorAAData(OutlineRenderer ren, in LineParameters lp)
         {
@@ -186,6 +186,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             LineAADataPool.ReleaseConvArray(_covers);
             LineAADataPool.ReleaseDistArray(_dist);
             LineAADataPool.ReleaseInterpolatorDDA2(_li);
+
         }
 
         public void AdjustForward()
@@ -739,9 +740,6 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                                                offset1 - offset0, _aa_data._covers,
                                                offset0);
             return npix != 0 && ++_aa_data.m_step < _aa_data._count;
-
-
-
         }
     }
 
