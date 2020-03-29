@@ -127,10 +127,8 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-
-
         //---------------------------------------------------------------- 
-        protected override void OnMouseLeave(UIMouseEventArgs e)
+        protected override void OnMouseLeave(UIMouseLeaveEventArgs e)
         {
             e.MouseCursorStyle = MouseCursorStyle.Arrow;
         }
@@ -140,7 +138,7 @@ namespace LayoutFarm.CustomWidgets
             _textEditRenderElement.HandleDoubleClick(e);
             e.CancelBubbling = true;
         }
-        protected override void OnMouseWheel(UIMouseEventArgs e)
+        protected override void OnMouseWheel(UIMouseWheelEventArgs e)
         {
             //mouse wheel on  
             _textEditRenderElement.HandleMouseWheel(e);
@@ -172,12 +170,12 @@ namespace LayoutFarm.CustomWidgets
             }
             return false;
         }
-        protected override void OnMouseDown(UIMouseEventArgs e)
+        protected override void OnMouseDown(UIMouseDownEventArgs e)
         {
             this.Focus();
             e.MouseCursorStyle = MouseCursorStyle.IBeam;
             e.CancelBubbling = true;
-            e.CurrentContextElement = this;
+            
             _textEditRenderElement.HandleMouseDown(e);
         }
         protected override void OnLostKeyboardFocus(UIFocusEventArgs e)
@@ -185,7 +183,7 @@ namespace LayoutFarm.CustomWidgets
             base.OnLostKeyboardFocus(e);
             _textEditRenderElement.Blur();
         }
-        protected override void OnMouseMove(UIMouseEventArgs e)
+        protected override void OnMouseMove(UIMouseMoveEventArgs e)
         {
             if (e.IsDragging)
             {
@@ -194,7 +192,7 @@ namespace LayoutFarm.CustomWidgets
                 e.MouseCursorStyle = MouseCursorStyle.IBeam;
             }
         }
-        protected override void OnMouseUp(UIMouseEventArgs e)
+        protected override void OnMouseUp(UIMouseUpEventArgs e)
         {
             if (e.IsDragging)
             {

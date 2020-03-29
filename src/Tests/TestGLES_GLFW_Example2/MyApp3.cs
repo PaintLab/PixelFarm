@@ -107,7 +107,7 @@ namespace TestGlfw
 
 
 
-        protected override void OnMouseMove(UIMouseEventArgs e)
+        protected override void OnMouseMove(UIMouseMoveEventArgs e)
         {
             if (_isMouseDown)
             {
@@ -119,12 +119,12 @@ namespace TestGlfw
             base.OnMouseMove(e);
         }
         bool _isMouseDown;
-        protected override void OnMouseDown(UIMouseEventArgs e)
+        protected override void OnMouseDown(UIMouseDownEventArgs e)
         {
             _isMouseDown = true;
             base.OnMouseDown(e);
         }
-        protected override void OnMouseUp(UIMouseEventArgs e)
+        protected override void OnMouseUp(UIMouseUpEventArgs e)
         {
             _isMouseDown = false;
             base.OnMouseUp(e);

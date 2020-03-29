@@ -365,7 +365,7 @@ namespace LayoutFarm.CustomWidgets
             EvalNeedScrollBox();
 
         }
-        protected override void OnMouseDown(UIMouseEventArgs e)
+        protected override void OnMouseDown(UIMouseDownEventArgs e)
         {
             if (e.X < _scrollButton.Left)
             {
@@ -418,43 +418,8 @@ namespace LayoutFarm.CustomWidgets
                 _scrollRangeLogic.SetValue((float)(_onePixelFor * currentMarkAt));
                 newYPos = CalculateThumbPosition();
                 scroll_button.SetLocation(pos.X, newYPos);
-
                 this.UserScroll?.Invoke(this, EventArgs.Empty);
-
-                e.StopPropagation();
             };
-            //----------------------------
-            //scroll_button.MouseLeave += (s, e) =>
-            //{
-            //    if (e.IsDragging)
-            //    {
-            //        Point pos = scroll_button.Position;
-            //        //if vscroll bar then move only y axis 
-            //        int newYPos = (int)(pos.Y + e.YDiff);
-            //        //clamp!
-            //        if (newYPos >= this.Height - (minmax_boxHeight + scrollButton.Height))
-            //        {
-            //            newYPos = this.Height - (minmax_boxHeight + scrollButton.Height);
-            //        }
-            //        else if (newYPos < minmax_boxHeight)
-            //        {
-            //            newYPos = minmax_boxHeight;
-            //        }
-
-            //        //calculate value from position 
-
-            //        int currentMarkAt = (newYPos - minmax_boxHeight);
-            //        this.scrollValue = (float)(onePixelFor * currentMarkAt);
-            //        newYPos = CalculateThumbPosition() + minmax_boxHeight;
-            //        scroll_button.SetLocation(pos.X, newYPos);
-            //        if (this.UserScroll != null)
-            //        {
-            //            this.UserScroll(this, EventArgs.Empty);
-            //        }
-
-            //        e.StopPropagation();
-            //    }
-            //};
         }
 
         //---------------------------------------------------------------------------
@@ -582,7 +547,7 @@ namespace LayoutFarm.CustomWidgets
 
                 this.UserScroll?.Invoke(this, EventArgs.Empty);
 
-                e.StopPropagation();
+
             };
             ////-------------------------------------------
             ////4.
@@ -688,7 +653,7 @@ namespace LayoutFarm.CustomWidgets
 
         public event EventHandler<EventArgs> UserScroll;
         //tempfix here
-        internal void ChildNotifyMouseWheel(UIMouseEventArgs e)
+        internal void ChildNotifyMouseWheel(UIMouseWheelEventArgs e)
         {
             if (e.Delta < 0)
             {   //scroll down
@@ -700,7 +665,7 @@ namespace LayoutFarm.CustomWidgets
                 this.StepSmallToMin();
             }
         }
-        protected override void OnMouseWheel(UIMouseEventArgs e)
+        protected override void OnMouseWheel(UIMouseWheelEventArgs e)
         {
             if (e.Delta < 0)
             {   //scroll down
@@ -1002,7 +967,7 @@ namespace LayoutFarm.CustomWidgets
             set => _slideBox.ScrollValue = value;
         }
 
-        protected override void OnMouseWheel(UIMouseEventArgs e)
+        protected override void OnMouseWheel(UIMouseWheelEventArgs e)
         {
             if (e.Delta < 0)
             {   //scroll down
@@ -1043,7 +1008,7 @@ namespace LayoutFarm.CustomWidgets
             this.OwnerScrollBar = owner;
         }
         IUIEventListener OwnerScrollBar { get; set; }
-        protected override void OnMouseWheel(UIMouseEventArgs e)
+        protected override void OnMouseWheel(UIMouseWheelEventArgs e)
         {
             this.OwnerScrollBar.ListenMouseWheel(e);
         }

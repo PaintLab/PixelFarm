@@ -18,6 +18,10 @@ namespace TestGlfw
 
             Mini.RootDemoPath.Path = @"..\Data";
             
+            
+            PixelFarm.Forms.GlfwPlatform glfwPlatform = new PixelFarm.Forms.GlfwPlatform();
+            
+
             MyApp3.Start();             
         }
     }

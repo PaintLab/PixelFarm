@@ -4,20 +4,20 @@ using System;
 using System.Collections.Generic;
 
 using PixelFarm.Drawing;
-using LayoutFarm.UI.InputBridge;
+using LayoutFarm.UI.ForImplementator;
 
 namespace LayoutFarm.UI
 {
     public abstract partial class AbstractTopWindowBridge
     {
-        RootGraphic _rootgfx;
-        ITopWindowEventRoot _topWinEventRoot;
+        readonly RootGraphic _rootgfx;
+        readonly ITopWindowEventRoot _topWinEventRoot;
         CanvasViewport _canvasViewport;
         MouseCursorStyle _currentCursorStyle = MouseCursorStyle.Default;
 
-        Stack<UIMouseEventArgs> _mouseEventStack = new Stack<UIMouseEventArgs>(); //reusable
-        Stack<UIKeyEventArgs> _keyEventStack = new Stack<UIKeyEventArgs>(); //reusable
-        Stack<UIFocusEventArgs> _focusEventStack = new Stack<UIFocusEventArgs>(); //resuable
+
+        readonly UIKeyEventArgs _keyEventArgs = new UIKeyEventArgs();
+        readonly UIFocusEventArgs _focusEventArgs = new UIFocusEventArgs();
 
         public AbstractTopWindowBridge(RootGraphic rootgfx, ITopWindowEventRoot topWinEventRoot)
         {
@@ -165,13 +165,6 @@ namespace LayoutFarm.UI
             //System.Windows.Forms.Cursor.Show();
         }
 
-
-        UIFocusEventArgs GetFreeFocusEventArgs() => _focusEventStack.Count > 0 ? _focusEventStack.Pop() : new UIFocusEventArgs();
-        void ReleaseFocusEventArgs(UIFocusEventArgs e)
-        {
-            e.Clear();
-            _focusEventStack.Push(e);
-        }
         public void HandleGotFocus(EventArgs e)
         {
             if (_canvasViewport.IsClosed)
@@ -179,10 +172,8 @@ namespace LayoutFarm.UI
                 return;
             }
             _canvasViewport.FullMode = false;
-
-            UIFocusEventArgs e1 = GetFreeFocusEventArgs();
-            _topWinEventRoot.RootGotFocus(e1);
-            ReleaseFocusEventArgs(e1);
+            _topWinEventRoot.RootGotFocus(_focusEventArgs);
+            _focusEventArgs.ResetAll();
             //
             PrepareRenderAndFlushAccumGraphics();
         }
@@ -190,23 +181,21 @@ namespace LayoutFarm.UI
         {
             _canvasViewport.FullMode = false;
             //
-            UIFocusEventArgs e1 = GetFreeFocusEventArgs();
-            _topWinEventRoot.RootLostFocus(e1);
-            ReleaseFocusEventArgs(e1);
+
+            _topWinEventRoot.RootLostFocus(_focusEventArgs);
+            _focusEventArgs.ResetAll();
             //
             PrepareRenderAndFlushAccumGraphics();
         }
         //------------------------------------------------------------------------
 
 
-        public void HandleMouseDown(UIMouseEventArgs mouseEventArgs)
+        public void HandleMouseDown(PrimaryMouseEventArgs mouseEventArgs)
         {
             _canvasViewport.FullMode = false;
             _topWinEventRoot.RootMouseDown(mouseEventArgs);
-
-            UpdateCursor(mouseEventArgs);
-
-            ReleaseUIMouseEventArgs(mouseEventArgs);
+            //
+            UpdateCursor();
 
             PrepareRenderAndFlushAccumGraphics();
 #if DEBUG
@@ -221,77 +210,58 @@ namespace LayoutFarm.UI
         }
 
 
-        //------------------
-        void ReleaseUIMouseEventArgs(UIMouseEventArgs mouseEventArgs)
-        {
-            mouseEventArgs.Clear();
-            _mouseEventStack.Push(mouseEventArgs);
-        }
-
-        //------------------
-        public void HandleMouseMove(UIMouseEventArgs mouseEventArgs)
+        public void HandleMouseMove(PrimaryMouseEventArgs mouseEventArgs)
         {
             _topWinEventRoot.RootMouseMove(mouseEventArgs);
-            UpdateCursor(mouseEventArgs);
-            ReleaseUIMouseEventArgs(mouseEventArgs);
+            UpdateCursor();
             PrepareRenderAndFlushAccumGraphics();
         }
 
-        public void HandleMouseUp(UIMouseEventArgs mouseEventArgs)
+        public void HandleMouseUp(PrimaryMouseEventArgs mouseEventArgs)
         {
             _canvasViewport.FullMode = false;
             _topWinEventRoot.RootMouseUp(mouseEventArgs);
+            UpdateCursor();
 
-            UpdateCursor(mouseEventArgs);
-            ReleaseUIMouseEventArgs(mouseEventArgs);
             PrepareRenderAndFlushAccumGraphics();
         }
 
         Cursor _latestCustomCursor;
-        void UpdateCursor(UIMouseEventArgs mouseEventArgs)
+        void UpdateCursor()
         {
-            if (mouseEventArgs.CustomMouseCursor != null)
+
+            if (_topWinEventRoot.RequestCursor != null)
             {
                 //specific custom cursor
                 _currentCursorStyle = MouseCursorStyle.CustomStyle;
-                if (_latestCustomCursor != mouseEventArgs.CustomMouseCursor)
+                if (_latestCustomCursor != _topWinEventRoot.RequestCursor)
                 {
                     //some change                     
-                    ChangeCursor(_latestCustomCursor = mouseEventArgs.CustomMouseCursor);
+                    ChangeCursor(_latestCustomCursor = _topWinEventRoot.RequestCursor);
                 }
             }
             else
             {
                 _latestCustomCursor = null;
-                if (_currentCursorStyle != mouseEventArgs.MouseCursorStyle)
+                if (_currentCursorStyle != _topWinEventRoot.RequestCursorStyle)
                 {
-                    ChangeCursor(_currentCursorStyle = mouseEventArgs.MouseCursorStyle);
+                    ChangeCursor(_currentCursorStyle = _topWinEventRoot.RequestCursorStyle);
                 }
             }
 
 
         }
-        public void HandleMouseWheel(UIMouseEventArgs mouseEventArgs)
+        public void HandleMouseWheel(PrimaryMouseEventArgs mouseEventArgs)
         {
             _canvasViewport.FullMode = true;
             _topWinEventRoot.RootMouseWheel(mouseEventArgs);
-            UpdateCursor(mouseEventArgs);
+            UpdateCursor();
 
-            ReleaseUIMouseEventArgs(mouseEventArgs);
+
             PrepareRenderAndFlushAccumGraphics();
         }
 
 
-        UIKeyEventArgs GetFreeUIKeyEventArg()
-        {
-            return _keyEventStack.Count > 0 ? _keyEventStack.Pop() : new UIKeyEventArgs();
-        }
-
-        void ReleaseUIKeyEventArgs(UIKeyEventArgs e)
-        {
-            e.Clear();
-            _keyEventStack.Push(e);
-        }
         //------------------------------------------------------
         public void HandleKeyDown(UIKeyEventArgs keyEventArgs)
         {
@@ -304,8 +274,7 @@ namespace LayoutFarm.UI
 #endif
             _canvasViewport.FullMode = false;
             _topWinEventRoot.RootKeyDown(keyEventArgs);
-            ReleaseUIKeyEventArgs(keyEventArgs);
-
+            keyEventArgs.ResetAll();
             PrepareRenderAndFlushAccumGraphics();
         }
 
@@ -314,7 +283,7 @@ namespace LayoutFarm.UI
         {
             _canvasViewport.FullMode = false;
             _topWinEventRoot.RootKeyUp(keyEventArgs);
-            ReleaseUIKeyEventArgs(keyEventArgs);
+            keyEventArgs.ResetAll();
             PrepareRenderAndFlushAccumGraphics();
         }
 
@@ -333,7 +302,7 @@ namespace LayoutFarm.UI
 
             keyEventArgs.SetKeyChar(keyChar);
             _topWinEventRoot.RootKeyPress(keyEventArgs);
-            ReleaseUIKeyEventArgs(keyEventArgs);
+            keyEventArgs.ResetAll();
 
             PrepareRenderAndFlushAccumGraphics();
         }
@@ -347,15 +316,13 @@ namespace LayoutFarm.UI
             //          System.Diagnostics.Debug.WriteLine("prev_dlgkey" + (dbug_preview_dialogKey_count++));
             //#endif
             _canvasViewport.FullMode = false;
-
-            UIKeyEventArgs keyEventArgs = GetFreeUIKeyEventArg();
-            keyEventArgs.SetEventInfo((uint)keyData, false, false, false);//f-f-f will be set later
-            bool result = _topWinEventRoot.RootProcessDialogKey(keyEventArgs);
+            _keyEventArgs.SetEventInfo((uint)keyData, false, false, false, UIEventName.ProcessDialogKey);//f-f-f will be set later
+            bool result = _topWinEventRoot.RootProcessDialogKey(_keyEventArgs);
             if (result)
             {
                 PrepareRenderAndFlushAccumGraphics();
             }
-            ReleaseUIKeyEventArgs(keyEventArgs);
+
             return result;
         }
 

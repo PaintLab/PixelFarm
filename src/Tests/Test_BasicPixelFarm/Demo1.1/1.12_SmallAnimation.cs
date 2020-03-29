@@ -23,13 +23,13 @@ namespace LayoutFarm
                 {
                     //test start animation  
                     int nsteps = 40;
-                    UIPlatform.RegisterTimerTask(20, timer =>
+                    UIPlatform.RegisterTimerTask(20, timTask =>
                     {
                         imgBox.SetLocation(imgBox.Left, imgBox.Top + 10);
                         nsteps--;
                         if (nsteps <= 0)
                         {
-                            timer.Remove();
+                            timTask.RemoveSelf();
                         }
                     });
                 };

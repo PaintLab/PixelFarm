@@ -11,7 +11,7 @@ namespace LayoutFarm.CustomWidgets
         Color _textColor; //text color
         Color _backColor;//actual filling color
 
-         
+
         //some time the label background is transparent
         //but its host has solid color, so this value will hint
 
@@ -19,12 +19,18 @@ namespace LayoutFarm.CustomWidgets
         CustomTextRun _myTextRun;
         DrawTextTechnique _drawTextTechnique;
 
-        //
+        public Label() : this(10, 10)
+        {
+            //if user does not provide width and height,
+            //we use default first, and set HasSpecificWidthAndHeight=false
+            //(this feature  found in label, image box, and text-flow-label)
+            HasSpecificWidthAndHeight = false; //***
+        }
         public Label(int w, int h)
             : base(w, h)
         {
-            _textColor = PixelFarm.Drawing.Color.Black; //default?, use Theme?
-            DrawTextTechnique = DrawTextTechnique.Stencil;//default
+            _textColor = PixelFarm.Drawing.Color.Black;
+            DrawTextTechnique = DrawTextTechnique.Stencil;
         }
 
 #if DEBUG
@@ -113,6 +119,7 @@ namespace LayoutFarm.CustomWidgets
                     _myTextRun.Text = value;
                     _myTextRun.InvalidateGraphics();
                 }
+                 
             }
         }
         public DrawTextTechnique DrawTextTechnique

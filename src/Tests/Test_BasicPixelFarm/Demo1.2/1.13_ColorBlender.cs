@@ -173,14 +173,14 @@ namespace LayoutFarm.ColorBlenderSample
 
             //----------------------------------
             {
-                Label lblChromaDarken = new Label(50, 20);
+                Label lblChromaDarken = new Label();
                 lblChromaDarken.BackColor = PixelFarm.Drawing.KnownColors.Gray;
-                lblChromaDarken.Text = "Darken";
+                lblChromaDarken.Text = "Darken";                
                 lblChromaDarken.SetLocation(x, y);
                 lblChromaDarken.AttachUIBehaviour(buttonBeh);
 
                 UI.GeneralEventListener evListener = new UI.GeneralEventListener();
-                evListener.MouseDown += e =>
+                evListener.MouseDown += (s, e) =>
                 {
                     PixelFarm.Drawing.Color color = PixelFarm.Drawing.KnownColors.DeepPink;
                     PaintLab.ChromaJs.Chroma chroma = new PaintLab.ChromaJs.Chroma(color);
@@ -195,21 +195,21 @@ namespace LayoutFarm.ColorBlenderSample
                     ShowColorBoxs(colorPanel, colors);
                 };
                 lblChromaDarken.AttachExternalEventListener(evListener);
-                x += lblChromaDarken.Width + 5;
+                x += 50;
 
                 host.AddChild(lblChromaDarken);
             }
 
             //----------------------------------
             {
-                Label lblLighten = new Label(50, 20);
+                Label lblLighten = new Label();
                 lblLighten.AttachUIBehaviour(buttonBeh);
 
                 lblLighten.Text = "Brighten";
                 lblLighten.SetLocation(x, y);
                 {
                     UI.GeneralEventListener evListener = new UI.GeneralEventListener();
-                    evListener.MouseDown += e =>
+                    evListener.MouseDown += (s, e) =>
                     {
                         PixelFarm.Drawing.Color color = PixelFarm.Drawing.KnownColors.DeepPink;
                         PaintLab.ChromaJs.Chroma chroma = new PaintLab.ChromaJs.Chroma(color);

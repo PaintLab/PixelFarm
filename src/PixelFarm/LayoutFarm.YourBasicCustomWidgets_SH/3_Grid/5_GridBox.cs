@@ -2,6 +2,8 @@
 
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
+using LayoutFarm.UI.ForImplementator;
+
 namespace LayoutFarm.CustomWidgets
 {
     class GridViewRenderBox : CustomRenderBox
@@ -686,7 +688,7 @@ namespace LayoutFarm.CustomWidgets
             _gridViewRenderE.InvalidateGraphics();
         }
 
-        protected override void OnMouseWheel(UIMouseEventArgs e)
+        protected override void OnMouseWheel(UIMouseWheelEventArgs e)
         {
             int cur_vwLeft = this.ViewportLeft;
             int cur_vwTop = this.ViewportTop;
@@ -703,7 +705,7 @@ namespace LayoutFarm.CustomWidgets
             base.OnMouseWheel(e);
             RaiseViewportChanged();
         }
-        protected override void OnMouseMove(UIMouseEventArgs e)
+        protected override void OnMouseMove(UIMouseMoveEventArgs e)
         {
             //System.Console.WriteLine(e.X + "," + e.Y);
             if (e.IsDragging)
@@ -758,7 +760,7 @@ namespace LayoutFarm.CustomWidgets
             }
             base.OnMouseMove(e);
         }
-        protected override void OnMouseUp(UIMouseEventArgs e)
+        protected override void OnMouseUp(UIMouseUpEventArgs e)
         {
             GridLayer layer = _gridViewRenderE.GridLayer;
             GridCell hitCell = layer.GetCellByPosition(e.X, e.Y);
@@ -780,7 +782,7 @@ namespace LayoutFarm.CustomWidgets
 
             base.OnMouseUp(e);
         }
-        protected override void OnMouseDown(UIMouseEventArgs e)
+        protected override void OnMouseDown(UIMouseDownEventArgs e)
         {
             //check if cell content
             //find grid item 
@@ -927,7 +929,7 @@ namespace LayoutFarm.CustomWidgets
         }
 
 
-        protected override void OnLostMouseFocus(UIMouseEventArgs e)
+        protected override void OnLostMouseFocus(UIMouseLostFocusEventArgs e)
         {
             //check if 
             if (ClearSelectionWhenLostFocus)

@@ -10,16 +10,14 @@ namespace LayoutFarm.CustomWidgets
         public ComboBox(int width, int height)
             : base(width, height)
         {
-            _hingeRel.LandPart = this; 
+            _hingeRel.LandPart = this;
         }
-        protected override void OnLostMouseFocus(UIMouseEventArgs e)
+        protected override void OnLostMouseFocus(UIMouseLostFocusEventArgs e)
         {
             _hingeRel.CloseHinge();
             base.OnLostMouseFocus(e);
         }
-         
-
-        protected override void OnMouseDown(UIMouseEventArgs e)
+        protected override void OnMouseDown(UIMouseDownEventArgs e)
         {
             _hingeRel.ToggleOpenOrClose();
             base.OnMouseDown(e);

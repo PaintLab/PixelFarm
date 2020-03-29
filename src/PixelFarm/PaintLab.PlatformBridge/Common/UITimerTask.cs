@@ -1,26 +1,22 @@
 ﻿//MIT, 2014-present, WinterDev
 
+using System;
+
 using System.Collections.Generic;
 namespace LayoutFarm.UI
 {
 
     public class UITimerTask
     {
-        TimerTick _tickAction;
+        Action<UITimerTask> _tickAction;         
         int _intervalInMillisec;
-        //
-        public delegate void TimerTick(UITimerTask timerTask);
-
-        public UITimerTask(TimerTick tickAction)
+       
+        public UITimerTask(Action<UITimerTask> tickAction)
         {
             _tickAction = tickAction;
             RunOnce = false;
         }
-        public bool Enabled
-        {
-            get;
-            set;
-        }
+        public bool Enabled { get; set; }
 
         /// <summary>
         /// interval of this timer in ms
@@ -52,7 +48,7 @@ namespace LayoutFarm.UI
         }
 
         internal bool RemoveFromQueue { get; set; }
-        public void Remove()
+        public void RemoveSelf()
         {
             RemoveFromQueue = true;
         }
@@ -97,6 +93,7 @@ namespace LayoutFarm.UI
 
         static Queue<UITimerTask> s_uiTimerTasks = new Queue<UITimerTask>();
 
+
         internal static int MinUICountDownInMillisec = 10; //default
         internal static void InternalMsgPumpRegister(UITimerTask timerTask)
         {
@@ -109,7 +106,13 @@ namespace LayoutFarm.UI
             //....
 
             if (timerTask.IsRegistered || timerTask.IntervalInMillisec <= 0)
+            {
+#if DEBUG
+                System.Diagnostics.Debugger.Break();
+#endif
+
                 return;
+            }
             //
             s_uiTimerTasks.Enqueue(timerTask);
             timerTask.IsRegistered = true;
@@ -129,21 +132,24 @@ namespace LayoutFarm.UI
 #endif
 
 
-                if (timer_task.IntervalInMillisec == 0 &&
-                    timer_task.Enabled &&
-                    timer_task.RunOnce)
-                {
-                    try
-                    {
-                        timer_task.InvokeAction();
-                    }
-                    catch (System.Exception ex)
-                    {
+                //if (timer_task.Enabled)
+                //{
 
-                    }
+                //}
+                //if (timer_task.IntervalInMillisec == 0 &&
+                //    timer_task.Enabled)
+                //{
+                //    try
+                //    {
+                //        timer_task.InvokeAction();
+                //    }
+                //    catch (System.Exception ex)
+                //    {
 
-                    continue;
-                }
+                //    }
+
+                //    continue;
+                //}
 
                 if (timer_task.Enabled)
                 {

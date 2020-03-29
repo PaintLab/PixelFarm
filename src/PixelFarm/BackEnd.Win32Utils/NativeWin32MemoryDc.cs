@@ -7,8 +7,8 @@ namespace Win32
 
     public class NativeWin32MemoryDC : IDisposable
     {
-        int _width;
-        int _height;
+        readonly int _width;
+        readonly int _height;
 
         IntPtr _memHdc;
         IntPtr _dib;
@@ -302,19 +302,19 @@ namespace Win32
         }
     }
 
-    public class Win32Font : IDisposable
+    public struct Win32Font : IDisposable
     {
         IntPtr _hfont;
         public Win32Font(IntPtr hfont)
         {
             _hfont = hfont;
         }
-        //
         public IntPtr GetHFont() => _hfont;
         //
         public void Dispose()
         {
             Win32.MyWin32.DeleteObject(_hfont);
+            _hfont = IntPtr.Zero;
         }
     }
 

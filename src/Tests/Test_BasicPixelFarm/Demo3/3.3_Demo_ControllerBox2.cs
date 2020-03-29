@@ -66,7 +66,7 @@ namespace LayoutFarm
                 //--------------------------------------------
                 e.CancelBubbling = true;
                 //change mouse capture to another control
-                e.SetMouseCaptureElement(_controllerBox1);
+                e.SetMouseCapturedElement(_controllerBox1);
             };
             //2. mouse up
             box.MouseUp += (s, e) =>
