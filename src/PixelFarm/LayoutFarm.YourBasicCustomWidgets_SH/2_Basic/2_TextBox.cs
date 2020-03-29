@@ -127,8 +127,6 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-
-
         //---------------------------------------------------------------- 
         protected override void OnMouseLeave(UIMouseLeaveEventArgs e)
         {
@@ -177,7 +175,7 @@ namespace LayoutFarm.CustomWidgets
             this.Focus();
             e.MouseCursorStyle = MouseCursorStyle.IBeam;
             e.CancelBubbling = true;
-            e.CurrentContextElement = this;
+            
             _textEditRenderElement.HandleMouseDown(e);
         }
         protected override void OnLostKeyboardFocus(UIFocusEventArgs e)

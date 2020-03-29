@@ -4,64 +4,127 @@ using System;
 namespace LayoutFarm.UI
 {
 
-    public class UIKeyEventArgs : UIEventArgs
+
+
+    namespace ForImplementator
     {
-        uint _keyData;
-        char _c;
-        public UIKeyEventArgs()
+        public static partial class UIEventArgsExtensions
         {
-        }
-        public uint KeyData
-        {
-            get => _keyData;
-            set => _keyData = value;
-        }
-        public bool HasKeyData => true;
-        public char KeyChar => _c;
-        public void SetKeyChar(char c) => _c = c;
-        //
-        public override void Clear()
-        {
-            base.Clear();
-            _c = '\0';
-            _keyData = 0;
-        }
-        public bool IsControlCharacter => Char.IsControl(_c);
-        public UIKeys KeyCode => (UIKeys)this.KeyData & UIKeys.KeyCode;
-        public void SetEventInfo(uint keydata, bool shift, bool alt, bool control)
-        {
-            _keyData = keydata;
-            this.Shift = shift;
-            this.Alt = alt;
-            this.Ctrl = control;
-        }
-        public void SetEventInfo(bool shift, bool alt, bool control)
-        {
-            this.Shift = shift;
-            this.Alt = alt;
-            this.Ctrl = control;
+            public static void SetEventInfo(this UIKeyEventArgs e, UIEventName eventName)
+            {
+                e._eventName = eventName;
+            }
+            public static void SetEventInfo(this UIFocusEventArgs e, UIEventName eventName)
+            {
+                e._evName = eventName;
+            }
+            public static void SetEventInfo(this UIKeyEventArgs e, uint keydata, bool shift, bool alt, bool control, UIEventName eventName)
+            {
+                e.KeyData = keydata;
+                e.Shift = shift;
+                e.Alt = alt;
+                e.Ctrl = control;
+                e._eventName = eventName;
+            }
+            public static void SetEventInfo(this UIKeyEventArgs e, bool shift, bool alt, bool control, UIEventName eventName)
+            {
+                e.Shift = shift;
+                e.Alt = alt;
+                e.Ctrl = control;
+                e._eventName = eventName;
+            }
+            public static void ResetAll(this UIEventArgs e) => UIEventArgs.Clear(e);
+
+            public static void SetExactHitObject(this UIEventArgs e, object obj) => e.ExactHitObject = obj;
+            public static void SetSourceHitObject(this UIEventArgs e, IUIEventListener obj) => e.SourceHitElement = obj;
+            public static void SetCurrentContextElement(this UIEventArgs e, IUIEventListener obj) => e.CurrentContextElement = obj;
+
+            public static void SetIsDragging(this UIMouseMoveEventArgs e, bool isDragging) => e.IsDragging = isDragging;
+            public static void SetIsDragging(this UIMouseUpEventArgs e, bool isDragging) => e.IsDragging = isDragging;
+
+
+            public static void SetLocation(this UIEventArgs e, int x, int y)
+            {
+                e.X = x;
+                e.Y = y;
+            }
+            public static void SetDiff(this UIMouseEventArgs e, int xdiff, int ydiff)
+            {
+                e.XDiff = xdiff;
+                e.YDiff = ydiff;
+            }
+            public static void SetEventInfo(this UIMouseEventArgs e, bool ctrl, bool alt, bool shift)
+            {
+                e.Ctrl = ctrl;
+                e.Alt = alt;
+                e.Shift = shift;
+            }
+            public static void SetEventInfo(this UIMouseEventArgs e, int x, int y, UIMouseButtons button, int clicks, int delta)
+            {
+                e.GlobalX = x;
+                e.GlobalY = y;
+                e.X = x;
+                e.Y = y;
+                e._buttons = button;
+                e._click = clicks;
+                e._delta = delta;
+            }
+            public static void SetMouseDoubleClick(this UIMouseUpEventArgs e, bool isAlsoDoubleClick)
+            {
+                e.IsAlsoDoubleClick = isAlsoDoubleClick;
+            }
         }
     }
 
+
+    public class UIKeyEventArgs : UIEventArgs
+    {
+        public UIKeyEventArgs()
+        {
+        }
+        public bool HasKeyData => true;
+        public uint KeyData { get; internal set; }
+        public char KeyChar { get; internal set; }
+        public void SetKeyChar(char c) => KeyChar = c;
+        //
+        protected override void OnClearData()
+        {
+            base.OnClearData();
+            KeyChar = '\0';
+            KeyData = 0;
+        }
+        public bool IsControlCharacter => Char.IsControl(KeyChar);
+        public UIKeys KeyCode => (UIKeys)this.KeyData & UIKeys.KeyCode;
+        
+
+        internal UIEventName _eventName;
+        public override UIEventName UIEventName => _eventName;
+    }
+
+
     public abstract class UIEventArgs : EventArgs
     {
-        int _x;
-        int _y;
-        IUIEventListener _currContext;
-
         public UIEventArgs()
         {
         }
-        public virtual void Clear()
+        protected virtual void OnClearData()
         {
-            _x = _y = 0;
-
+            X = Y = 0;
             this.ExactHitObject = this.SourceHitElement = this.CurrentContextElement = null;
             this.Shift = this.Alt = this.Ctrl = this.CancelBubbling = false;
             MouseCursorStyle = MouseCursorStyle.Default;
             CustomMouseCursor = null;
         }
+        internal static void Clear(UIEventArgs e)
+        {
+            e.OnClearData();
+        }
+
+        /// <summary>
+        /// request for custom mouse cursor
+        /// </summary>
         public MouseCursorStyle MouseCursorStyle { get; set; }
+
         /// <summary>
         /// request for custom mouse cursor
         /// </summary>
@@ -70,34 +133,24 @@ namespace LayoutFarm.UI
         /// <summary>
         /// exact hit object (include run)
         /// </summary>
-        public object ExactHitObject { get; set; }
+        public object ExactHitObject { get; internal set; }
 
         /// <summary>
         /// first hit IEventListener
         /// </summary>
-        public IUIEventListener SourceHitElement { get; set; }
+        public IUIEventListener SourceHitElement { get; internal set; }
         //TODO: review here, ensure set this value 
 
 
-        public IUIEventListener CurrentContextElement
-        {
-            get => _currContext;
-            set => _currContext = value;
-        }
+        public IUIEventListener CurrentContextElement { get; internal set; }
         //TODO: review here, ensure set this value  
-        public bool Shift { get; set; }
-        public bool Alt { get; set; }
-        public bool Ctrl { get; set; }
-        public void SetLocation(int x, int y)
-        {
-            _x = x;
-            _y = y;
-        }
+        public bool Shift { get; internal set; }
+        public bool Alt { get; internal set; }
+        public bool Ctrl { get; internal set; }
 
-        public int X => _x;
-        public int Y => _y;
 
         public bool IsCanceled { get; private set; }
+
         public void StopPropagation()
         {
             this.IsCanceled = true;
@@ -107,9 +160,12 @@ namespace LayoutFarm.UI
             get => this.IsCanceled;
             set => this.IsCanceled = value;
         }
+        public int X { get; internal set; }
+        public int Y { get; internal set; }
 
-        //TODO: review this
-        public UIEventName UIEventName { get; set; }
+        public abstract UIEventName UIEventName { get; }
+
+
     }
 
     public enum FocusEventType
@@ -130,13 +186,15 @@ namespace LayoutFarm.UI
         public object ToBeFocusElement { get; set; }
 
         public object ToBeLostFocusElement { get; set; }
-        public override void Clear()
+        protected override void OnClearData()
         {
             ToBeFocusElement = null;
             ToBeLostFocusElement = null;
             FocusEventType = FocusEventType.PreviewFocus;
-            base.Clear();
+            base.OnClearData();
         }
+        internal UIEventName _evName;
+        public override UIEventName UIEventName => _evName;
     }
 
     public class UIPaintEventArgs
@@ -160,7 +218,10 @@ namespace LayoutFarm.UI
     public class UIMouseLostFocusEventArgs : UIEventArgs
     {
         public UIMouseLostFocusEventArgs() { }
+        public override UIEventName UIEventName => UIEventName.MouseLostFocus;
     }
+
+
     public class UIMouseLeaveEventArgs : UIEventArgs
     {
         public UIMouseLeaveEventArgs() { }
@@ -168,77 +229,83 @@ namespace LayoutFarm.UI
         public int XDiff { get; private set; }
         public int YDiff { get; private set; }
 
-        public void SetDiff(int xdiff, int ydiff)
+        public static void SetDiff(UIMouseLeaveEventArgs e, int xdiff, int ydiff)
         {
-            this.XDiff = xdiff;
-            this.YDiff = ydiff;
+            e.XDiff = xdiff;
+            e.YDiff = ydiff;
         }
+
+        public override UIEventName UIEventName => UIEventName.MouseMove;
     }
 
     public class UIMouseDownEventArgs : UIMouseEventArgs
     {
         public UIMouseDownEventArgs() { }
         public int Clicks => _click;
-        public UIMouseButtons Buttons
-        {
-            get => _buttons;
-            set => _buttons = value;
-        }
+        public UIMouseButtons Buttons => _buttons;
+        public override UIEventName UIEventName => UIEventName.MouseDown;
     }
     public class UIMouseMoveEventArgs : UIMouseEventArgs
     {
         public UIMouseMoveEventArgs() { }
-        public UIMouseButtons Buttons
+        public UIMouseButtons Buttons => _buttons;
+        public bool IsDragging { get; internal set; }
+        protected override void OnClearData()
         {
-            get => _buttons;
-            set => _buttons = value;
+            base.OnClearData();
+            IsDragging = false;
         }
+        public override UIEventName UIEventName => UIEventName.MouseMove;
     }
     public class UIMouseUpEventArgs : UIMouseEventArgs
     {
         public UIMouseUpEventArgs() { }
-        public bool IsAlsoDoubleClick { get; set; }
+        public bool IsAlsoDoubleClick { get; internal set; }
+        public bool IsDragging { get; internal set; }
         public UIMouseButtons Buttons => _buttons;
-
+        public override UIEventName UIEventName => UIEventName.MouseUp;
+        protected override void OnClearData()
+        {
+            base.OnClearData();
+            IsAlsoDoubleClick = false;
+            IsDragging = false;
+        }
     }
     public class UIMouseWheelEventArgs : UIMouseEventArgs
     {
         public UIMouseWheelEventArgs() { }
         public int Delta => _delta;
+        public override UIEventName UIEventName => UIEventName.Wheel;
     }
     public abstract class UIMouseEventArgs : UIEventArgs
     {
         public UIMouseEventArgs()
         {
         }
+        /// <summary>
+        /// root-level left 
+        /// </summary>
+        public int GlobalX { get; internal set; }
+        /// <summary>
+        /// root-level top
+        /// </summary>
+        public int GlobalY { get; internal set; }
+        /// <summary>
+        /// x diff from previouse mouse pos
+        /// </summary>
+        public int XDiff { get; internal set; }
+        /// <summary>
+        /// y diff from previous mouse pos
+        /// </summary>
+        public int YDiff { get; internal set; }
 
-
-        public int GlobalX { get; private set; }
-        public int GlobalY { get; private set; }
-        public int XDiff { get; private set; }
-        public int YDiff { get; private set; }
-
-        public void SetDiff(int xdiff, int ydiff)
-        {
-            this.XDiff = xdiff;
-            this.YDiff = ydiff;
-        }
-        public void SetEventInfo(int x, int y, UIMouseButtons button, int clicks, int delta)
-        {
-            this.GlobalX = x;
-            this.GlobalY = y;
-            this.SetLocation(x, y);
-            _buttons = button;
-            _click = clicks;
-            _delta = delta;
-        }
         internal int _delta;
         internal int _click;
         internal UIMouseButtons _buttons;
 
-        public override void Clear()
+        protected override void OnClearData()
         {
-            base.Clear();
+            base.OnClearData();
             _buttons = UIMouseButtons.Left;
             _click =
                   this.XDiff =
@@ -251,37 +318,29 @@ namespace LayoutFarm.UI
             this.MouseCursorStyle = UI.MouseCursorStyle.Default;
             CustomMouseCursor = null;
 
-            this.IsDragging = false;
-            this.DraggingElement = null;
-
-            CurrentMousePressMonitor = null;
+            this.CapturedElement = null;
         }
 
-        public bool IsDragging { get; set; }
-        //-------------------------------------------------------------------
-        public IUIEventListener DraggingElement { get; private set; }
-        public void SetMouseCaptureElement(IUIEventListener listener)
+
+        //-----
+        //TODO: review here
+        public IUIEventListener CapturedElement { get; private set; }
+        public void SetMouseCapturedElement(IUIEventListener listener)
         {
-            this.DraggingElement = listener;
+            this.CapturedElement = listener;
+            CapturedMouseX = X;
+            CapturedMouseY = Y;
         }
-        //-------------------------------------------------------------------
-
-        public IUIEventListener CurrentMouseActive { get; set; }
-        public IUIEventListener PreviousMouseDown { get; set; }
 
         public int CapturedMouseX { get; set; }
         public int CapturedMouseY { get; set; }
         public int DiffCapturedX => this.X - this.CapturedMouseX;
         public int DiffCapturedY => this.Y - this.CapturedMouseY;
-        public IUIEventListener CurrentMousePressMonitor { get; set; }
-        public void StartMonitorMousePress(IUIEventListener listener)
-        {
-            CurrentMousePressMonitor = listener;
-        }
+
     }
 
     /// <summary>
-    /// primary mouse input
+    /// primary mouse input from the platform
     /// </summary>
     public class PrimaryMouseEventArgs : EventArgs
     {
@@ -386,6 +445,7 @@ namespace LayoutFarm.UI
         public IUIEventListener SenderAsIEventListener => this.Sender as IUIEventListener;
         public object UserMsgContent { get; set; }
         public int UserMsgFlags { get; set; }
+        public override UIEventName UIEventName => UIEventName.Unknown;
     }
 
 }

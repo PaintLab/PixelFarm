@@ -23,9 +23,7 @@ namespace LayoutFarm.UI
 
         void IEventListener.ListenGotKeyboardFocus(UIFocusEventArgs e)
         {
-
         }
-
         void IEventListener.ListenGuestMsg(UIGuestMsgEventArgs e)
         {
 

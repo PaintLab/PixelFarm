@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using LayoutFarm.UI.InputBridge;
 using PixelFarm.DrawingGL;
 
 namespace LayoutFarm.UI
@@ -203,6 +202,6 @@ namespace LayoutFarm.UI
         public void TopDownRecalculateContent()
         {
             _rootgfx.TopDownRecalculateContent();
-        }         
+        }
     }
 }

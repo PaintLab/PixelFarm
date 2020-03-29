@@ -164,7 +164,7 @@ namespace LayoutFarm.CustomWidgets
             this.Focus();
             e.MouseCursorStyle = MouseCursorStyle.IBeam;
             e.CancelBubbling = true;
-            e.CurrentContextElement = this;
+            
             _textFlowRenderBox.HandleMouseDown(e);
         }
         protected override void OnMouseMove(UIMouseMoveEventArgs e)
