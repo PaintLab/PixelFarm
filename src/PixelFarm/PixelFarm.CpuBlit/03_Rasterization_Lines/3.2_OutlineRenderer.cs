@@ -299,13 +299,14 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                            int xc1, int yc1, int xc2, int yc2,
                            int x1, int y1, int x2)
         {
-            byte[] covers = new byte[MAX_HALF_WIDTH * 2 + 4];
+            byte[] covers = LineAADataPool.GetFreeConvArray();
             int offset0 = 0;
             int offset1 = 0;
             int x = x1 << LineAA.SUBPIXEL_SHIFT;
             int y = y1 << LineAA.SUBPIXEL_SHIFT;
             int w = SubPixelWidth;
-            DistanceInterpolator0 di = new DistanceInterpolator0(xc1, yc1, xc2, yc2, x, y);
+
+            var di = new DistanceInterpolator0(xc1, yc1, xc2, yc2, x, y);
             x += LineAA.SUBPIXEL_SCALE / 2;
             y += LineAA.SUBPIXEL_SCALE / 2;
             int x0 = x1;
@@ -324,10 +325,13 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                 di.IncX();
             }
             while (++x1 <= x2);
+
             _destImageSurface.BlendSolidHSpan(x0, y1,
                                      offset1 - offset0,
                                      Color, covers,
                                      offset0);
+
+            LineAADataPool.ReleaseConvArray(covers);
         }
 
         public override void SemiDot(CompareFunction cmp, int xc1, int yc1, int xc2, int yc2)
@@ -337,7 +341,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             int r = ((SubPixelWidth + LineAA.SUBPIXEL_MARK) >> LineAA.SUBPIXEL_SHIFT);
             if (r < 1) r = 1;
 
-            EllipseBresenhamInterpolator ei = new EllipseBresenhamInterpolator(r, r);
+            var ei = new EllipseBresenhamInterpolator(r, r);
             int dx = 0;
             int dy = -r;
             int dy0 = dy;
@@ -366,13 +370,14 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         {
             if (_doClipping && ClipLiangBarsky.Flags(xc, yc, _clippingRectangle) != 0) return;
 
-            byte[] covers = new byte[MAX_HALF_WIDTH * 2 + 4];
+            byte[] covers = LineAADataPool.GetFreeConvArray();
             int index0 = 0;
             int index1 = 0;
             int x = xh1 << LineAA.SUBPIXEL_SHIFT;
             int y = yh1 << LineAA.SUBPIXEL_SHIFT;
             int w = SubPixelWidth;
-            DistanceInterpolator00 di = new DistanceInterpolator00(xc, yc, xp1, yp1, xp2, yp2, x, y);
+
+            var di = new DistanceInterpolator00(xc, yc, xp1, yp1, xp2, yp2, x, y);
             x += LineAA.SUBPIXEL_SCALE / 2;
             y += LineAA.SUBPIXEL_SCALE / 2;
             int xh0 = xh1;
@@ -391,14 +396,18 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                 di.IncX();
             }
             while (++xh1 <= xh2);
+
             _destImageSurface.BlendSolidHSpan(xh0, yh1, index1 - index0, Color, covers, index0);
+
+            LineAADataPool.ReleaseConvArray(covers);
         }
 
         public override void Pie(int xc, int yc, int x1, int y1, int x2, int y2)
         {
             int r = ((SubPixelWidth + LineAA.SUBPIXEL_MARK) >> LineAA.SUBPIXEL_SHIFT);
             if (r < 1) r = 1;
-            EllipseBresenhamInterpolator ei = new EllipseBresenhamInterpolator(r, r);
+            
+            var ei = new EllipseBresenhamInterpolator(r, r);
             int dx = 0;
             int dy = -r;
             int dy0 = dy;
@@ -419,12 +428,13 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                 ei.Next();
             }
             while (dy < 0);
+
             PineHLine(xc, yc, x1, y1, x2, y2, x - dx0, y + dy0, x + dx0);
         }
 
         const int MAX_LINE0_NO_CLIP_RECURSIVE = 32;
 
-        void Line0NoClip(int level, LineParameters lp)
+        void Line0NoClip(int level, in LineParameters lp)
         {
             if (level > MAX_LINE0_NO_CLIP_RECURSIVE)
             {
@@ -449,7 +459,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             }
         }
 
-        public override void Line0(LineParameters lp)
+        public override void Line0(in LineParameters lp)
         {
             if (_doClipping)
             {
@@ -478,7 +488,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             }
         }
 
-        void Line1NoClip(LineParameters lp, int sx, int sy)
+        void Line1NoClip(in LineParameters lp, int sx, int sy)
         {
             if (lp.len > LineAA.MAX_LENGTH)
             {
@@ -497,7 +507,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             }
         }
 
-        public override void Line1(LineParameters lp, int sx, int sy)
+        public override void Line1(in LineParameters lp, int sx, int sy)
         {
             if (_doClipping)
             {
@@ -551,7 +561,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             }
         }
 
-        void Line2NoClip(LineParameters lp, int ex, int ey)
+        void Line2NoClip(in LineParameters lp, int ex, int ey)
         {
             if (lp.len > LineAA.MAX_LENGTH)
             {
@@ -572,7 +582,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
 
         }
 
-        public override void Line2(LineParameters lp, int ex, int ey)
+        public override void Line2(in LineParameters lp, int ex, int ey)
         {
             if (_doClipping)
             {
@@ -626,7 +636,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             }
         }
 
-        void Line3NoClip(LineParameters lp,
+        void Line3NoClip(in LineParameters lp,
                          int sx, int sy, int ex, int ey)
         {
             if (lp.len > LineAA.MAX_LENGTH)
@@ -650,7 +660,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
 
         }
 
-        public override void Line3(LineParameters lp,
+        public override void Line3(in LineParameters lp,
                    int sx, int sy, int ex, int ey)
         {
             if (_doClipping)

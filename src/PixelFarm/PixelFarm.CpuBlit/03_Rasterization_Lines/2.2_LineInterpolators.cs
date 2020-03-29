@@ -117,17 +117,12 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
 
         }
 
-        public void AdjustForward()
-        {
-            _li.adjust_forward();
-        }
+        public void AdjustForward() => _li.adjust_forward();
 
         public int Y => _li.Y;
 
-        public void Prev()
-        {
-            _li.Prev();
-        }
+        public void Prev() => _li.Prev();
+
         public int BaseStepH(ref DistanceInterpolator1 di)
         {
             _li.Next();
@@ -228,7 +223,6 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         public void Dispose()
         {
             _aa_data.Dispose();
-
         }
         //
         int Count => _aa_data.Count;

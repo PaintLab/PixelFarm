@@ -17,6 +17,8 @@
 
 using System;
 using System.Collections.Generic;
+using PixelFarm.CpuBlit.FragmentProcessing;
+
 namespace PixelFarm.CpuBlit.Rasterization.Lines
 {
     public static class LineAA
@@ -120,18 +122,21 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
     static class LineAADataPool
     {
         [ThreadStatic]
-        static Stack<int[]> _freeDistPool;
+        static Stack<int[]> s_freeDistPool;
         [ThreadStatic]
-        static Stack<byte[]> _freeConvPool;
+        static Stack<byte[]> s_freeConvPool;
 
-
+        /// <summary>
+        /// get reusable distance array
+        /// </summary>
+        /// <returns></returns>
         internal static int[] GetFreeDistArray()
         {
-            if (_freeDistPool == null) _freeDistPool = new Stack<int[]>();
+            if (s_freeDistPool == null) s_freeDistPool = new Stack<int[]>();
 
-            if (_freeDistPool.Count > 0)
+            if (s_freeDistPool.Count > 0)
             {
-                return _freeDistPool.Pop();
+                return s_freeDistPool.Pop();
             }
             else
             {
@@ -144,19 +149,21 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         {
             //clear and add to list
             Array.Clear(distArray, 0, distArray.Length);
-            _freeDistPool.Push(distArray);
+            s_freeDistPool.Push(distArray);
         }
+        /// <summary>
+        /// get reuseable converate-area array
+        /// </summary>
+        /// <returns></returns>
         internal static byte[] GetFreeConvArray()
         {
-            if (_freeConvPool == null) _freeConvPool = new Stack<byte[]>();
-            if (_freeConvPool.Count > 0)
+            if (s_freeConvPool == null) s_freeConvPool = new Stack<byte[]>();
+            if (s_freeConvPool.Count > 0)
             {
-                return _freeConvPool.Pop();
+                return s_freeConvPool.Pop();
             }
             else
-            {
-                //m_dist = new int[MAX_HALF_WIDTH + 1];
-                //m_covers = new byte[MAX_HALF_WIDTH * 2 + 4];
+            {   
                 return new byte[(OutlineRenderer.MAX_HALF_WIDTH + 1) * 2];
             }
         }
@@ -164,18 +171,18 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         {
             //clear and add to list
             Array.Clear(convArray, 0, convArray.Length);
-            _freeConvPool.Push(convArray);
+            s_freeConvPool.Push(convArray);
         }
 
         [ThreadStatic]
-        static Stack<LineInterpolatorDDA2> _freeInterpolatorDDA2Pool;
+        static Stack<LineInterpolatorDDA2> s_freeInterpolatorDDA2Pool;
         internal static LineInterpolatorDDA2 GetFreeInterpolatorDDA2()
         {
-            if (_freeInterpolatorDDA2Pool == null) _freeInterpolatorDDA2Pool = new Stack<LineInterpolatorDDA2>();
+            if (s_freeInterpolatorDDA2Pool == null) s_freeInterpolatorDDA2Pool = new Stack<LineInterpolatorDDA2>();
 
-            if (_freeInterpolatorDDA2Pool.Count > 0)
+            if (s_freeInterpolatorDDA2Pool.Count > 0)
             {
-                return _freeInterpolatorDDA2Pool.Pop();
+                return s_freeInterpolatorDDA2Pool.Pop();
             }
             else
             {
@@ -184,9 +191,10 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         }
         internal static void ReleaseInterpolatorDDA2(LineInterpolatorDDA2 dda2)
         {
-            _freeInterpolatorDDA2Pool.Push(dda2);
+            s_freeInterpolatorDDA2Pool.Push(dda2);
         }
 
+       
     }
 
 }

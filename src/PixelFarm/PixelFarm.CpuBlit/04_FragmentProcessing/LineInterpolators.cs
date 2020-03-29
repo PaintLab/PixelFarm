@@ -41,33 +41,14 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             _dy = (0);
         }
 
-        //--------------------------------------------------------------------
-        //public void operator ++ ()
-        public void Next()
-        {
-            _dy += _inc;
-        }
+        public void Next() => _dy += _inc;//public void operator ++ ()
 
-        //--------------------------------------------------------------------
-        //public void operator -- ()
-        public void Prev()
-        {
-            _dy -= _inc;
-        }
+        public void Prev() => _dy -= _inc;//public void operator -- ()
 
-        //--------------------------------------------------------------------
-        //public void operator += (int n)
-        public void Next(int n)
-        {
-            _dy += _inc * n;
-        }
+        public void Next(int n) => _dy += _inc * n;//public void operator += (int n)
 
-        //--------------------------------------------------------------------
-        //public void operator -= (int n)
-        public void Prev(int n)
-        {
-            _dy -= _inc * n;
-        }
+        public void Prev(int n) => _dy -= _inc * n;//public void operator -= (int n)
+
         //--------------------------------------------------------------------
         public int y() => _y + (_dy >> (_fractionShift));  // - m_YShift)); }
         //
@@ -93,10 +74,8 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
         public LineInterpolatorDDA2()
         {
         }
-        public LineInterpolatorDDA2(int y1, int y2, int count)
-        {
-            Set(y1, y2, count);
-        }
+        public LineInterpolatorDDA2(int y1, int y2, int count) => Set(y1, y2, count);
+
         public void Set(int y1, int y2, int count)
         {
             //dbugIdN = 0;
@@ -162,15 +141,8 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
         }
 
         //--------------------------------------------------------------------
-        public void adjust_forward()
-        {
-            _mod -= _cnt;
-        }
-        //--------------------------------------------------------------------
-        public void adjust_backward()
-        {
-            _mod += _cnt;
-        }
+        public void adjust_forward() => _mod -= _cnt;
+        public void adjust_backward() => _mod += _cnt;
         //
         public int Y => _y;
         //
