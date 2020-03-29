@@ -30,6 +30,7 @@ using OpenTK;
 
 namespace LayoutFarm.UI
 {
+    using LayoutFarm.UI.ForImplementator;
 
     public static class GLESInit
     {
@@ -393,8 +394,7 @@ namespace LayoutFarm.UI
         }
         public void InvokeProcessDialogKey(uint virtualKey)
         {
-            _keyEventArgs.UIEventName = UIEventName.ProcessDialogKey;
-            _keyEventArgs.SetEventInfo(virtualKey, s_shiftDown = ShiftKeyDown(), s_altDown = AltKeyDown(), s_controlDown = ControlKeyDown());
+            _keyEventArgs.SetEventInfo(virtualKey, s_shiftDown = ShiftKeyDown(), s_altDown = AltKeyDown(), s_controlDown = ControlKeyDown(), UIEventName.ProcessDialogKey);
             MyWin32WindowWrapper.InvokeOnDialogKey(_myWindow, _keyEventArgs);
         }
         public void InvokeOnPaint(int left, int top, int width, int height)
@@ -486,7 +486,7 @@ namespace LayoutFarm.UI
                     {
                         //mouse up
                         int mouse_pos = lparams.ToInt32();
-                      
+
                         s_mouseDown = false;
                         _mouseArgs.SetMouseUpEventInfo((mouse_pos & 0xffff), ((mouse_pos >> 16) & 0xffff), UIMouseButtons.Left);
                         MyWin32WindowWrapper.InvokeMouseUp(_myWindow, _mouseArgs);
@@ -495,7 +495,7 @@ namespace LayoutFarm.UI
                 case Win32.MyWin32.WM_RBUTTONDOWN:
                     {
                         int mouse_pos = lparams.ToInt32();
-                       
+
                         s_mouseDown = true;
                         _mouseArgs.SetMouseDownEventInfo((mouse_pos & 0xffff), ((mouse_pos >> 16) & 0xffff), UIMouseButtons.Right, 1);
                         MyWin32WindowWrapper.InvokeMouseDown(_myWindow, _mouseArgs);
@@ -505,7 +505,7 @@ namespace LayoutFarm.UI
                 case Win32.MyWin32.WM_RBUTTONUP:
                     {
                         int mouse_pos = lparams.ToInt32();
-                        
+
                         s_mouseDown = false;
                         _mouseArgs.SetMouseUpEventInfo((mouse_pos & 0xffff), ((mouse_pos >> 16) & 0xffff), UIMouseButtons.Right);
                         MyWin32WindowWrapper.InvokeMouseUp(_myWindow, _mouseArgs);
@@ -514,7 +514,7 @@ namespace LayoutFarm.UI
                 case Win32.MyWin32.WM_MBUTTONDOWN:
                     {
                         int mouse_pos = lparams.ToInt32();
-                       
+
                         s_mouseDown = true;
                         _mouseArgs.SetMouseDownEventInfo((mouse_pos & 0xffff), ((mouse_pos >> 16) & 0xffff), UIMouseButtons.Middle, 1);
                         MyWin32WindowWrapper.InvokeMouseDown(_myWindow, _mouseArgs);
@@ -523,7 +523,7 @@ namespace LayoutFarm.UI
                 case Win32.MyWin32.WM_MBUTTONUP:
                     {
                         int mouse_pos = lparams.ToInt32();
-                     
+
                         s_mouseDown = false;
                         _mouseArgs.SetMouseUpEventInfo((mouse_pos & 0xffff), ((mouse_pos >> 16) & 0xffff), UIMouseButtons.Middle);
                         MyWin32WindowWrapper.InvokeMouseUp(_myWindow, _mouseArgs);
@@ -531,7 +531,7 @@ namespace LayoutFarm.UI
                     break;
                 case Win32.MyWin32.WM_MOUSEMOVE:
                     {
-                        int mouse_pos = lparams.ToInt32(); 
+                        int mouse_pos = lparams.ToInt32();
 
                         //button depend on prev mouse down button? 
                         _mouseArgs.SetMouseMoveEventInfo((mouse_pos & 0xffff), ((mouse_pos >> 16) & 0xffff));
@@ -543,7 +543,7 @@ namespace LayoutFarm.UI
                     {
                         //if we derived directly from System.Windows.Control
                         int mouse_pos = lparams.ToInt32();
-                   
+
                         int delta = ((int)wparams.ToInt64() >> 16);
 
                         //button depend on prev mouse down button?                         
@@ -555,7 +555,7 @@ namespace LayoutFarm.UI
                     {
                         //invoke mouse wheel 
                         int mouse_pos = lparams.ToInt32();
-                        
+
 
                         int delta = ((int)wparams.ToInt64() >> 16);
 
@@ -580,9 +580,7 @@ namespace LayoutFarm.UI
                     {
                         //wparams=> The virtual-key code of the nonsystem key. See Virtual-Key Codes. 
                         uint virtualKey = (uint)wparams.ToInt32();
-
-                        _keyEventArgs.UIEventName = UIEventName.KeyDown;
-                        _keyEventArgs.SetEventInfo(virtualKey, s_shiftDown = ShiftKeyDown(), s_altDown = AltKeyDown(), s_controlDown = ControlKeyDown());
+                        _keyEventArgs.SetEventInfo(virtualKey, s_shiftDown = ShiftKeyDown(), s_altDown = AltKeyDown(), s_controlDown = ControlKeyDown(), UIEventName.KeyDown);
 
                         MyWin32WindowWrapper.InvokeOnKeyDown(_myWindow, _keyEventArgs);
                         break;
@@ -591,16 +589,16 @@ namespace LayoutFarm.UI
                     {
                         uint codepoint = (uint)wparams.ToInt32();
                         char c = (char)codepoint;
-                        _keyEventArgs.UIEventName = UIEventName.KeyPress;
-                        _keyEventArgs.SetEventInfo(codepoint, s_shiftDown, s_altDown, s_controlDown);
+
+                        _keyEventArgs.SetEventInfo(codepoint, s_shiftDown, s_altDown, s_controlDown, UIEventName.KeyPress);
                         MyWin32WindowWrapper.InvokeOnKeyPress(_myWindow, _keyEventArgs);
                         break;
                     }
                 case Win32.MyWin32.WM_KEYUP:
                     {
                         uint virtualKey = (uint)wparams.ToInt32();
-                        _keyEventArgs.UIEventName = UIEventName.KeyUp;
-                        _keyEventArgs.SetEventInfo(virtualKey, s_shiftDown, s_altDown, s_controlDown);
+                         
+                        _keyEventArgs.SetEventInfo(virtualKey, s_shiftDown, s_altDown, s_controlDown, UIEventName.KeyUp);
                         MyWin32WindowWrapper.InvokeOnKeyUp(_myWindow, _keyEventArgs);
 
                         s_shiftDown = s_altDown = s_controlDown = false;//reset

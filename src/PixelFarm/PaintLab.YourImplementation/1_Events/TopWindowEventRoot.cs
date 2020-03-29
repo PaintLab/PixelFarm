@@ -1,10 +1,14 @@
 ﻿//Apache2, 2014-present, WinterDev
 using System;
 using LayoutFarm.UI;
+using LayoutFarm.UI.ForImplementator;
 using LayoutFarm.UI.InputBridge;
+
 
 namespace LayoutFarm
 {
+
+
     class TopWindowEventRoot : ITopWindowEventRoot
     {
         readonly UIMouseDownEventArgs _mouseDownEventArgs;
@@ -148,7 +152,10 @@ namespace LayoutFarm
             {
                 if (_draggingElement != null)
                 {
-                    //send this to dragging element first 
+                    //when we have dragging element
+                    //rediect msg (this mouse up) 
+                    //to the dragging element
+
                     _draggingElement.GetGlobalLocation(out int d_GlobalX, out int d_globalY);
                     e.SetLocation(e.GlobalX - d_GlobalX, e.GlobalY - d_globalY);
                     e.CapturedMouseX = _localMouseDownX;
@@ -281,7 +288,7 @@ namespace LayoutFarm
             {
                 return;
             }
-            SetKeyData(e);
+            SetKeyData(e, UIEventName.KeyDown);
             StopCaretBlink();
             e.ExactHitObject = e.SourceHitElement = _currentKbFocusElem;
             _currentKbFocusElem.ListenKeyDown(e);
@@ -299,7 +306,7 @@ namespace LayoutFarm
 
             StopCaretBlink();
 
-            SetKeyData(e);
+            SetKeyData(e, UIEventName.KeyUp);
             //----------------------------------------------------
             e.ExactHitObject = e.SourceHitElement = _currentKbFocusElem;
             _currentKbFocusElem.ListenKeyUp(e);
@@ -327,22 +334,24 @@ namespace LayoutFarm
             e.SetEventInfo(
                 _lastKeydownWithShift = ((k & UIKeys.Shift) == UIKeys.Shift),
                 _lastKeydownWithAlt = ((k & UIKeys.Alt) == UIKeys.Alt),
-                _lastKeydownWithControl = ((k & UIKeys.Control) == UIKeys.Control));
+                _lastKeydownWithControl = ((k & UIKeys.Control) == UIKeys.Control),
+                 UIEventName.ProcessDialogKey);
 
             e.ExactHitObject = e.SourceHitElement = _currentKbFocusElem;
             return _currentKbFocusElem.ListenProcessDialogKey(e);
         }
-        void SetKeyData(UIKeyEventArgs keyEventArgs)
+        void SetKeyData(UIKeyEventArgs keyEventArgs, UIEventName evName)
         {
             keyEventArgs.SetEventInfo(
                 _lastKeydownWithShift,
                 _lastKeydownWithAlt,
-                _lastKeydownWithControl);
+                _lastKeydownWithControl,
+                evName);
         }
 
         void AddMouseEventArgsDetail(UIMouseEventArgs mouseEventArg, PrimaryMouseEventArgs primaryMouseEventArgs)
         {
-            mouseEventArg.Clear();
+            mouseEventArg.ResetAll();
             //TODO: review here
             UIMouseEventArgs.SetEventInfo(mouseEventArg, primaryMouseEventArgs.Left, primaryMouseEventArgs.Top, primaryMouseEventArgs.Button, primaryMouseEventArgs.Clicks, primaryMouseEventArgs.Delta);
 

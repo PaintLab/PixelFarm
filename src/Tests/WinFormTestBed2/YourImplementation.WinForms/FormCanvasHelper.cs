@@ -5,10 +5,10 @@ using System;
 using System.Windows.Forms;
 using PixelFarm.Drawing;
 using Typography.FontManagement;
-
-
+using LayoutFarm.UI.ForImplementator;
 namespace LayoutFarm.UI
 {
+
     public static class FormCanvasHelper
     {
         static UIPlatformWinForm s_platform;
@@ -253,19 +253,17 @@ namespace LayoutFarm.UI
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            _keyEventArgs.UIEventName = UIEventName.KeyDown;
-            _keyEventArgs.SetEventInfo((uint)e.KeyCode, e.Shift, e.Alt, e.Control);
+            _keyEventArgs.SetEventInfo((uint)e.KeyCode, e.Shift, e.Alt, e.Control, UIEventName.KeyDown);
             _topWindowBridge.HandleKeyDown(_keyEventArgs);
         }
         protected override void OnKeyPress(KeyPressEventArgs e)
         {
-            _keyEventArgs.UIEventName = UIEventName.KeyPress;
+            _keyEventArgs.SetEventInfo(UIEventName.KeyPress);
             _topWindowBridge.HandleKeyPress(_keyEventArgs, e.KeyChar);
         }
         protected override void OnKeyUp(KeyEventArgs e)
         {
-            _keyEventArgs.UIEventName = UIEventName.KeyUp;
-            _keyEventArgs.SetEventInfo((uint)e.KeyCode, e.Shift, e.Alt, e.Control);
+            _keyEventArgs.SetEventInfo((uint)e.KeyCode, e.Shift, e.Alt, e.Control, UIEventName.KeyUp);
             _topWindowBridge.HandleKeyUp(_keyEventArgs);
         }
         protected override void OnMouseDown(MouseEventArgs e)

@@ -56,7 +56,7 @@ namespace LayoutFarm.CustomWidgets
                 }
                 if (ListItemMouseEvent != null)
                 {
-                    e.UIEventName = UIEventName.MouseDown;
+                   
                     ListItemMouseEvent(this, e);
                 }
             }
@@ -66,7 +66,7 @@ namespace LayoutFarm.CustomWidgets
         {
             if (_selectedItem != null && ListItemKeyboardEvent != null)
             {
-                e.UIEventName = UIEventName.KeyDown;
+                 
                 ListItemKeyboardEvent(this, e);
             }
             base.OnKeyDown(e);
@@ -76,8 +76,7 @@ namespace LayoutFarm.CustomWidgets
             base.OnDoubleClick(e);
             //raise event mouse double click
             if (e.SourceHitElement is ListItem src && ListItemMouseEvent != null)
-            {
-                e.UIEventName = UIEventName.DblClick;
+            {             
                 ListItemMouseEvent(this, e);
             }
         }

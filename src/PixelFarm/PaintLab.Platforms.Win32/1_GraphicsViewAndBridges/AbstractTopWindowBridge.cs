@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 using PixelFarm.Drawing;
 using LayoutFarm.UI.InputBridge;
+using LayoutFarm.UI.ForImplementator;
 
 namespace LayoutFarm.UI
 {
@@ -173,7 +174,7 @@ namespace LayoutFarm.UI
             }
             _canvasViewport.FullMode = false;
             _topWinEventRoot.RootGotFocus(_focusEventArgs);
-            _focusEventArgs.Clear();
+            _focusEventArgs.ResetAll();
             //
             PrepareRenderAndFlushAccumGraphics();
         }
@@ -183,7 +184,7 @@ namespace LayoutFarm.UI
             //
 
             _topWinEventRoot.RootLostFocus(_focusEventArgs);
-            _focusEventArgs.Clear();
+            _focusEventArgs.ResetAll();
             //
             PrepareRenderAndFlushAccumGraphics();
         }
@@ -195,7 +196,7 @@ namespace LayoutFarm.UI
             _canvasViewport.FullMode = false;
             _topWinEventRoot.RootMouseDown(mouseEventArgs);
             //
-            UpdateCursor();            
+            UpdateCursor();
 
             PrepareRenderAndFlushAccumGraphics();
 #if DEBUG
@@ -208,7 +209,7 @@ namespace LayoutFarm.UI
             }
 #endif
         }
-         
+
 
         public void HandleMouseMove(PrimaryMouseEventArgs mouseEventArgs)
         {
@@ -222,14 +223,14 @@ namespace LayoutFarm.UI
             _canvasViewport.FullMode = false;
             _topWinEventRoot.RootMouseUp(mouseEventArgs);
             UpdateCursor();
-           
+
             PrepareRenderAndFlushAccumGraphics();
         }
 
         Cursor _latestCustomCursor;
         void UpdateCursor()
         {
-            
+
             if (_topWinEventRoot.RequestCursor != null)
             {
                 //specific custom cursor
@@ -257,11 +258,11 @@ namespace LayoutFarm.UI
             _topWinEventRoot.RootMouseWheel(mouseEventArgs);
             UpdateCursor();
 
-          
+
             PrepareRenderAndFlushAccumGraphics();
         }
 
-         
+
         //------------------------------------------------------
         public void HandleKeyDown(UIKeyEventArgs keyEventArgs)
         {
@@ -274,7 +275,7 @@ namespace LayoutFarm.UI
 #endif
             _canvasViewport.FullMode = false;
             _topWinEventRoot.RootKeyDown(keyEventArgs);
-            keyEventArgs.Clear(); 
+            keyEventArgs.ResetAll();
             PrepareRenderAndFlushAccumGraphics();
         }
 
@@ -283,7 +284,7 @@ namespace LayoutFarm.UI
         {
             _canvasViewport.FullMode = false;
             _topWinEventRoot.RootKeyUp(keyEventArgs);
-            keyEventArgs.Clear();
+            keyEventArgs.ResetAll();
             PrepareRenderAndFlushAccumGraphics();
         }
 
@@ -302,7 +303,7 @@ namespace LayoutFarm.UI
 
             keyEventArgs.SetKeyChar(keyChar);
             _topWinEventRoot.RootKeyPress(keyEventArgs);
-            keyEventArgs.Clear();
+            keyEventArgs.ResetAll();
 
             PrepareRenderAndFlushAccumGraphics();
         }
@@ -316,15 +317,13 @@ namespace LayoutFarm.UI
             //          System.Diagnostics.Debug.WriteLine("prev_dlgkey" + (dbug_preview_dialogKey_count++));
             //#endif
             _canvasViewport.FullMode = false;
-
-
-            _keyEventArgs.SetEventInfo((uint)keyData, false, false, false);//f-f-f will be set later
+            _keyEventArgs.SetEventInfo((uint)keyData, false, false, false, UIEventName.ProcessDialogKey);//f-f-f will be set later
             bool result = _topWinEventRoot.RootProcessDialogKey(_keyEventArgs);
             if (result)
             {
                 PrepareRenderAndFlushAccumGraphics();
             }
-             
+
             return result;
         }
 
