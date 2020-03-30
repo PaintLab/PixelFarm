@@ -29,16 +29,37 @@ Because it is easy to do _dependency analysis_.
 _part1_
 
 
-**0.1 DevTests**
+
+**0.1 DevTests** :  contains tests and examples
+
+**0.9 WebDocuments**: contains modules that are needed by PaintLab.Svg, we shared the source with HtmlRender project.
+
+**1.0_Supportive Modules**: modules that support platform's functionality.
+
+**1.1_MiniOpenTK:** contains custom version of OpenTK
 
 
 
+**2.0_Shaped_Images:** about shapes, geometry, tesselation, and image codecs
 
+**2.1_Core:** contains drawing core, how to render an individual pixel to a bitmap's memory. 
+
+**2.2_Production:** merge all functions of *2.0 and 2.1* to a single dll here=> PixelFarm.Drawing.
+                    with PixelFarm.Drawing alone, we can create an in-memory bitmap canvas and 
+					draw anything to it. This is a pure software-renderer.					
+
+**3.0_Typography:** the PixelFarm.Drawing alone dose not have text-drawing function directly.
+				  drawing a text span is a complex part, I separate this part to another repo 'Typography'.
+				  PixelFarm provide a 'text-printer' interface, we implement that text-printer inside
+				  PixelFarm.Typography.				  
+				  
 
 ---
+
 ![px_proj_part2](https://user-images.githubusercontent.com/7447159/77893733-83366200-729e-11ea-85d1-6aff03eca45b.png)
 _part2_ 
  
+ **4.0_Specific_Drawing:** 
  
 
 
