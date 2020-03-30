@@ -575,7 +575,6 @@
     <Compile Include="2_AggPainter\AggPainter_FontAndText.cs" />
     <Compile Include="2_AggPainter\GradientBrushes.cs" />
     <Compile Include="2_AggPainter\AggRenderVx.cs" />
-    <Compile Include="2_AggPainter\Canvas2dExtension.cs" />
     <Compile Include="3_VertexProcessoring\dbugVertexSourceIO.cs" />
     <Compile Include="3_VertexProcessoring\LineDashGenerator.cs" />
     <Compile Include="3_VertexProcessoring\RectBorderHelper.cs" />
