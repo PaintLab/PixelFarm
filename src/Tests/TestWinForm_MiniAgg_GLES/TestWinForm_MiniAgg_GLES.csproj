@@ -93,6 +93,7 @@
     <Compile Include="3_Samples\07_Shading\02_GouraudSample.cs" />
     <Compile Include="3_Samples\22_CurveReconstructions\TriangleReconstructions.cs" />
     <Compile Include="3_Samples\23_ImgFilters\ImgFilters1Demo.cs" />
+    <Compile Include="3_Samples\24_FlexBox\FlexBoxDemo.cs" />
     <Compile Include="4_Samples_2\31_ScanlineBoolean\ScanlineBooleanSample.cs" />
     <Compile Include="4_Samples_2\41_BitmapRenderSample.cs" />
     <Compile Include="9_TestPaintFx\FormTestPaintFx.cs">
@@ -235,6 +236,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Marius.Yoga\Marius.Yoga.csproj">
+      <Project>{9060957d-ff0b-4b14-bb87-ee24b5170365}</Project>
+      <Name>Marius.Yoga</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\Builds\Net20\MiniOpenTK_Net20\MiniOpenTK_Net20.csproj">
       <Project>{f5a89623-87b9-42a3-a58c-abee7c9bbca2}</Project>
       <Name>MiniOpenTK_Net20</Name>
