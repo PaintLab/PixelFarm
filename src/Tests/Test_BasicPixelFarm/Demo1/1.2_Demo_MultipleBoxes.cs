@@ -156,7 +156,7 @@ namespace LayoutFarm
 
             GeneralEventListener evListener = new GeneralEventListener();
             evListener.MouseEnter += (s, e) =>
-            {
+            {                
                 IUIEventListener ctx = e.CurrentContextElement;
                 LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;
                 box.BackColor = Color.Red;
@@ -197,7 +197,7 @@ namespace LayoutFarm
             Color hoverState = Color.FromArgb(100, Color.Green);
 
             GeneralUIElementBehaviour beh = new GeneralUIElementBehaviour();
-            beh.MouseEnter += (s, e) =>
+            beh.MouseEnter += (b, e) =>
             {
                 IUIEventListener ctx = e.CurrentContextElement;
                 LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;
@@ -205,14 +205,14 @@ namespace LayoutFarm
 
                 System.Diagnostics.Debug.WriteLine("mouse_enter:" + box.dbugId);
             };
-            beh.MouseLeave += (s, e) =>
+            beh.MouseLeave += (b, e) =>
             {
                 IUIEventListener ctx = e.CurrentContextElement;
                 LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;
                 box.BackColor = normalState;
                 System.Diagnostics.Debug.WriteLine("mouse_leave:" + box.dbugId);
             };
-            beh.MouseHover += (s, e) =>
+            beh.MouseHover += (b, e) =>
             {
                 //
                 IUIEventListener ctx = e.CurrentContextElement;
@@ -221,7 +221,7 @@ namespace LayoutFarm
                 System.Diagnostics.Debug.WriteLine("mouse_hover:" + box.dbugId);
             };
              
-            beh.MousePress += (s, e) =>
+            beh.MousePress += (b, e) =>
             {
                 IUIEventListener ctx = e.CurrentContextElement;
                 LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;

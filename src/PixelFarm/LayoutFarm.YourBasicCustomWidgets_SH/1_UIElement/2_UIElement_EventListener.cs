@@ -1,4 +1,5 @@
 ﻿//Apache2, 2014-present, WinterDev
+using System;
 
 namespace LayoutFarm.UI
 {
@@ -199,27 +200,25 @@ namespace LayoutFarm.UI
     public interface IUIElementBehaviour : IEventListener
     {
     }
-
-    public delegate void UIBehEventHandler<T>(object b, T e);
-
+ 
 
     public class GeneralUIElementBehaviour : IUIElementBehaviour
     {
-        public event UIBehEventHandler<UIMouseDownEventArgs> MouseDown;
-        public event UIBehEventHandler<UIMouseUpEventArgs> MouseUp;
-        public event UIBehEventHandler<UIMouseMoveEventArgs> MouseMove;
+        public event Action<GeneralUIElementBehaviour, UIMouseDownEventArgs> MouseDown;
+        public event Action<GeneralUIElementBehaviour, UIMouseUpEventArgs> MouseUp;
+        public event Action<GeneralUIElementBehaviour, UIMouseMoveEventArgs> MouseMove;
 
         //----
-        public event UIBehEventHandler<UIMouseMoveEventArgs> MouseEnter;
-        public event UIBehEventHandler<UIMouseLeaveEventArgs> MouseLeave;
+        public event Action<GeneralUIElementBehaviour, UIMouseMoveEventArgs> MouseEnter;
+        public event Action<GeneralUIElementBehaviour, UIMouseLeaveEventArgs> MouseLeave;
 
-        public event UIBehEventHandler<UIMousePressEventArgs> MousePress;
-        public event UIBehEventHandler<UIMouseHoverEventArgs> MouseHover;
+        public event Action<GeneralUIElementBehaviour, UIMousePressEventArgs> MousePress;
+        public event Action<GeneralUIElementBehaviour, UIMouseHoverEventArgs> MouseHover;
         //----
 
-        public event UIBehEventHandler<UIKeyEventArgs> KeyDown;
-        public event UIBehEventHandler<UIKeyEventArgs> KeyPress;
-        public event UIBehEventHandler<UIKeyEventArgs> KeyUp;
+        public event Action<GeneralUIElementBehaviour, UIKeyEventArgs> KeyDown;
+        public event Action<GeneralUIElementBehaviour, UIKeyEventArgs> KeyPress;
+        public event Action<GeneralUIElementBehaviour, UIKeyEventArgs> KeyUp;
 
 
         void IEventListener.ListenGotKeyboardFocus(UIFocusEventArgs e) => OnGotKeyboardFocus(e);
