@@ -7,6 +7,10 @@ using System.Windows.Forms;
 
 using System.Drawing;
 using System.Drawing.Imaging;
+namespace System.Runtime.CompilerServices
+{
+    public partial class ExtensionAttribute : Attribute { }
+}
 
 namespace WinFormGdiPlus
 {

@@ -31,7 +31,7 @@ namespace BitmapBufferEx
         /// <param name="color">The color for the line.</param>
         /// <param name="strokeThickness">The stroke thickness of the line.</param>
         /// </summary>
-        public static void DrawLineAa(BitmapContext context, int pixelWidth, int pixelHeight, int x1, int y1, int x2, int y2, int color, int strokeThickness, RectD? clipRect = null)
+        public static void DrawLineAa(this BitmapContext context, int pixelWidth, int pixelHeight, int x1, int y1, int x2, int y2, int color, int strokeThickness, RectD? clipRect = null)
         {
             AAWidthLine(pixelWidth, pixelHeight, context, x1, y1, x2, y2, strokeThickness, color, clipRect);
         }
@@ -64,7 +64,7 @@ namespace BitmapBufferEx
         /// <param name="color">The color for the line.</param>
         /// <param name="strokeThickness">The stroke thickness of the line.</param>
         /// </summary>
-        public static void DrawLineAa(BitmapContext context, int pixelWidth, int pixelHeight, int x1, int y1, int x2, int y2, ColorInt color, int strokeThickness, RectD? clipRect = null)
+        public static void DrawLineAa(this BitmapContext context, int pixelWidth, int pixelHeight, int x1, int y1, int x2, int y2, ColorInt color, int strokeThickness, RectD? clipRect = null)
         {
 
             AAWidthLine(pixelWidth, pixelHeight, context, x1, y1, x2, y2, strokeThickness, color.ToPreMultAlphaColor(), clipRect);
