@@ -5,7 +5,7 @@ using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.CpuBlit.Imaging;
 
- 
+
 namespace PixelFarm.CpuBlit
 {
 
@@ -16,7 +16,7 @@ namespace PixelFarm.CpuBlit
 
         void DrawBitmap(MemBitmap memBmp, double left, double top)
         {
-          
+
             //save, restore later... 
             bool useSubPix = UseSubPixelLcdEffect;
             //before render an image we turn off vxs subpixel rendering
@@ -41,7 +41,7 @@ namespace PixelFarm.CpuBlit
         }
         void DrawBitmap(MemBitmap memBmp, double left, double top, int srcX, int srcY, int srcW, int srcH)
         {
-           
+
             //save, restore later... 
             bool useSubPix = UseSubPixelLcdEffect;
             //before render an image we turn off vxs subpixel rendering
@@ -94,7 +94,7 @@ namespace PixelFarm.CpuBlit
                 return;
             }
 
-             
+
             //-------------------------------
             bool useSubPix = UseSubPixelLcdEffect; //save, restore later... 
                                                    //before render an image we turn off vxs subpixel rendering
@@ -110,7 +110,7 @@ namespace PixelFarm.CpuBlit
             {
                 //? TODO
                 return;
-            } 
+            }
 
             bool useSubPix = UseSubPixelLcdEffect; //save, restore later... 
                                                    //before render an image we turn off vxs subpixel rendering
@@ -129,7 +129,7 @@ namespace PixelFarm.CpuBlit
             {
                 //? TODO
                 return;
-            } 
+            }
 
             bool useSubPix = UseSubPixelLcdEffect; //save, restore later... 
                                                    //before render an image we turn off vxs subpixel rendering
@@ -154,7 +154,7 @@ namespace PixelFarm.CpuBlit
         public override void ApplyFilter(PixelFarm.Drawing.IImageFilter imgFilter)
         {
             //check if we can use this imgFilter
-            if (!(imgFilter is PixelFarm.CpuBlit.FragmentProcessing.ICpuBlitImgFilter cpuBlitImgFx)) return;
+            if (!(imgFilter is PixelFarm.CpuBlit.PixelProcessing.ICpuBlitImgFilter cpuBlitImgFx)) return;
             // 
             cpuBlitImgFx.SetTarget(_aggsx.DestBitmapBlender);
             imgFilter.Apply();

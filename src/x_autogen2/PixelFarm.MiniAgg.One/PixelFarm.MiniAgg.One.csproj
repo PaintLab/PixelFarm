@@ -626,17 +626,17 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\3_VertexProcessoring\RectBorderHelper.cs">
       <Link>PixelFarm\PixelFarm.Drawing\3_VertexProcessoring\RectBorderHelper.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\4_FragmentProcessing\ClipProxyImage.cs">
-      <Link>PixelFarm\PixelFarm.Drawing\4_FragmentProcessing\ClipProxyImage.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\4_PixelProcessing\ClipProxyImage.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\4_PixelProcessing\ClipProxyImage.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\4_FragmentProcessing\GammaFuntions.cs">
-      <Link>PixelFarm\PixelFarm.Drawing\4_FragmentProcessing\GammaFuntions.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\4_PixelProcessing\GammaFuntions.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\4_PixelProcessing\GammaFuntions.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\4_FragmentProcessing\ICpuBlitImageFilter.cs">
-      <Link>PixelFarm\PixelFarm.Drawing\4_FragmentProcessing\ICpuBlitImageFilter.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\4_PixelProcessing\ICpuBlitImageFilter.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\4_PixelProcessing\ICpuBlitImageFilter.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\4_FragmentProcessing\ProxyImage.cs">
-      <Link>PixelFarm\PixelFarm.Drawing\4_FragmentProcessing\ProxyImage.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\4_PixelProcessing\ProxyImage.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\4_PixelProcessing\ProxyImage.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\5_PathReconstruction\BezierCurveReconstruction.cs">
       <Link>PixelFarm\PixelFarm.Drawing\5_PathReconstruction\BezierCurveReconstruction.cs</Link>
