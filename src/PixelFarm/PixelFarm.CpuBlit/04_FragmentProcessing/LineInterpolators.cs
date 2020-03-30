@@ -25,6 +25,7 @@
 using System;
 namespace PixelFarm.CpuBlit.FragmentProcessing
 {
+    //DDA algorithm :  (Digital Differential Analyzer).
     //===================================================dda_line_interpolator
     public struct LineInterpolatorDDA
     {

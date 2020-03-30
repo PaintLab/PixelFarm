@@ -368,12 +368,12 @@ namespace BitmapBufferEx
         public bool IsBufferOwner { get; private set; }
         public int PixelWidth { get; private set; }
         public int PixelHeight { get; private set; }
-        public int LenInBytes { get { return _lenInBytes; } }
+        public int LenInBytes => _lenInBytes;
 
         /// <summary>
         /// pre-multiplied alpha color pixels
         /// </summary>
         public IntPtr Pixels { get; private set; }
-        public bool IsEmpty { get { return Pixels == null; } }
+        public bool IsEmpty => Pixels == null;
     }
 }

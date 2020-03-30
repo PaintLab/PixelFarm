@@ -38,6 +38,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\FilterExtensions.cs">
+      <Link>BitmapBufferEx\FilterExtensions.cs</Link>
+    </Compile>
     <Compile Include="BrightnesssAndContrast.cs" />
     <Compile Include="InternalBrightnessAndContrastAdjustment.cs" />
     <Compile Include="PatternFilterBilnearColorRGBA.cs" />
@@ -52,9 +55,9 @@
     <Compile Include="IImageFilterFunc.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Typography\x_autogen2\PixelFarm.MiniAgg.One\PixelFarm.MiniAgg.One.csproj">
-      <Project>{fb5f78f5-c921-405d-8f21-42f7c15c2ad9}</Project>
-      <Name>PixelFarm.MiniAgg.One</Name>
+    <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
+      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
+      <Name>PixelFarm.Drawing</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\BackEnd.PaintFx\PdnSharedProject\PdnSharedProject.projitems" Label="Shared" />

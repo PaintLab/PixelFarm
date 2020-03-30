@@ -47,14 +47,8 @@
     <Compile Include="..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\BlitExtensions.cs">
       <Link>0_REF_BitmapBufferEx\BlitExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\ConvertExtensions.cs">
-      <Link>0_REF_BitmapBufferEx\ConvertExtensions.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\FillExtensions.cs">
       <Link>0_REF_BitmapBufferEx\FillExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\FilterExtensions.cs">
-      <Link>0_REF_BitmapBufferEx\FilterExtensions.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\LineExtensions.cs">
       <Link>0_REF_BitmapBufferEx\LineExtensions.cs</Link>
