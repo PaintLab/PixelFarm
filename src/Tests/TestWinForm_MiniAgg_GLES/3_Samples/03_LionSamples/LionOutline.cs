@@ -70,14 +70,9 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
         [DemoConfig]
         public bool RenderAsScanline
         {
-            get
-            {
-                return _lionOutlineSprite.RenderAsScanline;
-            }
-            set
-            {
-                _lionOutlineSprite.RenderAsScanline = value;
-            }
+            get => _lionOutlineSprite.RenderAsScanline;
+            set => _lionOutlineSprite.RenderAsScanline = value;
+
         }
 
         [DemoConfig]
@@ -200,45 +195,45 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
 
             if (RenderAsScanline)
             {
-                //a low-level example, expose scanline rasterizer
+                //for demostrate low-level agg func only.//***
 
-                ScanlineRasterizer rasterizer = aggsx.ScanlineRasterizer;
+                //a low-level: expose scanline rasterizer
+
+                ScanlineRasterizer rasterizer = aggsx.ScanlineRasterizer; //get current scanline reasterizer 
                 rasterizer.SetClipBox(0, 0, width, height);
-
-                //lionShape.ApplyTransform(affTx); 
-                //---------------------
 
                 using (Tools.More.BorrowVgPaintArgs(aggPainter, out var paintArgs))
                 {
                     paintArgs._currentTx = affTx;
                     paintArgs.PaintVisitHandler = (vxs, painterA) =>
                     {
-                        //use external painter handler
-                        //draw only outline with its fill-color. 
+
+                        //1. we reset the rasterizer before add any 'VertexStore' object (vxs)
                         rasterizer.Reset();
                         rasterizer.AddPath(vxs);
+                        //2. use default bitmap rasterizer
+                        //to blend the output from rasterizer imageClippingProxy
+                        //
                         aggsx.BitmapRasterizer.RenderWithColor(
                             imageClippingProxy, rasterizer,
                             aggsx.ScanlinePacked8,
-                            aggPainter.FillColor); //draw line with external drawing handler
+                            aggPainter.FillColor);
                     };
 
                     _spriteShape.Paint(paintArgs);
                 }
-
-                //---------------------------- 
-                //lionShape.ResetTransform();
             }
             else
             {
-
+                //provider 2 examples 
+                //1. UseBuiltInAggOutlineAATech: for gerneral usage
+                //2. Low-Level Demo: show low-level implementation (in side UseBuiltInAggOutlineAATech)
+                //                   
                 if (UseBuiltInAggOutlineAATech)
                 {
                     aggPainter.StrokeWidth = 1;
                     aggPainter.LineRenderingTech = AggPainter.LineRenderingTechnique.OutlineAARenderer;
-
                     //------
-
                     using (Tools.More.BorrowVgPaintArgs(aggPainter, out var paintArgs))
                     {
                         paintArgs._currentTx = affTx;
@@ -264,17 +259,27 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                     //Draw with LineProfile: 
                     //LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(strokeWidth * affTx.GetScale(), new GammaNone()); //with gamma
 
+                    //s_gamma_50 = new byte[AA_SCALE];
+                    //for (int i = AA_SCALE - 1; i >= (AA_SCALE / 2); --i)
+                    //{
+                    //    s_gamma_50[i] = 255;
+                    //}
+
+
+                    //1. LineProfileAnitAlias: for AA-area-coverage decision                   
                     LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(strokeWidth * affTx.GetScale(), null);
+
+                    //2. OutlineRenderer: 'line-color-blender', generate final output
                     OutlineRenderer outlineRenderer = new OutlineRenderer(imageClippingProxy, new PixelBlenderBGRA(), lineProfile);
                     outlineRenderer.SetClipBox(0, 0, this.Width, this.Height);
 
+                    //3. OutlineAARasterizer: generate scanlines for a input coord, 
                     OutlineAARasterizer rasterizer = new OutlineAARasterizer(outlineRenderer);
                     rasterizer.LineJoin = (RenderAccurateJoins ?
                         OutlineAARasterizer.OutlineJoin.AccurateJoin
                         : OutlineAARasterizer.OutlineJoin.Round);
                     rasterizer.RoundCap = true;
-
-                    //lionShape.ApplyTransform(affTx);
+                     
                     //----------------------------
                     using (Tools.More.BorrowVgPaintArgs(aggPainter, out var paintArgs))
                     {
