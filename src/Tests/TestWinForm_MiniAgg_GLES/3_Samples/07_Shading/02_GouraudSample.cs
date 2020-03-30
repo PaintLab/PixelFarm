@@ -5,6 +5,7 @@ using System;
 using System.Diagnostics;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.FragmentProcessing;
+using PixelFarm.CpuBlit.PixelProcessing;
 
 using Mini;
 namespace PixelFarm.CpuBlit.Sample_Gouraud
