@@ -60,23 +60,23 @@ _part1_
 _part2_ 
  
  **4.0_Specific_Drawing:** specific platform drawing, as describe above,
-        ixelFarm.Drawing contains only Software Rendering part.
+        PixelFarm.Drawing contains only Software Rendering part.
 		the code for platform-specific-drawing functions is here.
 						   
-		the module GdiPlus, GLES implement PixelFarm.Drawing's Painter,Drawboard
-		and add platform specific drawing function to it. 
+the module GdiPlus, GLES implement PixelFarm.Drawing's Painter,Drawboard
+and add platform specific drawing function to it. 
 						   
-		Painter's user can choose to use platform-specific or pure software-renderer.
+Painter's user can choose to use platform-specific or pure software-renderer.
 						   
-		for examples, GLES module use GLES painter by default, but
-		if user want to draw a some fine graphics object (eg. font glyphs)
-		they can draw it to software-base surface and copy to GLES surface
+for examples, GLES module use GLES painter by default, but
+if user want to draw a some fine graphics object (eg. font glyphs)
+they can draw it to software-base surface and copy to GLES surface
 						   
 						   						   
 						   
 **5.0_PaintLab_Platform:** contains RenderTree and other graphics support module (Color,PaintFx)					   
-		  RenderTree contains essential functions for UI implementation (eg. HitTest,
-						   event-tree, graphics update cycle implementation)
+RenderTree contains essential functions for UI implementation (eg. HitTest,
+event-tree, graphics update cycle implementation)
 
 **5.1_Your_Implementation:** as it name, this part provide 'example' for PaintLab's RenderTree.
                           it demonstrate how to create a low level UIElement,
