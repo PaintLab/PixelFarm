@@ -21,7 +21,7 @@ using PixelFarm.CpuBlit.FragmentProcessing;
 
 namespace PixelFarm.CpuBlit.Rasterization.Lines
 {
-    public struct PreBuiltLineAAGammaTable
+    public class PreBuiltLineAAGammaTable
     {
         internal readonly byte[] _gammaValues;
         public PreBuiltLineAAGammaTable(byte[] gammaValues)
@@ -35,7 +35,10 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
 #endif
             _gammaValues = gammaValues;
         }
-        public PreBuiltLineAAGammaTable(IGammaFunction generator)
+        public PreBuiltLineAAGammaTable(IGammaFunction generator) : this(generator.GetGamma)
+        { 
+        }
+        public PreBuiltLineAAGammaTable(Func<float, float> generator)
         {
             if (generator != null)
             {
@@ -43,7 +46,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                 for (int i = LineProfileAnitAlias.AA_SCALE - 1; i >= 0; --i)
                 {
                     //pass i to gamma func ***
-                    _gammaValues[i] = (byte)(AggMath.uround(generator.GetGamma((float)i / LineProfileAnitAlias.AA_MASK) * LineProfileAnitAlias.AA_MASK));
+                    _gammaValues[i] = (byte)(AggMath.uround(generator((float)i / LineProfileAnitAlias.AA_MASK) * LineProfileAnitAlias.AA_MASK));
                 }
             }
             else
@@ -51,8 +54,19 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
                 _gammaValues = null;
             }
         }
+        public static readonly PreBuiltLineAAGammaTable None;
 
-        public static PreBuiltLineAAGammaTable Empty = new PreBuiltLineAAGammaTable();
+        static PreBuiltLineAAGammaTable()
+        {
+            {
+                byte[] gammaValues = new byte[LineProfileAnitAlias.AA_SCALE];
+                for (int i = LineProfileAnitAlias.AA_SCALE - 1; i >= 0; --i)
+                {
+                    gammaValues[i] = (byte)(AggMath.uround(((float)(i) / LineProfileAnitAlias.AA_MASK) * LineProfileAnitAlias.AA_MASK));
+                }
+                None = new PreBuiltLineAAGammaTable(gammaValues);
+            }
+        }
     }
     //==========================================================line_profile_aa
     //
@@ -75,17 +89,8 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         double _min_width;
         double _smoother_width;
 
-        readonly static byte[] s_gamma_none;
+        PreBuiltLineAAGammaTable _gammaTable;
 
-        static LineProfileAnitAlias()
-        {
-            //GammaNone => just return i***
-            s_gamma_none = new byte[AA_SCALE];
-            for (int i = AA_SCALE - 1; i >= 0; --i)
-            {
-                s_gamma_none[i] = (byte)(AggMath.uround(((float)(i) / AA_MASK) * AA_MASK));
-            }
-        }
         public LineProfileAnitAlias(double w, IGammaFunction gamma_function)
             : this(w, new PreBuiltLineAAGammaTable(gamma_function))
         {
@@ -98,7 +103,8 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             _smoother_width = 1.0;
 
             //2. set gamma before set width
-            SetGamma(preBuiltGammaTable);
+            _gammaTable = preBuiltGammaTable;
+            _gamma = preBuiltGammaTable._gammaValues;
             //3. set width table
             SetWidth(w);
         }
@@ -164,9 +170,17 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             }
 
         }
-        void SetGamma(PreBuiltLineAAGammaTable preBuiltTable)
+
+        //change gamma table
+        public void SetGamma(PreBuiltLineAAGammaTable preBuiltTable)
         {
-            _gamma = preBuiltTable._gammaValues ?? s_gamma_none;
+            if (_gammaTable != preBuiltTable)
+            {
+                _gammaTable = preBuiltTable;
+                //when we change gamma,
+                //we need to update all profile
+                UpdateProfileBuffer(_smoother_width);
+            }
         }
 
         //---------------------------------------------
