@@ -59,7 +59,38 @@ _part1_
 ![px_proj_part2](https://user-images.githubusercontent.com/7447159/77893733-83366200-729e-11ea-85d1-6aff03eca45b.png)
 _part2_ 
  
- **4.0_Specific_Drawing:** 
+ **4.0_Specific_Drawing:** specific platform drawing, as describe above,
+                           PixelFarm.Drawing contains only Software Rendering part.
+						   the code for platform-specific-drawing functions is here.
+						   
+						   the module GdiPlus, GLES implement PixelFarm.Drawing's Painter,Drawboard
+						   and add platform specific drawing function to it. 
+						   
+						   Painter's user can choose to use platform-specific or pure software-renderer.
+						   
+						   for examples, GLES module use GLES painter by default, but
+						   if user want to draw a some fine graphics object (eg. font glyphs)
+						   they can draw it to software-base surface and copy to GLES surface
+						   
+						   						   
+						   
+**5.0_PaintLab_Platform:** contains RenderTree and other graphics support module (Color,PaintFx)					   
+						   RenderTree contains essential functions for UI implementation (eg. HitTest,
+						   event-tree, graphics update cycle implementation)
+
+**5.1_Your_Implementation:** as it name, this part provide 'example' for PaintLab's RenderTree.
+                          it demonstrate how to create a low level UIElement,
+						  binding UI interaction etc, you can reimlement this all by your own.
+						  
+**5.2_Specific_Implementation:** module for merge 'Your-Implementation' to a specific Platform
+
+**6.0_Tools**: contains '_BuildMergeProject_' tool that we use it to built the 'autogen' projects
+
+						  
+						   
+						   
+						    
+						   
  
 
 
