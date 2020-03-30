@@ -578,7 +578,7 @@
     <Compile Include="3_VertexProcessoring\dbugVertexSourceIO.cs" />
     <Compile Include="3_VertexProcessoring\LineDashGenerator.cs" />
     <Compile Include="3_VertexProcessoring\RectBorderHelper.cs" />
-    <Compile Include="2_AggPainter\SvgRenderVx.cs" />
+    <Compile Include="2_AggPainter\VxsRenderVx.cs" />
     <Compile Include="2_AggPainter\VertexStoreExtensions2.cs" />
     <Compile Include="6_Msdf\BasicElements.cs" />
     <Compile Include="6_Msdf\Msdf3\EdgeBmpLut.cs" />

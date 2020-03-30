@@ -2481,14 +2481,14 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\2_AggPainter\GradientBrushes.cs">
       <Link>PixelFarm\PixelFarm.Drawing\2_AggPainter\GradientBrushes.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\2_AggPainter\SvgRenderVx.cs">
-      <Link>PixelFarm\PixelFarm.Drawing\2_AggPainter\SvgRenderVx.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\2_AggPainter\Tools.cs">
       <Link>PixelFarm\PixelFarm.Drawing\2_AggPainter\Tools.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\2_AggPainter\VertexStoreExtensions2.cs">
       <Link>PixelFarm\PixelFarm.Drawing\2_AggPainter\VertexStoreExtensions2.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\2_AggPainter\VxsRenderVx.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\2_AggPainter\VxsRenderVx.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\3_VertexProcessoring\BorderDouble.cs">
       <Link>PixelFarm\PixelFarm.Drawing\3_VertexProcessoring\BorderDouble.cs</Link>
