@@ -31,9 +31,9 @@ namespace WinFormGdiPlus
                 wb.DrawLine(0, y, 100, y + 100,BitmapBufferEx.ColorInt.FromArgb(255, 255, 0, 0)); //red
                 wb.DrawLine(0, y + 100, 100, y + 0,BitmapBufferEx.ColorInt.FromArgb(255, 0, 0, 255)); //blue
 
-#if DEBUG
-                wb.DrawLineAa(100, y, 200, y + 100,BitmapBufferEx.ColorInt.FromArgb(255, 255, 0, 0));
-                wb.DrawLineAa(100, y + 100, 200, y + 0,BitmapBufferEx.ColorInt.FromArgb(255, 0, 0, 255)); //blue 
+#if DEBUG 
+                //wb.DrawLineAa(100, y, 200, y + 100,BitmapBufferEx.ColorInt.FromArgb(255, 255, 0, 0));
+                //wb.DrawLineAa(100, y + 100, 200, y + 0,BitmapBufferEx.ColorInt.FromArgb(255, 0, 0, 255)); //blue 
 #endif
 
 

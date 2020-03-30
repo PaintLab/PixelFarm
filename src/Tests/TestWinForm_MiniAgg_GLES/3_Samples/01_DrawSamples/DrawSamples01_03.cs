@@ -47,6 +47,8 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             {
                 p.RenderQuality = RenderQuality.HighQuality;
             }
+
+            p.StrokeColor = Color.Blue;
             p.Clear(Drawing.Color.White);
             p.UseSubPixelLcdEffect = false;
             //string teststr = "ABCDE pqyt 1230";
@@ -66,7 +68,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             //
 
             p.FillColor = Color.Yellow;
-            p.StrokeColor = Color.Blue;
+           
 
             p.FillEllipse(100.5, 400, 40, 60);
             p.DrawEllipse(50.5, 400, 40, 60);

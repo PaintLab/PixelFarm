@@ -114,9 +114,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\PixelFarm.BitmapBufferEx.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.BitmapBufferEx\BitmapBufferEx\PaintLab.BitmapBufferEx_TESTUNIT.csproj">
       <Project>{5eb9544f-51e1-42cc-abfd-b9afba6a2a0d}</Project>
-      <Name>PixelFarm.BitmapBufferEx</Name>
+      <Name>PaintLab.BitmapBufferEx_TESTUNIT</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\PixelFarm.PrimitiveGeo.csproj">
       <Project>{b951ff5b-d7a0-4259-880d-cb7a0c001956}</Project>

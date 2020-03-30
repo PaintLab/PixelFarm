@@ -6,7 +6,7 @@ using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.Imaging;
 using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.CpuBlit.Rasterization;
-using PixelFarm.CpuBlit.FragmentProcessing;
+using PixelFarm.CpuBlit.PixelProcessing;
 using Mini;
 namespace PixelFarm.CpuBlit.Sample_AADemoTest3
 {
@@ -277,7 +277,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
                 using (Tools.BorrowPathWriter(v1, out PathWriter ps))
                 {
                     ps.Clear();
-                    
+
                     ps.MoveTo(_x[0], _y[0]);
                     ps.LineTo(_x[1], _y[1]);
                     ps.LineTo(_x[2], _y[2]);
@@ -291,7 +291,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
                 //Stroke stroke = new Stroke(ps);
                 //stroke.Width = 2;
                 //rasterizer.AddPath(stroke.MakeVxs(ps.MakeVxs())); 
- 
+
                 //----------------------------------------
 
                 sclineRasToBmp.RenderWithColor(clippingProxyNormal, rasterizer, sl, new Color(200, 0, 150, 160));
