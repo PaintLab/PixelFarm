@@ -38,15 +38,15 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         public PreBuiltLineAAGammaTable(IGammaFunction generator) : this(generator.GetGamma)
         { 
         }
-        public PreBuiltLineAAGammaTable(Func<float, float> generator)
+        public PreBuiltLineAAGammaTable(Func<float, float> gammaValueGenerator)
         {
-            if (generator != null)
+            if (gammaValueGenerator != null)
             {
                 _gammaValues = new byte[LineProfileAnitAlias.AA_SCALE];
                 for (int i = LineProfileAnitAlias.AA_SCALE - 1; i >= 0; --i)
                 {
                     //pass i to gamma func ***
-                    _gammaValues[i] = (byte)(AggMath.uround(generator((float)i / LineProfileAnitAlias.AA_MASK) * LineProfileAnitAlias.AA_MASK));
+                    _gammaValues[i] = (byte)(AggMath.uround(gammaValueGenerator((float)i / LineProfileAnitAlias.AA_MASK) * LineProfileAnitAlias.AA_MASK));
                 }
             }
             else
