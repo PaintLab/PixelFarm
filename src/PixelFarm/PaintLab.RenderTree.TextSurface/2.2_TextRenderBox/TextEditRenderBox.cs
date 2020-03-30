@@ -949,7 +949,7 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        public override void HandleMouseWheel(UIMouseEventArgs e)
+        public override void HandleMouseWheel(UIMouseWheelEventArgs e)
         {
             if (_textSurfaceEventListener != null &&
                TextSurfaceEventListener.NotifyPreviewMouseWheel(_textSurfaceEventListener, e))

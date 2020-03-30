@@ -4,7 +4,6 @@ using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using LayoutFarm;
 using LayoutFarm.UI;
-using LayoutFarm.UI.InputBridge;
 using LayoutFarm.UI.OpenGL;
 namespace PixelFarm.Forms
 {
@@ -21,9 +20,9 @@ namespace PixelFarm.Forms
 
         public class GlfwEventBridge : GlfwWindowEventListener
         {
-            UIMouseEventArgs _mouseEventArgs = new UIMouseEventArgs();
-            UIKeyEventArgs _keyEventArgs = new UIKeyEventArgs();
-            UIPaintEventArgs _paintEventArgs = new UIPaintEventArgs();
+            readonly PrimaryMouseEventArgs _mouseArgs = new PrimaryMouseEventArgs();
+            readonly UIKeyEventArgs _keyEventArgs = new UIKeyEventArgs();
+            readonly UIPaintEventArgs _paintEventArgs = new UIPaintEventArgs();
             MyTopWindowBridgeOpenGL _myTopWindowBridge;
 
             int _mouseMoveX;
@@ -53,16 +52,15 @@ namespace PixelFarm.Forms
                 }
                 if (action == Glfw3.GLFW_PRESS)
                 {
-                    _mouseEventArgs.SetEventInfo(_mouseMoveX, _mouseMoveY, _ui_button, 1, 0);
-                    _mouseEventArgs.UIEventName = UIEventName.MouseDown;
-                    _myTopWindowBridge.HandleMouseDown(_mouseEventArgs);
+                    _mouseArgs.SetMouseDownEventInfo(_mouseMoveX, _mouseMoveY, _ui_button, 1);
+                    _myTopWindowBridge.HandleMouseDown(_mouseArgs);
 
                 }
                 else
                 {
-                    _mouseEventArgs.SetEventInfo(_mouseMoveX, _mouseMoveY, _ui_button, 1, 0);
-                    _mouseEventArgs.UIEventName = UIEventName.MouseUp;
-                    _myTopWindowBridge.HandleMouseUp(_mouseEventArgs);
+
+                    _mouseArgs.SetMouseUpEventInfo(_mouseMoveX, _mouseMoveY, _ui_button);
+                    _myTopWindowBridge.HandleMouseUp(_mouseArgs);
 
 
                     _ui_button = UIMouseButtons.Left;//reset after mouseup
@@ -75,9 +73,8 @@ namespace PixelFarm.Forms
                 _mouseMoveX = (int)xpos;
                 _mouseMoveY = (int)ypos;
 
-                _mouseEventArgs.SetEventInfo(_mouseMoveX, _mouseMoveY, _ui_button, 1, 0);
-                _mouseEventArgs.UIEventName = UIEventName.MouseMove;
-                _myTopWindowBridge.HandleMouseMove(_mouseEventArgs);
+                _mouseArgs.SetMouseMoveEventInfo(_mouseMoveX, _mouseMoveY);
+                _myTopWindowBridge.HandleMouseMove(_mouseArgs);
 
                 //mouse move
                 base.CursorEvent(windowPtr, xpos, ypos);

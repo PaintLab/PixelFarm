@@ -9,11 +9,16 @@ namespace LayoutFarm.CustomWidgets
         CustomImageRenderBox _imgRenderBox;
         ImageBinder _imageBinder;
         EventHandler _imgChangedSubscribe;
+        public ImageBox() : this(16, 16)
+        {
+            //if user does not provide width and height,
+            //we use default first, and set HasSpecificWidthAndHeight=false
+            //(this feature  found in label, image box, and text-flow-label)
+            HasSpecificWidthAndHeight = false;
+        }
         public ImageBox(int width, int height)
             : base(width, height)
         {
-
-
             this.NeedClipArea = true;
             _imgChangedSubscribe = (s, e) => OnContentUpdate();
         }

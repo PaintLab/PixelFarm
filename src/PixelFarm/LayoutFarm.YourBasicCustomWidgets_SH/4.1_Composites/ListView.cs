@@ -10,16 +10,14 @@ namespace LayoutFarm.CustomWidgets
 
     public class ListView : AbstractBox
     {
-
-
         public delegate void ListItemMouseHandler(object sender, UIMouseEventArgs e);
         public delegate void ListItemKeyboardHandler(object sender, UIKeyEventArgs e);
-
         //composite          
 
         List<ListItem> _items = new List<ListItem>();
         int _selectedIndex = -1;//default = no selection
         ListItem _selectedItem = null;
+
         public event ListItemMouseHandler ListItemMouseEvent;
         public event ListItemKeyboardHandler ListItemKeyboardEvent;
 
@@ -31,38 +29,14 @@ namespace LayoutFarm.CustomWidgets
             //dbugBreakMe = true;
 #endif
             this.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
-            this.BackColor = KnownColors.LightGray;
-            this.MouseDown += panel_MouseDown;
-            this.MouseDoubleClick += panel_MouseDoubleClick;
-            this.AcceptKeyboardFocus = true;
-            this.KeyDown += simpleBox_KeyDown;
+            this.BackColor = KnownColors.LightGray; 
+            this.AcceptKeyboardFocus = true; 
             this.NeedClipArea = true;
         }
-
-
-        void simpleBox_KeyDown(object sender, UIKeyEventArgs e)
-        {
-            if (_selectedItem != null && ListItemKeyboardEvent != null)
-            {
-                e.UIEventName = UIEventName.KeyDown;
-                ListItemKeyboardEvent(this, e);
-            }
-        }
-        void panel_MouseDoubleClick(object sender, UIMouseEventArgs e)
-        {
-            //raise event mouse double click
-            var src = e.SourceHitElement as ListItem;
-            if (src != null && ListItemMouseEvent != null)
-            {
-                e.UIEventName = UIEventName.DblClick;
-                ListItemMouseEvent(this, e);
-            }
-        }
-        void panel_MouseDown(object sender, UIMouseEventArgs e)
-        {
+        protected override void OnMouseDown(UIMouseDownEventArgs e)
+        { 
             //check what item is selected
-            var src = e.SourceHitElement as ListItem;
-            if (src != null)
+            if (e.SourceHitElement is ListItem src)
             {
                 //make this as current selected list item
                 //find index ?
@@ -82,11 +56,31 @@ namespace LayoutFarm.CustomWidgets
                 }
                 if (ListItemMouseEvent != null)
                 {
-                    e.UIEventName = UIEventName.MouseDown;
+                   
                     ListItemMouseEvent(this, e);
                 }
             }
+            base.OnMouseDown(e);
         }
+        protected override void OnKeyDown(UIKeyEventArgs e)
+        {
+            if (_selectedItem != null && ListItemKeyboardEvent != null)
+            {
+                 
+                ListItemKeyboardEvent(this, e);
+            }
+            base.OnKeyDown(e);
+        }
+        protected override void OnDoubleClick(UIMouseEventArgs e)
+        {
+            base.OnDoubleClick(e);
+            //raise event mouse double click
+            if (e.SourceHitElement is ListItem src && ListItemMouseEvent != null)
+            {             
+                ListItemMouseEvent(this, e);
+            }
+        }
+        
 
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {

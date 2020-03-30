@@ -51,15 +51,6 @@
     <Compile Include="..\backend.win32utils\NativeWin32MemoryDc.cs">
       <Link>0_REF_Win32Utils\NativeWin32MemoryDc.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.PlatformBase\dbugHelper.cs">
-      <Link>0_Shared\dbugHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\PaintLab.PlatformBase\InnerViewportKind.cs">
-      <Link>0_Shared\InnerViewportKind.cs</Link>
-    </Compile>
-    <Compile Include="..\PaintLab.PlatformBase\OpenGLCanvasViewport.cs">
-      <Link>2_GLES2\OpenGLCanvasViewport.cs</Link>
-    </Compile>
     <Compile Include="0_Platform\FrameworkInitWinGDI.cs" />
     <Compile Include="1_GraphicsViewAndBridges\GLControl.cs" />
     <Compile Include="1_GraphicsViewAndBridges\GLControlFactory.cs" />
@@ -89,6 +80,7 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\PixelFarm.Drawing.GdiPlus_SH\PixelFarm.Drawing.GdiPlus_SH.projitems" Label="Shared" />
+  <Import Project="..\PaintLab.Platforms.SH\PaintLab.Platforms.SH.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

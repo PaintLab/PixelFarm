@@ -6,7 +6,6 @@ using PixelFarm.Drawing;
 namespace LayoutFarm.UI.GdiPlus
 {
     using LayoutFarm.UI;
-    using LayoutFarm.UI.InputBridge;
     public class MyTopWindowBridgeGdiPlus : AbstractTopWindowBridge
     {
         IGpuOpenGLSurfaceView _windowControl;

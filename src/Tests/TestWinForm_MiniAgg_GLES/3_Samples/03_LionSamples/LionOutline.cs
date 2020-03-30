@@ -33,7 +33,7 @@ using System;
 using PixelFarm;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
-using PixelFarm.CpuBlit.Imaging;
+using PixelFarm.CpuBlit.FragmentProcessing;
 using PixelFarm.CpuBlit.PixelProcessing;
 using PixelFarm.CpuBlit.Rasterization;
 using PixelFarm.CpuBlit.Rasterization.Lines;
@@ -70,73 +70,90 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
         [DemoConfig]
         public bool RenderAsScanline
         {
-            get
-            {
-                return _lionOutlineSprite.RenderAsScanline;
-            }
-            set
-            {
-                _lionOutlineSprite.RenderAsScanline = value;
-            }
+            get => _lionOutlineSprite.RenderAsScanline;
+            set => _lionOutlineSprite.RenderAsScanline = value;
+
         }
 
         [DemoConfig]
         public bool RenderAccurateJoins
         {
-            get
-            {
-                return _lionOutlineSprite.RenderAccurateJoins;
-            }
-            set
-            {
-                _lionOutlineSprite.RenderAccurateJoins = value;
-            }
+            get => _lionOutlineSprite.RenderAccurateJoins;
+            set => _lionOutlineSprite.RenderAccurateJoins = value;
+
         }
 
         [DemoConfig]
         public bool UseBitmapExt
         {
-            get { return _lionOutlineSprite.UseBitmapExt; }
-            set
-            {
-                _lionOutlineSprite.UseBitmapExt = value;
-            }
+            get => _lionOutlineSprite.UseBitmapExt;
+            set => _lionOutlineSprite.UseBitmapExt = value;
+
         }
         [DemoConfig]
         public bool UseBuiltInAggOutlineAATech
         {
-            get { return _lionOutlineSprite.UseBuiltInAggOutlineAATech; }
-            set
-            {
-                _lionOutlineSprite.UseBuiltInAggOutlineAATech = value;
-            }
+            get => _lionOutlineSprite.UseBuiltInAggOutlineAATech;
+            set => _lionOutlineSprite.UseBuiltInAggOutlineAATech = value;
+        }
+        [DemoConfig]
+        public LionOutlineGammaOptions GammaOptions
+        {
+            get => _lionOutlineSprite.GammaOptions;
+            set => _lionOutlineSprite.GammaOptions = value;
+        }
+        [DemoConfig]
+        public bool DynamicStrokeWidth
+        {
+            get => _lionOutlineSprite.DynamicStrokeWidth;
+            set => _lionOutlineSprite.DynamicStrokeWidth = value;
         }
     }
     //--------------------------------------------------
+
+    public enum LionOutlineGammaOptions
+    {
+        None,
+        TrueIf_100Coverage,
+        TrueIf_50Coverage,
+        TrueIf_MoreThan0,
+    }
+
+
     public class LionOutlineSprite : BasicSprite
     {
         private SpriteShape _spriteShape;
         //special option 
+
+        PreBuiltLineAAGammaTable _gammaTrueIf_100;
+        PreBuiltLineAAGammaTable _gammaTrueIf_50_OrMore;
+        PreBuiltLineAAGammaTable _gammaTrueIf_MoreThan0;
+
         public LionOutlineSprite()
         {
             _spriteShape = new SpriteShape(VgVisualDocHelper.CreateVgVisualDocFromFile(@"Samples\lion.svg").VgRootElem);
             this.Width = 500;
             this.Height = 500;
+
+
+            _gammaTrueIf_100 = new PreBuiltLineAAGammaTable(x => (x == 1) ? 1 : 0);
+            _gammaTrueIf_50_OrMore = new PreBuiltLineAAGammaTable(x => (x > 0.5) ? 1 : 0);
+            _gammaTrueIf_MoreThan0 = new PreBuiltLineAAGammaTable(x => (x > 0) ? 1 : 0);
+
         }
         void NeedsRedraw(object sender, EventArgs e)
         {
         }
-
+        public LionOutlineGammaOptions GammaOptions { get; set; }
         public bool RenderAsScanline { get; set; }
         public bool RenderAccurateJoins { get; set; }
         public bool UseBitmapExt { get; set; }
         public bool UseBuiltInAggOutlineAATech { get; set; }
+        public bool DynamicStrokeWidth { get; set; } = true;
 
         public override void Render(PixelFarm.Drawing.Painter p)
         {
-
-
-            int strokeWidth = 1;
+            double strokeWidth = 1;
             int width = p.Width;
             int height = p.Height;
 
@@ -200,44 +217,69 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
 
             if (RenderAsScanline)
             {
-                //a low-level example, expose scanline rasterizer
+                //for demostrate low-level agg func only.//***
 
-                ScanlineRasterizer rasterizer = aggsx.ScanlineRasterizer;
+                //a low-level: expose scanline rasterizer
+
+                ScanlineRasterizer rasterizer = aggsx.ScanlineRasterizer; //get current scanline reasterizer 
                 rasterizer.SetClipBox(0, 0, width, height);
-
-                //lionShape.ApplyTransform(affTx); 
-                //---------------------
 
                 using (Tools.More.BorrowVgPaintArgs(aggPainter, out var paintArgs))
                 {
                     paintArgs._currentTx = affTx;
                     paintArgs.PaintVisitHandler = (vxs, painterA) =>
                     {
-                        //use external painter handler
-                        //draw only outline with its fill-color. 
+
+                        //1. we reset the rasterizer before add any 'VertexStore' object (vxs)
                         rasterizer.Reset();
                         rasterizer.AddPath(vxs);
+                        //2. use default bitmap rasterizer
+                        //to blend the output from rasterizer imageClippingProxy
+                        //
                         aggsx.BitmapRasterizer.RenderWithColor(
                             imageClippingProxy, rasterizer,
                             aggsx.ScanlinePacked8,
-                            aggPainter.FillColor); //draw line with external drawing handler
+                            aggPainter.FillColor);
                     };
 
                     _spriteShape.Paint(paintArgs);
                 }
-
-                //---------------------------- 
-                //lionShape.ResetTransform();
             }
             else
             {
+                //provider 2 examples 
+                //1. UseBuiltInAggOutlineAATech: for gerneral usage
+                //2. Low-Level Demo: show low-level implementation (in side UseBuiltInAggOutlineAATech)
+                //           
+                PreBuiltLineAAGammaTable selectedGamma = null;
+                switch (GammaOptions)
+                {
+                    default:
+                    case LionOutlineGammaOptions.None:
+                        selectedGamma = PreBuiltLineAAGammaTable.None;
+                        break;
+                    case LionOutlineGammaOptions.TrueIf_100Coverage:
+                        selectedGamma = _gammaTrueIf_100;
+                        break;
+                    case LionOutlineGammaOptions.TrueIf_50Coverage:
+                        selectedGamma = _gammaTrueIf_50_OrMore;
+                        break;
+                    case LionOutlineGammaOptions.TrueIf_MoreThan0:
+                        selectedGamma = _gammaTrueIf_MoreThan0;
+                        break;
+                }
+
+                if (DynamicStrokeWidth)
+                {
+                    strokeWidth *= affTx.GetScale();
+                }
+
 
                 if (UseBuiltInAggOutlineAATech)
                 {
-                    aggPainter.StrokeWidth = 1;
+                    aggPainter.StrokeWidth = strokeWidth;
                     aggPainter.LineRenderingTech = AggPainter.LineRenderingTechnique.OutlineAARenderer;
-
-                    //------
+                    aggPainter.LineAAGammaTable = selectedGamma;
 
                     using (Tools.More.BorrowVgPaintArgs(aggPainter, out var paintArgs))
                     {
@@ -258,23 +300,23 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                 else
                 {
                     //low-level implementation
-                    aggPainter.StrokeWidth = 1;
-
+                    aggPainter.StrokeWidth = strokeWidth;
                     //-------------------------                
-                    //Draw with LineProfile: 
-                    //LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(strokeWidth * affTx.GetScale(), new GammaNone()); //with gamma
+                     
+                    //1. LineProfileAnitAlias: for AA-area-coverage decision                   
+                    LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(strokeWidth, selectedGamma);
 
-                    LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(strokeWidth * affTx.GetScale(), null);
+                    //2. OutlineRenderer: 'line-color-blender', generate final output
                     OutlineRenderer outlineRenderer = new OutlineRenderer(imageClippingProxy, new PixelBlenderBGRA(), lineProfile);
                     outlineRenderer.SetClipBox(0, 0, this.Width, this.Height);
 
+                    //3. OutlineAARasterizer: generate scanlines for a input coord, 
                     OutlineAARasterizer rasterizer = new OutlineAARasterizer(outlineRenderer);
                     rasterizer.LineJoin = (RenderAccurateJoins ?
                         OutlineAARasterizer.OutlineJoin.AccurateJoin
                         : OutlineAARasterizer.OutlineJoin.Round);
                     rasterizer.RoundCap = true;
 
-                    //lionShape.ApplyTransform(affTx);
                     //----------------------------
                     using (Tools.More.BorrowVgPaintArgs(aggPainter, out var paintArgs))
                     {

@@ -454,7 +454,7 @@ namespace LayoutFarm.UI
         protected virtual void OnLostKeyboardFocus(UIFocusEventArgs e)
         {
         }
-        protected virtual void OnLostMouseFocus(UIMouseEventArgs e)
+        protected virtual void OnLostMouseFocus(UIMouseLostFocusEventArgs e)
         {
         }
         protected virtual void OnGotKeyboardFocus(UIFocusEventArgs e)
@@ -464,25 +464,29 @@ namespace LayoutFarm.UI
         {
         }
         //-------------------------------------------------------
-        protected virtual void OnMouseDown(UIMouseEventArgs e)
+        protected virtual void OnMouseDown(UIMouseDownEventArgs e)
         {
         }
-        protected virtual void OnMouseMove(UIMouseEventArgs e)
+        protected virtual void OnMousePress(UIMousePressEventArgs e)
+        {
+
+        }
+        protected virtual void OnMouseMove(UIMouseMoveEventArgs e)
         {
         }
-        protected virtual void OnMouseUp(UIMouseEventArgs e)
+        protected virtual void OnMouseUp(UIMouseUpEventArgs e)
         {
         }
-        protected virtual void OnMouseEnter(UIMouseEventArgs e)
+        protected virtual void OnMouseEnter(UIMouseMoveEventArgs e)
         {
         }
-        protected virtual void OnMouseLeave(UIMouseEventArgs e)
+        protected virtual void OnMouseLeave(UIMouseLeaveEventArgs e)
         {
         }
-        protected virtual void OnMouseWheel(UIMouseEventArgs e)
+        protected virtual void OnMouseWheel(UIMouseWheelEventArgs e)
         {
         }
-        protected virtual void OnMouseHover(UIMouseEventArgs e)
+        protected virtual void OnMouseHover(UIMouseHoverEventArgs e)
         {
         }
 

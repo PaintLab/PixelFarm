@@ -29,7 +29,7 @@ namespace LayoutFarm
             PixelFarm.Drawing.RequestFont font = new PixelFarm.Drawing.RequestFont("Source Sans Pro", 20);
             for (int i = 0; i < 10; ++i)
             {
-                Label label = new Label(17, 50);
+                Label label = new Label();
                 label.SetLocation(i * 20, i * 20);
                 label.TextColor = PixelFarm.Drawing.Color.Black;
                 label.SetFont(font);

@@ -1,7 +1,6 @@
 ﻿//Apache2, 2014-present, WinterDev
 
 using System;
-using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
     public class CheckBox : AbstractBox
@@ -9,26 +8,35 @@ namespace LayoutFarm.CustomWidgets
         //check icon
         ImageBox _imageBox;
         bool _isChecked;
+
+        static ImageBinder s_checkedImg;
+        static ImageBinder s_uncheckedImg;
+
         public CheckBox(int w, int h)
             : base(w, h)
         {
+        }
+        void EnsureImgBinders()
+        {
+            if (s_checkedImg == null)
+            {
+                s_checkedImg = ResImageList.GetImageBinder(ImageName.CheckBoxChecked);
+            }
+            if (s_uncheckedImg == null)
+            {
+                s_uncheckedImg = ResImageList.GetImageBinder(ImageName.CheckBoxUnChecked);
+            }
         }
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
             if (!this.HasReadyRenderElement)
             {
                 //first time
-                RenderElement baseRenderElement = base.GetPrimaryRenderElement(rootgfx);
-                _imageBox = new ImageBox(16, 16);
-                if (_isChecked)
-                {
-                    _imageBox.ImageBinder = ResImageList.GetImageBinder(ImageName.CheckBoxChecked);
-                }
-                else
-                {
-                    _imageBox.ImageBinder = ResImageList.GetImageBinder(ImageName.CheckBoxUnChecked);
-                }
+                EnsureImgBinders();
 
+                RenderElement baseRenderElement = base.GetPrimaryRenderElement(rootgfx);
+                _imageBox = new ImageBox();
+                _imageBox.ImageBinder = _isChecked ? s_checkedImg : s_uncheckedImg;
                 _imageBox.MouseDown += (s, e) =>
                 {
                     //toggle checked/unchecked
@@ -49,19 +57,13 @@ namespace LayoutFarm.CustomWidgets
             {
                 if (value != _isChecked)
                 {
+                    EnsureImgBinders();
+
                     _isChecked = value;
                     //check check image too!
+                    //review here,
 
-                    if (_isChecked)
-                    {
-                        _imageBox.ImageBinder = ResImageList.GetImageBinder(ImageName.CheckBoxChecked);
-                    }
-                    else
-                    {
-                        _imageBox.ImageBinder = ResImageList.GetImageBinder(ImageName.CheckBoxUnChecked);
-                    }
-
-
+                    _imageBox.ImageBinder = _isChecked ? s_checkedImg : s_uncheckedImg;
 
                     if (value && this.WhenChecked != null)
                     {

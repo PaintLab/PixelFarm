@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>a3bba4d4-0c7d-4b1c-b451-75d15f661cc6</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>PaintLab.Platforms.SH</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)dbugHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)InnerViewportKind.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OpenGLCanvasViewport.cs" />
+  </ItemGroup>
+</Project>

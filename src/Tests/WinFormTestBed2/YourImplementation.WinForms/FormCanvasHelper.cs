@@ -5,10 +5,10 @@ using System;
 using System.Windows.Forms;
 using PixelFarm.Drawing;
 using Typography.FontManagement;
-
-
+using LayoutFarm.UI.ForImplementator;
 namespace LayoutFarm.UI
 {
+
     public static class FormCanvasHelper
     {
         static UIPlatformWinForm s_platform;
@@ -88,7 +88,7 @@ namespace LayoutFarm.UI
         static AbstractTopWindowBridge GetTopWindowBridge(
             InnerViewportKind innerViewportKind,
             RootGraphic rootgfx,
-            LayoutFarm.UI.InputBridge.ITopWindowEventRoot topWindowEventRoot)
+            ITopWindowEventRoot topWindowEventRoot)
         {
             switch (innerViewportKind)
             {
@@ -196,8 +196,8 @@ namespace LayoutFarm.UI
         AbstractTopWindowBridge _topWindowBridge;
 
         GLESContext _myContext;
-        UIMouseEventArgs _mouseEventArgs = new UIMouseEventArgs();
-        UIKeyEventArgs _keyEventArgs = new UIKeyEventArgs();
+        readonly PrimaryMouseEventArgs _mouseEventArgs = new PrimaryMouseEventArgs();
+        readonly UIKeyEventArgs _keyEventArgs = new UIKeyEventArgs();
 
         Cursor _cursor;
 
@@ -253,19 +253,17 @@ namespace LayoutFarm.UI
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            _keyEventArgs.UIEventName = UIEventName.KeyDown;
-            _keyEventArgs.SetEventInfo((uint)e.KeyCode, e.Shift, e.Alt, e.Control);
+            _keyEventArgs.SetEventInfo((uint)e.KeyCode, e.Shift, e.Alt, e.Control, UIEventName.KeyDown);
             _topWindowBridge.HandleKeyDown(_keyEventArgs);
         }
         protected override void OnKeyPress(KeyPressEventArgs e)
         {
-            _keyEventArgs.UIEventName = UIEventName.KeyPress;
+            _keyEventArgs.SetEventInfo(UIEventName.KeyPress);
             _topWindowBridge.HandleKeyPress(_keyEventArgs, e.KeyChar);
         }
         protected override void OnKeyUp(KeyEventArgs e)
         {
-            _keyEventArgs.UIEventName = UIEventName.KeyUp;
-            _keyEventArgs.SetEventInfo((uint)e.KeyCode, e.Shift, e.Alt, e.Control);
+            _keyEventArgs.SetEventInfo((uint)e.KeyCode, e.Shift, e.Alt, e.Control, UIEventName.KeyUp);
             _topWindowBridge.HandleKeyUp(_keyEventArgs);
         }
         protected override void OnMouseDown(MouseEventArgs e)
@@ -285,8 +283,7 @@ namespace LayoutFarm.UI
                         buttons = UIMouseButtons.Right;
                         break;
                 }
-                _mouseEventArgs.UIEventName = UIEventName.MouseDown;
-                _mouseEventArgs.SetEventInfo(e.X, e.Y, buttons, e.Clicks, e.Delta);
+                _mouseEventArgs.SetMouseDownEventInfo(e.X, e.Y, buttons, e.Clicks);
                 _topWindowBridge.HandleMouseDown(_mouseEventArgs);
             }
             base.OnMouseDown(e);
@@ -295,8 +292,7 @@ namespace LayoutFarm.UI
         {
             if (_topWindowBridge != null)
             {
-                _mouseEventArgs.UIEventName = UIEventName.MouseMove;
-                _mouseEventArgs.SetEventInfo(e.X, e.Y, UIMouseButtons.None, e.Clicks, e.Delta);
+                _mouseEventArgs.SetMouseMoveEventInfo(e.X, e.Y);
                 _topWindowBridge.HandleMouseMove(_mouseEventArgs);
             }
             base.OnMouseMove(e);
@@ -318,8 +314,8 @@ namespace LayoutFarm.UI
                         buttons = UIMouseButtons.Right;
                         break;
                 }
-                _mouseEventArgs.UIEventName = UIEventName.MouseUp;
-                _mouseEventArgs.SetEventInfo(e.X, e.Y, buttons, e.Clicks, e.Delta);
+
+                _mouseEventArgs.SetMouseUpEventInfo(e.X, e.Y, buttons);
                 _topWindowBridge.HandleMouseUp(_mouseEventArgs);
             }
             base.OnMouseUp(e);
@@ -341,8 +337,8 @@ namespace LayoutFarm.UI
                         buttons = UIMouseButtons.Right;
                         break;
                 }
-                _mouseEventArgs.UIEventName = UIEventName.Wheel;
-                _mouseEventArgs.SetEventInfo(e.X, e.Y, buttons, e.Clicks, e.Delta);
+
+                _mouseEventArgs.SetMouseWheelEventInfo(e.X, e.Y, e.Delta);
                 _topWindowBridge.HandleMouseWheel(_mouseEventArgs);
             }
             base.OnMouseWheel(e);

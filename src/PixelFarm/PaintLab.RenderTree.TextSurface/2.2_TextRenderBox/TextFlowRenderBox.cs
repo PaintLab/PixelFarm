@@ -182,9 +182,9 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        public virtual void HandleMouseDown(UIMouseEventArgs e)
+        public virtual void HandleMouseDown(UIMouseDownEventArgs e)
         {
-            if (e.Button == UIMouseButtons.Left)
+            if (e.Buttons == UIMouseButtons.Left)
             {
                 InvalidateGraphicOfCurrentLineArea();
 
@@ -224,7 +224,7 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
-        public virtual void HandleMouseWheel(UIMouseEventArgs e)
+        public virtual void HandleMouseWheel(UIMouseWheelEventArgs e)
         {
 
             //
@@ -294,14 +294,14 @@ namespace LayoutFarm.TextEditing
                 startAt = len = 0;
             }
         }
-        public virtual void HandleDrag(UIMouseEventArgs e)
+        public virtual void HandleDrag(UIMouseMoveEventArgs e)
         {
             if (!_isDragBegin)
             {
                 //dbugMouseDragBegin++;
                 //first time
                 _isDragBegin = true;
-                if (e.Button == UIMouseButtons.Left)
+                if (e.Buttons == UIMouseButtons.Left)
                 {
                     _editSession.SetCaretPos(e.X, e.Y);
                     _editSession.StartSelect();
@@ -313,7 +313,7 @@ namespace LayoutFarm.TextEditing
             else
             {
                 //dbugMouseDragging++;
-                if (e.Button == UIMouseButtons.Left)
+                if (e.Buttons == UIMouseButtons.Left)
                 {
                     _editSession.StartSelectIfNoSelection();
                     _editSession.SetCaretPos(e.X, e.Y);
@@ -323,10 +323,10 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
-        public virtual void HandleDragEnd(UIMouseEventArgs e)
+        public virtual void HandleDragEnd(UIMouseUpEventArgs e)
         {
             _isDragBegin = false;
-            if (e.Button == UIMouseButtons.Left)
+            if (e.Buttons == UIMouseButtons.Left)
             {
                 _editSession.StartSelectIfNoSelection();
                 _editSession.SetCaretPos(e.X, e.Y);
@@ -419,7 +419,7 @@ namespace LayoutFarm.TextEditing
         {
             //TODO: review this method
         }
-        public void HandleMouseUp(UIMouseEventArgs e)
+        public void HandleMouseUp(UIMouseUpEventArgs e)
         {
             //empty?
         }

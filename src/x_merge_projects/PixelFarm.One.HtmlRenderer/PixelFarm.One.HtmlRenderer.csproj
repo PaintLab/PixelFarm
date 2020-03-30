@@ -39,10 +39,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\BackEnd.Color\BackEnd.Color.csproj">
-      <Project>{9cc6310f-c116-449d-be97-63d152f98746}</Project>
-      <Name>BackEnd.Color</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\BackEnd.ImgCodecs\BackEnd.ImgCodecs.csproj">
       <Project>{bfadb269-520e-4a14-9d4a-3d65ed57eb75}</Project>
       <Name>BackEnd.ImgCodecs</Name>
@@ -71,13 +67,21 @@
       <Project>{d2cc5cef-3003-4a5d-a532-8eb7e4fa40f2}</Project>
       <Name>PaintLab.AbstractPlatform</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.BitmapBufferEx\BitmapBufferEx\PaintLab.BitmapBufferEx.csproj">
+      <Project>{572e6b12-051f-4e41-af01-0831b210cf66}</Project>
+      <Name>PaintLab.BitmapBufferEx</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.Color\PaintLab.Color.csproj">
+      <Project>{9cc6310f-c116-449d-be97-63d152f98746}</Project>
+      <Name>PaintLab.Color</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.PaintFx\PaintLab.PaintFx.csproj">
+      <Project>{a533e1c7-ab74-4bcf-bc7a-12d4dbbfa918}</Project>
+      <Name>PaintLab.PaintFx</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PaintLab.YourImplementation\PaintLab.YourImplementation.csproj">
       <Project>{d88d86cd-6732-45e7-8fc9-49449ea9c737}</Project>
       <Name>PaintLab.YourImplementation</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.BitmapBufferEx\BitmapBufferEx\PixelFarm.BitmapBufferEx.csproj">
-      <Project>{5eb9544f-51e1-42cc-abfd-b9afba6a2a0d}</Project>
-      <Name>PixelFarm.BitmapBufferEx</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.GLES\PixelFarm.Drawing.GLES.csproj">
       <Project>{e1e89b3b-b529-4b17-b7ed-4c70cc8475eb}</Project>
