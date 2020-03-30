@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A533E1C7-AB74-4BCF-BC7A-12D4DBBFA918}</ProjectGuid>
+    <ProjectGuid>{572E6B12-051F-4E41-AF01-0831B210CF66}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PaintLab.PaintFx</RootNamespace>
-    <AssemblyName>PaintLab.PaintFx</AssemblyName>
+    <RootNamespace>BackEnd.BitmapBufferEx</RootNamespace>
+    <AssemblyName>BackEnd.BitmapBufferEx</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,29 +33,27 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BrightnesssAndContrast.cs" />
-    <Compile Include="InternalBrightnessAndContrastAdjustment.cs" />
-    <Compile Include="PatternFilterBilnearColorRGBA.cs" />
-    <Compile Include="RecursiveBlur.cs" />
-    <Compile Include="StackBlur.cs" />
-    <Compile Include="Transposer.cs" />
-    <Compile Include="ImgFilters.cs" />
+    <Compile Include="BitmapBuffer.cs" />
+    <Compile Include="BitmapBufferExtensions\BaseExtensions.cs" />
+    <Compile Include="BitmapBufferExtensions\BlitExtensions.cs" />
+    <Compile Include="BitmapBufferExtensions\ConvertExtensions.cs" />
+    <Compile Include="BitmapBufferExtensions\FillExtensions.cs" />
+    <Compile Include="BitmapBufferExtensions\FilterExtensions.cs" />
+    <Compile Include="BitmapBufferExtensions\LineExtensions.cs" />
+    <Compile Include="BitmapBufferExtensions\ShapeExtensions.cs" />
+    <Compile Include="BitmapBufferExtensions\SplineExtensions.cs" />
+    <Compile Include="BitmapBufferExtensions\TransformationExtensions.cs" />
+    <Compile Include="BitmapContext.cs" />
+    <Compile Include="BitmapBufferFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SharpenFilter.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IImageFilterFunc.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
+    <ProjectReference Include="..\..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="..\BackEnd.PaintFx\PdnSharedProject\PdnSharedProject.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
