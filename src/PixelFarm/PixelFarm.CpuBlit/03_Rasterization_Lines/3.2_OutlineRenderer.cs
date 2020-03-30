@@ -105,7 +105,13 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
         public float SubPixelWidth
         {
             get => _subpixel_width;
-            set => SetWidth(value);               //subpixel width
+            set
+            {
+                if (_subpixel_width != value)
+                {
+                    SetWidth(value);               //subpixel width
+                }
+            }
         }
 
         //#if DEBUG
@@ -250,7 +256,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             {
                 myLineProfile[--chIndex] = myLineProfile[ch_center++];
             }
-             
+
         }
     }
 
