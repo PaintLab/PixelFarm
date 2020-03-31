@@ -223,7 +223,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
     }
 
-
+     
     /// <summary>
     /// struct version of Affine (Matrix)
     /// </summary>
@@ -274,6 +274,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         /// <param name="m"></param>
         public void Rotate(double angleRad)
         {
+            if (angleRad == 0) return;
+
             double ca = Math.Cos(angleRad);
             double sa = Math.Sin(angleRad);
             double t0 = sx * ca - shy * sa;
@@ -297,7 +299,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         /// <param name="m"></param>
         public void Scale(double mm0, double mm3)
         {
-
             sx *= mm0;
             shx *= mm0;
             tx *= mm0;
@@ -532,7 +533,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
             _isIdenHint = false;
         }
-
+        
 
 
         public float[] Get3x3MatrixElements() => _elems.Get3x3MatrixElements();
@@ -1043,22 +1044,22 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         //}
 
         // Multiply matrix to another one
-        static void MultiplyMatrix(
-            ref double sx, ref double sy,
-            ref double shx, ref double shy,
-            ref double tx, ref double ty,
-            Affine m)
-        {
-            double t0 = sx * m._elems.sx + shy * m._elems.shx;
-            double t2 = shx * m._elems.sx + sy * m._elems.shx;
-            double t4 = tx * m._elems.sx + ty * m._elems.shx + m._elems.tx;
-            shy = sx * m._elems.shy + shy * m._elems.sy;
-            sy = shx * m._elems.shy + sy * m._elems.sy;
-            ty = tx * m._elems.shy + ty * m._elems.sy + m._elems.ty;
-            sx = t0;
-            shx = t2;
-            tx = t4;
-        }
+        //static void MultiplyMatrix(
+        //    ref double sx, ref double sy,
+        //    ref double shx, ref double shy,
+        //    ref double tx, ref double ty,
+        //    Affine m)
+        //{
+        //    double t0 = sx * m._elems.sx + shy * m._elems.shx;
+        //    double t2 = shx * m._elems.sx + sy * m._elems.shx;
+        //    double t4 = tx * m._elems.sx + ty * m._elems.shx + m._elems.tx;
+        //    shy = sx * m._elems.shy + shy * m._elems.sy;
+        //    sy = shx * m._elems.shy + sy * m._elems.sy;
+        //    ty = tx * m._elems.shy + ty * m._elems.sy + m._elems.ty;
+        //    sx = t0;
+        //    shx = t2;
+        //    tx = t4;
+        //}
 
         /*
 
