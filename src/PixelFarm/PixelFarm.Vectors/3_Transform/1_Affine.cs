@@ -223,7 +223,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
     }
 
-     
+
     /// <summary>
     /// struct version of Affine (Matrix)
     /// </summary>
@@ -299,6 +299,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         /// <param name="m"></param>
         public void Scale(double mm0, double mm3)
         {
+            if (mm0 == 1 && mm3 == 1) return;
+
             sx *= mm0;
             shx *= mm0;
             tx *= mm0;
@@ -308,6 +310,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
         public void Scale(double mm)
         {
+            if (mm == 1) return;
+
             sx *= mm;
             shx *= mm;
             tx *= mm;
@@ -533,7 +537,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
             _isIdenHint = false;
         }
-        
+
 
 
         public float[] Get3x3MatrixElements() => _elems.Get3x3MatrixElements();
