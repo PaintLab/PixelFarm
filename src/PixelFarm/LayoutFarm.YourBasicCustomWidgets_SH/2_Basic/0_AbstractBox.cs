@@ -320,10 +320,13 @@ namespace LayoutFarm.CustomWidgets
         protected override void OnMouseEnter(UIMouseMoveEventArgs e)
         {
             MouseEnter?.Invoke(this, e);
+            base.OnMouseEnter(e);
         }
         protected override void OnMouseDown(UIMouseDownEventArgs e)
         {
             MouseDown?.Invoke(this, e);
+            base.OnMouseDown(e);
+
             if (this.AcceptKeyboardFocus)
             {
                 this.Focus();
@@ -331,6 +334,7 @@ namespace LayoutFarm.CustomWidgets
         }
         protected override void OnMouseMove(UIMouseMoveEventArgs e)
         {
+            base.OnMouseMove(e);
             if (e.IsDragging)
             {
                 MouseDrag?.Invoke(this, e);
@@ -342,22 +346,18 @@ namespace LayoutFarm.CustomWidgets
         }
         protected override void OnMouseLeave(UIMouseLeaveEventArgs e)
         {
+            base.OnMouseLeave(e);
             MouseLeave?.Invoke(this, e);
         }
-        //protected override void OnMouseEnter(UIMouseEventArgs e)
-        //{
-        //    base.OnMouseEnter(e);
-        //}
-        //protected override void OnMouseHover(UIMouseEventArgs e)
-        //{
-        //    base.OnMouseHover(e);
-        //}
+
         protected override void OnMouseUp(UIMouseUpEventArgs e)
         {
+            base.OnMouseUp(e);
             MouseUp?.Invoke(this, e);
         }
         protected override void OnLostMouseFocus(UIMouseLostFocusEventArgs e)
         {
+            base.OnLostMouseFocus(e);
             this.LostMouseFocus?.Invoke(this, e);
         }
 

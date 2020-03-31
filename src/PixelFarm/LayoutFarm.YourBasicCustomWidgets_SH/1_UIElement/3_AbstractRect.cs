@@ -15,7 +15,7 @@ namespace LayoutFarm.UI
     /// <summary>
     /// abstract Rect UI Element
     /// </summary>
-    public abstract class AbstractRectUI : UIElement, IScrollable, IBoxElement
+    public abstract class AbstractRectUI : UIElement, IScrollable, IBoxElement, IAcceptBehviour
     {
         protected enum PaddingName
         {
@@ -63,6 +63,7 @@ namespace LayoutFarm.UI
         short _marginRight;
         short _marginBottom;
         // 
+
 
         public AbstractRectUI(int width, int height)
         {
@@ -433,7 +434,7 @@ namespace LayoutFarm.UI
         public virtual int InnerHeight => this.Height;
         //
         public virtual int InnerWidth => this.Width;
-        
+
         public bool HasSpecificWidth
         {
             get => _specificWidth;
@@ -472,7 +473,7 @@ namespace LayoutFarm.UI
                 }
             }
         }
-       
+
         public Rectangle Bounds => new Rectangle(this.Left, this.Top, this.Width, this.Height);
 
         //-----------------------
@@ -480,7 +481,120 @@ namespace LayoutFarm.UI
         void IBoxElement.ChangeElementSize(int w, int h) => this.SetSize(w, h);
         int IBoxElement.MinHeight => this.Height;
         //for css interface
-        //TODO: use mimimum current font height *** 
+        //TODO: use mimimum current font height ***  
+
+
+
+
+        //-----------------------
+        /// <summary>
+        /// mouse beh instant
+        /// </summary>
+        MouseBehaviorInstanceBase _uiMouseBehInst;
+
+        bool IAcceptBehviour.AttachBehviour(MouseBehaviorInstanceBase inst)
+        {
+            if (inst == null)
+            {
+                _uiMouseBehInst = null;
+                return true;
+            }
+
+            if (_uiMouseBehInst == null)
+            {
+                _uiMouseBehInst = inst;
+                return true;
+            }
+            else
+            {
+#if DEBUG
+                //please clear the old listener before set a new one.
+                //in this version a single AttachUIBehaviour has 1 external event listener
+                System.Diagnostics.Debugger.Break();
+#endif
+
+                return false;
+            }
+        }
+
+
+        //derived class can raise beh manually, 
+        //default mode: the attached mouse behavior will be invoke inside a responsible method
+        //user (derived class) can disable this but set DisableAutoBehRaising= true
+        //then if they want to call it=> call it via RaiseBeh...
+
+
+        /// <summary>
+        /// disable automatic raising event on _uiMouseBehInst
+        /// </summary>
+        protected bool DisableAutoBehRaising { get; set; }
+
+        protected void RaiseBehMouseDown(UIMouseDownEventArgs e)
+        {
+            _uiMouseBehInst?.ListenMouseDown(this, e);
+        }
+        protected void RaiseBehMouseMove(UIMouseMoveEventArgs e)
+        {
+            _uiMouseBehInst?.ListenMouseMove(this, e);
+        }
+        protected void RaiseBehMouseUp(UIMouseUpEventArgs e)
+        {
+            _uiMouseBehInst?.ListenMouseUp(this, e);
+        }
+        protected void RaiseBehMouseEnter(UIMouseMoveEventArgs e)
+        {
+            _uiMouseBehInst?.ListenMouseEnter(this, e);
+        }
+        protected void RaiseBehMouseLeave(UIMouseLeaveEventArgs e)
+        {
+            _uiMouseBehInst?.ListenMouseLeave(this, e);
+        }
+        protected void RaiseBehMousePress(UIMousePressEventArgs e)
+        {
+            _uiMouseBehInst?.ListenMousePress(this, e);
+        }
+        protected void RaiseBehMouseHover(UIMouseHoverEventArgs e)
+        {
+            _uiMouseBehInst?.ListenMouseHover(this, e);
+        }
+        protected void RaiseBehLostMouseFocus(UIMouseLostFocusEventArgs e)
+        {
+            _uiMouseBehInst?.ListenLostMouseFocus(this, e);
+        }
+
+
+        protected override void OnMouseDown(UIMouseDownEventArgs e)
+        {
+            if (!DisableAutoBehRaising) RaiseBehMouseDown(e);
+        }
+        protected override void OnMouseMove(UIMouseMoveEventArgs e)
+        {
+            if (!DisableAutoBehRaising) RaiseBehMouseMove(e);
+        }
+        protected override void OnMouseUp(UIMouseUpEventArgs e)
+        {
+            if (!DisableAutoBehRaising) RaiseBehMouseUp(e);
+        }
+        protected override void OnMouseEnter(UIMouseMoveEventArgs e)
+        {
+            if (!DisableAutoBehRaising) RaiseBehMouseEnter(e);
+        }
+        protected override void OnMouseLeave(UIMouseLeaveEventArgs e)
+        {
+            if (!DisableAutoBehRaising) RaiseBehMouseLeave(e);
+        }
+        protected override void OnMousePress(UIMousePressEventArgs e)
+        {
+            if (!DisableAutoBehRaising) RaiseBehMousePress(e);
+        }
+        protected override void OnMouseHover(UIMouseHoverEventArgs e)
+        {
+            if (!DisableAutoBehRaising) RaiseBehMouseHover(e);
+        }
+        protected override void OnLostMouseFocus(UIMouseLostFocusEventArgs e)
+        {
+            if (!DisableAutoBehRaising) RaiseBehLostMouseFocus(e);
+        }
     }
 
     public static class UIElementExtensions
