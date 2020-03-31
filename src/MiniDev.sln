@@ -195,7 +195,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaintLab.BitmapBufferEx_TES
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaintLab.BitmapBufferEx", "PixelFarm\PaintLab.BitmapBufferEx\BitmapBufferEx\PaintLab.BitmapBufferEx.csproj", "{572E6B12-051F-4E41-AF01-0831B210CF66}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marius.Yoga", "Marius.Yoga\Marius.Yoga.csproj", "{9060957D-FF0B-4B14-BB87-EE24B5170365}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marius.Yoga", "Tests\Marius.Yoga\Marius.Yoga.csproj", "{9060957D-FF0B-4B14-BB87-EE24B5170365}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution

@@ -1,6 +1,6 @@
-﻿using PixelFarm.CpuBlit.VertexProcessing;
+﻿//MIT, 2020, Brezza92
+
 using PixelFarm.Drawing;
-using PixelFarm.VectorMath;
 
 using Marius.Yoga;
 using Mini;

@@ -236,10 +236,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Marius.Yoga\Marius.Yoga.csproj">
-      <Project>{9060957d-ff0b-4b14-bb87-ee24b5170365}</Project>
-      <Name>Marius.Yoga</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\Builds\Net20\MiniOpenTK_Net20\MiniOpenTK_Net20.csproj">
       <Project>{f5a89623-87b9-42a3-a58c-abee7c9bbca2}</Project>
       <Name>MiniOpenTK_Net20</Name>
@@ -255,6 +251,10 @@
     <ProjectReference Include="..\..\x_autogen2\PixelFarm.One.HtmlRenderer\PixelFarm.One.HtmlRenderer.csproj">
       <Project>{662f2274-d6f8-413a-a908-1b2f10c01348}</Project>
       <Name>PixelFarm.One.HtmlRenderer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Marius.Yoga\Marius.Yoga.csproj">
+      <Project>{9060957d-ff0b-4b14-bb87-ee24b5170365}</Project>
+      <Name>Marius.Yoga</Name>
     </ProjectReference>
     <ProjectReference Include="..\TestSamples\TestSamples.csproj">
       <Project>{18ec3701-c6a5-429d-8c65-19ed4a2c2fed}</Project>
