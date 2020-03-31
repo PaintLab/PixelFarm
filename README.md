@@ -3,104 +3,113 @@ PixelFarm
 Hardware and Software 2D Rendering Library
 
 1.  Hardware Rendering Technology:
+     
+    The library uses OpenGL ES2+ and its Shading Langauge (GLSL) as its hardware-renderer backend.
     
-    1.1  OpenGL ES 2.0  + AA Shader:
-    This based on OpenGL ES2 and Its Shading Langauge (GLSL).
+    a lion cup below is read from svg file=> tessellated and rendered with GLES Painter
     
     ![gles2_aa_shader](https://cloud.githubusercontent.com/assets/7447159/20637925/221cc87a-b3c9-11e6-94a5-47c3b1026fd9.png)
+  _GLES backend Painter_
+
     ---
-    
- 
-	 
+    	 
 	
 2. Software Rendering Technology: 
-
-      2.1 Agg-Sharp
-
-      >Agg-Sharp is the C# port of Anti-Grain Geometry (AGG)  version (version 2.4, BSD license) 
-	
-    This provides 'classic' (pure) software based rendering technology.
-
-    Big thanks go to https://github.com/MatterHackers/agg-sharp
-	
-    ![agg_software](https://cloud.githubusercontent.com/assets/7447159/20637922/0b017956-b3c9-11e6-8c3b-41baad33af67.png)
-	
-    ---
-
-    
-    2.3  GDI+ , System.Drawing: as usual :)	
-    
-    ![gdiplus](https://cloud.githubusercontent.com/assets/7447159/20637923/1d0e1f78-b3c9-11e6-80d2-3c335bbca025.png)
-    
-	
-
-3. PixelFarm's Typography :
-   Agg's Subpixel Rendering 
    
-	![lcd_05](https://cloud.githubusercontent.com/assets/7447159/22738636/ceba4840-ee3a-11e6-8cd6-400b9d356fd7.png)
+    The library also provides a 'classic' (pure) software renderer.
+    
+    It uses a forked version of _Agg-Sharp_, in side this lib it is called _MiniAgg_
+
+      >Agg-Sharp is the C# port of Anti-Grain Geometry (AGG)  version (version 2.4, BSD license)  
+
+    and  Big thanks go to https://github.com/MatterHackers/agg-sharp
+
+![lions](https://user-images.githubusercontent.com/7447159/77984163-06a59100-733b-11ea-9955-5fd7ac96c5d2.png)
+    _Left: MiniAgg backend Painter  vs Right: Gdi+_
    
-    ---
-	![lcd_07](https://cloud.githubusercontent.com/assets/7447159/22779712/6e1512c2-eeee-11e6-9352-8c0c4fc1dc95.png)
-
-	---
-	![lcd_08](https://cloud.githubusercontent.com/assets/7447159/22780442/590abe10-eef1-11e6-93f6-bf4bbcfa3f34.png)
+ Agg-based Painter provides a high quality graphics output.
 
 
-	---
+
+![tiger](https://user-images.githubusercontent.com/7447159/34709205-cdf2a2de-f548-11e7-8075-1958c087a883.png)
+
+_PixelFarm's Agg (1) vs Chrome (2), Ghost script's Tiger.svg(https://commons.wikimedia.org/wiki/File:Ghostscript_Tiger.svg)_
  
-	![lcd_09](https://cloud.githubusercontent.com/assets/7447159/22780526/a0e65712-eef1-11e6-948a-eca8e8158aaa.png)
+![tiger2](https://user-images.githubusercontent.com/7447159/34709373-8e048286-f549-11e7-8cbc-2941b7b9fa4e.png)
 
-	![typography_thanamas](https://user-images.githubusercontent.com/7447159/44314099-d4357180-a43e-11e8-95c3-56894bfea1e4.png)
+_Agg's result, bitmap zoom-in to see fine details_ 
 
 
-	--- 
+  ---
+
+The Agg has various customizable scanline rasterizers. 
+ You can use its scanline technique it many ways.
+ In this library, for example,  It customize the scanline rasterizer to create  
+ _lcd-effect subpixel rendering_ effect (see below),
+ _msdf3 texture_ (see https://github.com/PaintLab/PixelFarm/issues/55)  etc.
+   
+
+
+
+
+  ---
+**PixelFarm's Lcd-effect Subpixel Rendering**
+ 
+ The library provides a special scanline rasterizer that produces lcd-effect subpixel rendering output.
+ You may need this when you want to make a font-glyph look sharper/easy to read on 
+ general computer monitor (96 dpi).
+ 
+   
+![lcd_05](https://cloud.githubusercontent.com/assets/7447159/22738636/ceba4840-ee3a-11e6-8cd6-400b9d356fd7.png)
+
+ If you look closely, It not just an anti-alias line, it is lcd-effect subpixel rendering antialias line.
+  
+![lcd_effect_zoom](https://user-images.githubusercontent.com/7447159/77986599-b978ed80-7341-11ea-9239-4f322af7d305.png)
+_zoom view of above picture_
+lcd effect subpixel rendering blends a single color to nearby pixels
+you can see it not just a simple red or blue line
+
+![lcd_07](https://cloud.githubusercontent.com/assets/7447159/22779712/6e1512c2-eeee-11e6-9352-8c0c4fc1dc95.png)
+_black on white, lcd-effect_
+
+With black line on white background, the output is not just black color, It has many color inside it.
+Not only line but curves too, below images are lcd-effect on curves of font glyphs.
+
+
+![lcd_08](https://cloud.githubusercontent.com/assets/7447159/22780442/590abe10-eef1-11e6-93f6-bf4bbcfa3f34.png)
+
+ 
+![lcd_09](https://cloud.githubusercontent.com/assets/7447159/22780526/a0e65712-eef1-11e6-948a-eca8e8158aaa.png)
+
+![typography_thanamas](https://user-images.githubusercontent.com/7447159/44314099-d4357180-a43e-11e8-95c3-56894bfea1e4.png)
+
 	
 ![autofit_hfit01](https://cloud.githubusercontent.com/assets/7447159/26182259/282de0f4-3ba1-11e7-83ab-84ac1911526d.png)
 
+The core library does not provide a text-rendering functions directly.  
+It provide a 'blank text printer' (abstract) for you.
+
+The library has one example of text printer, see=> PixelFarm.Typography
+
+How to read a font file, layout the glyphs, print to text are special topics.
+If you are interested, please visit  _Typography_ (https://github.com/LayoutFarm/Typography).
  
+
 ---
 
 The HtmlRenderer example!
 ---
 
+Now we can render a high quality graphics, we have a high quality font output too.
+
+Why don't we try to render a Web?
 
  ![htmlbox_gles_with_selection](https://user-images.githubusercontent.com/7447159/49267623-fc952900-f48d-11e8-8ac8-03269c571c2c.png)
  
-_pic 1: HtmlRenderer on GLES2 surface, text are renderered with the Typography, please note the text selection on the Html Surface._
+_HtmlRenderer on GLES2 surface, text are renderered with the Typography, please note the text selection on the Html Surface._  
 
 
-
-  
-
-
-(HtmlRender => https://github.com/LayoutFarm/HtmlRenderer,
-
-Typography => https://github.com/LayoutFarm/Typography)
-
-
- 
- 
- 
-
----
- 
-Ghost script's Tiger.svg
----
-
-(https://commons.wikimedia.org/wiki/File:Ghostscript_Tiger.svg)
-
-
-![tiger](https://user-images.githubusercontent.com/7447159/34709205-cdf2a2de-f548-11e7-8075-1958c087a883.png)
-
-_pic 1: PixelFarm's Agg (1) vs Chrome (2)_
-
-
-![tiger2](https://user-images.githubusercontent.com/7447159/34709373-8e048286-f549-11e7-8cbc-2941b7b9fa4e.png)
-
-_pic 2: Agg's result, bitmap zoom-in to see fine details_ 
- 
- 
- 
+If you are interested in HtmlRenderer, visit here => https://github.com/LayoutFarm/HtmlRenderer, 
  
 ---
 **HOW TO BUILD**
@@ -109,7 +118,11 @@ see https://github.com/PaintLab/PixelFarm/issues/37
 
 ---
 
+**SUB PROJECT ARRANGMENT**
 
+see https://github.com/PaintLab/PixelFarm/tree/master/src
+
+---
  
 **License:**
 
