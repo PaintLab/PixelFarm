@@ -86,14 +86,12 @@ namespace LayoutFarm.UI
         {
             OnLostMouseFocus(e);
             _externalEventListener?.ListenLostMouseFocus(e);
-
         }
 
         void IEventListener.ListenMouseDoubleClick(UIMouseEventArgs e)
         {
             OnDoubleClick(e);
             _externalEventListener?.ListenMouseDoubleClick(e);
-
         }
         void IEventListener.ListenMouseWheel(UIMouseWheelEventArgs e)
         {

@@ -11,7 +11,7 @@ namespace LayoutFarm.UI
     public class UIMouseBehaviour<S, T>
         where S : IAcceptBehviour
     {
-        public class SenderInfo
+        public struct SenderInfo
         {
             /// <summary>
             /// event source
@@ -21,6 +21,12 @@ namespace LayoutFarm.UI
             /// state, may be nothing
             /// </summary>
             public T State { get; internal set; }
+
+            public SenderInfo(S source, T state)
+            {
+                Source = source;
+                State = state;
+            }
         }
 
         public event Action<SenderInfo, UIMouseDownEventArgs> MouseDown;
@@ -38,121 +44,63 @@ namespace LayoutFarm.UI
         public event Action<SenderInfo, UIGuestMsgEventArgs> GuestMsg;
         //----
 
-        SenderInfo _senderInfo = new SenderInfo();
+        /// <summary>
+        /// has mouse-down
+        /// </summary>
+        internal bool HasMouseDown => MouseDown != null;
         internal void InvokeMouseDown(S sender, T state, UIMouseDownEventArgs e)
         {
-            if (MouseDown != null)
-            {
-                _senderInfo.Source = sender;
-                _senderInfo.State = state;
-                MouseDown.Invoke(_senderInfo, e);
-            }
-
+            MouseDown.Invoke(new SenderInfo(sender, state), e);
         }
+        /// <summary>
+        /// has mouse-up
+        /// </summary>
+        internal bool HasMouseUp => MouseUp != null;
         internal void InvokeMouseUp(S sender, T state, UIMouseUpEventArgs e)
         {
-            if (MouseUp != null)
-            {
-                _senderInfo.Source = sender;
-                _senderInfo.State = state;
-                MouseUp?.Invoke(_senderInfo, e);
-            }
-
+            MouseUp?.Invoke(new SenderInfo(sender, state), e);
         }
-        internal void InvokeMouseMove(S sender, T state, UIMouseMoveEventArgs e)
-        {
-            if (MouseMove != null)
-            {
-                _senderInfo.Source = sender;
-                _senderInfo.State = state;
-                MouseMove.Invoke(_senderInfo, e);
-            }
+        /// <summary>
+        /// has mouse move subscription
+        /// </summary>
+        internal bool HasMouseMove => MouseMove != null;
+        internal void InvokeMouseMove(S sender, T state, UIMouseMoveEventArgs e) => MouseMove.Invoke(new SenderInfo(sender, state), e);
 
-        }
-        internal void InvokeMouseEnter(S sender, T state, UIMouseMoveEventArgs e)
-        {
-            if (MouseEnter != null)
-            {
-                _senderInfo.Source = sender;
-                _senderInfo.State = state;
-                MouseEnter.Invoke(_senderInfo, e);
-            }
+        /// <summary>
+        /// has mouse enter
+        /// </summary>
+        internal bool HasMouseEnter => MouseEnter != null;
+        internal void InvokeMouseEnter(S sender, T state, UIMouseMoveEventArgs e) => MouseEnter.Invoke(new SenderInfo(sender, state), e);
 
-        }
-        internal void InvokeMouseLeave(S sender, T state, UIMouseLeaveEventArgs e)
-        {
-            if (MouseLeave != null)
-            {
-                _senderInfo.Source = sender;
-                _senderInfo.State = state;
-                MouseLeave.Invoke(_senderInfo, e);
-            }
+        /// <summary>
+        /// has mouse leave
+        /// </summary>
+        internal bool HasMouseLeave => MouseLeave != null;
+        internal void InvokeMouseLeave(S sender, T state, UIMouseLeaveEventArgs e) => MouseLeave.Invoke(new SenderInfo(sender, state), e);
 
-        }
-        internal void InvokeMousePress(S sender, T state, UIMousePressEventArgs e)
-        {
-            if (MousePress != null)
-            {
-                _senderInfo.Source = sender;
-                _senderInfo.State = state;
-                MousePress.Invoke(_senderInfo, e);
-            }
+        internal bool HasMousePress => MousePress != null;
+        internal void InvokeMousePress(S sender, T state, UIMousePressEventArgs e) => MousePress.Invoke(new SenderInfo(sender, state), e);
 
-        }
-        internal void InvokeMouseClick(S sender, T state, UIMouseEventArgs e)
-        {
-            if (MouseClick != null)
-            {
-                _senderInfo.Source = sender;
-                _senderInfo.State = state;
-                MouseClick.Invoke(_senderInfo, e);
-            }
-        }
+        internal bool HasMouseClick => MouseClick != null;
+        internal void InvokeMouseClick(S sender, T state, UIMouseEventArgs e) => MouseClick.Invoke(new SenderInfo(sender, state), e);
 
-        internal void InvokeMouseDoubleClick(S sender, T state, UIMouseEventArgs e)
-        {
-            if (MouseDoubleClick != null)
-            {
-                _senderInfo.Source = sender;
-                _senderInfo.State = state;
-                MouseDoubleClick.Invoke(_senderInfo, e);
-            }
+        internal bool HasMouseDoubleClick => MouseDoubleClick != null;
+        internal void InvokeMouseDoubleClick(S sender, T state, UIMouseEventArgs e) => MouseDoubleClick.Invoke(new SenderInfo(sender, state), e);
 
-        }
-        internal void InvokeGuestMsg(S sender, T state, UIGuestMsgEventArgs e)
-        {
-            if (GuestMsg != null)
-            {
-                _senderInfo.Source = sender;
-                _senderInfo.State = state;
-                GuestMsg.Invoke(_senderInfo, e);
-            }
-        }
-        internal void InvokeMouseLostFocus(S sender, T state, UIMouseLostFocusEventArgs e)
-        {
-            if (MouseLostFocus != null)
-            {
-                _senderInfo.Source = sender;
-                _senderInfo.State = state;
-                MouseLostFocus.Invoke(_senderInfo, e);
-            }
+        internal bool HasGuestMsg => GuestMsg != null;
+        internal void InvokeGuestMsg(S sender, T state, UIGuestMsgEventArgs e) => GuestMsg.Invoke(new SenderInfo(sender, state), e);
 
-        }
-        internal void InvokeMouseHover(S sender, T state, UIMouseHoverEventArgs e)
-        {
-            if (MouseHover != null)
-            {
-                _senderInfo.Source = sender;
-                _senderInfo.State = state;
-                MouseHover.Invoke(_senderInfo, e);
-            }
+        internal bool HasMouseLostFocus => MouseLostFocus != null;
+        internal void InvokeMouseLostFocus(S sender, T state, UIMouseLostFocusEventArgs e) => MouseLostFocus.Invoke(new SenderInfo(sender, state), e);
 
-        }
+        internal bool HasMouseHover => MouseHover != null;
+        internal void InvokeMouseHover(S sender, T state, UIMouseHoverEventArgs e) => MouseHover.Invoke(new SenderInfo(sender, state), e);
 
-
-        MouseBehaviourInstance<S, T> _sharedInstance;
+        readonly MouseBehaviourInstance<S, T> _sharedInstance;
         public UIMouseBehaviour(T defaultSharedState = default)
         {
+            //TODO:  _sharedInstance => should be replacable? 
+
             _sharedInstance = new MouseBehaviourInstance<S, T>(this, defaultSharedState);
         }
 
@@ -211,47 +159,51 @@ namespace LayoutFarm.UI
 
         internal override void ListenGuestMsg(object sender, UIGuestMsgEventArgs e)
         {
-            _ownerBeh.InvokeGuestMsg((S)sender, _state, e);
+            //since we don't want a 'blank round trip'
+            //(invoke a blank action), so , => check before invocation
+            if (_ownerBeh.HasGuestMsg) _ownerBeh.InvokeGuestMsg((S)sender, _state, e);
         }
         internal override void ListenLostMouseFocus(object sender, UIMouseLostFocusEventArgs e)
         {
-            _ownerBeh.InvokeMouseLostFocus((S)sender, _state, e);
+
+            if (_ownerBeh.HasMouseLostFocus) _ownerBeh.InvokeMouseLostFocus((S)sender, _state, e);
         }
         internal override void ListenMouseDoubleClick(object sender, UIMouseEventArgs e)
         {
-            _ownerBeh.InvokeMouseDoubleClick((S)sender, _state, e);
+
+            if (_ownerBeh.HasMouseDoubleClick) _ownerBeh.InvokeMouseDoubleClick((S)sender, _state, e);
         }
         internal override void ListenMouseClick(object sender, UIMouseEventArgs e)
         {
-            _ownerBeh.InvokeMouseClick((S)sender, _state, e);
+            if (_ownerBeh.HasMouseClick) _ownerBeh.InvokeMouseClick((S)sender, _state, e);
         }
         internal override void ListenMouseDown(object sender, UIMouseDownEventArgs e)
         {
-            _ownerBeh.InvokeMouseDown((S)sender, _state, e);
+            if (_ownerBeh.HasMouseDown) _ownerBeh.InvokeMouseDown((S)sender, _state, e);
         }
         internal override void ListenMouseEnter(object sender, UIMouseMoveEventArgs e)
         {
-            _ownerBeh.InvokeMouseEnter((S)sender, _state, e);
+            if (_ownerBeh.HasMouseEnter) _ownerBeh.InvokeMouseEnter((S)sender, _state, e);
         }
         internal override void ListenMouseLeave(object sender, UIMouseLeaveEventArgs e)
         {
-            _ownerBeh.InvokeMouseLeave((S)sender, _state, e);
+            if (_ownerBeh.HasMouseLeave) _ownerBeh.InvokeMouseLeave((S)sender, _state, e);
         }
         internal override void ListenMouseMove(object sender, UIMouseMoveEventArgs e)
         {
-            _ownerBeh.InvokeMouseMove((S)sender, _state, e);
+            if (_ownerBeh.HasMouseMove) _ownerBeh.InvokeMouseMove((S)sender, _state, e);
         }
         internal override void ListenMouseUp(object sender, UIMouseUpEventArgs e)
         {
-            _ownerBeh.InvokeMouseUp((S)sender, _state, e);
+            if (_ownerBeh.HasMouseUp) _ownerBeh.InvokeMouseUp((S)sender, _state, e);
         }
         internal override void ListenMousePress(object sender, UIMousePressEventArgs e)
         {
-            _ownerBeh.InvokeMousePress((S)sender, _state, e);
+            if (_ownerBeh.HasMousePress) _ownerBeh.InvokeMousePress((S)sender, _state, e);
         }
         internal override void ListenMouseHover(object sender, UIMouseHoverEventArgs e)
         {
-            _ownerBeh.InvokeMouseHover((S)sender, _state, e);
+            if (_ownerBeh.HasMouseHover) _ownerBeh.InvokeMouseHover((S)sender, _state, e);
         }
     }
 }

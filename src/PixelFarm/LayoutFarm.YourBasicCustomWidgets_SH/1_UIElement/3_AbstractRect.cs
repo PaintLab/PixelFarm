@@ -483,8 +483,15 @@ namespace LayoutFarm.UI
         //for css interface
         //TODO: use mimimum current font height ***  
 
+
+
+
         //-----------------------
+        /// <summary>
+        /// mouse beh instant
+        /// </summary>
         MouseBehaviorInstanceBase _uiMouseBehInst;
+
         bool IAcceptBehviour.AttachBehviour(MouseBehaviorInstanceBase inst)
         {
             if (inst == null)
@@ -511,37 +518,82 @@ namespace LayoutFarm.UI
         }
 
 
-        protected override void OnMouseDown(UIMouseDownEventArgs e)
+        //derived class can raise beh manually, 
+        //default mode: the attached mouse behavior will be invoke inside a responsible method
+        //user (derived class) can disable this but set DisableAutoBehRaising= true
+        //then if they want to call it=> call it via RaiseBeh...
+
+
+        /// <summary>
+        /// disable automatic raising event on _uiMouseBehInst
+        /// </summary>
+        protected bool DisableAutoBehRaising { get; set; }
+
+        protected void RaiseBehMouseDown(UIMouseDownEventArgs e)
         {
             _uiMouseBehInst?.ListenMouseDown(this, e);
         }
-        protected override void OnMouseMove(UIMouseMoveEventArgs e)
+        protected void RaiseBehMouseMove(UIMouseMoveEventArgs e)
         {
             _uiMouseBehInst?.ListenMouseMove(this, e);
         }
-        protected override void OnMouseUp(UIMouseUpEventArgs e)
+        protected void RaiseBehMouseUp(UIMouseUpEventArgs e)
         {
             _uiMouseBehInst?.ListenMouseUp(this, e);
         }
-        protected override void OnMouseEnter(UIMouseMoveEventArgs e)
+        protected void RaiseBehMouseEnter(UIMouseMoveEventArgs e)
         {
             _uiMouseBehInst?.ListenMouseEnter(this, e);
         }
-        protected override void OnMouseLeave(UIMouseLeaveEventArgs e)
+        protected void RaiseBehMouseLeave(UIMouseLeaveEventArgs e)
         {
             _uiMouseBehInst?.ListenMouseLeave(this, e);
         }
-        protected override void OnMousePress(UIMousePressEventArgs e)
+        protected void RaiseBehMousePress(UIMousePressEventArgs e)
         {
             _uiMouseBehInst?.ListenMousePress(this, e);
         }
-        protected override void OnMouseHover(UIMouseHoverEventArgs e)
+        protected void RaiseBehMouseHover(UIMouseHoverEventArgs e)
         {
             _uiMouseBehInst?.ListenMouseHover(this, e);
         }
-        protected override void OnLostMouseFocus(UIMouseLostFocusEventArgs e)
+        protected void RaiseBehLostMouseFocus(UIMouseLostFocusEventArgs e)
         {
             _uiMouseBehInst?.ListenLostMouseFocus(this, e);
+        }
+
+
+        protected override void OnMouseDown(UIMouseDownEventArgs e)
+        {
+            if (!DisableAutoBehRaising) RaiseBehMouseDown(e);
+        }
+        protected override void OnMouseMove(UIMouseMoveEventArgs e)
+        {
+            if (!DisableAutoBehRaising) RaiseBehMouseMove(e);
+        }
+        protected override void OnMouseUp(UIMouseUpEventArgs e)
+        {
+            if (!DisableAutoBehRaising) RaiseBehMouseUp(e);
+        }
+        protected override void OnMouseEnter(UIMouseMoveEventArgs e)
+        {
+            if (!DisableAutoBehRaising) RaiseBehMouseEnter(e);
+        }
+        protected override void OnMouseLeave(UIMouseLeaveEventArgs e)
+        {
+            if (!DisableAutoBehRaising) RaiseBehMouseLeave(e);
+        }
+        protected override void OnMousePress(UIMousePressEventArgs e)
+        {
+            if (!DisableAutoBehRaising) RaiseBehMousePress(e);
+        }
+        protected override void OnMouseHover(UIMouseHoverEventArgs e)
+        {
+            if (!DisableAutoBehRaising) RaiseBehMouseHover(e);
+        }
+        protected override void OnLostMouseFocus(UIMouseLostFocusEventArgs e)
+        {
+            if (!DisableAutoBehRaising) RaiseBehLostMouseFocus(e);
         }
     }
 
