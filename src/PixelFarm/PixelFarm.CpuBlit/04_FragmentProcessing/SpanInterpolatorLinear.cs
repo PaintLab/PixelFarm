@@ -22,7 +22,7 @@
 namespace PixelFarm.CpuBlit.FragmentProcessing
 {
     //================================================span_interpolator_linear
-    public struct SpanInterpolatorLinear : FragmentProcessing.ISpanInterpolator
+    struct SpanInterpolatorLinear : FragmentProcessing.ISpanInterpolator
     {
         LineInterpolatorDDA2 _li_x;
         LineInterpolatorDDA2 _li_y;
@@ -30,7 +30,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
         const int SUB_PIXEL_SCALE = 1 << SUB_PIXEL_SHIFT;
 
         public VertexProcessing.ICoordTransformer Transformer { get; set; }
-        
+
         public void Begin(double x, double y, int len)
         {
             double tx = x;
