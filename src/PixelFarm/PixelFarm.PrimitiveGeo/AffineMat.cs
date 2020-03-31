@@ -31,67 +31,8 @@ using System;
 
 
 namespace PixelFarm.CpuBlit.VertexProcessing
-{ 
-    public enum AffineMatrixCommand : byte
-    {
-        None,
-        Scale,
-        Skew,
-        Rotate,
-        Translate,
-        Invert
-    }
-
-    //public struct AffinePlan
-    //{
-    //    public readonly AffineMatrixCommand cmd;
-    //    public readonly double x;
-    //    public readonly double y;
-    //    public AffinePlan(AffineMatrixCommand cmd, double x, double y)
-    //    {
-    //        this.x = x;
-    //        this.y = y;
-    //        this.cmd = cmd;
-    //    }
-    //    public AffinePlan(AffineMatrixCommand cmd, double x)
-    //    {
-    //        this.x = x;
-    //        this.y = 0;
-    //        this.cmd = cmd;
-    //    }
-
-
-    //    //----------------------------------------------------------------------------
-    //    public static AffinePlan Translate(double x, double y)
-    //    {
-    //        return new AffinePlan(AffineMatrixCommand.Translate, x, y);
-    //    }
-    //    public static AffinePlan Rotate(double radAngle)
-    //    {
-    //        return new AffinePlan(AffineMatrixCommand.Rotate, radAngle);
-    //    }
-    //    public static AffinePlan RotateDeg(double degree)
-    //    {
-    //        return new AffinePlan(AffineMatrixCommand.Rotate, deg2rad(degree));
-    //    }
-    //    public static AffinePlan Skew(double x, double y)
-    //    {
-    //        return new AffinePlan(AffineMatrixCommand.Skew, x, y);
-    //    }
-    //    public static AffinePlan Scale(double x, double y)
-    //    {
-    //        return new AffinePlan(AffineMatrixCommand.Scale, x, y);
-    //    }
-    //    public static AffinePlan Scale(double both)
-    //    {
-    //        return new AffinePlan(AffineMatrixCommand.Scale, both, both);
-    //    }
-    //    static double deg2rad(double degree)
-    //    {
-    //        return degree * (System.Math.PI / 180d);
-    //    }
-    //}
-
+{
+     
     /// <summary>
     /// struct version of Affine (Matrix)
     /// </summary>
@@ -156,11 +97,23 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             shx = t2;
             tx = t4;
         }
-
+        public void Rotate(double angleRad, double centerX, double centerY)
+        {
+            Translate(-centerX, -centerY);//move to center
+            Rotate(angleRad);
+            Translate(centerX, centerY);//move back
+        }
         public void RotateDeg(double degree)
         {
             Rotate(DegToRad(degree));
         }
+        public void RotateDeg(double degree, double centerX, double centerY)
+        {
+            Translate(-centerX, -centerY);//move to center
+            Rotate(DegToRad(degree));
+            Translate(centerX, centerY);//move back
+        }
+
         /// <summary>
         /// inside-values will be CHANGED after call this
         /// </summary>
@@ -312,55 +265,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
         }
 
-        //public void BuildFromAffinePlans(AffinePlan[] creationPlans)
-        //{
-        //    //-----------------------
-        //    //start with identity matrix
-        //    this = AffineMat.Iden;//copy from iden
-        //    bool isIdenHint = true;
-
-        //    if (creationPlans == null) return;
-        //    //-----------------------
-        //    int j = creationPlans.Length;
-        //    for (int i = 0; i < j; ++i)
-        //    {
-        //        AffinePlan plan = creationPlans[i];
-        //        switch (plan.cmd)
-        //        {
-        //            case AffineMatrixCommand.None:
-        //                break;
-        //            case AffineMatrixCommand.Rotate:
-
-        //                isIdenHint = false;
-        //                this.Rotate(plan.x);
-
-        //                break;
-        //            case AffineMatrixCommand.Scale:
-
-        //                isIdenHint = false;
-        //                this.Scale(plan.x, plan.y);
-
-        //                break;
-        //            case AffineMatrixCommand.Translate:
-
-        //                isIdenHint = false;
-        //                this.Translate(plan.x, plan.y);
-
-        //                break;
-        //            case AffineMatrixCommand.Skew:
-        //                isIdenHint = false;
-        //                this.Skew(plan.x, plan.y);
-        //                break;
-        //            case AffineMatrixCommand.Invert:
-        //                isIdenHint = false;
-        //                this.Invert();
-        //                break;
-        //            default:
-        //                throw new NotSupportedException();
-
-        //        }
-        //    }
-        //}
+      
         static double DegToRad(double degree)
         {
             return degree * (Math.PI / 180d);

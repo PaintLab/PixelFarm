@@ -3,7 +3,7 @@
 using System;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.VertexProcessing;
-using PixelFarm.CpuBlit.Imaging;
+
 
 
 namespace PixelFarm.CpuBlit
@@ -104,7 +104,7 @@ namespace PixelFarm.CpuBlit
             //restore...
             this.UseSubPixelLcdEffect = useSubPix;
         }
-        public override void DrawImage(Image img, AffineMat aff)
+        public override void DrawImage(Image img, in AffineMat aff)
         {
             if (!(img is MemBitmap memBmp))
             {

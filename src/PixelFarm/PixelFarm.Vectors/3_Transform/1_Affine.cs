@@ -550,6 +550,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         public static Affine NewRotation(double angRad, double rotationCenterX, double rotationCenterY)
         {
             AffineMat mat = AffineMat.Iden;
+            
             mat.Translate(-rotationCenterX, -rotationCenterY);
             mat.Rotate(angRad);
             mat.Translate(rotationCenterX, rotationCenterY);
