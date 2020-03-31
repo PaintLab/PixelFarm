@@ -7,6 +7,10 @@ namespace LayoutFarm
     {
         protected override void OnStart(AppHost host)
         {
+            Box background_box = new Box(250, 500);
+            background_box.BackColor = PixelFarm.Drawing.Color.Blue;
+            host.AddChild(background_box);
+
             //PixelFarm.Drawing.RequestFont font = new PixelFarm.Drawing.RequestFont("Source Sans Pro", 20);
             PixelFarm.Drawing.RequestFont font = new PixelFarm.Drawing.RequestFont("Source Sans Pro", 20);
             for (int i = 0; i < 10; ++i)
@@ -27,10 +31,15 @@ namespace LayoutFarm
     {
         protected override void OnStart(AppHost host)
         {
+            Box background_box = new Box(500, 500);
+            background_box.BackColor = PixelFarm.Drawing.Color.Blue;
+            host.AddChild(background_box);
+
             for (int i = 0; i < 10; ++i)
             {
                 TextFlowLabel label = new TextFlowLabel(100, 50);
                 label.SetLocation(i * 55, i * 55);
+                label.BackColor = PixelFarm.Drawing.Color.Yellow;
                 //label.Color = PixelFarm.Drawing.Color.Black;
                 label.Text = "ABCDEFG\r\nHIJKLMNOP\r\nQRSTUVWXZYZ\r\n0123456789";
                 host.AddChild(label);
