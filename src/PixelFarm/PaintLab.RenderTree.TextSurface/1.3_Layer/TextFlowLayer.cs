@@ -833,10 +833,8 @@ namespace LayoutFarm.TextEditing
                     yield return curNode.Value;
                     curNode = curNode.Next;
                 }
-            }
-
-        }
-
+            } 
+        } 
 #endif
     }
 
