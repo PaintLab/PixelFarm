@@ -12,7 +12,7 @@ Hardware and Software 2D Rendering Library
   
   _GLES backend Painter_
 
-    ---
+---
     	 
 	
 2. Software Rendering Technology: 
@@ -42,7 +42,7 @@ _PixelFarm's Agg (1) vs Chrome (2), Ghost script's Tiger.svg(https://commons.wik
 _Agg's result, bitmap zoom-in to see fine details_ 
 
 
-  ---
+---
 
 The Agg has various customizable scanline rasterizers. 
  You can use its scanline technique it many ways.
@@ -54,7 +54,7 @@ The Agg has various customizable scanline rasterizers.
 
 
 
-  ---
+---
 **PixelFarm's Lcd-effect Subpixel Rendering**
  
  The library provides a special scanline rasterizer that produces lcd-effect subpixel rendering output.
