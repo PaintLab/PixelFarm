@@ -150,34 +150,32 @@ namespace LayoutFarm.ColorBlenderSample
 
             y += colorPanel.Height;
 
-
             //test1...
-            var buttonBeh = new UI.GeneralUIElementBehaviour();
-            buttonBeh.MouseMove += (b, e) =>
+            var buttonBeh = new UI.UIMouseBehaviour<Label, object>();
+            buttonBeh.MouseMove += (s, e) =>
             {
                 if (e.CurrentContextElement is Label lbl)
                 {
                     lbl.BackColor = PixelFarm.Drawing.Color.Yellow;
                 }
             };
-            buttonBeh.MouseLeave += (b, e) =>
+            buttonBeh.MouseLeave += (s, e) =>
             {
                 if (e.CurrentContextElement is Label lbl)
                 {
                     lbl.BackColor = PixelFarm.Drawing.KnownColors.Gray;
                 }
             };
-            //----------------------------------
-            //test2
 
 
             //----------------------------------
             {
                 Label lblChromaDarken = new Label();
                 lblChromaDarken.BackColor = PixelFarm.Drawing.KnownColors.Gray;
-                lblChromaDarken.Text = "Darken";                
+                lblChromaDarken.Text = "Darken";
                 lblChromaDarken.SetLocation(x, y);
-                lblChromaDarken.AttachUIBehaviour(buttonBeh);
+
+                buttonBeh.AttachSharedBehaviorTo(lblChromaDarken);
 
                 UI.GeneralEventListener evListener = new UI.GeneralEventListener();
                 evListener.MouseDown += (s, e) =>
@@ -203,9 +201,9 @@ namespace LayoutFarm.ColorBlenderSample
             //----------------------------------
             {
                 Label lblLighten = new Label();
-                lblLighten.AttachUIBehaviour(buttonBeh);
-
                 lblLighten.Text = "Brighten";
+                buttonBeh.AttachSharedBehaviorTo(lblLighten);
+
                 lblLighten.SetLocation(x, y);
                 {
                     UI.GeneralEventListener evListener = new UI.GeneralEventListener();
