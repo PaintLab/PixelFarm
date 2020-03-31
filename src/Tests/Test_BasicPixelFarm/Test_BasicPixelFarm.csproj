@@ -120,6 +120,10 @@
       <Project>{662f2274-d6f8-413a-a908-1b2f10c01348}</Project>
       <Name>PixelFarm.One.HtmlRenderer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Marius.Yoga\Marius.Yoga.csproj">
+      <Project>{9060957d-ff0b-4b14-bb87-ee24b5170365}</Project>
+      <Name>Marius.Yoga</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\de.txt">
