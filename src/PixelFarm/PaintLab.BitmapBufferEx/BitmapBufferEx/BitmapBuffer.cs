@@ -20,10 +20,7 @@ namespace BitmapBufferEx
     {
         MatrixTransform _inverseVersion;
         AffineMat _affine;
-        public MatrixTransform(AffinePlan[] affPlans)
-        {
-            _affine.BuildFromAffinePlans(affPlans);
-        }
+      
         public MatrixTransform(AffineMat affine)
         {
             _affine = affine;

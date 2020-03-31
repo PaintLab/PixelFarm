@@ -288,7 +288,8 @@ namespace PixelFarm.CpuBlit
                         default:
                             throw new NotImplementedException();
                     }
-                    TransformToVxs(ref destRectTransform, imgBoundsPath, v1);
+
+                    TransformToVxs(destRectTransform, imgBoundsPath, v1);
                     Render(v1, imgSpanGen);
                     unchecked { _destImageChanged++; };
                 }
@@ -302,7 +303,7 @@ namespace PixelFarm.CpuBlit
         /// </summary>
         /// <param name="src"></param>
         /// <param name="outputVxs"></param>
-        static void TransformToVxs(ref AffineMat aff, VertexStore src, VertexStore outputVxs)
+        static void TransformToVxs(in AffineMat aff, VertexStore src, VertexStore outputVxs)
         {
             int count = src.Count;
             VertexCmd cmd;
@@ -327,9 +328,7 @@ namespace PixelFarm.CpuBlit
             }
         }
 
-
-
-        public void Render(IBitmapSrc source, AffinePlan[] affinePlans)
+        public void Render(IBitmapSrc source)
         {
             using (Tools.BorrowVxs(out var v1, out var v2))
             {
@@ -337,17 +336,9 @@ namespace PixelFarm.CpuBlit
                 BuildOrgImgRectVxs(source.Width, source.Height, v1);
 
                 AffineMat destRectTransform;
-                if (affinePlans == null)
-                {
-                    destRectTransform = AffineMat.Iden;
-                    _reuseableAffine.SetElements(destRectTransform);
-                }
-                else
-                {
-                    destRectTransform = new AffineMat();
-                    destRectTransform.BuildFromAffinePlans(affinePlans);
-                    _reuseableAffine.SetElements(destRectTransform.CreateInvert());
-                }
+                destRectTransform = AffineMat.Iden;
+                _reuseableAffine.SetElements(AffineMat.Iden);
+
                 //TODO: review reusable span generator an interpolator *** 
                 //We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
 
@@ -356,7 +347,31 @@ namespace PixelFarm.CpuBlit
                 _currentImgSpanGen.BackgroundColor = Drawing.Color.Transparent;
                 _currentImgSpanGen.SetInterpolator(_spanInterpolator);
                 _currentImgSpanGen.SetSrcBitmap(source);
-                TransformToVxs(ref destRectTransform, v1, v2);
+                TransformToVxs(destRectTransform, v1, v2);
+                Render(v2, _currentImgSpanGen);
+                _currentImgSpanGen.ReleaseSrcBitmap();
+            }
+        }
+
+        public void Render(IBitmapSrc source, AffineMat aff)
+        {
+            using (Tools.BorrowVxs(out var v1, out var v2))
+            {
+
+                BuildOrgImgRectVxs(source.Width, source.Height, v1);
+
+                AffineMat destRectTransform = aff;
+                _reuseableAffine.SetElements(destRectTransform.CreateInvert());
+
+                //TODO: review reusable span generator an interpolator *** 
+                //We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
+
+                _spanInterpolator.Transformer = _reuseableAffine;
+
+                _currentImgSpanGen.BackgroundColor = Drawing.Color.Transparent;
+                _currentImgSpanGen.SetInterpolator(_spanInterpolator);
+                _currentImgSpanGen.SetSrcBitmap(source);
+                TransformToVxs(destRectTransform, v1, v2);
                 Render(v2, _currentImgSpanGen);
                 _currentImgSpanGen.ReleaseSrcBitmap();
             }
