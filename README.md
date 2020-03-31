@@ -9,6 +9,7 @@ Hardware and Software 2D Rendering Library
     a lion cup below is read from svg file=> tessellated and rendered with GLES Painter
     
     ![gles2_aa_shader](https://cloud.githubusercontent.com/assets/7447159/20637925/221cc87a-b3c9-11e6-94a5-47c3b1026fd9.png)
+  
   _GLES backend Painter_
 
     ---
@@ -25,7 +26,8 @@ Hardware and Software 2D Rendering Library
     and  Big thanks go to https://github.com/MatterHackers/agg-sharp
 
 ![lions](https://user-images.githubusercontent.com/7447159/77984163-06a59100-733b-11ea-9955-5fd7ac96c5d2.png)
-    _Left: MiniAgg backend Painter  vs Right: Gdi+_
+  
+ _Left: MiniAgg backend Painter  vs Right: Gdi+_
    
  Agg-based Painter provides a high quality graphics output.
 
@@ -65,11 +67,13 @@ The Agg has various customizable scanline rasterizers.
  If you look closely, It not just an anti-alias line, it is lcd-effect subpixel rendering antialias line.
   
 ![lcd_effect_zoom](https://user-images.githubusercontent.com/7447159/77986599-b978ed80-7341-11ea-9239-4f322af7d305.png)
+
 _zoom view of above picture_
 lcd effect subpixel rendering blends a single color to nearby pixels
 you can see it not just a simple red or blue line
 
 ![lcd_07](https://cloud.githubusercontent.com/assets/7447159/22779712/6e1512c2-eeee-11e6-9352-8c0c4fc1dc95.png)
+
 _black on white, lcd-effect_
 
 With black line on white background, the output is not just black color, It has many color inside it.
