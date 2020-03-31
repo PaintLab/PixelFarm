@@ -69,6 +69,7 @@ The Agg has various customizable scanline rasterizers.
 ![lcd_effect_zoom](https://user-images.githubusercontent.com/7447159/77986599-b978ed80-7341-11ea-9239-4f322af7d305.png)
 
 _zoom view of above picture_
+
 lcd effect subpixel rendering blends a single color to nearby pixels
 you can see it not just a simple red or blue line
 
