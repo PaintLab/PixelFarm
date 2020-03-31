@@ -152,7 +152,7 @@ namespace LayoutFarm.ColorBlenderSample
 
 
             //test1...
-            var buttonBeh = new UI.GeneralUIElementBehaviour();
+            var buttonBeh = new UI.UIMouseBehaviour<Label>();
             buttonBeh.MouseMove += (b, e) =>
             {
                 if (e.CurrentContextElement is Label lbl)
@@ -175,9 +175,11 @@ namespace LayoutFarm.ColorBlenderSample
             {
                 Label lblChromaDarken = new Label();
                 lblChromaDarken.BackColor = PixelFarm.Drawing.KnownColors.Gray;
-                lblChromaDarken.Text = "Darken";                
+                lblChromaDarken.Text = "Darken";
                 lblChromaDarken.SetLocation(x, y);
-                lblChromaDarken.AttachUIBehaviour(buttonBeh);
+
+              
+                lblChromaDarken.AttachMouseUIBehaviour(buttonBeh.CreateBehaviourInstance());
 
                 UI.GeneralEventListener evListener = new UI.GeneralEventListener();
                 evListener.MouseDown += (s, e) =>
@@ -203,7 +205,7 @@ namespace LayoutFarm.ColorBlenderSample
             //----------------------------------
             {
                 Label lblLighten = new Label();
-                lblLighten.AttachUIBehaviour(buttonBeh);
+                lblLighten.AttachMouseUIBehaviour(buttonBeh.CreateBehaviourInstance());
 
                 lblLighten.Text = "Brighten";
                 lblLighten.SetLocation(x, y);

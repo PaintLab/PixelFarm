@@ -64,6 +64,7 @@ namespace LayoutFarm.UI
         short _marginBottom;
         // 
 
+
         public AbstractRectUI(int width, int height)
         {
             //default,           
@@ -433,7 +434,7 @@ namespace LayoutFarm.UI
         public virtual int InnerHeight => this.Height;
         //
         public virtual int InnerWidth => this.Width;
-        
+
         public bool HasSpecificWidth
         {
             get => _specificWidth;
@@ -472,7 +473,7 @@ namespace LayoutFarm.UI
                 }
             }
         }
-       
+
         public Rectangle Bounds => new Rectangle(this.Left, this.Top, this.Width, this.Height);
 
         //-----------------------
@@ -480,7 +481,68 @@ namespace LayoutFarm.UI
         void IBoxElement.ChangeElementSize(int w, int h) => this.SetSize(w, h);
         int IBoxElement.MinHeight => this.Height;
         //for css interface
-        //TODO: use mimimum current font height *** 
+        //TODO: use mimimum current font height ***  
+
+        //-----------------------
+        MouseBehaviourInstanceBase _uiMouseBehInst;
+        
+        public bool AttachMouseUIBehaviour(MouseBehaviourInstanceBase behListener)
+        {
+
+            if (behListener == null)
+            {
+                _uiMouseBehInst = null;
+                return false;
+            }
+
+            if (_uiMouseBehInst == null)
+            {
+                _uiMouseBehInst = behListener;
+                return true;
+            }
+            else
+            {
+#if DEBUG
+                //please clear the old listener before set a new one.
+                //in this version a single AttachUIBehaviour has 1 external event listener
+                System.Diagnostics.Debugger.Break();
+#endif
+
+                return false;
+            }
+        }
+        protected override void OnMouseDown(UIMouseDownEventArgs e)
+        {
+            _uiMouseBehInst?.ListenMouseDown(e);
+        }
+        protected override void OnMouseMove(UIMouseMoveEventArgs e)
+        {
+            _uiMouseBehInst?.ListenMouseMove(e);
+        }
+        protected override void OnMouseUp(UIMouseUpEventArgs e)
+        {
+            _uiMouseBehInst?.ListenMouseUp(e);
+        }
+        protected override void OnMouseEnter(UIMouseMoveEventArgs e)
+        {
+            _uiMouseBehInst?.ListenMouseEnter(e);
+        }
+        protected override void OnMouseLeave(UIMouseLeaveEventArgs e)
+        {
+            _uiMouseBehInst?.ListenMouseLeave(e);
+        }
+        protected override void OnMousePress(UIMousePressEventArgs e)
+        {
+            _uiMouseBehInst?.ListenMousePress(e);
+        }
+        protected override void OnMouseHover(UIMouseHoverEventArgs e)
+        {
+            _uiMouseBehInst?.ListenMouseHover(e);
+        }
+        protected override void OnLostMouseFocus(UIMouseLostFocusEventArgs e)
+        {
+            _uiMouseBehInst?.ListenLostMouseFocus(e);
+        }
     }
 
     public static class UIElementExtensions
