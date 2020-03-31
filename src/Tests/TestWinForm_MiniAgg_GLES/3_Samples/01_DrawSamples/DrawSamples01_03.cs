@@ -151,6 +151,8 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             get;
             set;
         }
+
+        ReusableAffineMatrix _reusableAff = new ReusableAffineMatrix();
         public override void Draw(Painter p)
         {
 
@@ -176,22 +178,29 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 ellipseVxsGen.Set(0, 0, 100, 50);
                 stroke.Width = 3;
 
+              
+
                 for (double angleDegrees = 0; angleDegrees < 180; angleDegrees += 22.5)
                 {
                     //TODO: use AffineMat (stack-base matrix)
-                    var mat = Affine.New(
-                        AffinePlan.Rotate(MathHelper.DegreesToRadians(angleDegrees)),
-                        AffinePlan.Translate(width / 2, 150));
+                    //var mat = Affine.New(
+                    //    AffinePlan.Rotate(MathHelper.DegreesToRadians(angleDegrees)),
+                    //    AffinePlan.Translate(width / 2, 150));
+
+                    AffineMat mat = AffineMat.Iden;
+                    mat.RotateDeg(angleDegrees);
+                    mat.Translate(width / 2, 150);
+                    _reusableAff.SetElems(mat);
 
                     using (Tools.BorrowVxs(out var v1, out var v2, out var v3))
                     {
 
-                        ellipseVxsGen.MakeVxs(mat, v2);
-                        p.FillColor = Drawing.Color.Yellow;
-                        p.Fill(v2);
-                        //------------------------------------                
-                        p.FillColor = Drawing.Color.Blue;
-                        p.Fill(stroke.MakeVxs(v2, v3));
+                        //ellipseVxsGen.MakeVxs(mat, v2);
+                        //p.FillColor = Drawing.Color.Yellow;
+                        //p.Fill(v2);
+                        ////------------------------------------                
+                        //p.FillColor = Drawing.Color.Blue;
+                        //p.Fill(stroke.MakeVxs(v2, v3));
                     }
 
                 }

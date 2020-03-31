@@ -224,7 +224,14 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     }
 
 
-  
+
+    public class ReusableAffineMatrix : Affine
+    {
+        public void SetElems(in AffineMat aff)
+        {
+            SetElements(aff);
+        }
+    }
 
 
     public class Affine : ICoordTransformer
@@ -247,7 +254,18 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             _elems = copyFrom._elems;
             _isIdenHint = copyFrom._isIdenHint;
         }
+        public Affine(AffineMat copyFrom)
+        {
+            //sx = copyFrom.sx;
+            //shy = copyFrom.shy;
+            //shx = copyFrom.shx;
+            //sy = copyFrom.sy;
+            //tx = copyFrom.tx;
+            //ty = copyFrom.ty;
 
+            _elems = copyFrom;
+            _isIdenHint = false;
+        }
         // Custom matrix. Usually used in derived classes
         public Affine(double v0_sx, double v1_shy,
                       double v2_shx, double v3_sy,
@@ -260,6 +278,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
             _isIdenHint = false;
         }
+        public Affine() { }
 
 
 
@@ -304,7 +323,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         /// set elements by copy values from input elems
         /// </summary>
         /// <param name="elems"></param>
-        internal void SetElements(AffineMat elems)
+        internal void SetElements(in AffineMat elems)
         {
             _elems = elems;
             _isIdenHint = false;
@@ -323,151 +342,155 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             _elems.Multiply(ref b._elems);
 
         }
-        private Affine(Affine copyFrom, AffinePlan creationPlan)
-        {
-            _elems = copyFrom._elems;
-            //-----------------------             
-            switch (creationPlan.cmd)
-            {
-                default:
-                    {
-                        throw new NotSupportedException();
-                    }
-                case AffineMatrixCommand.None:
-                    _isIdenHint = copyFrom._isIdenHint;
-                    break;
-                case AffineMatrixCommand.Rotate:
-                    _isIdenHint = false;
-                    _elems.Rotate(creationPlan.x);
+        //private Affine(Affine copyFrom, AffinePlan creationPlan)
+        //{
+        //    _elems = copyFrom._elems;
+        //    //-----------------------             
+        //    switch (creationPlan.cmd)
+        //    {
+        //        default:
+        //            {
+        //                throw new NotSupportedException();
+        //            }
+        //        case AffineMatrixCommand.None:
+        //            _isIdenHint = copyFrom._isIdenHint;
+        //            break;
+        //        case AffineMatrixCommand.Rotate:
+        //            _isIdenHint = false;
+        //            _elems.Rotate(creationPlan.x);
 
-                    break;
-                case AffineMatrixCommand.Scale:
-                    _isIdenHint = false;
-                    _elems.Scale(creationPlan.x, creationPlan.y);
+        //            break;
+        //        case AffineMatrixCommand.Scale:
+        //            _isIdenHint = false;
+        //            _elems.Scale(creationPlan.x, creationPlan.y);
 
-                    break;
-                case AffineMatrixCommand.Skew:
-                    _isIdenHint = false;
-                    _elems.Skew(creationPlan.x, creationPlan.y);
+        //            break;
+        //        case AffineMatrixCommand.Skew:
+        //            _isIdenHint = false;
+        //            _elems.Skew(creationPlan.x, creationPlan.y);
 
-                    break;
-                case AffineMatrixCommand.Translate:
-                    _isIdenHint = false;
-                    _elems.Translate(creationPlan.x, creationPlan.y);
+        //            break;
+        //        case AffineMatrixCommand.Translate:
+        //            _isIdenHint = false;
+        //            _elems.Translate(creationPlan.x, creationPlan.y);
 
-                    break;
-                case AffineMatrixCommand.Invert:
-                    _isIdenHint = false;
-                    _elems.Invert();
-                    break;
-            }
-        }
+        //            break;
+        //        case AffineMatrixCommand.Invert:
+        //            _isIdenHint = false;
+        //            _elems.Invert();
+        //            break;
+        //    }
+        //}
 
-        void BuildAff(ref AffinePlan plan)
-        {
-            switch (plan.cmd)
-            {
-                case AffineMatrixCommand.None:
-                    break;
-                case AffineMatrixCommand.Rotate:
+        //void BuildAff(ref AffinePlan plan)
+        //{
+        //    switch (plan.cmd)
+        //    {
+        //        case AffineMatrixCommand.None:
+        //            break;
+        //        case AffineMatrixCommand.Rotate:
 
-                    _isIdenHint = false;
-                    _elems.Rotate(plan.x);
-                    break;
-                case AffineMatrixCommand.Scale:
-                    _isIdenHint = false;
-                    _elems.Scale(plan.x, plan.y);
-                    break;
-                case AffineMatrixCommand.Translate:
-                    _isIdenHint = false;
-                    _elems.Translate(plan.x, plan.y);
-                    break;
-                case AffineMatrixCommand.Skew:
-                    _isIdenHint = false;
-                    _elems.Skew(plan.x, plan.y);
-                    break;
-                case AffineMatrixCommand.Invert:
-                    _isIdenHint = false;
-                    _elems.Invert();
-                    break;
-                default:
-                    throw new NotSupportedException();
+        //            _isIdenHint = false;
+        //            _elems.Rotate(plan.x);
+        //            break;
+        //        case AffineMatrixCommand.Scale:
+        //            _isIdenHint = false;
+        //            _elems.Scale(plan.x, plan.y);
+        //            break;
+        //        case AffineMatrixCommand.Translate:
+        //            _isIdenHint = false;
+        //            _elems.Translate(plan.x, plan.y);
+        //            break;
+        //        case AffineMatrixCommand.Skew:
+        //            _isIdenHint = false;
+        //            _elems.Skew(plan.x, plan.y);
+        //            break;
+        //        case AffineMatrixCommand.Invert:
+        //            _isIdenHint = false;
+        //            _elems.Invert();
+        //            break;
+        //        default:
+        //            throw new NotSupportedException();
 
-            }
-        }
-        private Affine(AffinePlan[] creationPlans)
-        {
-            _elems = AffineMat.Iden;//copy
-            _isIdenHint = true;
-            if (creationPlans == null) return;
-            //-----------------------
-            for (int i = 0; i < creationPlans.Length; ++i)
-            {
-                BuildAff(ref creationPlans[i]);
-            }
-        }
-        private Affine(int pcount, ref AffinePlan p0, ref AffinePlan p1, ref AffinePlan p2, ref AffinePlan p3, ref AffinePlan p4, params AffinePlan[] creationPlans)
-        {
+        //    }
+        //}
+        //private Affine(AffinePlan[] creationPlans)
+        //{
+        //    _elems = AffineMat.Iden;//copy
+        //    _isIdenHint = true;
+        //    if (creationPlans == null) return;
+        //    //-----------------------
+        //    for (int i = 0; i < creationPlans.Length; ++i)
+        //    {
+        //        BuildAff(ref creationPlans[i]);
+        //    }
+        //}
+        //private Affine(int pcount, ref AffinePlan p0, ref AffinePlan p1, ref AffinePlan p2, ref AffinePlan p3, ref AffinePlan p4, params AffinePlan[] creationPlans)
+        //{
 
-            //-----------------------
-            //start with identity matrix
-            _elems = AffineMat.Iden;//copy
-            _isIdenHint = true;
-            //-----------------------
-            switch (pcount)
-            {
-                case 0:
-                    return;
-                case 1:
-                    BuildAff(ref p0);
-                    break;
-                case 2:
-                    BuildAff(ref p0);
-                    BuildAff(ref p1);
-                    break;
-                case 3:
-                    BuildAff(ref p0);
-                    BuildAff(ref p1);
-                    BuildAff(ref p2);
-                    break;
-                case 4:
-                    BuildAff(ref p0);
-                    BuildAff(ref p1);
-                    BuildAff(ref p2);
-                    BuildAff(ref p3);
-                    break;
-                case 5:
-                    BuildAff(ref p0);
-                    BuildAff(ref p1);
-                    BuildAff(ref p2);
-                    BuildAff(ref p3);
-                    BuildAff(ref p4);
-                    break;
-                default:
-                    BuildAff(ref p0);
-                    BuildAff(ref p1);
-                    BuildAff(ref p2);
-                    BuildAff(ref p3);
-                    BuildAff(ref p4);
-                    if (creationPlans != null)
-                    {
-                        for (int i = 0; i < creationPlans.Length; ++i)
-                        {
-                            BuildAff(ref creationPlans[i]);
-                        }
-                    }
-                    break;
+        //    //-----------------------
+        //    //start with identity matrix
+        //    _elems = AffineMat.Iden;//copy
+        //    _isIdenHint = true;
+        //    //-----------------------
+        //    switch (pcount)
+        //    {
+        //        case 0:
+        //            return;
+        //        case 1:
+        //            BuildAff(ref p0);
+        //            break;
+        //        case 2:
+        //            BuildAff(ref p0);
+        //            BuildAff(ref p1);
+        //            break;
+        //        case 3:
+        //            BuildAff(ref p0);
+        //            BuildAff(ref p1);
+        //            BuildAff(ref p2);
+        //            break;
+        //        case 4:
+        //            BuildAff(ref p0);
+        //            BuildAff(ref p1);
+        //            BuildAff(ref p2);
+        //            BuildAff(ref p3);
+        //            break;
+        //        case 5:
+        //            BuildAff(ref p0);
+        //            BuildAff(ref p1);
+        //            BuildAff(ref p2);
+        //            BuildAff(ref p3);
+        //            BuildAff(ref p4);
+        //            break;
+        //        default:
+        //            BuildAff(ref p0);
+        //            BuildAff(ref p1);
+        //            BuildAff(ref p2);
+        //            BuildAff(ref p3);
+        //            BuildAff(ref p4);
+        //            if (creationPlans != null)
+        //            {
+        //                for (int i = 0; i < creationPlans.Length; ++i)
+        //                {
+        //                    BuildAff(ref creationPlans[i]);
+        //                }
+        //            }
+        //            break;
 
-            }
-        }
-        //----------------------------------------------------------
+        //    }
+        //}
+
+        ////----------------------------------------------------------
         public static Affine operator *(Affine a, Affine b)
         {
             //new input
             return new Affine(a, b);
         }
         //----------------------------------------------------------
-
+        public Affine CreateInvert()
+        {
+            return new Affine(_elems.CreateInvert());
+        }
         // Identity matrix
         internal static Affine NewIdentity()
         {
@@ -479,34 +502,34 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             return newIden;
         }
 
-        public static Affine New(AffinePlan p0, AffinePlan p1)
-        {
-            AffinePlan p_empty = new AffinePlan();
-            return new Affine(2, ref p0, ref p1, ref p_empty, ref p_empty, ref p_empty, null);
-        }
-        public static Affine New(AffinePlan p0, AffinePlan p1, AffinePlan p2)
-        {
-            AffinePlan p_empty = new AffinePlan();
-            return new Affine(3, ref p0, ref p1, ref p2, ref p_empty, ref p_empty, null);
-        }
-        public static Affine New(AffinePlan p0, AffinePlan p1, AffinePlan p2, AffinePlan p3)
-        {
-            AffinePlan p_empty = new AffinePlan();
-            return new Affine(4, ref p0, ref p1, ref p2, ref p3, ref p_empty, null);
-        }
-        public static Affine New(AffinePlan p0, AffinePlan p1, AffinePlan p2, AffinePlan p3, AffinePlan p4)
-        {
-            return new Affine(5, ref p0, ref p1, ref p2, ref p3, ref p4, null);
-        }
+        //public static Affine New(AffinePlan p0, AffinePlan p1)
+        //{
+        //    AffinePlan p_empty = new AffinePlan();
+        //    return new Affine(2, ref p0, ref p1, ref p_empty, ref p_empty, ref p_empty, null);
+        //}
+        //public static Affine New(AffinePlan p0, AffinePlan p1, AffinePlan p2)
+        //{
+        //    AffinePlan p_empty = new AffinePlan();
+        //    return new Affine(3, ref p0, ref p1, ref p2, ref p_empty, ref p_empty, null);
+        //}
+        //public static Affine New(AffinePlan p0, AffinePlan p1, AffinePlan p2, AffinePlan p3)
+        //{
+        //    AffinePlan p_empty = new AffinePlan();
+        //    return new Affine(4, ref p0, ref p1, ref p2, ref p3, ref p_empty, null);
+        //}
+        //public static Affine New(AffinePlan p0, AffinePlan p1, AffinePlan p2, AffinePlan p3, AffinePlan p4)
+        //{
+        //    return new Affine(5, ref p0, ref p1, ref p2, ref p3, ref p4, null);
+        //}
 
-        public static Affine New(AffinePlan plan)
-        {
-            return new Affine(IdentityMatrix, plan);
-        }
-        public static Affine New(params AffinePlan[] plans)
-        {
-            return new Affine(plans);
-        }
+        //public static Affine New(AffinePlan plan)
+        //{
+        //    return new Affine(IdentityMatrix, plan);
+        //}
+        //public static Affine New(params AffinePlan[] plans)
+        //{
+        //    return new Affine(plans);
+        //}
 
         //====================================================trans_affine_rotation
         // Rotation matrix. sin() and cos() are calculated twice for the same angle.
@@ -526,10 +549,16 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
         public static Affine NewRotation(double angRad, double rotationCenterX, double rotationCenterY)
         {
-            return Affine.New(AffinePlan.Translate(-rotationCenterX, -rotationCenterY),
-                              AffinePlan.Rotate(angRad),
-                              AffinePlan.Translate(rotationCenterX, rotationCenterY)
-                           );
+            AffineMat mat = AffineMat.Iden;
+            mat.Translate(-rotationCenterX, -rotationCenterY);
+            mat.Rotate(angRad);
+            mat.Translate(rotationCenterX, rotationCenterY);
+            return new Affine(mat);
+
+            //return Affine.New(AffinePlan.Translate(-rotationCenterX, -rotationCenterY),
+            //                  AffinePlan.Rotate(angRad),
+            //                  AffinePlan.Translate(rotationCenterX, rotationCenterY)
+            //               );
 
         }
         public static Affine NewRotationDeg(double degree)
@@ -538,10 +567,11 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
         public static Affine NewRotationDeg(double degree, double rotationCenterX, double rotationCenterY)
         {
-            return Affine.New(AffinePlan.Translate(-rotationCenterX, -rotationCenterY),
-                             AffinePlan.RotateDeg(degree),
-                             AffinePlan.Translate(rotationCenterX, rotationCenterY)
-                         );
+            AffineMat mat = AffineMat.Iden;
+            mat.Translate(-rotationCenterX, -rotationCenterY);
+            mat.RotateDeg(degree);
+            mat.Translate(rotationCenterX, rotationCenterY);
+            return new Affine(mat);
         }
         //====================================================trans_affine_scaling
         // Scaling matrix. x, y - scale coefficients by X and Y respectively
@@ -836,14 +866,14 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         // Invert matrix. Do not try to invert degenerate matrices, 
         // there's no check for validity. If you set scale to 0 and 
         // then try to invert matrix, expect unpredictable result.
-        public Affine CreateInvert()
-        {
-            return new Affine(this, new AffinePlan(AffineMatrixCommand.Invert, 0));
-        }
-        public Affine CreateTranslation(double x, double y)
-        {
-            return new Affine(this, AffinePlan.Translate(x, y));
-        }
+        //public Affine CreateInvert()
+        //{
+        //    return new Affine(this, new AffinePlan(AffineMatrixCommand.Invert, 0));
+        //}
+        //public Affine CreateTranslation(double x, double y)
+        //{
+        //    return new Affine(this, AffinePlan.Translate(x, y));
+        //}
 
         /*
 

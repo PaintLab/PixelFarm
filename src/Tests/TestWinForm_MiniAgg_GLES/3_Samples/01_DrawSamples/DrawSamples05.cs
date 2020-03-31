@@ -80,11 +80,11 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 sRect.MakeVxs(vxs1);
                 p.Fill(vxs1, Color.Blue);
                 //-------------------
-                Affine af = Affine.New(
-                    AffinePlan.Translate(-w / 2f, -h / 2f),
-                    AffinePlan.Rotate(AggMath.deg2rad(30)),
-                    AffinePlan.Translate(w / 2f, h / 2f)
-                    );
+                AffineMat af = AffineMat.Iden;
+                af.Translate(-w / 2f, -h / 2f);
+                af.RotateDeg(30);
+                af.Translate(w / 2f, h / 2f);
+
 
                 af.TransformToVxs(vxs1, vxs2);
                 p.Fill(vxs2, Color.Red);
@@ -137,6 +137,9 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             }
             return smallBmp;
         }
+
+
+      
         public override void Draw(Painter p)
         {
             if (UseBitmapExt)
@@ -206,13 +209,15 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 sRect.MakeVxs(vxs1);
                 p.Fill(vxs1, Color.Blue);
                 //-------------------
-                Affine af = Affine.New(
-                    AffinePlan.Translate(-w / 2f, -h / 2f),
-                    AffinePlan.Rotate(AggMath.deg2rad(30)),
-                    AffinePlan.Translate(w / 2f, h / 2f)
-                    );
 
-                af.TransformToVxs(vxs1, vxs2);
+                AffineMat mat = AffineMat.Iden;
+                mat.Translate(-w / 2f, -h / 2f);
+                mat.RotateDeg(30);
+                mat.Translate(w / 2f, h / 2f);
+
+               
+
+                mat.TransformToVxs(vxs1, vxs2);
                 p.Fill(vxs2, Color.Red);
             }
         }

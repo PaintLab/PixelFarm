@@ -16,7 +16,7 @@ namespace PixelFarm.CpuBlit
 
         float _posX, _posY;
         float _mouseDownX, _mouseDownY;
-        Affine _currentTx = null;
+        ReusableAffineMatrix _currentTx = new ReusableAffineMatrix();
         byte _alpha;
 
         public MyTestSprite(SpriteShape spriteShape)
@@ -38,15 +38,10 @@ namespace PixelFarm.CpuBlit
             get => _spriteShape;
             set { _spriteShape = value; }
         }
-        public int SharpenRadius
-        {
-            get;
-            set;
-        }
-
+        public int SharpenRadius { get; set; }
         public byte AlphaValue
         {
-            get { return _alpha; }
+            get => _alpha;
             set
             {
                 _alpha = value;
@@ -139,13 +134,19 @@ namespace PixelFarm.CpuBlit
         {
             if (_currentTx == null)
             {
-                _currentTx = Affine.New(
-                      AffinePlan.Translate(-_spriteShape.Center.x, -_spriteShape.Center.y),
-                      AffinePlan.Scale(_spriteScale, _spriteScale),
-                      AffinePlan.Rotate(_angle + Math.PI),
-                      AffinePlan.Skew(_skewX / 1000.0, _skewY / 1000.0),
-                      AffinePlan.Translate(Width / 2, Height / 2)
-              );
+                // _currentTx = Affine.New(
+                //       AffinePlan.Translate(-_spriteShape.Center.x, -_spriteShape.Center.y),
+                //       AffinePlan.Scale(_spriteScale, _spriteScale),
+                //       AffinePlan.Rotate(_angle + Math.PI),
+                //       AffinePlan.Skew(_skewX / 1000.0, _skewY / 1000.0),
+                //       AffinePlan.Translate(Width / 2, Height / 2) 
+                //);
+                AffineMat mat = AffineMat.Iden;
+                mat.Translate(-_spriteShape.Center.x, -_spriteShape.Center.y);
+                mat.Scale(_spriteScale);
+                mat.Rotate(_angle + Math.PI);
+                mat.Skew(_skewX / 1000.0, _skewY / 1000.0);
+                mat.Translate(Width / 2, Height / 2);
             }
 
             if (JustMove)
