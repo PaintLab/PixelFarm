@@ -150,25 +150,22 @@ namespace LayoutFarm.ColorBlenderSample
 
             y += colorPanel.Height;
 
-
             //test1...
-            var buttonBeh = new UI.UIMouseBehaviour<Label>();
-            buttonBeh.MouseMove += (b, e) =>
+            var buttonBeh = new UI.UIMouseBehaviour<Label, object>();
+            buttonBeh.MouseMove += (s, e) =>
             {
                 if (e.CurrentContextElement is Label lbl)
                 {
                     lbl.BackColor = PixelFarm.Drawing.Color.Yellow;
                 }
             };
-            buttonBeh.MouseLeave += (b, e) =>
+            buttonBeh.MouseLeave += (s, e) =>
             {
                 if (e.CurrentContextElement is Label lbl)
                 {
                     lbl.BackColor = PixelFarm.Drawing.KnownColors.Gray;
                 }
             };
-            //----------------------------------
-            //test2
 
 
             //----------------------------------
@@ -178,8 +175,7 @@ namespace LayoutFarm.ColorBlenderSample
                 lblChromaDarken.Text = "Darken";
                 lblChromaDarken.SetLocation(x, y);
 
-              
-                lblChromaDarken.AttachMouseUIBehaviour(buttonBeh.CreateBehaviourInstance());
+                buttonBeh.AttachSharedBehaviorTo(lblChromaDarken);
 
                 UI.GeneralEventListener evListener = new UI.GeneralEventListener();
                 evListener.MouseDown += (s, e) =>
@@ -205,9 +201,9 @@ namespace LayoutFarm.ColorBlenderSample
             //----------------------------------
             {
                 Label lblLighten = new Label();
-                lblLighten.AttachMouseUIBehaviour(buttonBeh.CreateBehaviourInstance());
-
                 lblLighten.Text = "Brighten";
+                buttonBeh.AttachSharedBehaviorTo(lblLighten);
+
                 lblLighten.SetLocation(x, y);
                 {
                     UI.GeneralEventListener evListener = new UI.GeneralEventListener();

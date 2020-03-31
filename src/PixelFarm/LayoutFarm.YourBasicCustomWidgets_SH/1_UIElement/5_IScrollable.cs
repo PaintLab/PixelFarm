@@ -25,7 +25,6 @@ namespace LayoutFarm.UI
             LayoutDone
         }
         public ChangeKind Kind { get; set; }
-
     }
 
    

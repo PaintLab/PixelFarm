@@ -196,66 +196,46 @@ namespace LayoutFarm
             Color mouseEnterState = Color.FromArgb(100, Color.Red);
             Color hoverState = Color.FromArgb(100, Color.Green);
 
-            var beh = new UIMouseBehaviour<object>();
-
-            beh.MouseEnter += (b, e) =>
+            //create behaviour for specific host, => LayoutFarm.CustomWidgets.Box  
+            var beh = new UIMouseBehaviour<LayoutFarm.CustomWidgets.Box, object>();
+            beh.MouseEnter += (s, e) =>
             {
-                //b is a behaviour object that raise the event
-                //not the the current context element
-
-                IUIEventListener ctx = e.CurrentContextElement;
-                LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;
+                LayoutFarm.CustomWidgets.Box box = s.Source;
                 box.BackColor = mouseEnterState;
-
                 System.Diagnostics.Debug.WriteLine("mouse_enter:" + box.dbugId);
             };
-            beh.MouseLeave += (b, e) =>
+            beh.MouseLeave += (s, e) =>
             {
-                //b is a behaviour object that raise the event
-                //not the the current context element
-
-                IUIEventListener ctx = e.CurrentContextElement;
-                LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;
+                LayoutFarm.CustomWidgets.Box box = s.Source;
                 box.BackColor = normalState;
                 System.Diagnostics.Debug.WriteLine("mouse_leave:" + box.dbugId);
             };
-            beh.MouseHover += (b, e) =>
+            beh.MouseHover += (s, e) =>
             {
-                //b is a behaviour object that raise the event
-                //not the the current context element
-
-                IUIEventListener ctx = e.CurrentContextElement;
-                LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;
+                LayoutFarm.CustomWidgets.Box box = s.Source;
                 box.BackColor = hoverState;
                 System.Diagnostics.Debug.WriteLine("mouse_hover:" + box.dbugId);
             };
 
-            beh.MousePress += (b, e) =>
+            beh.MousePress += (s, e) =>
             {
-                //b is a behaviour object that raise the event
-                //not the the current context element
-
-                IUIEventListener ctx = e.CurrentContextElement;
-                LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;
+                LayoutFarm.CustomWidgets.Box box = s.Source;
                 Color back_color = box.BackColor;
                 box.BackColor = new Color((byte)System.Math.Min(back_color.A + 10, 255), back_color.R, back_color.G, back_color.B);
                 System.Diagnostics.Debug.WriteLine("mouse_press:" + box.dbugId);
             };
-
-            var sharedBeh = beh.CreateBehaviourInstance(beh);
 
             for (int i = 0; i < 10; ++i)
             {
                 var sampleButton = new LayoutFarm.CustomWidgets.Box(30, 30);
                 sampleButton.BackColor = normalState;
                 sampleButton.SetLocation(x_pos, 10);
-                sampleButton.AttachMouseUIBehaviour(sharedBeh);
+
+                beh.AttachSharedBehaviorTo(sampleButton);
 
                 host.AddChild(sampleButton);
-
                 x_pos += 30 + 5;
             }
-
         }
     }
 
@@ -266,7 +246,7 @@ namespace LayoutFarm
 
         class MyButtonState
         {
-
+            //store extra variable for behavior
         }
 
         protected override void OnStart(AppHost host)
@@ -277,15 +257,17 @@ namespace LayoutFarm
             Color mouseEnterState = Color.FromArgb(100, Color.Red);
             Color hoverState = Color.FromArgb(100, Color.Green);
 
+            //mouse behavior for LayoutFarm.CustomWidgets.Box,            
+            //with special attachment state => MyButtonState
 
-            var mouseBeh = new UIMouseBehaviour<MyButtonState>();
+            var sharedState = new MyButtonState();
+            var mouseBeh = new UIMouseBehaviour<LayoutFarm.CustomWidgets.Box, MyButtonState>(sharedState);
+
             mouseBeh.MouseEnter += (s, e) =>
             {
                 //s is a behaviour object that raise the event
                 //not the the current context element
-
-                IUIEventListener ctx = e.CurrentContextElement;
-                LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;
+                LayoutFarm.CustomWidgets.Box box = s.Source;
                 box.BackColor = mouseEnterState;
                 System.Diagnostics.Debug.WriteLine("mouse_enter:" + box.dbugId);
             };
@@ -294,8 +276,7 @@ namespace LayoutFarm
                 //s is a behaviour object that raise the event
                 //not the the current context element
 
-                IUIEventListener ctx = e.CurrentContextElement;
-                LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;
+                LayoutFarm.CustomWidgets.Box box = s.Source;
                 box.BackColor = normalState;
                 System.Diagnostics.Debug.WriteLine("mouse_leave:" + box.dbugId);
             };
@@ -304,17 +285,15 @@ namespace LayoutFarm
                 //b is a behaviour object that raise the event
                 //not the the current context element
 
-                IUIEventListener ctx = e.CurrentContextElement;
-                LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;
+                LayoutFarm.CustomWidgets.Box box = s.Source;
                 box.BackColor = hoverState;
                 System.Diagnostics.Debug.WriteLine("mouse_hover:" + box.dbugId);
             };
             mouseBeh.MousePress += (s, e) =>
             {
                 //s is a behaviour object that raise the event
-                //not the the current context element 
-                IUIEventListener ctx = e.CurrentContextElement;
-                LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;
+                //not the the current context element  
+                LayoutFarm.CustomWidgets.Box box = s.Source;
                 Color back_color = box.BackColor;
                 box.BackColor = new Color((byte)System.Math.Min(back_color.A + 10, 255), back_color.R, back_color.G, back_color.B);
                 System.Diagnostics.Debug.WriteLine("mouse_press:" + box.dbugId);
@@ -328,8 +307,7 @@ namespace LayoutFarm
                 sampleButton.SetLocation(x_pos, 10);
 
                 MyButtonState state = new MyButtonState();
-                var behInst = mouseBeh.CreateBehaviourInstance(state);
-                sampleButton.AttachMouseUIBehaviour(behInst);
+                mouseBeh.AttachUniqueBehaviorTo(sampleButton, state);
 
                 host.AddChild(sampleButton);
 

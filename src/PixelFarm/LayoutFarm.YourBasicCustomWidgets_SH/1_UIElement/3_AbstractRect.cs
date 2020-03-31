@@ -15,7 +15,7 @@ namespace LayoutFarm.UI
     /// <summary>
     /// abstract Rect UI Element
     /// </summary>
-    public abstract class AbstractRectUI : UIElement, IScrollable, IBoxElement
+    public abstract class AbstractRectUI : UIElement, IScrollable, IBoxElement, IAcceptBehviour
     {
         protected enum PaddingName
         {
@@ -484,20 +484,18 @@ namespace LayoutFarm.UI
         //TODO: use mimimum current font height ***  
 
         //-----------------------
-        MouseBehaviourInstanceBase _uiMouseBehInst;
-        
-        public bool AttachMouseUIBehaviour(MouseBehaviourInstanceBase behListener)
+        MouseBehaviorInstanceBase _uiMouseBehInst;
+        bool IAcceptBehviour.AttachBehviour(MouseBehaviorInstanceBase inst)
         {
-
-            if (behListener == null)
+            if (inst == null)
             {
                 _uiMouseBehInst = null;
-                return false;
+                return true;
             }
 
             if (_uiMouseBehInst == null)
             {
-                _uiMouseBehInst = behListener;
+                _uiMouseBehInst = inst;
                 return true;
             }
             else
@@ -511,37 +509,39 @@ namespace LayoutFarm.UI
                 return false;
             }
         }
+
+
         protected override void OnMouseDown(UIMouseDownEventArgs e)
         {
-            _uiMouseBehInst?.ListenMouseDown(e);
+            _uiMouseBehInst?.ListenMouseDown(this, e);
         }
         protected override void OnMouseMove(UIMouseMoveEventArgs e)
         {
-            _uiMouseBehInst?.ListenMouseMove(e);
+            _uiMouseBehInst?.ListenMouseMove(this, e);
         }
         protected override void OnMouseUp(UIMouseUpEventArgs e)
         {
-            _uiMouseBehInst?.ListenMouseUp(e);
+            _uiMouseBehInst?.ListenMouseUp(this, e);
         }
         protected override void OnMouseEnter(UIMouseMoveEventArgs e)
         {
-            _uiMouseBehInst?.ListenMouseEnter(e);
+            _uiMouseBehInst?.ListenMouseEnter(this, e);
         }
         protected override void OnMouseLeave(UIMouseLeaveEventArgs e)
         {
-            _uiMouseBehInst?.ListenMouseLeave(e);
+            _uiMouseBehInst?.ListenMouseLeave(this, e);
         }
         protected override void OnMousePress(UIMousePressEventArgs e)
         {
-            _uiMouseBehInst?.ListenMousePress(e);
+            _uiMouseBehInst?.ListenMousePress(this, e);
         }
         protected override void OnMouseHover(UIMouseHoverEventArgs e)
         {
-            _uiMouseBehInst?.ListenMouseHover(e);
+            _uiMouseBehInst?.ListenMouseHover(this, e);
         }
         protected override void OnLostMouseFocus(UIMouseLostFocusEventArgs e)
         {
-            _uiMouseBehInst?.ListenLostMouseFocus(e);
+            _uiMouseBehInst?.ListenLostMouseFocus(this, e);
         }
     }
 

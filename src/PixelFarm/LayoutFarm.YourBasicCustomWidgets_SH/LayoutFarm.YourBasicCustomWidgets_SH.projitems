@@ -19,7 +19,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)1_UIElement\3_AbstractRect.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)1_UIElement\4_UICollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)1_UIElement\5_IScrollable.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)1_UIElement\ElementBehaviour.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)1_UIElement\ElementBehaviors.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)1_UIElement\UIDragHitCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)1_UIElement\UIVisitor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)2_Basic\0_AbstractBox.cs" />
