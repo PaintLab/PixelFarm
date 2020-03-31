@@ -646,11 +646,7 @@ namespace LayoutFarm.TextEditing
         //    return; 
         //}
 
-        bool _isArrangeValid;
-        void ValidateArrangement()
-        {
-            _isArrangeValid = true;
-        }
+        
         internal TextLineBox InsertNewLine(int insertAt)
         {
             TextLineBox newLine = new TextLineBox(this);
