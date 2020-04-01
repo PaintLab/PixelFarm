@@ -199,7 +199,7 @@ namespace LayoutFarm
             int x_pos = 0;
 
             //create behaviour for specific host, => LayoutFarm.CustomWidgets.Box  
-            var beh = new UIMouseBehaviour<LayoutFarm.CustomWidgets.Box, object>();
+            var beh = new UIMouseBehaviour<LayoutFarm.CustomWidgets.Box>();
             beh.MouseEnter += (s, e) =>
             {
                 LayoutFarm.CustomWidgets.Box box = s.Source;

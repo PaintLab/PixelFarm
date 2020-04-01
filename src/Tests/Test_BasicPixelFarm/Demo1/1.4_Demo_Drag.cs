@@ -11,7 +11,7 @@ namespace LayoutFarm
         protected override void OnStart(AppHost host)
         {
 
-            var box_beh = new UIMouseBehaviour<Box, bool>();
+            var box_beh = new UIMouseBehaviour<Box>();
             {
                 box_beh.GuestMsg += (s, e) =>
                 {
