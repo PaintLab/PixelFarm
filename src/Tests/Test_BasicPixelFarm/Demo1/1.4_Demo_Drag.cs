@@ -13,6 +13,10 @@ namespace LayoutFarm
 
             var box_beh = new UIMouseBehaviour<Box, bool>();
             {
+                box_beh.GuestMsg += (s, e) =>
+                {
+
+                };
                 box_beh.MouseDown += (s, e) =>
                 {
                     e.MouseCursorStyle = MouseCursorStyle.Pointer;
@@ -24,13 +28,13 @@ namespace LayoutFarm
                     s.Source.BackColor = Color.FromArgb(50, KnownColors.FromKnownColor(KnownColor.DeepSkyBlue));
                 };
                 box_beh.MouseDrag += (s, e) =>
-                { 
+                {
                     Box box = s.Source;
                     box.BackColor = Color.FromArgb(180, KnownColors.FromKnownColor(KnownColor.GreenYellow));
                     Point pos = box.Position;
                     box.SetLocation(pos.X + e.XDiff, pos.Y + e.YDiff);
                     e.MouseCursorStyle = MouseCursorStyle.Pointer;
-                    e.CancelBubbling = true; 
+                    e.CancelBubbling = true;
                 };
             }
 
