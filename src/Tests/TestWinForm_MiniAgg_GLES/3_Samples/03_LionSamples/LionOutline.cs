@@ -151,24 +151,29 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
         public bool UseBuiltInAggOutlineAATech { get; set; }
         public bool DynamicStrokeWidth { get; set; } = true;
 
+
+        ReusableAffineMatrix _reuseableAffMat = new ReusableAffineMatrix();
+
         public override void Render(PixelFarm.Drawing.Painter p)
         {
             double strokeWidth = 1;
             int width = p.Width;
             int height = p.Height;
 
-            Affine affTx = Affine.New(
-                   AffinePlan.Translate(-_spriteShape.Center.x, -_spriteShape.Center.y),
-                   AffinePlan.Scale(_spriteScale, _spriteScale),
-                   AffinePlan.Rotate(_angle + Math.PI),
-                   AffinePlan.Skew(_skewX / 1000.0, _skewY / 1000.0),
-                   AffinePlan.Translate(width / 2, height / 2));
+           
+            AffineMat aff1 = AffineMat.Iden;
+            aff1.Translate(-_spriteShape.Center.x, -_spriteShape.Center.y);
+            aff1.Scale(_spriteScale, _spriteScale);
+            aff1.Rotate(_angle + Math.PI);
+            aff1.Skew(_skewX / 1000.0, _skewY / 1000.0);
+            aff1.Translate(width / 2, height / 2);
+            _reuseableAffMat.SetElems(aff1);
 
             var p1 = p as AggPainter;
             if (p1 == null)
             {
                 //TODO: review here 
-                _spriteShape.Paint(p, affTx);
+                _spriteShape.Paint(p, _reuseableAffMat);
                 //int j = lionShape.NumPaths;
                 //int[] pathList = lionShape.PathIndexList;  
                 //Drawing.Color[] colors = lionShape.Colors;
@@ -226,7 +231,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
 
                 using (Tools.More.BorrowVgPaintArgs(aggPainter, out var paintArgs))
                 {
-                    paintArgs._currentTx = affTx;
+                    paintArgs._currentTx = _reuseableAffMat;
                     paintArgs.PaintVisitHandler = (vxs, painterA) =>
                     {
 
@@ -271,7 +276,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
 
                 if (DynamicStrokeWidth)
                 {
-                    strokeWidth *= affTx.GetScale();
+                    strokeWidth *= _reuseableAffMat.GetScale();
                 }
 
 
@@ -283,7 +288,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
 
                     using (Tools.More.BorrowVgPaintArgs(aggPainter, out var paintArgs))
                     {
-                        paintArgs._currentTx = affTx;
+                        paintArgs._currentTx = _reuseableAffMat;
                         paintArgs.PaintVisitHandler = (vxs, painterA) =>
                         {
                             //use external painter handler
@@ -302,7 +307,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                     //low-level implementation
                     aggPainter.StrokeWidth = strokeWidth;
                     //-------------------------                
-                     
+
                     //1. LineProfileAnitAlias: for AA-area-coverage decision                   
                     LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(strokeWidth, selectedGamma);
 
@@ -320,7 +325,7 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
                     //----------------------------
                     using (Tools.More.BorrowVgPaintArgs(aggPainter, out var paintArgs))
                     {
-                        paintArgs._currentTx = affTx;
+                        paintArgs._currentTx = _reuseableAffMat;
                         paintArgs.PaintVisitHandler = (vxs, painterA) =>
                         {
                             //use external painter handler

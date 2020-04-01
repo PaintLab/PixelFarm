@@ -26,7 +26,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
     [Info("OpenTypeReaderFromPureCs")]
     public class OpenTypeReaderFromPureCS : DemoBase
     {
-         
+
         CurveFlattener _curveFlattener = new CurveFlattener();
         VertexStore _left_vxs;
         VertexStore _right_vxs;
@@ -92,15 +92,11 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             using (Tools.BorrowVxs(out var v0))
             {
                 txToVxs.WriteOutput(v0);
-                var mat = PixelFarm.CpuBlit.VertexProcessing.Affine.New(
-                     //translate
-                     new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(
-                         PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Translate, 10, 10),
-                     //scale
-                     new PixelFarm.CpuBlit.VertexProcessing.AffinePlan(
-                         PixelFarm.CpuBlit.VertexProcessing.AffineMatrixCommand.Scale, 1, 1)
-                         );
-                //mat.TransformToVxs(v0, v1);
+
+                AffineMat mat = AffineMat.Iden;
+                mat.Translate(10, 10);
+                //mat.Scale(1, 1);
+                 
                 _curveFlattener.MakeVxs(v0, mat, v2);
             }
             return v2;

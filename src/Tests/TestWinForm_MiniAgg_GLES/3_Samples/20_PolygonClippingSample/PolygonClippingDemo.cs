@@ -97,10 +97,14 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                         // Great Britain and Arrows
                         using (Tools.BorrowVxs(out var v1_gb_poly, out var v2_arrows))
                         {
-                            Affine mtx1 = Affine.New(
-                                    AffinePlan.Translate(-1150, -1150),
-                                    AffinePlan.Scale(2)
-                                 );
+
+                            AffineMat mat1 = AffineMat.Iden;
+                            mat1.Translate(-1150, -1150);
+                            mat1.Scale(2);
+
+                            Affine mtx1 = new Affine(mat1);
+
+
                             PolygonClippingDemoHelper.WriteGBObject(v1_gb_poly, 0, 0, mtx1);
 
                             p.Fill(v1_gb_poly, ColorEx.Make(0.5f, 0.5f, 0f, 0.1f));
@@ -124,9 +128,11 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                         using (Tools.BorrowVxs(out var v2_spiral, out var v2_spiral_outline))
                         using (Tools.BorrowStroke(out var stroke))
                         {
-                            Affine mtx = Affine.New(
-                                    AffinePlan.Translate(-1150, -1150),
-                                    AffinePlan.Scale(2));
+                            AffineMat mat = AffineMat.Iden;
+                            mat.Translate(-1150, -1150);
+                            mat.Scale(2);
+
+                            Affine mtx = new Affine(mat);
 
                             PolygonClippingDemoHelper.WriteGBObject(v1_gb_poly, 0, 0, mtx);
                             PolygonClippingDemoHelper.WriteSpiral(v2_spiral, _x, _y);
@@ -150,12 +156,15 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                         using (Tools.BorrowStroke(out var stroke))
                         {
 
-                            Affine mtx = Affine.New(
-                               AffinePlan.Scale(4),
-                               AffinePlan.Translate(220, 200));
+                            //Affine mtx = Affine.New(
+                            //   AffinePlan.Scale(4),
+                            //   AffinePlan.Translate(220, 200));
+                            AffineMat mat = AffineMat.Iden;
+                            mat.Scale(4);
+                            mat.Translate(220, 200);
 
                             PolygonClippingDemoHelper.WriteSpiral(v1_spiral, _x, _y);
-                            PolygonClippingDemoHelper.WriteGlyphObj(glyph_vxs, 0, 0, mtx);
+                            PolygonClippingDemoHelper.WriteGlyphObj(glyph_vxs, 0, 0, new Affine(mat));
 
                             //-----------------------------------------      
                             stroke.Width = 1;

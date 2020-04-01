@@ -9,10 +9,9 @@ namespace LayoutFarm.CustomWidgets
     public class TextFlowLabel : AbstractRectUI
     {
 
-        Color _textColor;
         Color _backColor;
-        RunStyle _runStyle;
-        RequestFont _font;
+        TextSpanStyle _textSpanStyle;
+
         protected TextFlowRenderBox _textFlowRenderBox;
 
         protected System.Collections.Generic.IEnumerable<PlainTextLine> _doc;
@@ -21,32 +20,56 @@ namespace LayoutFarm.CustomWidgets
         {
             //if user does not provide width and height,
             //we use default first, and set HasSpecificWidthAndHeight=false
-            //(this feature  found in label, image box, and text-flow-label)
-
+            //(this feature  found in label, image box, and text-flow-label) 
             HasSpecificWidthAndHeight = false;
         }
+
         public TextFlowLabel(int w, int h) : base(w, h)
         {
-            _textColor = PixelFarm.Drawing.Color.Black; //default?, use Theme?
             AcceptKeyboardFocus = true;
+
+            _textSpanStyle = new TextSpanStyle();
+            _textSpanStyle.FontColor = Color.Black; //default, use theme
+
         }
         public RequestFont RequestFont
         {
-            get => _font;
-            set => _font = value;
-        }
-        RunStyle GetDefaultRunStyle()
-        {
-            if (_runStyle == null)
+            get => _textSpanStyle.ReqFont;
+            set
             {
-                return _runStyle = new RunStyle() {
-                    FontColor = Color.Black,
-                    ReqFont = _font
-                };
+                _textSpanStyle.ReqFont = value;
+                if (_textFlowRenderBox != null)
+                {
+                    //set new style
+                    _textFlowRenderBox.CurrentTextSpanStyle = _textSpanStyle;
+                }
             }
-            else
+        }
+        public Color BackColor
+        {
+            get => _backColor;
+            set
             {
-                return _runStyle;
+                _backColor = value;
+                if (_textFlowRenderBox != null)
+                {
+                    //set new style
+                    _textFlowRenderBox.BackgroundColor = _backColor;
+                }
+            }
+        }
+        public Color TextColor
+        {
+            get => _textSpanStyle.FontColor;
+            set
+            {
+                _textSpanStyle.FontColor = value;
+                //update
+                if (_textFlowRenderBox != null)
+                {
+                    //set new style
+                    _textFlowRenderBox.CurrentTextSpanStyle = _textSpanStyle;
+                }
             }
         }
 
@@ -56,25 +79,19 @@ namespace LayoutFarm.CustomWidgets
         {
             if (_textFlowRenderBox == null)
             {
-                if (_font == null)
+                var txtFlowRenderBox = new TextFlowRenderBox(rootgfx, this.Width, this.Height, true);
+                txtFlowRenderBox.BackgroundColor = _backColor;
+
+                if (_textSpanStyle.ReqFont == null)
                 {
-                    _font = new RequestFont("Source Sans Pro", 11);
+                    _textSpanStyle.ReqFont = rootgfx.DefaultTextEditFontInfo;
                 }
 
-                _runStyle = new RunStyle() { FontColor = _textColor, ReqFont = _font };
-
-                var txtFlowRenderBox = new TextFlowRenderBox(rootgfx, this.Width, this.Height, true);
-                //txtFlowRenderBox.BackgroundColor = _backColor;
-                txtFlowRenderBox.CurrentTextSpanStyle = new TextSpanStyle() {
-                    ReqFont = _font,
-                    FontColor = Color.Black
-                };
-
+                txtFlowRenderBox.CurrentTextSpanStyle = _textSpanStyle;
                 txtFlowRenderBox.SetLocation(this.Left, this.Top);
                 txtFlowRenderBox.SetViewport(this.ViewportLeft, this.ViewportTop);
                 txtFlowRenderBox.SetVisible(this.Visible);
                 txtFlowRenderBox.SetController(this);
-
 
                 //
                 _textFlowRenderBox = txtFlowRenderBox;
@@ -82,15 +99,15 @@ namespace LayoutFarm.CustomWidgets
             }
             return _textFlowRenderBox;
         }
+
+
+        string _orgText;
         public string Text
         {
-            get
-            {
-                return null;
-            }
+            get => _orgText;
             set
             {
-                //_text = value;
+                _orgText = value;
                 _doc = PlainTextDocumentHelper.CreatePlainTextDocument(value);
                 if (_textFlowRenderBox != null)
                 {
@@ -108,7 +125,6 @@ namespace LayoutFarm.CustomWidgets
             _textFlowRenderBox.ClearAllChildren();
             int lineCount = 0;
 
-            RunStyle runstyle = GetDefaultRunStyle();
             foreach (PlainTextLine line in _doc)
             {
                 if (lineCount > 0)
@@ -164,7 +180,7 @@ namespace LayoutFarm.CustomWidgets
             this.Focus();
             e.MouseCursorStyle = MouseCursorStyle.IBeam;
             e.CancelBubbling = true;
-            
+
             _textFlowRenderBox.HandleMouseDown(e);
         }
         protected override void OnMouseMove(UIMouseMoveEventArgs e)

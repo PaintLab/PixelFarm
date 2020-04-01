@@ -60,13 +60,14 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             int x_pos = 0;
             for (int i = 0; i < 360; i += 30)
             {
-                p.DrawImage(_lionImg,
-                   //move to center of the image (hotspot x,y)
-                   AffinePlan.Translate(-_imgW / 2f, -_imgH / 2f),
-                   AffinePlan.Scale(0.50, 0.50),
-                   AffinePlan.Rotate(AggMath.deg2rad(i)),
-                   AffinePlan.Translate((_imgW / 2f) + x_pos, _imgH / 2f) //translate back
-                   );
+
+                AffineMat aff = AffineMat.Iden;
+                aff.Translate(-_imgW / 2f, -_imgH / 2f);
+                aff.Scale(0.5, 0.5);
+                aff.RotateDeg(i);
+                aff.Translate((_imgW / 2f) + x_pos, _imgH / 2f);
+
+                p.DrawImage(_lionImg, aff);
 
                 x_pos += _imgW / 3;
             }
@@ -80,11 +81,11 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 sRect.MakeVxs(vxs1);
                 p.Fill(vxs1, Color.Blue);
                 //-------------------
-                Affine af = Affine.New(
-                    AffinePlan.Translate(-w / 2f, -h / 2f),
-                    AffinePlan.Rotate(AggMath.deg2rad(30)),
-                    AffinePlan.Translate(w / 2f, h / 2f)
-                    );
+                AffineMat af = AffineMat.Iden;
+                af.Translate(-w / 2f, -h / 2f);
+                af.RotateDeg(30);
+                af.Translate(w / 2f, h / 2f);
+
 
                 af.TransformToVxs(vxs1, vxs2);
                 p.Fill(vxs2, Color.Red);
@@ -133,10 +134,15 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             MemBitmap smallBmp = new MemBitmap(orgBmp.Width / 2, orgBmp.Height / 2);
             using (Tools.BorrowAggPainter(smallBmp, out var painter))
             {
-                painter.DrawImage(orgBmp, AffinePlan.Scale(0.5, 0.5));
+                AffineMat mat = AffineMat.Iden;
+                mat.Scale(0.5);
+                painter.DrawImage(orgBmp, mat);
             }
             return smallBmp;
         }
+
+
+
         public override void Draw(Painter p)
         {
             if (UseBitmapExt)
@@ -165,7 +171,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             int x_pos = 0;
             int y_pos = 0;
 
-            var affPlans = new AffinePlan[4];
+
             //1. create new half-size lion image 
 
             //for (int i = 0; i < 360; i += 30)
@@ -182,13 +188,18 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
             x_pos = 0;
             y_pos = 100;
+
+
             for (int i = 0; i < 360; i += 30)
             {
-                affPlans[0] = AffinePlan.Translate(-_imgW / 2f, -_imgH / 2f);
-                affPlans[1] = AffinePlan.Scale(0.50, 0.50);
-                affPlans[2] = AffinePlan.Rotate(AggMath.deg2rad(i));
-                affPlans[3] = AffinePlan.Translate((_imgW / 2f) + x_pos, (_imgH / 2f) + y_pos);
-                p.DrawImage(_lionImg, affPlans);
+
+                AffineMat aff = AffineMat.Iden;
+                aff.Translate(-_imgW / 2f, -_imgH / 2f);
+                aff.Scale(0.5, 0.5);
+                aff.RotateDeg(i);
+                aff.Translate((_imgW / 2f) + x_pos, (_imgH / 2f) + y_pos);
+
+                p.DrawImage(_lionImg, aff);
                 x_pos += _imgW / 3;
             }
 
@@ -206,13 +217,15 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 sRect.MakeVxs(vxs1);
                 p.Fill(vxs1, Color.Blue);
                 //-------------------
-                Affine af = Affine.New(
-                    AffinePlan.Translate(-w / 2f, -h / 2f),
-                    AffinePlan.Rotate(AggMath.deg2rad(30)),
-                    AffinePlan.Translate(w / 2f, h / 2f)
-                    );
 
-                af.TransformToVxs(vxs1, vxs2);
+                AffineMat mat = AffineMat.Iden;
+                mat.Translate(-w / 2f, -h / 2f);
+                mat.RotateDeg(30);
+                mat.Translate(w / 2f, h / 2f);
+
+
+
+                mat.TransformToVxs(vxs1, vxs2);
                 p.Fill(vxs2, Color.Red);
             }
         }

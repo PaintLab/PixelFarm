@@ -68,7 +68,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             //
 
             p.FillColor = Color.Yellow;
-           
+
 
             p.FillEllipse(100.5, 400, 40, 60);
             p.DrawEllipse(50.5, 400, 40, 60);
@@ -91,13 +91,14 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             int _imgH = _lionImg.Height;
 
             //p.RenderQuality = RenderQuality.Fast;
-            p.DrawImage(_lionImg,
-             //move to center of the image (hotspot x,y)
-             AffinePlan.Translate(-_imgW / 2, -_imgH / 2),
-             //AffinePlan.Scale(0.50, 0.50),//
-             AffinePlan.Rotate(AggMath.deg2rad(30)),
-             AffinePlan.Translate(_imgW / 2, _imgH / 2)
-             );
+
+            AffineMat mat = AffineMat.Iden;
+
+            //move to center of the image (hotspot x,y)
+            mat.Translate(-_imgW / 2, -_imgH / 2);
+            mat.RotateDeg(30);
+            mat.Translate(_imgW / 2, _imgH / 2);
+            p.DrawImage(_lionImg, mat);
 
             //AffinePlan.Scale(0.75, 0.75),
             //move to target 
@@ -151,6 +152,8 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             get;
             set;
         }
+
+        ReusableAffineMatrix _reusableAff = new ReusableAffineMatrix();
         public override void Draw(Painter p)
         {
 
@@ -176,22 +179,29 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 ellipseVxsGen.Set(0, 0, 100, 50);
                 stroke.Width = 3;
 
+
+
                 for (double angleDegrees = 0; angleDegrees < 180; angleDegrees += 22.5)
                 {
                     //TODO: use AffineMat (stack-base matrix)
-                    var mat = Affine.New(
-                        AffinePlan.Rotate(MathHelper.DegreesToRadians(angleDegrees)),
-                        AffinePlan.Translate(width / 2, 150));
+                    //var mat = Affine.New(
+                    //    AffinePlan.Rotate(MathHelper.DegreesToRadians(angleDegrees)),
+                    //    AffinePlan.Translate(width / 2, 150));
+
+                    AffineMat mat = AffineMat.Iden;
+                    mat.RotateDeg(angleDegrees);
+                    mat.Translate(width / 2, 150);
+                    _reusableAff.SetElems(mat);
 
                     using (Tools.BorrowVxs(out var v1, out var v2, out var v3))
                     {
 
-                        ellipseVxsGen.MakeVxs(mat, v2);
-                        p.FillColor = Drawing.Color.Yellow;
-                        p.Fill(v2);
-                        //------------------------------------                
-                        p.FillColor = Drawing.Color.Blue;
-                        p.Fill(stroke.MakeVxs(v2, v3));
+                        //ellipseVxsGen.MakeVxs(mat, v2);
+                        //p.FillColor = Drawing.Color.Yellow;
+                        //p.Fill(v2);
+                        ////------------------------------------                
+                        //p.FillColor = Drawing.Color.Blue;
+                        //p.Fill(stroke.MakeVxs(v2, v3));
                     }
 
                 }

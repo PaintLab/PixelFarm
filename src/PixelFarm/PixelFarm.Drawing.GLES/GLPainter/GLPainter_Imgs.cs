@@ -17,7 +17,7 @@ namespace PixelFarm.DrawingGL
             throw new NotImplementedException();
         }
 
-        public override void DrawImage(Image img, params AffinePlan[] affinePlans)
+        public override void DrawImage(Image img, in AffineMat aff)
         {
             //create gl bmp
             //TODO: affinePlans***
