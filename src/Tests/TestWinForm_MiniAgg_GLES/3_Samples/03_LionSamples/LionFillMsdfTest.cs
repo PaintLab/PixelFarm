@@ -51,10 +51,11 @@ namespace PixelFarm.CpuBlit.Samples
 
             //lionFill.AutoFlipY = true;
 
-            _currentTx = PixelFarm.CpuBlit.VertexProcessing.Affine.New(
-                VertexProcessing.AffinePlan.RotateDeg(30),
-                VertexProcessing.AffinePlan.Scale(2)
-                );
+            PixelFarm.CpuBlit.VertexProcessing.AffineMat mat = PixelFarm.CpuBlit.VertexProcessing.AffineMat.Iden;
+            mat.RotateDeg(30);
+            mat.Scale(2);
+
+            _currentTx = new PixelFarm.CpuBlit.VertexProcessing.Affine(mat);
 
         }
 

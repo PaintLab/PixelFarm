@@ -71,12 +71,17 @@ namespace PixelFarm.DrawingGL
 
             }
 
-            var txMatrix = PixelFarm.CpuBlit.VertexProcessing.Affine.New(
-             PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(-x_1, -y_1),
-             PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Rotate(angleRad),
-             PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(x_1, y_1)
-             );
+            //var txMatrix = PixelFarm.CpuBlit.VertexProcessing.Affine.New(
+            // PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(-x_1, -y_1),
+            // PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Rotate(angleRad),
+            // PixelFarm.CpuBlit.VertexProcessing.AffinePlan.Translate(x_1, y_1)
+            // );
 
+            var txMatrix = PixelFarm.CpuBlit.VertexProcessing.AffineMat.Iden;
+             
+            txMatrix.Rotate(angleRad, x_1, y_1);
+             
+            
             //----------------------------------
             int j = s_vertices.Count;
 

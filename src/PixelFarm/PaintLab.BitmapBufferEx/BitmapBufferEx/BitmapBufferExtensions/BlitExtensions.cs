@@ -524,7 +524,7 @@ namespace BitmapBufferEx
                     int dstW = srcW;
 
 
-                    RectInt32 intersect = new RectInt32(0, 0, dpw, dstContextH); 
+                    RectInt32 intersect = new RectInt32(0, 0, dpw, dstContextH);
                     intersect.Intersect(new RectInt32(dstX, dstY, dstW, dstH));
                     if (intersect.IsEmpty)
                     {
@@ -568,7 +568,7 @@ namespace BitmapBufferEx
                     jj = sourceStartY;
                     y = py;
 
-                
+
                     for (int j = 0; j < dstH; j++)
                     {
                         if (y >= 0 && y < dstContextH)
@@ -1069,7 +1069,7 @@ namespace BitmapBufferEx
 
         }
 
-        static MatrixTransform s_identityMatrix = new MatrixTransform(PixelFarm.CpuBlit.VertexProcessing.Affine.IdentityMatrix);
+        static MatrixTransform s_identityMatrix = new MatrixTransform();
         /// <summary>
         /// Renders a bitmap using any affine transformation and transparency into this bitmap
         /// Unlike Silverlight's Render() method, this one uses 2-3 times less memory, and is the same or better quality
