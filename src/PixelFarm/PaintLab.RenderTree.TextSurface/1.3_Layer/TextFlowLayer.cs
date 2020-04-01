@@ -439,26 +439,18 @@ namespace LayoutFarm.TextEditing
             {
                 if (LineHeightHint == LineHeightHint.SameLineHeight)
                 {
-                    //same line height
-                    int j = lines.Count;
-                    if (j > 0)
+                    if (y >= 0 && lines.Count > 0)
                     {
+                        //same line height 
+                        //if (this.DefaultLineHeight == 0)
+                        //{
 
-                        if (this.DefaultLineHeight == 0)
-                        {
-
-                        }
+                        //}
                         //calculate 
                         //TODO: check interlinespace > 0 
                         int index = y / this.DefaultLineHeight;
                         if (index < lines.Count)
                         {
-                            //#if DEBUG
-                            //                            if (!lines[index].IntersectsWith(y))
-                            //                            {
-                            //                                throw new NotSupportedException();
-                            //                            }
-                            //#endif
                             return lines[index];
                         }
                     }
@@ -646,7 +638,7 @@ namespace LayoutFarm.TextEditing
         //    return; 
         //}
 
-        
+
         internal TextLineBox InsertNewLine(int insertAt)
         {
             TextLineBox newLine = new TextLineBox(this);
@@ -833,8 +825,8 @@ namespace LayoutFarm.TextEditing
                     yield return curNode.Value;
                     curNode = curNode.Next;
                 }
-            } 
-        } 
+            }
+        }
 #endif
     }
 
