@@ -40,12 +40,14 @@ namespace PixelFarm.CpuBlit.Sample_Images
     public class BasicBitmapRendering : DemoBase
     {
         MemBitmap _memBmp;
-        AffinePlan[] _affinePlans;
+        AffineMat _mat;
         public override void Init()
         {
             //actualImage2 = LoadImage(RootDemoPath.Path + "\\plain01.png");
             _memBmp = LoadImage(RootDemoPath.Path + "\\02.jpg");
-            _affinePlans = new AffinePlan[] { AffinePlan.Translate(50, 50) };
+            _mat = AffineMat.Iden;
+            _mat.Translate(50, 50);
+
         }
         static MemBitmap LoadImage(string filename)
         {
@@ -60,8 +62,7 @@ namespace PixelFarm.CpuBlit.Sample_Images
                 return memBmp;
             }
         }
-
-        AffinePlan[] affinePlan1 = new[] { AffinePlan.Translate(0, 200) }; //test
+ 
         public override void Draw(Painter p)
         {
             p.Clear(Drawing.Color.White);

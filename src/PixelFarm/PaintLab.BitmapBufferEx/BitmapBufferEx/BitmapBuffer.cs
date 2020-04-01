@@ -19,15 +19,17 @@ namespace BitmapBufferEx
     public class MatrixTransform : GeneralTransform
     {
         MatrixTransform _inverseVersion;
-        Affine _affine;
-        public MatrixTransform(AffinePlan[] affPlans)
-        {
-            _affine = Affine.New(affPlans);
-        }
-        public MatrixTransform(Affine affine)
+        AffineMat _affine;
+      
+        public MatrixTransform(AffineMat affine)
         {
             _affine = affine;
         }
+        public MatrixTransform()
+        {
+            _affine = AffineMat.Iden;
+        }
+         
         public override PointD Transform(PointD p)
         {
             double p_x = p.X;
