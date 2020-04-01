@@ -32,6 +32,7 @@ namespace LayoutFarm.UI
         public event Action<SenderInfo, UIMouseDownEventArgs> MouseDown;
         public event Action<SenderInfo, UIMouseUpEventArgs> MouseUp;
         public event Action<SenderInfo, UIMouseMoveEventArgs> MouseMove;
+        public event Action<SenderInfo, UIMouseMoveEventArgs> MouseDrag;
         //----
         public event Action<SenderInfo, UIMouseMoveEventArgs> MouseEnter;
         public event Action<SenderInfo, UIMouseLeaveEventArgs> MouseLeave;
@@ -65,6 +66,11 @@ namespace LayoutFarm.UI
         /// </summary>
         internal bool HasMouseMove => MouseMove != null;
         internal void InvokeMouseMove(S sender, T state, UIMouseMoveEventArgs e) => MouseMove.Invoke(new SenderInfo(sender, state), e);
+        /// <summary>
+        /// has mouse move subscription
+        /// </summary>
+        internal bool HasMouseDrag => MouseDrag != null;
+        internal void InvokeMouseDrag(S sender, T state, UIMouseMoveEventArgs e) => MouseDrag.Invoke(new SenderInfo(sender, state), e);
 
         /// <summary>
         /// has mouse enter
@@ -191,7 +197,21 @@ namespace LayoutFarm.UI
         }
         internal override void ListenMouseMove(object sender, UIMouseMoveEventArgs e)
         {
-            if (_ownerBeh.HasMouseMove) _ownerBeh.InvokeMouseMove((S)sender, _state, e);
+            if (e.IsDragging)
+            {
+                if (_ownerBeh.HasMouseDrag)
+                {
+                    _ownerBeh.InvokeMouseDrag((S)sender, _state, e);
+                }
+            }
+            else
+            {
+                if (_ownerBeh.HasMouseMove)
+                {
+                    _ownerBeh.InvokeMouseMove((S)sender, _state, e);
+                }
+            }
+
         }
         internal override void ListenMouseUp(object sender, UIMouseUpEventArgs e)
         {
