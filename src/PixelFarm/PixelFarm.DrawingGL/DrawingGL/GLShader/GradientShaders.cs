@@ -6,8 +6,8 @@ namespace PixelFarm.DrawingGL
 {
     class RectFillShader : ColorFillShaderBase
     {
-        ShaderVtxAttrib2f a_position;
-        ShaderVtxAttrib4f a_color;
+        readonly ShaderVtxAttrib2f a_position;
+        readonly ShaderVtxAttrib4f a_color;
 
         public RectFillShader(ShaderSharedResource shareRes)
             : base(shareRes)
@@ -71,11 +71,10 @@ namespace PixelFarm.DrawingGL
     class RadialGradientFillShader : ColorFillShaderBase
     {
 
-        ShaderVtxAttrib2f a_position;
-        ShaderUniformMatrix3 u_invertedTxMatrix;
-
-        ShaderUniformVar3 u_center; //center x,y and radius
-        ShaderUniformVar1 s_texture; //lookup 
+        readonly ShaderVtxAttrib2f a_position;
+        readonly ShaderUniformMatrix3 u_invertedTxMatrix;
+        readonly ShaderUniformVar3 u_center; //center x,y and radius
+        readonly ShaderUniformVar1 s_texture; //lookup 
         bool _isIdenMatrixLoaded;
 
         public RadialGradientFillShader(ShaderSharedResource shareRes)
@@ -222,9 +221,6 @@ namespace PixelFarm.DrawingGL
             //-------------------------------------------------------------------------------------
             // Bind the texture...
             TextureContainter container = _shareRes.LoadGLBitmap(bmp);
-            //GL.ActiveTexture(TextureUnit.Texture0);
-            //GL.BindTexture(TextureTarget.Texture2D, bmp.GetServerTextureId());
-            // Set the texture sampler to texture unit to 0     
             s_texture.SetValue(container.TextureUnitNo);
         }
     }
