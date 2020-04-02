@@ -79,7 +79,7 @@ namespace PixelFarm.DrawingGL
                 _pcx.DrawImage(glBmp, (float)left, (float)top);
             }
         }
-        public override void DrawImage(Image img, double left, double top, int srcX, int srcY, int srcW, int srcH)
+        public override void DrawImage(Image img, double left, double top, int srcLeft, int srcTop, int srcW, int srcH)
         {
             if (img is AtlasImageBinder binder)
             {
@@ -89,7 +89,7 @@ namespace PixelFarm.DrawingGL
             {
                 GLBitmap glBmp = _pcx.ResolveForGLBitmap(img);
                 if (glBmp == null) return;
-                _pcx.DrawSubImage(glBmp, srcX, srcY, srcW, srcH, (float)left, (float)top);
+                _pcx.DrawSubImage(glBmp, srcLeft, srcTop, srcW, srcH, (float)left, (float)top);
             }
         }
 
