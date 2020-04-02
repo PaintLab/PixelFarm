@@ -17,8 +17,7 @@ namespace PixelFarm.DrawingGL
 
         public static LinearGradientBrush Resolve(Drawing.LinearGradientBrush linearGradientBrush)
         {
-            LinearGradientBrush glGradient = linearGradientBrush.InnerBrush as LinearGradientBrush;
-            if (glGradient == null)
+            if (!(linearGradientBrush.InnerBrush is LinearGradientBrush glGradient))
             {
                 //create a new one
                 Build(linearGradientBrush, out float[] v2f, out float[] colors);
@@ -130,7 +129,7 @@ namespace PixelFarm.DrawingGL
             uint c1_color = (uint)stop1.Color.ToARGB();
             uint c2_color = (uint)stop2.Color.ToARGB();
 
-            //1. gradient distance  
+
             if (isFirstPane)
             {
                 //left solid rect pane 
@@ -189,8 +188,7 @@ namespace PixelFarm.DrawingGL
         }
         public static RadialGradientBrush Resolve(Drawing.RadialGradientBrush radGradientBrush)
         {
-            RadialGradientBrush glGradient = radGradientBrush.InnerBrush as RadialGradientBrush;
-            if (glGradient == null)
+            if (!(radGradientBrush.InnerBrush is RadialGradientBrush glGradient))
             {
                 //temp fix 
                 //check if some color stop has alpha 
@@ -277,8 +275,7 @@ namespace PixelFarm.DrawingGL
         }
     }
 
-
-
+ 
     class PolygonGradientBrush
     {
         internal float[] _v2f;
