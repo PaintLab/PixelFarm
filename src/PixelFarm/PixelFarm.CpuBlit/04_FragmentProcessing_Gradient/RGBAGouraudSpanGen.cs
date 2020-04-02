@@ -49,14 +49,16 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                 _dx = c2.x - c1.x;
                 double dy = c2.y - c1.y;
                 _1dy = (dy < 1e-5) ? 1e5 : 1.0 / dy;
-                _r1 = (int)c1.color.red;
-                _g1 = (int)c1.color.green;
-                _b1 = (int)c1.color.blue;
-                _a1 = (int)c1.color.alpha;
-                _dr = (int)c2.color.red - _r1;
-                _dg = (int)c2.color.green - _g1;
-                _db = (int)c2.color.blue - _b1;
-                _da = (int)c2.color.alpha - _a1;
+                
+                _r1 = (int)c1.color.R;
+                _g1 = (int)c1.color.G;
+                _b1 = (int)c1.color.B;
+                _a1 = (int)c1.color.A;
+
+                _dr = (int)c2.color.R - _r1;
+                _dg = (int)c2.color.G - _g1;
+                _db = (int)c2.color.B - _b1;
+                _da = (int)c2.color.A - _a1;
             }
 
             public void Calculate(double y)

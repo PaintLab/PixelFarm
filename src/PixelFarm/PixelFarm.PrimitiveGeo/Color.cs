@@ -91,11 +91,11 @@ namespace PixelFarm.Drawing
 
         public byte A => _a;
 
-        public byte alpha => _a;
+        //public byte alpha => _a;
 
-        public byte red => _r;
-        public byte green => _g;
-        public byte blue => _b;
+        //public byte red => _r;
+        //public byte green => _g;
+        //public byte blue => _b;
 
         public static Color FromArgb(int a, Color c) => new Color((byte)a, c.R, c.G, c.B);
 
@@ -129,7 +129,7 @@ namespace PixelFarm.Drawing
 
         public static readonly Color Aqua = new Color(255, 0, 255, 255);
         public static readonly Color Yellow = new Color(255, 255, 255, 0);
-        public static readonly Color Magenta = new Color(255, 255, 0, 255); 
+        public static readonly Color Magenta = new Color(255, 255, 0, 255);
 
         public static bool operator ==(Color c1, Color c2)
         {
@@ -139,19 +139,19 @@ namespace PixelFarm.Drawing
         public static bool operator !=(Color c1, Color c2)
         {
             return (uint)((c1._a << 24) | (c1._r << 16) | (c1._g << 8) | (c1._b)) !=
-                  (uint)((c2._a << 24) | (c2._r << 16) | (c2._g << 8) | (c2._b));
+                   (uint)((c2._a << 24) | (c2._r << 16) | (c2._g << 8) | (c2._b));
         }
         public int ToARGB() => ((_a << 24) | (_r << 16) | (_g << 8) | _b);
 
         public uint ToABGR() => (uint)((_a << 24) | (_b << 16) | (_g << 8) | _r);
 
-        public byte Red0To255 => _r;
+        byte Red0To255 => _r;
 
-        public byte Green0To255 => _g;
+        byte Green0To255 => _g;
 
-        public byte Blue0To255 => _b;
+        byte Blue0To255 => _b;
 
-        public byte Alpha0To255 => _a;
+        byte Alpha0To255 => _a;
 
         public Color CreateGradient(Color another, float colorDistanceRatio)
         {
@@ -174,20 +174,34 @@ namespace PixelFarm.Drawing
 
         public static Color operator +(Color A, Color B)
         {
-            byte r = (byte)((A._r + B._r) > 255 ? 255 : (A._r + B._r));
-            byte g = (byte)((A._g + B._g) > 255 ? 255 : (A._g + B._g));
-            byte b = (byte)((A._b + B._b) > 255 ? 255 : (A._b + B._b));
-            byte a = (byte)((A._a + B._a) > 255 ? 255 : (A._a + B._a));
-            return new Color(a, r, g, b);
+            //byte r = (byte)((A._r + B._r) > 255 ? 255 : (A._r + B._r));
+            //byte g = (byte)((A._g + B._g) > 255 ? 255 : (A._g + B._g));
+            //byte b = (byte)((A._b + B._b) > 255 ? 255 : (A._b + B._b));
+            //byte a = (byte)((A._a + B._a) > 255 ? 255 : (A._a + B._a));
+            //return new Color(a, r, g, b);
+
+            //clamp with upper max limit 255
+            return new Color(
+              (byte)Math.Min(A._a + B._a, 255),
+              (byte)Math.Min(A._r + B._r, 255),
+              (byte)Math.Min(A._g + B._g, 255),
+              (byte)Math.Min(A._b + B._b, 255));
         }
 
         public static Color operator -(Color A, Color B)
         {
-            byte red = (byte)((A._r - B._r) < 0 ? 0 : (A._r - B._r));
-            byte green = (byte)((A._g - B._g) < 0 ? 0 : (A._g - B._g));
-            byte blue = (byte)((A._b - B._b) < 0 ? 0 : (A._b - B._b));
-            byte alpha = (byte)((A._a - B._a) < 0 ? 0 : (A._a - B._a));
-            return new Color(alpha, red, green, blue);
+            //clamp with upper low limit 0
+            return new Color(
+            (byte)Math.Max(A._a - B._a, 0),
+            (byte)Math.Max(A._r - B._r, 0),
+            (byte)Math.Min(A._g - B._g, 0),
+            (byte)Math.Max(A._b - B._b, 0));
+
+            //byte red = (byte)((A._r - B._r) < 0 ? 0 : (A._r - B._r));
+            //byte green = (byte)((A._g - B._g) < 0 ? 0 : (A._g - B._g));
+            //byte blue = (byte)((A._b - B._b) < 0 ? 0 : (A._b - B._b));
+            //byte alpha = (byte)((A._a - B._a) < 0 ? 0 : (A._a - B._a));
+            //return new Color(alpha, red, green, blue);
         }
 
         /// <summary>
