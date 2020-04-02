@@ -94,7 +94,7 @@
     </Compile>
     <Compile Include="Demo1.1\1.10_Demo_Images.cs" />
     <None Include="app.config" />
-    <Compile Include="Demo5\5.1_Boxes_with_Beh.cs" />
+    <Compile Include="Demo5\Boxes_with_Beh.cs" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
