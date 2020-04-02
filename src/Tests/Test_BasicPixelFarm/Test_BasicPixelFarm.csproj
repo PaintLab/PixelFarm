@@ -57,7 +57,7 @@
     <Compile Include="Demo3\3.4_CursorTest.cs" />
     <Compile Include="Demo4\4.1_Demo_LionSprite.cs" />
     <Compile Include="Demo4\PxMotion.cs" />
-    <Compile Include="Demo5\5_DemoSampleCharts.cs" />
+    <Compile Include="Demo4\4.2_DemoSampleCharts.cs" />
     <Compile Include="Demo3\3.1_Demo_Visible.cs" />
     <Compile Include="Demo3\3.2_Demo_ControllerBox.cs" />
     <Compile Include="Demo3\3.3_Demo_ControllerBox2.cs" />
@@ -94,6 +94,7 @@
     </Compile>
     <Compile Include="Demo1.1\1.10_Demo_Images.cs" />
     <None Include="app.config" />
+    <Compile Include="Demo5\5.1_Boxes_with_Beh.cs" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
