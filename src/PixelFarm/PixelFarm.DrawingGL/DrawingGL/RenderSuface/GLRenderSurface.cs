@@ -1264,8 +1264,7 @@ namespace PixelFarm.DrawingGL
                         //TODO: review here again
                         //use VBO?
                         //TODO: create mask on another render suface and use shader+mask is more simple
-
-
+                         
                         //we use mask technique
                         //1. generate mask bitmap
                         SaveContextData(out GLPainterContextData saveData1);
@@ -1330,7 +1329,8 @@ namespace PixelFarm.DrawingGL
                         //                         
                         DrawImageWithMask(renderSx1.GetGLBitmap(), color_src, 0, 0);
 
-
+                        renderSx1.Dispose();
+                        renderSx2.Dispose();
                     }
                     break;
             }

@@ -52,6 +52,7 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
                     new PointF(50, 20), new PointF(300, 20),
                     new ColorStop[]
                     {
+                        //for test different colors
                         new ColorStop(0.0f, Drawing.Color.Yellow),
                         new ColorStop(0.25f, Drawing.Color.Blue),
                         new ColorStop(0.50f, Drawing.Color.Green),
