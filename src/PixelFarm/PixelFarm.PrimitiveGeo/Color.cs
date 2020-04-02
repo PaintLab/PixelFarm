@@ -90,19 +90,25 @@ namespace PixelFarm.Drawing
 
         public byte A => _a;
 
-        //public byte alpha => _a;
-
-        //public byte red => _r;
-        //public byte green => _g;
-        //public byte blue => _b;
-
         public static Color FromArgb(int a, Color c) => new Color((byte)a, c.R, c.G, c.B);
 
         public static Color FromArgb(int a, int r, int g, int b) => new Color((byte)a, (byte)r, (byte)g, (byte)b);
 
         public static Color FromArgb(int r, int g, int b) => new Color(255, (byte)r, (byte)g, (byte)b);
 
-        public static Color FromArgb(float a, float r, float g, float b) => new Color((byte)a, (byte)r, (byte)g, (byte)b);
+        public static Color FromArgb(float a, float r, float g, float b)
+        {
+#if DEBUG
+            if ((a < 0 || a > 1) ||
+                (r < 0 || r > 1) ||
+                (b < 0 || b > 1) ||
+                (g < 0 || g > 1))
+            {
+                throw new NotSupportedException();
+            }
+#endif
+            return new Color((byte)(a * 255), (byte)(r * 255), (byte)(g * 255), (byte)(b * 255));
+        }
 
         public override bool Equals(object obj)
         {
@@ -116,19 +122,6 @@ namespace PixelFarm.Drawing
             return false;
         }
         public override int GetHashCode() => base.GetHashCode();
-
-        public static readonly Color Empty = new Color(0, 0, 0, 0);
-        public static readonly Color Transparent = new Color(0, 255, 255, 255);
-        public static readonly Color White = new Color(255, 255, 255, 255);
-        public static readonly Color Black = new Color(255, 0, 0, 0);
-
-        public static readonly Color Red = new Color(255, 255, 0, 0);
-        public static readonly Color Green = new Color(255, 0, 255, 0);
-        public static readonly Color Blue = new Color(255, 0, 0, 255);
-
-        public static readonly Color Aqua = new Color(255, 0, 255, 255);
-        public static readonly Color Yellow = new Color(255, 255, 255, 0);
-        public static readonly Color Magenta = new Color(255, 255, 0, 255);
 
         public static bool operator ==(Color c1, Color c2)
         {
@@ -144,7 +137,7 @@ namespace PixelFarm.Drawing
 
         public uint ToABGR() => (uint)((_a << 24) | (_b << 16) | (_g << 8) | _r);
 
- 
+
 
         public Color CreateGradient(Color another, float colorDistanceRatio)
         {
@@ -254,6 +247,19 @@ namespace PixelFarm.Drawing
         //argb
         static public Color CreatRGB8Packed(int v) => new Color(255, (byte)((v >> 16) & 0xFF), (byte)((v >> 8) & 0xFF), ((byte)(v & 0xFF)));
 
+
+        public static readonly Color Empty = new Color(0, 0, 0, 0);
+        public static readonly Color Transparent = new Color(0, 255, 255, 255);
+        public static readonly Color White = new Color(255, 255, 255, 255);
+        public static readonly Color Black = new Color(255, 0, 0, 0);
+
+        public static readonly Color Red = new Color(255, 255, 0, 0);
+        public static readonly Color Green = new Color(255, 0, 255, 0);
+        public static readonly Color Blue = new Color(255, 0, 0, 255);
+
+        public static readonly Color Aqua = new Color(255, 0, 255, 255);
+        public static readonly Color Yellow = new Color(255, 255, 255, 0);
+        public static readonly Color Magenta = new Color(255, 255, 0, 255);
 
 
 #if DEBUG

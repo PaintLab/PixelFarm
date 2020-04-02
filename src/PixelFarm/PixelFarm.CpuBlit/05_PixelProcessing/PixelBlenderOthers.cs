@@ -228,7 +228,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         {
 
             //calculate new alpha
-          
+
 
             int src_a = (byte)((srcColor.A * coverageValue + 255) >> 8);
             //after apply the alpha
@@ -243,14 +243,14 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                     byte y = (byte)(((srcColor.R * 77) + (srcColor.G * 151) + (srcColor.B * 28)) >> 8);
                     srcColor = new Color(srcColor.A, y, y, y);
 
-                    int dest = *dstPtr;                   
+                    int dest = *dstPtr;
 
                     //separate each component
                     byte a = (byte)((dest >> CO.A_SHIFT) & 0xff);
                     byte r = (byte)((dest >> CO.R_SHIFT) & 0xff);
                     byte g = (byte)((dest >> CO.G_SHIFT) & 0xff);
                     byte b = (byte)((dest >> CO.B_SHIFT) & 0xff);
-                    
+
 
                     *dstPtr =
                      ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << CO.A_SHIFT) |
@@ -266,7 +266,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             {
 
                 //convert srcColor to grey-scale image
-              
+
 
                 if (srcColor.A == 255)
                 {
@@ -277,7 +277,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                     byte y = (byte)(((srcColor.R * 77) + (srcColor.G * 151) + (srcColor.B * 28)) >> 8);
                     srcColor = new Color(srcColor.A, y, y, y);
 
-                    int dest = *dstPtr;                    
+                    int dest = *dstPtr;
 
                     //separate each component
                     byte a = (byte)((dest >> CO.A_SHIFT) & 0xff);
@@ -619,11 +619,8 @@ namespace PixelFarm.CpuBlit.PixelProcessing
 
                 fixed (int* ptr = &dstBuffer[arrayOffset])
                 {
-                    //TODO: consider use memcpy() impl*** 
-                    byte y = (byte)(((srcColor.R * 77) + (srcColor.G * 151) + (srcColor.B * 28)) >> 8);
-                    srcColor = new Color(srcColor.A, y, y, y);
-
-                    *ptr = srcColor.ToARGB();
+                    //TODO: consider use memcpy() impl***  
+                    *ptr = srcColor.ToGrayValueARGB();
                 }
 
             }
@@ -639,12 +636,9 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                     fixed (int* ptr_byte = &dstBuffer[arrayOffset])
                     {
                         //TODO: consider use memcpy() impl***
-
-                        byte y = (byte)(((srcColor.R * 77) + (srcColor.G * 151) + (srcColor.B * 28)) >> 8);
-                        srcColor = new Color(srcColor.A, y, y, y);
-
+                         
                         int* ptr = ptr_byte;
-                        int argb = srcColor.ToARGB();
+                        int argb = srcColor.ToGrayValueARGB();
 
                         //---------
                         if ((count % 2) != 0)
