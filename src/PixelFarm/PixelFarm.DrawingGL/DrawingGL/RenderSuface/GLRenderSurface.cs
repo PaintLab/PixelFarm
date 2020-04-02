@@ -1264,11 +1264,13 @@ namespace PixelFarm.DrawingGL
                         //TODO: review here again
                         //use VBO?
                         //TODO: create mask on another render suface and use shader+mask is more simple
-                         
+
                         //we use mask technique
                         //1. generate mask bitmap
-                        SaveContextData(out GLPainterContextData saveData1);
                         GLRenderSurface renderSx1 = new GLRenderSurface(300, 300);
+                        GLRenderSurface renderSx2 = new GLRenderSurface(300, 300);
+
+                        SaveContextData(out GLPainterContextData saveData1);                      
                         AttachToRenderSurface(renderSx1);//**
                         OriginKind = RenderSurfaceOriginKind.LeftTop;
                         //generate mask bmp (white whole on black bg)
@@ -1279,8 +1281,9 @@ namespace PixelFarm.DrawingGL
 
                         //2. generate gradient color, (TODO: cache, NOT need to generate this every time)
 
+                       
                         SaveContextData(out GLPainterContextData saveData2);
-                        GLRenderSurface renderSx2 = new GLRenderSurface(300, 300);
+                        
                         AttachToRenderSurface(renderSx2);//**
                         OriginKind = RenderSurfaceOriginKind.LeftTop;
 
@@ -1569,6 +1572,21 @@ namespace PixelFarm.DrawingGL
         }
     }
 
+
+    public struct GLContextAutoSwitchBack : IDisposable
+    {
+        GLPainterContextData _contextData;
+        GLPainterContext _owner;
+        public GLContextAutoSwitchBack(GLPainterContext context)
+        {
+            _owner = context;
+            _owner.SaveContextData(out _contextData);
+        }
+        public void Dispose()
+        {
+            _owner.RestoreContextData(_contextData);
+        }
+    }
 
     public struct GLPainterContextData
     {
