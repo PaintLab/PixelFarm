@@ -2,14 +2,60 @@
 using System;
 namespace LayoutFarm.UI
 {
+    public class UIMouseBehaviour<S, T> : UIMouseBehaviourBase<S, T>
+          where S : IAcceptBehviour
+    {
+
+        readonly MouseBehaviourInstance<S, T> _sharedInstance;
+        public UIMouseBehaviour(T defaultSharedState = default)
+        {
+            //TODO:  _sharedInstance => should be replacable?  
+            _sharedInstance = new MouseBehaviourInstance<S, T>(this, defaultSharedState);
+        }
+        /// <summary>
+        /// attach shared behavior instance to specific object
+        /// </summary>
+        /// <param name="acc"></param>
+        public void AttachSharedBehaviorTo(S acc)
+        {
+            acc.AttachBehviour(_sharedInstance);
+        }
+        /// <summary>
+        /// attach new behaviour instance+ its state to specific object
+        /// </summary>
+        /// <param name="acc"></param>
+        /// <param name="state"></param>
+        public void AttachUniqueBehaviorTo(S acc, T state)
+        {
+            acc.AttachBehviour(new MouseBehaviourInstance<S, T>(this, state));
+        }
+    }
+    public class UIMouseBehaviour<S> : UIMouseBehaviourBase<S, object>
+         where S : IAcceptBehviour
+    {
+        readonly MouseBehaviourInstance<S, object> _sharedInstance;
+        public UIMouseBehaviour()
+        {
+            //TODO:  _sharedInstance => should be replacable?  
+            _sharedInstance = new MouseBehaviourInstance<S, object>(this, null);
+        }
+        /// <summary>
+        /// attach shared behavior instance to specific object
+        /// </summary>
+        /// <param name="acc"></param>
+        public void AttachSharedBehaviorTo(S acc)
+        {
+            acc.AttachBehviour(_sharedInstance);
+        }
+    }
 
     /// <summary>
     /// behavior group for specific object S and State T
     /// </summary>
     /// <typeparam name="S"></typeparam>
     /// <typeparam name="T"></typeparam>
-    public class UIMouseBehaviour<S, T>
-        where S : IAcceptBehviour
+    public abstract class UIMouseBehaviourBase<S, T>
+    where S : IAcceptBehviour
     {
         public struct SenderInfo
         {
@@ -32,6 +78,7 @@ namespace LayoutFarm.UI
         public event Action<SenderInfo, UIMouseDownEventArgs> MouseDown;
         public event Action<SenderInfo, UIMouseUpEventArgs> MouseUp;
         public event Action<SenderInfo, UIMouseMoveEventArgs> MouseMove;
+        public event Action<SenderInfo, UIMouseMoveEventArgs> MouseDrag;
         //----
         public event Action<SenderInfo, UIMouseMoveEventArgs> MouseEnter;
         public event Action<SenderInfo, UIMouseLeaveEventArgs> MouseLeave;
@@ -65,6 +112,11 @@ namespace LayoutFarm.UI
         /// </summary>
         internal bool HasMouseMove => MouseMove != null;
         internal void InvokeMouseMove(S sender, T state, UIMouseMoveEventArgs e) => MouseMove.Invoke(new SenderInfo(sender, state), e);
+        /// <summary>
+        /// has mouse move subscription
+        /// </summary>
+        internal bool HasMouseDrag => MouseDrag != null;
+        internal void InvokeMouseDrag(S sender, T state, UIMouseMoveEventArgs e) => MouseDrag.Invoke(new SenderInfo(sender, state), e);
 
         /// <summary>
         /// has mouse enter
@@ -96,32 +148,11 @@ namespace LayoutFarm.UI
         internal bool HasMouseHover => MouseHover != null;
         internal void InvokeMouseHover(S sender, T state, UIMouseHoverEventArgs e) => MouseHover.Invoke(new SenderInfo(sender, state), e);
 
-        readonly MouseBehaviourInstance<S, T> _sharedInstance;
-        public UIMouseBehaviour(T defaultSharedState = default)
-        {
-            //TODO:  _sharedInstance => should be replacable? 
 
-            _sharedInstance = new MouseBehaviourInstance<S, T>(this, defaultSharedState);
-        }
 
-        /// <summary>
-        /// attach shared behavior instance to specific object
-        /// </summary>
-        /// <param name="acc"></param>
-        public void AttachSharedBehaviorTo(S acc)
-        {
-            acc.AttachBehviour(_sharedInstance);
-        }
-        /// <summary>
-        /// attach new behaviour instance+ its state to specific object
-        /// </summary>
-        /// <param name="acc"></param>
-        /// <param name="state"></param>
-        public void AttachUniqueBehaviorTo(S acc, T state)
-        {
-            acc.AttachBehviour(new MouseBehaviourInstance<S, T>(this, state));
-        }
     }
+
+
 
     public abstract class MouseBehaviorInstanceBase
     {
@@ -147,9 +178,9 @@ namespace LayoutFarm.UI
     public class MouseBehaviourInstance<S, T> : MouseBehaviorInstanceBase
         where S : IAcceptBehviour
     {
-        readonly UIMouseBehaviour<S, T> _ownerBeh;
+        readonly UIMouseBehaviourBase<S, T> _ownerBeh;
         T _state;
-        public MouseBehaviourInstance(UIMouseBehaviour<S, T> ownerBeh, T state)
+        public MouseBehaviourInstance(UIMouseBehaviourBase<S, T> ownerBeh, T state)
         {
 #if DEBUG            
 #endif
@@ -191,7 +222,21 @@ namespace LayoutFarm.UI
         }
         internal override void ListenMouseMove(object sender, UIMouseMoveEventArgs e)
         {
-            if (_ownerBeh.HasMouseMove) _ownerBeh.InvokeMouseMove((S)sender, _state, e);
+            if (e.IsDragging)
+            {
+                if (_ownerBeh.HasMouseDrag)
+                {
+                    _ownerBeh.InvokeMouseDrag((S)sender, _state, e);
+                }
+            }
+            else
+            {
+                if (_ownerBeh.HasMouseMove)
+                {
+                    _ownerBeh.InvokeMouseMove((S)sender, _state, e);
+                }
+            }
+
         }
         internal override void ListenMouseUp(object sender, UIMouseUpEventArgs e)
         {
@@ -206,4 +251,8 @@ namespace LayoutFarm.UI
             if (_ownerBeh.HasMouseHover) _ownerBeh.InvokeMouseHover((S)sender, _state, e);
         }
     }
+
+
+
+
 }
