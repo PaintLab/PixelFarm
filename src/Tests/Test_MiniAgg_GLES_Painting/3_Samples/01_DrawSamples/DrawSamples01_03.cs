@@ -50,7 +50,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
             p.StrokeColor = Color.Blue;
             p.Clear(Drawing.Color.White);
-            p.UseSubPixelLcdEffect = false;
+            p.UseLcdEffectSubPixelRendering = false;
             //string teststr = "ABCDE pqyt 1230";
             //p.FillColor = Color.Black;
             //p.CurrentFont = new RequestFont("tahoma", 10);

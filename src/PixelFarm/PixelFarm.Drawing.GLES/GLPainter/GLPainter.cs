@@ -126,7 +126,7 @@ namespace PixelFarm.DrawingGL
                 }
             }
         }
-        public override bool UseSubPixelLcdEffect
+        public override bool UseLcdEffectSubPixelRendering
         {
             get => _pcx.SmoothMode == SmoothMode.Smooth;
             set => _pcx.SmoothMode = value ? SmoothMode.Smooth : SmoothMode.No;
