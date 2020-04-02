@@ -42,7 +42,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest2
                 int coverIndex = span2.cover_index;
                 do
                 {
-                    int a = (covers[coverIndex++] * color.Alpha0To255) >> 8;
+                    int a = (covers[coverIndex++] * color.A) >> 8;
                     _square.Draw(rasToBmp,
                              ras, _sl, destImage,
                              Color.FromArgb(a, color),

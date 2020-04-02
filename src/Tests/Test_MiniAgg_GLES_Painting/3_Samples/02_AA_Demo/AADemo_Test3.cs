@@ -77,7 +77,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
                     if (coverageValue >= 255)
                     {
                         //100% cover 
-                        int a = (coverageValue * color.Alpha0To255) >> 8;
+                        int a = (coverageValue * color.A) >> 8;
                         _square.Draw(rasToBmp,
                                ras, _sl, destImage,
                                Color.FromArgb(a, Color.FromArgb(color.red, color.green, color.blue)),
@@ -119,7 +119,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
                             }
 
 
-                            int a = (coverageValue * color.Alpha0To255) >> 8;
+                            int a = (coverageValue * color.A) >> 8;
                             _square.Draw(rasToBmp,
                                    ras, _sl, destImage,
                                     Color.FromArgb(a, Color.FromArgb(c_r, c_g, c_b)),
@@ -142,7 +142,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
 
 
 
-                            int a = (coverageValue * color.Alpha0To255) >> 8;
+                            int a = (coverageValue * color.A) >> 8;
                             _square.Draw(rasToBmp,
                                    ras, _sl, destImage,
                                    Color.FromArgb(a, Color.FromArgb(c_r, c_g, c_b)),
@@ -165,7 +165,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
                             }
 
 
-                            int a = (coverageValue * color.Alpha0To255) >> 8;
+                            int a = (coverageValue * color.A) >> 8;
                             _square.Draw(rasToBmp,
                                    ras, _sl, destImage,
                                    Color.FromArgb(a, Color.FromArgb(c_r, c_g, c_b)),
