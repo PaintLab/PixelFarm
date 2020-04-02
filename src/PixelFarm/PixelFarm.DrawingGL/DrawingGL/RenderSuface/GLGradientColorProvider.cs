@@ -78,10 +78,10 @@ namespace PixelFarm.DrawingGL
             // );
 
             var txMatrix = PixelFarm.CpuBlit.VertexProcessing.AffineMat.Iden;
-             
+
             txMatrix.Rotate(angleRad, x_1, y_1);
-             
-            
+
+
             //----------------------------------
             int j = s_vertices.Count;
 
@@ -177,7 +177,7 @@ namespace PixelFarm.DrawingGL
         internal float _cy;
         internal float _r;
         internal PixelFarm.CpuBlit.VertexProcessing.Affine _invertedAff;
-        internal bool _hasSignificateAlphaCompo;
+        internal bool _hasSignificantAlphaCompo;//TODO: reivew this again
 
         public RadialGradientBrush(float[] v2f)
         {
@@ -211,7 +211,7 @@ namespace PixelFarm.DrawingGL
                     ColorStop stop = radGradientBrush.ColorStops[i];
                     if (stop.Color.A < 255 * 0.8) //temp fix 0.8
                     {
-                        glGradient._hasSignificateAlphaCompo = true;
+                        glGradient._hasSignificantAlphaCompo = true;
                         break;
                     }
                 }
@@ -252,7 +252,8 @@ namespace PixelFarm.DrawingGL
         /// <param name="linearGradient"></param>
         static void Build(Drawing.RadialGradientBrush linearGradient, out float[] v2f)
         {
-            ColorStop[] colorStops = linearGradient.ColorStops;
+            //TODO: review this again
+            //ColorStop[] colorStops = linearGradient.ColorStops;
 
             //create a simple horizontal linear gradient bar 
             //and we will rotate and translate it to target pos 

@@ -14,6 +14,7 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
     {
         public enum BrushKind
         {
+            SolidBrush,
             LinearGradient,
             CircularGradient,
             PolygonGradient,
@@ -21,14 +22,18 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
 
 
         VertexStore _triangleVxs;
+
+        SolidBrush _solidBrush;
         LinearGradientBrush _linearGrBrush;
 
         RadialGradientBrush _circularGrBrush;
         PolygonGradientBrush _polygonGradientBrush;
-        
+
 
         public GradientDemo()
         {
+            //solid brush
+            _solidBrush = new SolidBrush(Color.Blue);
 
             //1. linear gradient
             _linearGrBrush = new LinearGradientBrush(
@@ -68,8 +73,8 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
             using (Tools.BorrowVxs(out var v1))
             using (Tools.BorrowPathWriter(v1, out PathWriter p))
             {
-                p.MoveTo(0, 0);
-                p.LineToRel(100, 100);
+                p.MoveTo(10, 10);
+                p.LineToRel(50, 100);
                 p.LineToRel(100, -100);
                 p.CloseFigure();
                 _triangleVxs = v1.CreateTrim();
@@ -85,13 +90,19 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
 
             p.RenderQuality = RenderQuality.Fast;
             Brush prevBrush = p.CurrentBrush;
-            Brush selectedBrush = _linearGrBrush;
+            Brush selectedBrush;
 
             p.Clear(Color.White);
 
             switch (SelectedBrushKind)
             {
+
+                default: throw new NotSupportedException();
+                case BrushKind.SolidBrush:
+                    selectedBrush = _solidBrush;
+                    break;
                 case BrushKind.LinearGradient:
+                    selectedBrush = _linearGrBrush;
                     break;
                 case BrushKind.CircularGradient:
                     selectedBrush = _circularGrBrush;
@@ -104,11 +115,11 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
             //
             p.CurrentBrush = selectedBrush;
 
-            p.FillRect(0, 100, 500, 500);
+            //p.FillRect(0, 100, 500, 500);
 
             //p.FillRect(0, 200, 200, 50);
 
-            //p.Fill(_triangleVxs);
+            p.Fill(_triangleVxs);
             ////-------------               
 
             p.CurrentBrush = prevBrush;

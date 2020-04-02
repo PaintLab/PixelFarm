@@ -1245,13 +1245,14 @@ namespace PixelFarm.DrawingGL
             }
         }
 
+
         public void FillGfxPath(Drawing.Brush brush, PathRenderVx pathRenderVx)
         {
             switch (brush.BrushKind)
             {
                 case Drawing.BrushKind.Solid:
                     {
-                        var solidBrush = brush as PixelFarm.Drawing.SolidBrush;
+                        var solidBrush = (PixelFarm.Drawing.SolidBrush)brush;
                         FillGfxPath(solidBrush.Color, pathRenderVx);
                     }
                     break;
@@ -1264,304 +1265,71 @@ namespace PixelFarm.DrawingGL
                         //use VBO?
                         //TODO: create mask on another render suface and use shader+mask is more simple
 
-                        if (pathRenderVx._enableVBO)
+
+                        //we use mask technique
+                        //1. generate mask bitmap
+                        SaveContextData(out GLPainterContextData saveData1);
+                        GLRenderSurface renderSx1 = new GLRenderSurface(300, 300);
+                        AttachToRenderSurface(renderSx1);//**
+                        OriginKind = RenderSurfaceOriginKind.LeftTop;
+                        //generate mask bmp (white whole on black bg)
+                        Clear(Color.Black);
+                        FillGfxPath(Color.White, pathRenderVx);
+                        RestoreContextData(saveData1);
+                        //-----------------
+
+                        //2. generate gradient color, (TODO: cache, NOT need to generate this every time)
+
+                        SaveContextData(out GLPainterContextData saveData2);
+                        GLRenderSurface renderSx2 = new GLRenderSurface(300, 300);
+                        AttachToRenderSurface(renderSx2);//**
+                        OriginKind = RenderSurfaceOriginKind.LeftTop;
+
+                        GLBitmap color_src;
+                        switch (brush.BrushKind)
                         {
-
-                            VBOStream tessVBOStream = GetVBOStreamOrBuildIfNotExists(pathRenderVx);
-
-                            GL.ClearStencil(0); //set value for clearing stencil buffer 
-                                                //actual clear here
-                            GL.Clear(ClearBufferMask.StencilBufferBit);
-                            //-------------------
-                            //disable rendering to color buffer
-                            GL.ColorMask(false, false, false, false);
-                            //start using stencil
-                            GL.Enable(EnableCap.StencilTest);
-                            //place a 1 where rendered
-                            GL.StencilFunc(StencilFunction.Always, 1, 1);
-                            //replace where rendered
-                            GL.StencilOp(StencilOp.Replace, StencilOp.Replace, StencilOp.Replace);
-                            //render  to stencill buffer
-
-                            tessVBOStream.Bind();
-
-                            _solidColorFillShader.FillTriangles(
-                                pathRenderVx._tessAreaVboSeg.startAt,
-                                pathRenderVx._tessAreaVboSeg.vertexCount,
-                                Color.Black);
-
-                            //-------------------------------------- 
-                            //render color
-                            //--------------------------------------  
-                            //re-enable color buffer 
-                            GL.ColorMask(true, true, true, true);
-                            //where a 1 was not rendered
-                            GL.StencilFunc(StencilFunction.Equal, 1, 1);
-                            //freeze stencill buffer
-                            GL.StencilOp(StencilOp.Keep, StencilOp.Keep, StencilOp.Keep);
-                            //------------------------------------------
-                            //we already have valid ps from stencil step
-                            //------------------------------------------
-
-                            //-------------------------------------------------------------------------------------
-                            //1.  we draw only alpha chanel of this black color to destination color
-                            //so we use  BlendFuncSeparate  as follow ... 
-                            //-------------------------------------------------------------------------------------
-
-                            GL.ColorMask(false, false, false, true);
-                            //GL.BlendFuncSeparate(
-                            //     BlendingFactorSrc.DstColor, BlendingFactorDest.DstColor, //the same
-                            //     BlendingFactorSrc.One, BlendingFactorDest.Zero);
-                            //use alpha chanel from source***
-                            GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.Zero);
-
-                            tessVBOStream.Unbind();
-                            //at this point alpha component is fill in to destination 
-                            {
-                                switch (brush.BrushKind)
+                            default: throw new NotSupportedException();
+                            case BrushKind.LinearGradient:
                                 {
-                                    case BrushKind.CircularGraident:
-                                        {
-                                            RadialGradientBrush glGrBrush = RadialGradientBrush.Resolve((Drawing.RadialGradientBrush)brush);
-                                            if (glGrBrush._hasSignificateAlphaCompo)
-                                            {
-                                                _radialGradientShader.Render(
+                                    LinearGradientBrush glGrBrush = LinearGradientBrush.Resolve((Drawing.LinearGradientBrush)brush);
+                                    _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
+                                    color_src = renderSx2.GetGLBitmap();
+                                }
+                                break;
+                            case BrushKind.CircularGraident:
+                                {
+                                    RadialGradientBrush glGrBrush = RadialGradientBrush.Resolve((Drawing.RadialGradientBrush)brush);
+                                    _radialGradientShader.Render(
                                                     glGrBrush._v2f,
                                                     glGrBrush._cx,
                                                     _vwHeight - glGrBrush._cy,
                                                     glGrBrush._r,
                                                     glGrBrush._invertedAff,
                                                     glGrBrush._lookupBmp);
-
-                                            }
-                                            else
-                                            {
-
-                                                tessVBOStream.Bind();
-
-                                                _invertAlphaLineSmoothShader.DrawTriangleStrips(
-                                                    pathRenderVx._smoothBorderVboSeg.startAt,
-                                                    pathRenderVx._smoothBorderVboSeg.vertexCount);
-
-
-                                                tessVBOStream.Unbind();
-                                            }
-                                        }
-                                        break;
-                                    default:
-                                        {
-                                            tessVBOStream.Bind();
-
-                                            _invertAlphaLineSmoothShader.DrawTriangleStrips(
-                                                pathRenderVx._smoothBorderVboSeg.startAt,
-                                                pathRenderVx._smoothBorderVboSeg.vertexCount);
-
-                                            tessVBOStream.Unbind();
-                                        }
-                                        break;
+                                    color_src = renderSx2.GetGLBitmap();
                                 }
-                            }
-
-
-                            //-------------------------------------------------------------------------------------
-                            //2. then fill again!, 
-                            //we use alpha information from dest, 
-                            //so we set blend func to ... GL.BlendFunc(BlendingFactorSrc.DstAlpha, BlendingFactorDest.OneMinusDstAlpha)    
-                            GL.ColorMask(true, true, true, true);
-                            GL.BlendFunc(BlendingFactorSrc.DstAlpha, BlendingFactorDest.OneMinusDstAlpha);
-                            {
-                                //draw box*** of gradient color
-                                switch (brush.BrushKind)
+                                break;
+                            case BrushKind.PolygonGradient:
                                 {
-                                    case BrushKind.CircularGraident:
-                                        {
-                                            //GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusDstAlpha);
-                                            //GL.Disable(EnableCap.StencilTest);
-
-                                            RadialGradientBrush glGrBrush = RadialGradientBrush.Resolve((Drawing.RadialGradientBrush)brush);
-                                            _radialGradientShader.Render(
-                                                glGrBrush._v2f,
-                                                glGrBrush._cx,
-                                                _vwHeight - glGrBrush._cy,
-                                                glGrBrush._r,
-                                                glGrBrush._invertedAff,
-                                                glGrBrush._lookupBmp);
-                                        }
-                                        break;
-                                    case Drawing.BrushKind.LinearGradient:
-                                        {
-                                            LinearGradientBrush glGrBrush = LinearGradientBrush.Resolve((Drawing.LinearGradientBrush)brush);
-                                            _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
-                                        }
-                                        break;
-                                    case BrushKind.PolygonGradient:
-                                        {
-
-                                            PolygonGradientBrush glGrBrush = PolygonGradientBrush.Resolve((Drawing.PolygonGradientBrush)brush, _tessTool);
-                                            _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
-                                        }
-                                        break;
-                                    case Drawing.BrushKind.Texture:
-                                        {
-                                            //draw texture image ***
-                                            PixelFarm.Drawing.TextureBrush tbrush = (PixelFarm.Drawing.TextureBrush)brush;
-                                            GLBitmap bmpTexture = PixelFarm.Drawing.Image.GetCacheInnerImage(tbrush.TextureImage) as GLBitmap;
-                                            //TODO: review here 
-                                            //where to start?
-                                            this.DrawImage(bmpTexture, 0, 300); //WHY 300=> fix this
-                                        }
-                                        break;
+                                    PolygonGradientBrush glGrBrush = PolygonGradientBrush.Resolve((Drawing.PolygonGradientBrush)brush, _tessTool);
+                                    _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
+                                    color_src = renderSx2.GetGLBitmap();
                                 }
-                            }
-                            //restore back 
-                            //3. switch to normal blending mode 
-                            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-                            GL.Disable(EnableCap.StencilTest);
+                                break;
+                            case BrushKind.Texture:
+                                {
+                                    //TODO: implement here
+                                    //see mask
+                                    PixelFarm.Drawing.TextureBrush tbrush = (PixelFarm.Drawing.TextureBrush)brush;
+                                    color_src = PixelFarm.Drawing.Image.GetCacheInnerImage(tbrush.TextureImage) as GLBitmap;
+                                }
+                                break;
                         }
-                        else
-                        {
-                            int m = pathRenderVx.FigCount;
-                            for (int b = 0; b < m; ++b)
-                            {
-                                Figure fig = pathRenderVx.GetFig(b);
-                                GL.ClearStencil(0); //set value for clearing stencil buffer 
-                                                    //actual clear here
-                                GL.Clear(ClearBufferMask.StencilBufferBit);
-                                //-------------------
-                                //disable rendering to color buffer
-                                GL.ColorMask(false, false, false, false);
-                                //start using stencil
-                                GL.Enable(EnableCap.StencilTest);
-                                //place a 1 where rendered
-                                GL.StencilFunc(StencilFunction.Always, 1, 1);
-                                //replace where rendered
-                                GL.StencilOp(StencilOp.Replace, StencilOp.Replace, StencilOp.Replace);
-                                //render  to stencill buffer
-                                //-----------------
-                                float[] tessArea = fig.GetAreaTess(_tessTool, _tessWindingRuleType, TessTriangleTechnique.DrawArray);
-                                //-------------------------------------   
-                                if (tessArea != null)
-                                {
-                                    //create a hole,
-                                    //no AA at this step
-                                    _solidColorFillShader.FillTriangles(tessArea, fig.TessAreaVertexCount, PixelFarm.Drawing.Color.Black);
-                                }
-                                //-------------------------------------- 
-                                //render color
-                                //--------------------------------------  
-                                //re-enable color buffer 
-                                GL.ColorMask(true, true, true, true);
-                                //where a 1 was not rendered
-                                GL.StencilFunc(StencilFunction.Equal, 1, 1);
-                                //freeze stencill buffer
-                                GL.StencilOp(StencilOp.Keep, StencilOp.Keep, StencilOp.Keep);
-                                //------------------------------------------
-                                //we already have valid ps from stencil step
-                                //------------------------------------------
 
-                                //-------------------------------------------------------------------------------------
-                                //1.  we draw only alpha chanel of this black color to destination color
-                                //so we use  BlendFuncSeparate  as follow ... 
-                                //-------------------------------------------------------------------------------------
+                        RestoreContextData(saveData2); //restore back
+                        //                         
+                        DrawImageWithMask(renderSx1.GetGLBitmap(), color_src, 0, 0);
 
-                                GL.ColorMask(false, false, false, true);
-                                //GL.BlendFuncSeparate(
-                                //     BlendingFactorSrc.DstColor, BlendingFactorDest.DstColor, //the same
-                                //     BlendingFactorSrc.One, BlendingFactorDest.Zero);
-                                //use alpha chanel from source***
-                                GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.Zero);
-
-
-                                //at this point alpha component is fill in to destination 
-                                {
-                                    switch (brush.BrushKind)
-                                    {
-                                        case BrushKind.CircularGraident:
-                                            {
-                                                RadialGradientBrush glGrBrush = RadialGradientBrush.Resolve((Drawing.RadialGradientBrush)brush);
-                                                if (glGrBrush._hasSignificateAlphaCompo)
-                                                {
-                                                    _radialGradientShader.Render(
-                                                        glGrBrush._v2f,
-                                                        glGrBrush._cx,
-                                                        _vwHeight - glGrBrush._cy,
-                                                        glGrBrush._r,
-                                                        glGrBrush._invertedAff,
-                                                        glGrBrush._lookupBmp);
-
-                                                }
-                                                else
-                                                {
-                                                    float[] smoothBorder = fig.GetSmoothBorders(_smoothBorderBuilder);
-                                                    _invertAlphaLineSmoothShader.DrawTriangleStrips(smoothBorder, fig.BorderTriangleStripCount);
-                                                }
-                                            }
-                                            break;
-                                        default:
-                                            {
-                                                float[] smoothBorder = fig.GetSmoothBorders(_smoothBorderBuilder);
-                                                _invertAlphaLineSmoothShader.DrawTriangleStrips(smoothBorder, fig.BorderTriangleStripCount);
-                                            }
-                                            break;
-                                    }
-                                }
-                                //-------------------------------------------------------------------------------------
-                                //2. then fill again!, 
-                                //we use alpha information from dest, 
-                                //so we set blend func to ... GL.BlendFunc(BlendingFactorSrc.DstAlpha, BlendingFactorDest.OneMinusDstAlpha)    
-                                GL.ColorMask(true, true, true, true);
-                                GL.BlendFunc(BlendingFactorSrc.DstAlpha, BlendingFactorDest.OneMinusDstAlpha);
-                                {
-                                    //draw box*** of gradient color
-                                    switch (brush.BrushKind)
-                                    {
-                                        case BrushKind.CircularGraident:
-                                            {
-                                                //GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusDstAlpha);
-                                                //GL.Disable(EnableCap.StencilTest);
-
-                                                RadialGradientBrush glGrBrush = RadialGradientBrush.Resolve((Drawing.RadialGradientBrush)brush);
-                                                _radialGradientShader.Render(
-                                                    glGrBrush._v2f,
-                                                    glGrBrush._cx,
-                                                    _vwHeight - glGrBrush._cy,
-                                                    glGrBrush._r,
-                                                    glGrBrush._invertedAff,
-                                                    glGrBrush._lookupBmp);
-                                            }
-                                            break;
-                                        case Drawing.BrushKind.LinearGradient:
-                                            {
-                                                LinearGradientBrush glGrBrush = LinearGradientBrush.Resolve((Drawing.LinearGradientBrush)brush);
-                                                _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
-                                            }
-                                            break;
-                                        case BrushKind.PolygonGradient:
-                                            {
-
-                                                PolygonGradientBrush glGrBrush = PolygonGradientBrush.Resolve((Drawing.PolygonGradientBrush)brush, _tessTool);
-                                                _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
-                                            }
-                                            break;
-                                        case Drawing.BrushKind.Texture:
-                                            {
-                                                //draw texture image ***
-                                                PixelFarm.Drawing.TextureBrush tbrush = (PixelFarm.Drawing.TextureBrush)brush;
-                                                GLBitmap bmpTexture = PixelFarm.Drawing.Image.GetCacheInnerImage(tbrush.TextureImage) as GLBitmap;
-                                                //TODO: review here 
-                                                //where to start?
-                                                this.DrawImage(bmpTexture, 0, 300); //WHY 300=> fix this
-                                            }
-                                            break;
-                                    }
-                                }
-                                //restore back 
-                                //3. switch to normal blending mode 
-                                GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-                                GL.Disable(EnableCap.StencilTest);
-                            }
-
-                        }
 
                     }
                     break;
@@ -1869,7 +1637,7 @@ namespace PixelFarm.DrawingGL
             float targetTop,
             float scale)
         {
-           
+
 #if DEBUG
             if (_orgBmpW == 0 || _orgBmpH == 0)
             {
