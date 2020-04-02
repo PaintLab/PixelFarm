@@ -106,7 +106,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
             int srcImgIndex = x + (width * y);
             int colorIndex = 0;
             int round = 0;
-            byte color_a = color.alpha;
+            byte color_a = color.A;
             unsafe
             {
                 byte* destImgBuffer = (byte*)memPtr.Ptr;

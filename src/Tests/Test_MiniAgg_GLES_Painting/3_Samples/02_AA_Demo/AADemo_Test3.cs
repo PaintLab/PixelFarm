@@ -80,7 +80,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
                         int a = (coverageValue * color.A) >> 8;
                         _square.Draw(rasToBmp,
                                ras, _sl, destImage,
-                               Color.FromArgb(a, Color.FromArgb(color.red, color.green, color.blue)),
+                               Color.FromArgb(a, Color.FromArgb(color.R, color.G, color.B)),
                                x, y);
                         prev_cover = 255;//full
                     }

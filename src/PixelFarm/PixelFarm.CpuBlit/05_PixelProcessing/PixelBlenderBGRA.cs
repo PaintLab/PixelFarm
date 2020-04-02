@@ -316,7 +316,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         static unsafe void BlendPixel32Internal(int* dstPtr, Color srcColor, int coverageValue)
         {
             //calculate new alpha
-            int src_a = (byte)((srcColor.alpha * coverageValue + 255) >> 8);
+            int src_a = (byte)((srcColor.A * coverageValue + 255) >> 8);
             //after apply the alpha
             unchecked
             {

@@ -64,7 +64,6 @@ using System;
 namespace PixelFarm.Drawing
 {
 
-
     [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
     public struct Color
     {
@@ -145,13 +144,7 @@ namespace PixelFarm.Drawing
 
         public uint ToABGR() => (uint)((_a << 24) | (_b << 16) | (_g << 8) | _r);
 
-        byte Red0To255 => _r;
-
-        byte Green0To255 => _g;
-
-        byte Blue0To255 => _b;
-
-        byte Alpha0To255 => _a;
+ 
 
         public Color CreateGradient(Color another, float colorDistanceRatio)
         {
@@ -165,10 +158,10 @@ namespace PixelFarm.Drawing
             //colorDistance ratio [0-1]
             //new_color = old_color + diff
 
-            byte r = (byte)(Red0To255 + (another.Red0To255 - this.Red0To255) * colorDistanceRatio);
-            byte g = (byte)(Green0To255 + (another.Green0To255 - this.Green0To255) * colorDistanceRatio);
-            byte b = (byte)(Blue0To255 + (another.Blue0To255 - this.Blue0To255) * colorDistanceRatio);
-            byte a = (byte)(Alpha0To255 + (another.Alpha0To255 - this.Alpha0To255) * colorDistanceRatio);
+            byte r = (byte)(R + (another.R - this.R) * colorDistanceRatio);
+            byte g = (byte)(G + (another.G - this.G) * colorDistanceRatio);
+            byte b = (byte)(B + (another.B - this.B) * colorDistanceRatio);
+            byte a = (byte)(A + (another.A - this.A) * colorDistanceRatio);
             return new Color(a, r, g, b);
         }
 
