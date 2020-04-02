@@ -95,6 +95,54 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
         //--------------------------------------------------------------------
         public RGBAGouraudSpanGen() { }
 
+        struct LineInterpolatorDDA255
+        {
+            //my custom extension of LineInterpolatorDDA
+            int _y;
+            int _dy;
+            readonly int _inc;
+            readonly int _fractionShift;
+
+            public LineInterpolatorDDA255(int y1, int y2, int count, int fractionShift)
+            {
+                _fractionShift = fractionShift;
+                _y = (y1);
+                _inc = (((y2 - y1) << _fractionShift) / (int)(count));
+                _dy = (0);
+            }
+
+            public void Next() => _dy += _inc;//public void operator ++ ()
+
+            public void Prev() => _dy -= _inc;//public void operator -- ()
+
+            public void NextN() => _dy += _inc * SUBPIXEL_SCALE;//public void operator += (int n)
+
+            public void Prev(int n) => _dy -= _inc * n;//public void operator -= (int n)
+
+            //--------------------------------------------------------------------
+            public int y() => _y + (_dy >> (_fractionShift));  // - m_YShift)); }
+                                                               //
+            public int dy() => _dy;
+            //--------------------------------------------------------------------
+            //special
+            public int y_clamp0_255()
+            {
+                int v = _y + (_dy >> (_fractionShift));
+
+                if (v < 0)
+                {
+                    return 0;
+                }
+                else if (v > 255)
+                {
+                    return 255;
+                }
+                else
+                {
+                    return v;
+                }
+            }
+        }
 
 
         public void SetColorAndCoords(
@@ -152,10 +200,18 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             //-------------------------
             int nlen = Math.Abs(pc2._x - pc1._x);
             if (nlen <= 0) nlen = 1;
-            var line_r = new LineInterpolatorDDA(pc1._r, pc2._r, nlen, 14);
-            var line_g = new LineInterpolatorDDA(pc1._g, pc2._g, nlen, 14);
-            var line_b = new LineInterpolatorDDA(pc1._b, pc2._b, nlen, 14);
-            var line_a = new LineInterpolatorDDA(pc1._a, pc2._a, nlen, 14);
+
+#if DEBUG
+            if (SUBPIXEL_SHIFT != 4)
+            {
+                throw new NotSupportedException();
+                //use LineInterpolatorDDA
+            }
+#endif
+            var line_r = new LineInterpolatorDDA255(pc1._r, pc2._r, nlen, 14);
+            var line_g = new LineInterpolatorDDA255(pc1._g, pc2._g, nlen, 14);
+            var line_b = new LineInterpolatorDDA255(pc1._b, pc2._b, nlen, 14);
+            var line_a = new LineInterpolatorDDA255(pc1._a, pc2._a, nlen, 14);
             // Calculate the starting point of the gradient with subpixel 
             // accuracy and correct (roll back) the interpolators.
             // This operation will also clip the beginning of the span
@@ -167,7 +223,7 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             line_b.Prev(start);
             line_a.Prev(start);
             nlen += start;
-            int vr, vg, vb, va;
+            //int vr, vg, vb, va;
 
             // Beginning part of the span. Since we rolled back the 
             // interpolators, the color values may have overflowed.
@@ -177,29 +233,33 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             //-------------------------
             while (len != 0 && start > 0)
             {
-                vr = line_r.y();
-                vg = line_g.y();
-                vb = line_b.y();
-                va = line_a.y();
+                //vr = line_r.y();
+                //vg = line_g.y();
+                //vb = line_b.y();
+                //va = line_a.y();
 
-                //clamp between 0 and 255--------
-                if (vr < 0) { vr = 0; } else if (vr > 255) { vr = 255; }
-                if (vg < 0) { vg = 0; } else if (vg > 255) { vg = 255; }
-                if (vb < 0) { vb = 0; } else if (vb > 255) { vb = 255; }
-                if (va < 0) { va = 0; } else if (va > 255) { va = 255; }
-                //-------------------------------
+                ////clamp between 0 and 255--------
+                //if (vr < 0) { vr = 0; } else if (vr > 255) { vr = 255; }
+                //if (vg < 0) { vg = 0; } else if (vg > 255) { vg = 255; }
+                //if (vb < 0) { vb = 0; } else if (vb > 255) { vb = 255; }
+                //if (va < 0) { va = 0; } else if (va > 255) { va = 255; }
+                ////-------------------------------
 
                 //outputColors[startIndex].red = (byte)vr;
                 //outputColors[startIndex].green = (byte)vg;
                 //outputColors[startIndex].blue = (byte)vb;
                 //outputColors[startIndex].alpha = (byte)va;
 
-                outputColors[startIndex] = Color.FromArgb((byte)va, (byte)vr, (byte)vg, (byte)vb);
+                outputColors[startIndex] = Color.FromArgb(
+                    line_a.y_clamp0_255(),
+                    line_r.y_clamp0_255(),
+                    line_g.y_clamp0_255(),
+                    line_b.y_clamp0_255());
 
-                line_r.Next(SUBPIXEL_SCALE);
-                line_g.Next(SUBPIXEL_SCALE);
-                line_b.Next(SUBPIXEL_SCALE);
-                line_a.Next(SUBPIXEL_SCALE);
+                line_r.NextN();
+                line_g.NextN();
+                line_b.NextN();
+                line_a.NextN();
                 nlen -= SUBPIXEL_SCALE;
                 start -= SUBPIXEL_SCALE;
                 ++startIndex;
@@ -224,10 +284,10 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
                     (byte)line_g.y(),
                     (byte)line_b.y()
                     );
-                line_r.Next(SUBPIXEL_SCALE);
-                line_g.Next(SUBPIXEL_SCALE);
-                line_b.Next(SUBPIXEL_SCALE);
-                line_a.Next(SUBPIXEL_SCALE);
+                line_r.NextN();
+                line_g.NextN();
+                line_b.NextN();
+                line_a.NextN();
                 nlen -= SUBPIXEL_SCALE;
                 ++startIndex;
                 --len;
@@ -238,30 +298,30 @@ namespace PixelFarm.CpuBlit.FragmentProcessing
             //-------------------------
             while (len != 0)
             {
-                vr = line_r.y();
-                vg = line_g.y();
-                vb = line_b.y();
-                va = line_a.y();
-                //clamp between 0 and 255
-                if (vr < 0) { vr = 0; } else if (vr > 255) { vr = 255; }
-                if (vg < 0) { vg = 0; } else if (vg > 255) { vg = 255; }
-                if (vb < 0) { vb = 0; } else if (vb > 255) { vb = 255; }
-                if (va < 0) { va = 0; } else if (va > 255) { va = 255; }
+                //vr = line_r.y();
+                //vg = line_g.y();
+                //vb = line_b.y();
+                //va = line_a.y();
+                ////clamp between 0 and 255
+                //if (vr < 0) { vr = 0; } else if (vr > 255) { vr = 255; }
+                //if (vg < 0) { vg = 0; } else if (vg > 255) { vg = 255; }
+                //if (vb < 0) { vb = 0; } else if (vb > 255) { vb = 255; }
+                //if (va < 0) { va = 0; } else if (va > 255) { va = 255; }
 
                 //outputColors[startIndex].red = ((byte)vr);
                 //outputColors[startIndex].green = ((byte)vg);
                 //outputColors[startIndex].blue = ((byte)vb);
                 //outputColors[startIndex].alpha = ((byte)va);
                 outputColors[startIndex] = Color.FromArgb(
-                    ((byte)va), 
-                    ((byte)vr), 
-                    ((byte)vg), 
-                    ((byte)vb));
+                       line_a.y_clamp0_255(),
+                       line_r.y_clamp0_255(),
+                       line_g.y_clamp0_255(),
+                       line_b.y_clamp0_255());
 
-                line_r.Next(SUBPIXEL_SCALE);
-                line_g.Next(SUBPIXEL_SCALE);
-                line_b.Next(SUBPIXEL_SCALE);
-                line_a.Next(SUBPIXEL_SCALE);
+                line_r.NextN();
+                line_g.NextN();
+                line_b.NextN();
+                line_a.NextN();
                 ++startIndex;
                 --len;
             }
