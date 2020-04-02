@@ -8,7 +8,7 @@ namespace LayoutFarm
 	//and mouse buttons behaviors
 
 
-	[DemoNote("1.2.1 BoxEvents")]
+	[DemoNote("5.1 BoxEvents")]
 	class Demo_BoxEvents : App
 	{
 		protected override void OnStart(AppHost host)
@@ -46,7 +46,7 @@ namespace LayoutFarm
 		}
 	}
 
-	[DemoNote("1.2.2 BoxEvents")]
+	[DemoNote("5.2 BoxEvents")]
 	class Demo_BoxEvents2 : App
 	{
 
@@ -103,7 +103,7 @@ namespace LayoutFarm
 	}
 
 
-	[DemoNote("1.2.3 BoxEvents")]
+	[DemoNote("5.3 BoxEvents")]
 	class Demo_BoxEvents3 : App
 	{
 		readonly Color _normalState = Color.FromArgb(100, Color.Blue);
