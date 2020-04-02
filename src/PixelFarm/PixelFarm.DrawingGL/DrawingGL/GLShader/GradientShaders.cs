@@ -196,6 +196,7 @@ namespace PixelFarm.DrawingGL
             {
                 float[] mat3x3 = invertedAffineTx.Get3x3MatrixElements();
                 u_invertedTxMatrix.SetData(mat3x3);
+                _isIdenMatrixLoaded = false;
             }
             else
             {
