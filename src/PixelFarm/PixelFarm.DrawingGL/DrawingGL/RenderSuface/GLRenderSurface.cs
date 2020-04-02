@@ -1270,65 +1270,68 @@ namespace PixelFarm.DrawingGL
                         GLRenderSurface renderSx1 = new GLRenderSurface(300, 300);
                         GLRenderSurface renderSx2 = new GLRenderSurface(300, 300);
 
-                        SaveContextData(out GLPainterContextData saveData1);                      
-                        AttachToRenderSurface(renderSx1);//**
-                        OriginKind = RenderSurfaceOriginKind.LeftTop;
+                        using (TempAttachToNewSurface(renderSx1))
+                        {
+                            Clear(Color.Black);
+                            FillGfxPath(Color.White, pathRenderVx);
+                        }
+                        //SaveContextData(out GLPainterContextData saveData1);
+                        //AttachToRenderSurface(renderSx1);//**
+                        //OriginKind = RenderSurfaceOriginKind.LeftTop;
                         //generate mask bmp (white whole on black bg)
-                        Clear(Color.Black);
-                        FillGfxPath(Color.White, pathRenderVx);
-                        RestoreContextData(saveData1);
+                        //Clear(Color.Black);
+                        //FillGfxPath(Color.White, pathRenderVx);
+                        //RestoreContextData(saveData1);
                         //-----------------
 
                         //2. generate gradient color, (TODO: cache, NOT need to generate this every time)
 
-                       
-                        SaveContextData(out GLPainterContextData saveData2);
-                        
-                        AttachToRenderSurface(renderSx2);//**
-                        OriginKind = RenderSurfaceOriginKind.LeftTop;
 
                         GLBitmap color_src;
-                        switch (brush.BrushKind)
+                        using (TempAttachToNewSurface(renderSx2))
                         {
-                            default: throw new NotSupportedException();
-                            case BrushKind.LinearGradient:
-                                {
-                                    LinearGradientBrush glGrBrush = LinearGradientBrush.Resolve((Drawing.LinearGradientBrush)brush);
-                                    _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
-                                    color_src = renderSx2.GetGLBitmap();
-                                }
-                                break;
-                            case BrushKind.CircularGraident:
-                                {
-                                    RadialGradientBrush glGrBrush = RadialGradientBrush.Resolve((Drawing.RadialGradientBrush)brush);
-                                    _radialGradientShader.Render(
-                                                    glGrBrush._v2f,
-                                                    glGrBrush._cx,
-                                                    _vwHeight - glGrBrush._cy,
-                                                    glGrBrush._r,
-                                                    glGrBrush._invertedAff,
-                                                    glGrBrush._lookupBmp);
-                                    color_src = renderSx2.GetGLBitmap();
-                                }
-                                break;
-                            case BrushKind.PolygonGradient:
-                                {
-                                    PolygonGradientBrush glGrBrush = PolygonGradientBrush.Resolve((Drawing.PolygonGradientBrush)brush, _tessTool);
-                                    _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
-                                    color_src = renderSx2.GetGLBitmap();
-                                }
-                                break;
-                            case BrushKind.Texture:
-                                {
-                                    //TODO: implement here
-                                    //see mask
-                                    PixelFarm.Drawing.TextureBrush tbrush = (PixelFarm.Drawing.TextureBrush)brush;
-                                    color_src = PixelFarm.Drawing.Image.GetCacheInnerImage(tbrush.TextureImage) as GLBitmap;
-                                }
-                                break;
+                            switch (brush.BrushKind)
+                            {
+                                default: throw new NotSupportedException();
+                                case BrushKind.LinearGradient:
+                                    {
+                                        LinearGradientBrush glGrBrush = LinearGradientBrush.Resolve((Drawing.LinearGradientBrush)brush);
+                                        _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
+                                        color_src = renderSx2.GetGLBitmap();
+                                    }
+                                    break;
+                                case BrushKind.CircularGraident:
+                                    {
+                                        RadialGradientBrush glGrBrush = RadialGradientBrush.Resolve((Drawing.RadialGradientBrush)brush);
+                                        _radialGradientShader.Render(
+                                                        glGrBrush._v2f,
+                                                        glGrBrush._cx,
+                                                        _vwHeight - glGrBrush._cy,
+                                                        glGrBrush._r,
+                                                        glGrBrush._invertedAff,
+                                                        glGrBrush._lookupBmp);
+                                        color_src = renderSx2.GetGLBitmap();
+                                    }
+                                    break;
+                                case BrushKind.PolygonGradient:
+                                    {
+                                        PolygonGradientBrush glGrBrush = PolygonGradientBrush.Resolve((Drawing.PolygonGradientBrush)brush, _tessTool);
+                                        _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
+                                        color_src = renderSx2.GetGLBitmap();
+                                    }
+                                    break;
+                                case BrushKind.Texture:
+                                    {
+                                        //TODO: implement here
+                                        //see mask
+                                        PixelFarm.Drawing.TextureBrush tbrush = (PixelFarm.Drawing.TextureBrush)brush;
+                                        color_src = PixelFarm.Drawing.Image.GetCacheInnerImage(tbrush.TextureImage) as GLBitmap;
+                                    }
+                                    break;
+                            }
                         }
 
-                        RestoreContextData(saveData2); //restore back
+                       
                         //                         
                         DrawImageWithMask(renderSx1.GetGLBitmap(), color_src, 0, 0);
 
@@ -1569,6 +1572,16 @@ namespace PixelFarm.DrawingGL
             _canvasOriginY = context.canvas_origin_Y;
             Rectangle clipRect = context.clipRect;
             SetClipRect(clipRect.Left, clipRect.Top, clipRect.Width, clipRect.Height);
+        }
+
+        public GLContextAutoSwitchBack TempAttachToNewSurface(GLRenderSurface newRenderSurface)
+        {
+            GLContextAutoSwitchBack swBack = new GLContextAutoSwitchBack(this);
+
+            AttachToRenderSurface(newRenderSurface);
+            OriginKind = RenderSurfaceOriginKind.LeftTop;
+
+            return swBack;
         }
     }
 
