@@ -71,8 +71,8 @@ namespace PixelFarm.DrawingGL
 
             }
 
-           
-            var txMatrix = PixelFarm.CpuBlit.VertexProcessing.AffineMat.Iden; 
+
+            var txMatrix = PixelFarm.CpuBlit.VertexProcessing.AffineMat.Iden;
             txMatrix.Rotate(angleRad, x_1, y_1); //rotate around x_1,y_1 
 
             //----------------------------------
@@ -125,24 +125,26 @@ namespace PixelFarm.DrawingGL
           ColorStop stop1, ColorStop stop2)
         {
             //TODO: review here again
+            //should not fix 600,800,1800 etc
 
-            Color c1 = stop1.Color;
-            Color c2 = stop2.Color;
+            uint c1_color = (uint)stop1.Color.ToARGB();
+            uint c2_color = (uint)stop2.Color.ToARGB();
 
             //1. gradient distance  
-
             if (isFirstPane)
             {
                 //left solid rect pane 
                 AddRect(vrx,
-                    c1.ToABGR(), c1.ToABGR(),
+                    c1_color,
+                    c1_color,
                     -600, -800,
                     x1 + 600, 1800);
             }
 
             //color gradient pane 
             AddRect(vrx,
-                c1.ToABGR(), c2.ToABGR(),
+                c1_color,
+                c2_color,
                 x1, -800,
                 distance, 1800);
 
@@ -152,7 +154,8 @@ namespace PixelFarm.DrawingGL
                 if (1200 - (x1 + distance) > 0)
                 {
                     AddRect(vrx,
-                        c2.ToABGR(), c2.ToABGR(),
+                        c2_color,
+                        c2_color,
                         (x1 + distance), -800,
                         1200 - (x1 + distance), 1800);
                 }
