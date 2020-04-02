@@ -40,7 +40,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         public override void Draw(Painter p)
         {
             p.Clear(Color.White);
-            if (_backgroundColor.Alpha0To255 > 0)
+            if (_backgroundColor.A > 0)
             {
                 p.FillColor = _backgroundColor;
                 p.FillRect(0, 0, this.Width, Height);

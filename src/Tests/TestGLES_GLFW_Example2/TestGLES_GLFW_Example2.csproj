@@ -64,11 +64,10 @@
       <Link>glfw3.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\TestWinForm_MiniAgg_GLES\Samples\lion.svg">
-      <Link>lion.svg</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Compile Include="GlfwPlatform.cs" />
+    <Content Include="..\Test_MiniAgg_GLES_Painting\Samples\lion.svg">
+      <Link>lion.svg</Link>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\Builds\Net20\MiniOpenTK_Net20\MiniOpenTK_Net20.csproj">

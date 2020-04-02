@@ -84,9 +84,8 @@
       <Link>glfw3.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\TestWinForm_MiniAgg_GLES\Samples\lion.svg">
+    <Content Include="..\Test_MiniAgg_GLES_Painting\Samples\lion.svg">
       <Link>lion.svg</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
