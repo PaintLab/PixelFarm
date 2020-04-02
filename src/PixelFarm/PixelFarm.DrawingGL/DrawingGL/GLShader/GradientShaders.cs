@@ -76,7 +76,7 @@ namespace PixelFarm.DrawingGL
 
         ShaderUniformVar3 u_center; //center x,y and radius
         ShaderUniformVar1 s_texture; //lookup 
-
+        bool _isIdenMatrixLoaded;
 
         public RadialGradientFillShader(ShaderSharedResource shareRes)
             : base(shareRes)
@@ -182,6 +182,8 @@ namespace PixelFarm.DrawingGL
             s_texture = _shaderProgram.GetUniform1("s_texture");
             u_invertedTxMatrix = _shaderProgram.GetUniformMat3("u_invertedTxMatrix");
         }
+
+
         public void Render(float[] v2fArray, float cx, float cy, float r, PixelFarm.CpuBlit.VertexProcessing.Affine invertedAffineTx, GLBitmap lookupBmp)
         {
             SetCurrent();
@@ -199,11 +201,16 @@ namespace PixelFarm.DrawingGL
             else
             {
                 //identity mat
-                u_invertedTxMatrix.SetData(mat3x3Identity);
+                if (!_isIdenMatrixLoaded)
+                {
+                    u_invertedTxMatrix.SetData(s_mat3x3Identity);
+                    _isIdenMatrixLoaded = true;
+                }
             }
             GL.DrawArrays(BeginMode.Triangles, 0, v2fArray.Length / 2);
         }
-        static readonly float[] mat3x3Identity = new float[]
+
+        static readonly float[] s_mat3x3Identity = new float[]
         {
             1,0,0,
             0,1,0,

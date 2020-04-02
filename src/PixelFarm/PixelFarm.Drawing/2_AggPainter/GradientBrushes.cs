@@ -231,11 +231,11 @@ namespace PixelFarm.CpuBlit
             _orgList = new LinearGradientPair[pairCount];
             _pairList = new LinearGradientPair[_orgList.Length];
 
-            ColorStop c0 = ColorStop.Empty;
+
             ColorStop c1 = ColorStop.Empty;
             for (int i = 0; i < pairCount; ++i)
             {
-                c0 = colorStops[i];
+                ColorStop c0 = colorStops[i];
                 c1 = colorStops[i + 1];
 
                 var pairN = new LinearGradientPair(
@@ -341,7 +341,7 @@ namespace PixelFarm.CpuBlit
             outputColors[len - 1] = Color.Transparent;
         }
     }
-  
+
     class PolygonGradientBrush
     {
 
