@@ -31,10 +31,12 @@ namespace LayoutFarm.RenderBoxes
             _uniqueName = uniqueName;
             _rootgfx = rootgfx;
             _tickHandler = tickHandler;
+            IntervalMs = internvalMs;
         }
 
         public TaskIntervalPlan PlanName { get; private set; }
         public bool Enable { get; set; }
+        public int IntervalMs { get; set; }
         public void RemoveSelf()
         {
             _rootgfx?.RemoveIntervalTask(_uniqueName);

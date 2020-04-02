@@ -43,7 +43,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
 
             p.Clear(Drawing.Color.Yellow);
-            p.UseSubPixelLcdEffect = false;
+            p.UseLcdEffectSubPixelRendering = false;
 
 
             //
@@ -155,7 +155,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             }
 
             p.Clear(Drawing.Color.White);
-            p.UseSubPixelLcdEffect = false;
+            p.UseLcdEffectSubPixelRendering = false;
 
             //---red reference line--
             p.StrokeColor = Color.Black;

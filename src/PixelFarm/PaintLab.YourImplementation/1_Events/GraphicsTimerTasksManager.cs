@@ -7,17 +7,17 @@ namespace LayoutFarm.UI
 {
     class GraphicsTimerTaskManager
     {
-        Dictionary<object, GraphicsTimerTask> _registeredTasks = new Dictionary<object, GraphicsTimerTask>();
-        List<GraphicsTimerTask> _fastIntervalTaskList = new List<GraphicsTimerTask>();
-        List<GraphicsTimerTask> _caretIntervalTaskList = new List<GraphicsTimerTask>();
-        Stack<MyIntervalTaskEventArgs> _taskEventPools = new Stack<MyIntervalTaskEventArgs>();
-        RootGraphic _rootgfx;
+        readonly Dictionary<object, GraphicsTimerTask> _registeredTasks = new Dictionary<object, GraphicsTimerTask>();
+        readonly List<GraphicsTimerTask> _fastIntervalTaskList = new List<GraphicsTimerTask>();
+        readonly List<GraphicsTimerTask> _caretIntervalTaskList = new List<GraphicsTimerTask>();
+        readonly Stack<MyIntervalTaskEventArgs> _taskEventPools = new Stack<MyIntervalTaskEventArgs>();
+        readonly RootGraphic _rootgfx;
 
         int _fastPlanInterval = 20;//ms 
         int _caretBlinkInterval = 400;//ms 
         int _tickAccum = 0;
         bool _enableCaretBlink = true;
-        UITimerTask _uiTimerTask;
+        readonly UITimerTask _uiTimerTask;
 
         public GraphicsTimerTaskManager(RootGraphic rootgfx)
         {
@@ -53,8 +53,7 @@ namespace LayoutFarm.UI
             int intervalMs,
             EventHandler<GraphicsTimerTaskEventArgs> tickhandler)
         {
-            GraphicsTimerTask existingTask;
-            if (!_registeredTasks.TryGetValue(uniqueName, out existingTask))
+            if (!_registeredTasks.TryGetValue(uniqueName, out GraphicsTimerTask existingTask))
             {
                 existingTask = new GraphicsTimerTask(_rootgfx, planName, uniqueName, intervalMs, tickhandler);
                 _registeredTasks.Add(uniqueName, existingTask);
@@ -76,8 +75,7 @@ namespace LayoutFarm.UI
         }
         public void UnsubscribeTimerTask(object uniqueName)
         {
-            GraphicsTimerTask found;
-            if (_registeredTasks.TryGetValue(uniqueName, out found))
+            if (_registeredTasks.TryGetValue(uniqueName, out GraphicsTimerTask found))
             {
                 _registeredTasks.Remove(uniqueName);
                 switch (found.PlanName)

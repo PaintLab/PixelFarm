@@ -268,7 +268,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
             //---------------------------------------------
             p.StrokeColor = PixelFarm.Drawing.Color.Black;
             p.StrokeWidth = 1.0f;
-            p.UseSubPixelLcdEffect = this.EnableSubPix;
+            p.UseLcdEffectSubPixelRendering = this.EnableSubPix;
             p.DrawLine(0, 1, 15, 20);
         }
         static double DegToRad(double degree)
@@ -284,7 +284,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
         {
             //version 4: 
             p.Clear(PixelFarm.Drawing.Color.White);
-            p.UseSubPixelLcdEffect = this.EnableSubPix;
+            p.UseLcdEffectSubPixelRendering = this.EnableSubPix;
             //--------------------------
             p.StrokeColor = PixelFarm.Drawing.Color.Black;
             p.StrokeWidth = 1.0f;
@@ -308,7 +308,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
         {
             //version 4: 
             p.Clear(PixelFarm.Drawing.Color.White);
-            p.UseSubPixelLcdEffect = this.EnableSubPix;
+            p.UseLcdEffectSubPixelRendering = this.EnableSubPix;
             //--------------------------
             p.StrokeColor = PixelFarm.Drawing.Color.Black;
             p.StrokeWidth = 2.0f;
@@ -335,7 +335,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
         {
             //version 4: 
             p.Clear(PixelFarm.Drawing.Color.White);
-            p.UseSubPixelLcdEffect = this.EnableSubPix;
+            p.UseLcdEffectSubPixelRendering = this.EnableSubPix;
             //--------------------------
             p.StrokeColor = PixelFarm.Drawing.Color.Black;
             p.StrokeWidth = 2.0f;

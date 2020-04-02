@@ -3,12 +3,8 @@ using System;
 using LayoutFarm.UI;
 using LayoutFarm.UI.ForImplementator;
 
-
-
 namespace LayoutFarm
 {
-
-
     class TopWindowEventRoot : ITopWindowEventRoot
     {
         readonly UIMouseDownEventArgs _mouseDownEventArgs;
@@ -238,7 +234,6 @@ namespace LayoutFarm
                         {
                             _draggingElement.ListenMouseMove(_mouseMoveEventArgs);
                         }
-
                     }
                 }
             }

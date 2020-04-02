@@ -330,17 +330,17 @@ namespace PixelFarm.DrawingGL
         {
             _pcx.DrawRenderVx(_strokeColor, renderVx);
         }
-        public override void DrawLine(double x1, double y1, double x2, double y2)
+        public override void DrawLine(double x0, double y0, double x1, double y1)
         {
             _pcx.StrokeColor = _strokeColor;
             if (_lineDashGen == null)
             {
-                _pcx.DrawLine((float)x1, (float)y1, (float)x2, (float)y2);
+                _pcx.DrawLine((float)x0, (float)y0, (float)x1, (float)y1);
             }
             else
             {
                 //TODO: line dash pattern cache
-                _pcx.DrawLine((float)x1, (float)y1, (float)x2, (float)y2);
+                _pcx.DrawLine((float)x0, (float)y0, (float)x1, (float)y1);
             }
         }
 

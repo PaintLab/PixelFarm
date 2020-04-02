@@ -64,8 +64,8 @@ namespace LayoutFarm
     public abstract partial class RootGraphic
     {
         public delegate void PaintToOutputWindowDelegate();
-        protected PaintToOutputWindowDelegate _paintToOutputWindowHandler;
-        CanvasInvalidateDelegate _canvasInvalidateDelegate;
+        protected PaintToOutputWindowDelegate _paintToOutputWindowHandler; 
+        Action<Rectangle> _canvasInvalidateDelegate;
         Rectangle _accumulateInvalidRect;
         bool _hasAccumRect;
         bool _hasRenderTreeInvalidateAccumRect;
@@ -156,7 +156,7 @@ namespace LayoutFarm
             _hasAccumRect = false;
             _hasRenderTreeInvalidateAccumRect = false;
         }
-        public void SetPaintDelegates(CanvasInvalidateDelegate canvasInvalidateDelegate, PaintToOutputWindowDelegate paintToOutputHandler)
+        public void SetPaintDelegates(Action<Rectangle> canvasInvalidateDelegate, PaintToOutputWindowDelegate paintToOutputHandler)
         {
             _canvasInvalidateDelegate = canvasInvalidateDelegate;
             _paintToOutputWindowHandler = paintToOutputHandler;
