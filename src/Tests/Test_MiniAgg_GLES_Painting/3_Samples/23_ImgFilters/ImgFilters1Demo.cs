@@ -111,9 +111,8 @@ namespace PixelFarm.CpuBlit.ImgFilterDemo
                     break;
             }
 
-            VertexProcessing.AffineMat mat = VertexProcessing.AffineMat.Iden;
-            mat.RotateDeg(_rotationDeg, _imgW / 2.0, _imgH / 2.0);
-
+            VertexProcessing.AffineMat mat = VertexProcessing.AffineMat.Iden();
+            mat.RotateDeg(_rotationDeg, _imgW / 2.0, _imgH / 2.0); 
             p.DrawImage(_orgImg, mat);
 
             if (_thumbnailScaleDown > 0 && _thumbnailScaleDown < 1)
