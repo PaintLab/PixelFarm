@@ -7,6 +7,9 @@ namespace PixelFarm.DrawingGL
 {
     class LinearGradientBrush
     {
+        /// <summary>
+        /// rect area coords,
+        /// </summary>
         internal float[] _v2f;
         internal float[] _colors;
         public LinearGradientBrush(float[] v2f, float[] colors)
@@ -70,11 +73,9 @@ namespace PixelFarm.DrawingGL
 
             }
 
-
             var txMatrix = PixelFarm.CpuBlit.VertexProcessing.AffineMat.Iden;
             txMatrix.Rotate(angleRad, x_1, y_1); //rotate around x_1,y_1 
 
-            //----------------------------------
             int j = s_vertices.Count;
 
             for (int m = 0; m < j; ++m)
@@ -82,8 +83,9 @@ namespace PixelFarm.DrawingGL
                 VertexC4V3f v = s_vertices[m];
                 double v_x = v.x;
                 double v_y = v.y;
+
                 txMatrix.Transform(ref v_x, ref v_y);
-                //vrx[i] = new VertexC4V3f(v.color, (float)v_x, (float)v_y);
+
                 s_v2fList.Add((float)v_x);
                 s_v2fList.Add((float)v_y);
 
@@ -160,13 +162,17 @@ namespace PixelFarm.DrawingGL
                 }
             }
         }
-    }
-
-
+    } 
+     
     class RadialGradientBrush : IDisposable
     {
-
+        /// <summary>
+        /// horizontal gradient bar for look up procress
+        /// </summary>
         internal GLBitmap _lookupBmp;
+        /// <summary>
+        /// rect area coords,
+        /// </summary>
         internal float[] _v2f;
         internal float _cx;
         internal float _cy;
@@ -193,11 +199,8 @@ namespace PixelFarm.DrawingGL
                 //temp fix 
                 //check if some color stop has alpha 
 
-
                 //create a new one
-                Build(radGradientBrush, out float[] v2f);
-                glGradient = new RadialGradientBrush(v2f);
-
+                glGradient = new RadialGradientBrush(Build());
 
                 ColorStop[] colorStops = radGradientBrush.ColorStops;
                 for (int i = 0; i < colorStops.Length; ++i)
@@ -221,8 +224,7 @@ namespace PixelFarm.DrawingGL
                     int* ptr = (int*)MemBitmap.GetBufferPtr(lookupBmp).Ptr;
                     for (int i = 0; i < sampleColors.Length; ++i)
                     {
-                        Color c = sampleColors[i];
-                        *ptr = (int)c.ToABGR();
+                        *ptr = (int)sampleColors[i].ToABGR();
                         ptr++;
                     }
                 }
@@ -244,15 +246,16 @@ namespace PixelFarm.DrawingGL
         /// we do not store input linearGradient
         /// </summary>
         /// <param name="linearGradient"></param>
-        static void Build(Drawing.RadialGradientBrush linearGradient, out float[] v2f)
+        static float[] Build()
         {
             //TODO: review this again
             //ColorStop[] colorStops = linearGradient.ColorStops;
 
             //create a simple horizontal linear gradient bar 
             //and we will rotate and translate it to target pos 
-            v2f = new float[12];
+            var v2f = new float[12];
             AddRect(v2f, 0, 0, 2000, 800);
+            return v2f;
         }
 
         static void AddRect(float[] vrx,
@@ -275,7 +278,7 @@ namespace PixelFarm.DrawingGL
         }
     }
 
- 
+
     class PolygonGradientBrush
     {
         internal float[] _v2f;
@@ -288,8 +291,7 @@ namespace PixelFarm.DrawingGL
 
         public static PolygonGradientBrush Resolve(Drawing.PolygonGradientBrush polygonGr, PixelFarm.CpuBlit.VertexProcessing.TessTool tess)
         {
-            PolygonGradientBrush glGradient = polygonGr.InnerBrush as PolygonGradientBrush;
-            if (glGradient == null)
+            if (!(polygonGr.InnerBrush is PolygonGradientBrush glGradient))
             {
                 //create a new one
                 Build(polygonGr, tess, out float[] v2f, out float[] colors);

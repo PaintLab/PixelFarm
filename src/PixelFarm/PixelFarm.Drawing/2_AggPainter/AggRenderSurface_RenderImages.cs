@@ -335,8 +335,8 @@ namespace PixelFarm.CpuBlit
 
                 BuildOrgImgRectVxs(source.Width, source.Height, v1);
 
-                AffineMat destRectTransform;
-                destRectTransform = AffineMat.Iden;
+
+                AffineMat destRectTransform = AffineMat.Iden;
                 _reuseableAffine.SetElements(AffineMat.Iden);
 
                 //TODO: review reusable span generator an interpolator *** 

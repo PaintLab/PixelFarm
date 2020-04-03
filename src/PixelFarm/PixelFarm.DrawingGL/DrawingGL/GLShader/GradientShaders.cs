@@ -67,7 +67,6 @@ namespace PixelFarm.DrawingGL
         }
     }
 
-
     class RadialGradientFillShader : ColorFillShaderBase
     {
 
