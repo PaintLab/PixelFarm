@@ -217,8 +217,7 @@ namespace PixelFarm.DrawingGL
 
 
             _blurShader = new BlurShader(_shareRes);
-            //
-            _invertAlphaLineSmoothShader = new InvertAlphaLineSmoothShader(_shareRes); //used with stencil  ***
+            //             
 
             _conv3x3TextureShader = new Conv3x3TextureShader(_shareRes);
 

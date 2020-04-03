@@ -654,7 +654,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLShader\ColorFillShaderBase.cs" Link="PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLShader\ColorFillShaderBase.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLShader\FilterEffectShaders.cs" Link="PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLShader\FilterEffectShaders.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLShader\GradientShaders.cs" Link="PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLShader\GradientShaders.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLShader\InvertAlphaLineSmoothShader.cs" Link="PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLShader\InvertAlphaLineSmoothShader.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLShader\ShaderBase.cs" Link="PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLShader\ShaderBase.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLShader\SignedDistanceFieldShader.cs" Link="PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLShader\SignedDistanceFieldShader.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLShader\SimpleRectTextureShader.cs" Link="PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLShader\SimpleRectTextureShader.cs" />

@@ -54,7 +54,6 @@
     <Compile Include="DrawingGL\RenderSuface\VertexPositionColor.cs" />
     <Compile Include="DrawingGL\GLShader\ColorFillShaderBase.cs" />
     <Compile Include="DrawingGL\GLShader\FilterEffectShaders.cs" />
-    <Compile Include="DrawingGL\GLShader\InvertAlphaLineSmoothShader.cs" />
     <Compile Include="DrawingGL\GLShader\GradientShaders.cs" />
     <Compile Include="DrawingGL\GLShader\ShaderBase.cs" />
     <Compile Include="DrawingGL\GLShader\SignedDistanceFieldShader.cs" />

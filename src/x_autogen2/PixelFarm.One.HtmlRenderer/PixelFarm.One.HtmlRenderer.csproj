@@ -1911,9 +1911,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLShader\GradientShaders.cs">
       <Link>PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLShader\GradientShaders.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLShader\InvertAlphaLineSmoothShader.cs">
-      <Link>PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLShader\InvertAlphaLineSmoothShader.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLShader\ShaderBase.cs">
       <Link>PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLShader\ShaderBase.cs</Link>
     </Compile>

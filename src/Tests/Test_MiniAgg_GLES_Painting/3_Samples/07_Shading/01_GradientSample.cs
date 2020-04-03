@@ -84,12 +84,13 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
                 AffineMat aff1 = AffineMat.GetScaleMat(2);
                 _triangleVxs = v1.CreateTrim(aff1);
 
-                AffineMat tx = AffineMat.GetTranslateMat(100, 25);    
+                AffineMat tx = AffineMat.GetTranslateMat(100, 25);
                 _triangleVxs2 = tx.TransformToVxs(_triangleVxs, v2).CreateTrim();
             }
         }
 
-
+        [DemoConfig]
+        public bool UseOffset { get; set; }
 
         [DemoConfig]
         public BrushKind SelectedBrushKind { get; set; }
@@ -123,12 +124,23 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
             //
             p.CurrentBrush = selectedBrush;
 
-            //p.FillRect(0, 100, 500, 500);
-
+            //p.FillRect(0, 100, 500, 500); 
             //p.FillRect(0, 200, 200, 50);
 
             p.Fill(_triangleVxs);
-            p.Fill(_triangleVxs2);
+            if (UseOffset)
+            {
+                float prev_ox = p.OriginX;
+                float prev_oy = p.OriginY;
+                p.SetOrigin(100, 25);
+                p.Fill(_triangleVxs);
+                p.SetOrigin(prev_ox, prev_oy);//restore
+            }
+            else
+            {
+                p.Fill(_triangleVxs2);
+            }
+
             ////-------------               
 
             p.CurrentBrush = prevBrush;
