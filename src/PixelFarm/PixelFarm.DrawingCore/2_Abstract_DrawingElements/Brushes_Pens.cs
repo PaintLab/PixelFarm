@@ -89,6 +89,13 @@ namespace PixelFarm.Drawing
 
         public ColorStop(float offset, GradientOffsetUnit unit, Color color)
         {
+#if DEBUG
+            if(offset < 0 || offset >1)
+            {
+                System.Diagnostics.Debugger.Break();
+            }
+#endif
+
             if (offset < 0)
             {
                 offset = 0;
@@ -104,6 +111,13 @@ namespace PixelFarm.Drawing
         }
         public ColorStop(float offset, Color color)
         {
+#if DEBUG
+            if (offset < 0 || offset > 1)
+            {
+                System.Diagnostics.Debugger.Break();
+            }
+#endif
+
             if (offset < 0)
             {
                 offset = 0;
