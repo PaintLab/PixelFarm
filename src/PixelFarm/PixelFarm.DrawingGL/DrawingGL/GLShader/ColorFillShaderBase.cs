@@ -8,7 +8,7 @@ namespace PixelFarm.DrawingGL
     abstract class ColorFillShaderBase : ShaderBase
     {
         protected ShaderUniformMatrix4 u_matrix;
-        protected ShaderUniformVar2 u_orthov_offset;
+        protected ShaderUniformVar2 u_ortho_offset;
 
         int _orthoviewVersion = -1;
         float _orthov_offsetX = 0;
@@ -36,7 +36,7 @@ namespace PixelFarm.DrawingGL
             if (dx != _orthov_offsetX || dy != _orthov_offsetY)
             {
                 //change
-                u_orthov_offset.SetValue(_orthov_offsetX = dx, _orthov_offsetY = dy);
+                u_ortho_offset.SetValue(_orthov_offsetX = dx, _orthov_offsetY = dy);
             }
         }
     }
