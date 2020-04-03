@@ -204,7 +204,6 @@ namespace PixelFarm.Drawing
     {
         public LinearGradientBrush(PointF start, PointF end, Color c1, Color c2)
         {
-
             StartPoint = start;
             EndPoint = end;
             IsValid = true;

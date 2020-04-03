@@ -1261,7 +1261,12 @@ namespace PixelFarm.DrawingGL
                 //we use mask technique
                 //1. generate mask bitmap
                 //find bound of path render vx
-                GLRenderSurface renderSx_mask = new GLRenderSurface(300, 300); //mask color surface 
+
+                RectangleF bounds = pathRenderVx.GetBounds();
+                int size_w = (int)Math.Round(bounds.Right);
+                int size_h = (int)Math.Round(bounds.Bottom);
+                //size_w = size_h = 300;
+                GLRenderSurface renderSx_mask = new GLRenderSurface(size_w, size_h); //mask color surface 
 
                 using (TempSwitchToNewSurface(renderSx_mask))
                 {
@@ -1289,11 +1294,17 @@ namespace PixelFarm.DrawingGL
                             else
                             {
                                 //create a new one and cache
-                                color_src = new GLBitmap(300, 300);
+                                color_src = new GLBitmap(size_w, size_h);
                                 var renderSx_color = new GLRenderSurface(color_src, false); //gradient color surface
+                                
+                                //brush origin?
+                                //this can be configured
+                                //1. relative to bounds of pathRenderVx
+                                //2. relative to other specific position
+
                                 using (TempSwitchToNewSurface(renderSx_color))
                                 {
-                                    _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
+                                    _rectFillShader.Render(bounds.Left, bounds.Top, glGrBrush._v2f, glGrBrush._colors);
                                 }
                                 glGrBrush.SetCacheGradientBitmap(color_src, true);
                                 renderSx_color.Dispose();
@@ -1340,7 +1351,7 @@ namespace PixelFarm.DrawingGL
                                 var renderSx_color = new GLRenderSurface(color_src, false); //gradient color surface
                                 using (TempSwitchToNewSurface(renderSx_color))
                                 {
-                                    _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
+                                    _rectFillShader.Render(0, 0, glGrBrush._v2f, glGrBrush._colors);
                                     color_src = renderSx_color.GetGLBitmap();
                                 }
                                 renderSx_color.Dispose();

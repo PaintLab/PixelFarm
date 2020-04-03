@@ -52,17 +52,26 @@ namespace PixelFarm.DrawingGL
 
 
             a_position = _shaderProgram.GetAttrV2f("a_position");
-            u_orthov_offset = _shaderProgram.GetUniform2("u_ortho_offset");
+            u_ortho_offset = _shaderProgram.GetUniform2("u_ortho_offset");
             a_color = _shaderProgram.GetAttrV4f("a_color");
             u_matrix = _shaderProgram.GetUniformMat4("u_mvpMatrix");
         }
-        public void Render(float[] v2fArray, float[] colors)
+
+        /// <summary>
+        /// fill gradient brush
+        /// </summary>
+        /// <param name="x">brush origin</param>
+        /// <param name="y">brush origin</param>
+        /// <param name="v2fArray"></param>
+        /// <param name="colors"></param>
+        public void Render(float x, float y, float[] v2fArray, float[] colors)
         {
             SetCurrent();
             CheckViewMatrix();
             //----------------------------------------------------
             a_position.LoadPureV2f(v2fArray);
             a_color.LoadPureV4f(colors);
+            u_ortho_offset.SetValue(x, y);
             GL.DrawArrays(BeginMode.Triangles, 0, v2fArray.Length / 2);
         }
     }
@@ -175,7 +184,7 @@ namespace PixelFarm.DrawingGL
             }
             a_position = _shaderProgram.GetAttrV2f("a_position");
             u_matrix = _shaderProgram.GetUniformMat4("u_mvpMatrix");
-            u_orthov_offset = _shaderProgram.GetUniform2("u_ortho_offset");
+            u_ortho_offset = _shaderProgram.GetUniform2("u_ortho_offset");
 
             u_center = _shaderProgram.GetUniform3("u_center");
             s_texture = _shaderProgram.GetUniform1("s_texture");

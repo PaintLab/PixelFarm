@@ -319,6 +319,7 @@ namespace PixelFarm.DrawingGL
                 //create a new one
                 Build(polygonGr, tess, out float[] v2f, out float[] colors);
                 glGradient = new PolygonGradientBrush(v2f, colors);
+                
                 polygonGr.InnerBrush = glGradient;
             }
             return glGradient;
