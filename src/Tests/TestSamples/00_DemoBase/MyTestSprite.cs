@@ -141,7 +141,7 @@ namespace PixelFarm.CpuBlit
                 //       AffinePlan.Skew(_skewX / 1000.0, _skewY / 1000.0),
                 //       AffinePlan.Translate(Width / 2, Height / 2) 
                 //);
-                AffineMat mat = AffineMat.Iden;
+                AffineMat mat = AffineMat.Iden();
                 mat.Translate(-_spriteShape.Center.x, -_spriteShape.Center.y);
                 mat.Scale(_spriteScale);
                 mat.Rotate(_angle + Math.PI);

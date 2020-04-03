@@ -93,10 +93,8 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             {
                 txToVxs.WriteOutput(v0);
 
-                AffineMat mat = AffineMat.Iden;
-                mat.Translate(10, 10);
-                //mat.Scale(1, 1);
-                 
+                AffineMat mat = AffineMat.GetTranslateMat(10, 10);
+
                 _curveFlattener.MakeVxs(v0, mat, v2);
             }
             return v2;

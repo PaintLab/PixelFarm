@@ -61,7 +61,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             for (int i = 0; i < 360; i += 30)
             {
 
-                AffineMat aff = AffineMat.Iden;
+                AffineMat aff = AffineMat.Iden();
                 aff.Translate(-_imgW / 2f, -_imgH / 2f);
                 aff.Scale(0.5, 0.5);
                 aff.RotateDeg(i);
@@ -81,11 +81,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 sRect.MakeVxs(vxs1);
                 p.Fill(vxs1, Color.Blue);
                 //-------------------
-                AffineMat af = AffineMat.Iden;
-                af.Translate(-w / 2f, -h / 2f);
-                af.RotateDeg(30);
-                af.Translate(w / 2f, h / 2f);
-
+                AffineMat af = AffineMat.GetRotateDegMat(30, w / 2f, h / 2f); 
 
                 af.TransformToVxs(vxs1, vxs2);
                 p.Fill(vxs2, Color.Red);
@@ -134,8 +130,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             MemBitmap smallBmp = new MemBitmap(orgBmp.Width / 2, orgBmp.Height / 2);
             using (Tools.BorrowAggPainter(smallBmp, out var painter))
             {
-                AffineMat mat = AffineMat.Iden;
-                mat.Scale(0.5);
+                AffineMat mat = AffineMat.GetScaleMat(0.5);
                 painter.DrawImage(orgBmp, mat);
             }
             return smallBmp;
@@ -193,7 +188,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             for (int i = 0; i < 360; i += 30)
             {
 
-                AffineMat aff = AffineMat.Iden;
+                AffineMat aff = AffineMat.Iden();
                 aff.Translate(-_imgW / 2f, -_imgH / 2f);
                 aff.Scale(0.5, 0.5);
                 aff.RotateDeg(i);
@@ -218,12 +213,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                 p.Fill(vxs1, Color.Blue);
                 //-------------------
 
-                AffineMat mat = AffineMat.Iden;
-                mat.Translate(-w / 2f, -h / 2f);
-                mat.RotateDeg(30);
-                mat.Translate(w / 2f, h / 2f);
-
-
+                AffineMat mat = AffineMat.GetRotateDegMat(30, w / 2f, h / 2f);
 
                 mat.TransformToVxs(vxs1, vxs2);
                 p.Fill(vxs2, Color.Red);

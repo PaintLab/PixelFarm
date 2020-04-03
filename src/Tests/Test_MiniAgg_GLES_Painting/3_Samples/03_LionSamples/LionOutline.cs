@@ -160,8 +160,8 @@ namespace PixelFarm.CpuBlit.Sample_LionOutline
             int width = p.Width;
             int height = p.Height;
 
-           
-            AffineMat aff1 = AffineMat.Iden;
+
+            AffineMat aff1 = AffineMat.Iden();
             aff1.Translate(-_spriteShape.Center.x, -_spriteShape.Center.y);
             aff1.Scale(_spriteScale, _spriteScale);
             aff1.Rotate(_angle + Math.PI);

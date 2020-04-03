@@ -81,12 +81,10 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
                 p.LineTo(10, 100);
                 p.CloseFigure();
 
-                AffineMat aff1 = AffineMat.Iden;
-                aff1.Scale(2, 2);
+                AffineMat aff1 = AffineMat.GetScaleMat(2);
                 _triangleVxs = v1.CreateTrim(aff1);
 
-                AffineMat tx = AffineMat.Iden;
-                tx.Translate(100, 0);
+                AffineMat tx = AffineMat.GetTranslateMat(100, 25);    
                 _triangleVxs2 = tx.TransformToVxs(_triangleVxs, v2).CreateTrim();
             }
         }

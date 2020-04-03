@@ -52,7 +52,7 @@ namespace OpenTkEssTest
                 p.CloseFigure();
 
                 _polygon1 = _painter.CreateRenderVx(v1.CreateTrim());
-                AffineMat tx = AffineMat.Iden;
+                AffineMat tx = AffineMat.Iden();
                 tx.Translate(200, 0);
 
                 tx.TransformToVxs(v1, v2); //v1=>v2

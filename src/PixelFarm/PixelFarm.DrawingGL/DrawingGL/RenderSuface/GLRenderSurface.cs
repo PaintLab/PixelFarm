@@ -1351,7 +1351,7 @@ namespace PixelFarm.DrawingGL
                                 var renderSx_color = new GLRenderSurface(color_src, false); //gradient color surface
                                 using (TempSwitchToNewSurface(renderSx_color))
                                 {
-                                    _rectFillShader.Render(0, 0, glGrBrush._v2f, glGrBrush._colors);
+                                    _rectFillShader.Render(bounds.Left, bounds.Top, glGrBrush._v2f, glGrBrush._colors);
                                     color_src = renderSx_color.GetGLBitmap();
                                 }
                                 renderSx_color.Dispose();
@@ -1814,7 +1814,7 @@ namespace PixelFarm.DrawingGL
             Quad2f quad = new Quad2f();
             quad.SetCornersFromRect(srcRect);
 
-            AffineMat mat = AffineMat.Iden;
+            AffineMat mat = AffineMat.Iden();
             mat.Translate(-srcRect.Left, -(srcRect.Top + srcRect.Bottom) / 2); //*** in this case we move to left-most x amd mid-y of the srcRect
             mat.Rotate(srcRotation);
             mat.Translate(targetLeft, targetTop);

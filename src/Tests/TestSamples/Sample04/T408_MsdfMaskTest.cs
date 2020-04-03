@@ -124,7 +124,7 @@ namespace OpenTkEssTest
                         Quad2f quad = new Quad2f();
                         quad.SetCornersFromRect(rect);
 
-                        AffineMat mat1 = AffineMat.Iden;
+                        AffineMat mat1 = AffineMat.Iden();
                         mat1.Translate(-rect.Width / 2, -rect.Height / 2);
                         mat1.RotateDeg(45);
                         mat1.Translate(rect.Width / 2, rect.Height / 2);

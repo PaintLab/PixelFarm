@@ -92,12 +92,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
             //p.RenderQuality = RenderQuality.Fast;
 
-            AffineMat mat = AffineMat.Iden;
-
-            //move to center of the image (hotspot x,y)
-            mat.Translate(-_imgW / 2, -_imgH / 2);
-            mat.RotateDeg(30);
-            mat.Translate(_imgW / 2, _imgH / 2);
+            AffineMat mat = AffineMat.GetRotateDegMat(30, _imgW / 2, _imgH / 2);
             p.DrawImage(_lionImg, mat);
 
             //AffinePlan.Scale(0.75, 0.75),
@@ -188,7 +183,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
                     //    AffinePlan.Rotate(MathHelper.DegreesToRadians(angleDegrees)),
                     //    AffinePlan.Translate(width / 2, 150));
 
-                    AffineMat mat = AffineMat.Iden;
+                    AffineMat mat = AffineMat.Iden();
                     mat.RotateDeg(angleDegrees);
                     mat.Translate(width / 2, 150);
                     _reusableAff.SetElems(mat);

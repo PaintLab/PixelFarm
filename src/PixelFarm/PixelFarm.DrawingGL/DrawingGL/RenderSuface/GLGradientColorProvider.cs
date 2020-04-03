@@ -92,7 +92,7 @@ namespace PixelFarm.DrawingGL
 
             }
 
-            var txMatrix = PixelFarm.CpuBlit.VertexProcessing.AffineMat.Iden;
+            var txMatrix = PixelFarm.CpuBlit.VertexProcessing.AffineMat.Iden();
             txMatrix.Rotate(angleRad, x_1, y_1); //rotate around x_1,y_1 
 
             int j = s_vertices.Count;
