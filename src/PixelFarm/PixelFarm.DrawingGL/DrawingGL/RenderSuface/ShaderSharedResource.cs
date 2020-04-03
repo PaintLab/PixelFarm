@@ -80,54 +80,35 @@ namespace PixelFarm.DrawingGL
 
     class TextureContainerMx
     {
-        readonly TextureContainter[] _textureContainers;
+        //readonly TextureContainter[] _textureContainers;
         readonly LinkedList<TextureContainter> _activeContainers = new LinkedList<TextureContainter>();
         readonly Queue<TextureContainter> _freeContainers = new Queue<TextureContainter>(32);
 
-        public TextureContainerMx()
+        public TextureContainerMx(int platformTextureUnitCount)
         {
             //GLES has 32 texture_units
             //texture unit 0,1 is not control by this
             //we let user to control them directly
-            //
-            _textureContainers = new TextureContainter[]
-            {
-                new TextureContainter(this,TextureUnit.Texture2,2),
-                new TextureContainter(this,TextureUnit.Texture3,3),
-                //new TextureContainter(this,TextureUnit.Texture4,4),
-                //new TextureContainter(this,TextureUnit.Texture5,5),
-                //new TextureContainter(this,TextureUnit.Texture6,6),
-                //new TextureContainter(this,TextureUnit.Texture7,7),
-                //new TextureContainter(this,TextureUnit.Texture8,8),
-                //new TextureContainter(this,TextureUnit.Texture9,9),
-                //new TextureContainter(this,TextureUnit.Texture10,10),
-                //new TextureContainter(this,TextureUnit.Texture11,11),
-                //new TextureContainter(this,TextureUnit.Texture12,12),
-                //new TextureContainter(this,TextureUnit.Texture13,13),
-                //new TextureContainter(this,TextureUnit.Texture14,14),
-                //new TextureContainter(this,TextureUnit.Texture15,15),
-                //new TextureContainter(this,TextureUnit.Texture16,16),
-                ////
-                //new TextureContainter(this,TextureUnit.Texture17,17),
-                //new TextureContainter(this,TextureUnit.Texture18,18),
-                //new TextureContainter(this,TextureUnit.Texture19,19),
-                //new TextureContainter(this,TextureUnit.Texture20,20),
-                //new TextureContainter(this,TextureUnit.Texture21,21),
-                //new TextureContainter(this,TextureUnit.Texture22,22),
-                //new TextureContainter(this,TextureUnit.Texture23,23),
-                //new TextureContainter(this,TextureUnit.Texture24,24),
-                //new TextureContainter(this,TextureUnit.Texture25,25),
-                //new TextureContainter(this,TextureUnit.Texture26,26),
-                //new TextureContainter(this,TextureUnit.Texture27,27),
-                //new TextureContainter(this,TextureUnit.Texture28,28),
-                //new TextureContainter(this,TextureUnit.Texture29,29),
-                //new TextureContainter(this,TextureUnit.Texture30,30),
-                //new TextureContainter(this,TextureUnit.Texture31,31),
+
+            TextureUnit[] textureUnitNames = new TextureUnit[] {
+                TextureUnit.Texture0,TextureUnit.Texture1,TextureUnit.Texture2, TextureUnit.Texture3,
+                TextureUnit.Texture4,TextureUnit.Texture5,TextureUnit.Texture6, TextureUnit.Texture7,
+                TextureUnit.Texture8,TextureUnit.Texture9,TextureUnit.Texture10,TextureUnit.Texture11,
+                TextureUnit.Texture12,TextureUnit.Texture13,TextureUnit.Texture14, TextureUnit.Texture15,
+                TextureUnit.Texture16,TextureUnit.Texture17,TextureUnit.Texture18, TextureUnit.Texture19,
+                TextureUnit.Texture20,TextureUnit.Texture21,TextureUnit.Texture22,TextureUnit.Texture23,
+                TextureUnit.Texture24,TextureUnit.Texture25,TextureUnit.Texture26,TextureUnit.Texture27,
+                TextureUnit.Texture28,TextureUnit.Texture29,TextureUnit.Texture30,TextureUnit.Texture31,
             };
 
-            for (int i = 0; i < _textureContainers.Length; ++i)
+            //so we only suport 32-2            
+            if (platformTextureUnitCount > 32) { platformTextureUnitCount = 32; }
+
+            //old code we test when platformTextureUnitCount=4
+
+            for (int i = 2; i < platformTextureUnitCount; ++i)
             {
-                _freeContainers.Enqueue(_textureContainers[i]);
+                _freeContainers.Enqueue(new TextureContainter(this, textureUnitNames[i], i));
             }
         }
 
@@ -259,10 +240,11 @@ namespace PixelFarm.DrawingGL
         float _orthoViewOffsetY;
         bool _isFlipAndPulldownHint;
 
-        TextureContainerMx _textureContainerMx = new TextureContainerMx();
+        TextureContainerMx _textureContainerMx;
         public ShaderSharedResource()
         {
-
+            GL.GetInteger(GetPName.MaxCombinedTextureImageUnits, out int textunit_num);
+            _textureContainerMx = new TextureContainerMx(textunit_num);
         }
         public TextureContainter LoadGLBitmap(GLBitmap glBmp)
         {
