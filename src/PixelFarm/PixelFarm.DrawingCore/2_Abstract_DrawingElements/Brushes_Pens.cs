@@ -140,8 +140,8 @@ namespace PixelFarm.Drawing
 
     public sealed class RadialGradientBrush : GeometryGradientBrush
     {
-        ColorStop[] _stops;
-        bool _isValid;
+        readonly ColorStop[] _stops;
+        readonly bool _isValid;
         public RadialGradientBrush(PointF start, PointF end, Color c1, Color c2)
             : this(start, end, new ColorStop[]
             {

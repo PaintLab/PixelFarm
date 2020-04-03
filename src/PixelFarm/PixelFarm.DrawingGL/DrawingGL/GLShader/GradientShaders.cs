@@ -6,8 +6,8 @@ namespace PixelFarm.DrawingGL
 {
     class RectFillShader : ColorFillShaderBase
     {
-        ShaderVtxAttrib2f a_position;
-        ShaderVtxAttrib4f a_color;
+        readonly ShaderVtxAttrib2f a_position;
+        readonly ShaderVtxAttrib4f a_color;
 
         public RectFillShader(ShaderSharedResource shareRes)
             : base(shareRes)
@@ -67,16 +67,14 @@ namespace PixelFarm.DrawingGL
         }
     }
 
-
     class RadialGradientFillShader : ColorFillShaderBase
     {
 
-        ShaderVtxAttrib2f a_position;
-        ShaderUniformMatrix3 u_invertedTxMatrix;
-
-        ShaderUniformVar3 u_center; //center x,y and radius
-        ShaderUniformVar1 s_texture; //lookup 
-
+        readonly ShaderVtxAttrib2f a_position;
+        readonly ShaderUniformMatrix3 u_invertedTxMatrix;
+        readonly ShaderUniformVar3 u_center; //center x,y and radius
+        readonly ShaderUniformVar1 s_texture; //lookup 
+        bool _isIdenMatrixLoaded;
 
         public RadialGradientFillShader(ShaderSharedResource shareRes)
             : base(shareRes)
@@ -182,6 +180,8 @@ namespace PixelFarm.DrawingGL
             s_texture = _shaderProgram.GetUniform1("s_texture");
             u_invertedTxMatrix = _shaderProgram.GetUniformMat3("u_invertedTxMatrix");
         }
+
+
         public void Render(float[] v2fArray, float cx, float cy, float r, PixelFarm.CpuBlit.VertexProcessing.Affine invertedAffineTx, GLBitmap lookupBmp)
         {
             SetCurrent();
@@ -195,15 +195,21 @@ namespace PixelFarm.DrawingGL
             {
                 float[] mat3x3 = invertedAffineTx.Get3x3MatrixElements();
                 u_invertedTxMatrix.SetData(mat3x3);
+                _isIdenMatrixLoaded = false;
             }
             else
             {
                 //identity mat
-                u_invertedTxMatrix.SetData(mat3x3Identity);
+                if (!_isIdenMatrixLoaded)
+                {
+                    u_invertedTxMatrix.SetData(s_mat3x3Identity);
+                    _isIdenMatrixLoaded = true;
+                }
             }
             GL.DrawArrays(BeginMode.Triangles, 0, v2fArray.Length / 2);
         }
-        static readonly float[] mat3x3Identity = new float[]
+
+        static readonly float[] s_mat3x3Identity = new float[]
         {
             1,0,0,
             0,1,0,
@@ -215,9 +221,6 @@ namespace PixelFarm.DrawingGL
             //-------------------------------------------------------------------------------------
             // Bind the texture...
             TextureContainter container = _shareRes.LoadGLBitmap(bmp);
-            //GL.ActiveTexture(TextureUnit.Texture0);
-            //GL.BindTexture(TextureTarget.Texture2D, bmp.GetServerTextureId());
-            // Set the texture sampler to texture unit to 0     
             s_texture.SetValue(container.TextureUnitNo);
         }
     }
