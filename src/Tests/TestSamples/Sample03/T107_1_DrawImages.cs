@@ -3,6 +3,7 @@
 
 using System;
 using Mini;
+using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.DrawingGL;
 namespace OpenTkEssTest

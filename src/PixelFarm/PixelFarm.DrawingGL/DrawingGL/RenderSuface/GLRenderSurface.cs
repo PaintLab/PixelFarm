@@ -4,8 +4,8 @@ using System;
 using System.Collections.Generic;
 using OpenTK.Graphics.ES20;
 using PixelFarm.Drawing;
+using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
-
 namespace PixelFarm.DrawingGL
 {
 
