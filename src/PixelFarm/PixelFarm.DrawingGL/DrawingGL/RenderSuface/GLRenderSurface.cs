@@ -1248,101 +1248,95 @@ namespace PixelFarm.DrawingGL
 
         public void FillGfxPath(Drawing.Brush brush, PathRenderVx pathRenderVx)
         {
-            switch (brush.BrushKind)
+            if (brush.BrushKind == BrushKind.Solid)
             {
-                case Drawing.BrushKind.Solid:
-                    {
-                        var solidBrush = (PixelFarm.Drawing.SolidBrush)brush;
-                        FillGfxPath(solidBrush.Color, pathRenderVx);
-                    }
-                    break;
-                case Drawing.BrushKind.LinearGradient:
-                case Drawing.BrushKind.CircularGraident:
-                case BrushKind.PolygonGradient:
-                    {
-                        //TODO: review here again
-                        //use VBO?
-                        //TODO: create mask on another render suface and use shader+mask is more simple
-
-                        //we use mask technique
-                        //1. generate mask bitmap
-                        GLRenderSurface renderSx_mask = new GLRenderSurface(300, 300); //mask color surface
-
-
-                        using (TempSwitchToNewSurface(renderSx_mask))
-                        {
-                            Clear(Color.Black);
-                            FillGfxPath(Color.White, pathRenderVx);
-                        }
-
-                        //DrawImage(renderSx1.GetGLBitmap(), 0, 0);
-                        //2. generate gradient color, (TODO: cache, NOT need to generate this every time)
-                        GLBitmap color_src;
-                        GLRenderSurface renderSx_color = null;
-                        switch (brush.BrushKind)
-                        {
-                            default: throw new NotSupportedException();
-                            case BrushKind.LinearGradient:
-                                {
-                                    renderSx_color = new GLRenderSurface(300, 300); //gradient color surface
-                                    using (TempSwitchToNewSurface(renderSx_color))
-                                    {
-                                        LinearGradientBrush glGrBrush = LinearGradientBrush.Resolve((Drawing.LinearGradientBrush)brush);
-                                        _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
-                                        color_src = renderSx_color.GetGLBitmap();
-                                    }
-                                }
-                                break;
-                            case BrushKind.CircularGraident:
-                                {
-                                    RadialGradientBrush glGrBrush = RadialGradientBrush.Resolve((Drawing.RadialGradientBrush)brush);
-                                    renderSx_color = new GLRenderSurface(300, 300); //gradient color surface
-                                    using (TempSwitchToNewSurface(renderSx_color))
-                                    {
-                                        _radialGradientShader.Render(
-                                                    glGrBrush._v2f,
-                                                    glGrBrush._cx,
-                                                    _vwHeight - glGrBrush._cy,
-                                                    glGrBrush._r,
-                                                    glGrBrush._invertedAff,
-                                                    glGrBrush._lookupBmp);
-                                        color_src = renderSx_color.GetGLBitmap();
-                                    }
-                                }
-                                break;
-                            case BrushKind.PolygonGradient:
-                                {
-                                    PolygonGradientBrush glGrBrush = PolygonGradientBrush.Resolve((Drawing.PolygonGradientBrush)brush, _tessTool);
-                                    renderSx_color = new GLRenderSurface(300, 300); //gradient color surface
-                                    using (TempSwitchToNewSurface(renderSx_color))
-                                    {
-                                        _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
-                                        color_src = renderSx_color.GetGLBitmap();
-                                    }
-                                }
-                                break;
-                            case BrushKind.Texture:
-                                {
-                                    //TODO: implement here
-                                    //see mask
-                                    PixelFarm.Drawing.TextureBrush tbrush = (PixelFarm.Drawing.TextureBrush)brush;
-                                    color_src = PixelFarm.Drawing.Image.GetCacheInnerImage(tbrush.TextureImage) as GLBitmap;
-                                }
-                                break;
-                        }
-
-                        //                         
-                        DrawImageWithMask(renderSx_mask.GetGLBitmap(), color_src, 0, 0);
-
-                        renderSx_mask.Dispose();
-                        if (renderSx_color != null)
-                        {
-                            renderSx_color.Dispose();
-                        }
-
-                    }
-                    break;
+                var solidBrush = (PixelFarm.Drawing.SolidBrush)brush;
+                FillGfxPath(solidBrush.Color, pathRenderVx);
             }
+            else
+            {
+                //TODO: review here again
+                //use VBO?
+                //TODO: create mask on another render suface and use shader+mask is more simple
+
+                //we use mask technique
+                //1. generate mask bitmap
+                //find bound of path render vx
+                GLRenderSurface renderSx_mask = new GLRenderSurface(300, 300); //mask color surface 
+
+                using (TempSwitchToNewSurface(renderSx_mask))
+                {
+                    Clear(Color.Black);
+                    FillGfxPath(Color.White, pathRenderVx);
+                }
+
+                //DrawImage(renderSx1.GetGLBitmap(), 0, 0);
+                //2. generate gradient color, (TODO: cache, NOT need to generate this every time)
+                GLBitmap color_src;
+                GLRenderSurface renderSx_color = null;
+                switch (brush.BrushKind)
+                {
+                    default: throw new NotSupportedException();
+                    case BrushKind.LinearGradient:
+                        {
+                            renderSx_color = new GLRenderSurface(300, 300); //gradient color surface
+                            using (TempSwitchToNewSurface(renderSx_color))
+                            {
+                                LinearGradientBrush glGrBrush = LinearGradientBrush.Resolve((Drawing.LinearGradientBrush)brush);
+                                _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
+                                color_src = renderSx_color.GetGLBitmap();
+                            }
+                        }
+                        break;
+                    case BrushKind.CircularGraident:
+                        {
+                            RadialGradientBrush glGrBrush = RadialGradientBrush.Resolve((Drawing.RadialGradientBrush)brush);
+                            renderSx_color = new GLRenderSurface(300, 300); //gradient color surface
+                            using (TempSwitchToNewSurface(renderSx_color))
+                            {
+                                _radialGradientShader.Render(
+                                            glGrBrush._v2f,
+                                            glGrBrush._cx,
+                                            _vwHeight - glGrBrush._cy,
+                                            glGrBrush._r,
+                                            glGrBrush._invertedAff,
+                                            glGrBrush._lookupBmp);
+                                color_src = renderSx_color.GetGLBitmap();
+                            }
+                        }
+                        break;
+                    case BrushKind.PolygonGradient:
+                        {
+                            PolygonGradientBrush glGrBrush = PolygonGradientBrush.Resolve((Drawing.PolygonGradientBrush)brush, _tessTool);
+                            renderSx_color = new GLRenderSurface(300, 300); //gradient color surface
+                            using (TempSwitchToNewSurface(renderSx_color))
+                            {
+                                _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
+                                color_src = renderSx_color.GetGLBitmap();
+                            }
+                        }
+                        break;
+                    case BrushKind.Texture:
+                        {
+                            //TODO: implement here
+                            //see mask
+                            PixelFarm.Drawing.TextureBrush tbrush = (PixelFarm.Drawing.TextureBrush)brush;
+                            color_src = ResolveForGLBitmap(tbrush.TextureImage);
+                            
+                        }
+                        break;
+                }
+
+                //                         
+                DrawImageWithMask(renderSx_mask.GetGLBitmap(), color_src, 0, 0);
+
+                renderSx_mask.Dispose();
+                if (renderSx_color != null)
+                {
+                    renderSx_color.Dispose();
+                }
+            }
+
         }
 
         public void DisableMask()

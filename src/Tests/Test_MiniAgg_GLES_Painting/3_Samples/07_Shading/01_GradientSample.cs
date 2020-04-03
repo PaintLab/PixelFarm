@@ -4,6 +4,8 @@
 using System;
 using System.Diagnostics;
 using PixelFarm.Drawing;
+using PixelFarm.CpuBlit;
+using PixelFarm.CpuBlit.VertexProcessing;
 
 using Mini;
 namespace PixelFarm.CpuBlit.Sample_Gradient
@@ -74,11 +76,14 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
             using (Tools.BorrowVxs(out var v1))
             using (Tools.BorrowPathWriter(v1, out PathWriter p))
             {
-                p.MoveTo(10, 10);
-                p.LineToRel(50, 100);
-                p.LineToRel(100, -100);
+                p.MoveTo(0, 50);
+                p.LineTo(50, 50);
+                p.LineTo(10, 100);
                 p.CloseFigure();
-                _triangleVxs = v1.CreateTrim();
+
+                AffineMat aff1 = AffineMat.Iden;
+                aff1.Scale(2, 2);
+                _triangleVxs = v1.CreateTrim(aff1);
             }
         }
 

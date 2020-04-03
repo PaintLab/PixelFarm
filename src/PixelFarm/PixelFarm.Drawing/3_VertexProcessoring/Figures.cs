@@ -978,8 +978,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
     public class FigureBuilder
     {
         //helper struct
-        List<float> _xylist = new List<float>();
-        List<Figure> _figs = new List<Figure>();
+        readonly List<float> _xylist = new List<float>();
+        readonly List<Figure> _figs = new List<Figure>();
         public FigureBuilder()
         {
         }
@@ -990,6 +990,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
             double prevX = 0;
             double prevY = 0;
+
             double prevMoveToX = 0;
             double prevMoveToY = 0;
 
@@ -1002,9 +1003,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
             int index = 0;
             VertexCmd cmd;
-
-            double x, y;
-            while ((cmd = vxs.GetVertex(index++, out x, out y)) != VertexCmd.NoMore)
+             
+            while ((cmd = vxs.GetVertex(index++, out double x, out double y)) != VertexCmd.NoMore)
             {
                 switch (cmd)
                 {
