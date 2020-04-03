@@ -45,9 +45,7 @@ namespace PixelFarm.CpuBlit.Sample_Images
         {
             //actualImage2 = LoadImage(RootDemoPath.Path + "\\plain01.png");
             _memBmp = LoadImage(RootDemoPath.Path + "\\02.jpg");
-            _mat = AffineMat.Iden;
-            _mat.Translate(50, 50);
-
+            _mat = AffineMat.GetTranslateMat(50, 50);
         }
         static MemBitmap LoadImage(string filename)
         {
@@ -62,7 +60,7 @@ namespace PixelFarm.CpuBlit.Sample_Images
                 return memBmp;
             }
         }
- 
+
         public override void Draw(Painter p)
         {
             p.Clear(Drawing.Color.White);

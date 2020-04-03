@@ -51,7 +51,7 @@ namespace PixelFarm.CpuBlit.Samples
 
             //lionFill.AutoFlipY = true;
 
-            PixelFarm.CpuBlit.VertexProcessing.AffineMat mat = PixelFarm.CpuBlit.VertexProcessing.AffineMat.Iden;
+            PixelFarm.CpuBlit.VertexProcessing.AffineMat mat = PixelFarm.CpuBlit.VertexProcessing.AffineMat.Iden();
             mat.RotateDeg(30);
             mat.Scale(2);
 

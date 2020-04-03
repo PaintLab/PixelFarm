@@ -5,7 +5,26 @@ using PixelFarm.CpuBlit;
 using PixelFarm.Drawing;
 namespace PixelFarm.DrawingGL
 {
-    class LinearGradientBrush
+
+    abstract class TextureBasedBrush : IDisposable
+    {
+        internal GLBitmap CacheGradientBitmap { get; private set; }
+        internal void SetCacheGradientBitmap(GLBitmap cache, bool isOwner)
+        {
+            _isCacheBmpOwner = isOwner;
+            CacheGradientBitmap = cache;
+        }
+        bool _isCacheBmpOwner;
+        public virtual void Dispose()
+        {
+            if (_isCacheBmpOwner && CacheGradientBitmap != null)
+            {
+                CacheGradientBitmap.Dispose();
+                CacheGradientBitmap = null;
+            }
+        }
+    }
+    class LinearGradientBrush : TextureBasedBrush
     {
         /// <summary>
         /// rect area coords,
@@ -73,7 +92,7 @@ namespace PixelFarm.DrawingGL
 
             }
 
-            var txMatrix = PixelFarm.CpuBlit.VertexProcessing.AffineMat.Iden;
+            var txMatrix = PixelFarm.CpuBlit.VertexProcessing.AffineMat.Iden();
             txMatrix.Rotate(angleRad, x_1, y_1); //rotate around x_1,y_1 
 
             int j = s_vertices.Count;
@@ -162,9 +181,11 @@ namespace PixelFarm.DrawingGL
                 }
             }
         }
-    } 
-     
-    class RadialGradientBrush : IDisposable
+
+        
+    }
+
+    class RadialGradientBrush : TextureBasedBrush
     {
         /// <summary>
         /// horizontal gradient bar for look up procress
@@ -184,14 +205,16 @@ namespace PixelFarm.DrawingGL
         {
             _v2f = v2f;
         }
-        public void Dispose()
+        public override void Dispose()
         {
+            base.Dispose();
             if (_lookupBmp != null)
             {
                 _lookupBmp.Dispose();
                 _lookupBmp = null;
             }
         }
+
         public static RadialGradientBrush Resolve(Drawing.RadialGradientBrush radGradientBrush)
         {
             if (!(radGradientBrush.InnerBrush is RadialGradientBrush glGradient))
@@ -279,7 +302,7 @@ namespace PixelFarm.DrawingGL
     }
 
 
-    class PolygonGradientBrush
+    class PolygonGradientBrush : TextureBasedBrush
     {
         internal float[] _v2f;
         internal float[] _colors;
@@ -296,6 +319,7 @@ namespace PixelFarm.DrawingGL
                 //create a new one
                 Build(polygonGr, tess, out float[] v2f, out float[] colors);
                 glGradient = new PolygonGradientBrush(v2f, colors);
+                
                 polygonGr.InnerBrush = glGradient;
             }
             return glGradient;

@@ -80,7 +80,7 @@ namespace PixelFarm.DrawingGL
 
     class TextureContainerMx
     {
-        //readonly TextureContainter[] _textureContainers;
+        
         readonly LinkedList<TextureContainter> _activeContainers = new LinkedList<TextureContainter>();
         readonly Queue<TextureContainter> _freeContainers = new Queue<TextureContainter>(32);
 

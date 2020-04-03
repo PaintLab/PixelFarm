@@ -4,7 +4,6 @@
 using System;
 using System.Diagnostics;
 using PixelFarm.Drawing;
-using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
 
 using Mini;
@@ -24,6 +23,7 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
 
 
         VertexStore _triangleVxs;
+        VertexStore _triangleVxs2;
 
         SolidBrush _solidBrush;
         LinearGradientBrush _linearGrBrush;
@@ -73,7 +73,7 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
             };
             _polygonGradientBrush = new PolygonGradientBrush(vertices);
 
-            using (Tools.BorrowVxs(out var v1))
+            using (Tools.BorrowVxs(out var v1, out var v2))
             using (Tools.BorrowPathWriter(v1, out PathWriter p))
             {
                 p.MoveTo(0, 50);
@@ -81,9 +81,11 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
                 p.LineTo(10, 100);
                 p.CloseFigure();
 
-                AffineMat aff1 = AffineMat.Iden;
-                aff1.Scale(2, 2);
+                AffineMat aff1 = AffineMat.GetScaleMat(2);
                 _triangleVxs = v1.CreateTrim(aff1);
+
+                AffineMat tx = AffineMat.GetTranslateMat(100, 25);    
+                _triangleVxs2 = tx.TransformToVxs(_triangleVxs, v2).CreateTrim();
             }
         }
 
@@ -126,6 +128,7 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
             //p.FillRect(0, 200, 200, 50);
 
             p.Fill(_triangleVxs);
+            p.Fill(_triangleVxs2);
             ////-------------               
 
             p.CurrentBrush = prevBrush;

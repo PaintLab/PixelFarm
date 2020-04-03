@@ -163,7 +163,7 @@ namespace PixelFarm.DrawingGL
 
         class PathRenderVxBuilder2
         {
-            Msdfgen.MsdfGen3 _msdfGen;
+            readonly Msdfgen.MsdfGen3 _msdfGen;
             public PathRenderVxBuilder2()
             {
                 _msdfGen = new Msdfgen.MsdfGen3();

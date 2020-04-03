@@ -455,7 +455,7 @@ namespace PixelFarm.DrawingGL
             a_position = _shaderProgram.GetAttrV3f("a_position");
             a_texCoord = _shaderProgram.GetAttrV2f("a_texCoord");
             u_matrix = _shaderProgram.GetUniformMat4("u_mvpMatrix");
-            u_orthov_offset = _shaderProgram.GetUniform2("u_ortho_offset");
+            u_ortho_offset = _shaderProgram.GetUniform2("u_ortho_offset");
             u_texture = _shaderProgram.GetUniform1("s_texture");
             OnProgramBuilt();
             return true;

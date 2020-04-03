@@ -174,7 +174,7 @@ namespace OpenTkEssTest
                             //left,top (NOT x,y) 
                             quad.SetCornersFromRect(0, 0, _glbmp.Width, _glbmp.Height);
 
-                            AffineMat aff = AffineMat.Iden;
+                            AffineMat aff = AffineMat.Iden();
                             aff.Translate(-_glbmp.Width / 2, -_glbmp.Height / 2);//move to bitmap's center
                             aff.RotateDeg(rotateDegree);
                             aff.Translate(i + _glbmp.Width / 2, i + _glbmp.Height / 2);
@@ -194,7 +194,7 @@ namespace OpenTkEssTest
                             //left,top (NOT x,y) 
                             quad.SetCornersFromRect(0, 0, _glbmp.Width, -_glbmp.Height);
 
-                            AffineMat aff = AffineMat.Iden;
+                            AffineMat aff = AffineMat.Iden();
                             aff.Translate(-_glbmp.Width / 2, -_glbmp.Height / 2);//move to bitmap's center
                             aff.RotateDeg(rotateDegree);
                             aff.Translate(i + _glbmp.Width / 2, i + _glbmp.Height / 2);
@@ -217,7 +217,7 @@ namespace OpenTkEssTest
                         for (int i = 0; i < 400;)
                         {
 
-                            AffineMat aff = AffineMat.Iden;
+                            AffineMat aff = AffineMat.Iden();
                             aff.Translate(-_glbmp.Width / 2, -_glbmp.Height / 2);//move to bitmap's center
                             aff.RotateDeg(rotateDegree);
                             aff.Translate(i + _glbmp.Width / 2, i + _glbmp.Height / 2);
@@ -230,7 +230,7 @@ namespace OpenTkEssTest
                         for (int i = 0; i < 400;)
                         {
 
-                            AffineMat aff = AffineMat.Iden;
+                            AffineMat aff = AffineMat.Iden();
                             aff.Translate(-_glbmp.Width / 2, -_glbmp.Height / 2);//move to bitmap's center
                             aff.RotateDeg(rotateDegree);
                             aff.Translate(i + _glbmp.Width / 2, i + _glbmp.Height / 2);

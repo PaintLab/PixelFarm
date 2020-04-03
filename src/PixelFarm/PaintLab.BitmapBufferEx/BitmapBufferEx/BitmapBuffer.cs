@@ -27,7 +27,7 @@ namespace BitmapBufferEx
         }
         public MatrixTransform()
         {
-            _affine = AffineMat.Iden;
+            _affine = AffineMat.Iden();
         }
          
         public override PointD Transform(PointD p)
