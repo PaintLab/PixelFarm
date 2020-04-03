@@ -132,6 +132,36 @@ namespace PixelFarm.DrawingGL
             _enableVBO = true;
         }
 
+        bool _cacheBoundEval;
+        PixelFarm.Drawing.RectangleF _cacheBounds;
+        public PixelFarm.Drawing.RectangleF GetBounds()
+        {
+            if (_cacheBoundEval)
+            {
+                return _cacheBounds;
+            }
+            if (_figures != null)
+            {
+                PixelFarm.Drawing.RectangleF bounds = new Drawing.RectangleF();
+                if (_figures.FigureCount > 0)
+                {
+                    bounds = _figures[0].GetBounds(); //start
+                    for (int i = 1; i < _figures.FigureCount; ++i)
+                    {
+                        bounds = PixelFarm.Drawing.RectangleF.Union(bounds, _figures[i].GetBounds());
+                    }
+                }
+                _cacheBoundEval = true;
+                return _cacheBounds = bounds;
+            }
+            else
+            {
+                //single figure
+                _cacheBoundEval = true;
+                return _cacheBounds = _figure.GetBounds();
+            }
+        }
+
         internal static PathRenderVx Create(FigureContainer figContainer)
         {
             return (figContainer.IsSingleFigure) ?
