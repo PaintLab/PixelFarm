@@ -67,6 +67,8 @@ namespace PixelFarm.DrawingGL
 
             //}
         }
+
+        internal LinkedListNode<TextureContainter> ActiveQueueLinkedNode { get; set; }
 #if DEBUG
         internal bool _debugIsActive;
         public override string ToString()
@@ -79,7 +81,7 @@ namespace PixelFarm.DrawingGL
     class TextureContainerMx
     {
         readonly TextureContainter[] _textureContainers;
-        readonly Queue<TextureContainter> _activeContainers = new Queue<TextureContainter>(32);
+        readonly LinkedList<TextureContainter> _activeContainers = new LinkedList<TextureContainter>();
         readonly Queue<TextureContainter> _freeContainers = new Queue<TextureContainter>(32);
 
         public TextureContainerMx()
@@ -129,11 +131,7 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-        internal TextureContainter CurrentActiveTextureContainer
-        {
-            get;
-            set;
-        }
+        internal TextureContainter CurrentActiveTextureContainer { get; set; }
         internal void ReleaseTextureContainer(TextureContainter textureContainer)
         {
 #if DEBUG
@@ -141,7 +139,25 @@ namespace PixelFarm.DrawingGL
             {   //clear the glbmp first
                 throw new System.NotSupportedException();
             }
+            if (_freeContainers.Contains(textureContainer))
+            {
+
+            }
 #endif
+            //must remove from active
+            if (textureContainer.ActiveQueueLinkedNode != null)
+            {
+                //remove specific node
+                _activeContainers.Remove(textureContainer.ActiveQueueLinkedNode);
+                textureContainer.ActiveQueueLinkedNode = null;//***
+            }
+            else
+            {
+#if DEBUG
+                System.Diagnostics.Debugger.Break();//???
+#endif
+            }
+
             _freeContainers.Enqueue(textureContainer);
         }
 
@@ -152,7 +168,7 @@ namespace PixelFarm.DrawingGL
         /// <param name="bmp"></param>
         /// <returns></returns>
         public TextureContainter LoadGLBitmap(GLBitmap bmp)
-        {          
+        {
 
             if (bmp.TextureContainer != null)
             {
@@ -167,7 +183,7 @@ namespace PixelFarm.DrawingGL
                 {
                     _latestLoadGLBmp = bmp;
                     return bmp.TextureContainer;
-                }                
+                }
             }
             //----------------
             if (_freeContainers.Count > 0)
@@ -175,7 +191,16 @@ namespace PixelFarm.DrawingGL
                 //has some free texture unit   
                 TextureContainter container = _freeContainers.Dequeue();
                 container.LoadGLBitmap(bmp);
-                _activeContainers.Enqueue(container);//move to active container queue
+
+#if DEBUG
+                if (_activeContainers.Contains(container))
+                {
+                    //remove this from 
+                    System.Diagnostics.Debugger.Break();
+                }
+#endif
+
+                container.ActiveQueueLinkedNode = _activeContainers.AddLast(container);
 #if DEBUG
                 container._debugIsActive = true;
 #endif
@@ -185,9 +210,15 @@ namespace PixelFarm.DrawingGL
             {
                 //TODO: handle out-of-quota  texture unit here
                 //in this version we unload from oldest active container
-                TextureContainter container = _activeContainers.Dequeue();
+
+                TextureContainter container = _activeContainers.First.Value;
                 container.UnloadGLBitmap();
+
 #if DEBUG
+                if (container.ActiveQueueLinkedNode != null)
+                {
+                    System.Diagnostics.Debugger.Break();
+                }
                 if (_freeContainers.Count < 2)
                 {
 
@@ -197,7 +228,10 @@ namespace PixelFarm.DrawingGL
                 //so we get the new one from the pool,DO NOT reuse current container
                 container = _freeContainers.Dequeue();
                 container.LoadGLBitmap(bmp);
-                _activeContainers.Enqueue(container);
+
+                //enqueue
+                container.ActiveQueueLinkedNode = _activeContainers.AddLast(container);
+
 #if DEBUG
                 container._debugIsActive = true;
 #endif
