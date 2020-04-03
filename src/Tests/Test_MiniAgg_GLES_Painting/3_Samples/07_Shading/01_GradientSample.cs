@@ -4,7 +4,6 @@
 using System;
 using System.Diagnostics;
 using PixelFarm.Drawing;
-using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
 
 using Mini;
