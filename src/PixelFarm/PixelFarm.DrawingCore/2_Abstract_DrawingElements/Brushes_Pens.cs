@@ -34,7 +34,7 @@ namespace PixelFarm.Drawing
         {
             this.Color = color;
         }
-        public Color Color { get; set; }
+        public Color Color { get; }
         public override BrushKind BrushKind => BrushKind.Solid;
 
         public override object InnerBrush { get; set; }
@@ -45,15 +45,13 @@ namespace PixelFarm.Drawing
 
     public sealed class TextureBrush : Brush
     {
-
-        Image _textureImage;
         public TextureBrush(Image textureImage)
         {
-            _textureImage = textureImage;
+            TextureImage = textureImage;
         }
         public override BrushKind BrushKind => BrushKind.Texture;
 
-        public Image TextureImage => _textureImage;
+        public Image TextureImage { get; }
         public override object InnerBrush { get; set; }
         public override void Dispose()
         {
@@ -90,7 +88,7 @@ namespace PixelFarm.Drawing
         public ColorStop(float offset, GradientOffsetUnit unit, Color color)
         {
 #if DEBUG
-            if(offset < 0 || offset >1)
+            if (offset < 0 || offset > 1)
             {
                 System.Diagnostics.Debugger.Break();
             }
@@ -154,8 +152,6 @@ namespace PixelFarm.Drawing
 
     public sealed class RadialGradientBrush : GeometryGradientBrush
     {
-        readonly ColorStop[] _stops;
-        readonly bool _isValid;
         public RadialGradientBrush(PointF start, PointF end, Color c1, Color c2)
             : this(start, end, new ColorStop[]
             {
@@ -188,15 +184,15 @@ namespace PixelFarm.Drawing
             }
             //---------------
 
-            _isValid = true;
-            _stops = stops;
+            IsValid = true;
+            ColorStops = stops;
         }
         public override BrushKind BrushKind => BrushKind.CircularGraident;
         public SpreadMethod SpreadMethod { get; set; }
         public PointF StartPoint { get; }
         public PointF EndPoint { get; }
-        public ColorStop[] ColorStops => _stops;
-        public bool IsValid => _isValid;
+        public ColorStop[] ColorStops { get; }
+        public bool IsValid { get; }
 
         public double Length => System.Math.Sqrt(
                                     (EndPoint.Y - StartPoint.Y) * (EndPoint.Y - StartPoint.Y) +
@@ -206,16 +202,13 @@ namespace PixelFarm.Drawing
 
     public sealed class LinearGradientBrush : GeometryGradientBrush
     {
-        ColorStop[] _stops;
-        bool _isValid;
-
         public LinearGradientBrush(PointF start, PointF end, Color c1, Color c2)
         {
 
             StartPoint = start;
             EndPoint = end;
-            _isValid = true;
-            _stops = new ColorStop[]
+            IsValid = true;
+            ColorStops = new ColorStop[]
             {
                 new ColorStop(0, GradientOffsetUnit.Ratio,c1),
                 new ColorStop(1, GradientOffsetUnit.Ratio,c2),
@@ -233,15 +226,15 @@ namespace PixelFarm.Drawing
             }
             //---------------
 
-            _isValid = true;
-            _stops = stops;
+            IsValid = true;
+            ColorStops = stops;
         }
         public override BrushKind BrushKind => BrushKind.LinearGradient;
         public SpreadMethod SpreadMethod { get; set; }
         public PointF StartPoint { get; }
         public PointF EndPoint { get; }
-        public ColorStop[] ColorStops => _stops;
-        public bool IsValid => _isValid;
+        public ColorStop[] ColorStops { get; }
+        public bool IsValid { get; }
         //
         public double Length => System.Math.Sqrt(
                                     (EndPoint.Y - StartPoint.Y) * (EndPoint.Y - StartPoint.Y) +
@@ -266,15 +259,14 @@ namespace PixelFarm.Drawing
             }
         }
 
-        List<ColorVertex2d> _colorVertices = new List<ColorVertex2d>();
         public PolygonGradientBrush(ColorVertex2d[] initVertices)
         {
             //start at least 3 vertices
             if (initVertices.Length < 2) throw new NotSupportedException();
-            _colorVertices.AddRange(initVertices);
+            Vertices.AddRange(initVertices);
         }
 
-        public List<ColorVertex2d> Vertices => _colorVertices;
+        public List<ColorVertex2d> Vertices { get; } = new List<ColorVertex2d>();
         public override BrushKind BrushKind => BrushKind.PolygonGradient;
         public override object InnerBrush { get; set; }
         public override void Dispose()
@@ -293,7 +285,7 @@ namespace PixelFarm.Drawing
     public sealed class Pen : PenBase
     {
 
-        Brush _brush;
+        readonly Brush _brush;
         Color _strokeColor;
         public Pen(Color color)
         {
