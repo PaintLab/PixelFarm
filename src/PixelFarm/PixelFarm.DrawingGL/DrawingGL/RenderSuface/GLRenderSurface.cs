@@ -105,10 +105,6 @@ namespace PixelFarm.DrawingGL
         }
     }
 
-
-
-
-
     /// <summary>
     /// GLES2 render Context, This is not intended to be used directly from your code
     /// </summary>
@@ -1124,6 +1120,11 @@ namespace PixelFarm.DrawingGL
             }
             return tessVBOStream;
         }
+
+
+
+        internal bool _specialBorderForMask; //test
+
         public void FillGfxPath(Drawing.Color color, PathRenderVx pathRenderVx)
         {
             switch (SmoothMode)
@@ -1175,6 +1176,12 @@ namespace PixelFarm.DrawingGL
                     break;
                 case SmoothMode.Smooth:
                     {
+
+                        if (_specialBorderForMask)
+                        {
+
+                        }
+
                         float saved_Width = StrokeWidth;
                         Drawing.Color saved_Color = StrokeColor;
                         //temp set stroke width to 2 amd stroke color
@@ -1267,15 +1274,18 @@ namespace PixelFarm.DrawingGL
                 //size_w = size_h = 300;
                 GLRenderSurface renderSx_mask = new GLRenderSurface(size_w, size_h); //mask color surface 
 
+                _specialBorderForMask = true;
                 using (TempSwitchToNewSurface(renderSx_mask))
                 {
                     //after switch to a new surface
                     //canvas offset is reset to (0,0) of the new surface 
                     Clear(Color.Black);
+                    //Clear(Color.White);
                     FillGfxPath(Color.White, pathRenderVx);
                 }
+                _specialBorderForMask = false;
 
-                //DrawImage(renderSx_mask.GetGLBitmap(), 0, 0);//for debug show mask 
+                DrawImage(renderSx_mask.GetGLBitmap(), 0, 0);//for debug show mask 
 
                 //2. generate gradient color, (TODO: cache, NOT need to generate this every time)
                 GLBitmap color_src;
@@ -1315,7 +1325,6 @@ namespace PixelFarm.DrawingGL
                                 //for debug,                            
                                 //DrawImage(color_src, 0, 0);//for debug show color-gradient
                                 renderSx_color.Dispose();
-
                             }
                         }
                         break;
@@ -1378,7 +1387,7 @@ namespace PixelFarm.DrawingGL
                 }
 
                 //                         
-                DrawImageWithMask(renderSx_mask.GetGLBitmap(), color_src, 0, 0);
+                //DrawImageWithMask(renderSx_mask.GetGLBitmap(), color_src, 0, 0);
 
                 renderSx_mask.Dispose();
 
