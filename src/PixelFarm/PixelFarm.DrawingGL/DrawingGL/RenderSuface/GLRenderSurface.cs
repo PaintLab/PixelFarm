@@ -1267,22 +1267,15 @@ namespace PixelFarm.DrawingGL
                 //size_w = size_h = 300;
                 GLRenderSurface renderSx_mask = new GLRenderSurface(size_w, size_h); //mask color surface 
 
-                int ox = _canvasOriginX;
-                int oy = _canvasOriginY;
-                if (ox != 0)
-                {
-
-                }
                 using (TempSwitchToNewSurface(renderSx_mask))
                 {
                     //after switch to a new surface
-                    //canvas offset is reset to (0,0) of the new surface
+                    //canvas offset is reset to (0,0) of the new surface 
                     Clear(Color.Black);
                     FillGfxPath(Color.White, pathRenderVx);
                 }
 
-
-                DrawImage(renderSx_mask.GetGLBitmap(), 0, 0);//for debug show mask 
+                //DrawImage(renderSx_mask.GetGLBitmap(), 0, 0);//for debug show mask 
 
                 //2. generate gradient color, (TODO: cache, NOT need to generate this every time)
                 GLBitmap color_src;
@@ -1290,68 +1283,68 @@ namespace PixelFarm.DrawingGL
                 switch (brush.BrushKind)
                 {
                     default: throw new NotSupportedException();
+
                     case BrushKind.LinearGradient:
                         {
                             //we can cache the gradient color for this bitmap
                             //so we don't need to create every time
 
                             LinearGradientBrush glGrBrush = LinearGradientBrush.Resolve((Drawing.LinearGradientBrush)brush);
-                            //if (glGrBrush.CacheGradientBitmap != null)
-                            //{
-                            //    color_src = glGrBrush.CacheGradientBitmap;
-                            //}
-                            //else
-                            //{
-                            //create a new one and cache
-                            color_src = new GLBitmap(size_w, size_h);
-                            var renderSx_color = new GLRenderSurface(color_src, false); //gradient color surface
-
-                            ////brush origin?
-                            ////this can be configured
-                            ////1. relative to bounds of pathRenderVx
-                            ////2. relative to other specific position
-
-                            using (TempSwitchToNewSurface(renderSx_color))
+                            if (glGrBrush.CacheGradientBitmap != null)
                             {
-                                _rectFillShader.Render(bounds.Left, bounds.Top, glGrBrush._v2f, glGrBrush._colors);
+                                color_src = glGrBrush.CacheGradientBitmap;
                             }
-                            //glGrBrush.SetCacheGradientBitmap(color_src, true);
+                            else
+                            {
+                                //create a new one and cache
+                                color_src = new GLBitmap(size_w, size_h);
+                                var renderSx_color = new GLRenderSurface(color_src, false); //gradient color surface
 
+                                ////brush origin?
+                                ////this can be configured
+                                ////1. relative to bounds of pathRenderVx
+                                ////2. relative to other specific position
 
-                            //for debug, 
-                            //DrawImage(color_src, 0, 0);//for debug show mask 
-                            renderSx_color.Dispose();
+                                using (TempSwitchToNewSurface(renderSx_color))
+                                {
+                                    _rectFillShader.Render(bounds.Left, bounds.Top, glGrBrush._v2f, glGrBrush._colors);
+                                }
+                                //glGrBrush.SetCacheGradientBitmap(color_src, true);
 
-                            //}
+                                //FillRect(Color.Yellow, 0, 0, 200, 100);
+                                //for debug,                            
+                                //DrawImage(color_src, 0, 0);//for debug show color-gradient
+                                renderSx_color.Dispose();
+
+                            }
                         }
                         break;
                     case BrushKind.CircularGraident:
                         {
                             RadialGradientBrush glGrBrush = RadialGradientBrush.Resolve((Drawing.RadialGradientBrush)brush);
-                            //if (glGrBrush.CacheGradientBitmap != null)
-                            //{
-                            //    color_src = glGrBrush.CacheGradientBitmap;
-                            //}
-                            //else
-                            //{
-                            color_src = new GLBitmap(size_w, size_h);
-                            var renderSx_color = new GLRenderSurface(color_src, false); //gradient color surface
-                            using (TempSwitchToNewSurface(renderSx_color))
+                            if (glGrBrush.CacheGradientBitmap != null)
                             {
-                                _radialGradientShader.Render(
-                                            glGrBrush._v2f,
-                                            glGrBrush._cx,
-                                            _vwHeight - glGrBrush._cy,
-                                            glGrBrush._r,
-                                            glGrBrush._invertedAff,
-                                            glGrBrush._lookupBmp);
-                                color_src = renderSx_color.GetGLBitmap();
+                                color_src = glGrBrush.CacheGradientBitmap;
                             }
-                            glGrBrush.SetCacheGradientBitmap(color_src, true);
-                            renderSx_color.Dispose();
-
-                            DrawImage(color_src, 0, 0);//for debug show mask 
-                            //}
+                            else
+                            {
+                                color_src = new GLBitmap(size_w, size_h);
+                                var renderSx_color = new GLRenderSurface(color_src, false); //gradient color surface
+                                using (TempSwitchToNewSurface(renderSx_color))
+                                {
+                                    _radialGradientShader.Render(
+                                                glGrBrush._v2f,
+                                                glGrBrush._cx,
+                                                _vwHeight - glGrBrush._cy,
+                                                glGrBrush._r,
+                                                glGrBrush._invertedAff,
+                                                glGrBrush._lookupBmp);
+                                    color_src = renderSx_color.GetGLBitmap();
+                                }
+                                glGrBrush.SetCacheGradientBitmap(color_src, true);
+                                renderSx_color.Dispose();
+                                //DrawImage(color_src, 0, 0);//for debug show color gradient 
+                            }
                         }
                         break;
                     case BrushKind.PolygonGradient:
@@ -1385,7 +1378,7 @@ namespace PixelFarm.DrawingGL
                 }
 
                 //                         
-                //DrawImageWithMask(renderSx_mask.GetGLBitmap(), color_src, 0, 0);
+                DrawImageWithMask(renderSx_mask.GetGLBitmap(), color_src, 0, 0);
 
                 renderSx_mask.Dispose();
 
@@ -1579,8 +1572,11 @@ namespace PixelFarm.DrawingGL
 
         public Rectangle GetClipRect()
         {
+            //int bottom = OriginKind == RenderSurfaceOriginKind.LeftTop ? _vwHeight - _scss_bottom : _scss_bottom;
+            //return Rectangle.FromLTRB(_scss_left - _canvasOriginX, bottom - _scss_height, _scss_width + _scss_left, bottom);
+
             int bottom = OriginKind == RenderSurfaceOriginKind.LeftTop ? _vwHeight - _scss_bottom : _scss_bottom;
-            return Rectangle.FromLTRB(_scss_left - _canvasOriginX, bottom - _scss_height, _scss_width + _scss_left, bottom);
+            return Rectangle.FromLTRB(_scss_left - _canvasOriginX, bottom - _scss_height - _canvasOriginY, _scss_width + _scss_left, bottom);
         }
         public void SetClipRect(int left, int top, int width, int height)
         {
@@ -1623,6 +1619,7 @@ namespace PixelFarm.DrawingGL
             SetCanvasOrigin(context.canvas_origin_X, context.canvas_origin_Y);
             Rectangle clipRect = context.clipRect;
             SetClipRect(clipRect.Left, clipRect.Top, clipRect.Width, clipRect.Height);
+
         }
         /// <summary>
         /// temporary switch to another render surface,and switch back after exist using context
