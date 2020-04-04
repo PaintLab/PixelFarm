@@ -76,15 +76,15 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
             using (Tools.BorrowVxs(out var v1, out var v2))
             using (Tools.BorrowPathWriter(v1, out PathWriter p))
             {
-                p.MoveTo(0, 50);
-                p.LineTo(50, 50);
+                p.MoveTo(0, 20);
+                p.LineTo(50, 20);
                 p.LineTo(10, 100);
                 p.CloseFigure();
 
                 AffineMat aff1 = AffineMat.GetScaleMat(2);
                 _triangleVxs = v1.CreateTrim(aff1);
 
-                AffineMat tx = AffineMat.GetTranslateMat(100, 25);
+                AffineMat tx = AffineMat.GetTranslateMat(100, 120);
                 _triangleVxs2 = tx.TransformToVxs(_triangleVxs, v2).CreateTrim();
             }
         }
@@ -111,11 +111,7 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
                     selectedBrush = _solidBrush;
                     break;
                 case BrushKind.LinearGradient:
-                    selectedBrush = _linearGrBrush;
-                    if (UseOffset)
-                    {
-
-                    }
+                    selectedBrush = _linearGrBrush; 
                     break;
                 case BrushKind.CircularGradient:
                     selectedBrush = _circularGrBrush;
@@ -137,13 +133,13 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
             {
                 float prev_ox = p.OriginX;
                 float prev_oy = p.OriginY;
-                p.SetOrigin(100, 50);
+                p.SetOrigin(100, 120);
                 p.Fill(_triangleVxs);
                 p.SetOrigin(prev_ox, prev_oy);//restore
             }
             else
             {
-                 
+                //p.Fill(_triangleVxs);
                 p.Fill(_triangleVxs2);
             }
 
