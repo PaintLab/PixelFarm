@@ -112,6 +112,10 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
                     break;
                 case BrushKind.LinearGradient:
                     selectedBrush = _linearGrBrush;
+                    if (UseOffset)
+                    {
+
+                    }
                     break;
                 case BrushKind.CircularGradient:
                     selectedBrush = _circularGrBrush;
@@ -128,16 +132,18 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
             //p.FillRect(0, 200, 200, 50);
 
             p.Fill(_triangleVxs);
+
             if (UseOffset)
             {
                 float prev_ox = p.OriginX;
                 float prev_oy = p.OriginY;
-                p.SetOrigin(100, 25);
+                p.SetOrigin(100, 50);
                 p.Fill(_triangleVxs);
                 p.SetOrigin(prev_ox, prev_oy);//restore
             }
             else
             {
+                 
                 p.Fill(_triangleVxs2);
             }
 
