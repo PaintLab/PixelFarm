@@ -52,7 +52,7 @@ namespace PixelFarm.DrawingGL
             }
 
             a_position = _shaderProgram.GetAttrV2f("a_position");
-            u_orthov_offset = _shaderProgram.GetUniform2("u_ortho_offset");
+            u_ortho_offset = _shaderProgram.GetUniform2("u_ortho_offset");
             u_matrix = _shaderProgram.GetUniformMat4("u_mvpMatrix");            
             u_solidColor = _shaderProgram.GetUniform4("u_solidColor");
         }

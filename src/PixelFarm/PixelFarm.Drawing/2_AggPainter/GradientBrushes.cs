@@ -355,11 +355,14 @@ namespace PixelFarm.CpuBlit
         List<VertexStore> _cacheVxsList = new List<VertexStore>();
         List<GouraudVerticeBuilder.CoordAndColor> _cacheColorAndVertexList = new List<GouraudVerticeBuilder.CoordAndColor>();
 
+    
+
         public PolygonGradientBrush()
         {
             this.DilationValue = 0.175f;
             this.LinearGamma = 0.809f;
         }
+        
         public float[] GetXYCoords() => _xyCoords;
         public Color[] GetColors() => _colors;
         public void BuildFrom(Drawing.PolygonGradientBrush polygonGrBrush)

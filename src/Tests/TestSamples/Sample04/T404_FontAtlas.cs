@@ -114,10 +114,7 @@ namespace OpenTkEssTest
             _pcx.DrawImage(_msdf_bmp, 0, 100);
             SwapBuffers();
         }
-        static PixelFarm.Drawing.Rectangle ConvToRect(Rectangle r)
-        {
-            return PixelFarm.Drawing.Rectangle.FromLTRB(r.Left, r.Top, r.Right, r.Bottom);
-        }
+        
     }
 
 }

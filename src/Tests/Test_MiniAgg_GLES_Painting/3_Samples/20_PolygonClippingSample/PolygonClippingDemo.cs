@@ -98,7 +98,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                         using (Tools.BorrowVxs(out var v1_gb_poly, out var v2_arrows))
                         {
 
-                            AffineMat mat1 = AffineMat.Iden;
+                            AffineMat mat1 = AffineMat.Iden();
                             mat1.Translate(-1150, -1150);
                             mat1.Scale(2);
 
@@ -128,7 +128,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                         using (Tools.BorrowVxs(out var v2_spiral, out var v2_spiral_outline))
                         using (Tools.BorrowStroke(out var stroke))
                         {
-                            AffineMat mat = AffineMat.Iden;
+                            AffineMat mat = AffineMat.Iden();
                             mat.Translate(-1150, -1150);
                             mat.Scale(2);
 
@@ -159,7 +159,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
                             //Affine mtx = Affine.New(
                             //   AffinePlan.Scale(4),
                             //   AffinePlan.Translate(220, 200));
-                            AffineMat mat = AffineMat.Iden;
+                            AffineMat mat = AffineMat.Iden();
                             mat.Scale(4);
                             mat.Translate(220, 200);
 

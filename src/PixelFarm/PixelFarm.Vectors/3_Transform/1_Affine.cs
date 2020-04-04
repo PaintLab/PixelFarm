@@ -300,7 +300,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
             }
         }
-    
+
         //-----------------------------------------
         /// <summary>
         /// m11
@@ -387,19 +387,15 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
         public static Affine NewRotation(double angRad, double rotationCenterX, double rotationCenterY)
         {
-            AffineMat mat = AffineMat.Iden;
-            mat.Rotate(angRad, rotationCenterX, rotationCenterY);
-            return new Affine(mat);
+            return new Affine(AffineMat.GetRotateMat(angRad, rotationCenterX, rotationCenterY));
         }
         public static Affine NewRotationDeg(double degree)
         {
             return NewRotation(degree * (Math.PI / 180d));
         }
         public static Affine NewRotationDeg(double degree, double rotationCenterX, double rotationCenterY)
-        {
-            AffineMat mat = AffineMat.Iden;
-            mat.RotateDeg(degree, rotationCenterX, rotationCenterY);
-            return new Affine(mat);
+        { 
+            return new Affine(AffineMat.GetRotateDegMat(degree, rotationCenterX, rotationCenterY));
         }
         //====================================================trans_affine_scaling
         // Scaling matrix. x, y - scale coefficients by X and Y respectively
