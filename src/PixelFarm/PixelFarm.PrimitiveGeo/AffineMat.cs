@@ -30,7 +30,7 @@
 using System;
 
 
-namespace PixelFarm.CpuBlit.VertexProcessing
+namespace PixelFarm.CpuBlit
 {
 
     /// <summary>

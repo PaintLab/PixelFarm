@@ -8,7 +8,7 @@ namespace PixelFarm.DrawingGL
     {
         readonly ShaderVtxAttrib2f a_position;
         readonly ShaderVtxAttrib4f a_color;
-
+      
         public RectFillShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
@@ -25,6 +25,7 @@ namespace PixelFarm.DrawingGL
                     attribute vec4 a_color;
                     uniform mat4 u_mvpMatrix; 
                     uniform vec2 u_ortho_offset;
+                    
                     varying vec4 v_color;
  
                     void main()
@@ -55,6 +56,7 @@ namespace PixelFarm.DrawingGL
             u_ortho_offset = _shaderProgram.GetUniform2("u_ortho_offset");
             a_color = _shaderProgram.GetAttrV4f("a_color");
             u_matrix = _shaderProgram.GetUniformMat4("u_mvpMatrix");
+            
         }
 
         /// <summary>
@@ -71,7 +73,7 @@ namespace PixelFarm.DrawingGL
             //----------------------------------------------------
             a_position.LoadPureV2f(v2fArray);
             a_color.LoadPureV4f(colors);
-            u_ortho_offset.SetValue(x, y);
+            //u_local_offset.SetValue(x, y);
             GL.DrawArrays(BeginMode.Triangles, 0, v2fArray.Length / 2);
         }
     }

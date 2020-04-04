@@ -2,7 +2,7 @@
 //MIT, 2017-present, WinterDev
 
 using System;
-using PixelFarm.CpuBlit.VertexProcessing;
+using PixelFarm.CpuBlit;
 
 namespace BitmapBufferEx
 {
@@ -20,7 +20,7 @@ namespace BitmapBufferEx
     {
         MatrixTransform _inverseVersion;
         AffineMat _affine;
-      
+
         public MatrixTransform(AffineMat affine)
         {
             _affine = affine;
@@ -29,7 +29,7 @@ namespace BitmapBufferEx
         {
             _affine = AffineMat.Iden();
         }
-         
+
         public override PointD Transform(PointD p)
         {
             double p_x = p.X;

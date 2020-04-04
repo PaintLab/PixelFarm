@@ -92,7 +92,7 @@ namespace PixelFarm.DrawingGL
 
             }
 
-            var txMatrix = PixelFarm.CpuBlit.VertexProcessing.AffineMat.Iden();
+            var txMatrix = AffineMat.Iden();
             txMatrix.Rotate(angleRad, x_1, y_1); //rotate around x_1,y_1 
 
             int j = s_vertices.Count;
@@ -182,7 +182,7 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-        
+
     }
 
     class RadialGradientBrush : TextureBasedBrush
@@ -319,7 +319,7 @@ namespace PixelFarm.DrawingGL
                 //create a new one
                 Build(polygonGr, tess, out float[] v2f, out float[] colors);
                 glGradient = new PolygonGradientBrush(v2f, colors);
-                
+
                 polygonGr.InnerBrush = glGradient;
             }
             return glGradient;

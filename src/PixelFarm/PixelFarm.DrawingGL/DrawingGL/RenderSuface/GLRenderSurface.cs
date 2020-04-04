@@ -4,8 +4,8 @@ using System;
 using System.Collections.Generic;
 using OpenTK.Graphics.ES20;
 using PixelFarm.Drawing;
+using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
-
 namespace PixelFarm.DrawingGL
 {
 
@@ -121,7 +121,6 @@ namespace PixelFarm.DrawingGL
         readonly RadialGradientFillShader _radialGradientShader;
 
         readonly SmoothLineShader _smoothLineShader;
-        readonly InvertAlphaLineSmoothShader _invertAlphaLineSmoothShader;
 
         readonly GlyphImageStecilShader _glyphStencilShader;
         readonly BGRImageTextureShader _bgrImgTextureShader;
@@ -217,8 +216,7 @@ namespace PixelFarm.DrawingGL
 
 
             _blurShader = new BlurShader(_shareRes);
-            //
-            _invertAlphaLineSmoothShader = new InvertAlphaLineSmoothShader(_shareRes); //used with stencil  ***
+            //             
 
             _conv3x3TextureShader = new Conv3x3TextureShader(_shareRes);
 
@@ -326,6 +324,7 @@ namespace PixelFarm.DrawingGL
 
             _shareRes.SetOrthoViewOffset(0, 0);
             rendersx.SetAsCurrentSurface();
+            SetCanvasOrigin(0, 0);//reset
             SetClipRect(0, 0, rendersx.Height, rendersx.Height);
         }
 
@@ -1270,17 +1269,21 @@ namespace PixelFarm.DrawingGL
 
                 using (TempSwitchToNewSurface(renderSx_mask))
                 {
+                    //after switch to a new surface
+                    //canvas offset is reset to (0,0) of the new surface 
                     Clear(Color.Black);
                     FillGfxPath(Color.White, pathRenderVx);
                 }
 
-                //DrawImage(renderSx1.GetGLBitmap(), 0, 0);
+                //DrawImage(renderSx_mask.GetGLBitmap(), 0, 0);//for debug show mask 
+
                 //2. generate gradient color, (TODO: cache, NOT need to generate this every time)
                 GLBitmap color_src;
 
                 switch (brush.BrushKind)
                 {
                     default: throw new NotSupportedException();
+
                     case BrushKind.LinearGradient:
                         {
                             //we can cache the gradient color for this bitmap
@@ -1296,18 +1299,23 @@ namespace PixelFarm.DrawingGL
                                 //create a new one and cache
                                 color_src = new GLBitmap(size_w, size_h);
                                 var renderSx_color = new GLRenderSurface(color_src, false); //gradient color surface
-                                
-                                //brush origin?
-                                //this can be configured
-                                //1. relative to bounds of pathRenderVx
-                                //2. relative to other specific position
+
+                                ////brush origin?
+                                ////this can be configured
+                                ////1. relative to bounds of pathRenderVx
+                                ////2. relative to other specific position
 
                                 using (TempSwitchToNewSurface(renderSx_color))
                                 {
                                     _rectFillShader.Render(bounds.Left, bounds.Top, glGrBrush._v2f, glGrBrush._colors);
                                 }
-                                glGrBrush.SetCacheGradientBitmap(color_src, true);
+                                //glGrBrush.SetCacheGradientBitmap(color_src, true);
+
+                                //FillRect(Color.Yellow, 0, 0, 200, 100);
+                                //for debug,                            
+                                //DrawImage(color_src, 0, 0);//for debug show color-gradient
                                 renderSx_color.Dispose();
+
                             }
                         }
                         break;
@@ -1320,7 +1328,7 @@ namespace PixelFarm.DrawingGL
                             }
                             else
                             {
-                                color_src = new GLBitmap(300, 300);
+                                color_src = new GLBitmap(size_w, size_h);
                                 var renderSx_color = new GLRenderSurface(color_src, false); //gradient color surface
                                 using (TempSwitchToNewSurface(renderSx_color))
                                 {
@@ -1335,6 +1343,7 @@ namespace PixelFarm.DrawingGL
                                 }
                                 glGrBrush.SetCacheGradientBitmap(color_src, true);
                                 renderSx_color.Dispose();
+                                //DrawImage(color_src, 0, 0);//for debug show color gradient 
                             }
                         }
                         break;
@@ -1563,8 +1572,11 @@ namespace PixelFarm.DrawingGL
 
         public Rectangle GetClipRect()
         {
+            //int bottom = OriginKind == RenderSurfaceOriginKind.LeftTop ? _vwHeight - _scss_bottom : _scss_bottom;
+            //return Rectangle.FromLTRB(_scss_left - _canvasOriginX, bottom - _scss_height, _scss_width + _scss_left, bottom);
+
             int bottom = OriginKind == RenderSurfaceOriginKind.LeftTop ? _vwHeight - _scss_bottom : _scss_bottom;
-            return Rectangle.FromLTRB(_scss_left - _canvasOriginX, bottom - _scss_height, _scss_width + _scss_left, bottom);
+            return Rectangle.FromLTRB(_scss_left - _canvasOriginX, bottom - _scss_height - _canvasOriginY, _scss_width + _scss_left, bottom);
         }
         public void SetClipRect(int left, int top, int width, int height)
         {
@@ -1603,10 +1615,11 @@ namespace PixelFarm.DrawingGL
         {
             AttachToRenderSurface(context.renderSurface);
             this.OriginKind = context.originKind;
-            _canvasOriginX = context.canvas_origin_X;
-            _canvasOriginY = context.canvas_origin_Y;
+
+            SetCanvasOrigin(context.canvas_origin_X, context.canvas_origin_Y);
             Rectangle clipRect = context.clipRect;
             SetClipRect(clipRect.Left, clipRect.Top, clipRect.Width, clipRect.Height);
+
         }
         /// <summary>
         /// temporary switch to another render surface,and switch back after exist using context
