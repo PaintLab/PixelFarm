@@ -170,7 +170,7 @@ namespace PixelFarm.Drawing.GLES2
             //resolve to internal presentation 
             if (image is AtlasImageBinder imgBinder)
             {
-                _gpuPainter.DrawImage(image, (float)destRect.X, (float)destRect.Y, (int)0, (int)0, (int)destRect.Width, (int)destRect.Height);
+                _gpuPainter.DrawImage(image, destRect.Left, destRect.Top, (int)0, (int)0, (int)destRect.Width, (int)destRect.Height);
                 _latestFillCouldbeUsedAsTextBgHint = false;
             }
             else
