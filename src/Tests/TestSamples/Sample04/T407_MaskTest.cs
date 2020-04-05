@@ -14,7 +14,7 @@ namespace OpenTkEssTest
     [Info("T407_MaskTest")]
     public class T407_MaskTest : DemoBase
     {
-        GLPainterContext _pcx;
+        GLPainterCore _pcx;
         GLPainter _painter;
 
         //
@@ -25,7 +25,7 @@ namespace OpenTkEssTest
 
         protected override void OnGLPainterReady(GLPainter painter)
         {
-            _pcx = painter.PainterContext;
+            _pcx = painter.Core;
             _painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()

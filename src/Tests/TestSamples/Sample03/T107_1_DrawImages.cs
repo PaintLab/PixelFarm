@@ -3,6 +3,7 @@
 
 using System;
 using Mini;
+using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.DrawingGL;
 namespace OpenTkEssTest
@@ -32,14 +33,14 @@ namespace OpenTkEssTest
     [Info("T107_1_DrawImages", AvailableOn = AvailableOn.GLES)]
     public class T107_1_DrawImages : DemoBase
     {
-        GLPainterContext _pcx;
+        GLPainterCore _pcx;
         GLPainter _painter;
         GLBitmap _glbmp;
         bool _isInit;
         //
         protected override void OnGLPainterReady(GLPainter painter)
         {
-            _pcx = painter.PainterContext;
+            _pcx = painter.Core;
             _painter = painter;
         }
         [DemoConfig]
@@ -174,7 +175,7 @@ namespace OpenTkEssTest
                             //left,top (NOT x,y) 
                             quad.SetCornersFromRect(0, 0, _glbmp.Width, _glbmp.Height);
 
-                            AffineMat aff = AffineMat.Iden;
+                            AffineMat aff = AffineMat.Iden();
                             aff.Translate(-_glbmp.Width / 2, -_glbmp.Height / 2);//move to bitmap's center
                             aff.RotateDeg(rotateDegree);
                             aff.Translate(i + _glbmp.Width / 2, i + _glbmp.Height / 2);
@@ -194,7 +195,7 @@ namespace OpenTkEssTest
                             //left,top (NOT x,y) 
                             quad.SetCornersFromRect(0, 0, _glbmp.Width, -_glbmp.Height);
 
-                            AffineMat aff = AffineMat.Iden;
+                            AffineMat aff = AffineMat.Iden();
                             aff.Translate(-_glbmp.Width / 2, -_glbmp.Height / 2);//move to bitmap's center
                             aff.RotateDeg(rotateDegree);
                             aff.Translate(i + _glbmp.Width / 2, i + _glbmp.Height / 2);
@@ -217,7 +218,7 @@ namespace OpenTkEssTest
                         for (int i = 0; i < 400;)
                         {
 
-                            AffineMat aff = AffineMat.Iden;
+                            AffineMat aff = AffineMat.Iden();
                             aff.Translate(-_glbmp.Width / 2, -_glbmp.Height / 2);//move to bitmap's center
                             aff.RotateDeg(rotateDegree);
                             aff.Translate(i + _glbmp.Width / 2, i + _glbmp.Height / 2);
@@ -230,7 +231,7 @@ namespace OpenTkEssTest
                         for (int i = 0; i < 400;)
                         {
 
-                            AffineMat aff = AffineMat.Iden;
+                            AffineMat aff = AffineMat.Iden();
                             aff.Translate(-_glbmp.Width / 2, -_glbmp.Height / 2);//move to bitmap's center
                             aff.RotateDeg(rotateDegree);
                             aff.Translate(i + _glbmp.Width / 2, i + _glbmp.Height / 2);

@@ -4,6 +4,7 @@
 using System;
 using System.Diagnostics;
 using PixelFarm.Drawing;
+using PixelFarm.CpuBlit.VertexProcessing;
 
 using Mini;
 namespace PixelFarm.CpuBlit.Sample_Gradient
@@ -14,6 +15,7 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
     {
         public enum BrushKind
         {
+            SolidBrush,
             LinearGradient,
             CircularGradient,
             PolygonGradient,
@@ -21,14 +23,19 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
 
 
         VertexStore _triangleVxs;
+        VertexStore _triangleVxs2;
+
+        SolidBrush _solidBrush;
         LinearGradientBrush _linearGrBrush;
 
         RadialGradientBrush _circularGrBrush;
         PolygonGradientBrush _polygonGradientBrush;
-        
+
 
         public GradientDemo()
         {
+            //solid brush
+            _solidBrush = new SolidBrush(Color.Blue);
 
             //1. linear gradient
             _linearGrBrush = new LinearGradientBrush(
@@ -47,6 +54,7 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
                     new PointF(50, 20), new PointF(300, 20),
                     new ColorStop[]
                     {
+                        //for test different colors
                         new ColorStop(0.0f, Drawing.Color.Yellow),
                         new ColorStop(0.25f, Drawing.Color.Blue),
                         new ColorStop(0.50f, Drawing.Color.Green),
@@ -65,18 +73,26 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
             };
             _polygonGradientBrush = new PolygonGradientBrush(vertices);
 
-            using (Tools.BorrowVxs(out var v1))
+            using (Tools.BorrowVxs(out var v1, out var v2))
             using (Tools.BorrowPathWriter(v1, out PathWriter p))
             {
-                p.MoveTo(0, 0);
-                p.LineToRel(100, 100);
-                p.LineToRel(100, -100);
+                p.MoveTo(0, 20);
+                p.LineTo(50, 20);
+                p.LineTo(10, 100);
                 p.CloseFigure();
-                _triangleVxs = v1.CreateTrim();
+
+                AffineMat aff1 = AffineMat.GetScaleMat(2);
+                _triangleVxs = v1.CreateTrim(aff1);
+
+                AffineMat tx = AffineMat.GetTranslateMat(100, 120);
+                _triangleVxs2 = tx.TransformToVxs(_triangleVxs, v2).CreateTrim();
             }
         }
 
-
+        [DemoConfig]
+        public bool UseOffset { get; set; }
+        [DemoConfig]
+        public bool EnableGLPainterTwoColorsMask { get; set; }
 
         [DemoConfig]
         public BrushKind SelectedBrushKind { get; set; }
@@ -85,13 +101,19 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
 
             p.RenderQuality = RenderQuality.Fast;
             Brush prevBrush = p.CurrentBrush;
-            Brush selectedBrush = _linearGrBrush;
+            Brush selectedBrush;
 
             p.Clear(Color.White);
 
             switch (SelectedBrushKind)
             {
+
+                default: throw new NotSupportedException();
+                case BrushKind.SolidBrush:
+                    selectedBrush = _solidBrush;
+                    break;
                 case BrushKind.LinearGradient:
+                    selectedBrush = _linearGrBrush;
                     break;
                 case BrushKind.CircularGradient:
                     selectedBrush = _circularGrBrush;
@@ -104,15 +126,44 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
             //
             p.CurrentBrush = selectedBrush;
 
-            p.FillRect(0, 100, 500, 500);
+            //special set for our GLPainter
+            bool glPainter2MaskColor = false;
+            DrawingGL.GLPainter glPainter = p as DrawingGL.GLPainter;
+            if (glPainter != null)
+            {
+                glPainter2MaskColor = p.EnableMask;
+                glPainter.UseTwoColorsMask = EnableGLPainterTwoColorsMask;
+               
+            }
 
+            //p.FillRect(0, 100, 500, 500); 
             //p.FillRect(0, 200, 200, 50);
 
-            //p.Fill(_triangleVxs);
+            p.Fill(_triangleVxs);
+
+            if (UseOffset)
+            {
+                float prev_ox = p.OriginX;
+                float prev_oy = p.OriginY;
+                p.SetOrigin(100, 120);
+                p.Fill(_triangleVxs);
+                p.SetOrigin(prev_ox, prev_oy);//restore
+            }
+            else
+            {
+                //p.Fill(_triangleVxs);
+                p.Fill(_triangleVxs2);
+            }
+
             ////-------------               
 
             p.CurrentBrush = prevBrush;
 
+            if (glPainter != null)
+            {
+                //restore
+                glPainter.UseTwoColorsMask = glPainter2MaskColor;
+            }
         }
 
     }

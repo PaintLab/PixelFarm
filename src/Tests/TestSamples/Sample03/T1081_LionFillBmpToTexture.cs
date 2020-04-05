@@ -25,14 +25,14 @@ namespace OpenTkEssTest
 
         AggPainter _aggPainter;
         //---------------------------
-        GLPainterContext _pcx;
+        GLPainterCore _pcx;
         SpriteShape _lionShape;
         GLPainter _painter;
         GLBitmap _glBmp;
 
         protected override void OnGLPainterReady(GLPainter painter)
         {
-            _pcx = painter.PainterContext;
+            _pcx = painter.Core;
             _painter = painter;
 
         }

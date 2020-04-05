@@ -24,7 +24,7 @@ namespace YourImplementation
                     SetUpSoftwareRendererOverGLSurface(
                         config,
                         vw.MyNativeWindow,
-                        vw.GetGLRenderSurface(),
+                        vw.GLPainterCore(),
                         vw.GetGLPainter(),
                         vw.InnerViewportKind);
                     break;
@@ -34,7 +34,7 @@ namespace YourImplementation
         static void SetUpSoftwareRendererOverGLSurface(
           LayoutFarm.AppHostConfig config,
           IGpuOpenGLSurfaceView myNativeWindow,
-          PixelFarm.DrawingGL.GLPainterContext pcx,
+          PixelFarm.DrawingGL.GLPainterCore pcx,
           PixelFarm.DrawingGL.GLPainter glPainter,
           InnerViewportKind innerViewPortKind)
         {

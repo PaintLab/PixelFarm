@@ -12,7 +12,7 @@ namespace OpenTkEssTest
     [Info("T112_FrameBuffer", AvailableOn = AvailableOn.GLES)]
     public class T112_FrameBuffer : DemoBase
     {
-        GLPainterContext _pcx;
+        GLPainterCore _pcx;
         GLPainter _painter;
         GLRenderSurface _surface1;
         GLBitmap _glbmp;
@@ -20,7 +20,7 @@ namespace OpenTkEssTest
         bool _frameBufferNeedUpdate;
         protected override void OnGLPainterReady(GLPainter painter)
         {
-            _pcx = painter.PainterContext;
+            _pcx = painter.Core;
             _painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()
@@ -111,14 +111,14 @@ namespace OpenTkEssTest
     [Info("T112_FrameBuffer_BGRA_to_RGBA", AvailableOn = AvailableOn.GLES)]
     public class T112_FrameBuffer_BGRA_To_RGBA : DemoBase
     {
-        GLPainterContext _pcx;
+        GLPainterCore _pcx;
         GLPainter _painter;
         GLBitmap _glbmp;
         bool _isInit;
 
         protected override void OnGLPainterReady(GLPainter painter)
         {
-            _pcx = painter.PainterContext;
+            _pcx = painter.Core;
             _painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()

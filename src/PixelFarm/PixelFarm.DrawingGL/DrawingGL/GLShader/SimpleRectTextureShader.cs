@@ -412,7 +412,7 @@ namespace PixelFarm.DrawingGL
             SetVarsBeforeRender();
             GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
         }
-         
+
         public void Render(GLBitmap glBmp, float left, float top, float w, float h, bool isFlipped = false)
         {
             unsafe
@@ -455,7 +455,7 @@ namespace PixelFarm.DrawingGL
             a_position = _shaderProgram.GetAttrV3f("a_position");
             a_texCoord = _shaderProgram.GetAttrV2f("a_texCoord");
             u_matrix = _shaderProgram.GetUniformMat4("u_mvpMatrix");
-            u_orthov_offset = _shaderProgram.GetUniform2("u_ortho_offset");
+            u_ortho_offset = _shaderProgram.GetUniform2("u_ortho_offset");
             u_texture = _shaderProgram.GetUniform1("s_texture");
             OnProgramBuilt();
             return true;
@@ -1466,14 +1466,13 @@ namespace PixelFarm.DrawingGL
         }
     }
 
-    sealed class MaskShader : SimpleRectTextureShader
+
+
+    abstract class MaskShaderBase : SimpleRectTextureShader
     {
         //in this shader we have 2 textures
         //1. for mask (default, similar to other SimpleRectTextureShaders)
-        //2. for color source (instead of vertex color)
-
-        //in this version, mask and color source size must be the same.
-        //this limitation will be fixed later.
+        //2. for color source (instead of vertex color) 
 
         ShaderUniformVar2 _offset;
         /// <summary>
@@ -1482,52 +1481,9 @@ namespace PixelFarm.DrawingGL
         ShaderUniformVar1 _u_color_src;
         ShaderVtxAttrib2f _texCoord_color;
 
-        public MaskShader(ShaderSharedResource shareRes)
+        public MaskShaderBase(ShaderSharedResource shareRes)
             : base(shareRes)
         {
-            string vs = @"                 
-                attribute vec4 a_position;
-                attribute vec2 a_texCoord;
-                attribute vec2 a_texCoord_color;
-
-                uniform vec2 u_ortho_offset;
-                uniform vec2 u_offset;                
-                uniform mat4 u_mvpMatrix; 
-
-                varying vec2 v_texCoord; 
-                varying vec2 v_color_texCoord; 
-
-                void main()
-                {                      
-                    gl_Position = u_mvpMatrix* (a_position+ vec4(u_offset+u_ortho_offset,0,0));
-                    v_texCoord =  a_texCoord;
-                    v_color_texCoord= a_texCoord_color;
-                }	 
-               ";
-
-
-            string fs = @"
-                      precision mediump float; 
-                      uniform sampler2D s_texture;
-                      uniform sampler2D s_color_src;
-                       
-                      varying vec2 v_texCoord; 
-                      varying vec2 v_color_texCoord;
-                      void main()
-                      {   
-                            vec4 m = texture2D(s_texture,v_texCoord);
-                            vec4 c = texture2D(s_color_src,v_color_texCoord);
-                            
-                            gl_FragColor= vec4(c[2], c[1], c[0] , c[3] * m[2]); 
-                      }
-                ";
-
-            //debug
-            //gl_FragColor= vec4(m[0],m[1],m[2],m[3]);
-            //gl_FragColor= vec4(c[2],c[1],c[0],c[3]);
-
-
-            BuildProgram(vs, fs);
         }
 
         protected override void OnProgramBuilt()
@@ -1612,6 +1568,136 @@ namespace PixelFarm.DrawingGL
             GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
         }
     }
+
+    sealed class OneColorMaskShader : MaskShaderBase
+    {
+        public OneColorMaskShader(ShaderSharedResource shareRes)
+           : base(shareRes)
+        {
+ 
+            string vs = @"                 
+            attribute vec4 a_position;
+            attribute vec2 a_texCoord;
+            attribute vec2 a_texCoord_color;
+
+            uniform vec2 u_ortho_offset;
+            uniform vec2 u_offset;
+            uniform mat4 u_mvpMatrix;
+
+            varying vec2 v_texCoord;
+            varying vec2 v_color_texCoord;
+
+            void main()
+            {
+                gl_Position = u_mvpMatrix * (a_position + vec4(u_offset + u_ortho_offset, 0, 0));
+                v_texCoord = a_texCoord;
+                v_color_texCoord = a_texCoord_color;
+            }
+            "; 
+            string fs = @"
+                      precision mediump float; 
+                      uniform sampler2D s_texture;
+                      uniform sampler2D s_color_src;
+
+                      varying vec2 v_texCoord; 
+                      varying vec2 v_color_texCoord;
+                      void main()
+                      {   
+                            vec4 m = texture2D(s_texture,v_texCoord);
+                            vec4 c = texture2D(s_color_src,v_color_texCoord);                            
+                            gl_FragColor= vec4(c[2], c[1], c[0] , c[3] * m[0]);                            
+                      }
+                ";
+            //debug
+            //gl_FragColor= vec4(m[0],m[1],m[2],m[3]);
+            //gl_FragColor= vec4(c[2],c[1],c[0],c[3]); 
+            BuildProgram(vs, fs);
+        }
+    }
+
+    sealed class TwoColorMaskShader : MaskShaderBase
+    {
+        //This is a special version of mask shader
+        //background-color: black,
+        //inside shape: white,
+        //border: red  
+
+        public TwoColorMaskShader(ShaderSharedResource shareRes)
+            : base(shareRes)
+        {
+            string vs = @"                 
+                attribute vec4 a_position;
+                attribute vec2 a_texCoord;
+                attribute vec2 a_texCoord_color;
+
+                uniform vec2 u_ortho_offset;
+                uniform vec2 u_offset;                
+                uniform mat4 u_mvpMatrix; 
+
+                varying vec2 v_texCoord; 
+                varying vec2 v_color_texCoord; 
+
+                void main()
+                {                      
+                    gl_Position = u_mvpMatrix* (a_position+ vec4(u_offset+u_ortho_offset,0,0));
+                    v_texCoord =  a_texCoord;
+                    v_color_texCoord= a_texCoord_color;
+                }	 
+               ";
+
+
+            //version 2.2: this version does not use if else
+            //if m[0]< 1.0 then we use m[0], not use m[2]
+            //else we don't use m[0], we switch to use m[2],
+            //so we use floor(m[0]), result will be 0 or 1 for m[2], (you see the code m[2]*c2_compo)
+            //and if c2_compo=0, then => 1.0-c2_compo => 1.0 (here we use only m[1])           
+
+            //TODO: test performance between 2.1 vs 2,2,
+            //compare between if-else and not use if-else
+
+            string fs = @"
+                      precision mediump float; 
+                      uniform sampler2D s_texture;
+                      uniform sampler2D s_color_src;
+                       
+                      varying vec2 v_texCoord; 
+                      varying vec2 v_color_texCoord;
+                      void main()
+                      {   
+                            vec4 m = texture2D(s_texture,v_texCoord);
+                            vec4 c = texture2D(s_color_src,v_color_texCoord);
+                            float c2_compo= floor(m[0]);
+                            gl_FragColor= vec4(c[2], c[1], c[0] , c[3] * (m[2]*c2_compo + m[0]*(1.0-c2_compo)));                            
+                      }
+                ";
+
+            //old version 2.1 , use if-else
+            //string fs = @"
+            //          precision mediump float; 
+            //          uniform sampler2D s_texture;
+            //          uniform sampler2D s_color_src;
+                       
+            //          varying vec2 v_texCoord; 
+            //          varying vec2 v_color_texCoord;
+            //          void main()
+            //          {   
+            //                vec4 m = texture2D(s_texture,v_texCoord);
+            //                vec4 c = texture2D(s_color_src,v_color_texCoord);
+            //                if(m[0]< 1.0){
+            //                   gl_FragColor= vec4(c[2], c[1], c[0] , c[3] * m[0]);  
+            //                }else{                              
+            //                    gl_FragColor= vec4(c[2], c[1], c[0] , c[3] * m[2]);
+            //                }
+            //          }
+            //    ";
+
+            //debug
+            //gl_FragColor= vec4(m[0],m[1],m[2],m[3]);
+            //gl_FragColor= vec4(c[2],c[1],c[0],c[3]); 
+            BuildProgram(vs, fs);
+        }
+    }
+
     //--------------------------------------------------------
     static class SimpleRectTextureShaderExtensions
     {

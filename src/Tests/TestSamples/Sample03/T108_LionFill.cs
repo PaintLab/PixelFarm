@@ -12,12 +12,12 @@ namespace OpenTkEssTest
     public class T108_LionFill : DemoBase
     {
 
-        GLPainterContext _pcx;
+        GLPainterCore _pcx;
         SpriteShape _spriteShape;
         GLPainter _painter;
         protected override void OnGLPainterReady(GLPainter painter)
         {
-            _pcx = painter.PainterContext;
+            _pcx = painter.Core;
             _painter = painter;
         }
 

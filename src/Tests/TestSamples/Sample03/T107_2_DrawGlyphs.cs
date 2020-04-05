@@ -27,7 +27,7 @@ namespace OpenTkEssTest
     [Info("T107_2_DrawGlyphs_from_GlyphTextureAtlas", AvailableOn = AvailableOn.GLES)]
     public class T107_2_DrawGlyphs : DemoBase
     {
-        GLPainterContext _pcx;
+        GLPainterCore _pcx;
         GLPainter _painter;
         GLBitmap _glbmp;
         bool _isInit;
@@ -37,7 +37,7 @@ namespace OpenTkEssTest
 
         protected override void OnGLPainterReady(GLPainter painter)
         {
-            _pcx = painter.PainterContext;
+            _pcx = painter.Core;
             _painter = painter;
             SelectedGlyphImage = T107_2_GlyphImages.Img1;
         }

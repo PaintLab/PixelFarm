@@ -56,7 +56,7 @@ namespace PixelFarm.DrawingGL
                 if (PixelFarm.Drawing.SimpleRectClipEvaluator.EvaluateRectClip(vxs, out RectangleF clipRect))
                 {
                     this.SetClipBox(
-                        (int)Math.Floor(clipRect.X), (int)Math.Floor(clipRect.Y),
+                        (int)Math.Floor(clipRect.Left), (int)Math.Floor(clipRect.Top),
                         (int)Math.Ceiling(clipRect.Right), (int)Math.Ceiling(clipRect.Bottom));
 
                     _currentClipTech = ClipingTechnique.ClipSimpleRect;

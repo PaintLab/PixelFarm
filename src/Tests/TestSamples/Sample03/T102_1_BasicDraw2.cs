@@ -27,13 +27,13 @@ namespace OpenTkEssTest
     [Info("T102_1_BasicDraw2")]
     public class T102_1_BasicDraw2 : DemoBase
     {
-        GLPainterContext _pcx;
+        GLPainterCore _pcx;
         GLPainter _painter;
 
         protected override void OnGLPainterReady(GLPainter painter)
         {
             _painter = painter;
-            _pcx = painter.PainterContext;
+            _pcx = painter.Core;
         }
         [DemoConfig]
         public T102_1_Set DrawSet

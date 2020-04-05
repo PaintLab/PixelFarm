@@ -14,7 +14,7 @@ namespace OpenTkEssTest
     [Info("T109_LionFillWithRenderVx", AvailableOn = AvailableOn.GLES)]
     public class T109_LionFillWithRenderVx : DemoBase
     {
-        GLPainterContext _pcx;
+        GLPainterCore _pcx;
         SpriteShape _lionShape;
         VertexStore _lionVxs;
         GLPainter _painter;
@@ -23,7 +23,7 @@ namespace OpenTkEssTest
 
         protected override void OnGLPainterReady(GLPainter painter)
         {
-            _pcx = painter.PainterContext;
+            _pcx = painter.Core;
             _painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()

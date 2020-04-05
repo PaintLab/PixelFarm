@@ -62,7 +62,7 @@ namespace Mini
             get => false;
             set { }
         }
-        public static void InvokeGLPainterReady(DemoBase demo, GLPainterContext pcx, GLPainter painter)
+        public static void InvokeGLPainterReady(DemoBase demo, GLPainterCore pcx, GLPainter painter)
         {
             demo.OnGLPainterReady(painter);
             demo.OnReadyForInitGLShaderProgram();
