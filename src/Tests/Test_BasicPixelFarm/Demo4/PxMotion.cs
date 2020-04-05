@@ -1,15 +1,11 @@
 ﻿//MIT, 2014-present,WinterDev
 
-using System;
-using PixelFarm;
-using PixelFarm.Drawing;
+using LayoutFarm.RenderBoxes;
+using PaintLab.Svg;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
+using PixelFarm.Drawing;
 using PixelFarm.VectorMath;
-
-
-using PaintLab.Svg;
-using LayoutFarm.RenderBoxes;
 
 namespace LayoutFarm.UI
 {
@@ -19,7 +15,7 @@ namespace LayoutFarm.UI
         public double _spriteScale = 1.0;
         public double _skewX = 0;
         public double _skewY = 0;
-       
+
         public int Width { get; set; }
         public int Height { get; set; }
         public override object Tag { get; set; }
@@ -31,7 +27,7 @@ namespace LayoutFarm.UI
         SpriteShape _spriteShape;
         VgVisualElement _vgVisElem;
 
-        float _posX, _posY;
+        float _left, _top;
         float _mouseDownX, _mouseDownY;
         Affine _currentTx = null;
         byte _alpha;
@@ -43,8 +39,8 @@ namespace LayoutFarm.UI
             AlphaValue = 255;
             _vgVisElem = vgRenderVx;
         }
-        public float X => _posX;
-        public float Y => _posY;
+        public float Left => _left;
+        public float Top => _top;
         public SpriteShape SpriteShape
         {
             get => _spriteShape;
@@ -77,13 +73,13 @@ namespace LayoutFarm.UI
                 RectD bounds = _vgVisElem.GetRectBounds();
                 _spriteShape = new SpriteShape(_vgVisElem, rootgfx, (int)bounds.Width, (int)bounds.Height);
                 _spriteShape.SetController(this);//listen event 
-                _spriteShape.SetLocation((int)_posX, (int)_posY);
+                _spriteShape.SetLocation((int)_left, (int)_top);
             }
             return _spriteShape;
         }
         public bool HitTestOnSubPart
         {
-            get { return _hitTestOnSubPart; }
+            get => _hitTestOnSubPart;
             set
             {
                 _hitTestOnSubPart = value;
@@ -119,11 +115,11 @@ namespace LayoutFarm.UI
         //
         public void SetLocation(float left, float top)
         {
-            _posX = left;
-            _posY = top;
+            _left = left;
+            _top = top;
             if (_spriteShape != null)
             {
-                _spriteShape.SetLocation((int)_posX, (int)_posY);
+                _spriteShape.SetLocation((int)_left, (int)_top);
             }
 
         }
@@ -377,9 +373,9 @@ namespace LayoutFarm.UI
                 float ox = p.OriginX;
                 float oy = p.OriginY;
                 //create agg's painter?
-                p.SetOrigin(ox + X, oy + Y);
+                //p.SetOrigin(ox + X, oy + Y);
                 Paint(p);
-                p.SetOrigin(ox, oy);
+                //p.SetOrigin(ox, oy);
             }
         }
 
