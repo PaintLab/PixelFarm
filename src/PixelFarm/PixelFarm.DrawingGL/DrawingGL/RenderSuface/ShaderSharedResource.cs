@@ -286,9 +286,7 @@ namespace PixelFarm.DrawingGL
             offsetX = _orthoViewOffsetX;
             offsetY = _orthoViewOffsetY;
         }
-
-
-        //-------- 
+         
         internal Drawing.Color StrokeColor
         {
             get => _strokeColor;
