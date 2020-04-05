@@ -46,11 +46,14 @@ namespace PixelFarm.DrawingGL
                         if(v_distance <1.0){                                         
                             delta = vec2(-sin(rad) * u_linewidth,cos(rad) * u_linewidth) + u_ortho_offset;                       
                             v_dir = vec2(0.80,0.0); 
-                            //v_color2 =vec4(1.0,0.0,0.0,1.0); //red-> outer inner part
+                            v_color2 =vec4(1.0, 0.0, 0.0, 1.0); 
+                            //v_color2 =vec4(1.0, 1.0, 1.0, 1.0); 
                         }else{                      
                             delta = vec2(sin(rad) * u_linewidth,-cos(rad) * u_linewidth) + u_ortho_offset;
                             v_dir = vec2(0.0,0.80); 
-                            //v_color2 =vec4(0.0,0.0,1.0,1.0); //outer part
+                            //v_color2 =vec4(0.0, 0.0, 1.0, 1.0);
+                            //v_color2 =vec4(1.0, 1.0, 1.0, 1.0); 
+                            //v_color2 =vec4(1.0, 0.0,1.0,1.0);
                         } 
                         gl_Position = u_mvpMatrix*  vec4(a_position[0] +delta[0],a_position[1]+delta[1],0,1);
                     }
@@ -67,9 +70,10 @@ namespace PixelFarm.DrawingGL
                     varying vec2 v_dir; 
                     varying vec4 v_color2;
                     void main()
-                    {                                
-                        gl_FragColor =vec4(u_solidColor[0],u_solidColor[1],u_solidColor[2], 
-                                           u_solidColor[3] *((v_distance* (v_dir[0])+ (1.0-v_distance)* (v_dir[1]))  * (1.0/p0)) * 0.55);  
+                    {     
+                        gl_FragColor =vec4(v_color2[0],v_color2[1],v_color2[2], 
+                        //gl_FragColor =vec4(u_solidColor[0],u_solidColor[1],u_solidColor[2], 
+                                             u_solidColor[3] *((v_distance* (v_dir[0])+ (1.0-v_distance)* (v_dir[1]))  * (1.0/p0)) * 0.55);  
                     }
                 "; 
 

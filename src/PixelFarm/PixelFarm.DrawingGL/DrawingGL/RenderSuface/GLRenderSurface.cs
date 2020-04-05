@@ -135,7 +135,8 @@ namespace PixelFarm.DrawingGL
         readonly SingleChannelSdf _sdfShader;
 
 
-        readonly MaskShader _maskShader;
+        readonly OneColorMaskShader _maskShader_OneColor;
+        readonly TwoColorMaskShader _maskShader_TwoColor;
         //-----------------------------------------------------------
         readonly ShaderSharedResource _shareRes;
 
@@ -207,8 +208,9 @@ namespace PixelFarm.DrawingGL
             _lcdSubPixShaderForWordStripCreation = new LcdSubPixShaderForWordStripCreation(_shareRes);
             _lcdSubPixShaderV2 = new LcdSubPixShaderV2(_shareRes);
             _lcdSubPixShaderV2.SetFillColor(Color.White);
-            _maskShader = new MaskShader(_shareRes);
 
+            _maskShader_OneColor = new OneColorMaskShader(_shareRes);
+            _maskShader_TwoColor = new TwoColorMaskShader(_shareRes);
 
 
             _blurShader = new BlurShader(_shareRes);
@@ -721,11 +723,17 @@ namespace PixelFarm.DrawingGL
                 targetTop += mask.Height;
             }
 
-            _maskShader.LoadGLBitmap(mask);
-            _maskShader.LoadColorSourceBitmap(colorSrc);
-            _maskShader.DrawSubImage2(maskSrcRect,
+            _maskShader_TwoColor.LoadGLBitmap(mask);
+            _maskShader_TwoColor.LoadColorSourceBitmap(colorSrc);
+            _maskShader_TwoColor.DrawSubImage2(maskSrcRect,
                 -colorSrcX, -colorSrcY,
                 targetLeft, targetTop);
+
+            //_maskShader_OneColor.LoadGLBitmap(mask);
+            //_maskShader_OneColor.LoadColorSourceBitmap(colorSrc);
+            //_maskShader_OneColor.DrawSubImage2(maskSrcRect,
+            //    -colorSrcX, -colorSrcY,
+            //    targetLeft, targetTop);
         }
 
         public void DrawImage(GLBitmap bmp,
@@ -1285,7 +1293,7 @@ namespace PixelFarm.DrawingGL
                 }
                 _specialBorderForMask = false;
 
-                DrawImage(renderSx_mask.GetGLBitmap(), 0, 0);//for debug show mask 
+                //DrawImage(renderSx_mask.GetGLBitmap(), 0, 0);//for debug, show mask 
 
                 //2. generate gradient color, (TODO: cache, NOT need to generate this every time)
                 GLBitmap color_src;
@@ -1387,7 +1395,7 @@ namespace PixelFarm.DrawingGL
                 }
 
                 //                         
-                //DrawImageWithMask(renderSx_mask.GetGLBitmap(), color_src, 0, 0);
+                DrawImageWithMask(renderSx_mask.GetGLBitmap(), color_src, 0, 0);
 
                 renderSx_mask.Dispose();
 
