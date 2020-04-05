@@ -1646,6 +1646,15 @@ namespace PixelFarm.DrawingGL
                ";
 
 
+            //version 2.2: this version does not use if else
+            //if m[0]< 1.0 then we use m[0], not use m[2]
+            //else we don't use m[0], we switch to use m[2],
+            //so we use floor(m[0]), result will be 0 or 1 for m[2], (you see the code m[2]*c2_compo)
+            //and if c2_compo=0, then => 1.0-c2_compo => 1.0 (here we use only m[1])           
+
+            //TODO: test performance between 2.1 vs 2,2,
+            //compare between if-else and not use if-else
+
             string fs = @"
                       precision mediump float; 
                       uniform sampler2D s_texture;
@@ -1657,13 +1666,31 @@ namespace PixelFarm.DrawingGL
                       {   
                             vec4 m = texture2D(s_texture,v_texCoord);
                             vec4 c = texture2D(s_color_src,v_color_texCoord);
-                            if(m[0]< 1.0){
-                               gl_FragColor= vec4(c[2], c[1], c[0] , c[3] * m[0]);  
-                            }else{                              
-                                gl_FragColor= vec4(c[2], c[1], c[0] , c[3] * m[2]);
-                            }
+                            float c2_compo= floor(m[0]);
+                            gl_FragColor= vec4(c[2], c[1], c[0] , c[3] * (m[2]*c2_compo + m[0]*(1.0-c2_compo)));                            
                       }
-                "; 
+                ";
+
+            //old version 2.1 , use if-else
+            //string fs = @"
+            //          precision mediump float; 
+            //          uniform sampler2D s_texture;
+            //          uniform sampler2D s_color_src;
+                       
+            //          varying vec2 v_texCoord; 
+            //          varying vec2 v_color_texCoord;
+            //          void main()
+            //          {   
+            //                vec4 m = texture2D(s_texture,v_texCoord);
+            //                vec4 c = texture2D(s_color_src,v_color_texCoord);
+            //                if(m[0]< 1.0){
+            //                   gl_FragColor= vec4(c[2], c[1], c[0] , c[3] * m[0]);  
+            //                }else{                              
+            //                    gl_FragColor= vec4(c[2], c[1], c[0] , c[3] * m[2]);
+            //                }
+            //          }
+            //    ";
+
             //debug
             //gl_FragColor= vec4(m[0],m[1],m[2],m[3]);
             //gl_FragColor= vec4(c[2],c[1],c[0],c[3]); 
