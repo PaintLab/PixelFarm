@@ -46,7 +46,7 @@ namespace PixelFarm.DrawingGL
                                         LayoutFarm.ImageBinder.SetCacheInnerImage(atlasImgBinder, _glBmp, false);
 
                                         atlasImgBinder.AtlasItem = atlasItem;
-                                        glPainter.PainterContext.DrawSubImage(_glBmp,
+                                        glPainter.Core.DrawSubImage(_glBmp,
                                             srcRect,
                                             left,
                                             top);
@@ -95,7 +95,7 @@ namespace PixelFarm.DrawingGL
                                         atlasImgBinder.SetPreviewImageSize(atlasItem.Width, atlasItem.Height);
                                         atlasImgBinder.RaiseImageChanged();
 
-                                        glPainter.PainterContext.DrawSubImage(_glBmp,
+                                        glPainter.Core.DrawSubImage(_glBmp,
                                             srcRect,
                                             left,
                                             top);

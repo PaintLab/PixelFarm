@@ -11,13 +11,13 @@ namespace OpenTkEssTest
     [Info("T111_FrameBuffer", AvailableOn = AvailableOn.GLES)]
     public class T111_FrameBuffer : DemoBase
     {
-        GLPainterContext _pcx;
+        GLPainterCore _pcx;
         GLPainter _painter;
         GLRenderSurface _surface1;
         bool _isInit;
         protected override void OnGLPainterReady(GLPainter painter)
         {
-            _pcx = painter.PainterContext;
+            _pcx = painter.Core;
             _painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()

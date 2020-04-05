@@ -112,25 +112,25 @@ namespace PixelFarm.Drawing.GLES2
         /// <exception cref="T:System.ArgumentNullException"><paramref name="image"/> is null.</exception>
         public override void DrawImage(Image image, RectangleF destRect, RectangleF srcRect)
         {
-            DrawingGL.GLBitmap glbmp = _gpuPainter.PainterContext.ResolveForGLBitmap(image);
+            DrawingGL.GLBitmap glbmp = _gpuPainter.Core.ResolveForGLBitmap(image);
             if (glbmp != null)
             {
 #if DEBUG
                 glbmp.dbugNotifyUsage();
 #endif
-                _gpuPainter.PainterContext.DrawSubImage(glbmp, destRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, destRect.Left, destRect.Top);
+                _gpuPainter.Core.DrawSubImage(glbmp, destRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, destRect.Left, destRect.Top);
                 _latestFillCouldbeUsedAsTextBgHint = false;
             }
         }
         public override void DrawImage(Image image, int x, int y)
         {
-            DrawingGL.GLBitmap glbmp = _gpuPainter.PainterContext.ResolveForGLBitmap(image);
+            DrawingGL.GLBitmap glbmp = _gpuPainter.Core.ResolveForGLBitmap(image);
             if (glbmp != null)
             {
 #if DEBUG
                 glbmp.dbugNotifyUsage();
 #endif
-                _gpuPainter.PainterContext.DrawSubImage(glbmp, 0, 0, glbmp.Width, glbmp.Height, x, y);
+                _gpuPainter.Core.DrawSubImage(glbmp, 0, 0, glbmp.Width, glbmp.Height, x, y);
                 _latestFillCouldbeUsedAsTextBgHint = false;
             }
         }
@@ -170,18 +170,18 @@ namespace PixelFarm.Drawing.GLES2
             //resolve to internal presentation 
             if (image is AtlasImageBinder imgBinder)
             {
-                _gpuPainter.DrawImage(image, (float)destRect.X, (float)destRect.Y, (int)0, (int)0, (int)destRect.Width, (int)destRect.Height);
+                _gpuPainter.DrawImage(image, destRect.Left, destRect.Top, (int)0, (int)0, (int)destRect.Width, (int)destRect.Height);
                 _latestFillCouldbeUsedAsTextBgHint = false;
             }
             else
             {
-                DrawingGL.GLBitmap glbmp = _gpuPainter.PainterContext.ResolveForGLBitmap(image);
+                DrawingGL.GLBitmap glbmp = _gpuPainter.Core.ResolveForGLBitmap(image);
                 if (glbmp != null)
                 {
 #if DEBUG
                     glbmp.dbugNotifyUsage();
 #endif
-                    _gpuPainter.PainterContext.DrawImage(glbmp, destRect.Left, destRect.Top, destRect.Width, destRect.Height);
+                    _gpuPainter.Core.DrawImage(glbmp, destRect.Left, destRect.Top, destRect.Width, destRect.Height);
                     _latestFillCouldbeUsedAsTextBgHint = false;
                 }
             }

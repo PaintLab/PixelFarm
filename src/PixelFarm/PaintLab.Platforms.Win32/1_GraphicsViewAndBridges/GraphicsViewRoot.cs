@@ -16,7 +16,7 @@ namespace LayoutFarm.UI
         InnerViewportKind _innerViewportKind;
         IGpuOpenGLSurfaceView _viewport;
 
-        GLPainterContext _pcx;
+        GLPainterCore _pcx;
         GLPainter _glPainter;
         PixelFarm.Drawing.GLES2.MyGLDrawBoard _drawboard;
 
@@ -93,7 +93,7 @@ namespace LayoutFarm.UI
         public RootGraphic RootGfx => _rootgfx;
         //         
         public GLPainter GetGLPainter() => _glPainter;
-        public GLPainterContext GetGLRenderSurface() => _pcx;
+        public GLPainterCore GLPainterCore() => _pcx;
         PixelFarm.Drawing.DrawBoard CreateSoftwareDrawBoard(int width, int height, InnerViewportKind innerViewportKind)
         {
 
@@ -138,9 +138,9 @@ namespace LayoutFarm.UI
 
                         int max = Math.Max(w, h);
 
-                        _pcx = GLPainterContext.Create(max, max, w, h, true);
+                        _pcx = PixelFarm.DrawingGL.GLPainterCore.Create(max, max, w, h, true);
                         _glPainter = new GLPainter();
-                        _glPainter.BindToPainterContext(_pcx);
+                        _glPainter.BindToPainterCore(_pcx);
 
                         if (PixelFarm.Drawing.GLES2.GLES2Platform.TextService != null)
                         {

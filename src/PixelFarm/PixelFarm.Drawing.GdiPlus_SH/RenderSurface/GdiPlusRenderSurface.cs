@@ -702,7 +702,7 @@ namespace PixelFarm.Drawing.WinGdi
                 System.Drawing.Bitmap inner2 = ResolveInnerBmp(image);
                 if (inner2.HorizontalResolution == _gx.DpiX)
                 {
-                    DrawImage(image, (int)destRect.X, (int)destRect.Y);
+                    DrawImage(image, (int)destRect.Left, (int)destRect.Top);
                     return;
                 }
             }

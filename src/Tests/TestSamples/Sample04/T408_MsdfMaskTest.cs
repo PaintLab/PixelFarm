@@ -24,7 +24,7 @@ namespace OpenTkEssTest
     [Info("T408_MsdfMaskTest")]
     public class T408_MsdfMaskTest : DemoBase
     {
-        GLPainterContext _pcx;
+        GLPainterCore _pcx;
         GLPainter _painter;
 
         //
@@ -40,7 +40,7 @@ namespace OpenTkEssTest
 
         protected override void OnGLPainterReady(GLPainter painter)
         {
-            _pcx = painter.PainterContext;
+            _pcx = painter.Core;
             _painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()
@@ -141,7 +141,7 @@ namespace OpenTkEssTest
                             //we save current setting of current GLRenderSurface 
 
 
-                            _pcx.SaveContextData(out GLPainterContextData saveData1); 
+                            _pcx.SaveStates(out GLPainterStatesData saveData1); 
 
                             _maskRenderSurface2 = new GLRenderSurface(100, 100); 
 
@@ -155,7 +155,7 @@ namespace OpenTkEssTest
                             _pcx.DrawImageWithMsdf(_msdfMaskGLBmp, quad, Color.White); 
                             
                             //switch back to normal surface   
-                            _pcx.RestoreContextData(saveData1);  
+                            _pcx.RestoreStates(saveData1);  
 
                         }
 

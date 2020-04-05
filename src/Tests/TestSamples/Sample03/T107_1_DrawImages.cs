@@ -33,14 +33,14 @@ namespace OpenTkEssTest
     [Info("T107_1_DrawImages", AvailableOn = AvailableOn.GLES)]
     public class T107_1_DrawImages : DemoBase
     {
-        GLPainterContext _pcx;
+        GLPainterCore _pcx;
         GLPainter _painter;
         GLBitmap _glbmp;
         bool _isInit;
         //
         protected override void OnGLPainterReady(GLPainter painter)
         {
-            _pcx = painter.PainterContext;
+            _pcx = painter.Core;
             _painter = painter;
         }
         [DemoConfig]

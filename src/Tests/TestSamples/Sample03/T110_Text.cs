@@ -20,11 +20,11 @@ namespace OpenTkEssTest
     [Info("T110_DrawText")]
     public class T110_DrawText : DemoBase
     {
-        GLPainterContext _pcx;
+        GLPainterCore _pcx;
         GLPainter _painter;
         protected override void OnGLPainterReady(GLPainter painter)
         {
-            _pcx = painter.PainterContext;
+            _pcx = painter.Core;
             _painter = painter;
             UserText = "";
 #if DEBUG

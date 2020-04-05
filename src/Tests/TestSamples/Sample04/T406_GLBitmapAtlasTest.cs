@@ -19,7 +19,7 @@ namespace OpenTkEssTest
     [Info("T406_GLBitmapAtlas", AvailableOn = AvailableOn.GLES)]
     public class T406_GLBitmapAtlas : DemoBase
     {
-        GLPainterContext _pcx;
+        GLPainterCore _pcx;
         GLPainter _painter;
         LayoutFarm.ImageBinder _chk_checked;
         LayoutFarm.ImageBinder _chk_unchecked;
@@ -36,7 +36,7 @@ namespace OpenTkEssTest
             _chk_checked = new AtlasImageBinder("test1_atlas", "\\chk_checked.png");
             _chk_unchecked = new AtlasImageBinder("test1_atlas", "\\chk_unchecked.png");
 
-            _pcx = painter.PainterContext;
+            _pcx = painter.Core;
             _painter = painter;
             //
             //string atlasInfoFile = "test1_atlas"; //see SampleFontAtlasBuilder below

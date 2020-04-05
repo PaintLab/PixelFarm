@@ -10,7 +10,7 @@ namespace OpenTkEssTest
     [Info("T114_FrameBuffer", AvailableOn = AvailableOn.GLES)]
     public class T114_FrameBufferWithConvFilterEffect : DemoBase
     {
-        GLPainterContext _pcx;
+        GLPainterCore _pcx;
         GLPainter _painter;
         GLRenderSurface _surface1;
 
@@ -19,7 +19,7 @@ namespace OpenTkEssTest
         bool _frameBufferNeedUpdate;
         protected override void OnGLPainterReady(GLPainter painter)
         {
-            _pcx = painter.PainterContext;
+            _pcx = painter.Core;
             _painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()

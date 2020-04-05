@@ -9,13 +9,13 @@ namespace OpenTkEssTest
     [Info("T102_BasicDraw", AvailableOn = AvailableOn.GLES)]
     public class T102_BasicDraw : DemoBase
     {
-        GLPainterContext _pcx;
+        GLPainterCore _pcx;
         GLPainter _painter;
         PixelFarm.Drawing.RenderVx _polygon1;
         PixelFarm.Drawing.RenderVx _polygon2;
         protected override void OnGLPainterReady(GLPainter painter)
         {
-            _pcx = painter.PainterContext;
+            _pcx = painter.Core;
             _painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()

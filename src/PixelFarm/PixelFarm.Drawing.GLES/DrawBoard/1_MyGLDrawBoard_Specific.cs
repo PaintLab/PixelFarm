@@ -175,15 +175,15 @@ namespace PixelFarm.Drawing.GLES2
             prevContext.prevClipRect = _currentClipRect;
             prevContext.prevCanvasOrgX = _canvasOriginX;
             prevContext.prevCanvasOrgY = _canvasOriginY;
-            prevContext.prevGLRenderSurface = _gpuPainter.PainterContext.CurrentRenderSurface;
+            prevContext.prevGLRenderSurface = _gpuPainter.Core.CurrentRenderSurface;
             _saveContexts.Push(prevContext);
 
             _currentClipRect = new Rectangle(0, 0, backbuffer.Width, backbuffer.Height);
             MyGLBackbuffer glBackBuffer = (MyGLBackbuffer)backbuffer;
 
-            _gpuPainter.PainterContext.AttachToRenderSurface(glBackBuffer.RenderSurface);
-            _gpuPainter.PainterContext.OriginKind = RenderSurfaceOriginKind.LeftTop;
-            _gpuPainter.UpdatePainterContext();
+            _gpuPainter.Core.AttachToRenderSurface(glBackBuffer.RenderSurface);
+            _gpuPainter.Core.OriginKind = RenderSurfaceOriginKind.LeftTop;
+            _gpuPainter.UpdateCore();
 
             _left = 0;
             _top = 0;
@@ -211,9 +211,9 @@ namespace PixelFarm.Drawing.GLES2
             _canvasOriginY = saveContext.prevCanvasOrgY;
             _currentClipRect = saveContext.prevClipRect;
 
-            _gpuPainter.PainterContext.AttachToRenderSurface(saveContext.prevGLRenderSurface);
-            _gpuPainter.PainterContext.OriginKind = RenderSurfaceOriginKind.LeftTop;
-            _gpuPainter.UpdatePainterContext();
+            _gpuPainter.Core.AttachToRenderSurface(saveContext.prevGLRenderSurface);
+            _gpuPainter.Core.OriginKind = RenderSurfaceOriginKind.LeftTop;
+            _gpuPainter.UpdateCore();
 
             _left = 0;
             _top = 0;

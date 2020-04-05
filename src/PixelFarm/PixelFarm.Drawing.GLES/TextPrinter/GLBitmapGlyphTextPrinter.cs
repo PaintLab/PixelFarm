@@ -107,7 +107,7 @@ namespace PixelFarm.DrawingGL
 
         MySimpleGLBitmapFontManager _myGLBitmapFontMx;
         SimpleBitmapAtlas _fontAtlas;
-        GLPainterContext _pcx;
+        GLPainterCore _pcx;
         GLPainter _painter;
         GLBitmap _glBmp;
         RequestFont _font;
@@ -131,7 +131,7 @@ namespace PixelFarm.DrawingGL
         {
             //create text printer for use with canvas painter           
             _painter = painter;
-            _pcx = painter.PainterContext;
+            _pcx = painter.Core;
             _textServices = textServices;
 
             //_currentTextureKind = TextureKind.Msdf; 

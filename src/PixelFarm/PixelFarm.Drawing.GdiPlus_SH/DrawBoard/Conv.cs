@@ -48,7 +48,7 @@ namespace PixelFarm.Drawing
         //------------------------------------------------
         public static System.Drawing.RectangleF ToRectF(this PixelFarm.Drawing.RectangleF rect)
         {
-            return new System.Drawing.RectangleF(rect.X, rect.Y, rect.Width, rect.Height);
+            return new System.Drawing.RectangleF(rect.Left, rect.Top, rect.Width, rect.Height);
         }
         public static PixelFarm.Drawing.RectangleF ToRectF(this System.Drawing.RectangleF rect)
         {
