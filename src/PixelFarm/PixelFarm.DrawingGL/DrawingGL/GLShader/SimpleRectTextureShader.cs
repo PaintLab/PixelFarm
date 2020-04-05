@@ -1656,16 +1656,12 @@ namespace PixelFarm.DrawingGL
                       void main()
                       {   
                             vec4 m = texture2D(s_texture,v_texCoord);
-                            vec4 c = texture2D(s_color_src,v_color_texCoord);                            
-                           
-
-                            gl_FragColor= vec4(c[2], c[1], c[0] , c[3] * (0.2126* m[0])+(0.7152*m[1])+(0.0722*m[2] ));  
-
-                            //if(m[0]< 1.0){
-                            //    gl_FragColor= vec4(c[2], c[1], c[0] , c[3] * m[0]);  
-                            //}else{                              
-                            //    gl_FragColor= vec4(c[2], c[1], c[0] , c[3] * m[2]);
-                            //}
+                            vec4 c = texture2D(s_color_src,v_color_texCoord);
+                            if(m[0]< 1.0){
+                               gl_FragColor= vec4(c[2], c[1], c[0] , c[3] * m[0]);  
+                            }else{                              
+                                gl_FragColor= vec4(c[2], c[1], c[0] , c[3] * m[2]);
+                            }
                       }
                 ";
 

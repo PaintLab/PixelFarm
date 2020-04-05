@@ -53,7 +53,7 @@ namespace PixelFarm.DrawingGL
                             v_dir = vec2(0.0,0.80); 
                             //v_color2 =vec4(0.0, 0.0, 1.0, 1.0);
                             //v_color2 =vec4(1.0, 1.0, 1.0, 1.0); 
-                            //v_color2 =vec4(1.0, 0.0,1.0,1.0);
+                            v_color2 =vec4(1.0,0.0,0.0,1.0);
                         } 
                         gl_Position = u_mvpMatrix*  vec4(a_position[0] +delta[0],a_position[1]+delta[1],0,1);
                     }
