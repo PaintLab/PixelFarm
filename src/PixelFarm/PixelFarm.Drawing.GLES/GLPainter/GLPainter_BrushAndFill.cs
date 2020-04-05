@@ -95,6 +95,11 @@ namespace PixelFarm.DrawingGL
         }
 
         //
+        public bool UseTwoColorsMask
+        {
+            get => _pcx.UseTwoColorsMask;
+            set => _pcx.UseTwoColorsMask = value;
+        }
 
         public override void Fill(VertexStore vxs)
         {
@@ -109,6 +114,7 @@ namespace PixelFarm.DrawingGL
                         System.Diagnostics.Debug.WriteLine("unknown brush!");
 #endif
                         break;
+                    case BrushKind.Texture:
                     case BrushKind.CircularGraident:
                     case BrushKind.LinearGradient:
                     case BrushKind.PolygonGradient:
@@ -116,12 +122,13 @@ namespace PixelFarm.DrawingGL
                         //resolve internal linear gradient brush impl
                         _pcx.FillGfxPath(_currentBrush, pathRenderVx);
                         break;
-                     
+
                     case BrushKind.Solid:
                         {
                             TextureRenderVx textureRenderVx = null;//TODO: review, not finish
                             if (textureRenderVx != null)
                             {
+                                //review this again!                                
                                 int ox = _pcx.OriginX;
                                 int oy = _pcx.OriginY;
                                 _pcx.SetCanvasOrigin(-(int)textureRenderVx.SpriteSource.TextureXOffset, -(int)textureRenderVx.SpriteSource.TextureYOffset);
@@ -137,8 +144,6 @@ namespace PixelFarm.DrawingGL
                             }
 
                         }
-                        break;
-                    case BrushKind.Texture:
                         break;
                 }
             }
