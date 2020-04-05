@@ -91,6 +91,8 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
 
         [DemoConfig]
         public bool UseOffset { get; set; }
+        [DemoConfig]
+        public bool EnableGLPainterTwoColorsMask { get; set; }
 
         [DemoConfig]
         public BrushKind SelectedBrushKind { get; set; }
@@ -111,7 +113,7 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
                     selectedBrush = _solidBrush;
                     break;
                 case BrushKind.LinearGradient:
-                    selectedBrush = _linearGrBrush; 
+                    selectedBrush = _linearGrBrush;
                     break;
                 case BrushKind.CircularGradient:
                     selectedBrush = _circularGrBrush;
@@ -123,6 +125,16 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
 
             //
             p.CurrentBrush = selectedBrush;
+
+            //special set for our GLPainter
+            bool glPainter2MaskColor = false;
+            DrawingGL.GLPainter glPainter = p as DrawingGL.GLPainter;
+            if (glPainter != null)
+            {
+                glPainter2MaskColor = p.EnableMask;
+                glPainter.UseTwoColorsMask = EnableGLPainterTwoColorsMask;
+               
+            }
 
             //p.FillRect(0, 100, 500, 500); 
             //p.FillRect(0, 200, 200, 50);
@@ -147,6 +159,11 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
 
             p.CurrentBrush = prevBrush;
 
+            if (glPainter != null)
+            {
+                //restore
+                glPainter.UseTwoColorsMask = glPainter2MaskColor;
+            }
         }
 
     }

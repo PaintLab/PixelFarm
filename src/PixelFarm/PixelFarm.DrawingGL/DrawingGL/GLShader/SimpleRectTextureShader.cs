@@ -1663,8 +1663,7 @@ namespace PixelFarm.DrawingGL
                                 gl_FragColor= vec4(c[2], c[1], c[0] , c[3] * m[2]);
                             }
                       }
-                ";
-
+                "; 
             //debug
             //gl_FragColor= vec4(m[0],m[1],m[2],m[3]);
             //gl_FragColor= vec4(c[2],c[1],c[0],c[3]); 

@@ -700,10 +700,12 @@ namespace PixelFarm.DrawingGL
 
                     GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToBorder);
                     GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToBorder);
-
                 }
             }
         }
+
+        public bool UseTwoColorsMask { get; set; }
+
         public void DrawImageWithMask(GLBitmap mask, GLBitmap colorSrc, float targetLeft, float targetTop)
         {
             DrawImageWithMask(mask, colorSrc,
@@ -711,6 +713,7 @@ namespace PixelFarm.DrawingGL
                 0, 0,
                 targetLeft, targetTop);
         }
+
         public void DrawImageWithMask(GLBitmap mask, GLBitmap colorSrc,
             in PixelFarm.Drawing.RectangleF maskSrcRect,
             float colorSrcX, float colorSrcY,
@@ -723,17 +726,22 @@ namespace PixelFarm.DrawingGL
                 targetTop += mask.Height;
             }
 
-            _maskShader_TwoColor.LoadGLBitmap(mask);
-            _maskShader_TwoColor.LoadColorSourceBitmap(colorSrc);
-            _maskShader_TwoColor.DrawSubImage2(maskSrcRect,
-                -colorSrcX, -colorSrcY,
-                targetLeft, targetTop);
-
-            //_maskShader_OneColor.LoadGLBitmap(mask);
-            //_maskShader_OneColor.LoadColorSourceBitmap(colorSrc);
-            //_maskShader_OneColor.DrawSubImage2(maskSrcRect,
-            //    -colorSrcX, -colorSrcY,
-            //    targetLeft, targetTop);
+            if (UseTwoColorsMask)
+            {
+                _maskShader_TwoColor.LoadGLBitmap(mask);
+                _maskShader_TwoColor.LoadColorSourceBitmap(colorSrc);
+                _maskShader_TwoColor.DrawSubImage2(maskSrcRect,
+                    -colorSrcX, -colorSrcY,
+                    targetLeft, targetTop);
+            }
+            else
+            {
+                _maskShader_OneColor.LoadGLBitmap(mask);
+                _maskShader_OneColor.LoadColorSourceBitmap(colorSrc);
+                _maskShader_OneColor.DrawSubImage2(maskSrcRect,
+                    -colorSrcX, -colorSrcY,
+                    targetLeft, targetTop);
+            }
         }
 
         public void DrawImage(GLBitmap bmp,
@@ -1129,11 +1137,7 @@ namespace PixelFarm.DrawingGL
             return tessVBOStream;
         }
 
-
-
-        internal bool _specialBorderForMask; //test
-
-        public void FillGfxPath(Drawing.Color color, PathRenderVx pathRenderVx)
+        public void FillGfxPath(Drawing.Color fillColor, Drawing.Color fineBorderColor, PathRenderVx pathRenderVx)
         {
             switch (SmoothMode)
             {
@@ -1149,7 +1153,7 @@ namespace PixelFarm.DrawingGL
                             _solidColorFillShader.FillTriangles(
                                 pathRenderVx._tessAreaVboSeg.startAt,
                                 pathRenderVx._tessAreaVboSeg.vertexCount,
-                                color);
+                                fillColor);
 
                             tessVBOStream.Unbind();
                         }
@@ -1162,7 +1166,7 @@ namespace PixelFarm.DrawingGL
                                 float[] tessArea = pathRenderVx.GetAreaTess(_tessTool, _tessWindingRuleType);
                                 if (tessArea != null)
                                 {
-                                    _solidColorFillShader.FillTriangles(tessArea, pathRenderVx.TessAreaVertexCount, color);
+                                    _solidColorFillShader.FillTriangles(tessArea, pathRenderVx.TessAreaVertexCount, fillColor);
                                 }
                             }
                             else
@@ -1174,7 +1178,7 @@ namespace PixelFarm.DrawingGL
                                     float[] tessArea = figure.GetAreaTess(_tessTool, _tessWindingRuleType, TessTriangleTechnique.DrawArray);
                                     if (tessArea != null)
                                     {
-                                        _solidColorFillShader.FillTriangles(tessArea, figure.TessAreaVertexCount, color);
+                                        _solidColorFillShader.FillTriangles(tessArea, figure.TessAreaVertexCount, fillColor);
                                     }
                                 }
                             }
@@ -1185,18 +1189,14 @@ namespace PixelFarm.DrawingGL
                 case SmoothMode.Smooth:
                     {
 
-                        if (_specialBorderForMask)
-                        {
-
-                        }
-
                         float saved_Width = StrokeWidth;
                         Drawing.Color saved_Color = StrokeColor;
+
                         //temp set stroke width to 2 amd stroke color
                         //to the same as bg color (for smooth border).
                         //and it will be set back later.
                         // 
-                        StrokeColor = color;
+                        StrokeColor = fillColor;
                         StrokeWidth = 1.5f; //TODO: review this *** 
 
                         if (pathRenderVx._enableVBO)
@@ -1208,8 +1208,9 @@ namespace PixelFarm.DrawingGL
                             _solidColorFillShader.FillTriangles(
                                 pathRenderVx._tessAreaVboSeg.startAt,
                                 pathRenderVx._tessAreaVboSeg.vertexCount,
-                                color);
+                                fillColor);
 
+                            StrokeColor = fineBorderColor;
                             _smoothLineShader.DrawTriangleStrips(
                                 pathRenderVx._smoothBorderVboSeg.startAt,
                                 pathRenderVx._smoothBorderVboSeg.vertexCount);
@@ -1227,9 +1228,9 @@ namespace PixelFarm.DrawingGL
                                 float[] tessArea = pathRenderVx.GetAreaTess(_tessTool, _tessWindingRuleType);
                                 if (tessArea != null)
                                 {
-                                    _solidColorFillShader.FillTriangles(tessArea, pathRenderVx.TessAreaVertexCount, color);
+                                    _solidColorFillShader.FillTriangles(tessArea, pathRenderVx.TessAreaVertexCount, fillColor);
                                 }
-
+                                StrokeColor = fineBorderColor;
                                 _smoothLineShader.DrawTriangleStrips(
                                     pathRenderVx.GetSmoothBorders(_smoothBorderBuilder),
                                     pathRenderVx.BorderTriangleStripCount);
@@ -1241,8 +1242,9 @@ namespace PixelFarm.DrawingGL
                                 if ((tessArea = figure.GetAreaTess(_tessTool, _tessWindingRuleType, TessTriangleTechnique.DrawArray)) != null)
                                 {
                                     //draw area
-                                    _solidColorFillShader.FillTriangles(tessArea, figure.TessAreaVertexCount, color);
+                                    _solidColorFillShader.FillTriangles(tessArea, figure.TessAreaVertexCount, fillColor);
                                     //draw smooth border
+                                    StrokeColor = fineBorderColor;
                                     _smoothLineShader.DrawTriangleStrips(
                                         figure.GetSmoothBorders(_smoothBorderBuilder),
                                         figure.BorderTriangleStripCount);
@@ -1253,10 +1255,14 @@ namespace PixelFarm.DrawingGL
                         //restore stroke width and color
                         StrokeWidth = saved_Width; //restore back
                         StrokeColor = saved_Color;
-
                     }
                     break;
             }
+        }
+
+        public void FillGfxPath(Drawing.Color color, PathRenderVx pathRenderVx)
+        {
+            FillGfxPath(color, color, pathRenderVx);
         }
 
         public void FillGfxPath(Drawing.Brush brush, PathRenderVx pathRenderVx)
@@ -1279,19 +1285,21 @@ namespace PixelFarm.DrawingGL
                 RectangleF bounds = pathRenderVx.GetBounds();
                 int size_w = (int)Math.Round(bounds.Right);
                 int size_h = (int)Math.Round(bounds.Bottom);
+
                 //size_w = size_h = 300;
                 GLRenderSurface renderSx_mask = new GLRenderSurface(size_w, size_h); //mask color surface 
-
-                _specialBorderForMask = true;
                 using (TempSwitchToNewSurface(renderSx_mask))
                 {
                     //after switch to a new surface
                     //canvas offset is reset to (0,0) of the new surface 
+
+                    //for mask, fill bg with black
                     Clear(Color.Black);
-                    //Clear(Color.White);
-                    FillGfxPath(Color.White, pathRenderVx);
+
+                    //shape => white
+                    //borders,=> use red, 
+                    FillGfxPath(Color.White, Color.Red, pathRenderVx); //
                 }
-                _specialBorderForMask = false;
 
                 //DrawImage(renderSx_mask.GetGLBitmap(), 0, 0);//for debug, show mask 
 
@@ -1392,13 +1400,10 @@ namespace PixelFarm.DrawingGL
                             color_src = ResolveForGLBitmap(tbrush.TextureImage);
                         }
                         break;
-                }
-
-                //                         
+                } 
                 DrawImageWithMask(renderSx_mask.GetGLBitmap(), color_src, 0, 0);
 
                 renderSx_mask.Dispose();
-
             }
 
         }
