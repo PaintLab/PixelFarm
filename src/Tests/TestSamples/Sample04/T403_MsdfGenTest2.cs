@@ -9,13 +9,13 @@ namespace OpenTkEssTest
     [Info("T403_MsdfGenTest2", AvailableOn = AvailableOn.GLES)]
     public class T403_MsdfGenTest2 : DemoBase
     {
-        GLPainterContext _pcx;
+        GLPainterCore _pcx;
         bool _resInit;
         GLBitmap _msdf_bmp;
 
         protected override void OnGLPainterReady(GLPainter painter)
         {
-            _pcx = painter.PainterContext;
+            _pcx = painter.Core;
         }
 
         protected override void DemoClosing()

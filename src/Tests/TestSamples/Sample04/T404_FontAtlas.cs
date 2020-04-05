@@ -14,7 +14,7 @@ namespace OpenTkEssTest
     [Info("T404_FontAtlas", AvailableOn = AvailableOn.GLES)]
     public class T404_FontAtlas : DemoBase
     {
-        GLPainterContext _pcx;
+        GLPainterCore _pcx;
         bool _resInit;
         GLBitmap _msdf_bmp;
         GLPainter _painter;
@@ -26,7 +26,7 @@ namespace OpenTkEssTest
         ushort _glyphIndex_1;
         protected override void OnGLPainterReady(GLPainter painter)
         {
-            _pcx = painter.PainterContext;
+            _pcx = painter.Core;
             _painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()

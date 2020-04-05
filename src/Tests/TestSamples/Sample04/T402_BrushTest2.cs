@@ -13,7 +13,7 @@ namespace OpenTkEssTest
     [Info("T402_BrushTest2")]
     public class T402_BrushTest2 : DemoBase
     {
-        GLPainterContext _pcx;
+        GLPainterCore _pcx;
         GLPainter _painter;
         RenderVx _glyph_vx;
         LinearGradientBrush _linearGrBrush2;
@@ -21,7 +21,7 @@ namespace OpenTkEssTest
 
         protected override void OnGLPainterReady(GLPainter painter)
         {
-            _pcx = painter.PainterContext;
+            _pcx = painter.Core;
             _painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()

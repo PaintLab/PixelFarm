@@ -18,7 +18,7 @@ namespace OpenTkEssTest
     [Info("T401_MsdfTest1")]
     public class T401_MsdfTest1 : DemoBase
     {
-        GLPainterContext _pcx;
+        GLPainterCore _pcx;
         bool _resInit;
         GLBitmap _msdf_bmp;
         GLBitmap _sdf_bmp;
@@ -32,7 +32,7 @@ namespace OpenTkEssTest
         }
         protected override void OnGLPainterReady(GLPainter painter)
         {
-            _pcx = painter.PainterContext;
+            _pcx = painter.Core;
         }
         [DemoConfig(MaxValue = 500, MinValue = 1)]
         public float ZoomLevel

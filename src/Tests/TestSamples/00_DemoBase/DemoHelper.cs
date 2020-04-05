@@ -38,7 +38,7 @@ namespace Mini
 
             demo.Width = _w;
             demo.Height = _h;
-            GLPainterContext pcx = null;
+            GLPainterCore pcx = null;
             GLPainter canvasPainter = null;
 
             //if demo not create canvas and painter
@@ -48,10 +48,10 @@ namespace Mini
             //canvasPainter = new GLCanvasPainter(canvas2d, max, max);
 
             //canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(w, h);
-            pcx = GLPainterContext.Create(max, max, _w, _h, true);
+            pcx = GLPainterCore.Create(max, max, _w, _h, true);
             pcx.OriginKind = PixelFarm.Drawing.RenderSurfaceOriginKind.LeftTop;
             canvasPainter = new GLPainter();
-            canvasPainter.BindToPainterContext(pcx);
+            canvasPainter.BindToPainterCore(pcx);
 
             //create text printer for opengl 
             //----------------------

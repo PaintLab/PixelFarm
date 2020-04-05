@@ -11,7 +11,7 @@ namespace OpenTkEssTest
     [Info("T115_VBO_01", AvailableOn = AvailableOn.GLES)]
     public class T115_VBO_01 : DemoBase
     {
-        GLPainterContext _pcx;
+        GLPainterCore _pcx;
         GLPainter _painter;
         PixelFarm.Drawing.RenderVx _polygon1, _polygon2, _polygon3;
         bool _isInit;
@@ -19,7 +19,7 @@ namespace OpenTkEssTest
         protected override void OnGLPainterReady(GLPainter painter)
         {
             _painter = painter;
-            _pcx = painter.PainterContext;
+            _pcx = painter.Core;
         }
         protected override void OnReadyForInitGLShaderProgram()
         {

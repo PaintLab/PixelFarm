@@ -49,7 +49,7 @@ namespace Mini
             _gfxViewRoot.MakeCurrent();
 
 
-            GLPainterContext pcx = _gfxViewRoot.GetGLRenderSurface();
+            GLPainterCore pcx = _gfxViewRoot.GLPainterCore();
             GLPainter glPainter = _gfxViewRoot.GetGLPainter();
 
             pcx.SmoothMode = SmoothMode.Smooth;//set anti-alias  
@@ -90,7 +90,7 @@ namespace Mini
             RenderElement _canvasRenderE;
             int _width;
             int _height;
-            GLPainterContext _pcx;
+            GLPainterCore _pcx;
             //
             GLPainter _painter;
             public DemoUI(DemoBase demobase, int width, int height)
@@ -100,7 +100,7 @@ namespace Mini
                 _demoBase = demobase;
             }
 
-            public void SetCanvasPainter(GLPainterContext pcx, GLPainter painter)
+            public void SetCanvasPainter(GLPainterCore pcx, GLPainter painter)
             {
                 _pcx = pcx;
                 _painter = painter;

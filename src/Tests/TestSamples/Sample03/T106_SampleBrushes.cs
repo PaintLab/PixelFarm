@@ -13,7 +13,7 @@ namespace OpenTkEssTest
     [Info("T106_SampleBrushes", AvailableOn = AvailableOn.GLES)]
     public class T106_SampleBrushes : DemoBase
     {
-        GLPainterContext _pcx;
+        GLPainterCore _pcx;
         GLPainter _painter;
         RenderVx _polygon1;
         RenderVx _polygon2;
@@ -28,7 +28,7 @@ namespace OpenTkEssTest
 
         protected override void OnGLPainterReady(GLPainter painter)
         {
-            _pcx = painter.PainterContext;
+            _pcx = painter.Core;
             _painter = painter;
             _glBmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\logo-dark.jpg");            
             _glBmp2 = DemoHelper.LoadTexture(RootDemoPath.Path + @"\lion1_v2.png");

@@ -106,11 +106,11 @@ namespace PixelFarm.DrawingGL
     }
 
     /// <summary>
-    /// GLES2 render Context, This is not intended to be used directly from your code
+    /// GLES2 render Core, This is not intended to be used directly from your code
     /// </summary>
-    public sealed class GLPainterContext
+    public sealed class GLPainterCore
     {
-        readonly int _painterContextId;
+        readonly int _id;
 
         readonly SolidColorFillShader _solidColorFillShader;
         readonly RectFillShader _rectFillShader;
@@ -157,14 +157,14 @@ namespace PixelFarm.DrawingGL
         FillingRule _fillingRule;
         Tesselate.Tesselator.WindingRuleType _tessWindingRuleType = Tesselate.Tesselator.WindingRuleType.NonZero;//default
 
-        internal GLPainterContext(int painterContextId, int w, int h, int viewportW, int viewportH)
+        internal GLPainterCore(int id, int w, int h, int viewportW, int viewportH)
         {
             //-------------
             //y axis points upward (like other OpenGL)
             //x axis points to right.
             //please NOTE: left lower corner of the canvas is (0,0)
             //------------- 
-            _painterContextId = painterContextId;
+            _id = id;
             //1.
             _shareRes = new ShaderSharedResource();
             //-----------------------------------------------------------------------             
@@ -256,37 +256,37 @@ namespace PixelFarm.DrawingGL
 
 
 
-        readonly static Dictionary<int, GLPainterContext> s_registeredPainterContexts = new Dictionary<int, GLPainterContext>();
-        static int s_painterContextTotalId;
+        readonly static Dictionary<int, GLPainterCore> s_registeredPainterCors = new Dictionary<int, GLPainterCore>();
+        static int s_painterCoreId;
 
         /// <summary>
-        /// create primary GL render context
+        /// create primary GL painter core
         /// </summary>
         /// <param name="w"></param>
         /// <param name="h"></param>
         /// <param name="viewportW"></param>
         /// <param name="viewportH"></param>
         /// <returns></returns>
-        public static GLPainterContext Create(int w, int h, int viewportW, int viewportH, bool register)
+        public static GLPainterCore Create(int w, int h, int viewportW, int viewportH, bool register)
         {
             //the canvas may need some init modules
             //so we start the canvass internaly here
             if (!register)
             {
-                return new GLPainterContext(0, w, h, viewportW, viewportH);
+                return new GLPainterCore(0, w, h, viewportW, viewportH);
             }
             else
             {
-                int painterContextId = ++s_painterContextTotalId;
-                var newPainterContext = new GLPainterContext(painterContextId, w, h, viewportW, viewportH);
-                s_registeredPainterContexts.Add(painterContextId, newPainterContext);
-                return newPainterContext;
+                int coreId = ++s_painterCoreId;
+                var newPainterCore = new GLPainterCore(coreId, w, h, viewportW, viewportH);
+                s_registeredPainterCors.Add(coreId, newPainterCore);
+                return newPainterCore;
             }
         }
 
-        public static bool TryGetRegisteredPainterContext(int painterContextId, out GLPainterContext found)
+        public static bool TryGetRegisteredPainterCore(int coreId, out GLPainterCore found)
         {
-            return s_registeredPainterContexts.TryGetValue(painterContextId, out found);
+            return s_registeredPainterCors.TryGetValue(coreId, out found);
         }
         public void AttachToRenderSurface(GLRenderSurface rendersx, bool updateTextureResult = true)
         {
@@ -1623,9 +1623,9 @@ namespace PixelFarm.DrawingGL
         internal TessTool GetTessTool() => _tessTool;
         internal SmoothBorderBuilder GetSmoothBorderBuilder() => _smoothBorderBuilder;
 
-        public void SaveContextData(out GLPainterContextData context)
+        public void SaveStates(out GLPainterStatesData stateData)
         {
-            context = new GLPainterContextData {
+            stateData = new GLPainterStatesData {
                 renderSurface = CurrentRenderSurface,
                 canvas_origin_X = _canvasOriginX,
                 canvas_origin_Y = _canvasOriginY,
@@ -1633,13 +1633,13 @@ namespace PixelFarm.DrawingGL
                 clipRect = GetClipRect()
             };
         }
-        public void RestoreContextData(in GLPainterContextData context)
+        public void RestoreStates(in GLPainterStatesData stateData)
         {
-            AttachToRenderSurface(context.renderSurface);
-            this.OriginKind = context.originKind;
+            AttachToRenderSurface(stateData.renderSurface);
+            this.OriginKind = stateData.originKind;
 
-            SetCanvasOrigin(context.canvas_origin_X, context.canvas_origin_Y);
-            Rectangle clipRect = context.clipRect;
+            SetCanvasOrigin(stateData.canvas_origin_X, stateData.canvas_origin_Y);
+            Rectangle clipRect = stateData.clipRect;
             SetClipRect(clipRect.Left, clipRect.Top, clipRect.Width, clipRect.Height);
 
         }
@@ -1662,20 +1662,20 @@ namespace PixelFarm.DrawingGL
 
     public struct GLContextAutoSwitchBack : IDisposable
     {
-        GLPainterContextData _contextData;
-        GLPainterContext _owner;
-        public GLContextAutoSwitchBack(GLPainterContext context)
+        GLPainterStatesData _stateData;
+        GLPainterCore _owner;
+        public GLContextAutoSwitchBack(GLPainterCore core)
         {
-            _owner = context;
-            _owner.SaveContextData(out _contextData);
+            _owner = core;
+            _owner.SaveStates(out _stateData);
         }
         public void Dispose()
         {
-            _owner.RestoreContextData(_contextData);
+            _owner.RestoreStates(_stateData);
         }
     }
 
-    public struct GLPainterContextData
+    public struct GLPainterStatesData
     {
         internal GLRenderSurface renderSurface;
         internal int canvas_origin_X;

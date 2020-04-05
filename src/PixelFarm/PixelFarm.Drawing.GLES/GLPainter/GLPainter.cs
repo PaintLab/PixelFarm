@@ -11,7 +11,7 @@ namespace PixelFarm.DrawingGL
 {
     public sealed partial class GLPainter : Painter, IDisposable
     {
-        GLPainterContext _pcx;
+        GLPainterCore _pcx;
         SmoothingMode _smoothingMode; //smoothing mode of this  painter
         RenderSurfaceOriginKind _orientation = RenderSurfaceOriginKind.LeftTop;
 
@@ -52,7 +52,7 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-        public void BindToPainterContext(GLPainterContext pcx)
+        public void BindToPainterCore(GLPainterCore pcx)
         {
             if (_pcx == pcx)
             {
@@ -64,7 +64,7 @@ namespace PixelFarm.DrawingGL
             _height = pcx.CanvasHeight;
             _clipBox = new RectInt(0, 0, _width, _height);
         }
-        public void UpdatePainterContext()
+        public void UpdateCore()
         {
             _width = _pcx.CanvasWidth;
             _height = _pcx.CanvasHeight;
@@ -100,7 +100,7 @@ namespace PixelFarm.DrawingGL
             _pcx.SetCanvasOrigin((int)ox, (int)oy);
         }
         //
-        public GLPainterContext PainterContext => _pcx;
+        public GLPainterCore Core => _pcx;
         //
         public override RenderQuality RenderQuality
         {
