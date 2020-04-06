@@ -128,6 +128,9 @@
     <Compile Include="..\pixelfarm.vectors\2_geometry\RectD.cs">
       <Link>0_REF_Vectors\2_Geometry\RectD.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.Vectors\2_Geometry\RectInt.cs">
+      <Link>0_REF_Vectors\2_Geometry\RectInt.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.Vectors\3_Transform\1_Affine.cs">
       <Link>0_REF_Vectors\3_Transform\1_Affine.cs</Link>
     </Compile>

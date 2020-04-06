@@ -60,7 +60,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             if (Bottom > rectToInclude.Bottom) Bottom = rectToInclude.Bottom;
         }
 
-        public bool Clip(RectInt r)
+        public bool Clip(in RectInt r)
         {
             if (Right > r.Right) Right = r.Right;
             if (Top > r.Top) Top = r.Top;

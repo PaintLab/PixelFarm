@@ -2295,9 +2295,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\RectangleF.cs">
       <Link>PixelFarm\PixelFarm.PrimitiveGeo\RectangleF.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\RectInt.cs">
-      <Link>PixelFarm\PixelFarm.PrimitiveGeo\RectInt.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\1_vectormaths\AggMath.cs">
       <Link>PixelFarm\PixelFarm.Vectors\1_vectormaths\AggMath.cs</Link>
     </Compile>
@@ -2360,6 +2357,9 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\2_geometry\RectD.cs">
       <Link>PixelFarm\PixelFarm.Vectors\2_geometry\RectD.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\2_Geometry\RectInt.cs">
+      <Link>PixelFarm\PixelFarm.Vectors\2_Geometry\RectInt.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_transform\1_Affine.cs">
       <Link>PixelFarm\PixelFarm.Vectors\3_transform\1_Affine.cs</Link>

@@ -163,7 +163,7 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
             {
                 //check if intersect  
                 var prevClip = p.ClipBox;
-                p.ClipBox = boundRect;
+                p.ClipBox = new Rectangle(boundRect.Left, boundRect.Top, boundRect.Width, boundRect.Height);
                 // Blur it
 
                 IImageFilter selectedFilter = null;
