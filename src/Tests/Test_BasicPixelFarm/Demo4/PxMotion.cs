@@ -186,8 +186,10 @@ namespace LayoutFarm.UI
         byte _alpha;
         Vector2 _center;
         RectD _boundingRect;
-        Affine _currentTx;
-        Bilinear _bilinearTx;
+
+        Affine _currentTx; //temp
+        Bilinear _bilinearTx; //temp
+        Perspective _perspectiveTx; //temp
 
         public SpriteShape(VgVisualElement vgVisElem, RootGraphic root, int w, int h)
              : base(root, w, h)
@@ -200,7 +202,10 @@ namespace LayoutFarm.UI
         public RectD Bounds => _boundingRect;
         public void ResetTransform()
         {
+            //TODO review here again
             _currentTx = null;
+            _bilinearTx = null;
+            _perspectiveTx = null;
         }
         public void ApplyTransform(Affine tx)
         {
@@ -224,6 +229,15 @@ namespace LayoutFarm.UI
             //    _svgRenderVx.SetInnerVx(i, SvgCmd.TransformToNew(_svgRenderVx.GetInnerVx(i), tx));
             //}
         }
+        public void ApplyTransform(Perspective tx)
+        {
+            _perspectiveTx = tx;
+            //int elemCount = _svgRenderVx.SvgVxCount;
+            //for (int i = 0; i < elemCount; ++i)
+            //{
+            //    _svgRenderVx.SetInnerVx(i, SvgCmd.TransformToNew(_svgRenderVx.GetInnerVx(i), tx));
+            //}
+        }
         public Vector2 Center => _center;
         public VgVisualElement GetRenderVx() => _vgVisElem;
 
@@ -233,7 +247,15 @@ namespace LayoutFarm.UI
         }
         public void Paint(Painter p)
         {
-            if (_bilinearTx != null)
+            if (_perspectiveTx != null)
+            {
+                using (Tools.More.BorrowVgPaintArgs(p, out var paintArgs))
+                {
+                    paintArgs._currentTx = _perspectiveTx;
+                    _vgVisElem.Paint(paintArgs);
+                }
+            }
+            else if (_bilinearTx != null)
             {
                 using (Tools.More.BorrowVgPaintArgs(p, out var paintArgs))
                 {

@@ -21,7 +21,7 @@ namespace LayoutFarm
         QuadWidgetControl _quadControl;
         Box _background;
         RectangleF _lionBounds;
-
+        Box _cmdBiliear;
         public Demo_Perspective()
         {
         }
@@ -31,25 +31,27 @@ namespace LayoutFarm
             _background.BackColor = Color.White;
             host.AddChild(_background);
 
+
+
+
             //---------------------------
             _vgVisElem = VgVisualDocHelper.CreateVgVisualDocFromFile(@"Samples\lion.svg").VgRootElem;
             _mySprite = new MyTestSprite(_vgVisElem);
-            var evListener = new GeneralEventListener();
+            //var evListener = new GeneralEventListener(); 
+            //evListener.MouseDrag += (s, e) =>
+            //{
+            //    if (e.Ctrl)
+            //    {
+            //        //TODO: 
+            //        //classic Agg's move and rotate                         
 
-            evListener.MouseDrag += (s, e) =>
-            {
-                if (e.Ctrl)
-                {
-                    //TODO: 
-                    //classic Agg's move and rotate                         
-
-                }
-                else
-                {   //just move
-                    _mySprite.SetLocation(_mySprite.Left + e.XDiff, _mySprite.Top + e.YDiff);
-                }
-            };
-            _mySprite.AttachExternalEventListener(evListener);
+            //    }
+            //    else
+            //    {   //just move
+            //        _mySprite.SetLocation(_mySprite.Left + e.XDiff, _mySprite.Top + e.YDiff);
+            //    }
+            //};
+            //_mySprite.AttachExternalEventListener(evListener);
 
 
             var rectBounds = _vgVisElem.GetRectBounds();
@@ -70,7 +72,29 @@ namespace LayoutFarm
 
             host.AddChild(_mySprite);
             host.AddChild(_quadControl);
+
+
+            //--------------------
+            _cmdBiliear = new Box(30, 30);
+            _cmdBiliear.SetLocation(400, 20);
+            _cmdBiliear.BackColor = Color.Yellow;
+            _cmdBiliear.MouseDown += (s, e) =>
+            {
+                if (_useBilinear)
+                {
+                    _cmdBiliear.BackColor = Color.Yellow;
+                    _useBilinear = false;
+                }
+                else
+                {
+                    _cmdBiliear.BackColor = Color.Red;
+                    _useBilinear = true;
+                }
+
+            };
+            host.AddChild(_cmdBiliear);
         }
+        bool _useBilinear;
 
         double[] _quadCorners = new double[8];
         private void _quadControl_ShapeUpdated(QuadWidgetControl sender, EventArgs arg)
@@ -88,18 +112,39 @@ namespace LayoutFarm
             _quadCorners[6] = quadCorners.left_bottom_x;
             _quadCorners[7] = quadCorners.left_bottom_y;
 
-            Bilinear txBilinear = Bilinear.RectToQuad(
-                _lionBounds.Left,
-                _lionBounds.Top,
-                _lionBounds.Right,
-                _lionBounds.Bottom,
-               _quadCorners);
 
-            if (txBilinear.IsValid)
+            //this is bilinear transformation
+            if (_useBilinear)
             {
-                _mySprite.GetSpriteShape().ApplyTransform(txBilinear);
-            }
+                Bilinear txBilinear = Bilinear.RectToQuad(
+                    _lionBounds.Left,
+                    _lionBounds.Top,
+                    _lionBounds.Right,
+                    _lionBounds.Bottom,
+                   _quadCorners);
 
+                if (txBilinear.IsValid)
+                {
+                    SpriteShape spriteShape = _mySprite.GetSpriteShape();
+                    spriteShape.ResetTransform();
+                    spriteShape.ApplyTransform(txBilinear);
+                }
+            }
+            else
+            {
+                Perspective perspective = new Perspective(
+                     _lionBounds.Left,
+                    _lionBounds.Top,
+                    _lionBounds.Right,
+                    _lionBounds.Bottom,
+                    _quadCorners);
+                if (perspective.IsValid)
+                {
+                    SpriteShape spriteShape = _mySprite.GetSpriteShape();
+                    spriteShape.ResetTransform();
+                    spriteShape.ApplyTransform(perspective);
+                }
+            }
         }
     }
 
