@@ -3,8 +3,6 @@
 
 using System;
 using System.Diagnostics;
-using PixelFarm.CpuBlit.UI;
-using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.Drawing;
 
 using Mini;
@@ -46,7 +44,7 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
     [Info(DemoCategory.Bitmap)]
     public class FilterFxDemo : DemoBase
     {
-        PolygonEditWidget _shadow_ctrl;
+        
         RectD _shape_bounds;
         Stopwatch _sw = new Stopwatch();
         MyTestSprite _testSprite;
@@ -72,7 +70,7 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
 
             //m_rbuf2 = new ReferenceImage();
             _shape_bounds = new RectD();
-            _shadow_ctrl = new PolygonEditWidget(4);
+           
             this.FlattenCurveChecked = true;
             this.FilterMethod = FilterMethod.None;
             this.BlurRadius = 15;
@@ -120,33 +118,17 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
 
         public override void MouseDown(int x, int y, bool isRightButton)
         {
-            _shadow_ctrl.OnMouseDown(
-                new MouseEventArgs(
-                    isRightButton ? MouseButtons.Right : MouseButtons.Left,
-                    1,
-                    x, y,
-                    1));
+          
         }
         public override void MouseUp(int x, int y)
         {
-            _shadow_ctrl.OnMouseUp(
-                new MouseEventArgs(
-                     MouseButtons.Left,
-                    1,
-                    x, y,
-                    1));
+            
         }
         public override void MouseDrag(int x, int y)
         {
-            _shadow_ctrl.OnMouseMove(
-               new MouseEventArgs(
-                   MouseButtons.Left,
-                   1,
-                   x, y,
-                   1));
+            
         }
-
-
+         
         public override void Draw(Painter p)
         {
             //create painter             
@@ -203,8 +185,8 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
                     case FilterMethod.Emboss:
                         selectedFilter = _fxEmboss;
                         break;
-                    case FilterMethod.EdgeDetection: 
-                        selectedFilter = _fxEdgeDetection; 
+                    case FilterMethod.EdgeDetection:
+                        selectedFilter = _fxEdgeDetection;
                         break;
                     case FilterMethod.OilPaint:
                         selectedFilter = _oilPaintFilter;

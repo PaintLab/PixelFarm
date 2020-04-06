@@ -1,4 +1,5 @@
-﻿using Marius.Yoga;
+﻿//MIT, 2020, Brezza92
+using Marius.Yoga;
 using System.Collections.Generic;
 
 namespace LayoutFarm.CustomWidgets
