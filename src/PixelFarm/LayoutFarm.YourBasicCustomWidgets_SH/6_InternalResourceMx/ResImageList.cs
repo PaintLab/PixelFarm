@@ -22,10 +22,10 @@ namespace LayoutFarm.CustomWidgets
             s_images.TryGetValue(imageName, out Image found);
             return found;
         }
-        public static ImageBinder GetImageBinder(ImageName imageName)
+        public static UIImageBinder GetImageBinder(ImageName imageName)
         {
             s_images.TryGetValue(imageName, out Image found);
-            ImageBinder binder = new MyClientImageBinder(null);
+            var binder = new MyClientImageBinder(null);
             binder.SetLocalImage(found);
             binder.State = BinderState.Loaded;
             return binder;

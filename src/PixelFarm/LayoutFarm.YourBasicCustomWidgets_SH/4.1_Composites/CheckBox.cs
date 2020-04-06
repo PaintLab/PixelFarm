@@ -9,8 +9,8 @@ namespace LayoutFarm.CustomWidgets
         ImageBox _imageBox;
         bool _isChecked;
 
-        static ImageBinder s_checkedImg;
-        static ImageBinder s_uncheckedImg;
+        static UIImageBinder s_checkedImg;
+        static UIImageBinder s_uncheckedImg;
 
         public CheckBox(int w, int h)
             : base(w, h)

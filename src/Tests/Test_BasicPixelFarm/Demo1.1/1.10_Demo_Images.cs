@@ -8,7 +8,7 @@ namespace LayoutFarm
         protected override void OnStart(AppHost host)
         {
 
-            ImageBinder imgBinder = host.LoadImageAndBind("../Data/imgs/favorites32.png");
+            PixelFarm.Drawing.ImageBinder imgBinder = host.LoadImageAndBind("../Data/imgs/favorites32.png");
             for (int i = 0; i < 100; ++i)
             {
                 //share 1 img binder with multiple img boxes
@@ -20,5 +20,5 @@ namespace LayoutFarm
         }
     }
 
-   
+
 }

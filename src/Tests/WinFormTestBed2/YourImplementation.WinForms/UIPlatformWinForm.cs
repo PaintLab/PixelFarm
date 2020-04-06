@@ -119,9 +119,9 @@ namespace LayoutFarm.UI
             {
                 s_platform = this;
                 SetAsDefaultPlatform();
-                UIMsgQueue.RegisterRunOnceImpl(runOnceDelegate =>
+                PixelFarm.Drawing.Internal.UIMsgQueue.RegisterRunOnceImpl(runOnceDelegate =>
                 {
-                    UIPlatform.RegisterRunOnceTask(tt => runOnceDelegate());
+                   UIPlatform.RegisterRunOnceTask(tt => runOnceDelegate());
                 });
             }
 

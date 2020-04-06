@@ -194,7 +194,7 @@ namespace PaintLab.Svg
         internal VgPathVisualMarkers _pathMarkers;
 
 
-        LayoutFarm.ImageBinder _imgBinder;
+        ImageBinder _imgBinder;
         VgVisualDoc _vgVisualDoc;
 
         Image _backimg;
@@ -272,12 +272,9 @@ namespace PaintLab.Svg
             ReleaseRenderVx();
         }
 
-        public LayoutFarm.ImageBinder ImageBinder
+        public PixelFarm.Drawing.ImageBinder ImageBinder
         {
-            get
-            {
-                return _imgBinder;
-            }
+            get => _imgBinder;
             set
             {
                 _imgBinder = value;
@@ -973,7 +970,7 @@ namespace PaintLab.Svg
                             if (imgSpec.ImageSrc != null)
                             {
                                 //create new 
-                                this.ImageBinder = new LayoutFarm.ImageBinder(imgSpec.ImageSrc);
+                                this.ImageBinder = new LayoutFarm.UIImageBinder(imgSpec.ImageSrc);
                                 isOK = true;
                             }
                         }
@@ -987,7 +984,7 @@ namespace PaintLab.Svg
                     EVAL_STATE:
                         switch (this.ImageBinder.State)
                         {
-                            case LayoutFarm.BinderState.Unload:
+                            case BinderState.Unload:
                                 if (!tryLoadOnce)
                                 {
                                     tryLoadOnce = true;
@@ -996,10 +993,10 @@ namespace PaintLab.Svg
                                     goto EVAL_STATE;
                                 }
                                 break;
-                            case LayoutFarm.BinderState.Loading:
+                            case BinderState.Loading:
                                 break;
                             //
-                            case LayoutFarm.BinderState.Loaded:
+                            case BinderState.Loaded:
                                 {
                                     //check if we need scale or not
 

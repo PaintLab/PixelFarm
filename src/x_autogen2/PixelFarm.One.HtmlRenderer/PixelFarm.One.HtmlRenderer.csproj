@@ -2439,11 +2439,17 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\6_Contours\Vertex.cs">
       <Link>PixelFarm\PixelFarm.Vectors\6_Contours\Vertex.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\1_IO\ImageBinder.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\1_IO\ImageBinder.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\1_IO\ImageReaders.cs">
       <Link>PixelFarm\PixelFarm.Drawing\1_IO\ImageReaders.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\1_IO\StorageService.cs">
       <Link>PixelFarm\PixelFarm.Drawing\1_IO\StorageService.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\1_IO\UIMsgQueue.cs">
+      <Link>PixelFarm\PixelFarm.Drawing\1_IO\UIMsgQueue.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\2_AggPainter\AggPainter.cs">
       <Link>PixelFarm\PixelFarm.Drawing\2_AggPainter\AggPainter.cs</Link>
