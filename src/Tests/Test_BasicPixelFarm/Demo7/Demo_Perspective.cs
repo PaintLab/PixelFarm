@@ -85,14 +85,14 @@ namespace LayoutFarm
             _quadCorners[3] = quadCorners.right_top_y;
             _quadCorners[4] = quadCorners.right_bottom_x;
             _quadCorners[5] = quadCorners.right_bottom_y;
-            _quadCorners[6] = quadCorners.right_bottom_x;
-            _quadCorners[7] = quadCorners.right_bottom_y;
+            _quadCorners[6] = quadCorners.left_bottom_x;
+            _quadCorners[7] = quadCorners.left_bottom_y;
 
             Bilinear txBilinear = Bilinear.RectToQuad(
                 _lionBounds.Left,
-                _lionBounds.Bottom,
-                _lionBounds.Right,
                 _lionBounds.Top,
+                _lionBounds.Right,
+                _lionBounds.Bottom,
                _quadCorners);
 
             if (txBilinear.IsValid)
