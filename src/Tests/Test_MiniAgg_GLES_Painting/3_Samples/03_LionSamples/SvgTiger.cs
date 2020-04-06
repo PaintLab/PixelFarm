@@ -90,7 +90,7 @@ namespace PixelFarm.CpuBlit.Samples
 
                 if (vgRenerVx != null && !vgRenerVx.HasBitmapSnapshot)
                 {
-                    RectD bound = vgRenerVx.GetRectBounds();
+                    VertexProcessing.RectD bound = vgRenerVx.GetRectBounds();
 
                     //create 
                     MemBitmap backBmp = new MemBitmap((int)bound.Width, (int)bound.Height);

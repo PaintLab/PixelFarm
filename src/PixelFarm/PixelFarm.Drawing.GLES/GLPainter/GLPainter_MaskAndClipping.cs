@@ -3,8 +3,8 @@
 
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.CpuBlit; 
-
+using PixelFarm.CpuBlit;
+using PixelFarm.CpuBlit.VertexProcessing;
 namespace PixelFarm.DrawingGL
 {
     partial class GLPainter

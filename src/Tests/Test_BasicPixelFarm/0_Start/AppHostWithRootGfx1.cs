@@ -111,7 +111,7 @@ namespace LayoutFarm
         PixelFarm.CpuBlit.MemBitmap CreateBitmap(VgVisualElement renderVx, int reqW, int reqH)
         {
 
-            RectD bound = renderVx.GetRectBounds();
+            var bound = renderVx.GetRectBounds();
             //create
             MemBitmap backingBmp = new MemBitmap((int)bound.Width + 10, (int)bound.Height + 10);
 #if DEBUG

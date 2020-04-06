@@ -42,7 +42,7 @@ namespace OpenTkEssTest
             PaintLab.Svg.VgVisualDoc vgVisualDoc = PaintLab.Svg.VgVisualDocHelper.CreateVgVisualDocFromFile("Samples/lion.svg");
             _lionShape = new SpriteShape(vgVisualDoc.VgRootElem);
 
-            RectD lionBounds = _lionShape.Bounds;
+            var lionBounds = _lionShape.Bounds;
             //-------------
             _memBmp = new MemBitmap((int)lionBounds.Width, (int)lionBounds.Height);
             _aggPainter = AggPainter.Create(_memBmp);

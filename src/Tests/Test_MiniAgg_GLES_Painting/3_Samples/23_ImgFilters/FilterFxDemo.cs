@@ -44,8 +44,8 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
     [Info(DemoCategory.Bitmap)]
     public class FilterFxDemo : DemoBase
     {
-        
-        RectD _shape_bounds;
+
+        CpuBlit.VertexProcessing.RectD _shape_bounds;
         Stopwatch _sw = new Stopwatch();
         MyTestSprite _testSprite;
 
@@ -69,8 +69,8 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
             //--------------
 
             //m_rbuf2 = new ReferenceImage();
-            _shape_bounds = new RectD();
-           
+            _shape_bounds = new VertexProcessing.RectD();
+
             this.FlattenCurveChecked = true;
             this.FilterMethod = FilterMethod.None;
             this.BlurRadius = 15;
@@ -118,17 +118,17 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
 
         public override void MouseDown(int x, int y, bool isRightButton)
         {
-          
+
         }
         public override void MouseUp(int x, int y)
         {
-            
+
         }
         public override void MouseDrag(int x, int y)
         {
-            
+
         }
-         
+
         public override void Draw(Painter p)
         {
             //create painter             
@@ -145,7 +145,7 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
                 return;
             }
 
-            RectInt boundRect = new RectInt((int)b_left, (int)b_bottom, (int)b_right, (int)b_top);
+            var boundRect = new PixelFarm.CpuBlit.VertexProcessing.RectInt((int)b_left, (int)b_bottom, (int)b_right, (int)b_top);
             int m_radius = this.BlurRadius;
             //expand bound rect
             boundRect.Left -= m_radius;
@@ -159,7 +159,7 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
             //create filter specfication
             //it will be resolve later by the platform similar to request font
             //------------------ 
-            if (boundRect.Clip(new RectInt(0, 0, p.Width - 1, p.Height - 1)))
+            if (boundRect.Clip(new PixelFarm.CpuBlit.VertexProcessing.RectInt(0, 0, p.Width - 1, p.Height - 1)))
             {
                 //check if intersect  
                 var prevClip = p.ClipBox;

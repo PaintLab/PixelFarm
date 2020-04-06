@@ -1425,8 +1425,6 @@ namespace PaintLab.Svg
                 p.EnableMask = false;
             }
         }
-
-
         public void AddChildElement(VgVisualElementBase vgVisElem)
         {
             if (vgVisElem == null) return;
@@ -1468,7 +1466,7 @@ namespace PaintLab.Svg
         public void InvalidateBounds()
         {
             _needBoundUpdate = true;
-            _boundRect = RectD.ZeroIntersection;// new RectD(this.X, this.Y, 2, 2);
+            _boundRect = RectD.ZeroIntersection();// new RectD(this.X, this.Y, 2, 2);
         }
 
 
@@ -1482,7 +1480,7 @@ namespace PaintLab.Svg
                 using (VgVistorArgsPool.Borrow(out VgVisitorArgs paintArgs))
                 {
                     //when we find bounds, lets start with  RectD.ZeroIntersectio
-                    RectD rectTotal = RectD.ZeroIntersection;
+                    RectD rectTotal = RectD.ZeroIntersection();
                     bool evaluated = false;
                     paintArgs._currentTx = this.CoordTx;
 
