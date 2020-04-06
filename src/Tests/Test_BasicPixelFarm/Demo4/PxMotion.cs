@@ -46,11 +46,7 @@ namespace LayoutFarm.UI
             get => _spriteShape;
             set => _spriteShape = value;
         }
-        public int SharpenRadius
-        {
-            get;
-            set;
-        }
+        public int SharpenRadius { get; set; }
         //
         public override RenderElement CurrentPrimaryRenderElement => _spriteShape;
         //
@@ -221,7 +217,7 @@ namespace LayoutFarm.UI
         RectD _boundingRect;
         Affine _currentTx;
         public SpriteShape(VgVisualElement vgVisElem, RootGraphic root, int w, int h)
-                   : base(root, w, h)
+             : base(root, w, h)
         {
             LoadFromSvg(vgVisElem);
         }

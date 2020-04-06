@@ -613,6 +613,7 @@ namespace LayoutFarm.UI
             Rectangle backup = updateArea.CurrentRect;//backup 
             int enter_canvas_x = d.OriginX;
             int enter_canvas_y = d.OriginY;
+
             do
             {
                 for (int i = startRowId; i < stopRowId; i++)
