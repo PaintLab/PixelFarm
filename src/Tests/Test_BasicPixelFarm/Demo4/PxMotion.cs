@@ -174,35 +174,6 @@ namespace LayoutFarm.UI
         }
 
 
-        //public override void Render(PixelFarm.Drawing.Painter p)
-        //{
-        //    if (_currentTx == null)
-        //    {
-        //        _currentTx = Affine.NewMatix(
-        //              AffinePlan.Translate(-_spriteShape.Center.x, -_spriteShape.Center.y),
-        //              AffinePlan.Scale(_spriteScale, _spriteScale),
-        //              AffinePlan.Rotate(_angle + Math.PI),
-        //              AffinePlan.Skew(_skewX / 1000.0, _skewY / 1000.0),
-        //              AffinePlan.Translate(Width / 2, Height / 2)
-        //      );
-        //    }
-
-        //    if (JustMove)
-        //    {
-        //        float ox = p.OriginX;
-        //        float oy = p.OriginY;
-
-        //        p.SetOrigin(ox + _posX, oy + _posY);
-        //        _spriteShape.Paint(p);
-        //        p.SetOrigin(ox, oy);
-
-        //    }
-        //    else
-        //    {
-        //        _spriteShape.Paint(p, _currentTx);
-        //    }
-
-        //}
 
         public SpriteShape GetSpriteShape() => _spriteShape;
     }
@@ -216,6 +187,8 @@ namespace LayoutFarm.UI
         Vector2 _center;
         RectD _boundingRect;
         Affine _currentTx;
+        Bilinear _bilinearTx;
+
         public SpriteShape(VgVisualElement vgVisElem, RootGraphic root, int w, int h)
              : base(root, w, h)
         {
@@ -244,6 +217,7 @@ namespace LayoutFarm.UI
         }
         public void ApplyTransform(Bilinear tx)
         {
+            _bilinearTx = tx;
             //int elemCount = _svgRenderVx.SvgVxCount;
             //for (int i = 0; i < elemCount; ++i)
             //{
@@ -259,11 +233,21 @@ namespace LayoutFarm.UI
         }
         public void Paint(Painter p)
         {
-
-            using (Tools.More.BorrowVgPaintArgs(p, out var paintArgs))
+            if (_bilinearTx != null)
             {
-                paintArgs._currentTx = _currentTx;
-                _vgVisElem.Paint(paintArgs);
+                using (Tools.More.BorrowVgPaintArgs(p, out var paintArgs))
+                {
+                    paintArgs._currentTx = _bilinearTx;
+                    _vgVisElem.Paint(paintArgs);
+                }
+            }
+            else
+            {
+                using (Tools.More.BorrowVgPaintArgs(p, out var paintArgs))
+                {
+                    paintArgs._currentTx = _currentTx;
+                    _vgVisElem.Paint(paintArgs);
+                }
             }
 
         }
@@ -286,7 +270,15 @@ namespace LayoutFarm.UI
             //------
             using (Tools.More.BorrowVgPaintArgs(p, out var paintArgs))
             {
-                paintArgs._currentTx = tx;
+                if (_bilinearTx != null)
+                {
+                    paintArgs._currentTx = _bilinearTx;
+                }
+                else
+                {
+                    paintArgs._currentTx = tx;
+                }
+
                 paintArgs.PaintVisitHandler = (vxs, painterA) =>
                 {
                     //use external painter handler
@@ -299,10 +291,6 @@ namespace LayoutFarm.UI
                 };
                 _vgVisElem.Paint(paintArgs);
             }
-
-
-
-
         }
         public void DrawOutline(Painter p)
         {

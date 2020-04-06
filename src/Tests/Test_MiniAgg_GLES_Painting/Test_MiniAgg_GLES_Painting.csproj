@@ -476,9 +476,7 @@
     </Content>
     <Content Include="x_notused\old_BitmapHelper.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="MiniGUI\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="..\WinFormTestBed2\WinFormTestBed2.projitems" Label="Shared" />
   <Import Project="..\..\PixelFarm\PaintLab.AppHost\PaintLab.AppHost.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
