@@ -566,9 +566,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\1_IO\StorageService.cs">
       <Link>PixelFarm\PixelFarm.Drawing\1_IO\StorageService.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\1_IO\UIMsgQueue.cs">
-      <Link>PixelFarm\PixelFarm.Drawing\1_IO\UIMsgQueue.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\2_AggPainter\AggPainter.cs">
       <Link>PixelFarm\PixelFarm.Drawing\2_AggPainter\AggPainter.cs</Link>
     </Compile>

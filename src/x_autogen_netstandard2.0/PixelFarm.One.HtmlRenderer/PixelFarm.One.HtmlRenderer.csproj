@@ -595,6 +595,7 @@
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\6_debug\IdbugOutputWindow.cs" Link="PixelFarm\PaintLab.RenderTree\6_debug\IdbugOutputWindow.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\8_EventQueue\EventQueueSystem.cs" Link="PixelFarm\PaintLab.RenderTree\8_EventQueue\EventQueueSystem.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.AbstractPlatform\CanvasViewport.cs" Link="PixelFarm\PaintLab.AbstractPlatform\CanvasViewport.cs" />
+    <Compile Include="..\..\PixelFarm\PaintLab.AbstractPlatform\ClipboardServices.cs" Link="PixelFarm\PaintLab.AbstractPlatform\ClipboardServices.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.AbstractPlatform\TempContext.cs" Link="PixelFarm\PaintLab.AbstractPlatform\TempContext.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.BitmapBufferEx\BitmapBufferEx\BitmapBuffer.cs" Link="PixelFarm\PaintLab.BitmapBufferEx\BitmapBufferEx\BitmapBuffer.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\BaseExtensions.cs" Link="PixelFarm\PaintLab.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\BaseExtensions.cs" />
@@ -833,7 +834,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\1_IO\ImageBinder.cs" Link="PixelFarm\PixelFarm.Drawing\1_IO\ImageBinder.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\1_IO\ImageReaders.cs" Link="PixelFarm\PixelFarm.Drawing\1_IO\ImageReaders.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\1_IO\StorageService.cs" Link="PixelFarm\PixelFarm.Drawing\1_IO\StorageService.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\1_IO\UIMsgQueue.cs" Link="PixelFarm\PixelFarm.Drawing\1_IO\UIMsgQueue.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\2_AggPainter\AggPainter.cs" Link="PixelFarm\PixelFarm.Drawing\2_AggPainter\AggPainter.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\2_AggPainter\AggPainter_BrushAndFill.cs" Link="PixelFarm\PixelFarm.Drawing\2_AggPainter\AggPainter_BrushAndFill.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\2_AggPainter\AggPainter_FontAndText.cs" Link="PixelFarm\PixelFarm.Drawing\2_AggPainter\AggPainter_FontAndText.cs" />

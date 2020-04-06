@@ -208,7 +208,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\1_IO\ImageBinder.cs" Link="PixelFarm\PixelFarm.Drawing\1_IO\ImageBinder.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\1_IO\ImageReaders.cs" Link="PixelFarm\PixelFarm.Drawing\1_IO\ImageReaders.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\1_IO\StorageService.cs" Link="PixelFarm\PixelFarm.Drawing\1_IO\StorageService.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\1_IO\UIMsgQueue.cs" Link="PixelFarm\PixelFarm.Drawing\1_IO\UIMsgQueue.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\2_AggPainter\AggPainter.cs" Link="PixelFarm\PixelFarm.Drawing\2_AggPainter\AggPainter.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\2_AggPainter\AggPainter_BrushAndFill.cs" Link="PixelFarm\PixelFarm.Drawing\2_AggPainter\AggPainter_BrushAndFill.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\2_AggPainter\AggPainter_FontAndText.cs" Link="PixelFarm\PixelFarm.Drawing\2_AggPainter\AggPainter_FontAndText.cs" />

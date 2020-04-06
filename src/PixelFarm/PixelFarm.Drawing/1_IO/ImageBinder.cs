@@ -1,31 +1,10 @@
 ﻿//BSD, 2014-present, WinterDev
 //MIT, 2018-present, WinterDev
 using System;
-namespace LayoutFarm
-{
-    using PixelFarm.Drawing;
-    public class UIImageBinder : ImageBinder
-    {
-        public UIImageBinder(string src) : base(src) { }
-        public override void SetLocalImage(Image image, bool fromAnotherThread = false)
-        {
-            base.SetLocalImage(image, fromAnotherThread);
-            if (!fromAnotherThread)
-            {
-                this.RaiseImageChanged();
-            }
-            else
-            {
-                PixelFarm.Drawing.Internal.UIMsgQueue.RegisterRunOnce(() => this.RaiseImageChanged());
-            }
-        }
-    }
 
-}
 namespace PixelFarm.Drawing
 {
     public delegate void LoadImageFunc(ImageBinder binder);
-
 
     public class ImageBinder : BitmapBufferProvider
     {
@@ -78,7 +57,9 @@ namespace PixelFarm.Drawing
             _isLocalImgOwner = isMemBmpOwner; //if true=> this binder will release a local cahed img
             this.State = BinderState.Loaded;
         }
+
         public event System.EventHandler ImageChanged;
+
         public virtual void RaiseImageChanged()
         {
             try
@@ -159,21 +140,32 @@ namespace PixelFarm.Drawing
         /// set local loaded image
         /// </summary>
         /// <param name="image"></param>
-        public virtual void SetLocalImage(PixelFarm.Drawing.Image image, bool fromAnotherThread = false)
+        public virtual void SetLocalImage(PixelFarm.Drawing.Image image, bool raiseEvent = true)
         {
             //set image to this binder
             if (image != null)
             {
                 _localImg = image;
                 this.State = BinderState.Loaded;
+               
+
+                if (raiseEvent)
+                {
+                    RaiseImageChanged();
+                }
+                else
+                {
+                    //eg. when we setLocalImage 
+                    //from other thread  
+                    //don't call raise image changed directly here
+                    //please use 'main thread queue' to invoke this
+                }
             }
             else
             {
-                //if set to null
-
+                //if set to null 
             }
         }
-
 
         public bool HasLazyFunc => _lazyLoadImgFunc != null;
 

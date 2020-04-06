@@ -970,7 +970,7 @@ namespace PaintLab.Svg
                             if (imgSpec.ImageSrc != null)
                             {
                                 //create new 
-                                this.ImageBinder = new LayoutFarm.UIImageBinder(imgSpec.ImageSrc);
+                                this.ImageBinder = new PixelFarm.Drawing.ImageBinder(imgSpec.ImageSrc);
                                 isOK = true;
                             }
                         }

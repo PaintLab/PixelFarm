@@ -2,7 +2,7 @@
 
 namespace LayoutFarm
 {
-    class MyClientImageBinder : UIImageBinder
+    class MyClientImageBinder : PixelFarm.Drawing.ImageBinder
     {
         UI.IUIEventListener _listener;
         public MyClientImageBinder(string src)

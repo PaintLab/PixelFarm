@@ -22,7 +22,7 @@ namespace LayoutFarm.CustomWidgets
             s_images.TryGetValue(imageName, out Image found);
             return found;
         }
-        public static UIImageBinder GetImageBinder(ImageName imageName)
+        public static PixelFarm.Drawing.ImageBinder GetImageBinder(ImageName imageName)
         {
             s_images.TryGetValue(imageName, out Image found);
             var binder = new MyClientImageBinder(null);

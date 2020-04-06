@@ -565,7 +565,6 @@
     </Compile>
     <Compile Include="1_IO\ImageBinder.cs" />
     <Compile Include="1_IO\StorageService.cs" />
-    <Compile Include="1_IO\UIMsgQueue.cs" />
     <Compile Include="3_VertexProcessoring\Figures.cs" />
     <Compile Include="2_AggPainter\AggPainter.cs" />
     <Compile Include="2_AggPainter\AggPainter_MaskAndClipping.cs" />

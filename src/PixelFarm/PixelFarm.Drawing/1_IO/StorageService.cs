@@ -1,7 +1,6 @@
 ﻿//BSD, 2014-present, WinterDev
 //MIT, 2018-present, WinterDev
 using System;
-using System.Collections.Generic;
 using System.IO;
 namespace PixelFarm.Platforms
 {
@@ -34,22 +33,4 @@ namespace PixelFarm.Platforms
         }
         public static StorageServiceProvider Provider => s_provider;
     }
-
-    public static class ClipboardService
-    {
-        static ClipboardDataProvider s_provider;
-        public static ClipboardDataProvider Provider => s_provider;
-    }
-    public abstract class ClipboardDataProvider
-    {
-        public abstract bool ContainsImage();
-        public abstract bool ContainsText();
-        public abstract bool ContainsFileDropList();
-        public abstract void Clear();
-        public abstract PixelFarm.Drawing.Image GetImage();
-        public abstract string GetText();
-        public abstract List<string> GetFileDropList();
-    } 
 }
-
- 
