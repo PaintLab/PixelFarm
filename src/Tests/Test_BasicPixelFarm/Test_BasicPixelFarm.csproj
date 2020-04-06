@@ -74,10 +74,6 @@
     <Compile Include="Demo6\6_DemoFlexBox.cs" />
     <Compile Include="Demo6\FlexBoxControl.cs" />
     <Compile Include="Demo7\Demo_Perspective.cs" />
-    <Compile Include="Demo7\IncompleteWidget.cs" />
-    <Compile Include="Demo7\MySimpleVertexSourceWidget.cs" />
-    <Compile Include="Demo7\Perspective.cs" />
-    <Compile Include="Demo7\PolygonWidget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="x_unused\x_MyGlfwForm.cs" />
     <Compile Include="x_unused\x_notusedOpenGLPortal.cs" />
