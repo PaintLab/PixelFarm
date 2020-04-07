@@ -44,7 +44,7 @@ namespace PaintFx.Effects
         {
             unsafe
             {
-                using (TempMemPtr bufferPtr = _target.GetBufferPtr())
+                using (PixelFarm.CpuBlit.TempMemPtr bufferPtr = _target.GetBufferPtr())
                 {
                     int[] output = new int[bufferPtr.LengthInBytes / 4]; //TODO: review here again
 
@@ -98,7 +98,7 @@ namespace PaintFx.Effects
             unsafe
             {
 
-                using (TempMemPtr bufferPtr = _target.GetBufferPtr())
+                using (PixelFarm.CpuBlit.TempMemPtr bufferPtr = _target.GetBufferPtr())
                 {
                     int[] output = new int[bufferPtr.LengthInBytes / 4]; //TODO: review here again
 
@@ -147,7 +147,7 @@ namespace PaintFx.Effects
 
                 _edge.SetAngle(Angle);
 
-                using (TempMemPtr bufferPtr = _target.GetBufferPtr())
+                using (PixelFarm.CpuBlit.TempMemPtr bufferPtr = _target.GetBufferPtr())
                 {
                     int[] output = new int[bufferPtr.LengthInBytes / 4]; //TODO: review here again
 
@@ -193,7 +193,7 @@ namespace PaintFx.Effects
         {
             unsafe
             {
-                using (TempMemPtr bufferPtr = _target.GetBufferPtr())
+                using (PixelFarm.CpuBlit.TempMemPtr bufferPtr = _target.GetBufferPtr())
                 {
                     int[] output = new int[bufferPtr.LengthInBytes / 4]; //TODO: review here again
 
@@ -238,7 +238,7 @@ namespace PaintFx.Effects
         {
             unsafe
             {
-                using (TempMemPtr bufferPtr = _target.GetBufferPtr())
+                using (PixelFarm.CpuBlit.TempMemPtr bufferPtr = _target.GetBufferPtr())
                 {
                     int[] output = new int[bufferPtr.LengthInBytes / 4]; //TODO: review here again
 
@@ -281,7 +281,7 @@ namespace PaintFx.Effects
         {
             unsafe
             {
-                using (TempMemPtr bufferPtr = _target.GetBufferPtr())
+                using (PixelFarm.CpuBlit.TempMemPtr bufferPtr = _target.GetBufferPtr())
                 {
                     int[] output = new int[bufferPtr.LengthInBytes / 4]; //TODO: review here again
 
@@ -348,7 +348,7 @@ namespace PaintFx.Effects
         {
             unsafe
             {
-                using (TempMemPtr bufferPtr = _target.GetBufferPtr())
+                using (PixelFarm.CpuBlit.TempMemPtr bufferPtr = _target.GetBufferPtr())
                 {
 
                     byte* srcBuffer = (byte*)bufferPtr.Ptr;

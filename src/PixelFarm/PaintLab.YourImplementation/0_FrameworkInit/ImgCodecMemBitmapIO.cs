@@ -267,7 +267,7 @@ namespace YourImplementation
             //-------------
             unsafe
             {
-                PixelFarm.CpuBlit.Imaging.TempMemPtr tmp = MemBitmap.GetBufferPtr(bmp);
+                PixelFarm.CpuBlit.TempMemPtr tmp = MemBitmap.GetBufferPtr(bmp);
                 int* intBuffer = (int*)tmp.Ptr;
 
                 int imgW = bmp.Width;

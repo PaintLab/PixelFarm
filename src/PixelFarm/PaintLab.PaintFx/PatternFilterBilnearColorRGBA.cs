@@ -50,7 +50,7 @@ namespace PixelFarm.CpuBlit.Rasterization.Lines
             unsafe
             {
 
-                Imaging.TempMemPtr ptr1 = sourceImage.GetBufferPtr();
+                TempMemPtr ptr1 = sourceImage.GetBufferPtr();
                 int* ptr = (int*)ptr1.Ptr;
                 sourceOffset = sourceImage.GetBufferOffsetXY32(x_lr, y_lr);
                 weight = (LineAA.SUBPIXEL_SCALE - x) *
