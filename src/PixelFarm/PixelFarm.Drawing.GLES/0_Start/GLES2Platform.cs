@@ -1,6 +1,6 @@
 ﻿//BSD, 2014-present, WinterDev
 
-using PixelFarm.Drawing.Fonts;
+ 
 using Typography.FontManagement;
 
 namespace PixelFarm.Drawing.GLES2

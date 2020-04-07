@@ -12,7 +12,6 @@ using System.IO;
 
 using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.Drawing;
-using PixelFarm.Drawing.Fonts;
 //
 using Typography.OpenFont;
 using Typography.Contours;
@@ -36,13 +35,13 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             string fontfile = YourImplementation.FrameworkInitWinGDI.GetFontLoader().GetInstalledTypeface("tahoma", TypefaceStyle.Regular).FontPath;
 
             this.FillBG = true;
-            float sizeInPts = 72; 
+            float sizeInPts = 72;
 
             using (var fs = new FileStream(fontfile, FileMode.Open, FileAccess.Read))
             {
                 var reader = new OpenFontReader();
                 //1. read typeface from font file
-                Typeface typeFace = reader.Read(fs); 
+                Typeface typeFace = reader.Read(fs);
                 //2. glyph-to-vxs builder
                 var builder = new GlyphOutlineBuilder(typeFace);
                 _left_vxs = BuildVxsForGlyph(builder, 'p', sizeInPts);
