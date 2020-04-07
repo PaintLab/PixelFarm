@@ -282,7 +282,7 @@ namespace PixelFarm.CpuBlit
         public override int ReferenceX => 0;
         public override int ReferenceY => 0;
         //
-        public RectInt Bounds => new RectInt(0, 0, _width, _height);
+       
         public override bool IsReferenceImage => false;
         public CpuBlit.Imaging.PixelFormat PixelFormat => _pixelFormat;
         //

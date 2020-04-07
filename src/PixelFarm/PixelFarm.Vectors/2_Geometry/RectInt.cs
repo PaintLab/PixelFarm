@@ -20,7 +20,7 @@
 using System;
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
-    //TODO: merge with Rectangle
+     
     //beware: the ctor!!=> left,bottom, right, top
 
     public struct RectInt
