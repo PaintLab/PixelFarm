@@ -254,6 +254,9 @@
     <Compile Include="..\PixelFarm.Painter\0_Base\ForNet20.cs">
       <Link>0_REF_Painter\0_Base\ForNet20.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.Painter\2_General\ClipingTechnique.cs">
+      <Link>0_REF_Painter\2_General\ClipingTechnique.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.Painter\2_General\ColorEx.cs">
       <Link>0_REF_Painter\2_General\ColorEx.cs</Link>
     </Compile>

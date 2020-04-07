@@ -2199,6 +2199,9 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\0_Base\ForNet20.cs">
       <Link>PixelFarm\PixelFarm.Painter\0_Base\ForNet20.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\2_General\ClipingTechnique.cs">
+      <Link>PixelFarm\PixelFarm.Painter\2_General\ClipingTechnique.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\2_General\ColorEx.cs">
       <Link>PixelFarm\PixelFarm.Painter\2_General\ColorEx.cs</Link>
     </Compile>

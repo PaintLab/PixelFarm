@@ -124,6 +124,7 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\Drawing\VertexCommandAndOrientation.cs" Link="PixelFarm\PixelFarm.DrawingCore\Drawing\VertexCommandAndOrientation.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\Drawing\VertexStore.cs" Link="PixelFarm\PixelFarm.DrawingCore\Drawing\VertexStore.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\0_Base\ForNet20.cs" Link="PixelFarm\PixelFarm.Painter\0_Base\ForNet20.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\2_General\ClipingTechnique.cs" Link="PixelFarm\PixelFarm.Painter\2_General\ClipingTechnique.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\2_General\ColorEx.cs" Link="PixelFarm\PixelFarm.Painter\2_General\ColorEx.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\2_General\ITextPrinter.cs" Link="PixelFarm\PixelFarm.Painter\2_General\ITextPrinter.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\2_General\TempContext.cs" Link="PixelFarm\PixelFarm.Painter\2_General\TempContext.cs" />
