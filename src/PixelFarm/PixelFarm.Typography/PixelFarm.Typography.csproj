@@ -80,14 +80,14 @@
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_Typography_Contours\GlyphPathBuilder.cs">
       <Link>3_Typograhy_Contours\GlyphPathBuilder.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_Typography_Contours\GlyphTranslatorToVxs.cs">
+      <Link>3_Typograhy_Contours\GlyphTranslatorToVxs.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_Typography_Contours\TextPrinterBase.cs">
       <Link>3_Typograhy_Contours\TextPrinterBase.cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_PixelFarm_Contours\GlyphOutlineAnalyzer.cs">
       <Link>4_PixelFarm_Contours\GlyphOutlineAnalyzer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_PixelFarm_Contours\GlyphTranslatorToVxs.cs">
-      <Link>4_PixelFarm_Contours\GlyphTranslatorToVxs.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
