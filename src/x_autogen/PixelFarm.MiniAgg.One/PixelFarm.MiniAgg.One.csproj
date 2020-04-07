@@ -129,7 +129,6 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\CpuBlit.VertexProcessing\BoundingRect.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\CpuBlit.VertexProcessing\CurveFlattener.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\CpuBlit.VertexProcessing\LineWalker.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\CpuBlit.VertexProcessing\PathWriter.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\CpuBlit.VertexProcessing\RoundedRect.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\CpuBlit.VertexProcessing\SimpleRect.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\CpuBlit.VertexProcessing\Stroke.cs" />
@@ -145,6 +144,7 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\CpuBlit.VertexProcessing\VxsClipping.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\CpuBlit\ColorRGBAf.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\CpuBlit\MemBitmap.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\CpuBlit\PathWriter.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\CpuBlit\TempMemPtr.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\Drawing.Internal\CO.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\Drawing.Internal\MicroPainter.cs" />
