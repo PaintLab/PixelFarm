@@ -129,7 +129,7 @@ namespace PixelFarm.CpuBlit.Rasterization
         const int AA_MASK2 = AA_SCALE2 - 1;
         //---------------------------
 
-        CartesRect _userModeClipBox;
+        Q1Rect _userModeClipBox;
         //---------------
 
         enum Status
@@ -170,9 +170,9 @@ namespace PixelFarm.CpuBlit.Rasterization
             _status = Status.Initial;
         }
 
-        public CartesRect GetVectorClipBox() => _userModeClipBox;
+        public Q1Rect GetVectorClipBox() => _userModeClipBox;
 
-        public void SetClipBox(CartesRect clippingRect)
+        public void SetClipBox(Q1Rect clippingRect)
         {
             SetClipBox(clippingRect.Left, clippingRect.Bottom, clippingRect.Right, clippingRect.Top);
         }
@@ -185,7 +185,7 @@ namespace PixelFarm.CpuBlit.Rasterization
             top += (int)OffsetOriginY;
 
 
-            _userModeClipBox = new CartesRect(left, bottom, right, top);
+            _userModeClipBox = new Q1Rect(left, bottom, right, top);
             Reset();
             _vectorClipper.SetClipBox(
                                 upscale(left), upscale(bottom),

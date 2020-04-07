@@ -160,7 +160,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             }
         }
 
-        void CopyFromNoClipping(IBitmapSrc sourceImage, CartesRect clippedSourceImageRect, int destXOffset, int destYOffset)
+        void CopyFromNoClipping(IBitmapSrc sourceImage, Q1Rect clippedSourceImageRect, int destXOffset, int destYOffset)
         {
             if (BytesBetweenPixelsInclusive != BitDepth / 8
                 || sourceImage.BytesBetweenPixelsInclusive != sourceImage.BitDepth / 8)
@@ -259,16 +259,16 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             }
         }
 
-        public void CopyFrom(IBitmapSrc sourceImage, CartesRect sourceImageRect, int destXOffset, int destYOffset)
+        public void CopyFrom(IBitmapSrc sourceImage, Q1Rect sourceImageRect, int destXOffset, int destYOffset)
         {
-            CartesRect sourceImageBounds = sourceImage.GetBounds();
-            CartesRect clippedSourceImageRect = new CartesRect();
+            Q1Rect sourceImageBounds = sourceImage.GetBounds();
+            Q1Rect clippedSourceImageRect = new Q1Rect();
             if (clippedSourceImageRect.IntersectRectangles(sourceImageRect, sourceImageBounds))
             {
-                CartesRect destImageRect = clippedSourceImageRect;
+                Q1Rect destImageRect = clippedSourceImageRect;
                 destImageRect.Offset(destXOffset, destYOffset);
-                CartesRect destImageBounds = GetBounds();
-                CartesRect clippedDestImageRect = new CartesRect();
+                Q1Rect destImageBounds = GetBounds();
+                Q1Rect clippedDestImageRect = new Q1Rect();
                 if (clippedDestImageRect.IntersectRectangles(destImageRect, destImageBounds))
                 {
                     // we need to make sure the source is also clipped to the dest. So, we'll copy this back to source and offset it.
@@ -285,7 +285,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
 
         public int BytesBetweenPixelsInclusive => _m_DistanceInBytesBetweenPixelsInclusive;
         public int BitDepth => _bitDepth;
-        public CartesRect GetBounds() => new CartesRect(0, 0, _width, _height);
+        public Q1Rect GetBounds() => new Q1Rect(0, 0, _width, _height);
 
         /// <summary>
         /// get, set blender of destination image buffer
