@@ -10,7 +10,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         public double Left, Bottom, Right, Top;
         public static RectD ZeroIntersection() => new RectD(double.MaxValue, double.MaxValue, double.MinValue, double.MinValue);
 
-
+         
         public RectD(double left, double bottom, double right, double top)
         {
             this.Left = left;

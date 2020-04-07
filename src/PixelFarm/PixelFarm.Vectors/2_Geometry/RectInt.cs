@@ -20,13 +20,17 @@
 using System;
 namespace PixelFarm.CpuBlit.VertexProcessing
 {
-     
+
     //beware: the ctor!!=> left,bottom, right, top
 
-    public struct RectInt
+    /// <summary>
+    /// cartesian rect, use with cartesian coord system, 
+    /// </summary>
+    public struct CartesRect
     {
+        //(x0,y0)=> (x1,y1)
         public int Left, Bottom, Right, Top;
-        public RectInt(int left, int bottom, int right, int top)
+        public CartesRect(int left, int bottom, int right, int top)
         {
             Left = left;
             Bottom = bottom;
@@ -52,7 +56,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             if (Bottom > Top) { t = Bottom; Bottom = Top; Top = t; }
         }
 
-        public void ExpandToInclude(RectInt rectToInclude)
+        public void ExpandToInclude(CartesRect rectToInclude)
         {
             if (Right < rectToInclude.Right) Right = rectToInclude.Right;
             if (Top < rectToInclude.Top) Top = rectToInclude.Top;
@@ -60,7 +64,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             if (Bottom > rectToInclude.Bottom) Bottom = rectToInclude.Bottom;
         }
 
-        public bool Clip(in RectInt r)
+        public bool Clip(in CartesRect r)
         {
             if (Right > r.Right) Right = r.Right;
             if (Top > r.Top) Top = r.Top;
@@ -75,7 +79,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         public bool Contains(int x, int y) => (x >= Left && x <= Right && y >= Bottom && y <= Top);
 
 
-        public bool IntersectRectangles(RectInt rectToCopy, RectInt rectToIntersectWith)
+        public bool IntersectRectangles(CartesRect rectToCopy, CartesRect rectToIntersectWith)
         {
             Left = rectToCopy.Left;
             Bottom = rectToCopy.Bottom;
@@ -93,7 +97,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             return false;
         }
 
-        public bool IntersectWithRectangle(RectInt rectToIntersectWith)
+        public bool IntersectWithRectangle(CartesRect rectToIntersectWith)
         {
             if (Left < rectToIntersectWith.Left) Left = rectToIntersectWith.Left;
             if (Bottom < rectToIntersectWith.Bottom) Bottom = rectToIntersectWith.Bottom;
@@ -107,7 +111,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             return false;
         }
 
-        public static bool DoIntersect(RectInt rect1, RectInt rect2)
+        public static bool DoIntersect(CartesRect rect1, CartesRect rect2)
         {
             int x1 = rect1.Left;
             int y1 = rect1.Bottom;
@@ -127,7 +131,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
 
         //---------------------------------------------------------unite_rectangles
-        public void unite_rectangles(RectInt r1, RectInt r2)
+        public void unite_rectangles(CartesRect r1, CartesRect r2)
         {
             Left = r1.Left;
             Bottom = r1.Bottom;
@@ -160,7 +164,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             return new { x1 = Left, x2 = Right, y1 = Bottom, y2 = Top }.GetHashCode();
         }
 
-        public static bool ClipRects(RectInt pBoundingRect, ref RectInt pSourceRect, ref RectInt pDestRect)
+        public static bool ClipRects(CartesRect pBoundingRect, ref CartesRect pSourceRect, ref CartesRect pDestRect)
         {
             // clip off the top so we don't write into random memory
             if (pDestRect.Top < pBoundingRect.Top)
@@ -237,7 +241,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
 
         //***************************************************************************************************************************************************
-        public static bool ClipRect(RectInt pBoundingRect, ref RectInt pDestRect)
+        public static bool ClipRect(CartesRect pBoundingRect, ref CartesRect pDestRect)
         {
             // clip off the top so we don't write into random memory
             if (pDestRect.Top < pBoundingRect.Top)

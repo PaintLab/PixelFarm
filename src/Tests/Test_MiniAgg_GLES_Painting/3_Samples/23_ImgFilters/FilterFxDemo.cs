@@ -145,7 +145,7 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
                 return;
             }
 
-            var boundRect = new PixelFarm.CpuBlit.VertexProcessing.RectInt((int)b_left, (int)b_bottom, (int)b_right, (int)b_top);
+            var boundRect = new PixelFarm.CpuBlit.VertexProcessing.CartesRect((int)b_left, (int)b_bottom, (int)b_right, (int)b_top);
             int m_radius = this.BlurRadius;
             //expand bound rect
             boundRect.Left -= m_radius;
@@ -159,7 +159,7 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
             //create filter specfication
             //it will be resolve later by the platform similar to request font
             //------------------ 
-            if (boundRect.Clip(new PixelFarm.CpuBlit.VertexProcessing.RectInt(0, 0, p.Width - 1, p.Height - 1)))
+            if (boundRect.Clip(new PixelFarm.CpuBlit.VertexProcessing.CartesRect(0, 0, p.Width - 1, p.Height - 1)))
             {
                 //check if intersect  
                 var prevClip = p.ClipBox;

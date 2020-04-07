@@ -28,18 +28,18 @@ namespace PixelFarm.CpuBlit.PixelProcessing
 {
     public sealed class ClipProxyImage : ProxyImage
     {
-        RectInt _clippingRect;
+        CartesRect _clippingRect;
         public ClipProxyImage(PixelProcessing.IBitmapBlender refImage)
             : base(refImage)
         {
-            _clippingRect = new RectInt(0, 0, (int)refImage.Width - 1, (int)refImage.Height - 1);
+            _clippingRect = new CartesRect(0, 0, (int)refImage.Width - 1, (int)refImage.Height - 1);
         }
 
         public bool SetClippingBox(int x1, int y1, int x2, int y2)
         {
-            RectInt cb = new RectInt(x1, y1, x2, y2);
+            CartesRect cb = new CartesRect(x1, y1, x2, y2);
             cb.Normalize();
-            if (cb.Clip(new RectInt(0, 0, (int)Width - 1, (int)Height - 1)))
+            if (cb.Clip(new CartesRect(0, 0, (int)Width - 1, (int)Height - 1)))
             {
                 _clippingRect = cb;
                 return true;
@@ -55,10 +55,10 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         {
             return _clippingRect.Contains(x, y);
         }
-        public RectInt GetClipArea(ref RectInt destRect, ref RectInt sourceRect, int sourceWidth, int sourceHeight)
+        public CartesRect GetClipArea(ref CartesRect destRect, ref CartesRect sourceRect, int sourceWidth, int sourceHeight)
         {
-            RectInt rc = new RectInt(0, 0, 0, 0);
-            RectInt cb = ClipBox;
+            CartesRect rc = new CartesRect(0, 0, 0, 0);
+            CartesRect cb = ClipBox;
             ++cb.Right;
             ++cb.Top;
             if (sourceRect.Left < 0)
@@ -106,7 +106,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             }
         }
 
-        public RectInt ClipBox => _clippingRect;
+        public CartesRect ClipBox => _clippingRect;
         int XMin => _clippingRect.Left;
         int YMin => _clippingRect.Bottom;
         int XMax => _clippingRect.Right;
@@ -308,13 +308,13 @@ namespace PixelFarm.CpuBlit.PixelProcessing
         }
 
         public override void CopyFrom(IBitmapSrc sourceImage,
-                       RectInt sourceImageRect,
+                       CartesRect sourceImageRect,
                        int destXOffset,
                        int destYOffset)
         {
-            RectInt destRect = sourceImageRect;
+            CartesRect destRect = sourceImageRect;
             destRect.Offset(destXOffset, destYOffset);
-            RectInt clippedSourceRect = new RectInt();
+            CartesRect clippedSourceRect = new CartesRect();
             if (clippedSourceRect.IntersectRectangles(destRect, _clippingRect))
             {
                 // move it back relative to the source

@@ -133,10 +133,10 @@ namespace PixelFarm.CpuBlit
         {
             {   // exit early if the dest and source bounds don't touch.
                 // TODO: <BUG> make this do rotation and scalling
-                RectInt sourceBounds = source.GetBounds();
-                RectInt destBounds = _destBitmapBlender.GetBounds();
+                CartesRect sourceBounds = source.GetBounds();
+                CartesRect destBounds = _destBitmapBlender.GetBounds();
                 sourceBounds.Offset((int)destX, (int)destY);
-                if (!RectInt.DoIntersect(sourceBounds, destBounds))
+                if (!CartesRect.DoIntersect(sourceBounds, destBounds))
                 {
                     if (inScaleX != 1 || inScaleY != 1 || angleRadians != 0)
                     {
@@ -415,11 +415,11 @@ namespace PixelFarm.CpuBlit
             // exit early if the dest and source bounds don't touch.
             // TODO: <BUG> make this do rotation and scalling
 
-            RectInt sourceBounds = new RectInt((int)destX, (int)destY, (int)destX + source.Width, (int)destY + source.Height);
+            CartesRect sourceBounds = new CartesRect((int)destX, (int)destY, (int)destX + source.Width, (int)destY + source.Height);
             //sourceBounds.Offset((int)destX, (int)destY);
 
-            RectInt destBounds = _destBitmapBlender.GetBounds();
-            if (!RectInt.DoIntersect(sourceBounds, destBounds))
+            CartesRect destBounds = _destBitmapBlender.GetBounds();
+            if (!CartesRect.DoIntersect(sourceBounds, destBounds))
             {
                 //if (inScaleX != 1 || inScaleY != 1 || angleRadians != 0)
                 //{
@@ -656,7 +656,7 @@ namespace PixelFarm.CpuBlit
                 get { throw new NotSupportedException(); }
             }
 
-            public RectInt GetBounds() => new RectInt(_x, _y, _x + _w, _y + _h);
+            public CartesRect GetBounds() => new CartesRect(_x, _y, _x + _w, _y + _h);
             public int GetBufferOffsetXY32(int x, int y)
             {
                 //goto row

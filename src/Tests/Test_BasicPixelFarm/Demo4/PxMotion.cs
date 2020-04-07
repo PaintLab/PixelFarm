@@ -66,7 +66,7 @@ namespace LayoutFarm.UI
             if (_spriteShape == null)
             {
                 //TODO: review bounds again
-                RectD bounds = _vgVisElem.GetRectBounds();
+                CartesRectD bounds = _vgVisElem.GetRectBounds();
                 _spriteShape = new SpriteShape(_vgVisElem, rootgfx, (int)bounds.Width, (int)bounds.Height);
                 _spriteShape.SetController(this);//listen event 
                 _spriteShape.SetLocation((int)_left, (int)_top);
@@ -140,7 +140,7 @@ namespace LayoutFarm.UI
         }
         public bool HitTest(float x, float y, VgHitChain svgHitChain)
         {
-            RectD bounds = _spriteShape.Bounds;
+            CartesRectD bounds = _spriteShape.Bounds;
             if (bounds.Contains(x, y))
             {
                 _mouseDownX = x;
@@ -185,7 +185,7 @@ namespace LayoutFarm.UI
         VgVisualElement _vgVisElem;
         byte _alpha;
         Vector2 _center;
-        RectD _boundingRect;
+        CartesRectD _boundingRect;
 
         Affine _currentTx; //temp
         Bilinear _bilinearTx; //temp
@@ -199,7 +199,7 @@ namespace LayoutFarm.UI
         public bool EnableHitOnSupParts { get; set; }
         protected override bool _MayHasOverlapChild() => EnableHitOnSupParts;
 
-        public RectD Bounds => _boundingRect;
+        public CartesRectD Bounds => _boundingRect;
         public void ResetTransform()
         {
             //TODO review here again
