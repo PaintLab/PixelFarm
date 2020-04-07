@@ -36,7 +36,7 @@ namespace PixelFarm.CpuBlit.Rasterization
             int _y1;
             int _f1;
             bool _clipping;
-            CellAARasterizer _ras;
+            readonly CellAARasterizer _ras;
             public VectorClipper(CellAARasterizer ras)
             {
                 _ras = ras;
