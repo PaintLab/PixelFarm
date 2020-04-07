@@ -22,10 +22,8 @@ namespace PixelFarm.CpuBlit
 
         public override Brush CurrentBrush
         {
-            get
-            {
-                return _curBrush;
-            }
+            get => _curBrush;
+
             set
             {
                 _curBrush = value;
@@ -198,7 +196,7 @@ namespace PixelFarm.CpuBlit
             SetClipRgn(vxs);
 
             PolygonGradientBrush brush = ResolvePolygonGradientBrush(polygonGrBrush);
-          
+
             //TODO: add gamma here...
             //aggsx.ScanlineRasterizer.ResetGamma(new GammaLinear(0.0f, this.LinearGamma)); //*** 
 
