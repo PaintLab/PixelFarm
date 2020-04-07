@@ -76,7 +76,7 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
             using (Tools.BorrowVxs(out var v1, out var v2))
             using (Tools.BorrowPathWriter(v1, out PathWriter p))
             {
-                p.MoveTo(0, 20);
+                p.MoveTo(0, 0);
                 p.LineTo(50, 20);
                 p.LineTo(10, 100);
                 p.CloseFigure();
