@@ -80,7 +80,7 @@ namespace PixelFarm.CpuBlit
 
         public bool HitTest(float x, float y, bool withSubPathTest)
         {
-            RectD bounds = _spriteShape.Bounds;
+            Q1RectD bounds = _spriteShape.Bounds;
 
             if (_currentTx != null)
             {

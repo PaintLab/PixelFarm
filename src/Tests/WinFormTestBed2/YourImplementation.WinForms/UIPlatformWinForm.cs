@@ -119,10 +119,11 @@ namespace LayoutFarm.UI
             {
                 s_platform = this;
                 SetAsDefaultPlatform();
-                UIMsgQueue.RegisterRunOnceImpl(runOnceDelegate =>
-                {
-                    UIPlatform.RegisterRunOnceTask(tt => runOnceDelegate());
-                });
+                
+                //PixelFarm.Drawing.Internal.UIMsgQueue.RegisterRunOnceImpl(runOnceDelegate =>
+                //{
+                //    UIPlatform.RegisterRunOnceTask(tt => runOnceDelegate());
+                //});
             }
 
             //var installedTypefaces = new Typography.FontManagement.InstalledTypefaceCollection();

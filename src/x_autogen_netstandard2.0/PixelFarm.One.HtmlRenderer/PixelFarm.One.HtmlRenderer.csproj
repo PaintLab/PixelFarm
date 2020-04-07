@@ -595,6 +595,7 @@
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\6_debug\IdbugOutputWindow.cs" Link="PixelFarm\PaintLab.RenderTree\6_debug\IdbugOutputWindow.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\8_EventQueue\EventQueueSystem.cs" Link="PixelFarm\PaintLab.RenderTree\8_EventQueue\EventQueueSystem.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.AbstractPlatform\CanvasViewport.cs" Link="PixelFarm\PaintLab.AbstractPlatform\CanvasViewport.cs" />
+    <Compile Include="..\..\PixelFarm\PaintLab.AbstractPlatform\ClipboardServices.cs" Link="PixelFarm\PaintLab.AbstractPlatform\ClipboardServices.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.AbstractPlatform\TempContext.cs" Link="PixelFarm\PaintLab.AbstractPlatform\TempContext.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.BitmapBufferEx\BitmapBufferEx\BitmapBuffer.cs" Link="PixelFarm\PaintLab.BitmapBufferEx\BitmapBufferEx\BitmapBuffer.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\BaseExtensions.cs" Link="PixelFarm\PaintLab.BitmapBufferEx\BitmapBufferEx\BitmapBufferExtensions\BaseExtensions.cs" />
@@ -781,7 +782,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\NativeMemMx.cs" Link="PixelFarm\PixelFarm.PrimitiveGeo\NativeMemMx.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\Rectangle.cs" Link="PixelFarm\PixelFarm.PrimitiveGeo\Rectangle.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\RectangleF.cs" Link="PixelFarm\PixelFarm.PrimitiveGeo\RectangleF.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\RectInt.cs" Link="PixelFarm\PixelFarm.PrimitiveGeo\RectInt.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\1_vectormaths\AggMath.cs" Link="PixelFarm\PixelFarm.Vectors\1_vectormaths\AggMath.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\1_vectormaths\AxisAlignedBoundingBox.cs" Link="PixelFarm\PixelFarm.Vectors\1_vectormaths\AxisAlignedBoundingBox.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\1_vectormaths\BezierCurve.cs" Link="PixelFarm\PixelFarm.Vectors\1_vectormaths\BezierCurve.cs" />
@@ -802,7 +802,8 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\2_geometry\Collections.cs" Link="PixelFarm\PixelFarm.Vectors\2_geometry\Collections.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\2_geometry\Curves.cs" Link="PixelFarm\PixelFarm.Vectors\2_geometry\Curves.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\2_geometry\Ellipse.cs" Link="PixelFarm\PixelFarm.Vectors\2_geometry\Ellipse.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\2_geometry\RectD.cs" Link="PixelFarm\PixelFarm.Vectors\2_geometry\RectD.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\2_Geometry\Q1Rect.cs" Link="PixelFarm\PixelFarm.Vectors\2_Geometry\Q1Rect.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\2_Geometry\Q1RectD.cs" Link="PixelFarm\PixelFarm.Vectors\2_Geometry\Q1RectD.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_transform\1_Affine.cs" Link="PixelFarm\PixelFarm.Vectors\3_transform\1_Affine.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_transform\2_Bilinear.cs" Link="PixelFarm\PixelFarm.Vectors\3_transform\2_Bilinear.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_transform\3_Perspective.cs" Link="PixelFarm\PixelFarm.Vectors\3_transform\3_Perspective.cs" />
@@ -830,6 +831,7 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\6_Contours\OutlineWalker.cs" Link="PixelFarm\PixelFarm.Vectors\6_Contours\OutlineWalker.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\6_Contours\PartFlattener.cs" Link="PixelFarm\PixelFarm.Vectors\6_Contours\PartFlattener.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\6_Contours\Vertex.cs" Link="PixelFarm\PixelFarm.Vectors\6_Contours\Vertex.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\1_IO\ImageBinder.cs" Link="PixelFarm\PixelFarm.Drawing\1_IO\ImageBinder.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\1_IO\ImageReaders.cs" Link="PixelFarm\PixelFarm.Drawing\1_IO\ImageReaders.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\1_IO\StorageService.cs" Link="PixelFarm\PixelFarm.Drawing\1_IO\StorageService.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\2_AggPainter\AggPainter.cs" Link="PixelFarm\PixelFarm.Drawing\2_AggPainter\AggPainter.cs" />
