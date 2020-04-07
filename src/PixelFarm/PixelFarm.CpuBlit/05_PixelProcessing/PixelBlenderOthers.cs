@@ -27,7 +27,6 @@
 //----------------------------------------------------------------------------
 
 using System;
-using PixelFarm.CpuBlit.Imaging;
 using PixelFarm.Drawing;
 using CO = PixelFarm.Drawing.Internal.CO;
 
