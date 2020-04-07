@@ -15,7 +15,7 @@ namespace PixelFarm.CpuBlit
         VgVisualElement _vgVisElem;
         byte _alpha;
         Vector2 _center;
-        RectD _boundingRect;
+        Q1RectD _boundingRect;
         CpuBlit.VertexProcessing.ICoordTransformer _currentTx;
 
         public SpriteShape(VgVisualElement vgVisElem)//, RootGraphic root, int w, int h)
@@ -23,13 +23,8 @@ namespace PixelFarm.CpuBlit
         {
             LoadFromSvg(vgVisElem);
         }
-        public RectD Bounds
-        {
-            get
-            {
-                return _boundingRect;
-            }
-        }
+        public Q1RectD Bounds=>_boundingRect;           
+        
         public void ResetTransform()
         {
             _currentTx = null;

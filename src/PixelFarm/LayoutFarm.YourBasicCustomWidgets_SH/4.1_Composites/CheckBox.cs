@@ -9,8 +9,8 @@ namespace LayoutFarm.CustomWidgets
         ImageBox _imageBox;
         bool _isChecked;
 
-        static ImageBinder s_checkedImg;
-        static ImageBinder s_uncheckedImg;
+        static PixelFarm.Drawing.ImageBinder s_checkedImg;
+        static PixelFarm.Drawing.ImageBinder s_uncheckedImg;
 
         public CheckBox(int w, int h)
             : base(w, h)

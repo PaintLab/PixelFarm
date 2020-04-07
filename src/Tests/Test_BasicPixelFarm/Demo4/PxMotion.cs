@@ -1,15 +1,11 @@
 ﻿//MIT, 2014-present,WinterDev
 
-using System;
-using PixelFarm;
-using PixelFarm.Drawing;
+using LayoutFarm.RenderBoxes;
+using PaintLab.Svg;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
+using PixelFarm.Drawing;
 using PixelFarm.VectorMath;
-
-
-using PaintLab.Svg;
-using LayoutFarm.RenderBoxes;
 
 namespace LayoutFarm.UI
 {
@@ -19,7 +15,7 @@ namespace LayoutFarm.UI
         public double _spriteScale = 1.0;
         public double _skewX = 0;
         public double _skewY = 0;
-       
+
         public int Width { get; set; }
         public int Height { get; set; }
         public override object Tag { get; set; }
@@ -31,7 +27,7 @@ namespace LayoutFarm.UI
         SpriteShape _spriteShape;
         VgVisualElement _vgVisElem;
 
-        float _posX, _posY;
+        float _left, _top;
         float _mouseDownX, _mouseDownY;
         Affine _currentTx = null;
         byte _alpha;
@@ -43,18 +39,14 @@ namespace LayoutFarm.UI
             AlphaValue = 255;
             _vgVisElem = vgRenderVx;
         }
-        public float X => _posX;
-        public float Y => _posY;
+        public float Left => _left;
+        public float Top => _top;
         public SpriteShape SpriteShape
         {
             get => _spriteShape;
             set => _spriteShape = value;
         }
-        public int SharpenRadius
-        {
-            get;
-            set;
-        }
+        public int SharpenRadius { get; set; }
         //
         public override RenderElement CurrentPrimaryRenderElement => _spriteShape;
         //
@@ -74,16 +66,16 @@ namespace LayoutFarm.UI
             if (_spriteShape == null)
             {
                 //TODO: review bounds again
-                RectD bounds = _vgVisElem.GetRectBounds();
+                Q1RectD bounds = _vgVisElem.GetRectBounds();
                 _spriteShape = new SpriteShape(_vgVisElem, rootgfx, (int)bounds.Width, (int)bounds.Height);
                 _spriteShape.SetController(this);//listen event 
-                _spriteShape.SetLocation((int)_posX, (int)_posY);
+                _spriteShape.SetLocation((int)_left, (int)_top);
             }
             return _spriteShape;
         }
         public bool HitTestOnSubPart
         {
-            get { return _hitTestOnSubPart; }
+            get => _hitTestOnSubPart;
             set
             {
                 _hitTestOnSubPart = value;
@@ -119,11 +111,11 @@ namespace LayoutFarm.UI
         //
         public void SetLocation(float left, float top)
         {
-            _posX = left;
-            _posY = top;
+            _left = left;
+            _top = top;
             if (_spriteShape != null)
             {
-                _spriteShape.SetLocation((int)_posX, (int)_posY);
+                _spriteShape.SetLocation((int)_left, (int)_top);
             }
 
         }
@@ -148,7 +140,7 @@ namespace LayoutFarm.UI
         }
         public bool HitTest(float x, float y, VgHitChain svgHitChain)
         {
-            RectD bounds = _spriteShape.Bounds;
+            Q1RectD bounds = _spriteShape.Bounds;
             if (bounds.Contains(x, y))
             {
                 _mouseDownX = x;
@@ -182,35 +174,6 @@ namespace LayoutFarm.UI
         }
 
 
-        //public override void Render(PixelFarm.Drawing.Painter p)
-        //{
-        //    if (_currentTx == null)
-        //    {
-        //        _currentTx = Affine.NewMatix(
-        //              AffinePlan.Translate(-_spriteShape.Center.x, -_spriteShape.Center.y),
-        //              AffinePlan.Scale(_spriteScale, _spriteScale),
-        //              AffinePlan.Rotate(_angle + Math.PI),
-        //              AffinePlan.Skew(_skewX / 1000.0, _skewY / 1000.0),
-        //              AffinePlan.Translate(Width / 2, Height / 2)
-        //      );
-        //    }
-
-        //    if (JustMove)
-        //    {
-        //        float ox = p.OriginX;
-        //        float oy = p.OriginY;
-
-        //        p.SetOrigin(ox + _posX, oy + _posY);
-        //        _spriteShape.Paint(p);
-        //        p.SetOrigin(ox, oy);
-
-        //    }
-        //    else
-        //    {
-        //        _spriteShape.Paint(p, _currentTx);
-        //    }
-
-        //}
 
         public SpriteShape GetSpriteShape() => _spriteShape;
     }
@@ -222,20 +185,27 @@ namespace LayoutFarm.UI
         VgVisualElement _vgVisElem;
         byte _alpha;
         Vector2 _center;
-        RectD _boundingRect;
-        Affine _currentTx;
+        Q1RectD _boundingRect;
+
+        Affine _currentTx; //temp
+        Bilinear _bilinearTx; //temp
+        Perspective _perspectiveTx; //temp
+
         public SpriteShape(VgVisualElement vgVisElem, RootGraphic root, int w, int h)
-                   : base(root, w, h)
+             : base(root, w, h)
         {
             LoadFromSvg(vgVisElem);
         }
         public bool EnableHitOnSupParts { get; set; }
         protected override bool _MayHasOverlapChild() => EnableHitOnSupParts;
 
-        public RectD Bounds => _boundingRect;
+        public Q1RectD Bounds => _boundingRect;
         public void ResetTransform()
         {
+            //TODO review here again
             _currentTx = null;
+            _bilinearTx = null;
+            _perspectiveTx = null;
         }
         public void ApplyTransform(Affine tx)
         {
@@ -252,6 +222,16 @@ namespace LayoutFarm.UI
         }
         public void ApplyTransform(Bilinear tx)
         {
+            _bilinearTx = tx;
+            //int elemCount = _svgRenderVx.SvgVxCount;
+            //for (int i = 0; i < elemCount; ++i)
+            //{
+            //    _svgRenderVx.SetInnerVx(i, SvgCmd.TransformToNew(_svgRenderVx.GetInnerVx(i), tx));
+            //}
+        }
+        public void ApplyTransform(Perspective tx)
+        {
+            _perspectiveTx = tx;
             //int elemCount = _svgRenderVx.SvgVxCount;
             //for (int i = 0; i < elemCount; ++i)
             //{
@@ -267,11 +247,29 @@ namespace LayoutFarm.UI
         }
         public void Paint(Painter p)
         {
-
-            using (Tools.More.BorrowVgPaintArgs(p, out var paintArgs))
+            if (_perspectiveTx != null)
             {
-                paintArgs._currentTx = _currentTx;
-                _vgVisElem.Paint(paintArgs);
+                using (Tools.More.BorrowVgPaintArgs(p, out var paintArgs))
+                {
+                    paintArgs._currentTx = _perspectiveTx;
+                    _vgVisElem.Paint(paintArgs);
+                }
+            }
+            else if (_bilinearTx != null)
+            {
+                using (Tools.More.BorrowVgPaintArgs(p, out var paintArgs))
+                {
+                    paintArgs._currentTx = _bilinearTx;
+                    _vgVisElem.Paint(paintArgs);
+                }
+            }
+            else
+            {
+                using (Tools.More.BorrowVgPaintArgs(p, out var paintArgs))
+                {
+                    paintArgs._currentTx = _currentTx;
+                    _vgVisElem.Paint(paintArgs);
+                }
             }
 
         }
@@ -294,7 +292,15 @@ namespace LayoutFarm.UI
             //------
             using (Tools.More.BorrowVgPaintArgs(p, out var paintArgs))
             {
-                paintArgs._currentTx = tx;
+                if (_bilinearTx != null)
+                {
+                    paintArgs._currentTx = _bilinearTx;
+                }
+                else
+                {
+                    paintArgs._currentTx = tx;
+                }
+
                 paintArgs.PaintVisitHandler = (vxs, painterA) =>
                 {
                     //use external painter handler
@@ -307,10 +313,6 @@ namespace LayoutFarm.UI
                 };
                 _vgVisElem.Paint(paintArgs);
             }
-
-
-
-
         }
         public void DrawOutline(Painter p)
         {
@@ -377,9 +379,9 @@ namespace LayoutFarm.UI
                 float ox = p.OriginX;
                 float oy = p.OriginY;
                 //create agg's painter?
-                p.SetOrigin(ox + X, oy + Y);
+                //p.SetOrigin(ox + X, oy + Y);
                 Paint(p);
-                p.SetOrigin(ox, oy);
+                //p.SetOrigin(ox, oy);
             }
         }
 

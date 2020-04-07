@@ -3,8 +3,6 @@
 
 using System;
 using System.Diagnostics;
-using PixelFarm.CpuBlit.UI;
-using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.Drawing;
 
 using Mini;
@@ -46,8 +44,8 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
     [Info(DemoCategory.Bitmap)]
     public class FilterFxDemo : DemoBase
     {
-        PolygonEditWidget _shadow_ctrl;
-        RectD _shape_bounds;
+
+        CpuBlit.VertexProcessing.Q1RectD _shape_bounds;
         Stopwatch _sw = new Stopwatch();
         MyTestSprite _testSprite;
 
@@ -71,8 +69,8 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
             //--------------
 
             //m_rbuf2 = new ReferenceImage();
-            _shape_bounds = new RectD();
-            _shadow_ctrl = new PolygonEditWidget(4);
+            _shape_bounds = new VertexProcessing.Q1RectD();
+
             this.FlattenCurveChecked = true;
             this.FilterMethod = FilterMethod.None;
             this.BlurRadius = 15;
@@ -120,32 +118,16 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
 
         public override void MouseDown(int x, int y, bool isRightButton)
         {
-            _shadow_ctrl.OnMouseDown(
-                new MouseEventArgs(
-                    isRightButton ? MouseButtons.Right : MouseButtons.Left,
-                    1,
-                    x, y,
-                    1));
+
         }
         public override void MouseUp(int x, int y)
         {
-            _shadow_ctrl.OnMouseUp(
-                new MouseEventArgs(
-                     MouseButtons.Left,
-                    1,
-                    x, y,
-                    1));
+
         }
         public override void MouseDrag(int x, int y)
         {
-            _shadow_ctrl.OnMouseMove(
-               new MouseEventArgs(
-                   MouseButtons.Left,
-                   1,
-                   x, y,
-                   1));
-        }
 
+        }
 
         public override void Draw(Painter p)
         {
@@ -163,7 +145,7 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
                 return;
             }
 
-            RectInt boundRect = new RectInt((int)b_left, (int)b_bottom, (int)b_right, (int)b_top);
+            var boundRect = new PixelFarm.CpuBlit.VertexProcessing.Q1Rect((int)b_left, (int)b_bottom, (int)b_right, (int)b_top);
             int m_radius = this.BlurRadius;
             //expand bound rect
             boundRect.Left -= m_radius;
@@ -177,11 +159,11 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
             //create filter specfication
             //it will be resolve later by the platform similar to request font
             //------------------ 
-            if (boundRect.Clip(new RectInt(0, 0, p.Width - 1, p.Height - 1)))
+            if (boundRect.Clip(new PixelFarm.CpuBlit.VertexProcessing.Q1Rect(0, 0, p.Width - 1, p.Height - 1)))
             {
                 //check if intersect  
                 var prevClip = p.ClipBox;
-                p.ClipBox = boundRect;
+                p.ClipBox = new Rectangle(boundRect.Left, boundRect.Top, boundRect.Width, boundRect.Height);
                 // Blur it
 
                 IImageFilter selectedFilter = null;
@@ -203,8 +185,8 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
                     case FilterMethod.Emboss:
                         selectedFilter = _fxEmboss;
                         break;
-                    case FilterMethod.EdgeDetection: 
-                        selectedFilter = _fxEdgeDetection; 
+                    case FilterMethod.EdgeDetection:
+                        selectedFilter = _fxEdgeDetection;
                         break;
                     case FilterMethod.OilPaint:
                         selectedFilter = _oilPaintFilter;

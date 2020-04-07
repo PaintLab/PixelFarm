@@ -46,7 +46,4 @@
     <Compile Include="$(MSBuildThisFileDirectory)8.2_Canvas\MiniAggCanvasRenderElement.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)9_TextContentSplitter\ContentTextSplitter.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Accessories\" />
-  </ItemGroup>
 </Project>

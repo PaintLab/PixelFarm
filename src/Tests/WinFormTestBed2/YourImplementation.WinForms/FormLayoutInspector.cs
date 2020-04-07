@@ -181,9 +181,12 @@ namespace LayoutFarm.Dev
         protected override void OnClosing(CancelEventArgs e)
         {
             IdbugOutputWindow outputWin = _viewroot.IdebugOutputWin;
-            outputWin.dbug_VisualRootDrawMsg -= _rootDrawMsgEventHandler;
-            outputWin.dbug_VisualRootHitChainMsg -= _rootHitMsgEventHandler;
-            outputWin.dbug_DisableAllDebugInfo();
+            if (outputWin != null)
+            {
+                outputWin.dbug_VisualRootDrawMsg -= _rootDrawMsgEventHandler;
+                outputWin.dbug_VisualRootHitChainMsg -= _rootHitMsgEventHandler;
+                outputWin.dbug_DisableAllDebugInfo();
+            }
             base.OnClosing(e);
         }
 

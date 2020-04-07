@@ -218,6 +218,7 @@ namespace BitmapBufferEx
         }
 
     }
+    
     public struct PointD
     {
         public double X;

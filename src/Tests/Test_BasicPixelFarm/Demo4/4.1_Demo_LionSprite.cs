@@ -10,19 +10,20 @@ namespace LayoutFarm
     class Demo_LionSprite : App
     {
         VgVisualElement _vgVisElem;
-
         MyTestSprite _mySprite;
-        AppHost _host;
+
         protected override void OnStart(AppHost host)
         {
-            _host = host;
+
             _vgVisElem = VgVisualDocHelper.CreateVgVisualDocFromFile(@"Samples\lion.svg").VgRootElem;
             _mySprite = new MyTestSprite(_vgVisElem);
             var evListener = new GeneralEventListener();
             evListener.MouseDown += (s, e) =>
             {
+               
                 if (e.Buttons == UIMouseButtons.Right)
                 {
+                    //right click=> hit test and change fill color
                     VgVisualElement foundE = _mySprite.HitTest(e.X, e.Y, true);
                     if (foundE != null)
                     {
@@ -31,23 +32,21 @@ namespace LayoutFarm
                     }
                 }
             };
-            evListener.MouseMove += (s, e) =>
+            evListener.MouseDrag += (s, e) =>
             {
-                if (e.Buttons == UIMouseButtons.Left && e.IsDragging)
+                if (e.Ctrl)
                 {
+                    //TODO: 
+                    //classic Agg's move and rotate                         
 
-                    if (e.Ctrl)
-                    {
-                        //TODO: 
-                        //classic Agg's move and rotate                         
+                }
+                else
+                {   //just move
+                    _mySprite.SetLocation(_mySprite.Left + e.XDiff, _mySprite.Top + e.YDiff);
 
-                    }
-                    else
-                    {   //just move
-                        _mySprite.SetLocation(_mySprite.X + e.XDiff, _mySprite.Y + e.YDiff);
-                    }
                 }
             };
+
 
             _mySprite.AttachExternalEventListener(evListener);
 

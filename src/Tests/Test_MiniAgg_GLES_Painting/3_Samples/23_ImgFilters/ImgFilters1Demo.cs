@@ -46,9 +46,7 @@ using System;
 using System.Collections.Generic;
 
 using PixelFarm.Drawing;
-using PixelFarm.CpuBlit.Imaging;
-using PixelFarm.CpuBlit.FragmentProcessing;
-
+using PixelFarm.CpuBlit.Imaging;  
 using Mini;
 
 namespace PixelFarm.CpuBlit.ImgFilterDemo

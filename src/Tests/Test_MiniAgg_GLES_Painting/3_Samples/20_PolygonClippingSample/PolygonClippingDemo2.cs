@@ -163,7 +163,7 @@ namespace PixelFarm.CpuBlit.Sample_PolygonClipping
         static MemBitmap CreateMaskBitmapFromVxs(VertexStore vxs)
         {
 
-            RectD bounds = vxs.GetBoundingRect();
+            Q1RectD bounds = vxs.GetBoundingRect();
             using (Tools.BorrowVxs(out var v1))
             {
                 vxs.TranslateToNewVxs(-bounds.Left, -bounds.Bottom, v1);

@@ -62,13 +62,13 @@ namespace PixelFarm.DrawingGL
             _pcx = pcx;
             _width = pcx.CanvasWidth;
             _height = pcx.CanvasHeight;
-            _clipBox = new RectInt(0, 0, _width, _height);
+            _clipBox = new Rectangle(0, 0, _width, _height);
         }
         public void UpdateCore()
         {
             _width = _pcx.CanvasWidth;
             _height = _pcx.CanvasHeight;
-            _clipBox = new RectInt(0, 0, _width, _height);
+            _clipBox = new Rectangle(0, 0, _width, _height);
         }
         public override ICoordTransformer CoordTransformer
         {
