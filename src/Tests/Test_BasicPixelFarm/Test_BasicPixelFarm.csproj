@@ -73,7 +73,7 @@
     <Compile Include="0_Start\Program.cs" />
     <Compile Include="Demo6\6_DemoFlexBox.cs" />
     <Compile Include="Demo6\FlexBoxControl.cs" />
-    <Compile Include="Demo7\Demo_Perspective.cs" />
+    <Compile Include="Demo4\4.3_Demo_Perspective.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="x_unused\x_MyGlfwForm.cs" />
     <Compile Include="x_unused\x_notusedOpenGLPortal.cs" />

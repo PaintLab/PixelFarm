@@ -13,7 +13,7 @@ using LayoutFarm.CustomWidgets;
 
 namespace LayoutFarm
 {
-    [DemoNote("7. Demo_Perspective")]
+    [DemoNote("4.3. Demo_Perspective")]
     class Demo_Perspective : App
     {
         VgVisualElement _vgVisElem;

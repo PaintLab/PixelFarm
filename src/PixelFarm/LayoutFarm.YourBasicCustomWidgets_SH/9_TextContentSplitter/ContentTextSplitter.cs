@@ -2,10 +2,56 @@
 
 using System;
 using System.Collections.Generic;
-using LayoutFarm.Composers;
+namespace LayoutFarm.Composers
+{
+    //temp here, 
+    //these will be moved later
+    public struct WordBreakInfo
+    {
+        public int breakAt;
+        public byte wordKind;
+    }
+    public interface ITextBreaker
+    {
+        void DoBreak(char[] inputBuffer, int startIndex, int len, List<WordBreakInfo> breakAtList);
+        void DoBreak(char[] inputBuffer, int startIndex, int len, List<int> breakAtList);
+    }
+
+    //TODO: review here
+    public struct TextSplitBounds
+    {
+        public readonly int startIndex;
+        public readonly int length;
+        public TextSplitBounds(int startIndex, int length)
+        {
+            this.startIndex = startIndex;
+            this.length = length;
+        }
+
+        public int RightIndex => startIndex + length;
+
+        public static readonly TextSplitBounds Empty = new TextSplitBounds();
+
+#if DEBUG
+        public override string ToString()
+        {
+            return startIndex + ":+" + length;
+        }
+#endif
+
+    }
+    //TODO: review here
+    public static class Default
+    {
+        public static ITextBreaker TextBreaker { get; set; }
+    }
+
+}
+
 namespace LayoutFarm.CustomWidgets
 {
 
+    using LayoutFarm.Composers;
     public class ContentTextSplitter
     {
 
@@ -13,7 +59,7 @@ namespace LayoutFarm.CustomWidgets
         List<int> _breakAtList = new List<int>();
         public ContentTextSplitter()
         {
-            _textBreaker = LayoutFarm.Composers.Default.TextBreaker;
+            _textBreaker = Default.TextBreaker;
         }
         public ITextBreaker TextBreaker
         {

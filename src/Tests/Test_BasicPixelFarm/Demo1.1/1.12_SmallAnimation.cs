@@ -7,7 +7,7 @@ namespace LayoutFarm
     {
         protected override void OnStart(AppHost host)
         {
-            ImageBinder imgBinder = host.LoadImageAndBind("../Data/imgs/favorites32.png");
+            PixelFarm.Drawing.ImageBinder imgBinder = host.LoadImageAndBind("../Data/imgs/favorites32.png");
 
             //GlobalRootGraphic.BlockGraphicsUpdate();
             for (int i = 0; i < 100; ++i)
