@@ -735,10 +735,10 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                 }
             }
         }
-        public RectInt GetBoundingRect()
-        {
-            return new RectInt(0, 0, Width, Height);
-        }
+        //public RectInt GetBoundingRect()
+        //{
+        //    return new RectInt(0, 0, Width, Height);
+        //}
         //---------
         public void SetFilterImage(MemBitmap filterBmp)
         {
@@ -754,11 +754,11 @@ namespace PixelFarm.CpuBlit.PixelProcessing
 #endif
 
 
-        public int[] GetOrgInt32Buffer()
-        {
-            return null;
-            //return this.raw_buffer32;
-        }
+        //public int[] GetOrgInt32Buffer()
+        //{
+        //    return null;
+        //    //return this.raw_buffer32;
+        //}
         //        static unsafe void CopyOrBlend32_BasedOnAlpha(PixelBlenderBGRA recieveBlender,
         //            int* destBuffer,
         //            int arrayOffset,
