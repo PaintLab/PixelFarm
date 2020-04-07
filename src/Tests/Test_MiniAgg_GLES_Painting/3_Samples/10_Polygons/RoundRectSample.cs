@@ -1,9 +1,7 @@
 ﻿//BSD, 2014-present, WinterDev
 //MatterHackers 
 
-using System;
-using PixelFarm.CpuBlit.Imaging;
-using Mini;
+ 
 namespace PixelFarm.CpuBlit.Sample_RoundRect
 {
     //[Info(OrderCode = "10")]

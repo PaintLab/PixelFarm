@@ -99,7 +99,7 @@ namespace PixelFarm.DrawingGL
             if (_frameBuffer != null)
             {
                 _frameBuffer.MakeCurrent();
-                GL.ReadPixels(left, top, width, height, PixelFormat.Rgba, PixelType.UnsignedByte, PixelFarm.CpuBlit.MemBitmap.GetBufferPtr(outputMemBmp).Ptr);
+                GL.ReadPixels(left, top, width, height, OpenTK.Graphics.ES20.PixelFormat.Rgba, PixelType.UnsignedByte, PixelFarm.CpuBlit.MemBitmap.GetBufferPtr(outputMemBmp).Ptr);
                 _frameBuffer.ReleaseCurrent();
             }
         }
@@ -459,7 +459,7 @@ namespace PixelFarm.DrawingGL
             //   PixelType.UnsignedByte,
             //   outputBuffer);
             GL.ReadPixels(x, y, w, h,
-            PixelFormat.Rgba,
+            OpenTK.Graphics.ES20.PixelFormat.Rgba,
             PixelType.UnsignedByte,
             outputBuffer);
 
@@ -1400,7 +1400,7 @@ namespace PixelFarm.DrawingGL
                             color_src = ResolveForGLBitmap(tbrush.TextureImage);
                         }
                         break;
-                } 
+                }
                 DrawImageWithMask(renderSx_mask.GetGLBitmap(), color_src, 0, 0);
 
                 renderSx_mask.Dispose();

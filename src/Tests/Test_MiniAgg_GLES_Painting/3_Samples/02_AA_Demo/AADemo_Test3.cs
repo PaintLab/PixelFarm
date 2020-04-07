@@ -3,7 +3,6 @@
 
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.CpuBlit.Imaging;
 using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.CpuBlit.Rasterization;
 using PixelFarm.CpuBlit.PixelProcessing;

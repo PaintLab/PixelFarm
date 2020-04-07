@@ -31,9 +31,7 @@ either expressed or implied, of the FreeBSD Project.
 
 using System;
 using PixelFarm;
-using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
-using PixelFarm.CpuBlit.FragmentProcessing;
 using PixelFarm.CpuBlit.PixelProcessing;
 using PixelFarm.CpuBlit.Rasterization;
 using PixelFarm.CpuBlit.Rasterization.Lines;

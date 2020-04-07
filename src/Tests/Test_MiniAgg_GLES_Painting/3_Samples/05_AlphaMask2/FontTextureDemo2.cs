@@ -24,7 +24,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         PixelBlenderPerColorComponentWithMask _maskPixelBlenderPerCompo = new PixelBlenderPerColorComponentWithMask();
 
 
-        LayoutFarm.OpenFontTextService _textServices;
+        OpenFontTextService _textServices;
         BitmapFontManager<MemBitmap> _bmpFontMx;
         SimpleBitmapAtlas _fontAtlas;
         RequestFont _font;
@@ -42,7 +42,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             //steps : detail ... 
             //1. create a text service (or get it from a singleton class)       
 
-            _textServices = new LayoutFarm.OpenFontTextService();
+            _textServices = new OpenFontTextService();
 
             //2. create manager
             _bmpFontMx = new BitmapFontManager<MemBitmap>(

@@ -9,15 +9,15 @@ namespace PixelFarm.Drawing.GLES2
     public static class GLES2Platform
     {
         
-        static LayoutFarm.OpenFontTextService s_textService;
+        static OpenFontTextService s_textService;
 
-        public static LayoutFarm.OpenFontTextService TextService
+        public static OpenFontTextService TextService
         {
             get
             {
                 if (s_textService == null)
                 {
-                    s_textService = new LayoutFarm.OpenFontTextService();
+                    s_textService = new OpenFontTextService();
                 }
                 return s_textService;
             } 
