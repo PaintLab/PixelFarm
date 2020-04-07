@@ -266,6 +266,7 @@
       <Link>0_REF_PaintLab.RenderTree\8_EventQueue\EventQueueSystem.cs</Link>
     </Compile>
     <Compile Include="CanvasViewport.cs" />
+    <Compile Include="ClipboardServices.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TempContext.cs" />
   </ItemGroup>

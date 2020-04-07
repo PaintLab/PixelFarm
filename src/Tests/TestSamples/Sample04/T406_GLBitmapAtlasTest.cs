@@ -4,10 +4,6 @@ using System;
 using System.Collections.Generic;
 using Mini;
 
-
-using PixelFarm.CpuBlit;
-using PixelFarm.CpuBlit.BitmapAtlas;
-
 using PixelFarm.DrawingGL;
 using PixelFarm.Drawing;
 
@@ -21,8 +17,8 @@ namespace OpenTkEssTest
     {
         GLPainterCore _pcx;
         GLPainter _painter;
-        LayoutFarm.ImageBinder _chk_checked;
-        LayoutFarm.ImageBinder _chk_unchecked;
+        ImageBinder _chk_checked;
+        ImageBinder _chk_unchecked;
         protected override void OnGLPainterReady(GLPainter painter)
         {
             //example;
@@ -63,7 +59,7 @@ namespace OpenTkEssTest
                     _painter.DrawImage(_chk_checked, x_pos, y * 20);
                     _painter.DrawImage(_chk_unchecked, x_pos + 20, y * 20);
                     x_pos += 40;
-                }             
+                }
             }
 
 

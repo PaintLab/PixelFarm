@@ -23,9 +23,9 @@ namespace PixelFarm.DrawingGL
         {
             switch (atlasImgBinder.State)
             {
-                case LayoutFarm.BinderState.Loaded:
+                case BinderState.Loaded:
                     {
-                        if (LayoutFarm.ImageBinder.GetCacheInnerImage(atlasImgBinder) is GLBitmap glbmp)
+                        if (PixelFarm.Drawing.ImageBinder.GetCacheInnerImage(atlasImgBinder) is GLBitmap glbmp)
                         {
                             AtlasItem atlasItem = atlasImgBinder.AtlasItem;
                             Rectangle srcRect =
@@ -42,8 +42,8 @@ namespace PixelFarm.DrawingGL
                                     throw new NotSupportedException();
                                 case TextureKind.Bitmap:
                                     {
-                                        atlasImgBinder.State = LayoutFarm.BinderState.Loaded;
-                                        LayoutFarm.ImageBinder.SetCacheInnerImage(atlasImgBinder, _glBmp, false);
+                                        atlasImgBinder.State = BinderState.Loaded;
+                                        ImageBinder.SetCacheInnerImage(atlasImgBinder, _glBmp, false);
 
                                         atlasImgBinder.AtlasItem = atlasItem;
                                         glPainter.Core.DrawSubImage(_glBmp,
@@ -56,7 +56,7 @@ namespace PixelFarm.DrawingGL
                         }
                     }
                     break;
-                case LayoutFarm.BinderState.Unload:
+                case BinderState.Unload:
                     {
                         //load img first
                         if (_lastestImgFile != atlasImgBinder.AtlasName)
@@ -65,7 +65,7 @@ namespace PixelFarm.DrawingGL
                             if (_bmpAtlas == null)
                             {
                                 //error 
-                                atlasImgBinder.State = LayoutFarm.BinderState.Error;//not found
+                                atlasImgBinder.State = BinderState.Error;//not found
                                 return;
                             }
                             _lastestImgFile = atlasImgBinder.AtlasName;
@@ -89,8 +89,8 @@ namespace PixelFarm.DrawingGL
                                     throw new NotSupportedException();
                                 case TextureKind.Bitmap:
                                     {
-                                        atlasImgBinder.State = LayoutFarm.BinderState.Loaded;
-                                        LayoutFarm.ImageBinder.SetCacheInnerImage(atlasImgBinder, _glBmp, false);
+                                        atlasImgBinder.State = BinderState.Loaded;
+                                        ImageBinder.SetCacheInnerImage(atlasImgBinder, _glBmp, false);
                                         atlasImgBinder.AtlasItem = atlasItem;
                                         atlasImgBinder.SetPreviewImageSize(atlasItem.Width, atlasItem.Height);
                                         atlasImgBinder.RaiseImageChanged();
@@ -105,13 +105,13 @@ namespace PixelFarm.DrawingGL
                         }
                         else
                         {
-                            atlasImgBinder.State = LayoutFarm.BinderState.Error;//not found
+                            atlasImgBinder.State = BinderState.Error;//not found
                         }
                     }
                     break;
             }
 #if DEBUG
-            if (atlasImgBinder.State == LayoutFarm.BinderState.Unload)
+            if (atlasImgBinder.State == BinderState.Unload)
             {
 
             }

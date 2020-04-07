@@ -10,10 +10,10 @@ namespace PixelFarm.DrawingGL
     partial class GLPainter
     {
         ClipingTechnique _currentClipTech;
-        RectInt _clipBox;
+        Rectangle _clipBox;
 
         public bool EnableBuiltInMaskComposite { get; set; }
-        public override RectInt ClipBox
+        public override Rectangle ClipBox
         {
             get => _clipBox;
             set => _clipBox = value;

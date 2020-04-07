@@ -2,7 +2,7 @@
 
 namespace LayoutFarm
 {
-    class MyClientImageBinder : ImageBinder
+    class MyClientImageBinder : PixelFarm.Drawing.ImageBinder
     {
         UI.IUIEventListener _listener;
         public MyClientImageBinder(string src)
@@ -11,7 +11,8 @@ namespace LayoutFarm
         }
         public override void RaiseImageChanged()
         {
-            _listener?.HandleContentUpdate(); 
+            _listener?.HandleContentUpdate();
+            base.RaiseImageChanged();//SET this too?
         }
         public void SetOwner(UI.IUIEventListener listener)
         {
