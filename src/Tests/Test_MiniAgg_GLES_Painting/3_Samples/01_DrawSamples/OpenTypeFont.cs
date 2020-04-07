@@ -30,7 +30,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
         VertexStore _left_vxs;
         VertexStore _right_vxs;
-        
+
         public override void Init()
         {
 
@@ -74,7 +74,12 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             {
                 txToVxs.WriteOutput(v0);
 
-                AffineMat mat = AffineMat.GetTranslateMat(10, 10);
+                Q1RectD bounds = v0.GetBoundingRect();
+
+                AffineMat mat = AffineMat.Iden();
+                mat.Scale(1, -1);//flipY
+                mat.Translate(0, bounds.Height);
+
                 flattener.MakeVxs(v0, mat, v2);
             }
             return v2;
