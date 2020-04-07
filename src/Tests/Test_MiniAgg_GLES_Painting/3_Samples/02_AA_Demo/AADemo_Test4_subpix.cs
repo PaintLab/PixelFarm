@@ -1,7 +1,5 @@
 ﻿//MIT, 2017-present, WinterDev 
 using System;
-using PixelFarm.Drawing;
-using PixelFarm.CpuBlit;
 using Mini;
 namespace PixelFarm.CpuBlit.Sample_AADemoTest4
 {
