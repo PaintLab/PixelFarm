@@ -2,7 +2,6 @@
 //Apache2, https://xmlgraphics.apache.org/
 
 using System;
-using System.Collections.Generic;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
@@ -11,6 +10,7 @@ namespace PixelFarm.DrawingGL
 {
     partial class GLPainter
     {
+        ReusableAffineMatrix _reusableAffineMat = new ReusableAffineMatrix();
         GLBitmapAtlasPainter _bmpAtlasPainter = new GLBitmapAtlasPainter();
         public override void ApplyFilter(PixelFarm.Drawing.IImageFilter imgFilter)
         {
@@ -20,14 +20,10 @@ namespace PixelFarm.DrawingGL
 
         public override void DrawImage(Image img, in AffineMat aff)
         {
-            //create gl bmp
-            //TODO: affinePlans***
+            //create gl bmp  
+            _reusableAffineMat.SetElems(aff);
+            DrawImage(img, 0, 0, _reusableAffineMat);
 
-            GLBitmap glBmp = _pcx.ResolveForGLBitmap(img);
-            if (glBmp != null)
-            {
-                _pcx.DrawImage(glBmp, 0, 0);
-            }
         }
         public override void DrawImage(Image img, double left, double top, ICoordTransformer coordTx)
         {
@@ -37,7 +33,9 @@ namespace PixelFarm.DrawingGL
             {
                 if (this.OriginX != 0 || this.OriginY != 0)
                 {
-                    //TODO: review here
+#if DEBUG
+                    System.Diagnostics.Debugger.Break();
+#endif
                 }
 
                 //  coordTx = aff = aff * Affine.NewTranslation(this.OriginX, this.OriginY);
