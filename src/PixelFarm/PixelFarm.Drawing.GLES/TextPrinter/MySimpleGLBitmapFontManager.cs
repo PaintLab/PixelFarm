@@ -10,7 +10,7 @@ namespace PixelFarm.DrawingGL
     {
         Dictionary<MemBitmap, GLBitmap> _sharedGlyphImgs = new Dictionary<MemBitmap, GLBitmap>();
 
-        public MySimpleGLBitmapFontManager(LayoutFarm.OpenFontTextService textServices)
+        public MySimpleGLBitmapFontManager(PixelFarm.Drawing.OpenFontTextService textServices)
             : base(textServices)
         {
             SetLoadNewBmpDel(atlas =>

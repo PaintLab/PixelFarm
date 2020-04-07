@@ -47,7 +47,7 @@ namespace PixelFarm.Drawing.WinGdi
         System.Drawing.SolidBrush _internalSolidBrush;
         System.Drawing.Rectangle _currentClipRect;
         //------------------------------- 
-        LayoutFarm.OpenFontTextService _openFontTextServices;
+        OpenFontTextService _openFontTextServices;
 
         PixelFarm.CpuBlit.MemBitmap _memBmp;
         CpuBlit.AggPainter _painter;
@@ -116,7 +116,7 @@ namespace PixelFarm.Drawing.WinGdi
 
                 if (_openFontTextServices == null)
                 {
-                    _openFontTextServices = new LayoutFarm.OpenFontTextService();
+                    _openFontTextServices = new OpenFontTextService();
                 }
                 //optional if we want to print text on agg surface
 
@@ -131,7 +131,7 @@ namespace PixelFarm.Drawing.WinGdi
             return _painter;
         }
 
-        internal LayoutFarm.OpenFontTextService OpenFontTextService => _openFontTextServices;
+        internal OpenFontTextService OpenFontTextService => _openFontTextServices;
 
 #if DEBUG
         public void dbugTestDrawText()

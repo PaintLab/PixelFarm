@@ -112,7 +112,7 @@ namespace PixelFarm.DrawingGL
         GLBitmap _glBmp;
         RequestFont _font;
 
-        readonly LayoutFarm.OpenFontTextService _textServices;
+        readonly OpenFontTextService _textServices;
         readonly TextureCoordVboBuilder _vboBuilder = new TextureCoordVboBuilder();
 
         float _px_scale = 1;
@@ -127,7 +127,7 @@ namespace PixelFarm.DrawingGL
         /// use vertex buffer object
         /// </summary>
 
-        public GLBitmapGlyphTextPrinter(GLPainter painter, LayoutFarm.OpenFontTextService textServices)
+        public GLBitmapGlyphTextPrinter(GLPainter painter, OpenFontTextService textServices)
         {
             //create text printer for use with canvas painter           
             _painter = painter;
