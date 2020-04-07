@@ -2355,11 +2355,11 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\2_geometry\Ellipse.cs">
       <Link>PixelFarm\PixelFarm.Vectors\2_geometry\Ellipse.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\2_geometry\RectD.cs">
-      <Link>PixelFarm\PixelFarm.Vectors\2_geometry\RectD.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\2_Geometry\Q1Rect.cs">
+      <Link>PixelFarm\PixelFarm.Vectors\2_Geometry\Q1Rect.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\2_Geometry\RectInt.cs">
-      <Link>PixelFarm\PixelFarm.Vectors\2_Geometry\RectInt.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\2_Geometry\Q1RectD.cs">
+      <Link>PixelFarm\PixelFarm.Vectors\2_Geometry\Q1RectD.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\3_transform\1_Affine.cs">
       <Link>PixelFarm\PixelFarm.Vectors\3_transform\1_Affine.cs</Link>

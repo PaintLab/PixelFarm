@@ -444,7 +444,7 @@ namespace PixelFarm.CpuBlit
             return buff2;
         }
         //
-        CartesRect IBitmapSrc.GetBounds() => new CartesRect(0, 0, _width, _height);
+        Q1Rect IBitmapSrc.GetBounds() => new Q1Rect(0, 0, _width, _height);
         int IBitmapSrc.Width => _width;
         int IBitmapSrc.Height => _height;
         int IBitmapSrc.Stride => _strideBytes;
@@ -496,7 +496,7 @@ namespace PixelFarm.CpuBlit
         int Stride { get; }
         int Height { get; }
 
-        CartesRect GetBounds();
+        Q1Rect GetBounds();
 
         int GetBufferOffsetXY32(int x, int y);
 

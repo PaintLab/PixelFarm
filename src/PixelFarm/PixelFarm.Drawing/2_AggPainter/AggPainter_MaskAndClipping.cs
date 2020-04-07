@@ -97,7 +97,7 @@ namespace PixelFarm.CpuBlit
         //}
         public override void SetClipBox(int x1, int y1, int x2, int y2)
         {
-            _aggsx.SetClippingRect(new CartesRect(x1, y1, x2, y2));
+            _aggsx.SetClippingRect(new Q1Rect(x1, y1, x2, y2));
         }
         //---------------------------------------------------------------
 

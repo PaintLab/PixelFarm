@@ -42,7 +42,7 @@ namespace PixelFarm.CpuBlit.Samples
             //#endif 
 
 
-            using (Tools.More.BorrowVgPaintArgs(p, out var paintArgs))             
+            using (Tools.More.BorrowVgPaintArgs(p, out var paintArgs))
             {
                 _vgVisualElem.Paint(paintArgs);
             }
@@ -90,7 +90,7 @@ namespace PixelFarm.CpuBlit.Samples
 
                 if (vgRenerVx != null && !vgRenerVx.HasBitmapSnapshot)
                 {
-                    VertexProcessing.RectD bound = vgRenerVx.GetRectBounds();
+                    VertexProcessing.Q1RectD bound = vgRenerVx.GetRectBounds();
 
                     //create 
                     MemBitmap backBmp = new MemBitmap((int)bound.Width, (int)bound.Height);
