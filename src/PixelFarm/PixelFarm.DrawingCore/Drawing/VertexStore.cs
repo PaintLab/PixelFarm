@@ -19,8 +19,6 @@
 //----------------------------------------------------------------------------
 
 
-
-using PixelFarm.CpuBlit;
 namespace PixelFarm.Drawing
 {
     public sealed class VertexStore
@@ -430,7 +428,7 @@ namespace PixelFarm.Drawing
                 tx.Transform(ref _coord_xy[a++], ref _coord_xy[a++]);
             }
         }
-        private VertexStore(VertexStore src, in AffineMat tx)
+        private VertexStore(VertexStore src, in PixelFarm.CpuBlit.AffineMat tx)
         {
             //for copy from src to this instance
 
@@ -489,7 +487,7 @@ namespace PixelFarm.Drawing
 
         public VertexStore CreateTrim(PixelFarm.CpuBlit.VertexProcessing.ICoordTransformer tx) => new VertexStore(this, tx);
 
-        public VertexStore CreateTrim(in AffineMat tx) => new VertexStore(this, tx);
+        public VertexStore CreateTrim(in PixelFarm.CpuBlit.AffineMat tx) => new VertexStore(this, tx);
 
     }
 

@@ -20,7 +20,10 @@
 
 using System;
 using PixelFarm.Drawing;
+using PixelFarm.Drawing.Internal;
 using PixelFarm.CpuBlit.VertexProcessing;
+using CO = PixelFarm.Drawing.Internal.CO;
+
 namespace PixelFarm.CpuBlit.Imaging
 {
     /// <summary>
@@ -91,8 +94,6 @@ namespace PixelFarm.CpuBlit.Imaging
 }
 namespace PixelFarm.CpuBlit
 {
-
-
 
 #if DEBUG
 
@@ -282,7 +283,7 @@ namespace PixelFarm.CpuBlit
         public override int ReferenceX => 0;
         public override int ReferenceY => 0;
         //
-       
+
         public override bool IsReferenceImage => false;
         public CpuBlit.Imaging.PixelFormat PixelFormat => _pixelFormat;
         //

@@ -3,8 +3,10 @@
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.IO;
+ 
 using PixelFarm.CpuBlit.Imaging;
+using MemMx = PixelFarm.Drawing.Internal.MemMx;
+
 namespace PixelFarm.CpuBlit
 {
 
@@ -441,7 +443,7 @@ namespace PixelFarm.CpuBlit
                           System.Drawing.Imaging.PixelFormat.Format32bppArgb); //read as 32 bits
             unsafe
             {
-                PixelFarm.CpuBlit.NativeMemMx.MemCopy(
+                PixelFarm.Drawing.Internal.NativeMemMx.MemCopy(
                     (byte*)targetBufferPtr.Ptr,
                     (byte*)bmpData.Scan0,
                     bmpData.Stride * dstMemBmp.Height

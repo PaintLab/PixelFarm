@@ -185,7 +185,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
 
                         for (int i = 0; i < clippedSourceImageRect.Height; i++)
                         {
-                            MemMx.memmove(destBuffer, destOffset * 4, sourceBuffer, sourceOffset, lengthInBytes);
+                            PixelFarm.Drawing.Internal.MemMx.memmove(destBuffer, destOffset * 4, sourceBuffer, sourceOffset, lengthInBytes);
                             sourceOffset += sourceImage.Stride;
                             destOffset += Stride;
                         }
@@ -538,7 +538,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             }
 #endif
         }
-        
+
         public void BlendSolidHSpan(int x, int y, int len, Color sourceColor, byte[] covers, int coversIndex)
         {
             int colorAlpha = sourceColor.A;

@@ -368,7 +368,7 @@ namespace PixelFarm.Drawing.WinGdi
         public Rectangle Rect => Rectangle.FromLTRB(_left, _top, _right, _bottom);
 
         public Rectangle InvalidateArea => _invalidateArea;
-         
+
         public void Invalidate(Rectangle rect)
         {
             if (_isEmptyInvalidateArea)
@@ -581,7 +581,7 @@ namespace PixelFarm.Drawing.WinGdi
                 IntPtr bufferHeaderPtr = binder.GetRawBufferHead();
                 unsafe
                 {
-                    PixelFarm.CpuBlit.NativeMemMx.memcpy((byte*)bmpdata.Scan0, (byte*)bufferHeaderPtr, bmpdata.Stride * bmpdata.Height);
+                    PixelFarm.Drawing.Internal.NativeMemMx.memcpy((byte*)bmpdata.Scan0, (byte*)bufferHeaderPtr, bmpdata.Stride * bmpdata.Height);
                 }
                 bmp.UnlockBits(bmpdata);
                 //
@@ -747,19 +747,19 @@ namespace PixelFarm.Drawing.WinGdi
                 var cmd = vxs.GetVertex(i, out double x, out double y);
                 switch (cmd)
                 {
-                    case PixelFarm.CpuBlit.VertexCmd.MoveTo:
+                    case VertexCmd.MoveTo:
                         {
                             latestMoveX = latestX = (float)x;
                             latestMoveY = latestY = (float)y;
                         }
                         break;
-                    case PixelFarm.CpuBlit.VertexCmd.LineTo:
+                    case VertexCmd.LineTo:
                         {
                             isOpen = true;
                             gpath.AddLine(latestX, latestY, latestX = (float)x, latestY = (float)y);
                         }
                         break;
-                    case PixelFarm.CpuBlit.VertexCmd.Close:
+                    case VertexCmd.Close:
                         {
                             latestX = latestMoveX;
                             latestY = latestMoveY;
@@ -768,7 +768,7 @@ namespace PixelFarm.Drawing.WinGdi
                             isOpen = false;
                         }
                         break;
-                    case CpuBlit.VertexCmd.NoMore: break;
+                    case VertexCmd.NoMore: break;
                     default:
                         throw new System.NotSupportedException();
                 }
@@ -1169,7 +1169,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
             //TODO: ...
         }
-      
+
         public void DrawString(char[] text, int startAt, int len, double left, double top)
         {
             //TODO: review TextBaseline ***
@@ -1195,6 +1195,6 @@ namespace PixelFarm.Drawing.WinGdi
             _rendersx.MeasureString(buffer, startAt, len, new Rectangle(), out w, out h);
         }
 
-       
+
     }
 }

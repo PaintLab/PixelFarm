@@ -179,6 +179,8 @@
     <Compile Include="4_CpuBlit_VertexProcessing\VertexStoreExtensions.cs" />
     <Compile Include="4_CpuBlit_VertexProcessing\VertexStoreTransformExtensions.cs" />
     <Compile Include="4_CpuBlit_VertexProcessing\VxsClipping.cs" />
+    <Compile Include="Drawing.Internal\CO.cs" />
+    <Compile Include="Drawing.Internal\MicroPainter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PixelFarm.DrawingCore\PixelFarm.DrawingCore.csproj">

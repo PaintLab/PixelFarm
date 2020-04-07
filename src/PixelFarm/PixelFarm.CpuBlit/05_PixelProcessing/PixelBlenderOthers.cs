@@ -29,6 +29,7 @@
 using System;
 using PixelFarm.CpuBlit.Imaging;
 using PixelFarm.Drawing;
+using CO = PixelFarm.Drawing.Internal.CO;
 
 namespace PixelFarm.CpuBlit.PixelProcessing
 {
@@ -636,7 +637,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                     fixed (int* ptr_byte = &dstBuffer[arrayOffset])
                     {
                         //TODO: consider use memcpy() impl***
-                         
+
                         int* ptr = ptr_byte;
                         int argb = srcColor.ToGrayValueARGB();
 

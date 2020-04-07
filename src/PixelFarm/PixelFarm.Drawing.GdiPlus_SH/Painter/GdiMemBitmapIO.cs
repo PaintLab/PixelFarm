@@ -3,6 +3,7 @@
 using System;
 using PixelFarm.CpuBlit;
 using System.IO;
+using MemMx = PixelFarm.Drawing.Internal.MemMx;
 namespace PixelFarm.Drawing.WinGdi
 {
 
