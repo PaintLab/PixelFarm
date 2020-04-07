@@ -2208,9 +2208,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\CpuBlit.VertexProcessing\LineWalker.cs">
       <Link>PixelFarm\PixelFarm.Painter\CpuBlit.VertexProcessing\LineWalker.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\CpuBlit.VertexProcessing\PathWriter.cs">
-      <Link>PixelFarm\PixelFarm.Painter\CpuBlit.VertexProcessing\PathWriter.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\CpuBlit.VertexProcessing\RoundedRect.cs">
       <Link>PixelFarm\PixelFarm.Painter\CpuBlit.VertexProcessing\RoundedRect.cs</Link>
     </Compile>
@@ -2255,6 +2252,9 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\CpuBlit\MemBitmap.cs">
       <Link>PixelFarm\PixelFarm.Painter\CpuBlit\MemBitmap.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\CpuBlit\PathWriter.cs">
+      <Link>PixelFarm\PixelFarm.Painter\CpuBlit\PathWriter.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\CpuBlit\TempMemPtr.cs">
       <Link>PixelFarm\PixelFarm.Painter\CpuBlit\TempMemPtr.cs</Link>
