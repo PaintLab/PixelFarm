@@ -16,45 +16,26 @@ namespace PixelFarm.CpuBlit.Sample_Draw
         MemBitmap _lionImg;
         public override void Init()
         {
-            UseBitmapExt = false;
-
             string imgFileName = "Samples\\lion1.png";
             if (System.IO.File.Exists(imgFileName))
             {
                 _lionImg = MemBitmap.LoadBitmap(imgFileName);
             }
-
         }
 
-        [DemoConfig]
-        public bool UseBitmapExt { get; set; }
 
         public override void Draw(Painter p)
         {
-            if (UseBitmapExt)
-            {
-                p.RenderQuality = RenderQuality.Fast;
-            }
-            else
-            {
-                p.RenderQuality = RenderQuality.HighQuality;
-            }
-
-
-
             p.Clear(Drawing.Color.Yellow);
-            p.UseLcdEffectSubPixelRendering = false;
 
-
-            //
-            //---red reference line--
+            ////
+            ////---reference line--
             p.StrokeColor = Color.Black;
             p.DrawLine(0, 400, 800, 400); //draw reference line
             p.DrawImage(_lionImg, 300, 0);
 
             int _imgW = _lionImg.Width;
             int _imgH = _lionImg.Height;
-
 
 
             int x_pos = 0;
@@ -74,14 +55,14 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
 
             using (Tools.BorrowVxs(out var vxs1, out var vxs2))
+            using (Tools.BorrowRect(out var rect))
             {
-                SimpleRect sRect = new SimpleRect();
-                int x = 0, y = 0, w = 100, h = 100;
-                sRect.SetRect(x, y, x + w, y + h);
-                sRect.MakeVxs(vxs1);
+                int x = 5, y = 5, w = 100, h = 100;
+                rect.SetRect(x, y, x + w, y + h);
+                rect.MakeVxs(vxs1);
                 p.Fill(vxs1, Color.Blue);
                 //-------------------
-                AffineMat af = AffineMat.GetRotateDegMat(30, w / 2f, h / 2f); 
+                AffineMat af = AffineMat.GetRotateDegMat(30, w / 2f, h / 2f);
 
                 af.TransformToVxs(vxs1, vxs2);
                 p.Fill(vxs2, Color.Red);
@@ -100,7 +81,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
         MemBitmap _halfLion;
         public override void Init()
         {
-            UseBitmapExt = false;
+
 
             string imgFileName = "Samples\\lion1.png";
             if (System.IO.File.Exists(imgFileName))
@@ -110,17 +91,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             }
         }
 
-        bool _useBmpExt;
-        [DemoConfig]
-        public bool UseBitmapExt
-        {
-            get => _useBmpExt;
-            set
-            {
-                _useBmpExt = value;
-                this.InvalidateGraphics();
-            }
-        }
+
 
         MemBitmap CreateHalfSize(MemBitmap orgBmp)
         {
@@ -140,14 +111,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
         public override void Draw(Painter p)
         {
-            if (UseBitmapExt)
-            {
-                p.RenderQuality = RenderQuality.Fast;
-            }
-            else
-            {
-                p.RenderQuality = RenderQuality.HighQuality;
-            }
+
 
             p.Clear(Drawing.Color.White);
             p.UseLcdEffectSubPixelRendering = false;
@@ -205,11 +169,12 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             //
 
             using (Tools.BorrowVxs(out var vxs1, out var vxs2))
+            using (Tools.BorrowRect(out var rect))
             {
-                SimpleRect sRect = new SimpleRect();
-                int x = 0, y = 0, w = 100, h = 100;
-                sRect.SetRect(x, y, x + w, y + h);
-                sRect.MakeVxs(vxs1);
+               
+                int x = 5, y = 5, w = 100, h = 100;
+                rect.SetRect(x, y, x + w, y + h);
+                rect.MakeVxs(vxs1);
                 p.Fill(vxs1, Color.Blue);
                 //-------------------
 
