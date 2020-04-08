@@ -1420,25 +1420,29 @@ namespace PixelFarm.DrawingGL
                 //move origin to (left,top) of bounds
                 int ox = OriginX;
                 int oy = OriginY;
-                SetCanvasOrigin(ox + bounds_left, oy + bounds_top); 
+                SetCanvasOrigin(ox + bounds_left, oy + bounds_top);
                 DrawImageWithMask(renderSx_mask.GetGLBitmap(), color_src, 0, 0);
                 SetCanvasOrigin(ox, oy);//restore
 
                 renderSx_mask.Dispose();
             }
-
         }
 
+        bool _maskMode;
         public void DisableMask()
         {
-            //restore back 
-            //3. switch to normal blending mode 
+            _maskMode = false;
+
+
+            ////restore back 
+            ////3. switch to normal blending mode 
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
             GL.Disable(EnableCap.StencilTest);
         }
 
         public void EnableMask(PathRenderVx pathRenderVx)
         {
+            _maskMode = true;
 
             GL.ClearStencil(0); //set value for clearing stencil buffer 
                                 //actual clear here
@@ -1498,19 +1502,32 @@ namespace PixelFarm.DrawingGL
             //TODO: review smooth border filll here ***
             //
             //float[] smoothBorder = fig.GetSmoothBorders(_smoothBorderBuilder);
-            //_invertAlphaFragmentShader.DrawTriangleStrips(smoothBorder, fig.BorderTriangleStripCount);
-
-            //at this point alpha component is fill in to destination 
+            Color prevStrokeColor = StrokeColor;
+            float preStrokeW = StrokeWidth;
+            StrokeColor = Color.White;
+            StrokeWidth = 1.5f;
+            for (int b = 0; b < m; ++b)
+            {
+                Figure f = pathRenderVx.GetFig(b);
+                //-------------------------------------   
+                _smoothLineShader.DrawTriangleStrips(
+                               f.GetSmoothBorders(_smoothBorderBuilder),
+                               f.BorderTriangleStripCount);
+            }
+            StrokeColor = prevStrokeColor;
+            StrokeWidth = preStrokeW;
+            //at this point,alpha component is fill in to destination 
             //-------------------------------------------------------------------------------------
             //2. then fill again!, 
             //we use alpha information from dest, 
             //so we set blend func to ... GL.BlendFunc(BlendingFactorSrc.DstAlpha, BlendingFactorDest.OneMinusDstAlpha)    
             GL.ColorMask(true, true, true, true);
+            GL.BlendFunc(BlendingFactorSrc.DstAlpha, BlendingFactorDest.OneMinusDstAlpha);
         }
 
         public void DrawGfxPath(Drawing.Color color, PathRenderVx igpth)
         {
-            //TODO: review here again
+            //TODO: review here againerr
             //use VBO?
             //
             switch (SmoothMode)

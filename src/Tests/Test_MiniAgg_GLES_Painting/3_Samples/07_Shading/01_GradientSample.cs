@@ -113,6 +113,10 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
 
         [DemoConfig]
         public bool UseOffset { get; set; }
+
+        [DemoConfig]
+        public bool UseClipRegion { get; set; }
+
         [DemoConfig]
         public bool EnableGLPainterTwoColorsMask { get; set; }
 
@@ -161,20 +165,29 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
             //p.FillRect(0, 100, 500, 500); 
             //p.FillRect(0, 200, 200, 50);
 
-
-            p.Fill(_triangleVxs);
-            if (UseOffset)
+            if (UseClipRegion)
             {
-                float prev_ox = p.OriginX;
-                float prev_oy = p.OriginY;
-                p.SetOrigin(100, 120);
-                p.Fill(_triangleVxs);
-                p.SetOrigin(prev_ox, prev_oy);//restore
+                p.SetClipRgn(_triangleVxs);
+                p.FillRect(0, 0, 100, 100, Color.Blue);
+                p.SetClipRgn(null);
             }
             else
             {
-                p.Fill(_triangleVxs2);
+                p.Fill(_triangleVxs);
+                if (UseOffset)
+                {
+                    float prev_ox = p.OriginX;
+                    float prev_oy = p.OriginY;
+                    p.SetOrigin(100, 120);
+                    p.Fill(_triangleVxs);
+                    p.SetOrigin(prev_ox, prev_oy);//restore
+                }
+                else
+                {
+                    p.Fill(_triangleVxs2);
+                }
             }
+
 
             //-------------               
 
