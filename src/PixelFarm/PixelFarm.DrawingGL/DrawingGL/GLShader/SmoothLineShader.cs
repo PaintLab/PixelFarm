@@ -212,12 +212,10 @@ namespace PixelFarm.DrawingGL
         }
     }
 
-    class InvertAlphaLineSmoothShader : ShaderBase
+    class InvertAlphaLineSmoothShader : ColorFillShaderBase
     {
         //for stencil buffer ***
-        readonly ShaderVtxAttrib4f a_position;
-        readonly ShaderUniformMatrix4 u_matrix;
-
+        readonly ShaderVtxAttrib4f a_position; 
         readonly ShaderUniformVar1 u_linewidth;
         readonly ShaderUniformVar1 u_p0;
         //float _strokeWidth = 0.5f;
@@ -240,8 +238,8 @@ namespace PixelFarm.DrawingGL
                 string vs = @"                   
                 attribute vec4 a_position;     
                 uniform mat4 u_mvpMatrix; 
-                uniform float u_linewidth; 
-                varying vec2 v_dir;
+                uniform float u_linewidth;
+                uniform vec2 u_ortho_offset;  
                 varying float v_distance; 
                 void main()
                 {                   
@@ -250,11 +248,9 @@ namespace PixelFarm.DrawingGL
 
                     vec2 delta;
                     if(v_distance <1.0){                                         
-                        delta = vec2(-sin(rad) * u_linewidth,cos(rad) * u_linewidth);                       
-                        v_dir = vec2(0.80,0.0);
+                        delta = vec2(-sin(rad) * u_linewidth,cos(rad) * u_linewidth) + u_ortho_offset;   
                     }else{                      
-                        delta = vec2(sin(rad) * u_linewidth,-cos(rad) * u_linewidth);
-                        v_dir = vec2(0.0,0.80);
+                        delta = vec2(sin(rad) * u_linewidth,-cos(rad) * u_linewidth)+ u_ortho_offset;  
                     } 
                     gl_Position = u_mvpMatrix*  vec4(a_position[0] +delta[0],a_position[1]+delta[1],0,1); 
                 }
@@ -266,12 +262,9 @@ namespace PixelFarm.DrawingGL
                 //p0= cutpoint of inside,outside
                 //1/p0 = factor
                 string fs = @"
-                    precision mediump float;                    
-                   
-                    uniform float p0;
-                    varying vec2 v_dir;
-                    varying float v_distance;
-                                    
+                    precision mediump float;      
+                    uniform float p0; 
+                    varying float v_distance; 
                     void main()
                     {  
                         if(v_distance < p0){                        
@@ -320,21 +313,13 @@ namespace PixelFarm.DrawingGL
 
             a_position = _shaderProgram.GetAttrV4f("a_position");
             u_matrix = _shaderProgram.GetUniformMat4("u_mvpMatrix");
-            //u_solidColor = _shaderProgram.GetUniform4("u_solidColor");
+            u_ortho_offset = _shaderProgram.GetUniform2("u_ortho_offset");
             u_linewidth = _shaderProgram.GetUniform1("u_linewidth");
             u_p0 = _shaderProgram.GetUniform1("p0");
             _cutPoint = SetCutPoint(0.5f); //this are fixed for inverted alpha smooth line shader
         }
 
-        void CheckViewMatrix()
-        {
-            int version = 0;
-            if (_orthoviewVersion != (version = _shareRes.OrthoViewVersion))
-            {
-                _orthoviewVersion = version;
-                u_matrix.SetData(_shareRes.OrthoView.data);
-            }
-        }
+       
 
         public void DrawTriangleStrips(float[] coords, int ncount)
         {
