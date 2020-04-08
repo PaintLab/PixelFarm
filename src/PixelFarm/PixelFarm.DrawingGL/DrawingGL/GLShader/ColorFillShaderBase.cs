@@ -11,8 +11,8 @@ namespace PixelFarm.DrawingGL
         protected ShaderUniformVar2 u_ortho_offset;
 
         int _orthoviewVersion = -1;
-        float _orthov_offsetX = 0;
-        float _orthov_offsetY = 0;
+        protected float _orthov_offsetX = 0;
+        protected float _orthov_offsetY = 0;
 
         public ColorFillShaderBase(ShaderSharedResource shareRes)
             : base(shareRes)
@@ -41,5 +41,5 @@ namespace PixelFarm.DrawingGL
         }
     }
 
-    
+
 }

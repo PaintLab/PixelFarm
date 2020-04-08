@@ -168,15 +168,7 @@ namespace PixelFarm.CpuBlit
                         _aggsx = _aggsx_mask;//*** 
                         break;
                 }
-                //TempMemPtr tmp = MemBitmap.GetBufferPtr(_aggsx.DestBitmap);
-                //unsafe
-                //{
-                //    _bxt = new BitmapBuffer(
-                //       _aggsx.Width,
-                //       _aggsx.Height,
-                //        tmp.Ptr,
-                //        tmp.LengthInBytes);
-                //}
+
             }
         }
 
@@ -212,7 +204,7 @@ namespace PixelFarm.CpuBlit
             }
         }
 
-        public override void Fill(Region rgn)
+        public override void FillRegion(Region rgn)
         {
             if (!(rgn is CpuBlitRegion region)) return;
             switch (region.Kind)
@@ -242,21 +234,18 @@ namespace PixelFarm.CpuBlit
                     }
                     break;
             }
-
         }
-        public override void Draw(Region rgn)
+
+        public override void DrawRegion(Region rgn)
         {
-            var region = rgn as PixelFarm.CpuBlit.CpuBlitRegion;
-            if (region == null) return;
+            if (!(rgn is PixelFarm.CpuBlit.CpuBlitRegion region)) return;
             switch (region.Kind)
             {
                 case CpuBlitRegion.CpuBlitRegionKind.BitmapBasedRegion:
                     {
                         var bmpRgn = (PixelFarm.PathReconstruction.BitmapBasedRegion)region;
                         //check if it has outline data or not
-                        //if not then just return
-
-
+                        //if not then just return 
                     }
                     break;
                 case CpuBlitRegion.CpuBlitRegionKind.VxsRegion:
@@ -274,6 +263,14 @@ namespace PixelFarm.CpuBlit
             }
         }
 
+        public override void FillRegion(VertexStore vxs)
+        {
+            throw new NotImplementedException();
+        }
+        public override void DrawRegion(VertexStore vxs)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public enum TargetBufferName

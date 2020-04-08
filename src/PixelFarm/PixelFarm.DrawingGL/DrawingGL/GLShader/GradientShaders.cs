@@ -216,7 +216,7 @@ namespace PixelFarm.DrawingGL
             CheckViewMatrix();
             //----------------------------------------------------
             a_position.LoadPureV2f(v2fArray);
-            u_center.SetValue(cx, cy, r);
+            u_center.SetValue(cx + _orthov_offsetX, cy - _orthov_offsetY, r);
             UploadGradientLookupTable(lookupBmp);
 
             if (invertedAffineTx != null)

@@ -5,6 +5,7 @@ using System;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.VertexProcessing;
+
 namespace PixelFarm.DrawingGL
 {
     partial class GLPainter
@@ -92,7 +93,7 @@ namespace PixelFarm.DrawingGL
         {
             _pcx.SetClipRect(left, top, right - left, bottom - top);
         }
-        public override void Fill(Region rgn)
+        public override void FillRegion(Region rgn)
         {
             if (!(rgn is CpuBlitRegion region)) return;
             switch (region.Kind)
@@ -120,7 +121,7 @@ namespace PixelFarm.DrawingGL
             }
 
         }
-        public override void Draw(Region rgn)
+        public override void DrawRegion(Region rgn)
         {
             var region = rgn as CpuBlitRegion;
             if (region == null) return;
@@ -142,6 +143,23 @@ namespace PixelFarm.DrawingGL
                     break;
             }
         }
+        public override void FillRegion(VertexStore vxs)
+        {
 
+            this.SetClipRgn(vxs);
+
+            float ox = this.OriginX;
+            float oy = this.OriginY;
+
+            Q1RectD bounds = vxs.GetBoundingRect();
+            SetOrigin((float)(ox + bounds.Left), (float)(oy + bounds.Bottom));
+            FillRect(0, 0, bounds.Width, bounds.Height);
+            SetClipRgn(null);
+            SetOrigin(ox, oy);
+        }
+        public override void DrawRegion(VertexStore vxs)
+        {
+
+        }
     }
 }

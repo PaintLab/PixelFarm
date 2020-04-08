@@ -167,33 +167,22 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
 
             if (UseClipRegion)
             {
+
+                //fill vxs region1
+                p.FillRegion(_triangleVxs);
+                //fill vxs region2
+                if (UseOffset)
                 {
-                    //fill vxs region1
-                    p.SetClipRgn(_triangleVxs); 
-
-                    float ox = p.OriginX;
-                    float oy = p.OriginY;
-
-                    Q1RectD bounds = _triangleVxs.GetBoundingRect();
-                    p.SetOrigin((float)(ox + bounds.Left), (float)(oy + bounds.Bottom));
-                    p.FillRect(0, 0, bounds.Width, bounds.Height);
-                    p.SetClipRgn(null);
-                    p.SetOrigin(ox, oy);
+                    float prev_ox = p.OriginX;
+                    float prev_oy = p.OriginY;
+                    p.SetOrigin(100, 120);
+                    p.FillRegion(_triangleVxs);
+                    p.SetOrigin(prev_ox, prev_oy);//restore
                 }
-
+                else
                 {
-                    //fill vxs region2
-                    p.SetClipRgn(_triangleVxs2);
-                    Q1RectD bounds = _triangleVxs2.GetBoundingRect();
-
-                    float ox = p.OriginX;
-                    float oy = p.OriginY;
-                    p.SetOrigin((float)(ox + bounds.Left), (float)(oy + bounds.Bottom));
-                    p.FillRect(0, 0, bounds.Width, bounds.Height);
-                    p.SetClipRgn(null);
-                    p.SetOrigin(ox, oy);
+                    p.FillRegion(_triangleVxs2);
                 }
-
             }
             else
             {
