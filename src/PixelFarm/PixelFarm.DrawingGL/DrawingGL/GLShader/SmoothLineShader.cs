@@ -217,9 +217,8 @@ namespace PixelFarm.DrawingGL
         //for stencil buffer ***
         readonly ShaderVtxAttrib4f a_position; 
         readonly ShaderUniformVar1 u_linewidth;
-        readonly ShaderUniformVar1 u_p0;
-        //float _strokeWidth = 0.5f;
-        int _orthoviewVersion = -1;
+        readonly ShaderUniformVar1 u_p0; 
+     
         float _cutPoint;
         bool _loadCutPoint;
         float _latestDrawW;
