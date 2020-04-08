@@ -250,32 +250,26 @@ namespace PixelFarm.DrawingGL
                 {   
                 
                     float rad = a_position[3];
-                    v_distance= a_position[2];
-
-                    float n_x = sin(rad); 
-                    float n_y = cos(rad);  
+                    v_distance= a_position[2]; 
 
                     vec4 delta;
                     if(v_distance <1.0){                                         
-                        delta = vec4(-n_x * u_linewidth,n_y * u_linewidth,0,0);                       
+                        delta = vec4(-sin(rad) * u_linewidth,cos(rad) * u_linewidth,0,0);                       
                     }else{                      
-                        delta = vec4(n_x * u_linewidth,-n_y * u_linewidth,0,0);
+                        delta = vec4(sin(rad) * u_linewidth,-cos(rad) * u_linewidth,0,0);
                     }
     
                     if(u_linewidth <= 0.5){
                         p0 = 0.5;      
                     }else if(u_linewidth <=1.0){
                         p0 = 0.45;  
-                    }else if(u_linewidth>1.0 && u_linewidth<3.0){
-                    
+                    }else if(u_linewidth>1.0 && u_linewidth<3.0){                    
                         p0 = 0.25;  
                     }else{
                         p0= 0.1;
-                    }
-                
-                    vec4 pos = vec4(a_position[0],a_position[1],0,1) + delta;                 
-                    gl_Position = u_mvpMatrix* pos;                
-
+                    }               
+                     
+                    gl_Position = u_mvpMatrix*  vec4(a_position[0] +delta[0],a_position[1]+delta[1],0,1);
                     v_color= u_solidColor;
                 }
                 ";
@@ -294,9 +288,9 @@ namespace PixelFarm.DrawingGL
                         float factor= 1.0 /p0;
             
                         if(d0 < p0){                        
-                            gl_FragColor = vec4(v_color[0],v_color[1],v_color[2], 1.0 -(v_color[3] *(d0 * factor)));
+                            gl_FragColor = vec4(v_color[0],v_color[1],v_color[2], 1.0-(v_color[3] *(d0 * factor)));
                         }else if(d0> p1){                         
-                            gl_FragColor= vec4(v_color[0],v_color[1],v_color[2],1.0-(v_color[3] *((1.0-d0)* factor)));
+                            gl_FragColor = vec4(v_color[0],v_color[1],v_color[2], 1.0-(v_color[3] *((1.0-d0)* factor)));
                         }
                         else{ 
                            gl_FragColor = vec4(0,0,0,0);                        
