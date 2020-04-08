@@ -157,7 +157,7 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
             DrawingGL.GLPainter glPainter = p as DrawingGL.GLPainter;
             if (glPainter != null)
             {
-                glPainter2MaskColor = p.EnableMask;
+                glPainter2MaskColor = glPainter.UseTwoColorsMask;
                 glPainter.UseTwoColorsMask = EnableGLPainterTwoColorsMask;
 
             }
@@ -168,7 +168,8 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
             if (UseClipRegion)
             {
                 p.SetClipRgn(_triangleVxs);
-                p.FillRect(0, 0, 100, 100, Color.Blue);
+                Q1RectD bounds = _triangleVxs.GetBoundingRect(); 
+                p.FillRect(bounds.Left, bounds.Bottom, bounds.Width, bounds.Height);
                 p.SetClipRgn(null);
             }
             else

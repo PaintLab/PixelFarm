@@ -1089,7 +1089,7 @@ namespace PixelFarm.DrawingGL
             FillTriangleStrip(color, _rect_coords, 4);
         }
 
-        public void FillTriangleStrip(Drawing.Color color, float[] coords, int n)
+        void FillTriangleStrip(Drawing.Color color, float[] coords, int n)
         {
             if (color.A == 0) { return; }
             _solidColorFillShader.FillTriangleStripWithVertexBuffer(coords, n, color);
@@ -1277,6 +1277,79 @@ namespace PixelFarm.DrawingGL
             FillGfxPath(color, color, pathRenderVx);
         }
 
+        public void FillRect(Brush brush, double left, double top, double width, double height)
+        {
+            //left,bottom,width,height         
+
+            SimpleTessTool.CreateRectTessCoordsTriStrip((float)left, (float)(top + height), (float)width, (float)height, _rect_coords);
+            switch (brush.BrushKind)
+            {
+                default: throw new NotSupportedException();
+                case BrushKind.Solid:
+                    {
+                        SolidBrush sb = (SolidBrush)brush;
+                        _solidColorFillShader.FillTriangleStripWithVertexBuffer(_rect_coords, 4, sb.Color);
+                    }
+                    break;
+                case BrushKind.LinearGradient:
+                    {
+                        LinearGradientBrush glGrBrush = LinearGradientBrush.Resolve((Drawing.LinearGradientBrush)brush);
+
+                        float[] glGrBrush_Colors = glGrBrush._colors;
+                        float[] swap_rgbaColors = new float[glGrBrush_Colors.Length];
+                        for (int i = 0; i < swap_rgbaColors.Length;)
+                        {
+                            ////a,b,g,r 
+                            //s_colorList.Add((color & 0xff) / 255f);//r
+                            //s_colorList.Add(((color >> 8) & 0xff) / 255f);//g 
+                            //s_colorList.Add(((color >> 16) & 0xff) / 255f); //b
+                            //s_colorList.Add(((color >> 24) & 0xff) / 255f); //a
+
+                            float r = glGrBrush_Colors[i];
+                            float g = glGrBrush_Colors[i + 1];
+                            float b = glGrBrush_Colors[i + 2];
+                            float a = glGrBrush_Colors[i + 3];
+
+                            swap_rgbaColors[i] = b;
+                            swap_rgbaColors[i + 1] = g;
+                            swap_rgbaColors[i + 2] = r;
+                            swap_rgbaColors[i + 3] = a;
+
+                            i += 4;
+                        }
+
+                        _rectFillShader.Render(glGrBrush._v2f, swap_rgbaColors);
+                    }
+                    break;
+                case BrushKind.CircularGraident:
+                    {
+                        RadialGradientBrush glGrBrush = RadialGradientBrush.Resolve((Drawing.RadialGradientBrush)brush);
+                        _radialGradientShader.Render(
+                                              glGrBrush._v2f,
+                                              glGrBrush._cx,
+                                              _vwHeight - glGrBrush._cy,
+                                              glGrBrush._r,
+                                              glGrBrush._invertedAff,
+                                              glGrBrush._lookupBmp);
+                    }
+                    break;
+                case BrushKind.PolygonGradient:
+                    {
+                        PolygonGradientBrush glGrBrush = PolygonGradientBrush.Resolve((Drawing.PolygonGradientBrush)brush, _tessTool);
+                        _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
+                    }
+                    break;
+                case BrushKind.Texture:
+                    {
+                        PixelFarm.Drawing.TextureBrush tbrush = (PixelFarm.Drawing.TextureBrush)brush;
+                        //TODO: review here
+                    }
+                    break;
+            }
+
+        }
+
+
         public void FillGfxPath(Drawing.Brush brush, PathRenderVx pathRenderVx)
         {
             if (brush.BrushKind == BrushKind.Solid)
@@ -1295,7 +1368,6 @@ namespace PixelFarm.DrawingGL
                 //find bound of path render vx
 
                 RectangleF bounds = pathRenderVx.GetBounds();
-
                 int bounds_left = (int)Math.Round(bounds.Left);
                 int bounds_top = (int)Math.Round(bounds.Top);
                 int size_w = (int)Math.Round(bounds.Width);
@@ -1431,21 +1503,9 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-        bool _maskMode;
-        public void DisableMask()
-        {
-            _maskMode = false;
-
-
-            ////restore back 
-            ////3. switch to normal blending mode 
-            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-            GL.Disable(EnableCap.StencilTest);
-        }
-
         public void EnableMask(PathRenderVx pathRenderVx)
         {
-            _maskMode = true;
+
 
             GL.ClearStencil(0); //set value for clearing stencil buffer 
                                 //actual clear here
@@ -1531,7 +1591,14 @@ namespace PixelFarm.DrawingGL
             GL.ColorMask(true, true, true, true);
             GL.BlendFunc(BlendingFactorSrc.DstAlpha, BlendingFactorDest.OneMinusDstAlpha);
         }
+        public void DisableMask()
+        {
 
+            ////restore back 
+            ////3. switch to normal blending mode 
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+            GL.Disable(EnableCap.StencilTest);
+        }
         public void DrawGfxPath(Drawing.Color color, PathRenderVx igpth)
         {
             //TODO: review here againerr
