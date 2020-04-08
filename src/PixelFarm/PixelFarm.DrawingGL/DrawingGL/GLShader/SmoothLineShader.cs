@@ -53,7 +53,7 @@ namespace PixelFarm.DrawingGL
                 ";
 
 
-                 
+
                 //version3
                 string fs = @"
                     precision mediump float;
@@ -66,7 +66,7 @@ namespace PixelFarm.DrawingGL
                          gl_FragColor =vec4(u_solidColor[0],u_solidColor[1],u_solidColor[2], 
                                             u_solidColor[3] *((v_distance* (v_dir[0])+ (1.0-v_distance)* (v_dir[1]))  * (1.0/p0)) * 0.55);  
                     }
-                "; 
+                ";
 
                 ////old version 2
                 //string fs = @"
@@ -209,6 +209,158 @@ namespace PixelFarm.DrawingGL
             //because original stroke width is the width of both side of
             //the line, but u_linewidth is the half of the strokeWidth            
             GL.DrawArrays(BeginMode.TriangleStrip, startAt, ncount);
+        }
+    }
+
+    class InvertAlphaLineSmoothShader : ColorFillShaderBase
+    {
+        //for stencil buffer ***
+        readonly ShaderVtxAttrib4f a_position;
+        readonly ShaderUniformVar1 u_linewidth;
+        readonly ShaderUniformVar1 u_p0;
+
+        float _cutPoint;
+        bool _loadCutPoint;
+        float _latestDrawW;
+
+        public InvertAlphaLineSmoothShader(ShaderSharedResource shareRes)
+             : base(shareRes)
+        {
+            //NOTE: during development, 
+            //new shader source may not recompile if you don't clear cache or disable cache feature
+            //like...
+            //EnableProgramBinaryCache = false;
+
+            if (!LoadCompiledShader())
+            {
+                //vertex shader source
+                string vs = @"                   
+                attribute vec4 a_position;     
+                uniform mat4 u_mvpMatrix; 
+                uniform float u_linewidth;
+                uniform vec2 u_ortho_offset;  
+                varying float v_distance; 
+                void main()
+                {                   
+                    float rad = a_position[3];
+                    v_distance= a_position[2]; 
+
+                    vec2 delta;
+                    if(v_distance <1.0){                                         
+                        delta = vec2(-sin(rad) * u_linewidth,cos(rad) * u_linewidth) + u_ortho_offset;   
+                    }else{                      
+                        delta = vec2(sin(rad) * u_linewidth,-cos(rad) * u_linewidth)+ u_ortho_offset;  
+                    } 
+                    gl_Position = u_mvpMatrix*  vec4(a_position[0] +delta[0],a_position[1]+delta[1],0,1); 
+                }
+                ";
+                //fragment source
+                //this is invert fragment shader *** 
+
+
+                //p0= cutpoint of inside,outside
+                //1/p0 = factor
+                string fs = @"
+                    precision mediump float;      
+                    uniform float p0; 
+                    varying float v_distance; 
+                    void main()
+                    {  
+                        if(v_distance < p0){                        
+                            gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0-((v_distance * (1.0 /p0))));
+                        }else if(v_distance> (1.0-p0)){                         
+                            gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0-(((1.0-v_distance)* (1.0 /p0))));
+                        }
+                        else{ 
+                            discard;                      
+                        } 
+                    }
+                ";
+
+
+                //string fs = @"
+                //    precision mediump float;                    
+                //    uniform vec4 u_solidColor; 
+                //    uniform float p0;
+                //    varying vec2 v_dir;
+                //    varying float v_distance;
+
+                //    void main()
+                //    {     
+                //        float factor= 1.0 /p0;            
+                //        if(v_distance < p0){                        
+                //            gl_FragColor = vec4(u_solidColor[0],u_solidColor[1],u_solidColor[2], 1.0-(u_solidColor[3] *(v_distance * factor)));
+                //        }else if(v_distance> (1.0-p0)){                         
+                //            gl_FragColor = vec4(u_solidColor[0],u_solidColor[1],u_solidColor[2], 1.0-(u_solidColor[3] *((1.0-v_distance)* factor)));
+                //        }
+                //        else{ 
+                //            discard;                      
+                //        } 
+                //    }
+                //";
+
+                //---------------------
+                if (!_shaderProgram.Build(vs, fs))
+                {
+                    return;
+                }
+
+                //-----------------------
+                SaveCompiledShader();
+            }
+
+
+            a_position = _shaderProgram.GetAttrV4f("a_position");
+            u_matrix = _shaderProgram.GetUniformMat4("u_mvpMatrix");
+            u_ortho_offset = _shaderProgram.GetUniform2("u_ortho_offset");
+            u_linewidth = _shaderProgram.GetUniform1("u_linewidth");
+            u_p0 = _shaderProgram.GetUniform1("p0");
+            _cutPoint = SetCutPoint(0.5f); //this are fixed for inverted alpha smooth line shader
+            
+        }
+
+
+
+        public void DrawTriangleStrips(float[] coords, int ncount)
+        {
+            SetCurrent();
+            CheckViewMatrix();
+            //----------------------------------- 
+            if (!_loadCutPoint) //just for reduce draw call
+            {
+                u_p0.SetValue(_cutPoint);
+                _loadCutPoint = true;
+            }
+
+            if (_latestDrawW != _shareRes._strokeWidth)//just for reduce draw call
+            {
+
+                u_linewidth.SetValue(_latestDrawW = _shareRes._strokeWidth);
+            }
+
+
+            a_position.LoadPureV4f(coords);
+            GL.DrawArrays(BeginMode.TriangleStrip, 0, ncount);
+        }
+
+        static float SetCutPoint(float value)
+        {
+            if (value <= 0.5)
+            {
+                return 0.5f;
+            }
+            else if (value <= 1.0)
+            {
+                return 0.45f;
+            }
+            else if (value > 1.0 && value < 3.0)
+            {
+                return 0.25f;
+            }
+            else
+            {
+                return 0.1f;
+            }
         }
     }
 

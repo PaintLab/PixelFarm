@@ -260,13 +260,13 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                 case TodoWithMagicWandProduct.CreateVxsRgnAndFill:
                     if (_tmpRgn != null)
                     {
-                        p.Fill(_tmpRgn);
+                        p.FillRegion(_tmpRgn);
                     }
                     break;
                 case TodoWithMagicWandProduct.CreateVxsRgnAndDraw:
                     if (_tmpRgn != null)
                     {
-                        p.Draw(_tmpRgn);
+                        p.DrawRegion(_tmpRgn);
                     }
                     break;
                 case TodoWithMagicWandProduct.CreateVxsRgnAndCopyToClipboard:

@@ -117,6 +117,7 @@ namespace PixelFarm.DrawingGL
         readonly RadialGradientFillShader _radialGradientShader;
 
         readonly SmoothLineShader _smoothLineShader;
+        readonly InvertAlphaLineSmoothShader _invertedAlphaSmoothLineShader;
 
         readonly GlyphImageStecilShader _glyphStencilShader;
         readonly BGRImageTextureShader _bgrImgTextureShader;
@@ -192,6 +193,8 @@ namespace PixelFarm.DrawingGL
 
             _solidColorFillShader = new SolidColorFillShader(_shareRes);
             _smoothLineShader = new SmoothLineShader(_shareRes);
+            _invertedAlphaSmoothLineShader = new InvertAlphaLineSmoothShader(_shareRes);
+
             _rectFillShader = new RectFillShader(_shareRes); //for gradient color fill, and  polygon-shape gradient fill
             _radialGradientShader = new RadialGradientFillShader(_shareRes);
             //
@@ -1086,7 +1089,7 @@ namespace PixelFarm.DrawingGL
             FillTriangleStrip(color, _rect_coords, 4);
         }
 
-        public void FillTriangleStrip(Drawing.Color color, float[] coords, int n)
+        void FillTriangleStrip(Drawing.Color color, float[] coords, int n)
         {
             if (color.A == 0) { return; }
             _solidColorFillShader.FillTriangleStripWithVertexBuffer(coords, n, color);
@@ -1274,6 +1277,55 @@ namespace PixelFarm.DrawingGL
             FillGfxPath(color, color, pathRenderVx);
         }
 
+        public void FillRect(Brush brush, double left, double top, double width, double height)
+        {
+            //left,bottom,width,height         
+
+            SimpleTessTool.CreateRectTessCoordsTriStrip((float)left, (float)(top + height), (float)width, (float)height, _rect_coords);
+            switch (brush.BrushKind)
+            {
+                default: throw new NotSupportedException();
+                case BrushKind.Solid:
+                    {
+                        SolidBrush sb = (SolidBrush)brush;
+                        _solidColorFillShader.FillTriangleStripWithVertexBuffer(_rect_coords, 4, sb.Color);
+                    }
+                    break;
+                case BrushKind.LinearGradient:
+                    {
+                        LinearGradientBrush glGrBrush = LinearGradientBrush.Resolve((Drawing.LinearGradientBrush)brush);
+                        _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
+                    }
+                    break;
+                case BrushKind.CircularGraident:
+                    {
+                        RadialGradientBrush glGrBrush = RadialGradientBrush.Resolve((Drawing.RadialGradientBrush)brush);
+                        _radialGradientShader.Render(
+                                              glGrBrush._v2f,
+                                              glGrBrush._cx,
+                                              _vwHeight - glGrBrush._cy,
+                                              glGrBrush._r,
+                                              glGrBrush._invertedAff,
+                                              glGrBrush._lookupBmp);
+                    }
+                    break;
+                case BrushKind.PolygonGradient:
+                    {
+                        PolygonGradientBrush glGrBrush = PolygonGradientBrush.Resolve((Drawing.PolygonGradientBrush)brush, _tessTool);
+                        _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
+                    }
+                    break;
+                case BrushKind.Texture:
+                    {
+                        PixelFarm.Drawing.TextureBrush tbrush = (PixelFarm.Drawing.TextureBrush)brush;
+                        //TODO: review here
+                    }
+                    break;
+            }
+
+        }
+
+
         public void FillGfxPath(Drawing.Brush brush, PathRenderVx pathRenderVx)
         {
             if (brush.BrushKind == BrushKind.Solid)
@@ -1292,7 +1344,6 @@ namespace PixelFarm.DrawingGL
                 //find bound of path render vx
 
                 RectangleF bounds = pathRenderVx.GetBounds();
-
                 int bounds_left = (int)Math.Round(bounds.Left);
                 int bounds_top = (int)Math.Round(bounds.Top);
                 int size_w = (int)Math.Round(bounds.Width);
@@ -1420,25 +1471,17 @@ namespace PixelFarm.DrawingGL
                 //move origin to (left,top) of bounds
                 int ox = OriginX;
                 int oy = OriginY;
-                SetCanvasOrigin(ox + bounds_left, oy + bounds_top); 
+                SetCanvasOrigin(ox + bounds_left, oy + bounds_top);
                 DrawImageWithMask(renderSx_mask.GetGLBitmap(), color_src, 0, 0);
                 SetCanvasOrigin(ox, oy);//restore
 
                 renderSx_mask.Dispose();
             }
-
-        }
-
-        public void DisableMask()
-        {
-            //restore back 
-            //3. switch to normal blending mode 
-            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-            GL.Disable(EnableCap.StencilTest);
         }
 
         public void EnableMask(PathRenderVx pathRenderVx)
         {
+
 
             GL.ClearStencil(0); //set value for clearing stencil buffer 
                                 //actual clear here
@@ -1498,19 +1541,43 @@ namespace PixelFarm.DrawingGL
             //TODO: review smooth border filll here ***
             //
             //float[] smoothBorder = fig.GetSmoothBorders(_smoothBorderBuilder);
-            //_invertAlphaFragmentShader.DrawTriangleStrips(smoothBorder, fig.BorderTriangleStripCount);
+            Color prevStrokeColor = StrokeColor;
+            float preStrokeW = StrokeWidth;
+            StrokeColor = Color.White;
+            StrokeWidth = 1.5f;
+            for (int b = 0; b < m; ++b)
+            {
+                Figure f = pathRenderVx.GetFig(b);
+                //-------------------------------------   
+                _invertedAlphaSmoothLineShader.DrawTriangleStrips(
+                               f.GetSmoothBorders(_smoothBorderBuilder),
+                               f.BorderTriangleStripCount);
 
-            //at this point alpha component is fill in to destination 
+                //_smoothLineShader.DrawTriangleStrips(
+                //               f.GetSmoothBorders(_smoothBorderBuilder),
+                //               f.BorderTriangleStripCount);
+            }
+            StrokeColor = prevStrokeColor;
+            StrokeWidth = preStrokeW;
+            //at this point,alpha component is fill in to destination 
             //-------------------------------------------------------------------------------------
             //2. then fill again!, 
             //we use alpha information from dest, 
             //so we set blend func to ... GL.BlendFunc(BlendingFactorSrc.DstAlpha, BlendingFactorDest.OneMinusDstAlpha)    
             GL.ColorMask(true, true, true, true);
+            GL.BlendFunc(BlendingFactorSrc.DstAlpha, BlendingFactorDest.OneMinusDstAlpha);
         }
+        public void DisableMask()
+        {
 
+            ////restore back 
+            ////3. switch to normal blending mode 
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+            GL.Disable(EnableCap.StencilTest);
+        }
         public void DrawGfxPath(Drawing.Color color, PathRenderVx igpth)
         {
-            //TODO: review here again
+            //TODO: review here againerr
             //use VBO?
             //
             switch (SmoothMode)
