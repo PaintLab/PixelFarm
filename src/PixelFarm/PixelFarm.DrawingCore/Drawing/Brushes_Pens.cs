@@ -243,11 +243,14 @@ namespace PixelFarm.Drawing
 
     public sealed class PolygonGradientBrush : GeometryGradientBrush
     {
+        /// <summary>
+        /// vertex contains (x,y and color)
+        /// </summary>
         public struct ColorVertex2d
         {
-            public float X;
-            public float Y;
-            public Color C;
+            public readonly float X;
+            public readonly float Y;
+            public readonly Color C;
             public ColorVertex2d(float x, float y, Color c)
             {
                 X = x;
