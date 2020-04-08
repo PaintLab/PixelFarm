@@ -1,6 +1,5 @@
 ﻿//MIT, 2019-present, WinterDev
 using System;
-using System.Collections.Generic;
 
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit;

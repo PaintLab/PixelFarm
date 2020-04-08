@@ -330,7 +330,7 @@ namespace LayoutFarm.CustomWidgets
         {
             if (_enableDoubleBuffer)
             {
-                MicroPainter painter = new MicroPainter(d);
+                var painter = new PixelFarm.Drawing.Internal.MicroPainter(d);
                 if (_builtInBackBuffer == null)
                 {
                     _builtInBackBuffer = painter.CreateOffscreenDrawBoard(this.Width, this.Height);
@@ -417,6 +417,6 @@ namespace LayoutFarm.CustomWidgets
                 base.RenderClientContent(d, updateArea);
             }
         }
- 
+
     }
 }

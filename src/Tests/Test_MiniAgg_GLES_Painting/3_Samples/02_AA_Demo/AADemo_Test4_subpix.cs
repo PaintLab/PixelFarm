@@ -1,7 +1,5 @@
 ﻿//MIT, 2017-present, WinterDev 
 using System;
-using PixelFarm.Drawing;
-using PixelFarm.CpuBlit;
 using Mini;
 namespace PixelFarm.CpuBlit.Sample_AADemoTest4
 {
@@ -33,7 +31,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
             //56 level grey scale buffer
 
 
-            CpuBlit.Imaging.TempMemPtr srcMemPtr = MemBitmap.GetBufferPtr(bmp);
+            CpuBlit.TempMemPtr srcMemPtr = MemBitmap.GetBufferPtr(bmp);
 
             int greyScaleBufferLen = imgW * height;
             byte[] greyScaleBuffer = new byte[greyScaleBufferLen];
@@ -99,7 +97,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
             //-------------------------
             //destination
 
-            CpuBlit.Imaging.TempMemPtr memPtr = MemBitmap.GetBufferPtr(dstBmp);
+            CpuBlit.TempMemPtr memPtr = MemBitmap.GetBufferPtr(dstBmp);
             //start pixel
             int destImgIndex = (x * 4) + (dstBmp.Stride * y);
             //start img src

@@ -2,34 +2,10 @@
 
 using System;
 using PixelFarm.CpuBlit;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-namespace PixelFarm.Drawing.Fonts
+using System.Collections.Generic; 
+namespace PixelFarm.Drawing 
 {
-    [StructLayout(LayoutKind.Sequential)]
-    public struct GlyphMatrix
-    {
-        public short unit_per_em;
-        public short ascender;
-        public short descender;
-        public short height;
-        public int advanceX;
-        public int advanceY;
-        public int bboxXmin;
-        public int bboxXmax;
-        public int bboxYmin;
-        public int bboxYmax;
-        public int img_width;
-        public int img_height;
-        public int img_horiBearingX;
-        public int img_horiBearingY;
-        public int img_horiAdvance;
-        public int img_vertBearingX;
-        public int img_vertBearingY;
-        public int img_vertAdvance;
-        public int bitmap_left;
-        public int bitmap_top;
-    }
+    
     public abstract class FontFace : IDisposable
     {
         public bool HasKerning { get; set; }
@@ -62,7 +38,7 @@ namespace PixelFarm.Drawing.Fonts
         /// </summary>
         public int codePoint;
 
-        public GlyphMatrix glyphMatrix;
+        
         /// <summary>
         /// 32 bpp image for render
         /// </summary>
@@ -141,9 +117,7 @@ namespace PixelFarm.Drawing.Fonts
         }
         public static void SetCacheActualFont(RequestFont r, ActualFont a)
         {
-            s_actualFonts[r.FontKey] = a;
-            //throw new NotSupportedException();
-            //RequestFont.SetCacheActualFont(r, a);
+            s_actualFonts[r.FontKey] = a; 
         }
     }
 }

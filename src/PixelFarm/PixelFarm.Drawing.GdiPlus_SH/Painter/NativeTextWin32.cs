@@ -5,8 +5,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Text;
- 
-using PixelFarm.Drawing.Fonts;
+  
 using Typography.FontManagement;
 using Typography.OpenFont;
 using Typography.OpenFont.Extensions;

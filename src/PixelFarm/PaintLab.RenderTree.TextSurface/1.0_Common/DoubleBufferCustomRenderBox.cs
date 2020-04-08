@@ -79,7 +79,7 @@ namespace LayoutFarm.TextEditing
             //
             if (_enableDoubleBuffer)
             {
-                MicroPainter painter = new MicroPainter(d);
+                var painter = new PixelFarm.Drawing.Internal.MicroPainter(d);
                 if (_builtInBackBuffer == null)
                 {
                     _builtInBackBuffer = painter.CreateOffscreenDrawBoard(this.Width, this.Height);
@@ -141,9 +141,9 @@ namespace LayoutFarm.TextEditing
                     //Rectangle updateArea2 = new Rectangle(0, 0, _builtInBackBuffer.Width, _builtInBackBuffer.Height);
 
                     Rectangle backup2 = updateArea.CurrentRect;
-                    updateArea.CurrentRect=new Rectangle(0, 0, _builtInBackBuffer.Width, _builtInBackBuffer.Height);
+                    updateArea.CurrentRect = new Rectangle(0, 0, _builtInBackBuffer.Width, _builtInBackBuffer.Height);
                     RenderElement.Render(ContentBox, d, updateArea);
-                    updateArea.CurrentRect =backup2;
+                    updateArea.CurrentRect = backup2;
 
 
                     //}
@@ -169,7 +169,7 @@ namespace LayoutFarm.TextEditing
                 RenderElement.Render(ContentBox, d, updateArea);
             }
         }
- 
+
 
     }
 

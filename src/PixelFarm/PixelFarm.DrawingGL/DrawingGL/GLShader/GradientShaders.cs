@@ -8,7 +8,7 @@ namespace PixelFarm.DrawingGL
     {
         readonly ShaderVtxAttrib2f a_position;
         readonly ShaderVtxAttrib4f a_color;
-      
+
         public RectFillShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
@@ -56,7 +56,7 @@ namespace PixelFarm.DrawingGL
             u_ortho_offset = _shaderProgram.GetUniform2("u_ortho_offset");
             a_color = _shaderProgram.GetAttrV4f("a_color");
             u_matrix = _shaderProgram.GetUniformMat4("u_mvpMatrix");
-            
+
         }
 
         /// <summary>
@@ -66,14 +66,13 @@ namespace PixelFarm.DrawingGL
         /// <param name="y">brush origin</param>
         /// <param name="v2fArray"></param>
         /// <param name="colors"></param>
-        public void Render(float x, float y, float[] v2fArray, float[] colors)
+        public void Render(float[] v2fArray, float[] colors)
         {
             SetCurrent();
             CheckViewMatrix();
             //----------------------------------------------------
             a_position.LoadPureV2f(v2fArray);
             a_color.LoadPureV4f(colors);
-            //u_local_offset.SetValue(x, y);
             GL.DrawArrays(BeginMode.Triangles, 0, v2fArray.Length / 2);
         }
     }
@@ -121,7 +120,7 @@ namespace PixelFarm.DrawingGL
                             vec4 pos=gl_FragCoord;                            
                             vec3 new_pos =  u_invertedTxMatrix* vec3(pos.x,pos.y,1.0);                             
                             vec4 c=  texture2D(s_texture,vec2(clamp((distance(vec2(new_pos.x,new_pos.y),vec2(u_center.x,u_center.y))/(u_center.z)),0.0,0.9),0.0));
-                            gl_FragColor= vec4(c[2],c[1],c[0],c[3]);
+                            gl_FragColor= vec4(c[0],c[1],c[2],c[3]);
                         }
                     ";
 
@@ -217,7 +216,7 @@ namespace PixelFarm.DrawingGL
             CheckViewMatrix();
             //----------------------------------------------------
             a_position.LoadPureV2f(v2fArray);
-            u_center.SetValue(cx, cy, r);
+            u_center.SetValue(cx + _orthov_offsetX, cy - _orthov_offsetY, r);
             UploadGradientLookupTable(lookupBmp);
 
             if (invertedAffineTx != null)

@@ -4,7 +4,6 @@ using System;
 using PixelFarm.Drawing;
 using Mini;
 using PixelFarm.DrawingGL;
-using PixelFarm.Drawing.Fonts;
 using Typography.FontManagement;
 
 namespace OpenTkEssTest

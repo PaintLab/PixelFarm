@@ -135,7 +135,7 @@ namespace PixelFarm.Drawing.WinGdi
                 CpuBlit.MemBitmap memBmp = destImg as CpuBlit.MemBitmap;
                 if (memBmp != null)
                 {
-                    CpuBlit.Imaging.TempMemPtr tmpPtr = CpuBlit.MemBitmap.GetBufferPtr(memBmp);
+                    PixelFarm.CpuBlit.TempMemPtr tmpPtr = CpuBlit.MemBitmap.GetBufferPtr(memBmp);
                     byte* head = (byte*)tmpPtr.Ptr;
                     _gdigsx.RenderTo(head);
                     tmpPtr.Dispose();

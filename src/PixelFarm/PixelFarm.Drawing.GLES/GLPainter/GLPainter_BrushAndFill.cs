@@ -171,22 +171,27 @@ namespace PixelFarm.DrawingGL
                 case BrushKind.LinearGradient:
                 case BrushKind.PolygonGradient:
                     {
-                        //resolve internal linear gradient brush impl
+                        //resolve internal linear gradient brush impl 
 
-                        using (Tools.BorrowVxs(out var v1))
-                        using (Tools.BorrowRect(out var rect))
+                        if (_currentClipTech == ClipingTechnique.ClipMask)
                         {
-                            rect.SetRectFromLTWH(left, top, width, height);
-                            rect.MakeVxs(v1);
-
-                            //convert to render vx
-                            //TODO: optimize here ***
-                            //we don't want to create path render vx everytime
-                            //
-                            // 
-                            using (PathRenderVx pathRenderVx = PathRenderVx.Create(_pathRenderVxBuilder.Build(v1)))
+                            _pcx.FillRect(_currentBrush, left, top, width, height);
+                        }
+                        else
+                        {
+                            using (Tools.BorrowVxs(out var v1))
+                            using (Tools.BorrowRect(out var rect))
                             {
-                                _pcx.FillGfxPath(_currentBrush, pathRenderVx);
+                                rect.SetRectFromLTWH(left, top, width, height);
+                                rect.MakeVxs(v1);
+
+                                //convert to render vx
+                                //TODO: optimize here ***
+                                //we don't want to create path render vx everytime 
+                                using (PathRenderVx pathRenderVx = PathRenderVx.Create(_pathRenderVxBuilder.Build(v1)))
+                                {
+                                    _pcx.FillGfxPath(_currentBrush, pathRenderVx);
+                                }
                             }
                         }
                     }

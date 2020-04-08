@@ -17,7 +17,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         VxsTextPrinter _vxsTextPrinter;
 
         TextPrinterBase _printer;
-        LayoutFarm.OpenFontTextService _openFontTextServices;
+        OpenFontTextService _openFontTextServices;
 
         public MiniAggWithTextPrinterDemo()
         {
@@ -86,7 +86,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 
             if (_vxsTextPrinter == null)
             {
-                _openFontTextServices = new LayoutFarm.OpenFontTextService();
+                _openFontTextServices = new OpenFontTextService();
                 _vxsTextPrinter = new VxsTextPrinter(p, _openFontTextServices);
             }
 

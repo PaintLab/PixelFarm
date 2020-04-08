@@ -88,7 +88,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
 
             unsafe
             {
-                MemMx.memcpy(
+                PixelFarm.Drawing.Internal.MemMx.memcpy(
                     (byte*)bmpdata.Scan0,
                     (byte*)srcPtr.Ptr,
                      srcPtr.LengthInBytes);

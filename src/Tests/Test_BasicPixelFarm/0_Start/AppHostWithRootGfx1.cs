@@ -12,8 +12,8 @@ namespace LayoutFarm
         RootGraphic _rootgfx;
         public AppHostWithRootGfx() { }
         public void Setup(AppHostConfig appHostConfig)
-        {   
-            
+        {
+
             _rootgfx = appHostConfig.RootGfx;
             _primaryScreenWorkingAreaW = appHostConfig.ScreenW;
             _primaryScreenWorkingAreaH = appHostConfig.ScreenH;
@@ -43,7 +43,7 @@ namespace LayoutFarm
                         //#if DEBUG
                         //                        memBmp._dbugNote = "img;
                         //#endif
-                        
+
                         PixelFarm.CpuBlit.BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(gdiBmp, memBmp);
                         return memBmp;
                     }
@@ -93,7 +93,7 @@ namespace LayoutFarm
 #if DEBUG
                                 memBmp._dbugNote = "img" + imgName;
 #endif
-                               BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(gdiBmp, memBmp);
+                                BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(gdiBmp, memBmp);
                                 return memBmp;
                             }
 
