@@ -212,20 +212,19 @@ namespace PixelFarm.DrawingGL
         }
     }
 
-
-
     class InvertAlphaLineSmoothShader : ShaderBase
     {
         //for stencil buffer ***
-        ShaderVtxAttrib4f a_position;
-        ShaderUniformMatrix4 u_matrix;
+        readonly ShaderVtxAttrib4f a_position;
+        readonly ShaderUniformMatrix4 u_matrix;
 
-        ShaderUniformVar1 u_linewidth;
-        ShaderUniformVar1 u_p0;
+        readonly ShaderUniformVar1 u_linewidth;
+        readonly ShaderUniformVar1 u_p0;
         //float _strokeWidth = 0.5f;
         int _orthoviewVersion = -1;
         float _cutPoint;
         bool _loadCutPoint;
+        float _latestDrawW;
 
         public InvertAlphaLineSmoothShader(ShaderSharedResource shareRes)
              : base(shareRes)
@@ -342,14 +341,19 @@ namespace PixelFarm.DrawingGL
             SetCurrent();
             CheckViewMatrix();
             //----------------------------------- 
-            if (!_loadCutPoint)
+            if (!_loadCutPoint) //just for reduce draw call
             {
                 u_p0.SetValue(_cutPoint);
+                _loadCutPoint = true;
             }
 
-            a_position.LoadPureV4f(coords);
+            if (_latestDrawW != _shareRes._strokeWidth)//just for reduce draw call
+            {
+                u_linewidth.SetValue(_latestDrawW = _shareRes._strokeWidth);
+            }
 
-            u_linewidth.SetValue(_shareRes._strokeWidth);
+
+            a_position.LoadPureV4f(coords);
             GL.DrawArrays(BeginMode.TriangleStrip, 0, ncount);
         }
 
