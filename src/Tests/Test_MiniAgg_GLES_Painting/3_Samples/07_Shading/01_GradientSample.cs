@@ -64,12 +64,34 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
 
 
             //3. polygon gradient: this version, just a simple rect 
+
+            //PolygonGradientBrush.ColorVertex2d[] vertices = new PolygonGradientBrush.ColorVertex2d[]
+            // {
+            //        new PolygonGradientBrush.ColorVertex2d(5,50,KnownColors.OrangeRed),
+            //        new PolygonGradientBrush.ColorVertex2d(50,50,Color.Black),
+            //        new PolygonGradientBrush.ColorVertex2d(50,5,Color.Yellow),
+            //        new PolygonGradientBrush.ColorVertex2d(5,5,Color.Blue),
+            // };
+            //PolygonGradientBrush.ColorVertex2d[] vertices = new PolygonGradientBrush.ColorVertex2d[]
+            //{
+            //        new PolygonGradientBrush.ColorVertex2d(5,300,KnownColors.OrangeRed),
+            //        new PolygonGradientBrush.ColorVertex2d(300,300,Color.Black),
+            //        new PolygonGradientBrush.ColorVertex2d(300,5,Color.Yellow),
+            //        new PolygonGradientBrush.ColorVertex2d(5,5,Color.Blue),
+            //};
+            //PolygonGradientBrush.ColorVertex2d[] vertices = new PolygonGradientBrush.ColorVertex2d[]
+            //{
+            //    new PolygonGradientBrush.ColorVertex2d(5,5,Color.Blue),
+            //    new PolygonGradientBrush.ColorVertex2d(220,5,Color.Yellow),
+            //    new PolygonGradientBrush.ColorVertex2d(220,100,Color.Black),
+            //    new PolygonGradientBrush.ColorVertex2d(5,220,KnownColors.OrangeRed),
+            //};
             PolygonGradientBrush.ColorVertex2d[] vertices = new PolygonGradientBrush.ColorVertex2d[]
             {
-                new PolygonGradientBrush.ColorVertex2d(0,0,KnownColors.OrangeRed),
-                new PolygonGradientBrush.ColorVertex2d(300,0,Color.Black),
-                new PolygonGradientBrush.ColorVertex2d(300,400,Color.Yellow),
-                new PolygonGradientBrush.ColorVertex2d(0,400,Color.Blue),
+                    new PolygonGradientBrush.ColorVertex2d(0,0,Color.Blue),
+                    new PolygonGradientBrush.ColorVertex2d(300,0,Color.Yellow),
+                    new PolygonGradientBrush.ColorVertex2d(300,300,Color.Black),
+                    new PolygonGradientBrush.ColorVertex2d(0,300,KnownColors.OrangeRed),
             };
             _polygonGradientBrush = new PolygonGradientBrush(vertices);
 
@@ -84,7 +106,7 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
                 AffineMat aff1 = AffineMat.GetScaleMat(2);
                 _triangleVxs = v1.CreateTrim(aff1);
 
-                AffineMat tx = AffineMat.GetTranslateMat(100, 120);
+                AffineMat tx = AffineMat.GetTranslateMat(200, 220);
                 _triangleVxs2 = tx.TransformToVxs(_triangleVxs, v2).CreateTrim();
             }
         }
@@ -133,14 +155,14 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
             {
                 glPainter2MaskColor = p.EnableMask;
                 glPainter.UseTwoColorsMask = EnableGLPainterTwoColorsMask;
-               
+
             }
 
             //p.FillRect(0, 100, 500, 500); 
             //p.FillRect(0, 200, 200, 50);
 
-            p.Fill(_triangleVxs);
 
+            p.Fill(_triangleVxs);
             if (UseOffset)
             {
                 float prev_ox = p.OriginX;
@@ -151,11 +173,10 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
             }
             else
             {
-                //p.Fill(_triangleVxs);
                 p.Fill(_triangleVxs2);
             }
 
-            ////-------------               
+            //-------------               
 
             p.CurrentBrush = prevBrush;
 

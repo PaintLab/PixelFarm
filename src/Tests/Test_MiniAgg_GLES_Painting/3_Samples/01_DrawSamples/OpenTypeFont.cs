@@ -12,7 +12,6 @@ using System.IO;
 
 using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.Drawing;
-using PixelFarm.Drawing.Fonts;
 //
 using Typography.OpenFont;
 using Typography.Contours;
@@ -33,30 +32,20 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
         public override void Init()
         {
-
-
             string fontfile = YourImplementation.FrameworkInitWinGDI.GetFontLoader().GetInstalledTypeface("tahoma", TypefaceStyle.Regular).FontPath;
 
             this.FillBG = true;
             float sizeInPts = 72;
-
-            char testChar = 'B';
 
             using (var fs = new FileStream(fontfile, FileMode.Open, FileAccess.Read))
             {
                 var reader = new OpenFontReader();
                 //1. read typeface from font file
                 Typeface typeFace = reader.Read(fs);
-
-                //test left & right that has kern distance
-                ushort left_g_index = typeFace.GetGlyphIndex('A');
-                ushort right_g_index = typeFace.GetGlyphIndex('Y');
-                short kern_distance = typeFace.GetKernDistance(left_g_index, right_g_index);
-
                 //2. glyph-to-vxs builder
                 var builder = new GlyphOutlineBuilder(typeFace);
-                _left_vxs = BuildVxsForGlyph(builder, 'A', sizeInPts);
-                _right_vxs = BuildVxsForGlyph(builder, 'Y', sizeInPts);
+                _left_vxs = BuildVxsForGlyph(builder, 'p', sizeInPts);
+                _right_vxs = BuildVxsForGlyph(builder, 'f', sizeInPts);
             }
         }
 
@@ -111,7 +100,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
 
                 p.Fill(_left_vxs);
-                p.SetOrigin(x + 50, y + 20);
+                p.SetOrigin(x + 50, y + 50);
                 p.Fill(_right_vxs);
                 p.SetOrigin(x, y);
             }
