@@ -24,7 +24,6 @@ namespace PixelFarm.Drawing
 
     public sealed class SolidBrush : Brush
     {
-
         public SolidBrush()
         {
             //default
@@ -36,7 +35,6 @@ namespace PixelFarm.Drawing
         }
         public Color Color { get; }
         public override BrushKind BrushKind => BrushKind.Solid;
-
         public override object InnerBrush { get; set; }
         public override void Dispose()
         {

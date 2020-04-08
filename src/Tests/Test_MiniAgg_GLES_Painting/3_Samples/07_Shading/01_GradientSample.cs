@@ -139,8 +139,8 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
             //p.FillRect(0, 100, 500, 500); 
             //p.FillRect(0, 200, 200, 50);
 
-            p.Fill(_triangleVxs);
 
+            p.Fill(_triangleVxs);
             if (UseOffset)
             {
                 float prev_ox = p.OriginX;
@@ -154,7 +154,7 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
                 //p.Fill(_triangleVxs);
                 p.Fill(_triangleVxs2);
             }
-
+           
             ////-------------               
 
             p.CurrentBrush = prevBrush;

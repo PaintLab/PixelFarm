@@ -1475,11 +1475,16 @@ namespace PixelFarm.DrawingGL
         //2. for color source (instead of vertex color) 
 
         ShaderUniformVar2 _offset;
+
+
         /// <summary>
         /// color texture for color src
         /// </summary>
         ShaderUniformVar1 _u_color_src;
         ShaderVtxAttrib2f _texCoord_color;
+
+
+        ShaderUniformVar2 _colorSrcOffset;
 
         public MaskShaderBase(ShaderSharedResource shareRes)
             : base(shareRes)
@@ -1491,6 +1496,7 @@ namespace PixelFarm.DrawingGL
             _offset = _shaderProgram.GetUniform2("u_offset");
             _u_color_src = _shaderProgram.GetUniform1("s_color_src");
             _texCoord_color = _shaderProgram.GetAttrV2f("a_texCoord_color");
+            _colorSrcOffset = _shaderProgram.GetUniform2("u_color_src_offset");
         }
         protected override void SetVarsBeforeRender()
         {
@@ -1499,6 +1505,13 @@ namespace PixelFarm.DrawingGL
 
         int _colorBmpW;
         int _colorBmpH;
+        float _colorSrcOffsetX;
+        float _colorSrcOffsetY;
+        public void SetColorSourceOffset(float dx, float dy)
+        {
+            _colorSrcOffsetX = dx;
+            _colorSrcOffsetY = dy;
+        }
         /// <summary>
         /// load glbmp before draw
         /// </summary>
@@ -1535,6 +1548,7 @@ namespace PixelFarm.DrawingGL
                 float* imgVertices = stackalloc float[7 * 4];
                 AssignVertice7_4(quad, srcRect, colorSrc, imgVertices, !_latestBmpYFlipped);
 
+                _colorSrcOffset.SetValue(_colorSrcOffsetX / maskSrc.Width, _colorSrcOffsetY / maskSrc.Height);
                 a_position.UnsafeLoadMixedV3f(imgVertices, 7);
                 a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 7);
                 _texCoord_color.UnsafeLoadMixedV2f(imgVertices + 5, 7);
@@ -1560,6 +1574,8 @@ namespace PixelFarm.DrawingGL
                 float* imgVertices = stackalloc float[7 * 4];
                 AssignVertice7_4(quad, srcRect, colorSrc, imgVertices, !_latestBmpYFlipped);
 
+
+                //_colorSrcOffset.SetValue(_colorSrcOffsetX / maskSrc.Width, _colorSrcOffsetY / maskSrc.Height);
                 a_position.UnsafeLoadMixedV3f(imgVertices, 7);
                 a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 7);
                 _texCoord_color.UnsafeLoadMixedV2f(imgVertices + 5, 7);
@@ -1574,7 +1590,7 @@ namespace PixelFarm.DrawingGL
         public OneColorMaskShader(ShaderSharedResource shareRes)
            : base(shareRes)
         {
- 
+
             string vs = @"                 
             attribute vec4 a_position;
             attribute vec2 a_texCoord;
@@ -1582,7 +1598,8 @@ namespace PixelFarm.DrawingGL
 
             uniform vec2 u_ortho_offset;
             uniform vec2 u_offset;
-            uniform mat4 u_mvpMatrix;
+            uniform mat4 u_mvpMatrix;            
+            uniform vec2 u_color_src_offset;
 
             varying vec2 v_texCoord;
             varying vec2 v_color_texCoord;
@@ -1591,9 +1608,9 @@ namespace PixelFarm.DrawingGL
             {
                 gl_Position = u_mvpMatrix * (a_position + vec4(u_offset + u_ortho_offset, 0, 0));
                 v_texCoord = a_texCoord;
-                v_color_texCoord = a_texCoord_color;
+                v_color_texCoord = a_texCoord_color + u_color_src_offset;
             }
-            "; 
+            ";
             string fs = @"
                       precision mediump float; 
                       uniform sampler2D s_texture;
@@ -1633,6 +1650,7 @@ namespace PixelFarm.DrawingGL
                 uniform vec2 u_ortho_offset;
                 uniform vec2 u_offset;                
                 uniform mat4 u_mvpMatrix; 
+                uniform vec2 u_color_src_offset;
 
                 varying vec2 v_texCoord; 
                 varying vec2 v_color_texCoord; 
@@ -1641,7 +1659,7 @@ namespace PixelFarm.DrawingGL
                 {                      
                     gl_Position = u_mvpMatrix* (a_position+ vec4(u_offset+u_ortho_offset,0,0));
                     v_texCoord =  a_texCoord;
-                    v_color_texCoord= a_texCoord_color;
+                    v_color_texCoord= a_texCoord_color +u_color_src_offset;
                 }	 
                ";
 
@@ -1676,7 +1694,7 @@ namespace PixelFarm.DrawingGL
             //          precision mediump float; 
             //          uniform sampler2D s_texture;
             //          uniform sampler2D s_color_src;
-                       
+
             //          varying vec2 v_texCoord; 
             //          varying vec2 v_color_texCoord;
             //          void main()
