@@ -1294,31 +1294,7 @@ namespace PixelFarm.DrawingGL
                 case BrushKind.LinearGradient:
                     {
                         LinearGradientBrush glGrBrush = LinearGradientBrush.Resolve((Drawing.LinearGradientBrush)brush);
-
-                        float[] glGrBrush_Colors = glGrBrush._colors;
-                        float[] swap_rgbaColors = new float[glGrBrush_Colors.Length];
-                        for (int i = 0; i < swap_rgbaColors.Length;)
-                        {
-                            ////a,b,g,r 
-                            //s_colorList.Add((color & 0xff) / 255f);//r
-                            //s_colorList.Add(((color >> 8) & 0xff) / 255f);//g 
-                            //s_colorList.Add(((color >> 16) & 0xff) / 255f); //b
-                            //s_colorList.Add(((color >> 24) & 0xff) / 255f); //a
-
-                            float r = glGrBrush_Colors[i];
-                            float g = glGrBrush_Colors[i + 1];
-                            float b = glGrBrush_Colors[i + 2];
-                            float a = glGrBrush_Colors[i + 3];
-
-                            swap_rgbaColors[i] = b;
-                            swap_rgbaColors[i + 1] = g;
-                            swap_rgbaColors[i + 2] = r;
-                            swap_rgbaColors[i + 3] = a;
-
-                            i += 4;
-                        }
-
-                        _rectFillShader.Render(glGrBrush._v2f, swap_rgbaColors);
+                        _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
                     }
                     break;
                 case BrushKind.CircularGraident:

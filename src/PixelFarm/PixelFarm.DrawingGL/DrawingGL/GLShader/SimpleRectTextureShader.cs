@@ -1622,7 +1622,7 @@ namespace PixelFarm.DrawingGL
                       {   
                             vec4 m = texture2D(s_texture,v_texCoord);
                             vec4 c = texture2D(s_color_src,v_color_texCoord);                            
-                            gl_FragColor= vec4(c[2], c[1], c[0] , c[3] * m[0]);                            
+                            gl_FragColor= vec4(c[0], c[1], c[2] , c[3] * m[0]);                            
                       }
                 ";
             //debug
@@ -1685,7 +1685,7 @@ namespace PixelFarm.DrawingGL
                             vec4 m = texture2D(s_texture,v_texCoord);
                             vec4 c = texture2D(s_color_src,v_color_texCoord);
                             float c2_compo= floor(m[0]);
-                            gl_FragColor= vec4(c[2], c[1], c[0] , c[3] * (m[2]*c2_compo + m[0]*(1.0-c2_compo)));                            
+                            gl_FragColor= vec4(c[0], c[1], c[2] , c[3] * (m[2]*c2_compo + m[0]*(1.0-c2_compo)));                            
                       }
                 ";
 

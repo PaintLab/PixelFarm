@@ -120,7 +120,7 @@ namespace PixelFarm.DrawingGL
                             vec4 pos=gl_FragCoord;                            
                             vec3 new_pos =  u_invertedTxMatrix* vec3(pos.x,pos.y,1.0);                             
                             vec4 c=  texture2D(s_texture,vec2(clamp((distance(vec2(new_pos.x,new_pos.y),vec2(u_center.x,u_center.y))/(u_center.z)),0.0,0.9),0.0));
-                            gl_FragColor= vec4(c[2],c[1],c[0],c[3]);
+                            gl_FragColor= vec4(c[0],c[1],c[2],c[3]);
                         }
                     ";
 

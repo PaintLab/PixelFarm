@@ -27,30 +27,22 @@
 using System.Runtime.InteropServices;
 namespace PixelFarm.DrawingGL
 {
-    [StructLayout(LayoutKind.Sequential)]
-    struct VertexC4V3f
+     
+    struct ColorAndCoord
     {
-        public uint color;
-        public float x;
-        public float y;
-        float z;
-        public VertexC4V3f(uint color, float x, float y)
+        public readonly PixelFarm.Drawing.Color color;
+        public readonly float x;
+        public readonly float y; 
+        public ColorAndCoord(PixelFarm.Drawing.Color color, float x, float y)
         {
             this.color = color;
             this.x = x;
-            this.y = y;
-            z = 0;
-        }
-
+            this.y = y; 
+        } 
         public override string ToString()
         {
             return x + "," + y;
-        }
-
-        public const int SIZE_IN_BYTES = sizeof(uint) + sizeof(float) * 3;
-        //public const int VX_OFFSET = sizeof(uint);
-        //public const OpenTK.Graphics.OpenGL.VertexPointerType VX_PTR_TYPE = OpenTK.Graphics.OpenGL.VertexPointerType.Float;
-        //public const int N_COORDS = 3;
+        } 
     }
     //[StructLayout(LayoutKind.Sequential)]
     //struct VertexV2S1Cvr
