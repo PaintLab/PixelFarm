@@ -211,7 +211,7 @@ namespace PixelFarm.DrawingGL
             GL.DrawArrays(BeginMode.TriangleStrip, startAt, ncount);
         }
     }
-    
+
 
 
     class InvertAlphaLineSmoothShader : ShaderBase
@@ -221,6 +221,8 @@ namespace PixelFarm.DrawingGL
         ShaderUniformMatrix4 u_matrix;
         ShaderUniformVar4 u_solidColor;
         ShaderUniformVar1 u_linewidth;
+        ShaderUniformVar1 u_p0;
+
         Drawing.Color _strokeColor;
         float _strokeWidth = 0.5f;
         int _orthoviewVersion = -1;
@@ -236,16 +238,11 @@ namespace PixelFarm.DrawingGL
             {
                 //vertex shader source
                 string vs = @"                   
-                attribute vec4 a_position;    
-
-                uniform mat4 u_mvpMatrix;
-                uniform vec4 u_solidColor; 
-                uniform float u_linewidth;
-
-                varying vec4 v_color; 
-                varying float v_distance;
-                varying float p0;
-            
+                attribute vec4 a_position;     
+                uniform mat4 u_mvpMatrix; 
+                uniform float u_linewidth; 
+                varying vec2 v_dir;
+                varying float v_distance; 
                 void main()
                 {   
                 
@@ -255,45 +252,37 @@ namespace PixelFarm.DrawingGL
                     vec4 delta;
                     if(v_distance <1.0){                                         
                         delta = vec4(-sin(rad) * u_linewidth,cos(rad) * u_linewidth,0,0);                       
+                        v_dir = vec2(0.80,0.0);
                     }else{                      
                         delta = vec4(sin(rad) * u_linewidth,-cos(rad) * u_linewidth,0,0);
-                    }
-    
-                    if(u_linewidth <= 0.5){
-                        p0 = 0.5;      
-                    }else if(u_linewidth <=1.0){
-                        p0 = 0.45;  
-                    }else if(u_linewidth>1.0 && u_linewidth<3.0){                    
-                        p0 = 0.25;  
-                    }else{
-                        p0= 0.1;
-                    }               
-                     
-                    gl_Position = u_mvpMatrix*  vec4(a_position[0] +delta[0],a_position[1]+delta[1],0,1);
-                    v_color= u_solidColor;
+                        v_dir = vec2(0.0,0.80);
+                    } 
+                    gl_Position = u_mvpMatrix*  vec4(a_position[0] +delta[0],a_position[1]+delta[1],0,1); 
                 }
                 ";
                 //fragment source
                 //this is invert fragment shader *** 
                 //so we 
                 string fs = @"
-                    precision mediump float;
-                    varying vec4 v_color;  
+                    precision mediump float;                    
+                    uniform vec4 u_solidColor; 
+                    uniform float p0;
+                    varying vec2 v_dir;
                     varying float v_distance;
-                    varying float p0;                
+                                    
                     void main()
                     {
-                        float d0= v_distance; 
+                        
                         float p1= 1.0-p0;
                         float factor= 1.0 /p0;
             
-                        if(d0 < p0){                        
-                            gl_FragColor = vec4(v_color[0],v_color[1],v_color[2], 1.0-(v_color[3] *(d0 * factor)));
-                        }else if(d0> p1){                         
-                            gl_FragColor = vec4(v_color[0],v_color[1],v_color[2], 1.0-(v_color[3] *((1.0-d0)* factor)));
+                        if(v_distance < p0){                        
+                            gl_FragColor = vec4(u_solidColor[0],u_solidColor[1],u_solidColor[2], 1.0-(u_solidColor[3] *(v_distance * factor)));
+                        }else if(v_distance> p1){                         
+                            gl_FragColor = vec4(u_solidColor[0],u_solidColor[1],u_solidColor[2], 1.0-(u_solidColor[3] *((1.0-v_distance)* factor)));
                         }
                         else{ 
-                           gl_FragColor = vec4(0,0,0,0);                        
+                            discard;                      
                         } 
                     }
                 ";
@@ -312,6 +301,7 @@ namespace PixelFarm.DrawingGL
             u_matrix = _shaderProgram.GetUniformMat4("u_mvpMatrix");
             u_solidColor = _shaderProgram.GetUniform4("u_solidColor");
             u_linewidth = _shaderProgram.GetUniform1("u_linewidth");
+            u_p0 = _shaderProgram.GetUniform1("p0");
             _strokeColor = Drawing.Color.Black;
         }
 
@@ -330,6 +320,9 @@ namespace PixelFarm.DrawingGL
             SetCurrent();
             CheckViewMatrix();
             //-----------------------------------
+
+
+            SetLineWidth(_strokeWidth);
             u_solidColor.SetValue(
                   _strokeColor.R / 255f,
                   _strokeColor.G / 255f,
@@ -337,6 +330,7 @@ namespace PixelFarm.DrawingGL
                   _strokeColor.A / 255f);
             a_position.LoadPureV4f(coords);
             u_linewidth.SetValue(_strokeWidth);
+
             GL.DrawArrays(BeginMode.TriangleStrip, 0, ncount);
         }
         public void DrawTriangleStrips(int startAt, int ncount)
@@ -345,12 +339,33 @@ namespace PixelFarm.DrawingGL
             CheckViewMatrix();
 
             _shareRes.AssignStrokeColorToVar(u_solidColor);
+
+            SetLineWidth(_strokeWidth);
             u_linewidth.SetValue(1.0f / 2f);
             //
             a_position.LoadLatest();
             //because original stroke width is the width of both side of
             //the line, but u_linewidth is the half of the strokeWidth            
             GL.DrawArrays(BeginMode.TriangleStrip, startAt, ncount);
+        }
+        void SetLineWidth(float value)
+        {
+            if (value <= 0.5)
+            {
+                u_p0.SetValue(0.5f);
+            }
+            else if (value <= 1.0)
+            {
+                u_p0.SetValue(0.45f);
+            }
+            else if (value > 1.0 && value < 3.0)
+            {
+                u_p0.SetValue(0.25f);
+            }
+            else
+            {
+                u_p0.SetValue(0.1f);
+            }
         }
     }
 
