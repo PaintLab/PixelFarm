@@ -99,7 +99,7 @@ namespace PixelFarm.DrawingGL
 
             for (int m = 0; m < j; ++m)
             {
-                VertexC4V3f v = s_vertices[m];
+                ColorAndCoord v = s_vertices[m];
                 double v_x = v.x;
                 double v_y = v.y;
 
@@ -108,12 +108,12 @@ namespace PixelFarm.DrawingGL
                 s_v2fList.Add((float)v_x);
                 s_v2fList.Add((float)v_y);
 
-                uint color = v.color;
-                //a,b,g,r 
-                s_colorList.Add((color & 0xff) / 255f);//r
-                s_colorList.Add(((color >> 8) & 0xff) / 255f);//g 
-                s_colorList.Add(((color >> 16) & 0xff) / 255f); //b
-                s_colorList.Add(((color >> 24) & 0xff) / 255f); //a
+                Color color = v.color;
+
+                s_colorList.Add(color.R / 255f);
+                s_colorList.Add(color.G / 255f);
+                s_colorList.Add(color.B / 255f);
+                s_colorList.Add(color.A / 255f);
             }
 
             v2f = s_v2fList.ToArray();
@@ -122,24 +122,24 @@ namespace PixelFarm.DrawingGL
 
         static List<float> s_v2fList = new List<float>();
         static List<float> s_colorList = new List<float>();
-        static ArrayList<VertexC4V3f> s_vertices = new ArrayList<VertexC4V3f>(); //reusable
+        static ArrayList<ColorAndCoord> s_vertices = new ArrayList<ColorAndCoord>(); //reusable
 
-        static void AddRect(ArrayList<VertexC4V3f> vrx,
-          uint c1, uint c2,
+        static void AddRect(ArrayList<ColorAndCoord> vrx,
+          Color c1, Color c2,
           float x, float y,
           float w, float h)
         {
             //horizontal gradient
-            vrx.Append(new VertexC4V3f(c1, x, y));
-            vrx.Append(new VertexC4V3f(c2, x + w, y));
-            vrx.Append(new VertexC4V3f(c2, x + w, y + h));
-            vrx.Append(new VertexC4V3f(c2, x + w, y + h));
-            vrx.Append(new VertexC4V3f(c1, x, y + h));
-            vrx.Append(new VertexC4V3f(c1, x, y));
+            vrx.Append(new ColorAndCoord(c1, x, y));
+            vrx.Append(new ColorAndCoord(c2, x + w, y));
+            vrx.Append(new ColorAndCoord(c2, x + w, y + h));
+            vrx.Append(new ColorAndCoord(c2, x + w, y + h));
+            vrx.Append(new ColorAndCoord(c1, x, y + h));
+            vrx.Append(new ColorAndCoord(c1, x, y));
         }
 
         static void CalculateLinearGradientVxs(
-          ArrayList<VertexC4V3f> vrx,
+          ArrayList<ColorAndCoord> vrx,
           bool isFirstPane,
           bool isLastPane, float x1, float distance,
           ColorStop stop1, ColorStop stop2)
@@ -147,9 +147,8 @@ namespace PixelFarm.DrawingGL
             //TODO: review here again
             //should not fix 600,800,1800 etc
 
-            uint c1_color = (uint)stop1.Color.ToARGB();
-            uint c2_color = (uint)stop2.Color.ToARGB();
-
+            Color c1_color = stop1.Color;
+            Color c2_color = stop2.Color;
 
             if (isFirstPane)
             {
@@ -334,10 +333,10 @@ namespace PixelFarm.DrawingGL
               out float[] v2f,
               out float[] colors)
         {
-            
+
 
             //reverse user input order
-            List<Drawing.PolygonGradientBrush.ColorVertex2d> vertices = linearGradient.Vertices;    
+            List<Drawing.PolygonGradientBrush.ColorVertex2d> vertices = linearGradient.Vertices;
             s_v2fList.Clear();
             s_colorList.Clear();
 
@@ -369,7 +368,7 @@ namespace PixelFarm.DrawingGL
 
 
                 //a,b,g,r 
-                 
+
                 colors2[n1] = (color.B / 255f);//r
                 colors2[n1 + 1] = (color.G / 255f);//g 
                 colors2[n1 + 2] = (color.R / 255f); //b
