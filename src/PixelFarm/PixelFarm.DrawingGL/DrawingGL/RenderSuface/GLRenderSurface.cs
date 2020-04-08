@@ -117,6 +117,7 @@ namespace PixelFarm.DrawingGL
         readonly RadialGradientFillShader _radialGradientShader;
 
         readonly SmoothLineShader _smoothLineShader;
+        readonly InvertAlphaLineSmoothShader _invertedAlphaSmoothLineShader;
 
         readonly GlyphImageStecilShader _glyphStencilShader;
         readonly BGRImageTextureShader _bgrImgTextureShader;
@@ -192,6 +193,8 @@ namespace PixelFarm.DrawingGL
 
             _solidColorFillShader = new SolidColorFillShader(_shareRes);
             _smoothLineShader = new SmoothLineShader(_shareRes);
+            _invertedAlphaSmoothLineShader = new InvertAlphaLineSmoothShader(_shareRes);
+
             _rectFillShader = new RectFillShader(_shareRes); //for gradient color fill, and  polygon-shape gradient fill
             _radialGradientShader = new RadialGradientFillShader(_shareRes);
             //
@@ -1510,9 +1513,13 @@ namespace PixelFarm.DrawingGL
             {
                 Figure f = pathRenderVx.GetFig(b);
                 //-------------------------------------   
-                _smoothLineShader.DrawTriangleStrips(
+                _invertedAlphaSmoothLineShader.DrawTriangleStrips(
                                f.GetSmoothBorders(_smoothBorderBuilder),
                                f.BorderTriangleStripCount);
+
+                //_smoothLineShader.DrawTriangleStrips(
+                //               f.GetSmoothBorders(_smoothBorderBuilder),
+                //               f.BorderTriangleStripCount);
             }
             StrokeColor = prevStrokeColor;
             StrokeWidth = preStrokeW;
