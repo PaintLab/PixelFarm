@@ -167,10 +167,33 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
 
             if (UseClipRegion)
             {
-                p.SetClipRgn(_triangleVxs);
-                Q1RectD bounds = _triangleVxs.GetBoundingRect(); 
-                p.FillRect(bounds.Left, bounds.Bottom, bounds.Width, bounds.Height);
-                p.SetClipRgn(null);
+                {
+                    //fill vxs region1
+                    p.SetClipRgn(_triangleVxs); 
+
+                    float ox = p.OriginX;
+                    float oy = p.OriginY;
+
+                    Q1RectD bounds = _triangleVxs.GetBoundingRect();
+                    p.SetOrigin((float)(ox + bounds.Left), (float)(oy + bounds.Bottom));
+                    p.FillRect(0, 0, bounds.Width, bounds.Height);
+                    p.SetClipRgn(null);
+                    p.SetOrigin(ox, oy);
+                }
+
+                {
+                    //fill vxs region2
+                    p.SetClipRgn(_triangleVxs2);
+                    Q1RectD bounds = _triangleVxs2.GetBoundingRect();
+
+                    float ox = p.OriginX;
+                    float oy = p.OriginY;
+                    p.SetOrigin((float)(ox + bounds.Left), (float)(oy + bounds.Bottom));
+                    p.FillRect(0, 0, bounds.Width, bounds.Height);
+                    p.SetClipRgn(null);
+                    p.SetOrigin(ox, oy);
+                }
+
             }
             else
             {
