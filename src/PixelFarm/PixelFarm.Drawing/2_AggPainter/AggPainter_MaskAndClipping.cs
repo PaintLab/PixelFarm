@@ -265,7 +265,22 @@ namespace PixelFarm.CpuBlit
 
         public override void FillRegion(VertexStore vxs)
         {
-            throw new NotImplementedException();
+            
+
+            this.SetClipRgn(vxs);
+
+            float ox = this.OriginX;
+            float oy = this.OriginY;
+
+            Q1RectD bounds = vxs.GetBoundingRect();
+            SetOrigin((float)(ox + bounds.Left), (float)(oy + bounds.Bottom));
+
+            FillRect(0, 0, bounds.Width, bounds.Height);
+
+
+
+            SetClipRgn(null);
+            SetOrigin(ox, oy);
         }
         public override void DrawRegion(VertexStore vxs)
         {

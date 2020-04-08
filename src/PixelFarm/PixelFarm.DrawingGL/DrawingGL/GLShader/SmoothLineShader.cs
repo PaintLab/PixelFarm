@@ -215,10 +215,10 @@ namespace PixelFarm.DrawingGL
     class InvertAlphaLineSmoothShader : ColorFillShaderBase
     {
         //for stencil buffer ***
-        readonly ShaderVtxAttrib4f a_position; 
+        readonly ShaderVtxAttrib4f a_position;
         readonly ShaderUniformVar1 u_linewidth;
-        readonly ShaderUniformVar1 u_p0; 
-     
+        readonly ShaderUniformVar1 u_p0;
+
         float _cutPoint;
         bool _loadCutPoint;
         float _latestDrawW;
@@ -316,9 +316,10 @@ namespace PixelFarm.DrawingGL
             u_linewidth = _shaderProgram.GetUniform1("u_linewidth");
             u_p0 = _shaderProgram.GetUniform1("p0");
             _cutPoint = SetCutPoint(0.5f); //this are fixed for inverted alpha smooth line shader
+            
         }
 
-       
+
 
         public void DrawTriangleStrips(float[] coords, int ncount)
         {
@@ -333,6 +334,7 @@ namespace PixelFarm.DrawingGL
 
             if (_latestDrawW != _shareRes._strokeWidth)//just for reduce draw call
             {
+
                 u_linewidth.SetValue(_latestDrawW = _shareRes._strokeWidth);
             }
 
