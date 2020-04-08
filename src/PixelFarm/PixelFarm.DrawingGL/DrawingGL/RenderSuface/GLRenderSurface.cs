@@ -1405,6 +1405,7 @@ namespace PixelFarm.DrawingGL
                                 glGrBrush.SetCacheGradientBitmap(color_src, true);
                                 renderSx_color.Dispose();
                             }
+                            //DrawImage(color_src, 0, 0);//for debug show color gradient 
                         }
                         break;
                     case BrushKind.Texture:

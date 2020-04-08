@@ -64,12 +64,34 @@ namespace PixelFarm.CpuBlit.Sample_Gradient
 
 
             //3. polygon gradient: this version, just a simple rect 
+
+            //PolygonGradientBrush.ColorVertex2d[] vertices = new PolygonGradientBrush.ColorVertex2d[]
+            // {
+            //        new PolygonGradientBrush.ColorVertex2d(5,50,KnownColors.OrangeRed),
+            //        new PolygonGradientBrush.ColorVertex2d(50,50,Color.Black),
+            //        new PolygonGradientBrush.ColorVertex2d(50,5,Color.Yellow),
+            //        new PolygonGradientBrush.ColorVertex2d(5,5,Color.Blue),
+            // };
+            //PolygonGradientBrush.ColorVertex2d[] vertices = new PolygonGradientBrush.ColorVertex2d[]
+            //{
+            //        new PolygonGradientBrush.ColorVertex2d(5,300,KnownColors.OrangeRed),
+            //        new PolygonGradientBrush.ColorVertex2d(300,300,Color.Black),
+            //        new PolygonGradientBrush.ColorVertex2d(300,5,Color.Yellow),
+            //        new PolygonGradientBrush.ColorVertex2d(5,5,Color.Blue),
+            //};
+            //PolygonGradientBrush.ColorVertex2d[] vertices = new PolygonGradientBrush.ColorVertex2d[]
+            //{
+            //    new PolygonGradientBrush.ColorVertex2d(5,5,Color.Blue),
+            //    new PolygonGradientBrush.ColorVertex2d(220,5,Color.Yellow),
+            //    new PolygonGradientBrush.ColorVertex2d(220,100,Color.Black),
+            //    new PolygonGradientBrush.ColorVertex2d(5,220,KnownColors.OrangeRed),
+            //};
             PolygonGradientBrush.ColorVertex2d[] vertices = new PolygonGradientBrush.ColorVertex2d[]
             {
-                new PolygonGradientBrush.ColorVertex2d(0,0,KnownColors.OrangeRed),
-                new PolygonGradientBrush.ColorVertex2d(300,0,Color.Black),
-                new PolygonGradientBrush.ColorVertex2d(300,400,Color.Yellow),
-                new PolygonGradientBrush.ColorVertex2d(0,400,Color.Blue),
+                    new PolygonGradientBrush.ColorVertex2d(0,0,Color.Blue),
+                    new PolygonGradientBrush.ColorVertex2d(300,0,Color.Yellow),
+                    new PolygonGradientBrush.ColorVertex2d(300,300,Color.Black),
+                    new PolygonGradientBrush.ColorVertex2d(0,300,KnownColors.OrangeRed),
             };
             _polygonGradientBrush = new PolygonGradientBrush(vertices);
 

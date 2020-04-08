@@ -334,7 +334,10 @@ namespace PixelFarm.DrawingGL
               out float[] v2f,
               out float[] colors)
         {
-            List<Drawing.PolygonGradientBrush.ColorVertex2d> vertices = linearGradient.Vertices;
+            
+
+            //reverse user input order
+            List<Drawing.PolygonGradientBrush.ColorVertex2d> vertices = linearGradient.Vertices;    
             s_v2fList.Clear();
             s_colorList.Clear();
 
@@ -351,7 +354,7 @@ namespace PixelFarm.DrawingGL
                  tess, s_v2fList.ToArray(), null,
                  out float[] tessCoords,
                  out int vertexCount
-                  );
+                 );
 
             int n1 = 0;
             int n2 = 0;
@@ -364,10 +367,16 @@ namespace PixelFarm.DrawingGL
                 Drawing.PolygonGradientBrush.ColorVertex2d v = vertices[index];
                 Color color = v.C;
 
+
                 //a,b,g,r 
-                colors2[n1] = (color.R / 255f);//r
+                //colors2[n1] = (color.R / 255f);//r
+                //colors2[n1 + 1] = (color.G / 255f);//g 
+                //colors2[n1 + 2] = (color.B / 255f); //b
+                //colors2[n1 + 3] = (color.A / 255f); //a 
+
+                colors2[n1] = (color.B / 255f);//r
                 colors2[n1 + 1] = (color.G / 255f);//g 
-                colors2[n1 + 2] = (color.B / 255f); //b
+                colors2[n1 + 2] = (color.R / 255f); //b
                 colors2[n1 + 3] = (color.A / 255f); //a 
 
                 tessCoord2[n2] = v.X;
