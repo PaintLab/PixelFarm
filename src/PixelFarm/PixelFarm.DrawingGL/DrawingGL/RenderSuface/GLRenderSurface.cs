@@ -1293,8 +1293,6 @@ namespace PixelFarm.DrawingGL
 
                 RectangleF bounds = pathRenderVx.GetBounds();
 
-
-
                 int bounds_left = (int)Math.Round(bounds.Left);
                 int bounds_top = (int)Math.Round(bounds.Top);
                 int size_w = (int)Math.Round(bounds.Width);
@@ -1354,10 +1352,10 @@ namespace PixelFarm.DrawingGL
                                 glGrBrush.SetCacheGradientBitmap(color_src, true);
 
                                 //FillRect(Color.Yellow, 0, 0, 200, 100);
-                                //for debug,                            
-                                //DrawImage(color_src, 0, 0);//for debug show color-gradient
+                                //for debug,                                                           
                                 renderSx_color.Dispose();
                             }
+                            //DrawImage(color_src, 0, 0);//for debug show color-gradient
                         }
                         break;
                     case BrushKind.CircularGraident:
@@ -1422,8 +1420,11 @@ namespace PixelFarm.DrawingGL
                 //SetColorMaskColorSourceOffset(bounds.Left, bounds.Top);
 
                 //move origin to (left,top) of bounds
-                SetCanvasOrigin(bounds_left, bounds_top);
+                int ox = OriginX;
+                int oy = OriginY;
+                SetCanvasOrigin(ox + bounds_left, oy + bounds_top);
                 DrawImageWithMask(renderSx_mask.GetGLBitmap(), color_src, 0, 0);
+                SetCanvasOrigin(ox, oy);//restore
 
                 renderSx_mask.Dispose();
             }
