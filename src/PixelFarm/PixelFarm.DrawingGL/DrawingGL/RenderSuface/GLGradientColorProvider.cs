@@ -369,11 +369,7 @@ namespace PixelFarm.DrawingGL
 
 
                 //a,b,g,r 
-                //colors2[n1] = (color.R / 255f);//r
-                //colors2[n1 + 1] = (color.G / 255f);//g 
-                //colors2[n1 + 2] = (color.B / 255f); //b
-                //colors2[n1 + 3] = (color.A / 255f); //a 
-
+                 
                 colors2[n1] = (color.B / 255f);//r
                 colors2[n1 + 1] = (color.G / 255f);//g 
                 colors2[n1 + 2] = (color.R / 255f); //b

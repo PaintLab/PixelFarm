@@ -1297,8 +1297,6 @@ namespace PixelFarm.DrawingGL
                 int bounds_top = (int)Math.Round(bounds.Top);
                 int size_w = (int)Math.Round(bounds.Width);
                 int size_h = (int)Math.Round(bounds.Height);
-                //int size_w = (int)Math.Round(bounds.Right);
-                //int size_h = (int)Math.Round(bounds.Bottom);
 
                 GLRenderSurface renderSx_mask = new GLRenderSurface(size_w, size_h); //mask color surface 
                 using (TempSwitchToNewSurface(renderSx_mask))
@@ -1312,7 +1310,7 @@ namespace PixelFarm.DrawingGL
                     //offset to (left,top) of bounds
                     SetCanvasOrigin(-bounds_left, -bounds_top);
                     FillGfxPath(Color.White, Color.Red, pathRenderVx); //
-                    SetCanvasOrigin(0, 0);//offet back
+                    SetCanvasOrigin(0, 0);//offset back
                 }
 
                 //DrawImage(renderSx_mask.GetGLBitmap(), 0, 0);//for debug, show mask 
@@ -1346,8 +1344,7 @@ namespace PixelFarm.DrawingGL
                                 ////2. relative to other specific position 
                                 using (TempSwitchToNewSurface(renderSx_color))
                                 {
-                                    //fill at 0,0 of color source                                    
-                                    _rectFillShader.Render(0, 0, glGrBrush._v2f, glGrBrush._colors);
+                                    _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
                                 }
                                 glGrBrush.SetCacheGradientBitmap(color_src, true);
 
@@ -1399,7 +1396,7 @@ namespace PixelFarm.DrawingGL
                                 var renderSx_color = new GLRenderSurface(color_src, false); //gradient color surface
                                 using (TempSwitchToNewSurface(renderSx_color))
                                 {
-                                    _rectFillShader.Render(0, 0, glGrBrush._v2f, glGrBrush._colors);
+                                    _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
                                     color_src = renderSx_color.GetGLBitmap();
                                 }
                                 glGrBrush.SetCacheGradientBitmap(color_src, true);
@@ -1423,7 +1420,7 @@ namespace PixelFarm.DrawingGL
                 //move origin to (left,top) of bounds
                 int ox = OriginX;
                 int oy = OriginY;
-                SetCanvasOrigin(ox + bounds_left, oy + bounds_top);
+                SetCanvasOrigin(ox + bounds_left, oy + bounds_top); 
                 DrawImageWithMask(renderSx_mask.GetGLBitmap(), color_src, 0, 0);
                 SetCanvasOrigin(ox, oy);//restore
 
