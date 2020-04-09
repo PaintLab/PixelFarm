@@ -245,11 +245,25 @@ namespace LayoutFarm.CustomWidgets
                 {
                     //short content
                     //but we must update content size
-
                     //config delay or not 
-                    var buff = new TextBufferSpan(_textBuffer);
-                    Root.TextServices.MeasureString(buff, _font);
-
+                    if (!this.HasSpecificWidthAndHeight)
+                    {
+                        int newW = this.Width;
+                        int newH = this.Height;
+                        var buff = new TextBufferSpan(_textBuffer);
+                        Size size = Root.TextServices.MeasureString(buff, _font);
+                        if (!this.HasSpecificWidth)
+                        {
+                            newW = _contentLeft + size.Width + _contentRight;
+                        }
+                        if (!this.HasSpecificHeight)
+                        {
+                            newH = _contentTop + size.Height + _contentBottom;
+                        }
+                        PreRenderSetSize(newW, newH);
+                        //after set this 
+                        NeedPreRenderEval = false;
+                    }
 
                 }
             }
