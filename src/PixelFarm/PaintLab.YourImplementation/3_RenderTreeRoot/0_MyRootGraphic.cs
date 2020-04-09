@@ -251,7 +251,7 @@ namespace LayoutFarm.UI
         }
         //-------------------------------------------------------------------------------
         //
-        int VisualRequestCount => _renderRequestList.Count;
+        //int VisualRequestCount => _renderRequestList.Count;
         //
         public override void AddChild(RenderElement renderE)
         {
