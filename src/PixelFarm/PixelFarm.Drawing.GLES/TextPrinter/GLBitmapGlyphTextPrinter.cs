@@ -256,8 +256,8 @@ namespace PixelFarm.DrawingGL
         }
         public void MeasureString(char[] buffer, int startAt, int len, out int w, out int h)
         {
-            TextBufferSpan textBufferSpan = new TextBufferSpan(buffer, startAt, len);
-            Size s = _textServices.MeasureString(ref textBufferSpan, _painter.CurrentFont);
+            var textBufferSpan = new TextBufferSpan(buffer, startAt, len);
+            Size s = _textServices.MeasureString(textBufferSpan, _painter.CurrentFont);
             w = s.Width;
             h = s.Height;
         }
@@ -267,10 +267,10 @@ namespace PixelFarm.DrawingGL
             _vboBuilder.Clear();
             _vboBuilder.SetTextureInfo(_glBmp.Width, _glBmp.Height, _glBmp.IsYFlipped, _pcx.OriginKind);
             //create temp buffer span that describe the part of a whole char buffer
-            TextBufferSpan textBufferSpan = new TextBufferSpan(buffer, startAt, len);
+            var textBufferSpan = new TextBufferSpan(buffer, startAt, len);
             //ask text service to parse user input char buffer and create a glyph-plan-sequence (list of glyph-plan) 
             //with specific request font
-            GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(ref textBufferSpan, _font);
+            GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(textBufferSpan, _font);
             float px_scale = _px_scale;
             //--------------------------
             //TODO:
@@ -664,11 +664,11 @@ namespace PixelFarm.DrawingGL
             _vboBuilder.SetTextureInfo(_glBmp.Width, _glBmp.Height, _glBmp.IsYFlipped, _pcx.OriginKind);
 
             //create temp buffer span that describe the part of a whole char buffer
-            TextBufferSpan textBufferSpan = new TextBufferSpan(buffer, startAt, len);
+            var textBufferSpan = new TextBufferSpan(buffer, startAt, len);
 
             //ask text service to parse user input char buffer and create a glyph-plan-sequence (list of glyph-plan) 
             //with specific request font
-            GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(ref textBufferSpan, _font);
+            GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(textBufferSpan, _font);
             float px_scale = _px_scale;
             float scaleFromTexture = 1; //TODO: support msdf auto scale
 

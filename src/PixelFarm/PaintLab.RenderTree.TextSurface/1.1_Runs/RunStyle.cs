@@ -20,36 +20,36 @@ namespace LayoutFarm.TextEditing
         public RequestFont ReqFont { get; set; }
         public Color FontColor { get; set; }
         //
-        internal Size MeasureString(ref TextBufferSpan textBufferSpan)
+        internal Size MeasureString(in TextBufferSpan textBufferSpan)
         {
-            return GlobalRootGraphic.TextService.MeasureString(ref textBufferSpan, ReqFont);
+            return GlobalRootGraphic.TextService.MeasureString(textBufferSpan, ReqFont);
         }
         internal float MeasureBlankLineHeight()
         {
             return GlobalRootGraphic.TextService.MeasureBlankLineHeight(ReqFont);
         }
         internal bool SupportsWordBreak => GlobalRootGraphic.TextService.SupportsWordBreak;
-        internal ILineSegmentList BreakToLineSegments(ref TextBufferSpan textBufferSpan)
+        internal ILineSegmentList BreakToLineSegments(in TextBufferSpan textBufferSpan)
         {
-            return GlobalRootGraphic.TextService.BreakToLineSegments(ref textBufferSpan);
+            return GlobalRootGraphic.TextService.BreakToLineSegments(textBufferSpan);
         }
 
         internal void CalculateUserCharGlyphAdvancePos(
-            ref TextBufferSpan textBufferSpan,
+            in TextBufferSpan textBufferSpan,
             ref TextSpanMeasureResult measureResult)
         {
             GlobalRootGraphic.TextService.CalculateUserCharGlyphAdvancePos(
-                ref textBufferSpan,
+                  textBufferSpan,
                 ReqFont,
                 ref measureResult);
         }
 
-        internal void CalculateUserCharGlyphAdvancePos(ref TextBufferSpan textBufferSpan,
+        internal void CalculateUserCharGlyphAdvancePos(in TextBufferSpan textBufferSpan,
             ILineSegmentList lineSegs,
             ref TextSpanMeasureResult measureResult)
         {
             GlobalRootGraphic.TextService.CalculateUserCharGlyphAdvancePos(
-                ref textBufferSpan,
+                textBufferSpan,
                 lineSegs,
                 ReqFont,
                 ref measureResult);

@@ -55,21 +55,19 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
-        
+
         public string Text
         {
             get => new string(_textBuffer);
             set
             {
                 //TODO: review here
-                //if input string is null => textBuffer= null
-
-               
+                //if input string is null => textBuffer= null               
                 _textBuffer = (value == null) ? null : value.ToCharArray();
                 //reset 
                 if (_renderVxFormattedString != null)
                 {
-                  
+
                     _renderVxFormattedString.Dispose();
                     _renderVxFormattedString = null;
                     //----------
@@ -78,8 +76,8 @@ namespace LayoutFarm.CustomWidgets
                     //similar to size change
                     //for gfx-invalidation, we need a size before change and after change 
 
-                    TextBufferSpan textBufferSpan = new TextBufferSpan(_textBuffer);
-                    Size newSize = Root.TextServices.MeasureString(ref textBufferSpan, _font);//just measure
+                    var textBufferSpan = new TextBufferSpan(_textBuffer);
+                    Size newSize = Root.TextServices.MeasureString(textBufferSpan, _font);//just measure
                     int newW = Width;
                     int newH = Height;
                     if (!this.HasSpecificWidth)
@@ -191,55 +189,73 @@ namespace LayoutFarm.CustomWidgets
         {
             //in this case we use formatted string
             //do not draw anything on this stage
-            if (_textBuffer != null && _textBuffer.Length > 2)
+            if (_textBuffer != null)
             {
                 //for long text ? => configurable? 
                 //use formatted string
-                if (_renderVxFormattedString == null)
+                if (_textBuffer.Length > 2)
                 {
-                    if (d == null) { return; }
+                    if (_renderVxFormattedString == null)
+                    {
+                        if (d == null) { return; }
 
-                    Color prevColor = d.CurrentTextColor;
-                    RequestFont prevFont = d.CurrentFont;
-                    DrawTextTechnique prevTechnique = d.DrawTextTechnique;
+                        Color prevColor = d.CurrentTextColor;
+                        RequestFont prevFont = d.CurrentFont;
+                        DrawTextTechnique prevTechnique = d.DrawTextTechnique;
 
-                    d.CurrentTextColor = _textColor;
-                    d.CurrentFont = _font;
-                    d.DrawTextTechnique = this.DrawTextTechnique;
+                        d.CurrentTextColor = _textColor;
+                        d.CurrentFont = _font;
+                        d.DrawTextTechnique = this.DrawTextTechnique;
 
-                    //config delay or not
-                    _renderVxFormattedString = d.CreateFormattedString(_textBuffer, 0, _textBuffer.Length, this.DelayFormattedString);
+                        //config delay or not
+                        _renderVxFormattedString = d.CreateFormattedString(_textBuffer, 0, _textBuffer.Length, this.DelayFormattedString);
 
-                    d.DrawTextTechnique = prevTechnique;
-                    d.CurrentFont = prevFont;
-                    d.CurrentTextColor = prevColor;
+                        d.DrawTextTechnique = prevTechnique;
+                        d.CurrentFont = prevFont;
+                        d.CurrentTextColor = prevColor;
+                    }
+
+                    switch (_renderVxFormattedString.State)
+                    {
+                        case RenderVxFormattedString.VxState.Ready:
+                            {
+                                //newsize
+                                //...
+
+                                int newW = this.Width;
+                                int newH = this.Height;
+
+                                if (!this.HasSpecificWidth)
+                                {
+                                    newW = _contentLeft + (int)System.Math.Ceiling(_renderVxFormattedString.Width) + _contentRight;
+                                }
+                                if (!this.HasSpecificHeight)
+                                {
+                                    newH = _contentTop + (int)System.Math.Ceiling(_renderVxFormattedString.SpanHeight) + _contentBottom;
+                                }
+
+                                PreRenderSetSize(newW, newH);
+                                //after set this 
+                                NeedPreRenderEval = false;
+                            }
+                            break;
+                    }
                 }
-
-                switch (_renderVxFormattedString.State)
+                else
                 {
-                    case RenderVxFormattedString.VxState.Ready:
-                        {
-                            //newsize
-                            //...
+                    //short content
+                    //but we must update content size
 
-                            int newW = this.Width;
-                            int newH = this.Height;
+                    //config delay or not 
+                    var buff = new TextBufferSpan(_textBuffer);
+                    Root.TextServices.MeasureString(buff, _font);
 
-                            if (!this.HasSpecificWidth)
-                            {
-                                newW = _contentLeft + (int)System.Math.Ceiling(_renderVxFormattedString.Width) + _contentRight;
-                            }
-                            if (!this.HasSpecificHeight)
-                            {
-                                newH = _contentTop + (int)System.Math.Ceiling(_renderVxFormattedString.SpanHeight) + _contentBottom;
-                            }
 
-                            PreRenderSetSize(newW, newH);
-                            //after set this 
-                            NeedPreRenderEval = false;
-                        }
-                        break;
                 }
+            }
+            else
+            {
+                //no content
             }
         }
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)

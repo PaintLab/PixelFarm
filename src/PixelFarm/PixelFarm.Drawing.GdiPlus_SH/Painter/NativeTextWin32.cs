@@ -148,7 +148,7 @@ namespace PixelFarm.Drawing.WinGdi
         }
         //==============================================
 
-        public static void CalculateGlyphAdvancePos(ref TextBufferSpan textBufferSpan,
+        public static void CalculateGlyphAdvancePos(in TextBufferSpan textBufferSpan,
                 RequestFont font, int[] outputGlyphAdvances, out int outputTotalW)
         {
 
@@ -363,30 +363,30 @@ namespace PixelFarm.Drawing.WinGdi
         {
             return WinGdiTextService.MeasureWhitespace(f);
         }
-        public PixelFarm.Drawing.Size MeasureString(ref TextBufferSpan textBufferSpan, RequestFont font)
+        public PixelFarm.Drawing.Size MeasureString(in TextBufferSpan textBufferSpan, RequestFont font)
         {
             return WinGdiTextService.MeasureString(textBufferSpan.GetRawCharBuffer(), textBufferSpan.start, textBufferSpan.len, font);
         }
-        public void MeasureString(ref TextBufferSpan textBufferSpan, RequestFont font, int maxWidth, out int charFit, out int charFitWidth)
+        public void MeasureString(in TextBufferSpan textBufferSpan, RequestFont font, int maxWidth, out int charFit, out int charFitWidth)
         {
             WinGdiTextService.MeasureString(textBufferSpan.GetRawCharBuffer(), textBufferSpan.start, textBufferSpan.len, font, maxWidth, out charFit, out charFitWidth);
         }
 
-        public void CalculateUserCharGlyphAdvancePos(ref TextBufferSpan textBufferSpan,
+        public void CalculateUserCharGlyphAdvancePos(in TextBufferSpan textBufferSpan,
             RequestFont font, ref TextSpanMeasureResult measureResult)
         {
-            WinGdiTextService.CalculateGlyphAdvancePos(ref textBufferSpan, font, measureResult.outputXAdvances, out measureResult.outputTotalW);
+            WinGdiTextService.CalculateGlyphAdvancePos(textBufferSpan, font, measureResult.outputXAdvances, out measureResult.outputTotalW);
             measureResult.lineHeight = (ushort)WinGdiTextService.MeasureBlankLineHeight(font);
         }
 
         public float MeasureBlankLineHeight(RequestFont f) => WinGdiTextService.MeasureBlankLineHeight(f);
 
-        public ILineSegmentList BreakToLineSegments(ref TextBufferSpan textBufferSpan)
+        public ILineSegmentList BreakToLineSegments(in TextBufferSpan textBufferSpan)
         {
             return null;
             throw new NotImplementedException();
         }
-        public void CalculateUserCharGlyphAdvancePos(ref TextBufferSpan textBufferSpan,
+        public void CalculateUserCharGlyphAdvancePos(in TextBufferSpan textBufferSpan,
             ILineSegmentList lineSegs,
             RequestFont font,
             ref TextSpanMeasureResult measureResult)

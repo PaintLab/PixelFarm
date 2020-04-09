@@ -58,21 +58,19 @@ namespace LayoutFarm
             //PixelFarm.Drawing.RequestFont font = new PixelFarm.Drawing.RequestFont("Source Sans Pro", 20);
             PixelFarm.Drawing.RequestFont font = new PixelFarm.Drawing.RequestFont("Source Sans Pro", 20);
             {
-
                 Label label = new Label();
                 label.TextColor = PixelFarm.Drawing.Color.Black;
-                label.SetFont(font);
-                label.Text = "A"; 
                 label.SetLocation(10, 20);
-                label.SetSize(15, 20);
+                label.SetFont(font);
+                label.Text = "A";
                 host.AddChild(label);
+               
             }
             {
                 Label label = new Label();
                 label.TextColor = PixelFarm.Drawing.Color.Black;
                 label.SetFont(font);
                 label.Text = "A12345";
-                label.SetSize(10, 20);
                 label.SetLocation(30, 20);
                 host.AddChild(label);
             }
