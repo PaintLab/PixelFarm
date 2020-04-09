@@ -15,7 +15,7 @@ namespace LayoutFarm
         protected override void OnStart(AppHost host)
         {
 
-            _vgVisElem = VgVisualDocHelper.CreateVgVisualDocFromFile(@"Samples\lion.svg").VgRootElem;
+            _vgVisElem = VgVisualDocHelper.CreateVgVisualDocFromFile(@"Data\lion.svg").VgRootElem;
             _mySprite = new MyTestSprite(_vgVisElem);
             var evListener = new GeneralEventListener();
             evListener.MouseDown += (s, e) =>

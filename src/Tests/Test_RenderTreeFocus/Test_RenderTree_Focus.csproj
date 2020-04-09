@@ -173,11 +173,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\Data\lion.svg">
-      <Link>lion.svg</Link>
+      <Link>Data\lion.svg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\Data\tiger.svg">
-      <Link>tiger.svg</Link>
+      <Link>Data\tiger.svg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Data\colorbrewer.txt">
