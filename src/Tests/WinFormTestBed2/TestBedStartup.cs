@@ -132,14 +132,15 @@ namespace YourImplementation
             LayoutFarm.UIPlatform.Close();
         }
 
-        public static void RunDemoList(Type mainType)
+        public static void RunDemoList(System.Reflection.Assembly asm)
         {
+           
             //-------------------------------
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             ////------------------------------- 
             var formDemoList = new LayoutFarm.Dev.FormDemoList();
-            formDemoList.LoadDemoList(mainType);
+            formDemoList.LoadDemoList(asm);
             Application.Run(formDemoList);
         }
         /// <summary>

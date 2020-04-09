@@ -19,7 +19,7 @@ namespace TestGraphicPackage2
             //string typographyDir = @"brkitr_src/dictionaries";
             //string icu_datadir = YourImplementation.RelativePathBuilder.SearchBackAndBuildFolderPath(System.IO.Directory.GetCurrentDirectory(), "PixelFarm", @"..\Typography\Typography.TextBreak\icu62\brkitr");
 
-             
+
             string icu_datadir = "brkitr"; //see brkitr folder, we link data from Typography project and copy to output if newer
             if (!System.IO.Directory.Exists(icu_datadir))
             {
@@ -32,7 +32,10 @@ namespace TestGraphicPackage2
 
             YourImplementation.TestBedStartup.Setup();
             //-------------------------------------------
-            YourImplementation.TestBedStartup.RunDemoList(typeof(Program));
+
+            //load demo list from specific asm
+            System.Reflection.Assembly asm = typeof(LayoutFarm.Demo_SingleButton).Assembly;
+            YourImplementation.TestBedStartup.RunDemoList(asm);
         }
     }
 }
