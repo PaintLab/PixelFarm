@@ -4,7 +4,7 @@ using PixelFarm.Drawing;
 namespace LayoutFarm
 {
     [DemoNote("1.7 ListView")]
-    class Demo_ListView : App
+    public class Demo_ListView : App
     {
         protected override void OnStart(AppHost host)
         {

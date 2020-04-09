@@ -3,7 +3,7 @@
 namespace LayoutFarm
 {
     [DemoNote("1.5 ScrollBar")]
-    class Demo_ScrollBar : App
+    public class Demo_ScrollBar : App
     {
         protected override void OnStart(AppHost host)
         {
@@ -15,7 +15,7 @@ namespace LayoutFarm
                 slideBox.SetLocation(10, 400);
                 slideBox.MinValue = 0;
                 slideBox.MaxValue = 100;
-                slideBox.SmallChange = 50; 
+                slideBox.SmallChange = 50;
                 host.AddChild(slideBox);
                 slideBox.ScrollValue = 150;
             }

@@ -5,7 +5,7 @@ using LayoutFarm.UI;
 namespace LayoutFarm
 {
     [DemoNote("3.2 DemoControllerBox")]
-    class Demo_ControllerBoxs : App
+    public class Demo_ControllerBoxs : App
     {
         UIControllerBox _controllerBox1;
         protected override void OnStart(AppHost host)

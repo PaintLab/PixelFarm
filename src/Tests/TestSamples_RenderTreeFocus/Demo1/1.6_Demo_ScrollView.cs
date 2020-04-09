@@ -6,7 +6,7 @@ using LayoutFarm.UI;
 namespace LayoutFarm
 {
     [DemoNote("1.6 ScrollView")]
-    class Demo_ScrollView : App
+    public class Demo_ScrollView : App
     {
 
         protected override void OnStart(AppHost host)

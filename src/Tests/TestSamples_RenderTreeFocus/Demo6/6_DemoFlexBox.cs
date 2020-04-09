@@ -6,7 +6,7 @@ using LayoutFarm.CustomWidgets;
 namespace LayoutFarm
 {
     [DemoNote("6 FlexBox")]
-    class Demo_FlexBox : App
+    public class Demo_FlexBox : App
     {
         YogaNode root;
         YogaNode root_child0;

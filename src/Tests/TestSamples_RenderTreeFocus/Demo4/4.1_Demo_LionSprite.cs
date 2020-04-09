@@ -7,7 +7,7 @@ using LayoutFarm.UI;
 namespace LayoutFarm
 {
     [DemoNote("4.1 Demo_LionSprite")]
-    class Demo_LionSprite : App
+    public class Demo_LionSprite : App
     {
         VgVisualElement _vgVisElem;
         MyTestSprite _mySprite;
@@ -20,7 +20,7 @@ namespace LayoutFarm
             var evListener = new GeneralEventListener();
             evListener.MouseDown += (s, e) =>
             {
-               
+
                 if (e.Buttons == UIMouseButtons.Right)
                 {
                     //right click=> hit test and change fill color

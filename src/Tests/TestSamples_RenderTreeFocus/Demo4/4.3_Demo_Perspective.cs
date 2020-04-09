@@ -14,7 +14,7 @@ using LayoutFarm.CustomWidgets;
 namespace LayoutFarm
 {
     [DemoNote("4.3. Demo_Perspective")]
-    class Demo_Perspective : App
+    public class Demo_Perspective : App
     {
         VgVisualElement _vgVisElem;
         MyTestSprite _mySprite;

@@ -3,14 +3,13 @@
 namespace LayoutFarm
 {
     [DemoNote("2.1 SingleLineText")]
-    class Demo_SingleLineText : App
+    public class Demo_SingleLineText : App
     {
         protected override void OnStart(AppHost host)
         {
             //simple textbox
             var textbox = new LayoutFarm.CustomWidgets.TextBox(100, 30, false);
-            var textSpanStyle = new TextEditing.TextSpanStyle()
-            {
+            var textSpanStyle = new TextEditing.TextSpanStyle() {
                 ReqFont = new PixelFarm.Drawing.RequestFont("tahoma", 18),
                 FontColor = new PixelFarm.Drawing.Color(255, 0, 0)
             };
@@ -24,18 +23,13 @@ namespace LayoutFarm
             //--------------
             //mask text box
             var maskTextBox = new LayoutFarm.CustomWidgets.MaskTextBox(100, 30);
-            var textSpanStyle2 = new TextEditing.TextSpanStyle()
-            {
+            var textSpanStyle2 = new TextEditing.TextSpanStyle() {
                 ReqFont = new PixelFarm.Drawing.RequestFont("tahoma", 18),
                 FontColor = PixelFarm.Drawing.Color.Black
             };
 
             maskTextBox.SetLocation(0, 40);
             host.AddChild(maskTextBox);
-
-
-
-
         }
     }
 }

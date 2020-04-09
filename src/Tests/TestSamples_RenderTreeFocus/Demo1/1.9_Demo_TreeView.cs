@@ -4,7 +4,7 @@ using PixelFarm.Drawing;
 namespace LayoutFarm
 {
     [DemoNote("1.9 TreeView")]
-    class Demo_TreeView : App
+    public class Demo_TreeView : App
     {
         protected override void OnStart(AppHost host)
         {
@@ -14,7 +14,7 @@ namespace LayoutFarm
             host.AddChild(treeView);
             //prepare node icon
 
-            ImageBinder nodeOpen = host.LoadImageAndBind("../Data/imgs/arrow_open.png");             
+            ImageBinder nodeOpen = host.LoadImageAndBind("../Data/imgs/arrow_open.png");
 
             //add 
             for (int i = 0; i < 10; ++i)

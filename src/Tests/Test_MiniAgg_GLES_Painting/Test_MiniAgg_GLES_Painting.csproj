@@ -55,22 +55,22 @@
     <Compile Include="4_Samples_2\41_BitmapRenderSample.cs" />
     <Compile Include="4_Samples_2\CutCopyPaste.cs" />
     <Compile Include="4_Samples_2\FloodFillDemo.cs" />
-    <Compile Include="Experiments\FormTestPaintFx.cs">
+    <Compile Include="FormTestPaintFx.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Experiments\FormTestPaintFx.Designer.cs">
+    <Compile Include="FormTestPaintFx.Designer.cs">
       <DependentUpon>FormTestPaintFx.cs</DependentUpon>
     </Compile>
-    <Compile Include="Experiments\ColorCompoBox.cs">
+    <Compile Include="ColorCompoBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Experiments\ColorCompoBox.Designer.cs">
+    <Compile Include="ColorCompoBox.Designer.cs">
       <DependentUpon>ColorCompoBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Experiments\FormTestColorBlend.cs">
+    <Compile Include="FormTestColorBlend.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Experiments\FormTestColorBlend.Designer.cs">
+    <Compile Include="FormTestColorBlend.Designer.cs">
       <DependentUpon>FormTestColorBlend.cs</DependentUpon>
     </Compile>
     <Compile Include="FormDev.cs">
@@ -111,10 +111,10 @@
     <Compile Include="x_notused\DrawingGLFontPrinter.Gdi.cs" />
     <Compile Include="x_notused\GradientSpanGen.cs" />
     <Compile Include="x_notused\IGradientValueCalculator_and_Impl.cs" />
-    <EmbeddedResource Include="Experiments\FormTestPaintFx.resx">
+    <EmbeddedResource Include="FormTestPaintFx.resx">
       <DependentUpon>FormTestPaintFx.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Experiments\ColorCompoBox.resx">
+    <EmbeddedResource Include="ColorCompoBox.resx">
       <DependentUpon>ColorCompoBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormDev.resx">
@@ -123,7 +123,7 @@
     <EmbeddedResource Include="FormTestBed.resx">
       <DependentUpon>FormTestBed.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Experiments\FormTestColorBlend.resx">
+    <EmbeddedResource Include="FormTestColorBlend.resx">
       <DependentUpon>FormTestColorBlend.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormImgResampling.resx">

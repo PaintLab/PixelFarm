@@ -5,7 +5,7 @@ using LayoutFarm.UI;
 namespace LayoutFarm
 {
     [DemoNote("1.15 Demo_Drag2")]
-    class Demo_Drag2 : App
+    public class Demo_Drag2 : App
     {
         protected override void OnStart(AppHost host)
         {

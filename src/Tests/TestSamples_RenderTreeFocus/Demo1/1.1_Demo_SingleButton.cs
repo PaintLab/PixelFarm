@@ -4,7 +4,7 @@ using System;
 namespace LayoutFarm
 {
     [DemoNote("1.1 SingleButton")]
-    class Demo_SingleButton : App
+    public class Demo_SingleButton : App
     {
         protected override void OnStart(AppHost host)
         {

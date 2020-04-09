@@ -11,7 +11,7 @@ using PaintLab.ColorBlender;
 namespace LayoutFarm.ColorBlenderSample
 {
     [DemoNote("1.13 ColorBlenderExample")]
-    class DemoColorBlender : App
+    public class DemoColorBlender : App
     {
         ColorMatch _colorMatch;
         Box _r_sampleBox, _g_sampleBox, _b_sampleBox;

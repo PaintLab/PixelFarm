@@ -33,7 +33,7 @@ using PixelFarm.CpuBlit;
 namespace LayoutFarm.ColorBlenderSample
 {
     [DemoNote("4.2 DemoSampleCharts")]
-    class DemoSampleCharts : App
+    public class DemoSampleCharts : App
     {
 
         //sample chart! 

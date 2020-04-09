@@ -1,14 +1,13 @@
 ﻿//MIT, 2020, Brezza92
 using LayoutFarm.MariusYoga;
-using System.Collections.Generic;
 
 namespace LayoutFarm.CustomWidgets
 {
     public class FlexBox : AbstractBox
     {
-        public FlexBox(int w,int h): base(w, h)
+        public FlexBox(int w, int h) : base(w, h)
         {
-            
+
         }
         private YogaNode _yoga;
         public YogaNode YogaNode
@@ -43,5 +42,5 @@ namespace LayoutFarm.CustomWidgets
             }
         }
     }
-     
+
 }

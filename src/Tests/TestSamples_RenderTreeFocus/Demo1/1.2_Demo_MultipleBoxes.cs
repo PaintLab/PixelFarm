@@ -6,7 +6,7 @@ using LayoutFarm.UI;
 namespace LayoutFarm
 {
     [DemoNote("1.2 MultpleBox")]
-    class Demo_MultipleBox : App
+    public class Demo_MultipleBox : App
     {
         LayoutFarm.CustomWidgets.CheckBox _currentSingleCheckedBox;
         protected override void OnStart(AppHost host)
@@ -145,5 +145,5 @@ namespace LayoutFarm
         //    return binder;
         //}
     }
-      
+
 }

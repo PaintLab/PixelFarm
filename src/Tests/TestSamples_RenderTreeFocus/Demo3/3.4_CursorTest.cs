@@ -9,7 +9,7 @@ using IconMaker;
 namespace LayoutFarm
 {
     [DemoNote("3.4_CursorTest")]
-    class Demo_CursorTest : App
+    public class Demo_CursorTest : App
     {
 
         Cursor _myCursor;

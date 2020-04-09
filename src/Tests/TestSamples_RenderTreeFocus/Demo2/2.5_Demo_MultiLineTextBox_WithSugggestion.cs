@@ -7,7 +7,7 @@ using LayoutFarm.UI;
 namespace LayoutFarm
 {
     [DemoNote("2.5 MultiLineText_WithSuggestion")]
-    class Demo_MultiLineText_WithSuggestion : App
+    public class Demo_MultiLineText_WithSuggestion : App
     {
         LayoutFarm.CustomWidgets.TextBox _textbox;
         LayoutFarm.CustomWidgets.ListView _listView;

@@ -3,7 +3,7 @@ using LayoutFarm.CustomWidgets;
 namespace LayoutFarm
 {
     [DemoNote("1.11_1 MultipleLabels")]
-    class Demo_MultipleLabels : App
+    public class Demo_MultipleLabels : App
     {
         protected override void OnStart(AppHost host)
         {
@@ -27,7 +27,7 @@ namespace LayoutFarm
 
 
     [DemoNote("1.11_2 MultipleLabels2")]
-    class Demo_MultipleLabels2 : App
+    public class Demo_MultipleLabels2 : App
     {
         protected override void OnStart(AppHost host)
         {
@@ -47,7 +47,7 @@ namespace LayoutFarm
         }
     }
     [DemoNote("1.11_3 TwoLabels")]
-    class Demo_TwoLabels : App
+    public class Demo_TwoLabels : App
     {
         protected override void OnStart(AppHost host)
         {
@@ -64,7 +64,7 @@ namespace LayoutFarm
                 label.SetFont(font);
                 label.Text = "A";
                 host.AddChild(label);
-               
+
             }
             {
                 Label label = new Label();
@@ -73,7 +73,7 @@ namespace LayoutFarm
                 label.Text = "A12345";
                 label.SetLocation(30, 20);
                 host.AddChild(label);
-            } 
+            }
 
         }
     }

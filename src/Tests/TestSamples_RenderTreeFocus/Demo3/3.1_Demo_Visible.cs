@@ -4,7 +4,7 @@ using PixelFarm.Drawing;
 namespace LayoutFarm
 {
     [DemoNote("3.1 DemoVisible")]
-    class Demo_Visible : App
+    public class Demo_Visible : App
     {
         protected override void OnStart(AppHost host)
         {

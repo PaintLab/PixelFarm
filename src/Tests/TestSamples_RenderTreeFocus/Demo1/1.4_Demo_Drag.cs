@@ -6,7 +6,7 @@ using LayoutFarm.CustomWidgets;
 namespace LayoutFarm
 {
     [DemoNote("1.4 DemoDrag")]
-    class Demo_Drag : App
+    public class Demo_Drag : App
     {
         protected override void OnStart(AppHost host)
         {

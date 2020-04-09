@@ -3,7 +3,7 @@
 namespace LayoutFarm
 {
     [DemoNote("1.12 MultipleImages")]
-    class Demo_SmallAnimation : App
+    public class Demo_SmallAnimation : App
     {
         protected override void OnStart(AppHost host)
         {

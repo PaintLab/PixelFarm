@@ -3,7 +3,7 @@ using LayoutFarm.CustomWidgets;
 namespace LayoutFarm
 {
     [DemoNote("2.2 MultiLineTextBox")]
-    class Demo_MultiLineTextBox : App
+    public class Demo_MultiLineTextBox : App
     {
         protected override void OnStart(AppHost host)
         {
@@ -23,7 +23,7 @@ namespace LayoutFarm
             style2.FontColor = new PixelFarm.Drawing.Color(0, 0, 0);
             textbox2.DefaultSpanStyle = style2;
             textbox2.SetLocation(20, 120);
-            
+
 
             host.AddChild(textbox2);
             var textSplitter = new ContentTextSplitter();

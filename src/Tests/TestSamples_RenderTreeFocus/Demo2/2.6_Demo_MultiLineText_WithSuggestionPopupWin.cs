@@ -7,7 +7,7 @@ using LayoutFarm.UI;
 namespace LayoutFarm
 {
     [DemoNote("2.6 Demo_MultiLineText_WithSuggestionPopupWin")]
-    class Demo_MultiLineText_WithSuggestionPopupWin : App
+    public class Demo_MultiLineText_WithSuggestionPopupWin : App
     {
         LayoutFarm.CustomWidgets.TextBox _textbox;
         SuggestionWindowMx _sgBox;

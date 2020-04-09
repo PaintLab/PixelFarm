@@ -4,7 +4,7 @@ using PixelFarm.Drawing;
 namespace LayoutFarm
 {
     [DemoNote("1.8 Hinge")]
-    class Demo_Hinge : App
+    public class Demo_Hinge : App
     {
         ImageBinder _arrowBmp;
         AppHost _appHost;
@@ -75,7 +75,7 @@ namespace LayoutFarm
             var mnuItem = new CustomWidgets.MenuItem(150, 20);
             mnuItem.BackColor = KnownColors.OrangeRed;
             mnuItem.SetLocation(x, y);
-             
+
             //--------------------------------------
             //add small px to land part
             //image

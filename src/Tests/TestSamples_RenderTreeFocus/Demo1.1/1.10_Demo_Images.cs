@@ -3,7 +3,7 @@ using LayoutFarm.CustomWidgets;
 namespace LayoutFarm
 {
     [DemoNote("1.10 MultipleImages")]
-    class Demo_MultipleImages : App
+    public class Demo_MultipleImages : App
     {
         protected override void OnStart(AppHost host)
         {

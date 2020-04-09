@@ -6,7 +6,7 @@ using LayoutFarm.CustomWidgets;
 namespace LayoutFarm
 {
     [DemoNote("1.14 EasingFuncs")]
-    class Demo_EasingFuncs : App
+    public class Demo_EasingFuncs : App
     {
         Box _animationBoard;
         AppHost _appHost;
