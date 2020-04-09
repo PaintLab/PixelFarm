@@ -7,8 +7,8 @@
     <ProjectGuid>{18EC3701-C6A5-429D-8C65-19ED4A2C2FED}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TestSamples</RootNamespace>
-    <AssemblyName>TestSamples</AssemblyName>
+    <RootNamespace>TestSamples_Painting_Focus</RootNamespace>
+    <AssemblyName>TestSamples_Painting_Focus</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

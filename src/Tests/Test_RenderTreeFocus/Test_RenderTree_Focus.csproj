@@ -7,8 +7,8 @@
     <ProjectGuid>{E8DF35E8-8765-47C2-BC1A-B686A058062C}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Test_BasicPixelFarm</RootNamespace>
-    <AssemblyName>Test_BasicPixelFarm</AssemblyName>
+    <RootNamespace>Test_RenderTree_Focus</RootNamespace>
+    <AssemblyName>Test_RenderTree_Focus</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -91,9 +91,9 @@
       <Project>{9060957d-ff0b-4b14-bb87-ee24b5170365}</Project>
       <Name>Marius.Yoga</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Test_RenderTreeFocusExamples\Test_RenderTreeFocusExamples.csproj">
+    <ProjectReference Include="..\TestSamples_RenderTreeFocus\TestSamples_RenderTreeFocus.csproj">
       <Project>{e906647b-3216-4cc1-b849-dd249f6737f4}</Project>
-      <Name>Test_RenderTreeFocusExamples</Name>
+      <Name>TestSamples_RenderTreeFocus</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
