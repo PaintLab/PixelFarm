@@ -5,10 +5,11 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
+//https://github.com/marius-klimantavicius/yoga
 
 using System;
 
-namespace Marius.Yoga
+namespace LayoutFarm.MariusYoga
 {
     public static class YogaArray
     {
@@ -70,32 +71,29 @@ namespace Marius.Yoga
 
         public T this[int index]
         {
-            get { return _array[index]; }
-            set { _array[index] = value; }
+            get => _array[index];
+            set => _array[index] = value;
         }
 
         public T this[YogaEdge index]
         {
-            get { return _array[(int)index]; }
-            set { _array[(int)index] = value; }
+            get => _array[(int)index];
+            set => _array[(int)index] = value;
         }
 
         public T this[YogaFlexDirection index]
         {
-            get { return _array[(int)index]; }
-            set { _array[(int)index] = value; }
+            get => _array[(int)index];
+            set => _array[(int)index] = value;
         }
 
         public T this[YogaDimension index]
         {
-            get { return _array[(int)index]; }
-            set { _array[(int)index] = value; }
+            get => _array[(int)index];
+            set => _array[(int)index] = value;
         }
 
-        public int Length
-        {
-            get { return _array.Length; }
-        }
+        public int Length => _array.Length;
 
         public YogaArray(int length)
         {

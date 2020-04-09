@@ -5,10 +5,11 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
+//https://github.com/marius-klimantavicius/yoga
 
-namespace Marius.Yoga
+namespace LayoutFarm.MariusYoga
 {
-    public enum YogaAlign
+    public enum YogaAlign : byte
     {
         Auto,
         FlexStart,

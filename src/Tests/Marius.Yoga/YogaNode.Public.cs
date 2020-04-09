@@ -5,25 +5,24 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
+//https://github.com/marius-klimantavicius/yoga
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 
-namespace Marius.Yoga
+
+namespace LayoutFarm.MariusYoga
 {
     public partial class YogaNode
     {
-        private object _data;
+        public bool IsMeasureDefined => _measure != null;
 
-        public bool IsMeasureDefined { get { return _measure != null; } }
-
-        public bool IsBaselineDefined { get { return _baseline != null; } }
+        public bool IsBaselineDefined => Baseline != null;
 
         public bool IsReferenceBaseline
         {
-            get { return _isReferenceBaseline; }
+            get => _isReferenceBaseline;
             set
             {
                 if (_isReferenceBaseline != value)
@@ -41,11 +40,7 @@ namespace Marius.Yoga
 
         public YogaDirection StyleDirection
         {
-            get
-            {
-                return _style.Direction;
-            }
-
+            get => _style.Direction;
             set
             {
                 if (_style.Direction != value)
@@ -58,11 +53,7 @@ namespace Marius.Yoga
 
         public YogaFlexDirection FlexDirection
         {
-            get
-            {
-                return _style.FlexDirection;
-            }
-
+            get => _style.FlexDirection;
             set
             {
                 if (_style.FlexDirection != value)
@@ -75,11 +66,7 @@ namespace Marius.Yoga
 
         public YogaJustify JustifyContent
         {
-            get
-            {
-                return _style.JustifyContent;
-            }
-
+            get => _style.JustifyContent;
             set
             {
                 if (_style.JustifyContent != value)
@@ -92,11 +79,7 @@ namespace Marius.Yoga
 
         public YogaDisplay Display
         {
-            get
-            {
-                return _style.Display;
-            }
-
+            get => _style.Display;
             set
             {
                 if (_style.Display != value)
@@ -109,11 +92,7 @@ namespace Marius.Yoga
 
         public YogaAlign AlignItems
         {
-            get
-            {
-                return _style.AlignItems;
-            }
-
+            get => _style.AlignItems;
             set
             {
                 if (_style.AlignItems != value)
@@ -126,11 +105,7 @@ namespace Marius.Yoga
 
         public YogaAlign AlignSelf
         {
-            get
-            {
-                return _style.AlignSelf;
-            }
-
+            get => _style.AlignSelf;
             set
             {
                 if (_style.AlignSelf != value)
@@ -143,11 +118,7 @@ namespace Marius.Yoga
 
         public YogaAlign AlignContent
         {
-            get
-            {
-                return _style.AlignContent;
-            }
-
+            get => _style.AlignContent;
             set
             {
                 if (_style.AlignContent != value)
@@ -160,11 +131,7 @@ namespace Marius.Yoga
 
         public YogaPositionType PositionType
         {
-            get
-            {
-                return _style.PositionType;
-            }
-
+            get => _style.PositionType;
             set
             {
                 if (_style.PositionType != value)
@@ -177,11 +144,7 @@ namespace Marius.Yoga
 
         public YogaWrap Wrap
         {
-            get
-            {
-                return _style.FlexWrap;
-            }
-
+            get => _style.FlexWrap;
             set
             {
                 if (_style.FlexWrap != value)
@@ -209,11 +172,7 @@ namespace Marius.Yoga
 
         public float? FlexGrow
         {
-            get
-            {
-                return _style.FlexGrow;
-            }
-
+            get => _style.FlexGrow;
             set
             {
                 if (value == float.NaN)
@@ -229,11 +188,7 @@ namespace Marius.Yoga
 
         public float? FlexShrink
         {
-            get
-            {
-                return _style.FlexShrink;
-            }
-
+            get => _style.FlexShrink;
             set
             {
                 if (value == float.NaN)
@@ -249,11 +204,7 @@ namespace Marius.Yoga
 
         public YogaValue FlexBasis
         {
-            get
-            {
-                return _style.FlexBasis;
-            }
-
+            get => _style.FlexBasis;
             set
             {
                 var current = _style.FlexBasis;
@@ -267,11 +218,7 @@ namespace Marius.Yoga
 
         public YogaValue Width
         {
-            get
-            {
-                return _style.Dimensions[YogaDimension.Width];
-            }
-
+            get => _style.Dimensions[YogaDimension.Width];
             set
             {
                 var current = _style.Dimensions[YogaDimension.Width];
@@ -303,11 +250,7 @@ namespace Marius.Yoga
 
         public YogaValue MaxWidth
         {
-            get
-            {
-                return _style.MaxDimensions[YogaDimension.Width];
-            }
-
+            get => _style.MaxDimensions[YogaDimension.Width];
             set
             {
                 var current = _style.MaxDimensions[YogaDimension.Width];
@@ -321,11 +264,7 @@ namespace Marius.Yoga
 
         public YogaValue MaxHeight
         {
-            get
-            {
-                return _style.MaxDimensions[YogaDimension.Height];
-            }
-
+            get => _style.MaxDimensions[YogaDimension.Height];
             set
             {
                 var current = _style.MaxDimensions[YogaDimension.Height];
@@ -339,11 +278,7 @@ namespace Marius.Yoga
 
         public YogaValue MinWidth
         {
-            get
-            {
-                return _style.MinDimensions[YogaDimension.Width];
-            }
-
+            get => _style.MinDimensions[YogaDimension.Width];
             set
             {
                 var current = _style.MinDimensions[YogaDimension.Width];
@@ -357,11 +292,7 @@ namespace Marius.Yoga
 
         public YogaValue MinHeight
         {
-            get
-            {
-                return _style.MinDimensions[YogaDimension.Height];
-            }
-
+            get => _style.MinDimensions[YogaDimension.Height];
             set
             {
                 var current = _style.MinDimensions[YogaDimension.Height];
@@ -375,11 +306,7 @@ namespace Marius.Yoga
 
         public float? AspectRatio
         {
-            get
-            {
-                return _style.AspectRatio;
-            }
-
+            get => _style.AspectRatio;
             set
             {
                 if (_style.AspectRatio != value)
@@ -390,38 +317,19 @@ namespace Marius.Yoga
             }
         }
 
-        public float LayoutX
-        {
-            get { return _layout.Position[YogaEdge.Left] ?? 0; }
-        }
+        public float LayoutX => _layout.Position[YogaEdge.Left] ?? 0;
 
-        public float LayoutY
-        {
-            get { return _layout.Position[YogaEdge.Top] ?? 0; }
-        }
+        public float LayoutY => _layout.Position[YogaEdge.Top] ?? 0;
 
-        public float LayoutWidth
-        {
-            get { return _layout.Dimensions[YogaDimension.Width] ?? 0; }
-        }
+        public float LayoutWidth => _layout.Dimensions[YogaDimension.Width] ?? 0;
 
-        public float LayoutHeight
-        {
-            get { return _layout.Dimensions[YogaDimension.Height] ?? 0; }
-        }
+        public float LayoutHeight => _layout.Dimensions[YogaDimension.Height] ?? 0;
 
-        public YogaDirection LayoutDirection
-        {
-            get { return _layout.Direction; }
-        }
+        public YogaDirection LayoutDirection => _layout.Direction;
 
         public YogaOverflow Overflow
         {
-            get
-            {
-                return _style.Overflow;
-            }
-
+            get => _style.Overflow;
             set
             {
                 if (_style.Overflow != value)
@@ -432,77 +340,52 @@ namespace Marius.Yoga
             }
         }
 
-        public object Data
-        {
-            get { return _data; }
-            set { _data = value; }
-        }
+        public object Data { get; set; }
 
-        public YogaNode this[int index]
-        {
-            get { return _children[index]; }
-        }
+        public YogaNode this[int index] => _children[index];
 
-        public int Count
-        {
-            get { return _children != null ? _children.Count : 0; }
-        }
+        public int Count => _children != null ? _children.Count : 0;
 
-        public void MarkLayoutSeen()
-        {
-            _hasNewLayout = false;
-        }
+        public void MarkLayoutSeen() => HasNewLayout = false;
 
-        public void SetMeasureFunction(YogaMeasure measure)
-        {
-            Measure = measure;
-        }
+        public void SetMeasureFunction(YogaMeasure measure) => Measure = measure;
 
-        public void SetBaselineFunction(YogaBaseline baseline)
-        {
-            Baseline = baseline;
-        }
+        public void SetBaselineFunction(YogaBaseline baseline) => Baseline = baseline;
 
         public void Reset()
         {
             if (_children.Count > 0)
                 throw new InvalidOperationException("Cannot reset a node which still has children attached");
 
-            if (_owner != null)
+            if (Owner != null)
                 throw new InvalidOperationException("Cannot reset a node still attached to a owner");
 
             Clear();
 
-            _print = null;
-            _hasNewLayout = true;
-            _nodeType = YogaNodeType.Default;
+            PrintFunction = null;
+            HasNewLayout = true;
+            NodeType = YogaNodeType.Default;
             _measure = null;
-            _baseline = null;
-            _dirtied = null;
+            Baseline = null;
+            Dirtied = null;
             _style = new YogaStyle();
             _layout = new YogaLayout();
-            _lineIndex = 0;
-            _owner = null;
+            LineIndex = 0;
+            Owner = null;
             _children = new List<YogaNode>();
-            _nextChild = null;
+            NextChild = null;
             _isDirty = false;
-            _resolvedDimensions = new YogaArray<YogaValue>(new YogaValue[] { YogaValue.Undefined, YogaValue.Undefined });
+            ResolvedDimensions = new YogaArray<YogaValue>(new YogaValue[] { YogaValue.Undefined, YogaValue.Undefined });
 
-            if (_config.UseWebDefaults)
+            if (Config.UseWebDefaults)
             {
                 Style.FlexDirection = YogaFlexDirection.Row;
                 Style.AlignContent = YogaAlign.Stretch;
             }
         }
 
-        public IEnumerator<YogaNode> GetEnumerator()
-        {
-            return _children.GetEnumerator();
-        }
+        public IEnumerator<YogaNode> GetEnumerator() => _children.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

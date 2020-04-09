@@ -5,57 +5,25 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
+//https://github.com/marius-klimantavicius/yoga
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Marius.Yoga
+namespace LayoutFarm.MariusYoga
 {
     public class YogaConfig
     {
-        private bool[] _experimentalFeatures = new bool[] { false };
-        private bool _useWebDefaults;
-        private bool _useLegacyStretchBehaviour;
-        private bool _shouldDiffLayoutWithoutLegacyStretchBehaviour;
-        private float _pointScaleFactor = 1.0F;
-        private YogaNodeCloned _onNodeCloned;
+        public bool[] ExperimentalFeatures { get; set; } = new bool[] { false };
 
-        public bool[] ExperimentalFeatures
-        {
-            get { return _experimentalFeatures; }
-            set { _experimentalFeatures = value; }
-        }
+        public bool UseWebDefaults { get; set; }
 
-        public bool UseWebDefaults
-        {
-            get { return _useWebDefaults; }
-            set { _useWebDefaults = value; }
-        }
+        public bool UseLegacyStretchBehaviour { get; set; }
 
-        public bool UseLegacyStretchBehaviour
-        {
-            get { return _useLegacyStretchBehaviour; }
-            set { _useLegacyStretchBehaviour = value; }
-        }
+        public bool ShouldDiffLayoutWithoutLegacyStretchBehaviour { get; set; }
 
-        public bool ShouldDiffLayoutWithoutLegacyStretchBehaviour
-        {
-            get { return _shouldDiffLayoutWithoutLegacyStretchBehaviour; }
-            set { _shouldDiffLayoutWithoutLegacyStretchBehaviour = value; }
-        }
+        public float PointScaleFactor { get; set; } = 1.0F;
 
-        public float PointScaleFactor
-        {
-            get { return _pointScaleFactor; }
-            set { _pointScaleFactor = value; }
-        }
-
-        public YogaNodeCloned OnNodeCloned
-        {
-            get { return _onNodeCloned; }
-            set { _onNodeCloned = value; }
-        }
+        public YogaNodeCloned OnNodeCloned { get; set; }
 
         public YogaConfig()
         {
