@@ -147,23 +147,23 @@ namespace PixelFarm.CpuBlit.Samples
         public override void KeyDown(int keycode)
         {
             //temp 
-            System.Windows.Forms.Keys k = (System.Windows.Forms.Keys)keycode;
-            switch (k)
-            {
-                case System.Windows.Forms.Keys.A:
-                    {
-                        SpriteShape s = new SpriteShape(VgVisualDocHelper.CreateVgVisualDocFromFile(@"Samples\arrow2.svg").VgRootElem);
-                        _spriteList.Add(new MyTestSprite(s) { JustMove = true });
-                    }
-                    break;
-                case System.Windows.Forms.Keys.Q:
-                    {
-                        //test add box control ...
+            //System.Windows.Forms.Keys k = (System.Windows.Forms.Keys)keycode;
+            //switch (k)
+            //{
+            //    case System.Windows.Forms.Keys.A:
+            //        {
+            //            SpriteShape s = new SpriteShape(VgVisualDocHelper.CreateVgVisualDocFromFile(@"Samples\arrow2.svg").VgRootElem);
+            //            _spriteList.Add(new MyTestSprite(s) { JustMove = true });
+            //        }
+            //        break;
+            //    case System.Windows.Forms.Keys.Q:
+            //        {
+            //            //test add box control ...
 
 
-                    }
-                    break;
-            }
+            //        }
+            //        break;
+            //}
 
 
             base.KeyDown(keycode);

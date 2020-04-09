@@ -26,13 +26,14 @@ namespace PixelFarm.CpuBlit.Sample_Draw
     public class OpenTypeReaderFromPureCS : DemoBase
     {
 
-
         VertexStore _left_vxs;
         VertexStore _right_vxs;
 
         public override void Init()
         {
-            string fontfile = YourImplementation.FrameworkInitWinGDI.GetFontLoader().GetInstalledTypeface("tahoma", TypefaceStyle.Regular).FontPath;
+            // YourImplementation.FrameworkInitWinGDI.GetFontLoader().GetInstalledTypeface("tahoma", TypefaceStyle.Regular).FontPath;
+            
+            string fontfile = "Data\\";
 
             this.FillBG = true;
             float sizeInPts = 72;

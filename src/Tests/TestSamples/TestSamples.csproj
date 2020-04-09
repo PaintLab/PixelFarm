@@ -47,6 +47,42 @@
     <Compile Include="00_DemoBase\MyTestSprite.cs" />
     <Compile Include="00_DemoBase\SpriteShape.cs" />
     <Compile Include="00_DemoBase\Square.cs" />
+    <Compile Include="3_Samples\01_DrawSamples\DrawSamples01_03.cs" />
+    <Compile Include="3_Samples\01_DrawSamples\DrawSamples04.cs" />
+    <Compile Include="3_Samples\01_DrawSamples\DrawSamples05.cs" />
+    <Compile Include="3_Samples\01_DrawSamples\OpenTypeFont.cs" />
+    <Compile Include="3_Samples\01_DrawSamples\SimplePainterGlyphSample.cs" />
+    <Compile Include="3_Samples\01_DrawSamples\SimplePainterSample.cs" />
+    <Compile Include="3_Samples\02_AA_Demo\AADemo_Test2.cs" />
+    <Compile Include="3_Samples\02_AA_Demo\AADemo_Test3.cs" />
+    <Compile Include="3_Samples\02_AA_Demo\AADemo_Test4_subpix.cs" />
+    <Compile Include="3_Samples\02_AA_Demo\Lines.cs" />
+    <Compile Include="3_Samples\02_AA_Demo\StrokeGenSample.cs" />
+    <Compile Include="3_Samples\03_LionSamples\LionFill.cs" />
+    <Compile Include="3_Samples\03_LionSamples\LionFillMsdfTest.cs" />
+    <Compile Include="3_Samples\03_LionSamples\LionOutline.cs" />
+    <Compile Include="3_Samples\03_LionSamples\SvgTiger.cs" />
+    <Compile Include="3_Samples\05_AlphaMask2\FontTextureDemo.cs" />
+    <Compile Include="3_Samples\05_AlphaMask2\FontTextureDemo2.cs" />
+    <Compile Include="3_Samples\05_AlphaMask2\FontTextureDemo3.cs" />
+    <Compile Include="3_Samples\05_AlphaMask2\LionMask3.cs" />
+    <Compile Include="3_Samples\05_AlphaMask2\MiniAggWithTextPrinterDemo.cs" />
+    <Compile Include="3_Samples\06_ComponentRendering\ComponentRendering.cs" />
+    <Compile Include="3_Samples\07_Shading\01_GradientSample.cs" />
+    <Compile Include="3_Samples\07_Shading\02_GouraudSample.cs" />
+    <Compile Include="3_Samples\10_Polygons\GlyphDebugContourVisualizer.cs" />
+    <Compile Include="3_Samples\10_Polygons\GlyphDemo.cs" />
+    <Compile Include="3_Samples\10_Polygons\Poly2TriDemo.cs" />
+    <Compile Include="3_Samples\10_Polygons\PolygonShopDemo.cs" />
+    <Compile Include="3_Samples\10_Polygons\RoundRectSample.cs" />
+    <Compile Include="3_Samples\20_PolygonClippingSample\PolygonClippingDemo.cs" />
+    <Compile Include="3_Samples\20_PolygonClippingSample\PolygonClippingDemo2.cs" />
+    <Compile Include="3_Samples\20_PolygonClippingSample\PolygonClippingDemoHelper.cs" />
+    <Compile Include="3_Samples\22_CurveReconstructions\LionCurveReconstruction.cs" />
+    <Compile Include="3_Samples\22_CurveReconstructions\TriangleReconstructions.cs" />
+    <Compile Include="3_Samples\23_ImgFilters\FilterFxDemo.cs" />
+    <Compile Include="3_Samples\23_ImgFilters\ImgFilters1Demo.cs" />
+    <Compile Include="3_Samples\24_FlexBox\FlexBoxDemo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sample03\T102_1_BasicDraw2.cs" />
     <Compile Include="Sample03\T107_1_DrawImages.cs" />
@@ -123,9 +159,16 @@
       <Project>{662f2274-d6f8-413a-a908-1b2f10c01348}</Project>
       <Name>PixelFarm.One.HtmlRenderer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Marius.Yoga\Marius.Yoga.csproj">
+      <Project>{9060957d-ff0b-4b14-bb87-ee24b5170365}</Project>
+      <Name>Marius.Yoga</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="3_Samples\09_Surfaces\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

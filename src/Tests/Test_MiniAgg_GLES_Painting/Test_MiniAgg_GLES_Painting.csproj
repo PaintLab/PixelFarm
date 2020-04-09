@@ -55,43 +55,9 @@
     <Compile Include="0_Start\CpuBlitAppModule.cs" />
     <Compile Include="0_Start\CpuBlitOnGLESAppModule.cs" />
     <Compile Include="0_Start\GLESAppModule.cs" />
-    <Compile Include="3_Samples\01_DrawSamples\DrawSamples05.cs" />
-    <Compile Include="3_Samples\01_DrawSamples\DrawSamples04.cs" />
-    <Compile Include="3_Samples\01_DrawSamples\DrawSamples01_03.cs" />
-    <Compile Include="3_Samples\02_AA_Demo\Lines.cs" />
-    <Compile Include="3_Samples\01_DrawSamples\OpenTypeFont.cs" />
-    <Compile Include="3_Samples\01_DrawSamples\SimplePainterGlyphSample.cs" />
-    <Compile Include="3_Samples\01_DrawSamples\SimplePainterSample.cs" />
-    <Compile Include="3_Samples\02_AA_Demo\AADemo_Test3.cs" />
-    <Compile Include="3_Samples\02_AA_Demo\AADemo_Test4_subpix.cs" />
-    <Compile Include="3_Samples\02_AA_Demo\AADemo_Test2.cs" />
-    <Compile Include="3_Samples\02_AA_Demo\StrokeGenSample.cs" />
-    <Compile Include="3_Samples\03_LionSamples\LionFillMsdfTest.cs" />
-    <Compile Include="3_Samples\09_Surfaces\CutCopyPaste.cs" />
-    <Compile Include="3_Samples\10_Polygons\GlyphDebugContourVisualizer.cs" />
-    <Compile Include="3_Samples\10_Polygons\GlyphDemo.cs" />
-    <Compile Include="3_Samples\10_Polygons\Poly2TriDemo.cs" />
-    <Compile Include="3_Samples\10_Polygons\PolygonShopDemo.cs" />
-    <Compile Include="3_Samples\20_PolygonClippingSample\PolygonClippingDemo2.cs" />
-    <Compile Include="3_Samples\22_CurveReconstructions\LionCurveReconstruction.cs" />
-    <Compile Include="3_Samples\03_LionSamples\SvgTiger.cs" />
-    <Compile Include="3_Samples\05_AlphaMask2\FontTextureDemo2.cs" />
-    <Compile Include="3_Samples\05_AlphaMask2\FontTextureDemo3.cs" />
-    <Compile Include="3_Samples\05_AlphaMask2\LionMask3.cs" />
-    <Compile Include="3_Samples\05_AlphaMask2\MiniAggWithTextPrinterDemo.cs" />
-    <Compile Include="3_Samples\06_ComponentRendering\ComponentRendering.cs" />
-    <Compile Include="3_Samples\07_Shading\01_GradientSample.cs" />
-    <Compile Include="3_Samples\09_Surfaces\FloodFillDemo.cs" />
-    <Compile Include="3_Samples\10_Polygons\RoundRectSample.cs" />
-    <Compile Include="3_Samples\20_PolygonClippingSample\PolygonClippingDemoHelper.cs" />
-    <Compile Include="3_Samples\20_PolygonClippingSample\PolygonClippingDemo.cs" />
-    <Compile Include="3_Samples\05_AlphaMask2\FontTextureDemo.cs" />
-    <Compile Include="3_Samples\07_Shading\02_GouraudSample.cs" />
-    <Compile Include="3_Samples\22_CurveReconstructions\TriangleReconstructions.cs" />
-    <Compile Include="3_Samples\23_ImgFilters\FilterFxDemo.cs" />
-    <Compile Include="3_Samples\23_ImgFilters\ImgFilters1Demo.cs" />
-    <Compile Include="3_Samples\24_FlexBox\FlexBoxDemo.cs" />
     <Compile Include="4_Samples_2\41_BitmapRenderSample.cs" />
+    <Compile Include="4_Samples_2\CutCopyPaste.cs" />
+    <Compile Include="4_Samples_2\FloodFillDemo.cs" />
     <Compile Include="9_TestPaintFx\FormTestPaintFx.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -139,8 +105,6 @@
     <Compile Include="FormDev.Designer.cs">
       <DependentUpon>FormDev.cs</DependentUpon>
     </Compile>
-    <Compile Include="3_Samples\03_LionSamples\LionFill.cs" />
-    <Compile Include="3_Samples\03_LionSamples\LionOutline.cs" />
     <Compile Include="0_Start\Program.cs" />
     <Compile Include="7_GLES2Test\FormTestBed.cs">
       <SubType>Form</SubType>
