@@ -46,4 +46,45 @@ namespace LayoutFarm
             }
         }
     }
+    [DemoNote("1.11_3 TwoLabels")]
+    class Demo_TwoLabels : App
+    {
+        protected override void OnStart(AppHost host)
+        {
+            Box background_box = new Box(250, 500);
+            background_box.BackColor = PixelFarm.Drawing.Color.White;
+            host.AddChild(background_box);
+
+            //PixelFarm.Drawing.RequestFont font = new PixelFarm.Drawing.RequestFont("Source Sans Pro", 20);
+            PixelFarm.Drawing.RequestFont font = new PixelFarm.Drawing.RequestFont("Source Sans Pro", 20);
+            {
+
+                Label label = new Label();
+                label.TextColor = PixelFarm.Drawing.Color.Black;
+                label.SetFont(font);
+                label.Text = "A"; 
+                label.SetLocation(10, 20);
+                label.SetSize(15, 20);
+                host.AddChild(label);
+            }
+            {
+                Label label = new Label();
+                label.TextColor = PixelFarm.Drawing.Color.Black;
+                label.SetFont(font);
+                label.Text = "A12345";
+                label.SetSize(10, 20);
+                label.SetLocation(30, 20);
+                host.AddChild(label);
+            }
+            //{
+            //    Label label = new Label();
+            //    label.TextColor = PixelFarm.Drawing.Color.Black;
+            //    label.SetFont(font);
+            //    label.Text = "XY";
+            //    label.SetLocation(30, 20);
+            //    host.AddChild(label);
+            //}
+
+        }
+    }
 }
