@@ -49,32 +49,28 @@
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\TextBreakerTest\IcuSimpleTextFileDictionaryProvider.cs">
       <Link>0_YourImplementation\IcuSimpleTextFileDictionaryProvider.cs</Link>
     </Compile>
-    <Compile Include="..\Test_RenderTreeFocus\0_Start\AppHostWithRootGfx1.cs">
-      <Link>0_Start\AppHostWithRootGfx1.cs</Link>
-    </Compile>
     <Compile Include="0_Start\CpuBlitAppModule.cs" />
     <Compile Include="0_Start\CpuBlitOnGLESAppModule.cs" />
     <Compile Include="0_Start\GLESAppModule.cs" />
     <Compile Include="4_Samples_2\41_BitmapRenderSample.cs" />
     <Compile Include="4_Samples_2\CutCopyPaste.cs" />
     <Compile Include="4_Samples_2\FloodFillDemo.cs" />
-    <Compile Include="9_TestPaintFx\FormTestPaintFx.cs">
+    <Compile Include="Experiments\FormTestPaintFx.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="9_TestPaintFx\FormTestPaintFx.Designer.cs">
+    <Compile Include="Experiments\FormTestPaintFx.Designer.cs">
       <DependentUpon>FormTestPaintFx.cs</DependentUpon>
     </Compile>
-    <Compile Include="9_TestPaintFx\TestPaintFx1.cs" />
-    <Compile Include="Experiment_ColorBlend\ColorCompoBox.cs">
+    <Compile Include="Experiments\ColorCompoBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Experiment_ColorBlend\ColorCompoBox.Designer.cs">
+    <Compile Include="Experiments\ColorCompoBox.Designer.cs">
       <DependentUpon>ColorCompoBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Experiment_ColorBlend\FormTestColorBlend.cs">
+    <Compile Include="Experiments\FormTestColorBlend.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Experiment_ColorBlend\FormTestColorBlend.Designer.cs">
+    <Compile Include="Experiments\FormTestColorBlend.Designer.cs">
       <DependentUpon>FormTestColorBlend.cs</DependentUpon>
     </Compile>
     <Compile Include="FormDev.cs">
@@ -84,10 +80,10 @@
       <DependentUpon>FormDev.cs</DependentUpon>
     </Compile>
     <Compile Include="0_Start\Program.cs" />
-    <Compile Include="7_GLES2Test\FormTestBed.cs">
+    <Compile Include="FormTestBed.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="7_GLES2Test\FormTestBed.designer.cs">
+    <Compile Include="FormTestBed.designer.cs">
       <DependentUpon>FormTestBed.cs</DependentUpon>
     </Compile>
     <Compile Include="FormImgResampling.cs">
@@ -115,19 +111,19 @@
     <Compile Include="x_notused\DrawingGLFontPrinter.Gdi.cs" />
     <Compile Include="x_notused\GradientSpanGen.cs" />
     <Compile Include="x_notused\IGradientValueCalculator_and_Impl.cs" />
-    <EmbeddedResource Include="9_TestPaintFx\FormTestPaintFx.resx">
+    <EmbeddedResource Include="Experiments\FormTestPaintFx.resx">
       <DependentUpon>FormTestPaintFx.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Experiment_ColorBlend\ColorCompoBox.resx">
+    <EmbeddedResource Include="Experiments\ColorCompoBox.resx">
       <DependentUpon>ColorCompoBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormDev.resx">
       <DependentUpon>FormDev.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="7_GLES2Test\FormTestBed.resx">
+    <EmbeddedResource Include="FormTestBed.resx">
       <DependentUpon>FormTestBed.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Experiment_ColorBlend\FormTestColorBlend.resx">
+    <EmbeddedResource Include="Experiments\FormTestColorBlend.resx">
       <DependentUpon>FormTestColorBlend.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormImgResampling.resx">
