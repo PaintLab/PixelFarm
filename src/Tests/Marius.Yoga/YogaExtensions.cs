@@ -6,11 +6,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
+//https://github.com/marius-klimantavicius/yoga
 
-namespace Marius.Yoga
+namespace LayoutFarm.MariusYoga
 {
     public static class YogaExtensions
     {

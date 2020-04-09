@@ -1,5 +1,5 @@
 ﻿//MIT, 2020, Brezza92
-using Marius.Yoga;
+using LayoutFarm.MariusYoga;
 using System.Collections.Generic;
 
 namespace LayoutFarm.CustomWidgets
@@ -43,9 +43,5 @@ namespace LayoutFarm.CustomWidgets
             }
         }
     }
-
-    public class FlexBoxCollection
-    {
-        List<FlexBox> flexBoxes = new List<FlexBox>();
-    }
+     
 }
