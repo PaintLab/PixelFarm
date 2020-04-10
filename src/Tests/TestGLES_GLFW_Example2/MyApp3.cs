@@ -214,23 +214,18 @@ namespace TestGlfw
         }
         public static void Start()
         {
-            //bridge from native side to managed side
+
+
+          
+            string versionStr3 = Marshal.PtrToStringAnsi(Glfw.Glfw3.glfwGetVersionString());
+
             var bridge = new MyGlfwTopWindowBridge.GlfwEventBridge();
+
+         
+
             var form = new GlFwForm(s_formW, s_formH, "hello!", bridge);
             form.MakeCurrent();
-
-            //----------
-            //(test) use gles2.1
-            Glfw.Glfw3.glfwWindowHint(Glfw.Glfw3.GLFW_CLIENT_API, Glfw.Glfw3.GLFW_OPENGL_ES_API);
-            Glfw.Glfw3.glfwWindowHint(Glfw.Glfw3.GLFW_CONTEXT_CREATION_API, Glfw.Glfw3.GLFW_EGL_CONTEXT_API);
-            Glfw.Glfw3.glfwWindowHint(Glfw.Glfw3.GLFW_CONTEXT_VERSION_MAJOR, 2);
-            Glfw.Glfw3.glfwWindowHint(Glfw.Glfw3.GLFW_CONTEXT_VERSION_MINOR, 1);
-      
-            Glfw.Glfw3.glfwSwapInterval(1);
-            //----------
-
-
-            string versionStr3 = Marshal.PtrToStringAnsi(Glfw3.glfwGetVersionString());
+          
             OpenTK.Platform.Factory.GetCustomPlatformFactory = () => OpenTK.Platform.Egl.EglAngle.NewFactory();
             OpenTK.Toolkit.Init(new OpenTK.ToolkitOptions {
                 Backend = OpenTK.PlatformBackend.PreferNative,
