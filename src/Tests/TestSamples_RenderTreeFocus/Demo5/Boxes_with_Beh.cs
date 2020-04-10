@@ -21,14 +21,18 @@ namespace LayoutFarm
                 IUIEventListener ctx = e.CurrentContextElement;
                 LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;
                 box.BackColor = Color.Red;
+#if DEBUG
                 System.Diagnostics.Debug.WriteLine("mouse_enter:" + box.dbugId);
+#endif
             };
             evListener.MouseLeave += (s, e) =>
             {
                 IUIEventListener ctx = e.CurrentContextElement;
                 LayoutFarm.CustomWidgets.Box box = (LayoutFarm.CustomWidgets.Box)ctx;
                 box.BackColor = Color.Blue;
+#if DEBUG
                 System.Diagnostics.Debug.WriteLine("mouse_leave:" + box.dbugId);
+#endif
             };
 
             for (int i = 0; i < 10; ++i)
@@ -65,19 +69,25 @@ namespace LayoutFarm
             {
                 LayoutFarm.CustomWidgets.Box box = s.Source;
                 box.BackColor = _mouseEnterState;
+#if DEBUG
                 System.Diagnostics.Debug.WriteLine("mouse_enter:" + box.dbugId);
+#endif
             };
             beh.MouseLeave += (s, e) =>
             {
                 LayoutFarm.CustomWidgets.Box box = s.Source;
                 box.BackColor = _normalState;
+#if DEBUG
                 System.Diagnostics.Debug.WriteLine("mouse_leave:" + box.dbugId);
+#endif
             };
             beh.MouseHover += (s, e) =>
             {
                 LayoutFarm.CustomWidgets.Box box = s.Source;
                 box.BackColor = _hoverState;
+#if DEBUG
                 System.Diagnostics.Debug.WriteLine("mouse_hover:" + box.dbugId);
+#endif
             };
 
             beh.MousePress += (s, e) =>
@@ -85,7 +95,9 @@ namespace LayoutFarm
                 LayoutFarm.CustomWidgets.Box box = s.Source;
                 Color back_color = box.BackColor;
                 box.BackColor = new Color((byte)System.Math.Min(back_color.A + 10, 255), back_color.R, back_color.G, back_color.B);
+#if DEBUG
                 System.Diagnostics.Debug.WriteLine("mouse_press:" + box.dbugId);
+#endif
             };
 
             for (int i = 0; i < 10; ++i)
@@ -133,7 +145,9 @@ namespace LayoutFarm
                 //not the the current context element
                 LayoutFarm.CustomWidgets.Box box = s.Source;
                 box.BackColor = _mouseEnterState;
+#if DEBUG
                 System.Diagnostics.Debug.WriteLine("mouse_enter:" + box.dbugId);
+#endif
             };
             mouseBeh.MouseLeave += (s, e) =>
             {
@@ -142,7 +156,9 @@ namespace LayoutFarm
 
                 LayoutFarm.CustomWidgets.Box box = s.Source;
                 box.BackColor = _normalState;
+#if DEBUG
                 System.Diagnostics.Debug.WriteLine("mouse_leave:" + box.dbugId);
+#endif
             };
             mouseBeh.MouseHover += (s, e) =>
             {
@@ -151,7 +167,9 @@ namespace LayoutFarm
 
                 LayoutFarm.CustomWidgets.Box box = s.Source;
                 box.BackColor = _hoverState;
+#if DEBUG
                 System.Diagnostics.Debug.WriteLine("mouse_hover:" + box.dbugId);
+#endif
             };
             mouseBeh.MousePress += (s, e) =>
             {
@@ -160,7 +178,9 @@ namespace LayoutFarm
                 LayoutFarm.CustomWidgets.Box box = s.Source;
                 Color back_color = box.BackColor;
                 box.BackColor = new Color((byte)System.Math.Min(back_color.A + 10, 255), back_color.R, back_color.G, back_color.B);
+#if DEBUG
                 System.Diagnostics.Debug.WriteLine("mouse_press:" + box.dbugId);
+#endif
             };
             mouseBeh.MouseDown += (s, e) =>
             {
