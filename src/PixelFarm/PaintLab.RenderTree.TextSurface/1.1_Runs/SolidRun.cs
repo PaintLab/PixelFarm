@@ -160,7 +160,7 @@ namespace LayoutFarm.TextEditing
         Size CalculateDrawingStringSize(char[] buffer, int length)
         {
             var textBufferSpan = new TextBufferSpan(buffer, 0, length);
-            return MeasureString(ref textBufferSpan);
+            return MeasureString(textBufferSpan);
         }
 
         public override CopyRun Copy(int startIndex, int length)

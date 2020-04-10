@@ -80,11 +80,11 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
             int j = buffer.Length;
             //create temp buffer span that describe the part of a whole char buffer
-            TextBufferSpan textBufferSpan = new TextBufferSpan(buffer, startAt, len);
+            var textBufferSpan = new TextBufferSpan(buffer, startAt, len);
 
             //ask text service to parse user input char buffer and create a glyph-plan-sequence (list of glyph-plan) 
             //with specific request font
-            GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(ref textBufferSpan, _font);
+            GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(textBufferSpan, _font);
 
             Typeface typeface = _textServices.ResolveTypeface(_font);
             float scale = typeface.CalculateScaleToPixelFromPointSize(_font.SizeInPoints);

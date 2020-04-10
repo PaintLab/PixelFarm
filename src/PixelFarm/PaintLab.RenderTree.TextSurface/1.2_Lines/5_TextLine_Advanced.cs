@@ -436,12 +436,12 @@ namespace LayoutFarm.TextEditing
             {
                 var textBufferSpan = new TextBufferSpan(mybuffer);
 
-                ILineSegmentList lineSegs = txServices.BreakToLineSegments(ref textBufferSpan);
+                ILineSegmentList lineSegs = txServices.BreakToLineSegments(textBufferSpan);
 
-                TextSpanMeasureResult result = new TextSpanMeasureResult();
+                var result = new TextSpanMeasureResult();
                 result.outputXAdvances = new int[mybuffer.Length];
 
-                txServices.CalculateUserCharGlyphAdvancePos(ref textBufferSpan, lineSegs,
+                txServices.CalculateUserCharGlyphAdvancePos(textBufferSpan, lineSegs,
                     DefaultRunStyle.ReqFont,
                     ref result);
 
@@ -453,10 +453,10 @@ namespace LayoutFarm.TextEditing
 
                 var textBufferSpan = new TextBufferSpan(mybuffer);
 
-                TextSpanMeasureResult result = new TextSpanMeasureResult();
+                var result = new TextSpanMeasureResult();
                 result.outputXAdvances = new int[mybuffer.Length];
 
-                txServices.CalculateUserCharGlyphAdvancePos(ref textBufferSpan,
+                txServices.CalculateUserCharGlyphAdvancePos(textBufferSpan,
                     DefaultRunStyle.ReqFont,
                     ref result);
 

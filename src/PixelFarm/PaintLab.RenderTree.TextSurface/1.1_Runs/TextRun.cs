@@ -125,19 +125,19 @@ namespace LayoutFarm.TextEditing
                 if (_content_unparsed)
                 {
                     //parse the content first 
-                    _lineSegs = BreakToLineSegs(ref textBufferSpan);
+                    _lineSegs = BreakToLineSegs(textBufferSpan);
                 }
                 _content_unparsed = false;
-                MeasureString2(ref textBufferSpan, _lineSegs, ref measureResult);
+                MeasureString2(textBufferSpan, _lineSegs, ref measureResult);
             }
             else
             {
-                MeasureString2(ref textBufferSpan, null, ref measureResult);
+                MeasureString2(textBufferSpan, null, ref measureResult);
             }
 
             SetSize2(measureResult.outputTotalW, measureResult.lineHeight);
 
-            InvalidateGraphics();            
+            InvalidateGraphics();
         }
         protected void AdjustClientBounds(ref Rectangle bounds)
         {
@@ -196,7 +196,7 @@ namespace LayoutFarm.TextEditing
                 }
             }
             var textBufferSpan = new TextBufferSpan(_mybuffer, 0, length);
-            return MeasureString(ref textBufferSpan);
+            return MeasureString(textBufferSpan);
         }
 
         public override CopyRun Copy(int startIndex, int length)
