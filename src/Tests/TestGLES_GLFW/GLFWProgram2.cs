@@ -25,15 +25,15 @@ namespace TestGlfw
             Glfw.Glfw3.glfwWindowHint(Glfw.Glfw3.GLFW_CONTEXT_VERSION_MAJOR, 2);
             Glfw.Glfw3.glfwWindowHint(Glfw.Glfw3.GLFW_CONTEXT_VERSION_MINOR, 1);
             Glfw.Glfw3.glfwSwapInterval(1);
+
             //----------
 
 
-            string versionStr3 = Marshal.PtrToStringAnsi(Glfw3.glfwGetVersionString()); 
+            string versionStr3 = Marshal.PtrToStringAnsi(Glfw3.glfwGetVersionString());
 
 
             OpenTK.Platform.Factory.GetCustomPlatformFactory = () => OpenTK.Platform.Egl.EglAngle.NewFactory();
-            OpenTK.Toolkit.Init(new OpenTK.ToolkitOptions
-            {
+            OpenTK.Toolkit.Init(new OpenTK.ToolkitOptions {
                 Backend = OpenTK.PlatformBackend.PreferNative,
             });
             OpenTK.Graphics.PlatformAddressPortal.GetAddressDelegate = OpenTK.Platform.Utilities.CreateGetAddress();
@@ -62,7 +62,11 @@ namespace TestGlfw
             GL.Viewport(0, 0, max, max);
 
             //---------
-            form.RenderDel = demoContext.Render;
+            form.RenderDel = () =>
+            {
+                demoContext.Render();                 
+                form.SwapBuffers();
+            };
             //---------
 
             GlfwAppLoop.Run();

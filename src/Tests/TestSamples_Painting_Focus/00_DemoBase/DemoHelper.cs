@@ -73,15 +73,12 @@ namespace Mini
             //var printer = new GLBmpGlyphTextPrinter(canvasPainter, YourImplementation.BootStrapWinGdi.myFontLoader);
             //canvasPainter.TextPrinter = printer;
 
-            if (_getTextPrinterDel != null)
-            {
-                _getTextPrinterDel(canvasPainter);
-            }
+            _getTextPrinterDel?.Invoke(canvasPainter);
 
 
 
             demo.SetEssentialGLHandlers(
-                () => { },
+                null,
                 () => IntPtr.Zero,
                 () => IntPtr.Zero);
 
