@@ -36,17 +36,7 @@ namespace LayoutFarm
                 using (System.IO.MemoryStream ms = new MemoryStream(rawImgFile))
                 {
                     ms.Position = 0;
-                    //TODO: review here again
-                    using (System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(ms))
-                    {
-                        PixelFarm.CpuBlit.MemBitmap memBmp = new PixelFarm.CpuBlit.MemBitmap(gdiBmp.Width, gdiBmp.Height);
-                        //#if DEBUG
-                        //                        memBmp._dbugNote = "img;
-                        //#endif
-
-                        PixelFarm.CpuBlit.BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(gdiBmp, memBmp);
-                        return memBmp;
-                    }
+                    return PixelFarm.Platforms.ImageIOPortal.ReadImageDataFromMemStream(ms, imgTypeHint);
                 }
             }
             catch (System.Exception ex)
