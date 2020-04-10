@@ -1,5 +1,6 @@
 ﻿//Apache2, 2014-present, WinterDev 
 using System;
+using System.Collections.Generic;
 using LayoutFarm.UI;
 namespace LayoutFarm
 {
@@ -9,14 +10,28 @@ namespace LayoutFarm
     {
         static UIPlatform s_ui_platform;
         static bool s_Closing;
-
-        public abstract void SetClipboardData(string textData);
-        public abstract string GetClipboardData();
+        //----------------------------------------------------------------
+        //clipboard
         public abstract void ClearClipboardData();
+        public abstract bool ContainsClipboardData(string dataformat);
+        public abstract object GetClipboardData(string dataformat);
 
+        public abstract string GetClipboardText();
+        public abstract PixelFarm.Drawing.Image GetClipboardImage();
+        public abstract IEnumerable<string> GetClipboardFileDropList();
+
+
+        public abstract void SetClipboardText(string textData);
+        public abstract void SetClipboardImage(PixelFarm.Drawing.Image img);
+        public abstract void SetClipboardFileDropList(string[] filedrops);
+
+        //----------------------------------------------------------------
+        //cursor
         protected abstract Cursor CreateCursorImpl(CursorRequest curReq);
         public static Cursor CreateCursor(CursorRequest curReq) => s_ui_platform.CreateCursorImpl(curReq);
 
+
+        //----------------------------------------------------------------
         protected void SetAsDefaultPlatform()
         {
             s_ui_platform = this;
@@ -25,10 +40,15 @@ namespace LayoutFarm
         {
             s_Closing = true;
         }
+
+
+        //----------------------------------------------------------------
+        //timer and msg loop
         public static void RegisterTimerTask(UITimerTask uiTimerTask)
         {
             UIMsgQueueSystem.InternalMsgPumpRegister(uiTimerTask);
         }
+
         public static void RegisterRunOnceTask(Action<UITimerTask> action)
         {
 
@@ -50,6 +70,8 @@ namespace LayoutFarm
             //
             UIMsgQueueSystem.InternalMsgPumpOneStep();
         }
+
+
         protected static void SetUIMsgMinTimerCounterBackInMillisec(int millisec)
         {
             UIMsgQueueSystem.MinUICountDownInMillisec = millisec;

@@ -5,13 +5,13 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
+//https://github.com/marius-klimantavicius/yoga
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 
-namespace Marius.Yoga
+namespace LayoutFarm.MariusYoga
 {
     public partial class YogaNode : IEnumerable<YogaNode>
     {
@@ -20,62 +20,51 @@ namespace Marius.Yoga
         public const float WebDefaultFlexShrink = 1.0f;
 
         private static int _instanceCount = 0;
-
-        private YogaPrint _print;
-        private bool _hasNewLayout;
-        private YogaNodeType _nodeType;
         private YogaMeasure _measure;
-        private YogaBaseline _baseline;
         private bool _isReferenceBaseline;
-        private YogaDirtied _dirtied;
         private YogaStyle _style;
         private YogaLayout _layout;
-        private int _lineIndex;
-        private YogaNode _owner;
         private List<YogaNode> _children;
-        private YogaNode _nextChild;
-        private YogaConfig _config;
         private bool _isDirty;
-        private YogaArray<YogaValue> _resolvedDimensions; // [2]
 
         public YogaNode()
         {
-            _print = null;
-            _hasNewLayout = true;
-            _nodeType = YogaNodeType.Default;
+            PrintFunction = null;
+            HasNewLayout = true;
+            NodeType = YogaNodeType.Default;
             _measure = null;
-            _baseline = null;
-            _dirtied = null;
+            Baseline = null;
+            Dirtied = null;
             _style = new YogaStyle();
             _layout = new YogaLayout();
-            _lineIndex = 0;
-            _owner = null;
+            LineIndex = 0;
+            Owner = null;
             _children = new List<YogaNode>();
-            _nextChild = null;
-            _config = new YogaConfig();
+            NextChild = null;
+            Config = new YogaConfig();
             _isDirty = false;
-            _resolvedDimensions = new YogaArray<YogaValue>(new YogaValue[] { YogaValue.Undefined, YogaValue.Undefined });
+            ResolvedDimensions = new YogaArray<YogaValue>(new YogaValue[] { YogaValue.Undefined, YogaValue.Undefined });
 
             Interlocked.Increment(ref _instanceCount);
         }
 
         public YogaNode(YogaNode node)
         {
-            _print = node._print;
-            _hasNewLayout = node._hasNewLayout;
-            _nodeType = node._nodeType;
+            PrintFunction = node.PrintFunction;
+            HasNewLayout = node.HasNewLayout;
+            NodeType = node.NodeType;
             _measure = node._measure;
-            _baseline = node._baseline;
-            _dirtied = node._dirtied;
+            Baseline = node.Baseline;
+            Dirtied = node.Dirtied;
             _style = node._style;
             _layout = node._layout;
-            _lineIndex = node._lineIndex;
-            _owner = node._owner;
+            LineIndex = node.LineIndex;
+            Owner = node.Owner;
             _children = new List<YogaNode>(node._children);
-            _nextChild = node._nextChild;
-            _config = node._config;
+            NextChild = node.NextChild;
+            Config = node.Config;
             _isDirty = node._isDirty;
-            _resolvedDimensions = YogaArray.From(node._resolvedDimensions);
+            ResolvedDimensions = YogaArray.From(node.ResolvedDimensions);
 
             Interlocked.Increment(ref _instanceCount);
         }
@@ -83,7 +72,7 @@ namespace Marius.Yoga
         public YogaNode(YogaNode node, YogaNode owner)
             : this(node)
         {
-            _owner = owner;
+            Owner = owner;
         }
 
         public YogaNode(
@@ -103,30 +92,30 @@ namespace Marius.Yoga
             bool isDirty,
             YogaValue[] resolvedDimensions)
         {
-            _print = print;
-            _hasNewLayout = hasNewLayout;
-            _nodeType = nodeType;
+            PrintFunction = print;
+            HasNewLayout = hasNewLayout;
+            NodeType = nodeType;
             _measure = measure;
-            _baseline = baseline;
-            _dirtied = dirtied;
+            Baseline = baseline;
+            Dirtied = dirtied;
             _style = style;
             _layout = layout;
-            _lineIndex = lineIndex;
-            _owner = owner;
+            LineIndex = lineIndex;
+            Owner = owner;
             _children = new List<YogaNode>(children);
-            _nextChild = nextChild;
-            _config = config;
+            NextChild = nextChild;
+            Config = config;
             _isDirty = isDirty;
-            _resolvedDimensions = YogaArray.From(resolvedDimensions);
+            ResolvedDimensions = YogaArray.From(resolvedDimensions);
 
             Interlocked.Increment(ref _instanceCount);
         }
 
         public YogaNode(YogaConfig config) : this()
         {
-            _config = config ?? new YogaConfig();
+            Config = config ?? new YogaConfig();
 
-            if (_config.UseWebDefaults)
+            if (Config.UseWebDefaults)
             {
                 Style.FlexDirection = YogaFlexDirection.Row;
                 Style.AlignContent = YogaAlign.Stretch;
@@ -145,23 +134,11 @@ namespace Marius.Yoga
             return _instanceCount;
         }
 
-        public YogaPrint PrintFunction
-        {
-            get { return _print; }
-            set { _print = value; }
-        }
+        public YogaPrint PrintFunction { get; set; }
 
-        public bool HasNewLayout
-        {
-            get { return _hasNewLayout; }
-            set { _hasNewLayout = value; }
-        }
+        public bool HasNewLayout { get; set; }
 
-        public YogaNodeType NodeType
-        {
-            get { return _nodeType; }
-            set { _nodeType = value; }
-        }
+        public YogaNodeType NodeType { get; set; }
 
         public YogaMeasure Measure
         {
@@ -176,7 +153,7 @@ namespace Marius.Yoga
                     _measure = null;
                     // TODO: t18095186 Move nodeType to opt-in function and mark appropriate
                     // places in Litho
-                    _nodeType = YogaNodeType.Default;
+                    NodeType = YogaNodeType.Default;
                 }
                 else
                 {
@@ -190,17 +167,9 @@ namespace Marius.Yoga
             }
         }
 
-        public YogaBaseline Baseline
-        {
-            get { return _baseline; }
-            set { _baseline = value; }
-        }
+        public YogaBaseline Baseline { get; set; }
 
-        public YogaDirtied Dirtied
-        {
-            get { return _dirtied; }
-            set { _dirtied = value; }
-        }
+        public YogaDirtied Dirtied { get; set; }
 
         public YogaStyle Style
         {
@@ -214,57 +183,41 @@ namespace Marius.Yoga
             set { _layout.CopyFrom(value); }
         }
 
-        public int LineIndex
-        {
-            get { return _lineIndex; }
-            set { _lineIndex = value; }
-        }
+        public int LineIndex { get; set; }
 
-        public YogaNode Owner
-        {
-            get { return _owner; }
-            set { _owner = value; }
-        }
+        public YogaNode Owner { get; set; }
 
-        public YogaNode Parent { get { return _owner; } }
+        public YogaNode Parent => Owner;
 
         public List<YogaNode> Children
         {
-            get { return _children; }
+            get => _children;
             set { _children = (value != null) ? new List<YogaNode>(value) : new List<YogaNode>(); }
         }
 
         public YogaNode GetChild(int index) { return _children[index]; }
 
-        public YogaNode NextChild
-        {
-            get { return _nextChild; }
-            set { _nextChild = value; }
-        }
+        public YogaNode NextChild { get; set; }
 
-        public YogaConfig Config
-        {
-            get { return _config; }
-            set { _config = value; }
-        }
+        public YogaConfig Config { get; set; }
 
         public bool IsDirty
         {
-            get { return _isDirty; }
+            get =>_isDirty; 
             set
             {
                 if (value == _isDirty)
                     return;
 
                 _isDirty = value;
-                if (value && _dirtied != null)
-                    _dirtied(this);
+                if (value && Dirtied != null)
+                    Dirtied(this);
             }
         }
 
-        public YogaArray<YogaValue> ResolvedDimensions { get { return _resolvedDimensions; } }
+        public YogaArray<YogaValue> ResolvedDimensions { get; private set; }
 
-        public YogaValue GetResolvedDimension(YogaDimension index) { return _resolvedDimensions[index]; }
+        public YogaValue GetResolvedDimension(YogaDimension index) { return ResolvedDimensions[index]; }
 
         // Methods related to positions, margin, padding and border
         public float? GetLeadingPosition(YogaFlexDirection axis, float? axisSize)
@@ -420,7 +373,7 @@ namespace Marius.Yoga
         public float ResolveFlexGrow()
         {
             // Root nodes flexGrow should always be 0
-            if (_owner == null)
+            if (Owner == null)
                 return 0.0f;
 
             if (_style.FlexGrow != null)
@@ -434,16 +387,16 @@ namespace Marius.Yoga
 
         public float ResolveFlexShrink()
         {
-            if (_owner == null)
+            if (Owner == null)
                 return 0.0f;
 
             if (_style.FlexShrink != null)
                 return _style.FlexShrink.Value;
 
-            if (!_config.UseWebDefaults && _style.Flex != null && _style.Flex.Value < 0.0f)
+            if (!Config.UseWebDefaults && _style.Flex != null && _style.Flex.Value < 0.0f)
                 return -_style.Flex.Value;
 
-            return _config.UseWebDefaults ? WebDefaultFlexShrink : DefaultFlexShrink;
+            return Config.UseWebDefaults ? WebDefaultFlexShrink : DefaultFlexShrink;
         }
 
         public YogaValue ResolveFlexBasis()
@@ -453,7 +406,7 @@ namespace Marius.Yoga
                 return flexBasis;
 
             if (_style.Flex != null && _style.Flex.Value > 0.0f)
-                return _config.UseWebDefaults ? YogaValue.Auto : YogaValue.Zero;
+                return Config.UseWebDefaults ? YogaValue.Auto : YogaValue.Zero;
 
             return YogaValue.Auto;
         }
@@ -463,9 +416,9 @@ namespace Marius.Yoga
             for (var dim = (int)YogaDimension.Width; dim < 2; dim++)
             {
                 if (_style.MaxDimensions[dim].Unit != YogaUnit.Undefined && _style.MaxDimensions[dim].Equals(_style.MinDimensions[dim]))
-                    _resolvedDimensions[dim] = _style.MaxDimensions[dim];
+                    ResolvedDimensions[dim] = _style.MaxDimensions[dim];
                 else
-                    _resolvedDimensions[dim] = _style.Dimensions[dim];
+                    ResolvedDimensions[dim] = _style.Dimensions[dim];
             }
         }
 
@@ -532,7 +485,7 @@ namespace Marius.Yoga
         {
             /* Root nodes should be always layouted as LTR, so we don't return negative
              * values. */
-            var directionRespectingRoot = _owner != null ? direction : YogaDirection.LeftToRight;
+            var directionRespectingRoot = Owner != null ? direction : YogaDirection.LeftToRight;
             var mainAxis = _style.FlexDirection.ResolveFlexDirection(directionRespectingRoot);
             var crossAxis = mainAxis.FlexDirectionCross(directionRespectingRoot);
 
@@ -547,7 +500,7 @@ namespace Marius.Yoga
 
         public void SetAndPropogateUseLegacyFlag(bool useLegacyFlag)
         {
-            _config.UseLegacyStretchBehaviour = useLegacyFlag;
+            Config.UseLegacyStretchBehaviour = useLegacyFlag;
             foreach (var item in _children)
                 item.Config.UseLegacyStretchBehaviour = useLegacyFlag;
         }
@@ -562,7 +515,7 @@ namespace Marius.Yoga
         public void Clear()
         {
             foreach (var item in _children)
-                item._owner = null;
+                item.Owner = null;
 
             _children.Clear();
             _isDirty = true;
@@ -630,8 +583,8 @@ namespace Marius.Yoga
                 IsDirty = true;
 
                 Layout.ComputedFlexBasis = default(float?);
-                if (_owner != null)
-                    _owner.MarkDirty();
+                if (Owner != null)
+                    Owner.MarkDirty();
             }
         }
 
@@ -688,13 +641,12 @@ namespace Marius.Yoga
                 return;
             }
 
-            var cloneNodeCallback = _config.OnNodeCloned;
+            var cloneNodeCallback = Config.OnNodeCloned;
             for (var i = 0; i < childCount; ++i)
             {
                 var oldChild = _children[i];
-                var newChild = new YogaNode(oldChild)
-                {
-                    _owner = null
+                var newChild = new YogaNode(oldChild) {
+                    Owner = null
                 };
 
                 ReplaceChild(newChild, i);

@@ -34,12 +34,12 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Common\Clipboard.cs" />
     <Compile Include="Common\ExtensionAttribute.cs" />
     <Compile Include="Common\GeneralEventListener.cs" />
     <Compile Include="Common\IPlatformWindowBox.cs" />
     <Compile Include="Common\UIPlatform.cs" />
     <Compile Include="Common\UITimerTask.cs" />
-    <Compile Include="Common\Clipboard.cs" />
     <Compile Include="Events\IEventListener.cs" />
     <Compile Include="Events\ITopWindowEventRoot.cs" />
     <Compile Include="Events\IEventPortal.cs" />
@@ -51,6 +51,12 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
+      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
+      <Name>PixelFarm.Drawing</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

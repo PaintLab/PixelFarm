@@ -256,8 +256,8 @@ namespace PixelFarm.DrawingGL
         }
         public void MeasureString(char[] buffer, int startAt, int len, out int w, out int h)
         {
-            TextBufferSpan textBufferSpan = new TextBufferSpan(buffer, startAt, len);
-            Size s = _textServices.MeasureString(ref textBufferSpan, _painter.CurrentFont);
+            var textBufferSpan = new TextBufferSpan(buffer, startAt, len);
+            Size s = _textServices.MeasureString(textBufferSpan, _painter.CurrentFont);
             w = s.Width;
             h = s.Height;
         }
@@ -267,10 +267,10 @@ namespace PixelFarm.DrawingGL
             _vboBuilder.Clear();
             _vboBuilder.SetTextureInfo(_glBmp.Width, _glBmp.Height, _glBmp.IsYFlipped, _pcx.OriginKind);
             //create temp buffer span that describe the part of a whole char buffer
-            TextBufferSpan textBufferSpan = new TextBufferSpan(buffer, startAt, len);
+            var textBufferSpan = new TextBufferSpan(buffer, startAt, len);
             //ask text service to parse user input char buffer and create a glyph-plan-sequence (list of glyph-plan) 
             //with specific request font
-            GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(ref textBufferSpan, _font);
+            GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(textBufferSpan, _font);
             float px_scale = _px_scale;
             //--------------------------
             //TODO:
@@ -283,8 +283,8 @@ namespace PixelFarm.DrawingGL
 
             float g_left = 0;
             float g_top = 0;
-            int baseLine = (int)Math.Round((float)top + _font.AscentInPixels);
-            int bottom = (int)Math.Round((float)top + _font.AscentInPixels - _font.DescentInPixels);
+
+
 
             float acc_x = 0; //local accumulate x
             float acc_y = 0; //local accumulate y 
@@ -299,6 +299,7 @@ namespace PixelFarm.DrawingGL
                 }
                 //draw red-line-marker for baseLine
                 _painter.StrokeColor = Color.Red;
+                int baseLine = (int)Math.Round((float)top + _font.AscentInPixels);
                 _painter.DrawLine(left, baseLine, left + 200, baseLine);
                 //
                 //draw magenta-line-marker for bottom line
@@ -321,6 +322,7 @@ namespace PixelFarm.DrawingGL
 
 
             //----------
+            float bottom = (float)top + _font.AscentInPixels - _font.DescentInPixels;
             int seqLen = glyphPlanSeq.Count;
             for (int i = 0; i < seqLen; ++i)
             {
@@ -363,10 +365,8 @@ namespace PixelFarm.DrawingGL
                         break;
                 }
 
-
-
                 acc_x += (float)Math.Round(glyph.AdvanceX * px_scale);
-                g_top = (float)Math.Floor(g_top);//adjust to integer num *** 
+                g_top = (float)Math.Ceiling(g_top);//adjust to integer num *** 
 
 #if DEBUG
                 if (s_dbugShowMarkers)
@@ -664,22 +664,23 @@ namespace PixelFarm.DrawingGL
             _vboBuilder.SetTextureInfo(_glBmp.Width, _glBmp.Height, _glBmp.IsYFlipped, _pcx.OriginKind);
 
             //create temp buffer span that describe the part of a whole char buffer
-            TextBufferSpan textBufferSpan = new TextBufferSpan(buffer, startAt, len);
+            var textBufferSpan = new TextBufferSpan(buffer, startAt, len);
 
             //ask text service to parse user input char buffer and create a glyph-plan-sequence (list of glyph-plan) 
             //with specific request font
-            GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(ref textBufferSpan, _font);
+            GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(textBufferSpan, _font);
             float px_scale = _px_scale;
             float scaleFromTexture = 1; //TODO: support msdf auto scale
 
             //-------------------------- 
 
-            TextureKind textureKind = _fontAtlas.TextureKind;
+            //TextureKind textureKind = _fontAtlas.TextureKind;
             float g_left = 0;
             float g_top = 0;
 
             //int baseLine = (int)Math.Round((float)top + _font.AscentInPixels);
-            int bottom = (int)Math.Round((float)top + _font.AscentInPixels - _font.DescentInPixels);
+            //int bottom = (int)Math.Round((float)top + _font.AscentInPixels - _font.DescentInPixels);
+            float bottom = (float)top + _font.AscentInPixels - _font.DescentInPixels;
             float acc_x = 0; //local accumulate x
             float acc_y = 0; //local accumulate y  
 

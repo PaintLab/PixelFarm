@@ -52,7 +52,7 @@ namespace LayoutFarm.Dev
                 out _viewroot,
                 out _latest_formCanvas);
 
-            AppHostWithRootGfx appHost = new AppHostWithRootGfx();
+            AppHost appHost = new AppHost();
             AppHostConfig config = new AppHostConfig();
             YourImplementation.UISurfaceViewportSetupHelper.SetUISurfaceViewportControl(config, _viewroot);
             appHost.Setup(config);
@@ -105,12 +105,11 @@ namespace LayoutFarm.Dev
             this.lstDemoList.Items.Clear();
         }
 
-        public void LoadDemoList(Type sampleAssemblySpecificType)
+        public void LoadDemoList(System.Reflection.Assembly asm)
         {
-            Type demoBaseType = typeof(App);
-            var thisAssem = System.Reflection.Assembly.GetAssembly(sampleAssemblySpecificType);
+            Type demoBaseType = typeof(App);            
             List<DemoInfo> demoInfoList = new List<DemoInfo>();
-            foreach (var t in thisAssem.GetTypes())
+            foreach (Type t in asm.GetTypes())
             {
                 if (demoBaseType.IsAssignableFrom(t) && t != demoBaseType && !t.IsAbstract)
                 {
@@ -120,16 +119,13 @@ namespace LayoutFarm.Dev
                     if (notes != null && notes.Length > 0)
                     {
                         //get one only
-                        DemoNoteAttribute note = notes[0] as DemoNoteAttribute;
-                        if (note != null)
+                        if (notes[0] is DemoNoteAttribute note)
                         {
                             noteMsg = note.Message;
                         }
                     }
                     demoInfoList.Add(new DemoInfo(t, noteMsg));
                 }
-
-
             }
             demoInfoList.Sort((d1, d2) =>
             {

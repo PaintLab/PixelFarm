@@ -111,16 +111,34 @@ namespace YourImplementation
 
             FrameworkInitGLES.SetupDefaultValues();
 
-            PixelFarm.CpuBlit.Imaging.PngImageWriter.InstallImageSaveToFileService((IntPtr imgBuffer, int stride, int width, int height, string filename) =>
+            //TODO: review namespace***
+            var pars = new PixelFarm.Platforms.ImageIOSetupParameters();
+            pars.SaveToPng = (IntPtr imgBuffer, int stride, int width, int height, string filename) =>
             {
-
                 using (System.Drawing.Bitmap newBmp = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
                 {
                     PixelFarm.CpuBlit.BitmapHelper.CopyToGdiPlusBitmapSameSize(imgBuffer, newBmp);
                     //save
                     newBmp.Save(filename);
                 }
-            });
+            };
+            pars.ReadFromMemStream = (System.IO.MemoryStream ms, string kind) =>
+            {
+                //read  
+                //TODO: review here again
+                using (System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(ms))
+                {
+                    PixelFarm.CpuBlit.MemBitmap memBmp = new PixelFarm.CpuBlit.MemBitmap(gdiBmp.Width, gdiBmp.Height);
+                    //#if DEBUG
+                    //                        memBmp._dbugNote = "img;
+                    //#endif
+
+                    PixelFarm.CpuBlit.BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(gdiBmp, memBmp);
+                    return memBmp;
+                }
+
+            };
+            PixelFarm.Platforms.ImageIOPortal.Setup(pars);
 
             //you can use your font loader
             YourImplementation.FrameworkInitWinGDI.SetupDefaultValues();
@@ -132,14 +150,15 @@ namespace YourImplementation
             LayoutFarm.UIPlatform.Close();
         }
 
-        public static void RunDemoList(Type mainType)
+        public static void RunDemoList(System.Reflection.Assembly asm)
         {
+
             //-------------------------------
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             ////------------------------------- 
             var formDemoList = new LayoutFarm.Dev.FormDemoList();
-            formDemoList.LoadDemoList(mainType);
+            formDemoList.LoadDemoList(asm);
             Application.Run(formDemoList);
         }
         /// <summary>
@@ -150,7 +169,7 @@ namespace YourImplementation
         public static bool dbugShowLayoutInspectorForm { get; set; }
 #endif
         public static Form RunSpecificDemo(LayoutFarm.App demo,
-            LayoutFarm.AppHostWithRootGfx appHost,
+            LayoutFarm.AppHost appHost,
             InnerViewportKind innerViewportKind = InnerViewportKind.GdiPlusOnGLES)
         {
             System.Drawing.Rectangle workingArea = Screen.PrimaryScreen.WorkingArea;

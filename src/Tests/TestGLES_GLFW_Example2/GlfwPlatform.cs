@@ -1,13 +1,11 @@
 ﻿//MIT, 2019-present, WinterDev
 using System;
-using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using LayoutFarm;
 using LayoutFarm.UI;
-using LayoutFarm.UI.OpenGL;
+using PixelFarm.Drawing;
 namespace PixelFarm.Forms
 {
-    using Glfw;
     public class GlfwPlatform : UIPlatform
     {
         public GlfwPlatform()
@@ -18,19 +16,46 @@ namespace PixelFarm.Forms
         {
 
         }
+        public override object GetClipboardData(string dataformat)
+        {
+            throw new NotImplementedException();
+        }
+        public override string GetClipboardText()
+        {
+            throw new NotImplementedException();
+        }
+        public override bool ContainsClipboardData(string datatype)
+        {
+            throw new NotImplementedException();
+        }
+         
+          
+        protected override Cursor CreateCursorImpl(CursorRequest curReq) => new GlfwCursor();
 
-        public override string GetClipboardData()
+        public override void SetClipboardImage(Image img)
+        {
+
+        }
+         
+        public override Image GetClipboardImage()
         {
             return null;
         }
 
-        public override void SetClipboardData(string textData)
+        public override IEnumerable<string> GetClipboardFileDropList()
         {
-            //TODO: implement 
+            throw new NotImplementedException();
         }
 
-        protected override Cursor CreateCursorImpl(CursorRequest curReq) => new GlfwCursor();
+        public override void SetClipboardText(string textData)
+        {
+            throw new NotImplementedException();
+        }
 
+        public override void SetClipboardFileDropList(string[] filedrops)
+        {
+            throw new NotImplementedException();
+        }
     }
     class GlfwCursor : Cursor
     {

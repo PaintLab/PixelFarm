@@ -1,7 +1,10 @@
 ﻿//Apache2, 2014-present, WinterDev
 
 
+using PixelFarm.CpuBlit;
+using PixelFarm.Drawing;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 namespace LayoutFarm.UI
 {
@@ -87,8 +90,6 @@ namespace LayoutFarm.UI
     public class UIPlatformWinForm : UIPlatform
     {
         static UIPlatformWinForm s_platform;
-
-
         //TODO: review how to adjust this value
         const int UI_MSG_TIMER_INTERVAL = 5;
         static UIPlatformWinForm()
@@ -119,7 +120,7 @@ namespace LayoutFarm.UI
             {
                 s_platform = this;
                 SetAsDefaultPlatform();
-                
+
                 //PixelFarm.Drawing.Internal.UIMsgQueue.RegisterRunOnceImpl(runOnceDelegate =>
                 //{
                 //    UIPlatform.RegisterRunOnceTask(tt => runOnceDelegate());
@@ -161,11 +162,28 @@ namespace LayoutFarm.UI
         {
             System.Windows.Forms.Clipboard.Clear();
         }
-        public override string GetClipboardData()
+        public override string GetClipboardText()
         {
             return System.Windows.Forms.Clipboard.GetText();
         }
-        public override void SetClipboardData(string textData)
+        public override bool ContainsClipboardData(string datatype)
+        {
+            switch (datatype)
+            {
+                case "text":
+                    return System.Windows.Forms.Clipboard.ContainsText();
+                case "image":
+                    return System.Windows.Forms.Clipboard.ContainsImage();
+                case "filedrops":
+                    return System.Windows.Forms.Clipboard.ContainsFileDropList();
+            }
+            return false;
+        }
+        public override object GetClipboardData(string dataformat)
+        {
+            return System.Windows.Forms.Clipboard.GetData(dataformat);
+        }
+        public override void SetClipboardText(string textData)
         {
             if (!string.IsNullOrEmpty(textData))
             {
@@ -176,7 +194,42 @@ namespace LayoutFarm.UI
                 System.Windows.Forms.Clipboard.Clear();
             }
         }
+        public override IEnumerable<string> GetClipboardFileDropList()
+        {
+            foreach (string s in System.Windows.Forms.Clipboard.GetFileDropList())
+            {
+                yield return s;
+            }
+        }
+        public override void SetClipboardFileDropList(string[] filedrops)
+        {
+            var stringCollection = new System.Collections.Specialized.StringCollection();
+            stringCollection.AddRange(filedrops);
+            System.Windows.Forms.Clipboard.SetFileDropList(stringCollection);
+        }
+        public override Image GetClipboardImage()
+        {
 
+            if (System.Windows.Forms.Clipboard.GetImage() is System.Drawing.Bitmap bmp)
+            {
+                MemBitmap memBmp = new MemBitmap(bmp.Width, bmp.Height);
+                BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(bmp, memBmp);
+                return memBmp;
+            }
+            return null;
+        }
+
+        public override void SetClipboardImage(Image img)
+        {
+            if (img is MemBitmap memBmp)
+            {
+                System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(memBmp.Width, memBmp.Height);
+                using (TempMemPtr tmp = MemBitmap.GetBufferPtr(memBmp))
+                {
+                    BitmapHelper.CopyToGdiPlusBitmapSameSize(tmp.Ptr, bmp);
+                }
+            }
+        }
 
         protected override Cursor CreateCursorImpl(CursorRequest cursorReq)
         {
@@ -208,6 +261,7 @@ namespace LayoutFarm.UI
             }
             return myCursor;
         }
+
 
 
         public class MyCursor : Cursor, IDisposable

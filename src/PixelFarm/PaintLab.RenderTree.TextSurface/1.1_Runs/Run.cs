@@ -23,7 +23,7 @@ namespace LayoutFarm.TextEditing
         int _top;
         int _width;
         int _height;
-       
+
 
         internal Run(RunStyle runStyle)
         {
@@ -42,28 +42,28 @@ namespace LayoutFarm.TextEditing
             return _runStyle.MeasureBlankLineHeight();
         }
 
-        protected Size MeasureString(ref TextBufferSpan textBufferSpan) => _runStyle.MeasureString(ref textBufferSpan);
+        protected Size MeasureString(in TextBufferSpan textBufferSpan) => _runStyle.MeasureString(textBufferSpan);
 
         protected bool SupportWordBreak => _runStyle.SupportsWordBreak;
 
-        protected ILineSegmentList BreakToLineSegs(ref TextBufferSpan textBufferSpan)
+        protected ILineSegmentList BreakToLineSegs(in TextBufferSpan textBufferSpan)
         {
-            return _runStyle.BreakToLineSegments(ref textBufferSpan);
+            return _runStyle.BreakToLineSegments(textBufferSpan);
         }
 
-        protected void MeasureString2(ref TextBufferSpan textBufferSpan,
+        protected void MeasureString2(in TextBufferSpan textBufferSpan,
             ILineSegmentList lineSeg,
             ref TextSpanMeasureResult measureResult)
         {
             if (lineSeg != null)
             {
-                ILineSegmentList seglist = _runStyle.BreakToLineSegments(ref textBufferSpan);
-                _runStyle.CalculateUserCharGlyphAdvancePos(ref textBufferSpan, seglist, ref measureResult);
+                ILineSegmentList seglist = _runStyle.BreakToLineSegments(textBufferSpan);
+                _runStyle.CalculateUserCharGlyphAdvancePos(textBufferSpan, seglist, ref measureResult);
 
             }
             else
             {
-                _runStyle.CalculateUserCharGlyphAdvancePos(ref textBufferSpan, ref measureResult);
+                _runStyle.CalculateUserCharGlyphAdvancePos(textBufferSpan, ref measureResult);
             }
         }
 
