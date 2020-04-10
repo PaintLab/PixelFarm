@@ -18,17 +18,6 @@ namespace TestGlfw
             var form = new GlFwForm(800, 600, "hello!", winEventListener);
             form.MakeCurrent();
 
-            //----------
-            //(test) use gles2.1
-            Glfw.Glfw3.glfwWindowHint(Glfw.Glfw3.GLFW_CLIENT_API, Glfw.Glfw3.GLFW_OPENGL_ES_API);
-            Glfw.Glfw3.glfwWindowHint(Glfw.Glfw3.GLFW_CONTEXT_CREATION_API, Glfw.Glfw3.GLFW_EGL_CONTEXT_API);
-            Glfw.Glfw3.glfwWindowHint(Glfw.Glfw3.GLFW_CONTEXT_VERSION_MAJOR, 2);
-            Glfw.Glfw3.glfwWindowHint(Glfw.Glfw3.GLFW_CONTEXT_VERSION_MINOR, 1);
-            Glfw.Glfw3.glfwSwapInterval(1);
-
-            //----------
-
-
             string versionStr3 = Marshal.PtrToStringAnsi(Glfw3.glfwGetVersionString());
 
 
@@ -64,7 +53,7 @@ namespace TestGlfw
             //---------
             form.RenderDel = () =>
             {
-                demoContext.Render();                 
+                demoContext.Render();
                 form.SwapBuffers();
             };
             //---------

@@ -14,6 +14,7 @@ using PaintLab.Svg;
 
 using Glfw;
 using LayoutFarm.CustomWidgets;
+using PixelFarm.DrawingGL;
 
 namespace TestGlfw
 {
@@ -135,6 +136,7 @@ namespace TestGlfw
         }
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
+             
             using (Tools.More.BorrowVgPaintArgs(d.GetPainter(), out var paintArgs))
             {
                 _renderVx.Paint(paintArgs);
@@ -194,6 +196,11 @@ namespace TestGlfw
                   InnerViewportKind.GLES,
                   glfwWindowWrapper,
                   bridge1);
+            if (s_viewroot.GetGLPainter() is GLPainter glPainter)
+            {
+                glPainter.SmoothingMode = SmoothingMode.AntiAlias;
+            }
+
 
             //----------------------
             Box bgBox = new Box(s_formW, s_formH);
