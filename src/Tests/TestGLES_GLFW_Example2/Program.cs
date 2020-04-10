@@ -36,8 +36,8 @@ namespace TestGlfw
             Mini.RootDemoPath.Path = @"..\Data";
 
            
-            MyApp3.s_formW = 800;
-            MyApp3.s_formH = 600;
+            MyApp3.s_formW = width;
+            MyApp3.s_formH = height;
 
             MyApp3.Start();
         }

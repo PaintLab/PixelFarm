@@ -135,12 +135,11 @@ namespace TestGlfw
         }
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
-            //Painter p = d.GetPainter();
-            //using (Tools.More.BorrowVgPaintArgs(p, out var paintArgs))
-            //{
-            //    _renderVx.Paint(paintArgs);
-            //}
-            d.FillRectangle(Color.Blue, 0, 0, 50, 50);
+            using (Tools.More.BorrowVgPaintArgs(d.GetPainter(), out var paintArgs))
+            {
+                _renderVx.Paint(paintArgs);
+            }
+            //d.FillRectangle(Color.Blue, 0, 0, 50, 50);
         }
         public override void ResetRootGraphics(RootGraphic rootgfx)
         {
@@ -198,7 +197,7 @@ namespace TestGlfw
 
             //----------------------
             Box bgBox = new Box(s_formW, s_formH);
-            bgBox.BackColor = Color.Red;
+            bgBox.BackColor = Color.White;
 
             s_myRootGfx.AddChild(bgBox.GetPrimaryRenderElement(s_myRootGfx));
 
@@ -216,16 +215,16 @@ namespace TestGlfw
         {
 
 
-          
+
             string versionStr3 = Marshal.PtrToStringAnsi(Glfw.Glfw3.glfwGetVersionString());
 
             var bridge = new MyGlfwTopWindowBridge.GlfwEventBridge();
 
-         
+
 
             var form = new GlFwForm(s_formW, s_formH, "hello!", bridge);
             form.MakeCurrent();
-          
+
             OpenTK.Platform.Factory.GetCustomPlatformFactory = () => OpenTK.Platform.Egl.EglAngle.NewFactory();
             OpenTK.Toolkit.Init(new OpenTK.ToolkitOptions {
                 Backend = OpenTK.PlatformBackend.PreferNative,
