@@ -13,7 +13,7 @@ using LayoutFarm.UI;
 using PaintLab.Svg;
 
 using Glfw;
-
+using LayoutFarm.CustomWidgets;
 
 namespace TestGlfw
 {
@@ -99,21 +99,16 @@ namespace TestGlfw
 
         public override RenderElement CurrentPrimaryRenderElement => _renderElem;
 
-
-
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx) => _renderElem;
 
         public override void InvalidateGraphics() => _renderElem.InvalidateGraphics();
-
-
-
         protected override void OnMouseMove(UIMouseMoveEventArgs e)
         {
             if (_isMouseDown)
             {
                 //dragging
-                Point p1 = _renderElem.Location;
-                _renderElem.SetLocation(p1.X + 2, p1.Y);
+
+                _renderElem.SetLocation(_renderElem.X + e.XDiff, _renderElem.Y + e.YDiff);
             }
 
             base.OnMouseMove(e);
@@ -140,16 +135,12 @@ namespace TestGlfw
         }
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
-            //d.SetCanvasOrigin(0, 0);
-            //d.SetClipRect(new PixelFarm.Drawing.Rectangle(0, 0, 100, 100));
-            //d.FillRectangle(PixelFarm.Drawing.Color.Red, 0, 0, this.Width, this.Height);
-
-            //TODO: review here
-            Painter p = d.GetPainter();
-            using (Tools.More.BorrowVgPaintArgs(p, out var paintArgs))
-            {
-                _renderVx.Paint(paintArgs);
-            }
+            //Painter p = d.GetPainter();
+            //using (Tools.More.BorrowVgPaintArgs(p, out var paintArgs))
+            //{
+            //    _renderVx.Paint(paintArgs);
+            //}
+            d.FillRectangle(Color.Blue, 0, 0, 50, 50);
         }
         public override void ResetRootGraphics(RootGraphic rootgfx)
         {
@@ -159,9 +150,10 @@ namespace TestGlfw
 
     class MyApp3
     {
-        static MyBoxUI s_box;
-        static MyRootGraphic s_myRootGfx;
-        static GraphicsViewRoot s_viewroot;
+
+
+        public static int s_formW = 1024;
+        public static int s_formH = 1024;
 
         static void Init(GlFwForm form)
         {
@@ -185,14 +177,12 @@ namespace TestGlfw
             textService.LoadFontsFromFolder("Fonts");
 
             //---------------------------------------------------------------------------
-            int w = 800;
-            int h = 600;
-            s_myRootGfx = new MyRootGraphic(w, h, textService);
+
+            var s_myRootGfx = new MyRootGraphic(s_formW, s_formH, textService);
             //---------------------------------------------------------------------------
-            //PixelFarm.Drawing.Rectangle screenClientAreaRect = Conv.ToRect(Screen.PrimaryScreen.WorkingArea);
 
 
-            s_viewroot = new GraphicsViewRoot(w, h);
+            var s_viewroot = new GraphicsViewRoot(s_formW, s_formH);
             MyGlfwTopWindowBridge bridge1 = new MyGlfwTopWindowBridge(s_myRootGfx, s_myRootGfx.TopWinEventPortal);
             ((MyGlfwTopWindowBridge.GlfwEventBridge)(form.WindowEventListener)).SetWindowBridge(bridge1);
 
@@ -206,40 +196,27 @@ namespace TestGlfw
                   glfwWindowWrapper,
                   bridge1);
 
+            //----------------------
+            Box bgBox = new Box(s_formW, s_formH);
+            bgBox.BackColor = Color.Red;
+
+            s_myRootGfx.AddChild(bgBox.GetPrimaryRenderElement(s_myRootGfx));
+
+            //----------------------
             MySprite sprite = new MySprite(s_myRootGfx, 200, 300);
             MyBoxUI boxUI = new MyBoxUI();
             boxUI.SetRenderElement(sprite);
             sprite.SetController(boxUI);
 
+            bgBox.Add(boxUI);
 
-            s_myRootGfx.AddChild(sprite);
-            boxUI.InvalidateGraphics();
-
-            //MyWin32WindowWrapper myNativeWindow = new MyWin32WindowWrapper();
-            //var winBridge = new Win32EventBridge();
-            //winBridge.SetMainWindowControl(myNativeWindow);
-
-            //var acutualWinUI = new MyGraphicsViewWindow();
-            //acutualWinUI.Size = new System.Drawing.Size(w, h);
-            ////
-            //IntPtr handle = acutualWinUI.Handle; //force window creation ?
-            //acutualWinUI.SetWin32EventBridge(winBridge);
-
-
-
-
-            //canvasViewport.InitRootGraphics(
-            //    myRootGfx,
-            //    myRootGfx.TopWinEventPortal,
-            //    InnerViewportKind.GLES,
-            //    myNativeWindow);
-
+            //bgBox.InvalidateGraphics();
         }
         public static void Start()
         {
             //bridge from native side to managed side
             var bridge = new MyGlfwTopWindowBridge.GlfwEventBridge();
-            var form = new GlFwForm(800, 600, "hello!", bridge);
+            var form = new GlFwForm(s_formW, s_formH, "hello!", bridge);
             form.MakeCurrent();
 
             //----------
@@ -248,6 +225,7 @@ namespace TestGlfw
             Glfw.Glfw3.glfwWindowHint(Glfw.Glfw3.GLFW_CONTEXT_CREATION_API, Glfw.Glfw3.GLFW_EGL_CONTEXT_API);
             Glfw.Glfw3.glfwWindowHint(Glfw.Glfw3.GLFW_CONTEXT_VERSION_MAJOR, 2);
             Glfw.Glfw3.glfwWindowHint(Glfw.Glfw3.GLFW_CONTEXT_VERSION_MINOR, 1);
+      
             Glfw.Glfw3.glfwSwapInterval(1);
             //----------
 
@@ -273,23 +251,23 @@ namespace TestGlfw
 
 
             bool isCurrent = context.IsCurrent;
+
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
             GL.ClearColor(1, 1, 1, 1);
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
             //--------------------------------------------------------------------------------
             //setup viewport size
             //set up canvas
-            int ww_w = 800;
-            int ww_h = 600;
+            int ww_w = s_formW;
+            int ww_h = s_formH;
             int max = Math.Max(ww_w, ww_h);
             GL.Viewport(0, 0, max, max);
 
 
-
             //---------
             //form.RenderDel = s_viewroot.PaintMe;
-            //---------
-
+            //---------  
             GlfwAppLoop.Run();
         }
     }

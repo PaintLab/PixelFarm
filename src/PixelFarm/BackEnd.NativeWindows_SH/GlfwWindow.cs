@@ -272,7 +272,8 @@ namespace PixelFarm.Forms
                 s_mainMsgWin.RenderDel?.Invoke();
 
                 /* Poll for and process events */
-                Glfw3.glfwPollEvents();
+                //Glfw3.glfwPollEvents();
+                Glfw3.glfwWaitEvents();
             }
             Glfw3.glfwTerminate();
         }

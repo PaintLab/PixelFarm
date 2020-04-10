@@ -16,9 +16,15 @@ namespace TestGlfw
                 throw new NotSupportedException();
             }
 
-            Mini.RootDemoPath.Path = @"..\Data"; 
-            PixelFarm.Forms.GlfwPlatform glfwPlatform = new PixelFarm.Forms.GlfwPlatform(); 
-            MyApp3.Start();             
+
+            Glfw.Glfw3.glfwGetMonitorWorkarea(Glfw.Glfw3.glfwGetPrimaryMonitor(), out int xpos, out int ypos, out int width, out int height);
+
+            Mini.RootDemoPath.Path = @"..\Data";
+            PixelFarm.Forms.GlfwPlatform glfwPlatform = new PixelFarm.Forms.GlfwPlatform();
+            MyApp3.s_formW = width;
+            MyApp3.s_formH = height;
+
+            MyApp3.Start();
         }
     }
 }
