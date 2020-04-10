@@ -30,14 +30,17 @@ namespace TestGlfw
             Glfw.Glfw3.glfwWindowHint(Glfw.Glfw3.GLFW_CONTEXT_VERSION_MAJOR, 3);
             Glfw.Glfw3.glfwWindowHint(Glfw.Glfw3.GLFW_CONTEXT_VERSION_MINOR, 1);
             Glfw.Glfw3.glfwSwapInterval(1);
-
+#if DEBUG
+            string versionStr3 = Marshal.PtrToStringAnsi(Glfw.Glfw3.glfwGetVersionString());
+#endif
             ////----------
             Glfw.Glfw3.glfwGetMonitorWorkarea(Glfw.Glfw3.glfwGetPrimaryMonitor(), out int xpos, out int ypos, out int width, out int height);
             Mini.RootDemoPath.Path = @"..\Data";
-
            
             MyApp3.s_formW = width;
             MyApp3.s_formH = height;
+
+
 
             MyApp3.Start();
         }

@@ -21,7 +21,7 @@ namespace TestGlfw
 
     class GlfwWindowWrapper : IGpuOpenGLSurfaceView
     {
-        GlFwForm _form;
+        readonly GlFwForm _form;
         public GlfwWindowWrapper(GlFwForm form)
         {
             _form = form;
@@ -136,7 +136,7 @@ namespace TestGlfw
         }
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
-             
+
             using (Tools.More.BorrowVgPaintArgs(d.GetPainter(), out var paintArgs))
             {
                 _renderVx.Paint(paintArgs);
@@ -149,13 +149,15 @@ namespace TestGlfw
         }
     }
 
-    class MyApp3
+    static class MyApp3
     {
 
 
         public static int s_formW = 1024;
         public static int s_formH = 1024;
 
+        static MyRootGraphic s_myRootGfx;
+        static GraphicsViewRoot s_viewroot;
         static void Init(GlFwForm form)
         {
             GLESInit.InitGLES();
@@ -179,11 +181,11 @@ namespace TestGlfw
 
             //---------------------------------------------------------------------------
 
-            var s_myRootGfx = new MyRootGraphic(s_formW, s_formH, textService);
+            s_myRootGfx = new MyRootGraphic(s_formW, s_formH, textService);
             //---------------------------------------------------------------------------
 
 
-            var s_viewroot = new GraphicsViewRoot(s_formW, s_formH);
+            s_viewroot = new GraphicsViewRoot(s_formW, s_formH);
             MyGlfwTopWindowBridge bridge1 = new MyGlfwTopWindowBridge(s_myRootGfx, s_myRootGfx.TopWinEventPortal);
             ((MyGlfwTopWindowBridge.GlfwEventBridge)(form.WindowEventListener)).SetWindowBridge(bridge1);
 
@@ -200,9 +202,34 @@ namespace TestGlfw
             {
                 glPainter.SmoothingMode = SmoothingMode.AntiAlias;
             }
+        }
+        public static void Start2()
+        {
+
+
+            var bridge = new MyGlfwTopWindowBridge.GlfwEventBridge();
+            var form = new GlFwForm(s_formW, s_formH, "hello!", bridge);
+            form.MakeCurrent();
+
+            OpenTK.Platform.Factory.GetCustomPlatformFactory = () => OpenTK.Platform.Egl.EglAngle.NewFactory();
+            OpenTK.Toolkit.Init(new OpenTK.ToolkitOptions {
+                Backend = OpenTK.PlatformBackend.PreferNative,
+            });
+            OpenTK.Graphics.PlatformAddressPortal.GetAddressDelegate = OpenTK.Platform.Utilities.CreateGetAddress();
+
+
+            IntPtr currentContext = Glfw3.glfwGetCurrentContext();
+            var contextHandler = new OpenTK.ContextHandle(currentContext);
+            var glfwContext = new GLFWContextForOpenTK(contextHandler);
+            var context = OpenTK.Graphics.GraphicsContext.CreateExternalContext(glfwContext);
+
+            //------ 
+            Init(form);
+            //------
 
 
             //----------------------
+            //this is an app detail
             Box bgBox = new Box(s_formW, s_formH);
             bgBox.BackColor = Color.White;
 
@@ -216,60 +243,13 @@ namespace TestGlfw
 
             bgBox.Add(boxUI);
 
-            //bgBox.InvalidateGraphics();
-        }
-        public static void Start()
-        {
 
-
-
-            string versionStr3 = Marshal.PtrToStringAnsi(Glfw.Glfw3.glfwGetVersionString());
-
-            var bridge = new MyGlfwTopWindowBridge.GlfwEventBridge();
-
-
-
-            var form = new GlFwForm(s_formW, s_formH, "hello!", bridge);
-            form.MakeCurrent();
-
-            OpenTK.Platform.Factory.GetCustomPlatformFactory = () => OpenTK.Platform.Egl.EglAngle.NewFactory();
-            OpenTK.Toolkit.Init(new OpenTK.ToolkitOptions {
-                Backend = OpenTK.PlatformBackend.PreferNative,
-            });
-            OpenTK.Graphics.PlatformAddressPortal.GetAddressDelegate = OpenTK.Platform.Utilities.CreateGetAddress();
-
-
-            IntPtr currentContext = Glfw3.glfwGetCurrentContext();
-            var contextHandler = new OpenTK.ContextHandle(currentContext);
-
-            //------
-            Init(form);
-            //------
-
-            var glfwContext = new GLFWContextForOpenTK(contextHandler);
-            var context = OpenTK.Graphics.GraphicsContext.CreateExternalContext(glfwContext);
-
-
-
-            bool isCurrent = context.IsCurrent;
-
-            GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-            GL.ClearColor(1, 1, 1, 1);
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
-            //--------------------------------------------------------------------------------
-            //setup viewport size
-            //set up canvas
-            int ww_w = s_formW;
-            int ww_h = s_formH;
-            int max = Math.Max(ww_w, ww_h);
-            GL.Viewport(0, 0, max, max);
-
-
-            //---------
             //form.RenderDel = s_viewroot.PaintMe;
             //---------  
             GlfwAppLoop.Run();
+        }
+        public static void Start()
+        {
         }
     }
 }

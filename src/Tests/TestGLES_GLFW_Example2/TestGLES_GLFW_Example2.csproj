@@ -198,6 +198,10 @@
       <Project>{18ec3701-c6a5-429d-8c65-19ed4a2c2fed}</Project>
       <Name>TestSamples_Painting_Focus</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TestSamples_RenderTreeFocus\TestSamples_RenderTreeFocus.csproj">
+      <Project>{e906647b-3216-4cc1-b849-dd249f6737f4}</Project>
+      <Name>TestSamples_RenderTreeFocus</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

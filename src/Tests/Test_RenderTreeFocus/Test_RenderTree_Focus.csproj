@@ -78,17 +78,9 @@
       <Project>{4602b28b-eeec-4a69-854c-b00b8b616837}</Project>
       <Name>PaintLab.Platforms.Win32</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PaintLab.Svg.One\PaintLab.Svg.One.csproj">
-      <Project>{12bd3faf-a10b-4e38-9337-f5b28c6543b4}</Project>
-      <Name>PaintLab.Svg.One</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\x_autogen2\PixelFarm.One.HtmlRenderer\PixelFarm.One.HtmlRenderer.csproj">
       <Project>{662f2274-d6f8-413a-a908-1b2f10c01348}</Project>
       <Name>PixelFarm.One.HtmlRenderer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Marius.Yoga\Marius.Yoga.csproj">
-      <Project>{9060957d-ff0b-4b14-bb87-ee24b5170365}</Project>
-      <Name>Marius.Yoga</Name>
     </ProjectReference>
     <ProjectReference Include="..\TestSamples_RenderTreeFocus\TestSamples_RenderTreeFocus.csproj">
       <Project>{e906647b-3216-4cc1-b849-dd249f6737f4}</Project>
