@@ -36,9 +36,6 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\WinFormTestBed2\AppHostWithRootGfx.cs">
-      <Link>AppHostWithRootGfx.cs</Link>
-    </Compile>
     <Compile Include="GlfwEventBridge.cs" />
     <Compile Include="MyApp3.cs" />
     <Compile Include="Program.cs" />
