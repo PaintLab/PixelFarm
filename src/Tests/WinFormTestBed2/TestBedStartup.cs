@@ -169,7 +169,7 @@ namespace YourImplementation
         public static bool dbugShowLayoutInspectorForm { get; set; }
 #endif
         public static Form RunSpecificDemo(LayoutFarm.App demo,
-            LayoutFarm.AppHostWithRootGfx appHost,
+            LayoutFarm.AppHost appHost,
             InnerViewportKind innerViewportKind = InnerViewportKind.GdiPlusOnGLES)
         {
             System.Drawing.Rectangle workingArea = Screen.PrimaryScreen.WorkingArea;

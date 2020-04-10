@@ -49,9 +49,6 @@
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\TextBreakerTest\IcuSimpleTextFileDictionaryProvider.cs">
       <Link>0_YourImplementation\IcuSimpleTextFileDictionaryProvider.cs</Link>
     </Compile>
-    <Compile Include="..\WinFormTestBed2\AppHostWithRootGfx.cs">
-      <Link>0_Start\AppHostWithRootGfx.cs</Link>
-    </Compile>
     <Compile Include="0_Start\CpuBlitAppModule.cs" />
     <Compile Include="0_Start\CpuBlitOnGLESAppModule.cs" />
     <Compile Include="0_Start\GLESAppModule.cs" />

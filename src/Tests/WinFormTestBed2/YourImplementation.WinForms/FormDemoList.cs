@@ -52,7 +52,7 @@ namespace LayoutFarm.Dev
                 out _viewroot,
                 out _latest_formCanvas);
 
-            AppHostWithRootGfx appHost = new AppHostWithRootGfx();
+            AppHost appHost = new AppHost();
             AppHostConfig config = new AppHostConfig();
             YourImplementation.UISurfaceViewportSetupHelper.SetUISurfaceViewportControl(config, _viewroot);
             appHost.Setup(config);
