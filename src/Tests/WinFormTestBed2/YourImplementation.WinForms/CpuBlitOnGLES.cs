@@ -172,7 +172,7 @@ namespace YourImplementation
             //_gdiDrawBoard.RenderSurface.Win32DC.ClearClipRect();
             //------------
             //update software part content
-            RenderBoxBase primElem = base.CpuBlitCanvasRenderElement;
+            //RenderBoxBase primElem = base.CpuBlitCanvasRenderElement;
             if (HasCpuBlitUpdateSurfaceDel)
             {
                 RaiseUpdateCpuBlitSurface(updateArea);

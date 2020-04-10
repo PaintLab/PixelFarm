@@ -47,7 +47,7 @@
     <Compile Include="..\..\..\..\Typography\Demo\Windows\PixelFarmSample.WinForms\PixelFarm\GdiBitmapIO.cs">
       <Link>GdiHelper\GdiBitmapIO.cs</Link>
     </Compile>
-    <Compile Include="..\Test_MiniAgg_GLES_Painting\3_Samples\10_Polygons\GlyphDebugContourVisualizer.cs">
+    <Compile Include="..\TestSamples_Painting_Focus\3_Samples\10_Polygons\GlyphDebugContourVisualizer.cs">
       <Link>GlyphDebugContourVisualizer.cs</Link>
     </Compile>
     <Compile Include="Form1.cs">

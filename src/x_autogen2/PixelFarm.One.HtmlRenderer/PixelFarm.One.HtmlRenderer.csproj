@@ -1734,9 +1734,6 @@
     <Compile Include="..\..\PixelFarm\PaintLab.AbstractPlatform\CanvasViewport.cs">
       <Link>PixelFarm\PaintLab.AbstractPlatform\CanvasViewport.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.AbstractPlatform\ClipboardServices.cs">
-      <Link>PixelFarm\PaintLab.AbstractPlatform\ClipboardServices.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.AbstractPlatform\TempContext.cs">
       <Link>PixelFarm\PaintLab.AbstractPlatform\TempContext.cs</Link>
     </Compile>

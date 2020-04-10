@@ -49,88 +49,25 @@
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\TextBreakerTest\IcuSimpleTextFileDictionaryProvider.cs">
       <Link>0_YourImplementation\IcuSimpleTextFileDictionaryProvider.cs</Link>
     </Compile>
-    <Compile Include="..\Test_BasicPixelFarm\0_Start\AppHostWithRootGfx1.cs">
-      <Link>0_Start\AppHostWithRootGfx1.cs</Link>
-    </Compile>
     <Compile Include="0_Start\CpuBlitAppModule.cs" />
     <Compile Include="0_Start\CpuBlitOnGLESAppModule.cs" />
     <Compile Include="0_Start\GLESAppModule.cs" />
-    <Compile Include="3_Samples\01_DrawSamples\DrawSamples05.cs" />
-    <Compile Include="3_Samples\01_DrawSamples\DrawSamples04.cs" />
-    <Compile Include="3_Samples\01_DrawSamples\DrawSamples01_03.cs" />
-    <Compile Include="3_Samples\02_AA_Demo\Lines.cs" />
-    <Compile Include="3_Samples\01_DrawSamples\OpenTypeFont.cs" />
-    <Compile Include="3_Samples\01_DrawSamples\SimplePainterGlyphSample.cs" />
-    <Compile Include="3_Samples\01_DrawSamples\SimplePainterSample.cs" />
-    <Compile Include="3_Samples\02_AA_Demo\AADemo_Test3.cs" />
-    <Compile Include="3_Samples\02_AA_Demo\AADemo_Test4_subpix.cs" />
-    <Compile Include="3_Samples\02_AA_Demo\AADemo_Test2.cs" />
-    <Compile Include="3_Samples\02_AA_Demo\StrokeGenSample.cs" />
-    <Compile Include="3_Samples\03_LionSamples\LionFillMsdfTest.cs" />
-    <Compile Include="3_Samples\09_Surfaces\CutCopyPaste.cs" />
-    <Compile Include="3_Samples\10_Polygons\GlyphDebugContourVisualizer.cs" />
-    <Compile Include="3_Samples\10_Polygons\GlyphDemo.cs" />
-    <Compile Include="3_Samples\10_Polygons\Poly2TriDemo.cs" />
-    <Compile Include="3_Samples\10_Polygons\PolygonShopDemo.cs" />
-    <Compile Include="3_Samples\20_PolygonClippingSample\PolygonClippingDemo2.cs" />
-    <Compile Include="3_Samples\22_CurveReconstructions\LionCurveReconstruction.cs" />
-    <Compile Include="3_Samples\03_LionSamples\SvgTiger.cs" />
-    <Compile Include="3_Samples\05_AlphaMask2\FontTextureDemo2.cs" />
-    <Compile Include="3_Samples\05_AlphaMask2\FontTextureDemo3.cs" />
-    <Compile Include="3_Samples\05_AlphaMask2\LionMask3.cs" />
-    <Compile Include="3_Samples\05_AlphaMask2\MiniAggWithTextPrinterDemo.cs" />
-    <Compile Include="3_Samples\06_ComponentRendering\ComponentRendering.cs" />
-    <Compile Include="3_Samples\07_Shading\01_GradientSample.cs" />
-    <Compile Include="3_Samples\09_Surfaces\FloodFillDemo.cs" />
-    <Compile Include="3_Samples\10_Polygons\RoundRectSample.cs" />
-    <Compile Include="3_Samples\20_PolygonClippingSample\PolygonClippingDemoHelper.cs" />
-    <Compile Include="3_Samples\20_PolygonClippingSample\PolygonClippingDemo.cs" />
-    <Compile Include="3_Samples\05_AlphaMask2\FontTextureDemo.cs" />
-    <Compile Include="3_Samples\07_Shading\02_GouraudSample.cs" />
-    <Compile Include="3_Samples\22_CurveReconstructions\TriangleReconstructions.cs" />
-    <Compile Include="3_Samples\23_ImgFilters\FilterFxDemo.cs" />
-    <Compile Include="3_Samples\23_ImgFilters\ImgFilters1Demo.cs" />
-    <Compile Include="3_Samples\24_FlexBox\FlexBoxDemo.cs" />
-    <Compile Include="4_Samples_2\41_BitmapRenderSample.cs" />
-    <Compile Include="9_TestPaintFx\FormTestPaintFx.cs">
+    <Compile Include="FormTestPaintFx.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="9_TestPaintFx\FormTestPaintFx.Designer.cs">
+    <Compile Include="FormTestPaintFx.Designer.cs">
       <DependentUpon>FormTestPaintFx.cs</DependentUpon>
     </Compile>
-    <Compile Include="9_TestPaintFx\TestPaintFx1.cs" />
-    <Compile Include="Experiment\4_Animation\ColorComponentStepup.cs" />
-    <Compile Include="Experiment\4_Animation\GfxProcessorModule.cs" />
-    <Compile Include="Experiment\4_Animation\ParallelTimeline.cs" />
-    <Compile Include="Experiment\4_Animation\Timelines.cs" />
-    <Compile Include="Experiment\Contour.cs" />
-    <Compile Include="Experiment\ContourGenerator.cs" />
-    <Compile Include="Experiment\FontSystem.cs" />
-    <Compile Include="Experiment\GdiPathConverter.cs" />
-    <Compile Include="Experiment\GdiPathFont.cs" />
-    <Compile Include="Experiment\GdiPathFontFace.cs" />
-    <Compile Include="Experiment\GdiPathFontStore.cs" />
-    <Compile Include="Experiment\GdiPlusPlatformFontMx.cs" />
-    <Compile Include="Experiment\WinGdiPlusFont.cs" />
-    <Compile Include="Experiment\WinGdiPlusFontStore.cs" />
-    <Compile Include="Experiment\xStrokeGen.cs" />
-    <Compile Include="Experiment\x_notusedFromComplement\ImageClipProxyFloat.cs" />
-    <Compile Include="Experiment\x_notusedFromComplement\KDTree.cs" />
-    <Compile Include="Experiment\x_notusedFromComplement\SpanSubDivAdapter.cs" />
-    <Compile Include="Experiment\x_notusedFromComplement\x_ImageTgaIO.cs" />
-    <Compile Include="Experiment\x_notused_fromMiniAgg\x_ImageHelper2.cs" />
-    <Compile Include="Experiment\x_notused_fromMiniAgg\x_ImageSpan.cs" />
-    <Compile Include="Experiment\x_notused_fromMiniAgg\x_PixelBlenderFloat.cs" />
-    <Compile Include="Experiment_ColorBlend\ColorCompoBox.cs">
+    <Compile Include="ColorCompoBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Experiment_ColorBlend\ColorCompoBox.Designer.cs">
+    <Compile Include="ColorCompoBox.Designer.cs">
       <DependentUpon>ColorCompoBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Experiment_ColorBlend\FormTestColorBlend.cs">
+    <Compile Include="FormTestColorBlend.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Experiment_ColorBlend\FormTestColorBlend.Designer.cs">
+    <Compile Include="FormTestColorBlend.Designer.cs">
       <DependentUpon>FormTestColorBlend.cs</DependentUpon>
     </Compile>
     <Compile Include="FormDev.cs">
@@ -139,13 +76,11 @@
     <Compile Include="FormDev.Designer.cs">
       <DependentUpon>FormDev.cs</DependentUpon>
     </Compile>
-    <Compile Include="3_Samples\03_LionSamples\LionFill.cs" />
-    <Compile Include="3_Samples\03_LionSamples\LionOutline.cs" />
     <Compile Include="0_Start\Program.cs" />
-    <Compile Include="7_GLES2Test\FormTestBed.cs">
+    <Compile Include="FormTestBed.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="7_GLES2Test\FormTestBed.designer.cs">
+    <Compile Include="FormTestBed.designer.cs">
       <DependentUpon>FormTestBed.cs</DependentUpon>
     </Compile>
     <Compile Include="FormImgResampling.cs">
@@ -167,25 +102,19 @@
       <DependentUpon>FormTestMsdfGen.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="x_notused\3_MyTopWindowBridgeSkia.cs" />
-    <Compile Include="x_notused\BGRATexttureWithTransparentShader.cs" />
-    <Compile Include="x_notused\CpuBlitTextSpanPrinter.cs" />
-    <Compile Include="x_notused\DrawingGLFontPrinter.Gdi.cs" />
-    <Compile Include="x_notused\GradientSpanGen.cs" />
-    <Compile Include="x_notused\IGradientValueCalculator_and_Impl.cs" />
-    <EmbeddedResource Include="9_TestPaintFx\FormTestPaintFx.resx">
+    <EmbeddedResource Include="FormTestPaintFx.resx">
       <DependentUpon>FormTestPaintFx.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Experiment_ColorBlend\ColorCompoBox.resx">
+    <EmbeddedResource Include="ColorCompoBox.resx">
       <DependentUpon>ColorCompoBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormDev.resx">
       <DependentUpon>FormDev.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="7_GLES2Test\FormTestBed.resx">
+    <EmbeddedResource Include="FormTestBed.resx">
       <DependentUpon>FormTestBed.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Experiment_ColorBlend\FormTestColorBlend.resx">
+    <EmbeddedResource Include="FormTestColorBlend.resx">
       <DependentUpon>FormTestColorBlend.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormImgResampling.resx">
@@ -247,9 +176,9 @@
       <Project>{9060957d-ff0b-4b14-bb87-ee24b5170365}</Project>
       <Name>Marius.Yoga</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TestSamples\TestSamples.csproj">
+    <ProjectReference Include="..\TestSamples_Painting_Focus\TestSamples_Painting_Focus.csproj">
       <Project>{18ec3701-c6a5-429d-8c65-19ed4a2c2fed}</Project>
-      <Name>TestSamples</Name>
+      <Name>TestSamples_Painting_Focus</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -470,7 +399,6 @@
     <Content Include="Samples\tiger_wrinkles.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="x_notused\old_BitmapHelper.txt" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="..\WinFormTestBed2\WinFormTestBed2.projitems" Label="Shared" />
