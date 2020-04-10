@@ -9,7 +9,7 @@ using LayoutFarm.UI.ForImplementator;
 namespace LayoutFarm.UI
 {
 
-    public static class FormCanvasHelper
+    static class FormCanvasHelper
     {
         static UIPlatformWinForm s_platform;
 
@@ -187,9 +187,7 @@ namespace LayoutFarm.UI
 
         }
     }
-}
-namespace LayoutFarm.UI
-{
+
 
     sealed class MyWinFormsControl : UserControl, IGpuOpenGLSurfaceView
     {
@@ -324,19 +322,6 @@ namespace LayoutFarm.UI
         {
             if (_topWindowBridge != null)
             {
-                LayoutFarm.UI.UIMouseButtons buttons = UIMouseButtons.Left;
-                switch (e.Button)
-                {
-                    case MouseButtons.Left:
-                        buttons = UIMouseButtons.Left;
-                        break;
-                    case MouseButtons.Middle:
-                        buttons = UIMouseButtons.Middle;
-                        break;
-                    case MouseButtons.Right:
-                        buttons = UIMouseButtons.Right;
-                        break;
-                }
 
                 _mouseEventArgs.SetMouseWheelEventInfo(e.X, e.Y, e.Delta);
                 _topWindowBridge.HandleMouseWheel(_mouseEventArgs);
