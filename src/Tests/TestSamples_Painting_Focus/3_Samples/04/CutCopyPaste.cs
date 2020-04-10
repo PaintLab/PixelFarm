@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 using PixelFarm.Drawing;
 using Mini;
+using LayoutFarm.UI;
 
 namespace PixelFarm.CpuBlit.Sample_FloodFill
 {
@@ -28,10 +29,7 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             //1.copy
             using (MemBitmap memBitmap = _lionPng.CopyImgBuffer(20, 20, 100, 100))
             {
-                using (var platformBmp = CreatePlatformBitmap(memBitmap))
-                {
-                    System.Windows.Forms.Clipboard.SetImage(platformBmp);
-                }
+                Clipboard.SetImage(memBitmap);
             }
             //2. fill cut area
             using (Tools.BorrowAggPainter(_lionPng, out var painter))
@@ -47,54 +45,22 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
         {
             using (MemBitmap memBitmap = _lionPng.CopyImgBuffer(20, 20, 100, 100))
             {
-                using (var platformBmp = CreatePlatformBitmap(memBitmap))
-                {
-                    System.Windows.Forms.Clipboard.SetImage(platformBmp);
-                }
+                Clipboard.SetImage(memBitmap);
             }
         }
         [DemoAction]
         public void Paste()
         {
             //paste img from clipboard
-            if (System.Windows.Forms.Clipboard.ContainsImage())
+            if (Clipboard.ContainsImage())
             {
                 //convert clipboard img to 
-                System.Drawing.Bitmap bmp = System.Windows.Forms.Clipboard.GetImage() as System.Drawing.Bitmap;
-                MemBitmap memBmp = new MemBitmap(bmp.Width, bmp.Height);
-                PixelFarm.CpuBlit.BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(bmp, memBmp);
-
-                //...
+                MemBitmap memBmp = Clipboard.GetImage() as MemBitmap;
                 using (Tools.BorrowAggPainter(_lionPng, out var painter))
                 {
                     painter.DrawImage(memBmp);
                 }
-
             }
-        }
-        static System.Drawing.Bitmap CreatePlatformBitmap(MemBitmap memBmp)
-        {
-            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(
-                memBmp.Width,
-                memBmp.Height,
-                System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-
-            var srcPtr = MemBitmap.GetBufferPtr(memBmp);
-
-            var bmpdata = bmp.LockBits(
-                new System.Drawing.Rectangle(0, 0, memBmp.Width, memBmp.Height),
-                System.Drawing.Imaging.ImageLockMode.ReadWrite,
-                System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-
-            unsafe
-            {
-                PixelFarm.Drawing.Internal.MemMx.memcpy(
-                    (byte*)bmpdata.Scan0,
-                    (byte*)srcPtr.Ptr,
-                     srcPtr.LengthInBytes);
-            }
-            bmp.UnlockBits(bmpdata);
-            return bmp;
         }
     }
 }

@@ -48,15 +48,13 @@ namespace PixelFarm.CpuBlit.Sample_Images
         static MemBitmap LoadImage(string filename)
         {
             //read sample image
-            using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(filename))
+            byte[] rawFileBuffer = System.IO.File.ReadAllBytes(filename);
+            using (System.IO.MemoryStream ms = new System.IO.MemoryStream(rawFileBuffer))
             {
-                //read to image buffer 
-                int bmpW = bmp.Width;
-                int bmpH = bmp.Height;
-                MemBitmap memBmp = new MemBitmap(bmpW, bmpH);
-                BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(bmp, memBmp);
-                return memBmp;
+                ms.Position = 0;
+                return Platforms.ImageIOPortal.ReadImageDataFromMemStream(ms, System.IO.Path.GetExtension(filename)) as MemBitmap;
             }
+
         }
 
         public override void Draw(Painter p)
