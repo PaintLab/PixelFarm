@@ -89,8 +89,6 @@ namespace LayoutFarm.UI
     public class UIPlatformWinForm : UIPlatform
     {
         static UIPlatformWinForm s_platform;
-
-
         //TODO: review how to adjust this value
         const int UI_MSG_TIMER_INTERVAL = 5;
         static UIPlatformWinForm()
@@ -163,9 +161,26 @@ namespace LayoutFarm.UI
         {
             System.Windows.Forms.Clipboard.Clear();
         }
-        public override string GetClipboardData()
+        public override string GetClipboardText()
         {
             return System.Windows.Forms.Clipboard.GetText();
+        }
+        public override bool ContainsClipboardData(string datatype)
+        {
+            switch (datatype)
+            {
+                case "text":
+                    return System.Windows.Forms.Clipboard.ContainsText();
+                case "image":
+                    return System.Windows.Forms.Clipboard.ContainsImage();
+                case "filedrops":
+                    return System.Windows.Forms.Clipboard.ContainsFileDropList();
+            }
+            return false;
+        }
+        public override object GetClipboardData(string dataformat)
+        {
+            return System.Windows.Forms.Clipboard.GetData(dataformat);
         }
         public override void SetClipboardData(string textData)
         {
@@ -224,11 +239,7 @@ namespace LayoutFarm.UI
         public override void SetClipboardImage(Image img)
         {//TODO: review here
         }
-        public override bool ContainsClipboardImage()
-        {
-            //TODO: review here
-            return false;
-        }
+
         public class MyCursor : Cursor, IDisposable
         {
             IntPtr _nativeCursorHandler;

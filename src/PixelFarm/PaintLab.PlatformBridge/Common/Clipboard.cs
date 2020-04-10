@@ -2,6 +2,7 @@
 
 namespace LayoutFarm.UI
 {
+
     /// <summary>
     /// clipboard services
     /// </summary>
@@ -19,26 +20,28 @@ namespace LayoutFarm.UI
             //textdata = text;
             s_currentUIPlatform.SetClipboardData(text);
         }
-        public static bool ContainUnicodeText()
+        public static bool ContainsUnicodeText()
         {
             //TODO: review here
-            return s_currentUIPlatform.GetClipboardData() != null;
+            return s_currentUIPlatform.ContainsClipboardData("text");
         }
-        public static bool ContainImage()
-        {//TODO: review here
-            return s_currentUIPlatform.GetClipboardData() != null;
-        }
-        public static bool ContainFileDrops()
+        public static bool ContainsImage()
         {
-            return s_currentUIPlatform.GetClipboardData() != null;
+            //TODO: review here
+            return s_currentUIPlatform.ContainsClipboardData("image");
+        }
+        public static bool ContainsFileDrops()
+        {
+            return s_currentUIPlatform.ContainsClipboardData("filedrops");
         }
         public static string GetUnicodeText()
-        {//TODO: review here
-            return s_currentUIPlatform.GetClipboardData();
+        {
+            //TODO: review here
+            return s_currentUIPlatform.GetClipboardText();
         }
-        
         public static void SetUIPlatform(UIPlatform uiPlatform)
-        {//TODO: review here
+        {   
+            //TODO: review here
             s_currentUIPlatform = uiPlatform;
         }
         public static System.Collections.Generic.List<string> GetFileDropList()
@@ -54,5 +57,5 @@ namespace LayoutFarm.UI
             s_currentUIPlatform.SetClipboardImage(img);
         }
     }
-     
+
 }

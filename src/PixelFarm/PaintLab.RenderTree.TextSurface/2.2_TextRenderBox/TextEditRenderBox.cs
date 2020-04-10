@@ -373,7 +373,7 @@ namespace LayoutFarm.TextEditing
                         break;
                     case UIKeys.V:
                         {
-                            if (_isEditable && Clipboard.ContainUnicodeText())
+                            if (_isEditable && Clipboard.ContainsUnicodeText())
                             {
                                 //1. we need to parse multi-line to single line
                                 //this may need text-break services 

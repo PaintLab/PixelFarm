@@ -1,14 +1,11 @@
 ﻿//MIT, 2019-present, WinterDev
 using System;
-using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using LayoutFarm;
 using LayoutFarm.UI;
 using PixelFarm.Drawing;
-using LayoutFarm.UI.OpenGL;
 namespace PixelFarm.Forms
 {
-    using Glfw;
     public class GlfwPlatform : UIPlatform
     {
         public GlfwPlatform()
@@ -19,12 +16,18 @@ namespace PixelFarm.Forms
         {
 
         }
-
-        public override string GetClipboardData()
+        public override object GetClipboardData(string dataformat)
         {
-            return null;
+            throw new NotImplementedException();
         }
-
+        public override string GetClipboardText()
+        {
+            throw new NotImplementedException();
+        }
+        public override bool ContainsClipboardData(string datatype)
+        {
+            throw new NotImplementedException();
+        }
         public override void SetClipboardData(string textData)
         {
             //TODO: implement 
@@ -38,17 +41,14 @@ namespace PixelFarm.Forms
         }
         public override List<string> GetClipboardFileDropList()
         {
-            return null;             
+            return null;
         }
 
         public override Image GetClipboardImage()
         {
             return null;
         }
-        public override bool ContainsClipboardImage()
-        {
-            throw new NotImplementedException();
-        }
+
     }
     class GlfwCursor : Cursor
     {
