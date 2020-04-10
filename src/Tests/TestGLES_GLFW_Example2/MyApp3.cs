@@ -167,16 +167,26 @@ namespace TestGlfw
         {
             GLESInit.InitGLES();
 
-            ////1. init
-            //InitWinform();
-            //IInstalledTypefaceProvider fontLoader = YourImplementation.CommonTextServiceSetup.FontLoader;
-            ////2. 
-            ITextService textService = PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.GetTextService();
-            //PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetInstalledTypefaceProvider(fontLoader);
+
+            string icu_datadir = "brkitr"; //see brkitr folder, we link data from Typography project and copy to output if newer
+            if (!System.IO.Directory.Exists(icu_datadir))
+            {
+                throw new System.NotSupportedException("dic");
+            }
+            var dicProvider = new Typography.TextBreak.IcuSimpleTextFileDictionaryProvider() { DataDir = icu_datadir };
+            Typography.TextBreak.CustomBreakerBuilder.Setup(dicProvider);
+
+            PixelFarm.CpuBlit.MemBitmapExtensions.DefaultMemBitmapIO = new PixelFarm.Drawing.WinGdi.GdiBitmapIO();
+
+            PixelFarm.Platforms.StorageService.RegisterProvider(new YourImplementation.LocalFileStorageProvider(""));
+
+            OpenFontTextService textService = new OpenFontTextService();
+
+            textService.LoadFontsFromFolder("Fonts");
+
             //---------------------------------------------------------------------------
             int w = 800;
             int h = 600;
-            textService = null;
             s_myRootGfx = new MyRootGraphic(w, h, textService);
             //---------------------------------------------------------------------------
             //PixelFarm.Drawing.Rectangle screenClientAreaRect = Conv.ToRect(Screen.PrimaryScreen.WorkingArea);
@@ -195,8 +205,6 @@ namespace TestGlfw
                   InnerViewportKind.GLES,
                   glfwWindowWrapper,
                   bridge1);
-
-
 
             MySprite sprite = new MySprite(s_myRootGfx, 200, 300);
             MyBoxUI boxUI = new MyBoxUI();

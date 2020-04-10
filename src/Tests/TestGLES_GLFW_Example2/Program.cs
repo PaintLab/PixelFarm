@@ -16,12 +16,8 @@ namespace TestGlfw
                 throw new NotSupportedException();
             }
 
-            Mini.RootDemoPath.Path = @"..\Data";
-            
-            
-            PixelFarm.Forms.GlfwPlatform glfwPlatform = new PixelFarm.Forms.GlfwPlatform();
-            
-
+            Mini.RootDemoPath.Path = @"..\Data"; 
+            PixelFarm.Forms.GlfwPlatform glfwPlatform = new PixelFarm.Forms.GlfwPlatform(); 
             MyApp3.Start();             
         }
     }
