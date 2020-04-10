@@ -1,7 +1,9 @@
 ﻿//Apache2, 2014-present, WinterDev
 
 
+using PixelFarm.Drawing;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 namespace LayoutFarm.UI
 {
@@ -119,7 +121,7 @@ namespace LayoutFarm.UI
             {
                 s_platform = this;
                 SetAsDefaultPlatform();
-                
+
                 //PixelFarm.Drawing.Internal.UIMsgQueue.RegisterRunOnceImpl(runOnceDelegate =>
                 //{
                 //    UIPlatform.RegisterRunOnceTask(tt => runOnceDelegate());
@@ -209,7 +211,24 @@ namespace LayoutFarm.UI
             return myCursor;
         }
 
+        public override List<string> GetClipboardFileDropList()
+        {//TODO: review here
+            return null;
+        }
 
+        public override Image GetClipboardImage()
+        {//TODO: review here
+            return null;
+        }
+
+        public override void SetClipboardImage(Image img)
+        {//TODO: review here
+        }
+        public override bool ContainsClipboardImage()
+        {
+            //TODO: review here
+            return false;
+        }
         public class MyCursor : Cursor, IDisposable
         {
             IntPtr _nativeCursorHandler;

@@ -13,6 +13,7 @@ namespace LayoutFarm
         public AppHostWithRootGfx() { }
         public void Setup(AppHostConfig appHostConfig)
         {
+
             _rootgfx = appHostConfig.RootGfx;
             _primaryScreenWorkingAreaW = appHostConfig.ScreenW;
             _primaryScreenWorkingAreaH = appHostConfig.ScreenH;
@@ -42,7 +43,8 @@ namespace LayoutFarm
                         //#if DEBUG
                         //                        memBmp._dbugNote = "img;
                         //#endif
-                        PixelFarm.CpuBlit.MyLocalBitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(gdiBmp, memBmp);
+
+                        PixelFarm.CpuBlit.BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(gdiBmp, memBmp);
                         return memBmp;
                     }
                 }
@@ -87,11 +89,11 @@ namespace LayoutFarm
 
                             using (System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(imgName))
                             {
-                                PixelFarm.CpuBlit.MemBitmap memBmp = new PixelFarm.CpuBlit.MemBitmap(gdiBmp.Width, gdiBmp.Height);
+                                MemBitmap memBmp = new MemBitmap(gdiBmp.Width, gdiBmp.Height);
 #if DEBUG
                                 memBmp._dbugNote = "img" + imgName;
 #endif
-                                PixelFarm.CpuBlit.MyLocalBitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(gdiBmp, memBmp);
+                                BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(gdiBmp, memBmp);
                                 return memBmp;
                             }
 
@@ -109,16 +111,16 @@ namespace LayoutFarm
         PixelFarm.CpuBlit.MemBitmap CreateBitmap(VgVisualElement renderVx, int reqW, int reqH)
         {
 
-            PixelFarm.CpuBlit.VertexProcessing.Q1RectD bound = renderVx.GetRectBounds();
+            var bound = renderVx.GetRectBounds();
             //create
-            PixelFarm.CpuBlit.MemBitmap backingBmp = new PixelFarm.CpuBlit.MemBitmap((int)bound.Width + 10, (int)bound.Height + 10);
+            MemBitmap backingBmp = new MemBitmap((int)bound.Width + 10, (int)bound.Height + 10);
 #if DEBUG
             backingBmp._dbugNote = "renderVx";
 #endif
             //PixelFarm.CpuBlit.AggPainter painter = PixelFarm.CpuBlit.AggPainter.Create(backingBmp);
 
-            using (Tools.BorrowAggPainter(backingBmp, out AggPainter painter))
-            using (Tools.More.BorrowVgPaintArgs(painter, out VgPaintArgs paintArgs))
+            using (Tools.BorrowAggPainter(backingBmp, out var painter))
+            using (Tools.More.BorrowVgPaintArgs(painter, out var paintArgs))
             {
                 double prevStrokeW = painter.StrokeWidth;
 

@@ -9,7 +9,6 @@
     <Import_RootNamespace>WinFormTestBed2</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)AppHostWithRootGfx1.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TestBedStartup.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\CpuBlitOnGLES.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)YourImplementation.WinForms\FormCanvasHelper.cs" />

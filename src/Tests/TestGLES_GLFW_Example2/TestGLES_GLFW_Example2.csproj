@@ -36,6 +36,9 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\WinFormTestBed2\AppHostWithRootGfx.cs">
+      <Link>AppHostWithRootGfx.cs</Link>
+    </Compile>
     <Compile Include="GlfwEventBridge.cs" />
     <Compile Include="MyApp3.cs" />
     <Compile Include="Program.cs" />
@@ -89,6 +92,10 @@
     <ProjectReference Include="..\..\x_autogen2\PixelFarm.One.HtmlRenderer\PixelFarm.One.HtmlRenderer.csproj">
       <Project>{662f2274-d6f8-413a-a908-1b2f10c01348}</Project>
       <Name>PixelFarm.One.HtmlRenderer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestSamples_Painting_Focus\TestSamples_Painting_Focus.csproj">
+      <Project>{18ec3701-c6a5-429d-8c65-19ed4a2c2fed}</Project>
+      <Name>TestSamples_Painting_Focus</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

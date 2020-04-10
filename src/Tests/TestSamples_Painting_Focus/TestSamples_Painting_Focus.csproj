@@ -62,6 +62,7 @@
     <Compile Include="3_Samples\03_LionSamples\LionFillMsdfTest.cs" />
     <Compile Include="3_Samples\03_LionSamples\LionOutline.cs" />
     <Compile Include="3_Samples\03_LionSamples\SvgTiger.cs" />
+    <Compile Include="3_Samples\04\FloodFillDemo.cs" />
     <Compile Include="3_Samples\05_AlphaMask2\FontTextureDemo.cs" />
     <Compile Include="3_Samples\05_AlphaMask2\FontTextureDemo2.cs" />
     <Compile Include="3_Samples\05_AlphaMask2\FontTextureDemo3.cs" />
@@ -168,7 +169,6 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="3_Samples\04\" />
     <Folder Include="3_Samples\09_Surfaces\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

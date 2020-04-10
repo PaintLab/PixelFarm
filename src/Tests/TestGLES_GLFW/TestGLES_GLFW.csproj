@@ -74,6 +74,10 @@
       <Project>{198d20b3-0dbd-4c8c-8f0d-0d0fd9c61d43}</Project>
       <Name>BackEnd.NativeWindows</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TestSamples_Painting_Focus\TestSamples_Painting_Focus.csproj">
+      <Project>{18ec3701-c6a5-429d-8c65-19ed4a2c2fed}</Project>
+      <Name>TestSamples_Painting_Focus</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\Tools\dlls\glfw3.3\glfw3.dll">

@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using LayoutFarm;
 using LayoutFarm.UI;
+using PixelFarm.Drawing;
 using LayoutFarm.UI.OpenGL;
 namespace PixelFarm.Forms
 {
@@ -31,6 +32,23 @@ namespace PixelFarm.Forms
 
         protected override Cursor CreateCursorImpl(CursorRequest curReq) => new GlfwCursor();
 
+        public override void SetClipboardImage(Image img)
+        {
+
+        }
+        public override List<string> GetClipboardFileDropList()
+        {
+            return null;             
+        }
+
+        public override Image GetClipboardImage()
+        {
+            return null;
+        }
+        public override bool ContainsClipboardImage()
+        {
+            throw new NotImplementedException();
+        }
     }
     class GlfwCursor : Cursor
     {

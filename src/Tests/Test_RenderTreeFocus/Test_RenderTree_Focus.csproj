@@ -46,6 +46,9 @@
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\TextBreakerTest\IcuSimpleTextFileDictionaryProvider.cs">
       <Link>0_YourImplementation\IcuSimpleTextFileDictionaryProvider.cs</Link>
     </Compile>
+    <Compile Include="..\WinFormTestBed2\AppHostWithRootGfx.cs">
+      <Link>AppHostWithRootGfx.cs</Link>
+    </Compile>
     <Compile Include="0_Start\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">

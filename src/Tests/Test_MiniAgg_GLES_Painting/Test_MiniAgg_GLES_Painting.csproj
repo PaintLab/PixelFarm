@@ -49,12 +49,14 @@
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\TextBreakerTest\IcuSimpleTextFileDictionaryProvider.cs">
       <Link>0_YourImplementation\IcuSimpleTextFileDictionaryProvider.cs</Link>
     </Compile>
+    <Compile Include="..\WinFormTestBed2\AppHostWithRootGfx.cs">
+      <Link>0_Start\AppHostWithRootGfx.cs</Link>
+    </Compile>
     <Compile Include="0_Start\CpuBlitAppModule.cs" />
     <Compile Include="0_Start\CpuBlitOnGLESAppModule.cs" />
     <Compile Include="0_Start\GLESAppModule.cs" />
     <Compile Include="4_Samples_2\41_BitmapRenderSample.cs" />
     <Compile Include="4_Samples_2\CutCopyPaste.cs" />
-    <Compile Include="4_Samples_2\FloodFillDemo.cs" />
     <Compile Include="FormTestPaintFx.cs">
       <SubType>Form</SubType>
     </Compile>

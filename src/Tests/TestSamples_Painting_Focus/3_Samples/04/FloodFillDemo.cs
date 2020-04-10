@@ -282,44 +282,44 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             }
         }
 
-        static void PutBitmapToClipboardPreserveAlpha(System.Drawing.Bitmap bmp)
-        {
-            //save to png
-            string tmpfilename = System.Windows.Forms.Application.CommonAppDataPath + "\\clipboard_tmp.png";
+        //static void PutBitmapToClipboardPreserveAlpha(System.Drawing.Bitmap bmp)
+        //{
+        //    //save to png
+        //    string tmpfilename = System.Windows.Forms.Application.CommonAppDataPath + "\\clipboard_tmp.png";
 
-            using (System.IO.FileStream fs = new System.IO.FileStream(tmpfilename, System.IO.FileMode.Create))
-            {
-                bmp.Save(fs, System.Drawing.Imaging.ImageFormat.Png);
-            }
-            var fileList = new System.Collections.Specialized.StringCollection();
-            fileList.Add(tmpfilename);
-            System.Windows.Forms.Clipboard.SetFileDropList(fileList);
+        //    using (System.IO.FileStream fs = new System.IO.FileStream(tmpfilename, System.IO.FileMode.Create))
+        //    {
+        //        bmp.Save(fs, System.Drawing.Imaging.ImageFormat.Png);
+        //    }
+        //    var fileList = new System.Collections.Specialized.StringCollection();
+        //    fileList.Add(tmpfilename);
+        //    System.Windows.Forms.Clipboard.SetFileDropList(fileList);
 
-        }
-        static System.Drawing.Bitmap CreatePlatformBitmap(MemBitmap memBmp)
-        {
-            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(
-                memBmp.Width,
-                memBmp.Height,
-                System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+        //}
+        //static System.Drawing.Bitmap CreatePlatformBitmap(MemBitmap memBmp)
+        //{
+        //    System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(
+        //        memBmp.Width,
+        //        memBmp.Height,
+        //        System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
-            var srcPtr = MemBitmap.GetBufferPtr(memBmp);
+        //    var srcPtr = MemBitmap.GetBufferPtr(memBmp);
 
-            var bmpdata = bmp.LockBits(
-                new System.Drawing.Rectangle(0, 0, memBmp.Width, memBmp.Height),
-                System.Drawing.Imaging.ImageLockMode.ReadWrite,
-                System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+        //    var bmpdata = bmp.LockBits(
+        //        new System.Drawing.Rectangle(0, 0, memBmp.Width, memBmp.Height),
+        //        System.Drawing.Imaging.ImageLockMode.ReadWrite,
+        //        System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
-            unsafe
-            {
-                PixelFarm.Drawing.Internal.MemMx.memcpy(
-                    (byte*)bmpdata.Scan0,
-                    (byte*)srcPtr.Ptr,
-                     srcPtr.LengthInBytes);
-            }
-            bmp.UnlockBits(bmpdata);
-            return bmp;
-        }
+        //    unsafe
+        //    {
+        //        PixelFarm.Drawing.Internal.MemMx.memcpy(
+        //            (byte*)bmpdata.Scan0,
+        //            (byte*)srcPtr.Ptr,
+        //             srcPtr.LengthInBytes);
+        //    }
+        //    bmp.UnlockBits(bmpdata);
+        //    return bmp;
+        //}
         //-------------------------
         //for wanding-tool test
         MemBitmap _tmpMaskBitmap;
@@ -490,11 +490,16 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
                                 //copy to clipboard
                                 //convert to platform specific bitmap data
                                 painter.EnableBuiltInMaskComposite = false;
-                                using (var platformBmp = CreatePlatformBitmap(bmp))
-                                {
-                                    //PutBitmapToClipboardPreserveAlpha(platformBmp);
-                                    System.Windows.Forms.Clipboard.SetImage(platformBmp);
-                                }
+
+                                //TODO: review again
+                                throw new NotSupportedException(); 
+
+                                //LayoutFarm.UI.ClipboardService.Provider.GetImage 
+                                //using (var platformBmp = CreatePlatformBitmap(bmp))
+                                //{
+                                //    //PutBitmapToClipboardPreserveAlpha(platformBmp);
+                                //    System.Windows.Forms.Clipboard.SetImage(platformBmp);
+                                //}
                             }
 
                         }
