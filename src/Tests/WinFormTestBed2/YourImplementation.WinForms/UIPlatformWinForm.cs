@@ -1,6 +1,7 @@
 ﻿//Apache2, 2014-present, WinterDev
 
 
+using PixelFarm.CpuBlit;
 using PixelFarm.Drawing;
 using System;
 using System.Collections.Generic;
@@ -182,7 +183,7 @@ namespace LayoutFarm.UI
         {
             return System.Windows.Forms.Clipboard.GetData(dataformat);
         }
-        public override void SetClipboardData(string textData)
+        public override void SetClipboardText(string textData)
         {
             if (!string.IsNullOrEmpty(textData))
             {
@@ -193,7 +194,42 @@ namespace LayoutFarm.UI
                 System.Windows.Forms.Clipboard.Clear();
             }
         }
+        public override IEnumerable<string> GetClipboardFileDropList()
+        {
+            foreach (string s in System.Windows.Forms.Clipboard.GetFileDropList())
+            {
+                yield return s;
+            }
+        }
+        public override void SetClipboardFileDropList(string[] filedrops)
+        {
+            var stringCollection = new System.Collections.Specialized.StringCollection();
+            stringCollection.AddRange(filedrops);
+            System.Windows.Forms.Clipboard.SetFileDropList(stringCollection);
+        }
+        public override Image GetClipboardImage()
+        {
 
+            if (System.Windows.Forms.Clipboard.GetImage() is System.Drawing.Bitmap bmp)
+            {
+                MemBitmap memBmp = new MemBitmap(bmp.Width, bmp.Height);
+                BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(bmp, memBmp);
+                return memBmp;
+            }
+            return null;
+        }
+
+        public override void SetClipboardImage(Image img)
+        {
+            if (img is MemBitmap memBmp)
+            {
+                System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(memBmp.Width, memBmp.Height);
+                using (TempMemPtr tmp = MemBitmap.GetBufferPtr(memBmp))
+                {
+                    BitmapHelper.CopyToGdiPlusBitmapSameSize(tmp.Ptr, bmp);
+                }
+            }
+        }
 
         protected override Cursor CreateCursorImpl(CursorRequest cursorReq)
         {
@@ -226,19 +262,7 @@ namespace LayoutFarm.UI
             return myCursor;
         }
 
-        public override List<string> GetClipboardFileDropList()
-        {//TODO: review here
-            return null;
-        }
 
-        public override Image GetClipboardImage()
-        {//TODO: review here
-            return null;
-        }
-
-        public override void SetClipboardImage(Image img)
-        {//TODO: review here
-        }
 
         public class MyCursor : Cursor, IDisposable
         {
