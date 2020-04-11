@@ -1,9 +1,5 @@
 ﻿//MIT, 2016-present, WinterDev
 using System;
-using System.Runtime.InteropServices;
-
-using OpenTK.Graphics.ES20;
-using PixelFarm;
 using PixelFarm.Forms;
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit;
@@ -12,84 +8,18 @@ using LayoutFarm;
 using LayoutFarm.UI;
 using PaintLab.Svg;
 
-using Glfw;
 using LayoutFarm.CustomWidgets;
 using PixelFarm.DrawingGL;
 
 namespace TestGlfw
 {
+       
 
-    class GlfwWindowWrapper : IGpuOpenGLSurfaceView
-    {
-        readonly GlFwForm _form;
-        public GlfwWindowWrapper(GlFwForm form)
-        {
-            _form = form;
-        }
-
-        public IntPtr NativeWindowHwnd => _form.Handle;
-
-        public int Width => _form.Width;
-
-        public int Height => _form.Height;
-
-        public Cursor CurrentCursor
-        {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
-        }
-
-        public void Dispose()
-        {
-        }
-
-        public IntPtr GetEglDisplay()
-        {
-
-            return IntPtr.Zero;
-        }
-
-        public IntPtr GetEglSurface()
-        {
-            return IntPtr.Zero;
-        }
-
-        public Size GetSize() => new Size(_form.Width, _form.Height);
-
-        public void Invalidate()
-        {
-            _form.Invalidate();
-        }
-
-        public void MakeCurrent()
-        {
-            _form.MakeCurrent();
-        }
-
-        public void SwapBuffers()
-        {
-            _form.SwapBuffers();
-        }
-        public void Refresh()
-        {
-            //???
-        }
-        public void SetBounds(int left, int top, int width, int height)
-        {
-            _form.SetBounds(left, top, width, height);
-        }
-
-        public void SetSize(int width, int height)
-        {
-            _form.SetSize(width, height);
-        }
-
-    }
-
-    class MyBoxUI : UIElement
+#if DEBUG
+    class dbugMyBoxUI : UIElement
     {
         RenderElement _renderElem;
-        public MyBoxUI()
+        public dbugMyBoxUI()
         {
         }
 
@@ -127,10 +57,10 @@ namespace TestGlfw
         }
 
     }
-    class MySprite : RenderElement
+    class dbugMySprite : RenderElement
     {
         VgVisualElement _renderVx;
-        public MySprite(RootGraphic root, int w, int h) : base(root, w, h)
+        public dbugMySprite(RootGraphic root, int w, int h) : base(root, w, h)
         {
             _renderVx = VgVisualDocHelper.CreateVgVisualDocFromFile(@"lion.svg").VgRootElem;
         }
@@ -148,20 +78,26 @@ namespace TestGlfw
 
         }
     }
-
+#endif
     static class MyApp3
     {
 
-
-        public static int s_formW = 1024;
-        public static int s_formH = 1024;
+        public static int s_formW = 800;
+        public static int s_formH = 600;
 
         static MyRootGraphic s_myRootGfx;
         static GraphicsViewRoot s_viewroot;
         static void Init(GlFwForm form)
         {
-            GLESInit.InitGLES();
+            form.MakeCurrent();
 
+            OpenTK.Platform.Factory.GetCustomPlatformFactory = () => OpenTK.Platform.Egl.EglAngle.NewFactory();
+            OpenTK.Toolkit.Init(new OpenTK.ToolkitOptions {
+                Backend = OpenTK.PlatformBackend.PreferNative,
+            });
+            OpenTK.Graphics.PlatformAddressPortal.GetAddressDelegate = OpenTK.Platform.Utilities.CreateGetAddress();
+
+            GLESInit.InitGLES();
 
             string icu_datadir = "brkitr"; //see brkitr folder, we link data from Typography project and copy to output if newer
             if (!System.IO.Directory.Exists(icu_datadir))
@@ -175,10 +111,12 @@ namespace TestGlfw
 
             PixelFarm.Platforms.StorageService.RegisterProvider(new YourImplementation.LocalFileStorageProvider(""));
 
+
+            //---------------------------------------------------------------------------
+            //Typography TextService
             OpenFontTextService textService = new OpenFontTextService();
-
             textService.LoadFontsFromFolder("Fonts");
-
+            GlobalRootGraphic.TextService = textService;
             //---------------------------------------------------------------------------
 
             s_myRootGfx = new MyRootGraphic(s_formW, s_formH, textService);
@@ -198,58 +136,100 @@ namespace TestGlfw
                   InnerViewportKind.GLES,
                   glfwWindowWrapper,
                   bridge1);
+
+
+
+            //------------------------------------------------------------------------
+            //optional:
             if (s_viewroot.GetGLPainter() is GLPainter glPainter)
             {
                 glPainter.SmoothingMode = SmoothingMode.AntiAlias;
             }
+
+
+            //------------------------------------------------------------------------
+            //optional:
+            //if we don't set this, it will error on read-write image
+            var pars = new PixelFarm.Platforms.ImageIOSetupParameters();
+            pars.SaveToPng = (IntPtr imgBuffer, int stride, int width, int height, string filename) =>
+            {
+                using (System.Drawing.Bitmap newBmp = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+                {
+                    PixelFarm.CpuBlit.BitmapHelper.CopyToGdiPlusBitmapSameSize(imgBuffer, newBmp);
+                    //save
+                    newBmp.Save(filename);
+                }
+            };
+            pars.ReadFromMemStream = (System.IO.MemoryStream ms, string kind) =>
+            {
+                //read  
+                //TODO: review here again
+                using (System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(ms))
+                {
+                    PixelFarm.CpuBlit.MemBitmap memBmp = new PixelFarm.CpuBlit.MemBitmap(gdiBmp.Width, gdiBmp.Height);
+                    //#if DEBUG
+                    //                        memBmp._dbugNote = "img;
+                    //#endif
+
+                    PixelFarm.CpuBlit.BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(gdiBmp, memBmp);
+                    return memBmp;
+                }
+
+            };
+            PixelFarm.Platforms.ImageIOPortal.Setup(pars);
+            //------------------------------------------------------------------------
         }
-        public static void Start2()
+#if DEBUG
+        public static void dbugStart_Basic()
         {
-
-
+            //demonstrate basic setup
             var bridge = new MyGlfwTopWindowBridge.GlfwEventBridge();
-            var form = new GlFwForm(s_formW, s_formH, "hello!", bridge);
-            form.MakeCurrent();
-
-            OpenTK.Platform.Factory.GetCustomPlatformFactory = () => OpenTK.Platform.Egl.EglAngle.NewFactory();
-            OpenTK.Toolkit.Init(new OpenTK.ToolkitOptions {
-                Backend = OpenTK.PlatformBackend.PreferNative,
-            });
-            OpenTK.Graphics.PlatformAddressPortal.GetAddressDelegate = OpenTK.Platform.Utilities.CreateGetAddress();
-
-
-            IntPtr currentContext = Glfw3.glfwGetCurrentContext();
-            var contextHandler = new OpenTK.ContextHandle(currentContext);
-            var glfwContext = new GLFWContextForOpenTK(contextHandler);
-            var context = OpenTK.Graphics.GraphicsContext.CreateExternalContext(glfwContext);
-
-            //------ 
+            var form = new GlFwForm(s_formW, s_formH, "GLES_GLFW", bridge);
             Init(form);
-            //------
+            //------ 
 
-
-            //----------------------
             //this is an app detail
             Box bgBox = new Box(s_formW, s_formH);
             bgBox.BackColor = Color.White;
-
             s_myRootGfx.AddChild(bgBox.GetPrimaryRenderElement(s_myRootGfx));
 
             //----------------------
-            MySprite sprite = new MySprite(s_myRootGfx, 200, 300);
-            MyBoxUI boxUI = new MyBoxUI();
+            dbugMySprite sprite = new dbugMySprite(s_myRootGfx, 200, 300);
+            dbugMyBoxUI boxUI = new dbugMyBoxUI();
             boxUI.SetRenderElement(sprite);
             sprite.SetController(boxUI);
 
             bgBox.Add(boxUI);
-
-
-            //form.RenderDel = s_viewroot.PaintMe;
             //---------  
-            GlfwAppLoop.Run();
         }
+#endif
         public static void Start()
         {
+            var bridge = new MyGlfwTopWindowBridge.GlfwEventBridge();
+            var form = new GlFwForm(s_formW, s_formH, "GLES_GLFW", bridge);
+            //
+            Init(form);
+            //------
+
+            AppHost appHost = new AppHost();
+            AppHostConfig config = new AppHostConfig();
+            config.RootGfx = s_myRootGfx;
+            config.ScreenW = s_formW;
+            config.ScreenH = s_formH;
+            appHost.Setup(config);
+            //------
+            Box bgBox = new Box(s_formW, s_formH);
+            bgBox.BackColor = Color.White;
+            s_myRootGfx.AddChild(bgBox.GetPrimaryRenderElement(s_myRootGfx));
+            //------ 
+
+
+            //appHost.StartApp(new Demo_BoxEvents3());
+            appHost.StartApp(new Demo_ScrollView());
+            //appHost.StartApp(new Demo_MultipleLabels());
+            //appHost.StartApp(new Demo_MultipleLabels2());
+            //---------  
+
         }
     }
 }

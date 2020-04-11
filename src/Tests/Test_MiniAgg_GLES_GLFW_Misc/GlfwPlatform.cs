@@ -61,4 +61,69 @@ namespace PixelFarm.Forms
     {
 
     }
+    class GlfwWindowWrapper : IGpuOpenGLSurfaceView
+    {
+        readonly GlFwForm _form;
+        public GlfwWindowWrapper(GlFwForm form)
+        {
+            _form = form;
+        }
+
+        public IntPtr NativeWindowHwnd => _form.Handle;
+
+        public int Width => _form.Width;
+
+        public int Height => _form.Height;
+
+        public Cursor CurrentCursor
+        {
+            get => throw new NotImplementedException();
+            set => throw new NotImplementedException();
+        }
+
+        public void Dispose()
+        {
+        }
+
+        public IntPtr GetEglDisplay()
+        {
+
+            return IntPtr.Zero;
+        }
+
+        public IntPtr GetEglSurface()
+        {
+            return IntPtr.Zero;
+        }
+
+        public Size GetSize() => new Size(_form.Width, _form.Height);
+
+        public void Invalidate()
+        {
+            _form.Invalidate();
+        }
+
+        public void MakeCurrent()
+        {
+            _form.MakeCurrent();
+        }
+
+        public void SwapBuffers()
+        {
+            _form.SwapBuffers();
+        }
+        public void Refresh()
+        {
+            //???
+        }
+        public void SetBounds(int left, int top, int width, int height)
+        {
+            _form.SetBounds(left, top, width, height);
+        }
+
+        public void SetSize(int width, int height)
+        {
+            _form.SetSize(width, height);
+        }
+    }
 }

@@ -36,13 +36,15 @@ namespace TestGlfw
             ////----------
             Glfw.Glfw3.glfwGetMonitorWorkarea(Glfw.Glfw3.glfwGetPrimaryMonitor(), out int xpos, out int ypos, out int width, out int height);
             Mini.RootDemoPath.Path = @"..\Data";
-           
+
             MyApp3.s_formW = width;
             MyApp3.s_formH = height;
 
 
 
             MyApp3.Start();
+
+            PixelFarm.Forms.GlfwAppLoop.Run(); //main app loop
         }
     }
 }
