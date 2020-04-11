@@ -1,7 +1,5 @@
 ﻿//MIT, 2019-present, WinterDev
 using System;
-using System.Runtime.InteropServices;
-using System.Collections.Generic;
 using LayoutFarm;
 using LayoutFarm.UI;
 using LayoutFarm.UI.OpenGL;
@@ -10,7 +8,7 @@ namespace PixelFarm.Forms
     using Glfw;
 
 
-    class MyGlfwTopWindowBridge : MyTopWindowBridgeOpenGL
+    public class MyGlfwTopWindowBridge : MyTopWindowBridgeOpenGL
     {
         public MyGlfwTopWindowBridge(RootGraphic root, ITopWindowEventRoot topWinEventRoot)
             : base(root, topWinEventRoot)

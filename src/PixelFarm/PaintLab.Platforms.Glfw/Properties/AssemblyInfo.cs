@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("PaintLab.Platforms.Glfw")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("PaintLab.Platforms.Glfw")]
 [assembly: AssemblyCopyright("Copyright 2020")]
 [assembly: AssemblyTrademark("")]

@@ -39,7 +39,6 @@
     <Compile Include="..\..\..\..\typography\typography.textbreak\textbreakertest\IcuSimpleTextFileDictionaryProvider.cs">
       <Link>0_YourImplementation\IcuSimpleTextFileDictionaryProvider.cs</Link>
     </Compile>
-    <Compile Include="GlfwEventBridge.cs" />
     <Compile Include="MyApp3.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -168,7 +167,6 @@
       <Link>glfw3.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Compile Include="GlfwPlatform.cs" />
     <Content Include="..\Test_MiniAgg_GLES_Painting\Samples\lion.svg">
       <Link>lion.svg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

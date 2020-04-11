@@ -28,15 +28,15 @@ namespace PixelFarm.Forms
         {
             throw new NotImplementedException();
         }
-         
-          
+
+
         protected override Cursor CreateCursorImpl(CursorRequest curReq) => new GlfwCursor();
 
         public override void SetClipboardImage(Image img)
         {
 
         }
-         
+
         public override Image GetClipboardImage()
         {
             return null;
@@ -61,7 +61,7 @@ namespace PixelFarm.Forms
     {
 
     }
-    class GlfwWindowWrapper : IGpuOpenGLSurfaceView
+    public class GlfwWindowWrapper : IGpuOpenGLSurfaceView
     {
         readonly GlFwForm _form;
         public GlfwWindowWrapper(GlFwForm form)

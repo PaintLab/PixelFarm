@@ -42,6 +42,8 @@
     <Compile Include="..\PixelFarm.Drawing.GdiPlus_SH\Painter\GdiMemBitmapIO.cs">
       <Link>GdiMemBitmapIO.cs</Link>
     </Compile>
+    <Compile Include="GlfwEventBridge.cs" />
+    <Compile Include="GlfwPlatform.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -52,6 +54,10 @@
     <ProjectReference Include="..\BackEnd.MiniOpenTK\src\Builds\Net20\MiniOpenTK_Net20\MiniOpenTK_Net20.csproj">
       <Project>{f5a89623-87b9-42a3-a58c-abee7c9bbca2}</Project>
       <Name>MiniOpenTK_Net20</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BackEnd.NativeWindows\BackEnd.NativeWindows.csproj">
+      <Project>{198d20b3-0dbd-4c8c-8f0d-0d0fd9c61d43}</Project>
+      <Name>BackEnd.NativeWindows</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
