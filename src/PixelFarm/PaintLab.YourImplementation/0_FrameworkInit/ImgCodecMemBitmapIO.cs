@@ -43,7 +43,33 @@ namespace YourImplementation
 
         public override MemBitmap LoadImage(Stream input)
         {
-            throw new NotImplementedException();
+            //try get type of img from input stream
+            byte[] buff = new byte[4];
+            input.Read(buff, 0, 4);
+
+            //convert to chars
+#if DEBUG
+            char c0 = (char)buff[0];
+            char c1 = (char)buff[1];
+            char c2 = (char)buff[2];
+            char c3 = (char)buff[3];
+#endif
+            if ((char)buff[1] == 'P' &&
+                (char)buff[2] == 'N' &&
+                (char)buff[3] == 'G')
+            {
+                //try read as png
+                input.Seek(-4, SeekOrigin.Current);
+                return LoadImage(input, OutputImageFormat.Png);
+            }
+            else
+            {
+                //jpeg?
+                //throw new NotImplementedException();
+                input.Seek(-4, SeekOrigin.Current);
+                return LoadImage(input, OutputImageFormat.Jpeg);
+            }
+
         }
         public MemBitmap LoadImage(Stream input, OutputImageFormat format)
         {

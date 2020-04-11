@@ -184,6 +184,26 @@
       <Link>swiftshader\libglesv2.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\Data\imgs\01.jpg">
+      <Link>Data\01.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Data\imgs\02.jpg">
+      <Link>Data\02.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Data\imgs\03.jpg">
+      <Link>Data\03.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Data\imgs\04.jpg">
+      <Link>Data\04.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Data\imgs\05.jpg">
+      <Link>Data\05.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\Data\lion.svg">
       <Link>Data\lion.svg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

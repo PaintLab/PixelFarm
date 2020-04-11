@@ -164,7 +164,7 @@ namespace TestGlfw
                          null);
                 }
 
-                //---save with GDI+---
+                //--- save with GDI+---
                 //using (System.Drawing.Bitmap newBmp = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
                 //{
                 //    PixelFarm.CpuBlit.BitmapHelper.CopyToGdiPlusBitmapSameSize(imgBuffer, newBmp);
@@ -172,10 +172,24 @@ namespace TestGlfw
                 //    newBmp.Save(filename);
                 //}
             };
+
             pars.ReadFromMemStream = (System.IO.MemoryStream ms, string kind) =>
             {
+                //on .net core, we can use skia
+                SkiaSharp.SKBitmap skbitmap = SkiaSharp.SKBitmap.Decode(ms);
+                //copy to mem bitmap
+                MemBitmap memBmp = new MemBitmap(skbitmap.Width, skbitmap.Height);
+                IntPtr ptr = skbitmap.GetAddr(0, 0);
+                unsafe
+                {
+                    using (var ptr1 = MemBitmap.GetBufferPtr(memBmp))
+                    {
+                        PixelFarm.Drawing.Internal.MemMx.memcpy((byte*)ptr1.Ptr, (byte*)ptr, skbitmap.RowBytes * skbitmap.Height);
+                    }
+                }
+                return memBmp;
 
-                return PixelFarm.CpuBlit.MemBitmapExtensions.DefaultMemBitmapIO.LoadImage(ms);
+                //return PixelFarm.CpuBlit.MemBitmapExtensions.DefaultMemBitmapIO.LoadImage(ms);
                 //read/guest img format                 
 
                 //--- load img with GDI+---
