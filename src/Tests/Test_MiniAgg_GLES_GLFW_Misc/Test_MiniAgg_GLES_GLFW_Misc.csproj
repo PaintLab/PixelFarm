@@ -1,17 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E8DF35E8-8765-47C2-BC1A-B686A058062C}</ProjectGuid>
+    <ProjectGuid>{B60987F9-9DA7-4129-9754-C6957E04DF10}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Test_RenderTree_Focus</RootNamespace>
-    <AssemblyName>Test_RenderTree_Focus</AssemblyName>
+    <RootNamespace>Test_MiniAgg_GLES_GLFW_Misc</RootNamespace>
+    <AssemblyName>Test_MiniAgg_GLES_GLFW_Misc</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -19,34 +18,30 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;PIXEL_FARM_NET20</DefineConstants>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Prefer32Bit>false</Prefer32Bit>
-    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\Release\</OutputPath>
-    <DefineConstants>TRACE;PIXEL_FARM_NET20</DefineConstants>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\TextBreakerTest\IcuSimpleTextFileDictionaryProvider.cs">
+    <Compile Include="..\..\..\..\typography\typography.textbreak\textbreakertest\IcuSimpleTextFileDictionaryProvider.cs">
       <Link>0_YourImplementation\IcuSimpleTextFileDictionaryProvider.cs</Link>
     </Compile>
-    <Compile Include="0_Start\Program.cs" />
+    <Compile Include="GlfwEventBridge.cs" />
+    <Compile Include="MyApp3.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -58,7 +53,10 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="app.config" />
+    <None Include="..\..\..\..\Typography\Demo\Windows\TestFonts\SourceSansPro-Regular.ttf">
+      <Link>Fonts\SourceSansPro-Regular.ttf</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -70,97 +68,79 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\Builds\Net20\MiniOpenTK_Net20\MiniOpenTK_Net20.csproj">
-      <Project>{f5a89623-87b9-42a3-a58c-abee7c9bbca2}</Project>
-      <Name>MiniOpenTK_Net20</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PaintLab.Platforms.Win32\PaintLab.Platforms.Win32.csproj">
-      <Project>{4602b28b-eeec-4a69-854c-b00b8b616837}</Project>
-      <Name>PaintLab.Platforms.Win32</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\x_autogen2\PixelFarm.One.HtmlRenderer\PixelFarm.One.HtmlRenderer.csproj">
-      <Project>{662f2274-d6f8-413a-a908-1b2f10c01348}</Project>
-      <Name>PixelFarm.One.HtmlRenderer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TestSamples_RenderTreeFocus\TestSamples_RenderTreeFocus.csproj">
-      <Project>{e906647b-3216-4cc1-b849-dd249f6737f4}</Project>
-      <Name>TestSamples_RenderTreeFocus</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\de.txt">
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\de.txt">
       <Link>brkitr\de.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\dictionaries\burmesedict.txt">
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\dictionaries\burmesedict.txt">
       <Link>brkitr\dictionaries\burmesedict.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\dictionaries\cjdict.txt">
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\dictionaries\cjdict.txt">
       <Link>brkitr\dictionaries\cjdict.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\dictionaries\khmerdict.txt">
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\dictionaries\khmerdict.txt">
       <Link>brkitr\dictionaries\khmerdict.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\dictionaries\laodict.txt">
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\dictionaries\laodict.txt">
       <Link>brkitr\dictionaries\laodict.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\dictionaries\thaidict.txt">
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\dictionaries\thaidict.txt">
       <Link>brkitr\dictionaries\thaidict.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\el.txt">
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\el.txt">
       <Link>brkitr\el.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\en.txt">
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\en.txt">
       <Link>brkitr\en.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\en_US.txt">
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\en_US.txt">
       <Link>brkitr\en_US.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\en_US_POSIX.txt">
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\en_US_POSIX.txt">
       <Link>brkitr\en_US_POSIX.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\es.txt">
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\es.txt">
       <Link>brkitr\es.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\fr.txt">
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\fr.txt">
       <Link>brkitr\fr.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\it.txt">
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\it.txt">
       <Link>brkitr\it.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\ja.txt">
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\ja.txt">
       <Link>brkitr\ja.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\pt.txt">
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\pt.txt">
       <Link>brkitr\pt.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\root.txt">
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\root.txt">
       <Link>brkitr\root.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\ru.txt">
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\ru.txt">
       <Link>brkitr\ru.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\zh.txt">
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\zh.txt">
       <Link>brkitr\zh.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\..\Typography\Typography.TextBreak\icu63\brkitr\zh_Hant.txt">
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\zh_Hant.txt">
       <Link>brkitr\zh_Hant.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -176,37 +156,53 @@
       <Link>libGLESv2.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\Tools\dlls\angle\_x64\swiftshader\libegl.dll">
+    <Content Include="..\..\tools\dlls\angle\_x64\swiftshader\libegl.dll">
       <Link>swiftshader\libegl.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\Tools\dlls\angle\_x64\swiftshader\libglesv2.dll">
+    <Content Include="..\..\tools\dlls\angle\_x64\swiftshader\libglesv2.dll">
       <Link>swiftshader\libglesv2.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\Data\lion.svg">
-      <Link>Data\lion.svg</Link>
+    <Content Include="..\..\Tools\dlls\glfw3.3\glfw3.dll">
+      <Link>glfw3.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\Data\tiger.svg">
-      <Link>Data\tiger.svg</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Data\colorbrewer.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Data\GoogleMaterialDzColor.txt">
+    <Compile Include="GlfwPlatform.cs" />
+    <Content Include="..\Test_MiniAgg_GLES_Painting\Samples\lion.svg">
+      <Link>lion.svg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
-  <Import Project="..\WinFormTestBed2\WinFormTestBed2.projitems" Label="Shared" />
+  <ItemGroup>
+    <ProjectReference Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\Builds\Net20\MiniOpenTK_Net20\MiniOpenTK_Net20.csproj">
+      <Project>{f5a89623-87b9-42a3-a58c-abee7c9bbca2}</Project>
+      <Name>MiniOpenTK_Net20</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\BackEnd.NativeWindows\BackEnd.NativeWindows.csproj">
+      <Project>{198d20b3-0dbd-4c8c-8f0d-0d0fd9c61d43}</Project>
+      <Name>BackEnd.NativeWindows</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.Platforms.Win32\PaintLab.Platforms.Win32.csproj">
+      <Project>{e5f2b317-2205-4727-92c4-6190a2fa3ddc}</Project>
+      <Name>PaintLab.Platforms.Win32</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.Svg.One\PaintLab.Svg.One.csproj">
+      <Project>{12bd3faf-a10b-4e38-9337-f5b28c6543b4}</Project>
+      <Name>PaintLab.Svg.One</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\x_autogen2\PixelFarm.One.HtmlRenderer\PixelFarm.One.HtmlRenderer.csproj">
+      <Project>{662f2274-d6f8-413a-a908-1b2f10c01348}</Project>
+      <Name>PixelFarm.One.HtmlRenderer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestSamples_Painting_Focus\TestSamples_Painting_Focus.csproj">
+      <Project>{18ec3701-c6a5-429d-8c65-19ed4a2c2fed}</Project>
+      <Name>TestSamples_Painting_Focus</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestSamples_RenderTreeFocus\TestSamples_RenderTreeFocus.csproj">
+      <Project>{e906647b-3216-4cc1-b849-dd249f6737f4}</Project>
+      <Name>TestSamples_RenderTreeFocus</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

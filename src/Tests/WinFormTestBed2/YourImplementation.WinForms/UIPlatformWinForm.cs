@@ -1,11 +1,12 @@
 ﻿//Apache2, 2014-present, WinterDev
 
-
-using PixelFarm.CpuBlit;
-using PixelFarm.Drawing;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+
+using PixelFarm.CpuBlit;
+using PixelFarm.Drawing;
+
 namespace LayoutFarm.UI
 {
 
@@ -119,16 +120,8 @@ namespace LayoutFarm.UI
             if (s_platform == null)
             {
                 s_platform = this;
-                SetAsDefaultPlatform();
-
-                //PixelFarm.Drawing.Internal.UIMsgQueue.RegisterRunOnceImpl(runOnceDelegate =>
-                //{
-                //    UIPlatform.RegisterRunOnceTask(tt => runOnceDelegate());
-                //});
-            }
-
-            //var installedTypefaces = new Typography.FontManagement.InstalledTypefaceCollection();
-
+                SetAsDefaultPlatform(); 
+            } 
 
             try
             {

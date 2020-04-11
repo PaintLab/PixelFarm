@@ -24,8 +24,9 @@ I separate the main projects into many sub _solution folders_ =>
 Because it is easy to do _dependency analysis_.
 
 ---
+ 
+![px_proj_part1](https://user-images.githubusercontent.com/7447159/78972144-43da0200-7b37-11ea-8288-c7bb3d4b706b.png)
 
-![px_proj_part1](https://user-images.githubusercontent.com/7447159/77893725-7fa2db00-729e-11ea-84fb-f6254df0d503.png)
 _part1_
 
 

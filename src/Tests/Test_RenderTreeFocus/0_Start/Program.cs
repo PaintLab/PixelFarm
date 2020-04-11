@@ -33,9 +33,8 @@ namespace TestGraphicPackage2
             YourImplementation.TestBedStartup.Setup();
             //-------------------------------------------
 
-            //load demo list from specific asm
-            System.Reflection.Assembly asm = typeof(LayoutFarm.Demo_SingleButton).Assembly;
-            YourImplementation.TestBedStartup.RunDemoList(asm);
+            //load demo list from specific asm             
+            YourImplementation.TestBedStartup.RunDemoList(typeof(LayoutFarm.Demo_SingleButton).Assembly);
         }
     }
 }
