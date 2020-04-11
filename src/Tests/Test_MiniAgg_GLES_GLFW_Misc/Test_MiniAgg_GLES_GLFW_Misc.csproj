@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{B60987F9-9DA7-4129-9754-C6957E04DF10}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>TestGLES_GLFW_Example2</RootNamespace>
-    <AssemblyName>TestGLES_GLFW_Example2</AssemblyName>
+    <RootNamespace>Test_MiniAgg_GLES_GLFW_Misc</RootNamespace>
+    <AssemblyName>Test_MiniAgg_GLES_GLFW_Misc</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -51,6 +51,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="..\..\..\..\Typography\Demo\Windows\TestFonts\SourceSansPro-Regular.ttf">
       <Link>Fonts\SourceSansPro-Regular.ttf</Link>

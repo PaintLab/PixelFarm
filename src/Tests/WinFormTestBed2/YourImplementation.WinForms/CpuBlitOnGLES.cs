@@ -14,12 +14,12 @@ using LayoutFarm.RenderBoxes;
 namespace YourImplementation
 {
 
-    public delegate void UpdateCpuBlitSurface(AggPainter painter, Rectangle updateArea);
+    delegate void UpdateCpuBlitSurface(AggPainter painter, Rectangle updateArea);
 
     /// <summary>
     /// CpuBlit to GLES UIElement
     /// </summary>
-    public class CpuBlitGLESUIElement : UIElement
+    class CpuBlitGLESUIElement : UIElement
     {
 
 
@@ -155,7 +155,7 @@ namespace YourImplementation
     /// <summary>
     /// CpuBlit and Gdi+  Bridge UIElement
     /// </summary>
-    public class GdiOnGLESUIElement : CpuBlitGLESUIElement
+    class GdiOnGLESUIElement : CpuBlitGLESUIElement
     {
         PixelFarm.Drawing.WinGdi.GdiPlusDrawBoard _gdiDrawBoard;
         public GdiOnGLESUIElement(int width, int height)
