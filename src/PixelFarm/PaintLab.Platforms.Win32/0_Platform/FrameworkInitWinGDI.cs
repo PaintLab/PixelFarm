@@ -3,8 +3,6 @@ using Typography.FontManagement;
 
 namespace YourImplementation
 {
-
-
     public static class FrameworkInitWinGDI
     {
         public static IInstalledTypefaceProvider GetFontLoader()

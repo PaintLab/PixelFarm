@@ -183,9 +183,9 @@
       <Project>{198d20b3-0dbd-4c8c-8f0d-0d0fd9c61d43}</Project>
       <Name>BackEnd.NativeWindows</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PaintLab.Platforms.Win32\PaintLab.Platforms.Win32.csproj">
-      <Project>{e5f2b317-2205-4727-92c4-6190a2fa3ddc}</Project>
-      <Name>PaintLab.Platforms.Win32</Name>
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.Platforms.Glfw\PaintLab.Platforms.Glfw.csproj">
+      <Project>{fae4c438-ecbd-4751-b38c-5b75996a5caf}</Project>
+      <Name>PaintLab.Platforms.Glfw</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PaintLab.Svg.One\PaintLab.Svg.One.csproj">
       <Project>{12bd3faf-a10b-4e38-9337-f5b28c6543b4}</Project>

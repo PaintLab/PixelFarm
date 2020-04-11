@@ -9,7 +9,13 @@
     <Import_RootNamespace>PaintLab.Platforms.SH</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)3_MyTopWindowBridgeOpenGL.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AbstractTopWindowBridge.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AbstractTopWindowBridge_dbug.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)dbugHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GLESInit.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GraphicsViewRoot.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IGpuSurfaceViewport.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)InnerViewportKind.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OpenGLCanvasViewport.cs" />
   </ItemGroup>
