@@ -838,7 +838,7 @@ namespace OpenTK.Graphics.ES20
             {
                 fixed (byte* binDataPtr = &binaryData[0])
                 {
-#if !XAMARIN
+#if !IOS_OPENTK
                     GL.Oes.GetProgramBinary(_program_id, prog_bin_len, &writtenLen, &binFormat, (System.IntPtr)binDataPtr);
 #endif
                 }
@@ -858,7 +858,7 @@ namespace OpenTK.Graphics.ES20
         }
         public bool LoadCompiledShader(System.IO.BinaryReader reader)
         {
-#if XAMARIN
+#if IOS_OPENTK
             return false;
 #endif
             All binFormat = 0;
@@ -882,7 +882,7 @@ namespace OpenTK.Graphics.ES20
 
                     _program_id = OpenTK.Graphics.ES20.GL.CreateProgram();
 
-#if !XAMARIN
+#if !IOS_OPENTK
                     // update the program's data. 
                     GL.Oes.ProgramBinary(_program_id, binFormat, (System.IntPtr)compiled_binary_ptr, prog_bin_len);
                     // Check the link status, which indicates whether glProgramBinaryOES() succeeded.
