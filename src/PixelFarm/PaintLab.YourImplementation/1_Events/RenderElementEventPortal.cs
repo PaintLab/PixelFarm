@@ -443,6 +443,21 @@ namespace LayoutFarm.UI
 
         internal IUIEventListener _latestMouseActive;
 
+        void IEventPortal.PortalMouseLeaveFromViewport()
+        {
+            //mouse out from viewport
+            _isFirstMouseEnter = true;
+            if (_latestMouseActive != null)
+            {
+                _mouseLeaveEventArgs.IsDragging = false;
+                UIMouseLeaveEventArgs.SetDiff(_mouseLeaveEventArgs, 0, 0);
+                _mouseLeaveEventArgs.SetCurrentContextElement(_latestMouseActive);
+
+                _latestMouseActive.ListenMouseLeave(_mouseLeaveEventArgs);
+                _latestMouseActive = null;
+            }
+
+        }
         void IEventPortal.PortalMouseMove(UIMouseMoveEventArgs e)
         {
 
@@ -486,8 +501,6 @@ namespace LayoutFarm.UI
                     {
                         _isFirstMouseEnter = true;
                     }
-
-
 
                     if (!e1.IsCanceled)
                     {

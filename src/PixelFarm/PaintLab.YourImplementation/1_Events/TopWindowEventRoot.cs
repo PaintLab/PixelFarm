@@ -136,9 +136,9 @@ namespace LayoutFarm
             UIMouseEventArgs e = _mouseUpEventArgs;
             AddMouseEventArgsDetail(e, primaryMouseEventArgs);
             e.SetDiff(xdiff, ydiff);
-             
+
             //----------------------------------
-             
+
             _mouseUpEventArgs.SetIsDragging(_isDragging);
             _isMouseDown = _isDragging = false;
 
@@ -173,7 +173,7 @@ namespace LayoutFarm
                 }
             }
             else
-            {                 
+            {
                 _mouseUpEventArgs.SetMouseDoubleClick(timediff.Milliseconds < _dblClickSense);
                 _iTopBoxEventPortal.PortalMouseUp(_mouseUpEventArgs);
 
@@ -184,7 +184,14 @@ namespace LayoutFarm
             RequestCursor = e.CustomMouseCursor;
         }
 
+        void ITopWindowEventRoot.RootMouseLeave()
+        {
+            //mouse leave from viewport             
 
+            _iTopBoxEventPortal.PortalMouseLeaveFromViewport();
+            _hoverMonitoringTask.Reset();
+
+        }
         void ITopWindowEventRoot.RootMouseMove(PrimaryMouseEventArgs primaryMouseEventArgs)
         {
             int xdiff = primaryMouseEventArgs.Left - _prevLogicalMouseX;
