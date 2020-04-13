@@ -12,16 +12,15 @@ namespace TestGlfw
         static void Main()
         {
 
-            if (Glfw.Glfw3.glfwInit() == 0)
-            {
-                throw new NotSupportedException();
-            }
+
             PixelFarm.Forms.GlfwPlatform.Init();
-#if DEBUG
-            string versionStr3 = Marshal.PtrToStringAnsi(Glfw.Glfw3.glfwGetVersionString());
-#endif
-            ////----------
+
+            //----------
             Glfw.Glfw3.glfwGetMonitorWorkarea(Glfw.Glfw3.glfwGetPrimaryMonitor(), out int xpos, out int ypos, out int width, out int height);
+
+
+
+            //----------
             Mini.RootDemoPath.Path = @"..\Data";
 
             MyApp3.s_formW = width;

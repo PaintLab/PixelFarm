@@ -20,6 +20,11 @@ namespace PixelFarm.Forms
                 return;
             }
 
+            if (Glfw.Glfw3.glfwInit() == 0)
+            {
+                throw new NotSupportedException();
+            }
+
             s_platform = new GlfwPlatform();
             //----------
             //we use gles API,
@@ -37,9 +42,8 @@ namespace PixelFarm.Forms
             Glfw.Glfw3.glfwWindowHint(Glfw.Glfw3.GLFW_CONTEXT_VERSION_MINOR, 1);
             Glfw.Glfw3.glfwSwapInterval(1);
 
-         
-            GLESInit.InitGLES();
 
+            GLESInit.InitGLES();
         }
         private GlfwPlatform()
         {
@@ -145,7 +149,7 @@ namespace PixelFarm.Forms
         }
         public void Refresh()
         {
-            //???
+            
         }
         public void SetBounds(int left, int top, int width, int height)
         {

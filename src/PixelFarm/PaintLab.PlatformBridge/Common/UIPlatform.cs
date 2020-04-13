@@ -10,6 +10,9 @@ namespace LayoutFarm
     {
         static UIPlatform s_ui_platform;
         static bool s_Closing;
+
+        //----------------------------------------------------------------
+
         //----------------------------------------------------------------
         //clipboard
         public abstract void ClearClipboardData();

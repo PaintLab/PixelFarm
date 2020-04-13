@@ -32,6 +32,12 @@ namespace PixelFarm.Forms
             {
                 _myTopWindowBridge = bridge;
             }
+            public override void WindowRefresh(IntPtr window)
+            {
+                _myTopWindowBridge.PaintToOutputWindow();
+            }
+           
+
             public override void MouseEvent(IntPtr winPtr, int button, int action, int modifier)
             {
 
