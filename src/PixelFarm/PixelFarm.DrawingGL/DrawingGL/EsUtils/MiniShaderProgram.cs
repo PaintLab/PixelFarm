@@ -425,7 +425,7 @@ namespace OpenTK.Graphics.ES30
                     //// Check the link status, which indicates whether glProgramBinaryOES() succeeded.
                     //GL.GetProgram(_program_id, GetProgramParameterName.LinkStatus, out int linkStatus);
 
- 
+
                     GL.ProgramBinary(_program_id, binFormat, (System.IntPtr)compiled_binary_ptr, prog_bin_len);
                     GL.GetProgram(_program_id, ProgramParameter.LinkStatus, out int linkStatus);
 
@@ -838,7 +838,9 @@ namespace OpenTK.Graphics.ES20
             {
                 fixed (byte* binDataPtr = &binaryData[0])
                 {
+#if !IOS_OPENTK
                     GL.Oes.GetProgramBinary(_program_id, prog_bin_len, &writtenLen, &binFormat, (System.IntPtr)binDataPtr);
+#endif
                 }
             }
             //using (System.IO.FileStream fs = new System.IO.FileStream(filename, System.IO.FileMode.Create))
@@ -856,6 +858,9 @@ namespace OpenTK.Graphics.ES20
         }
         public bool LoadCompiledShader(System.IO.BinaryReader reader)
         {
+#if IOS_OPENTK
+            return false;
+#endif
             All binFormat = 0;
             int prog_bin_len = 0;
             byte[] compiled_binary = null;
@@ -877,12 +882,15 @@ namespace OpenTK.Graphics.ES20
 
                     _program_id = OpenTK.Graphics.ES20.GL.CreateProgram();
 
+#if !IOS_OPENTK
                     // update the program's data. 
                     GL.Oes.ProgramBinary(_program_id, binFormat, (System.IntPtr)compiled_binary_ptr, prog_bin_len);
                     // Check the link status, which indicates whether glProgramBinaryOES() succeeded.
                     GL.GetProgram(_program_id, GetProgramParameterName.LinkStatus, out int linkStatus);
+#else
+                    int linkStatus = 1;
+#endif
 
-                    
                     if (linkStatus != 0)
                     {
                         //success

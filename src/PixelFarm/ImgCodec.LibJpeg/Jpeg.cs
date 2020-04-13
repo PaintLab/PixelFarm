@@ -131,11 +131,14 @@ namespace BitMiracle.LibJpeg
             destination.BeginWrite();
 
             /* Process data */
-            while (m_decompressor.Output_scanline < m_decompressor.Output_height)
+
             {
                 byte[][] row = jpeg_common_struct.AllocJpegSamples(m_decompressor.Output_width * m_decompressor.Output_components, 1);
-                m_decompressor.jpeg_read_scanlines(row, 1);
-                destination.ProcessPixelsRow(row[0]);
+                while (m_decompressor.Output_scanline < m_decompressor.Output_height)
+                {
+                    m_decompressor.jpeg_read_scanlines(row, 1);
+                    destination.ProcessPixelsRow(row[0]);
+                }
             }
 
             destination.EndWrite();

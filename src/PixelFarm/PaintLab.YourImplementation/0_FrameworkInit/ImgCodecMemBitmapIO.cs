@@ -2,7 +2,7 @@
 using System;
 using PixelFarm.CpuBlit;
 using System.IO;
-
+using BitMiracle.LibJpeg;
 
 namespace YourImplementation
 {
@@ -43,26 +43,177 @@ namespace YourImplementation
 
         public override MemBitmap LoadImage(Stream input)
         {
-            throw new NotImplementedException();
+            //try get type of img from input stream
+            byte[] buff = new byte[4];
+            input.Read(buff, 0, 4);
+
+            //convert to chars
+#if DEBUG
+            char c0 = (char)buff[0];
+            char c1 = (char)buff[1];
+            char c2 = (char)buff[2];
+            char c3 = (char)buff[3];
+#endif
+            if ((char)buff[1] == 'P' &&
+                (char)buff[2] == 'N' &&
+                (char)buff[3] == 'G')
+            {
+                //try read as png
+                input.Seek(-4, SeekOrigin.Current);
+                return LoadImage(input, OutputImageFormat.Png);
+            }
+            else
+            {
+                //jpeg?
+                //throw new NotImplementedException();
+                input.Seek(-4, SeekOrigin.Current);
+                return LoadImage(input, OutputImageFormat.Jpeg);
+            }
         }
+
+
+        class JpegDecoderDst : BitMiracle.LibJpeg.IDecompressDestination
+        {
+            MemBitmap _memBmp;
+            int _imgWidth;
+            int _imgHeight;
+            int _component;
+            BitStream _bitStream;
+
+            int _currentRowNo;
+            TempMemPtr _tempMemPtr;
+
+            public JpegDecoderDst() { }
+            public Stream Output => null;
+            public MemBitmap MemBitmapOutput => _memBmp;
+            public void BeginWrite()
+            {
+                _currentRowNo = 0;
+            }
+            public void EndWrite()
+            {
+                _tempMemPtr.Dispose();
+            }
+            public void SetImageAttributes(LoadedImageAttributes parameters)
+            {
+                _imgWidth = parameters.Width;
+                _imgHeight = parameters.Height;
+                _component = parameters.Components;
+                _bitStream = new BitStream();
+
+                _memBmp = new MemBitmap(_imgWidth, _imgHeight);
+                _tempMemPtr = MemBitmap.GetBufferPtr(_memBmp);
+            }
+            public void ProcessPixelsRow(byte[] row)
+            {
+                //data row is decoded 
+                _bitStream.ResetInput(row);
+                //create long buffer for a single line 
+                int index = 0;
+                unsafe
+                {
+                    int* head = (int*)_tempMemPtr.Ptr;
+                    head += (_currentRowNo * _imgWidth);//
+
+                    //....
+
+                    switch (_component)
+                    {
+                        case 3:
+                            {
+                                for (int col = 0; col < _imgWidth; ++col)
+                                {
+                                    byte b = row[index];
+                                    byte g = row[index + 1];
+                                    byte r = row[index + 2];
+                                    index += 3;
+
+                                    //store value
+                                    *head = ((255 << 24) | (b << 16) | (g << 8) | r);
+                                    head++;
+                                }
+                            }
+                            break;
+                        default: throw new NotSupportedException();
+                    }
+                }
+                _currentRowNo++;
+                //for (int i = 0; i < _imgWidth; ++i)
+                //{
+                //    //each component
+                //    //eg. 1,2,3,4 
+                //    switch (_component)
+                //    {
+                //        case 1:
+                //            {
+
+                //            }
+                //            _lineBuffer16[byteIndex] = (short)bitStream.Read(bitsPerComponent);
+                //            byteIndex++;
+                //            break;
+                //        case 2:
+                //            {
+
+                //            }
+                //            _lineBuffer16[byteIndex] = (short)bitStream.Read(bitsPerComponent);
+                //            _lineBuffer16[byteIndex + 1] = (short)bitStream.Read(bitsPerComponent);
+                //            byteIndex += 2;
+                //            break;
+                //        case 3:
+                //            {
+
+                //            }
+                //            _lineBuffer16[byteIndex] = (short)bitStream.Read(bitsPerComponent);
+                //            _lineBuffer16[byteIndex + 1] = (short)bitStream.Read(bitsPerComponent);
+                //            _lineBuffer16[byteIndex + 2] = (short)bitStream.Read(bitsPerComponent);
+                //            byteIndex += 3;
+                //            break;
+                //        case 4:
+                //            {
+
+                //            }
+                //            _lineBuffer16[byteIndex] = (short)bitStream.Read(bitsPerComponent);
+                //            _lineBuffer16[byteIndex + 1] = (short)bitStream.Read(bitsPerComponent);
+                //            _lineBuffer16[byteIndex + 2] = (short)bitStream.Read(bitsPerComponent);
+                //            _lineBuffer16[byteIndex + 4] = (short)bitStream.Read(bitsPerComponent);
+                //            byteIndex += 4;
+                //            break;
+                //        default:
+                //            throw new NotSupportedException();
+                //    }
+                //}
+
+
+            }
+
+        }
+
         public MemBitmap LoadImage(Stream input, OutputImageFormat format)
         {
             ImageTools.ExtendedImage extendedImg = new ImageTools.ExtendedImage();
             //TODO: review img loading, we should not use only its extension
             switch (format)
             {
+                case OutputImageFormat.Jpeg:
+                    {
+
+                        var decoder = new ImageTools.IO.Jpeg.JpegDecoder();
+                        var dst = new JpegDecoderDst();
+                        extendedImg.JpegDecompressDest = dst;
+                        extendedImg.Load(input, decoder);
+                        //copy from 
+
+                        return dst.MemBitmapOutput;
+
+                    }
+                    break;
                 case OutputImageFormat.Png:
                     {
                         var decoder = new ImageTools.IO.Png.PngDecoder();
                         extendedImg.Load(input, decoder);
                     }
                     break;
-                case OutputImageFormat.Jpeg:
-                    {
-                        var decoder = new ImageTools.IO.Jpeg.JpegDecoder();
-                        extendedImg.Load(input, decoder);
-                    }
-                    break;
+
                 default:
                     throw new System.NotSupportedException();
 

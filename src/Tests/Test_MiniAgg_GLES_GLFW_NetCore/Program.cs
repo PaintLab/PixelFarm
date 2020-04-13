@@ -14,7 +14,7 @@ namespace TestGlfw
 
 
             PixelFarm.Forms.GlfwPlatform.Init();
-            Mini.RootDemoPath.Path = @"..\Data";
+            Mini.RootDemoPath.Path = @"..\Data"; 
 
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             sw.Start();

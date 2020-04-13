@@ -127,8 +127,8 @@ namespace ImageTools.IO.Jpeg
         /// </exception>
         public void Decode(ExtendedImage image, Stream stream)
         {
-            Guard.NotNull(image, "image");
-            Guard.NotNull(stream, "stream");
+            Guard.NotNull(image, nameof(image));
+            Guard.NotNull(stream, nameof(stream));
 
             if (UseLegacyLibrary)
             {
@@ -161,15 +161,26 @@ namespace ImageTools.IO.Jpeg
 
                 //------- 
                 image.DensityXInt32 = jpg.Image.DensityX;
-                image.DensityYInt32 = jpg.Image.DensityY; 
+                image.DensityYInt32 = jpg.Image.DensityY;
                 image.SetPixels(pixelWidth, pixelHeight, pixels);
             }
             else
             {
-                JpegImage jpg = new JpegImage(stream);
+                JpegImage jpg;
+                if (image.JpegDecompressDest != null)
+                {
+                    jpg = new JpegImage(stream, image.JpegDecompressDest);
+                    return;
+                }
+                else
+                {
+                    jpg = new JpegImage(stream);
+                }
+
 
                 int pixelWidth = jpg.Width;
                 int pixelHeight = jpg.Height;
+
 
                 byte[] pixels = new byte[pixelWidth * pixelHeight * 4];
 
@@ -178,6 +189,8 @@ namespace ImageTools.IO.Jpeg
                     throw new UnsupportedImageFormatException();
                 }
 
+
+
                 for (int y = 0; y < pixelHeight; y++)
                 {
                     SampleRow row = jpg.GetRow(y);
@@ -185,7 +198,10 @@ namespace ImageTools.IO.Jpeg
                     {
                         //Sample sample = row.GetAt(x);
                         int offset = (y * pixelWidth + x) * 4;
-                        row.GetComponentsAt(x, out pixels[offset + 0], out pixels[offset + 1], out pixels[offset + 2]);
+
+                        //for windows                         
+                        //row.GetComponentsAt(x, out pixels[offset + 0], out pixels[offset + 1], out pixels[offset + 2]);
+                        row.GetComponentsAt(x, out pixels[offset + 2], out pixels[offset + 1], out pixels[offset + 0]);
                         //r = (byte)sample[0];
                         //g = (byte)sample[1];
                         //b = (byte)sample[2];  

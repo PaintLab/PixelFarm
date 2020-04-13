@@ -83,21 +83,28 @@ namespace TestGlfw
     static class MyApp3
     {
 
-
         static MyRootGraphic s_myRootGfx;
         static GraphicsViewRoot s_viewroot;
+        static GlFwForm s_mainForm;
+        static void Init()
+        {
+            Size prim_size = UIPlatform.CurrentPlatform.GetPrimaryMonitorSize();
+
+            Init(new GlFwForm(prim_size.Width, prim_size.Height, "GLES_GLFW", new MyGlfwTopWindowBridge.GlfwEventBridge()));
+        }
         static void Init(GlFwForm form)
         {
+            s_mainForm = form;
+
             //PART1:
             //1. storage io
             PixelFarm.Platforms.StorageService.RegisterProvider(new YourImplementation.LocalFileStorageProvider(""));
 
             //2. img-io implementation
             PixelFarm.CpuBlit.MemBitmapExtensions.DefaultMemBitmapIO = new YourImplementation.ImgCodecMemBitmapIO(); // new PixelFarm.Drawing.WinGdi.GdiBitmapIO();
-            //PixelFarm.CpuBlit.MemBitmapExtensions.DefaultMemBitmapIO = new PixelFarm.Drawing.WinGdi.GdiBitmapIO();
 
             //------------------------------------------------------------------------
-            // 
+            //5. image-IO (optional)
             //if we don't set this, it will error on read-write image
             //you can implement this with other lib that can read-write images
 
@@ -112,7 +119,7 @@ namespace TestGlfw
                          null);
                 }
 
-                //---save with GDI+---
+                //--- save with GDI+---
                 //using (System.Drawing.Bitmap newBmp = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
                 //{
                 //    PixelFarm.CpuBlit.BitmapHelper.CopyToGdiPlusBitmapSameSize(imgBuffer, newBmp);
@@ -120,10 +127,24 @@ namespace TestGlfw
                 //    newBmp.Save(filename);
                 //}
             };
+
             pars.ReadFromMemStream = (System.IO.MemoryStream ms, string kind) =>
             {
+                //on .net core, we can use skia
+                SkiaSharp.SKBitmap skbitmap = SkiaSharp.SKBitmap.Decode(ms);
+                //copy to mem bitmap
+                MemBitmap memBmp = new MemBitmap(skbitmap.Width, skbitmap.Height);
+                IntPtr ptr = skbitmap.GetAddr(0, 0);
+                unsafe
+                {
+                    using (var ptr1 = MemBitmap.GetBufferPtr(memBmp))
+                    {
+                        PixelFarm.Drawing.Internal.MemMx.memcpy((byte*)ptr1.Ptr, (byte*)ptr, skbitmap.RowBytes * skbitmap.Height);
+                    }
+                }
+                return memBmp;
 
-                return PixelFarm.CpuBlit.MemBitmapExtensions.DefaultMemBitmapIO.LoadImage(ms);
+                //return PixelFarm.CpuBlit.MemBitmapExtensions.DefaultMemBitmapIO.LoadImage(ms);
                 //read/guest img format                 
 
                 //--- load img with GDI+---
@@ -143,7 +164,6 @@ namespace TestGlfw
             PixelFarm.Platforms.ImageIOPortal.Setup(pars);
             //------------------------------------------------------------------------
 
-
             //3. setup text-breaker
             string icu_datadir = "brkitr"; //see brkitr folder, we link data from Typography project and copy to output if newer
             if (!System.IO.Directory.Exists(icu_datadir))
@@ -158,6 +178,7 @@ namespace TestGlfw
             textService.LoadFontsFromFolder("Fonts");
             GlobalRootGraphic.TextService = textService;
             //---------------------------------------------------------------------------
+
 
             //PART2: root graphics
             Size primScreenSize = UIPlatform.CurrentPlatform.GetPrimaryMonitorSize();
@@ -192,13 +213,14 @@ namespace TestGlfw
         public static void dbugStart_Basic()
         {
             //demonstrate basic setup
-            var bridge = new MyGlfwTopWindowBridge.GlfwEventBridge();
-            Size primScreenSize = UIPlatform.CurrentPlatform.GetPrimaryMonitorSize();
-            var form = new GlFwForm(primScreenSize.Width, primScreenSize.Height, "GLES_GLFW", bridge);
-            Init(form);
+
+
+            Init();
             //------ 
 
             //this is an app detail
+            Size primScreenSize = UIPlatform.CurrentPlatform.GetPrimaryMonitorSize();
+
             Box bgBox = new Box(primScreenSize.Width, primScreenSize.Height);
             bgBox.BackColor = Color.White;
             s_myRootGfx.AddChild(bgBox.GetPrimaryRenderElement(s_myRootGfx));
@@ -215,14 +237,11 @@ namespace TestGlfw
 #endif
         public static void Start()
         {
-            var bridge = new MyGlfwTopWindowBridge.GlfwEventBridge();
 
-            Size primScreenSize = UIPlatform.CurrentPlatform.GetPrimaryMonitorSize();
-            var form = new GlFwForm(primScreenSize.Width, primScreenSize.Height, "GLES_GLFW", bridge);
             //
-            Init(form);
+            Init();
             //------
-
+            Size primScreenSize = UIPlatform.CurrentPlatform.GetPrimaryMonitorSize();
             AppHost appHost = new AppHost();
             AppHostConfig config = new AppHostConfig();
             config.RootGfx = s_myRootGfx;
@@ -230,7 +249,7 @@ namespace TestGlfw
             config.ScreenH = primScreenSize.Height;
             appHost.Setup(config);
             //------
-            Box bgBox = new Box(primScreenSize.Width, primScreenSize.Height);
+            Box bgBox = new Box(s_myRootGfx.Width, s_myRootGfx.Height);
             bgBox.BackColor = Color.White;
             s_myRootGfx.AddChild(bgBox.GetPrimaryRenderElement(s_myRootGfx));
             //------ 

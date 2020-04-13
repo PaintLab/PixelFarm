@@ -6,11 +6,58 @@ using LayoutFarm.UI;
 using PixelFarm.Drawing;
 namespace PixelFarm.Forms
 {
+
     public class GlfwPlatform : UIPlatform
     {
-        public GlfwPlatform()
+        static GlfwPlatform s_platform;
+        bool s_checkPrimaryMonitorSize;
+        int _primscreen_w;
+        int _primscreen_h;
+        public static void Init()
+        {
+            if (s_platform != null)
+            {
+                return;
+            }
+
+            if (Glfw.Glfw3.glfwInit() == 0)
+            {
+                throw new NotSupportedException();
+            }
+
+            s_platform = new GlfwPlatform();
+            //----------
+            //we use gles API,
+            //so we need to hint before create a window
+            //(if we hint after create a window,it will use default GL,
+            // GL swapBuffer != GLES'sEGL swapBuffer())
+            //see https://www.khronos.org/registry/EGL/sdk/docs/man/html/eglSwapBuffers.xhtml
+            //----------
+#if DEBUG
+            string versionStr3 = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(Glfw.Glfw3.glfwGetVersionString());
+#endif
+            Glfw.Glfw3.glfwWindowHint(Glfw.Glfw3.GLFW_CLIENT_API, Glfw.Glfw3.GLFW_OPENGL_ES_API);
+            Glfw.Glfw3.glfwWindowHint(Glfw.Glfw3.GLFW_CONTEXT_CREATION_API, Glfw.Glfw3.GLFW_EGL_CONTEXT_API);
+            Glfw.Glfw3.glfwWindowHint(Glfw.Glfw3.GLFW_CONTEXT_VERSION_MAJOR, 3);
+            Glfw.Glfw3.glfwWindowHint(Glfw.Glfw3.GLFW_CONTEXT_VERSION_MINOR, 1);
+            Glfw.Glfw3.glfwSwapInterval(1);
+
+
+            GLESInit.InitGLES();
+        }
+        private GlfwPlatform()
         {
             SetAsDefaultPlatform();
+        }
+       
+        public override Size GetPrimaryMonitorSize()
+        {
+            if (!s_checkPrimaryMonitorSize)
+            {
+                Glfw.Glfw3.glfwGetMonitorWorkarea(Glfw.Glfw3.glfwGetPrimaryMonitor(), out int xpos, out int ypos, out _primscreen_w, out _primscreen_h);
+                s_checkPrimaryMonitorSize = true;
+            }
+            return new Size(_primscreen_w, _primscreen_h);
         }
         public override void ClearClipboardData()
         {
@@ -28,16 +75,14 @@ namespace PixelFarm.Forms
         {
             throw new NotImplementedException();
         }
-
-
         protected override Cursor CreateCursorImpl(CursorRequest curReq) => new GlfwCursor();
 
-        public override void SetClipboardImage(Image img)
+        public override void SetClipboardImage(Drawing.Image img)
         {
 
         }
 
-        public override Image GetClipboardImage()
+        public override Drawing.Image GetClipboardImage()
         {
             return null;
         }
@@ -96,7 +141,7 @@ namespace PixelFarm.Forms
             return IntPtr.Zero;
         }
 
-        public Size GetSize() => new Size(_form.Width, _form.Height);
+        public Drawing.Size GetSize() => new Drawing.Size(_form.Width, _form.Height);
 
         public void Invalidate()
         {
@@ -114,7 +159,7 @@ namespace PixelFarm.Forms
         }
         public void Refresh()
         {
-            //???
+
         }
         public void SetBounds(int left, int top, int width, int height)
         {

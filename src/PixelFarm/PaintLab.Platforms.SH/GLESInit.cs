@@ -34,7 +34,8 @@ namespace LayoutFarm.UI
         static OpenTK.Graphics.GraphicsMode s_gfxmode;
         static bool s_initOpenTK;
         public static void InitGLES()
-        {
+        {         
+
             if (s_initOpenTK) return;
 
             OpenTK.Platform.Factory.GetCustomPlatformFactory = () => OpenTK.Platform.Egl.EglAngle.NewFactory();

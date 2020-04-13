@@ -55,7 +55,7 @@ namespace LayoutFarm.UI
     /// <typeparam name="S"></typeparam>
     /// <typeparam name="T"></typeparam>
     public abstract class UIMouseBehaviourBase<S, T>
-    where S : IAcceptBehviour
+                          where S : IAcceptBehviour
     {
         public struct SenderInfo
         {

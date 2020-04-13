@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using LayoutFarm.UI;
+
+
 namespace LayoutFarm
 {
 
@@ -10,6 +12,10 @@ namespace LayoutFarm
     {
         static UIPlatform s_ui_platform;
         static bool s_Closing;
+
+        //----------------------------------------------------------------
+        //monitor:
+        public abstract PixelFarm.Drawing.Size GetPrimaryMonitorSize();
         //----------------------------------------------------------------
         //clipboard
         public abstract void ClearClipboardData();
@@ -19,8 +25,6 @@ namespace LayoutFarm
         public abstract string GetClipboardText();
         public abstract PixelFarm.Drawing.Image GetClipboardImage();
         public abstract IEnumerable<string> GetClipboardFileDropList();
-
-
         public abstract void SetClipboardText(string textData);
         public abstract void SetClipboardImage(PixelFarm.Drawing.Image img);
         public abstract void SetClipboardFileDropList(string[] filedrops);
@@ -41,7 +45,7 @@ namespace LayoutFarm
             s_Closing = true;
         }
 
-
+        public static UIPlatform CurrentPlatform => s_ui_platform;
         //----------------------------------------------------------------
         //timer and msg loop
         public static void RegisterTimerTask(UITimerTask uiTimerTask)
