@@ -481,6 +481,7 @@ namespace LayoutFarm.UI
             {
                 _mouseMoveFoundSomeHit = false;
 
+
                 ForEachEventListenerBubbleUp(e, hitPointChain, (e1, listener) =>
                 {
                     //please ensure=> no local var/pararmeter capture inside lambda
@@ -505,6 +506,7 @@ namespace LayoutFarm.UI
                     if (!e1.IsCanceled)
                     {
                         //TODO: review here
+                        e.CancelBubbling = true;
                         if (_isFirstMouseEnter)
                         {
                             listener.ListenMouseEnter(e1);
@@ -513,7 +515,8 @@ namespace LayoutFarm.UI
 
                         _latestMouseActive = e1.CurrentContextElement;
                     }
-                    return true;//stop
+
+                    return e.CancelBubbling;
                 });
 
                 if (!_mouseMoveFoundSomeHit)

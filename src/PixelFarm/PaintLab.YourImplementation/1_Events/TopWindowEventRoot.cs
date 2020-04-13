@@ -210,6 +210,7 @@ namespace LayoutFarm
 
             //-------------------------------------------------------
             _mouseMoveEventArgs.SetIsDragging(_isMouseDown);
+            
             if (_isDragging = _isMouseDown)
             {
 
