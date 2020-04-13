@@ -10,52 +10,16 @@ namespace ImageTools
 
     public class SimpleImage
     {
-        byte[] _pixels;
-        public byte[] Pixels
-        {
-            get
-            {
-                return _pixels;
-            }
-        }
-        
-        //public int[] Pixels32
-        //{
-        //    get
-        //    {
-        //        throw new NotSupportedException();
-        //    }
-        //}
-        int _pixelHeight;
-        public int PixelHeight
-        {
-            get
-            {
-
-                return _pixelHeight;
-            }
-        }
-
-        private int _pixelWidth;
-        public int PixelWidth
-        {
-            get
-            {
-
-                return _pixelWidth;
-            }
-        }
+        public byte[] Pixels { get; private set; }
+        public int PixelHeight { get; private set; }
+        public int PixelWidth { get; private set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this image has been loaded.
         /// </summary>
         /// <value><c>true</c> if this image has been loaded; otherwise, <c>false</c>.</value>
 
-        public bool IsFilled
-        {
-            get;
-            private set;
-        }
+        public bool IsFilled { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SimpleImage"/> class
@@ -74,12 +38,12 @@ namespace ImageTools
             //Contract.Requires<ArgumentException>(height >= 0, "Height must be greater or equals than zero.");
             //Contract.Ensures(IsFilled);
 
-            _pixelWidth = width;
-            _pixelHeight = height;
+            PixelWidth = width;
+            PixelHeight = height;
 
             //32 bit img
             //consider layz init,            
-            _pixels = new byte[PixelWidth * PixelHeight * 4];
+            Pixels = new byte[PixelWidth * PixelHeight * 4];
             IsFilled = true;
         }
 
@@ -99,11 +63,11 @@ namespace ImageTools
 
             byte[] pixels = other.Pixels;
 
-            _pixelWidth = other.PixelWidth;
-            _pixelHeight = other.PixelHeight;
-            _pixels = new byte[pixels.Length];
+            PixelWidth = other.PixelWidth;
+            PixelHeight = other.PixelHeight;
+            Pixels = new byte[pixels.Length];
 
-            Array.Copy(pixels, _pixels, pixels.Length);
+            Array.Copy(pixels, Pixels, pixels.Length);
 
             IsFilled = other.IsFilled;
         }
@@ -146,15 +110,12 @@ namespace ImageTools
                     "pixels");
             }
 
-            _pixelWidth = width;
-            _pixelHeight = height;
-            _pixels = pixels;
+            PixelWidth = width;
+            PixelHeight = height;
+            Pixels = pixels;
             IsFilled = true;
         }
-        public int BitDepth
-        {
-            get; set;
-        }
+        public int BitDepth { get; set; }
         public ExtraImageInfo ExtraImageInfo { get; set; }
     }
 }

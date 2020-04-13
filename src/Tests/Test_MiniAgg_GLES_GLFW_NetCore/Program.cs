@@ -25,8 +25,16 @@ namespace TestGlfw
             Mini.RootDemoPath.Path = @"..\Data";
 
             MyApp3.s_formW = width;
-            MyApp3.s_formH = height; 
+            MyApp3.s_formH = height;
+
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
+
             MyApp3.Start();
+
+
+            sw.Stop();
+            System.Diagnostics.Debug.WriteLine("load (ms):" + sw.ElapsedMilliseconds);
 
             PixelFarm.Forms.GlfwAppLoop.Run(); //main app loop
         }

@@ -10,14 +10,7 @@ namespace BitMiracle.LibJpeg
         {
             m_jpegImage = jpegImage;
         }
-
-        public Stream Output
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public Stream Output => null;
 
         public void SetImageAttributes(LoadedImageAttributes parameters)
         {

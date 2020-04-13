@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
- 
-
 using System.IO;
 
 using BitMiracle.LibJpeg.Classic;
@@ -18,18 +16,18 @@ namespace BitMiracle.LibJpeg
 #endif
     sealed class JpegImage : IDisposable
     {
-        private bool m_alreadyDisposed;
+        bool m_alreadyDisposed;
 
         /// <summary>
         /// Description of image pixels (samples)
         /// </summary>
-        private List<SampleRow> m_rows = new List<SampleRow>();
+        List<SampleRow> _rows = new List<SampleRow>();
 
-        private int m_width;
-        private int m_height;
-        private byte m_bitsPerComponent;
-        private byte m_componentsPerSample;
-        private Colorspace m_colorspace;
+        int _width;
+        int _height;
+        byte _bitsPerComponent;
+        byte _componentsPerSample;
+        Colorspace _colorspace;
 
         // Fields below (m_compressedData, m_decompressedData, m_bitmap) are not initialized in constructors necessarily.
         // Instead direct access to these field you should use corresponding properties (compressedData, decompressedData, bitmap)
@@ -38,28 +36,32 @@ namespace BitMiracle.LibJpeg
         /// <summary>
         /// Bytes of jpeg image. Refreshed when m_compressionParameters changed.
         /// </summary>
-        private MemoryStream m_compressedData;
+        MemoryStream m_compressedData;
 
         /// <summary>
         /// Current compression parameters corresponding with compressed data.
         /// </summary>
-        private CompressionParameters m_compressionParameters;
+        CompressionParameters m_compressionParameters;
 
         /// <summary>
         /// Bytes of decompressed image (bitmap)
         /// </summary>
-        private MemoryStream m_decompressedData;
+        MemoryStream m_decompressedData;
 
         /// <summary>
         /// Creates <see cref="JpegImage"/> from stream with an arbitrary image data
         /// </summary>
         /// <param name="imageData">Stream containing bytes of image in 
         /// arbitrary format (BMP, Jpeg, GIF, PNG, TIFF, e.t.c)</param>
+        public JpegImage(Stream imageData, IDecompressDestination dst)
+        {
+            //new DecompressorToJpegImage(this)
+            createFromStream(imageData, dst);
+        }
         public JpegImage(Stream imageData)
         {
-            createFromStream(imageData);
+            createFromStream(imageData, new DecompressorToJpegImage(this));
         }
-
         ///// <summary>
         ///// Creates <see cref="JpegImage"/> from pixels
         ///// </summary>
@@ -131,7 +133,7 @@ namespace BitMiracle.LibJpeg
                 m_compressionParameters = null;
                 m_compressedData = null;
                 m_decompressedData = null;
-                m_rows = null;
+                _rows = null;
                 m_alreadyDisposed = true;
             }
         }
@@ -144,11 +146,11 @@ namespace BitMiracle.LibJpeg
         {
             get
             {
-                return m_width;
+                return _width;
             }
             internal set
             {
-                m_width = value;
+                _width = value;
             }
         }
 
@@ -160,11 +162,11 @@ namespace BitMiracle.LibJpeg
         {
             get
             {
-                return m_height;
+                return _height;
             }
             internal set
             {
-                m_height = value;
+                _height = value;
             }
         }
 
@@ -176,11 +178,11 @@ namespace BitMiracle.LibJpeg
         {
             get
             {
-                return m_componentsPerSample;
+                return _componentsPerSample;
             }
             internal set
             {
-                m_componentsPerSample = value;
+                _componentsPerSample = value;
             }
         }
 
@@ -192,11 +194,11 @@ namespace BitMiracle.LibJpeg
         {
             get
             {
-                return m_bitsPerComponent;
+                return _bitsPerComponent;
             }
             internal set
             {
-                m_bitsPerComponent = value;
+                _bitsPerComponent = value;
             }
         }
 
@@ -208,11 +210,11 @@ namespace BitMiracle.LibJpeg
         {
             get
             {
-                return m_colorspace;
+                return _colorspace;
             }
             internal set
             {
-                m_colorspace = value;
+                _colorspace = value;
             }
         }
 
@@ -224,7 +226,7 @@ namespace BitMiracle.LibJpeg
         /// <returns>Image row of samples.</returns>
         public SampleRow GetRow(int rowNumber)
         {
-            return m_rows[rowNumber];
+            return _rows[rowNumber];
         }
 
         /// <summary>
@@ -292,7 +294,7 @@ namespace BitMiracle.LibJpeg
             if (row == null)
                 throw new ArgumentNullException("row");
 
-            m_rows.Add(row);
+            _rows.Add(row);
         }
 
         /// <summary>
@@ -312,7 +314,7 @@ namespace BitMiracle.LibJpeg
             return (first == 0xFF && second == (int)JPEG_MARKER.SOI);
         }
 
-        private void createFromStream(Stream imageData)
+        private void createFromStream(Stream imageData, IDecompressDestination dst)
         {
             if (imageData == null)
                 throw new ArgumentNullException("imageData");
@@ -320,7 +322,8 @@ namespace BitMiracle.LibJpeg
             if (isCompressed(imageData))
             {
                 m_compressedData = Utils.CopyStream(imageData);
-                decompress();
+
+                decompress(dst);
             }
             else
             {
@@ -332,10 +335,10 @@ namespace BitMiracle.LibJpeg
 
         private void compress(CompressionParameters parameters)
         {
-            Debug.Assert(m_rows != null);
-            Debug.Assert(m_rows.Count != 0);
+            Debug.Assert(_rows != null);
+            Debug.Assert(_rows.Count != 0);
 
-            RawImage source = new RawImage(m_rows, m_colorspace);
+            RawImage source = new RawImage(_rows, _colorspace);
             compress(source, parameters);
         }
 
@@ -361,10 +364,10 @@ namespace BitMiracle.LibJpeg
                    !m_compressionParameters.Equals(parameters);
         }
 
-        private void decompress()
+        private void decompress(IDecompressDestination dst)
         {
             Jpeg jpeg = new Jpeg();
-            jpeg.Decompress(compressedData, new DecompressorToJpegImage(this));
+            jpeg.Decompress(compressedData, dst);
         }
 
         private void fillDecompressedData()

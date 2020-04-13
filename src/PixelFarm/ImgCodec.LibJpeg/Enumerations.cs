@@ -6,7 +6,7 @@
 #if EXPOSE_LIBJPEG
     public
 #endif
-    enum Colorspace
+    public enum Colorspace
     {
         /// <summary>
         /// Unspecified colorspace
