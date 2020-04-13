@@ -90,66 +90,15 @@ namespace TestGlfw
         static GraphicsViewRoot s_viewroot;
         static void Init(GlFwForm form)
         {
-            form.MakeCurrent();
-
-            OpenTK.Platform.Factory.GetCustomPlatformFactory = () => OpenTK.Platform.Egl.EglAngle.NewFactory();
-            OpenTK.Toolkit.Init(new OpenTK.ToolkitOptions {
-                Backend = OpenTK.PlatformBackend.PreferNative,
-            });
-            OpenTK.Graphics.PlatformAddressPortal.GetAddressDelegate = OpenTK.Platform.Utilities.CreateGetAddress();
-
-            GLESInit.InitGLES();
-
-            string icu_datadir = "brkitr"; //see brkitr folder, we link data from Typography project and copy to output if newer
-            if (!System.IO.Directory.Exists(icu_datadir))
-            {
-                throw new System.NotSupportedException("dic");
-            }
-            var dicProvider = new Typography.TextBreak.IcuSimpleTextFileDictionaryProvider() { DataDir = icu_datadir };
-            Typography.TextBreak.CustomBreakerBuilder.Setup(dicProvider);
-
-            PixelFarm.CpuBlit.MemBitmapExtensions.DefaultMemBitmapIO = new YourImplementation.ImgCodecMemBitmapIO(); // new PixelFarm.Drawing.WinGdi.GdiBitmapIO();
-
+            //PART1:
+            //1. storage io
             PixelFarm.Platforms.StorageService.RegisterProvider(new YourImplementation.LocalFileStorageProvider(""));
 
-
-            //---------------------------------------------------------------------------
-            //Typography TextService
-            OpenFontTextService textService = new OpenFontTextService();
-            textService.LoadFontsFromFolder("Fonts");
-            GlobalRootGraphic.TextService = textService;
-            //---------------------------------------------------------------------------
-
-            s_myRootGfx = new MyRootGraphic(s_formW, s_formH, textService);
-            //---------------------------------------------------------------------------
-
-
-            s_viewroot = new GraphicsViewRoot(s_formW, s_formH);
-            MyGlfwTopWindowBridge bridge1 = new MyGlfwTopWindowBridge(s_myRootGfx, s_myRootGfx.TopWinEventPortal);
-            ((MyGlfwTopWindowBridge.GlfwEventBridge)(form.WindowEventListener)).SetWindowBridge(bridge1);
-
-
-            var glfwWindowWrapper = new GlfwWindowWrapper(form);
-            bridge1.BindWindowControl(glfwWindowWrapper);
-
-            s_viewroot.InitRootGraphics(s_myRootGfx,
-                  s_myRootGfx.TopWinEventPortal,
-                  InnerViewportKind.GLES,
-                  glfwWindowWrapper,
-                  bridge1);
-
-
+            //2. img-io implementation
+            PixelFarm.CpuBlit.MemBitmapExtensions.DefaultMemBitmapIO = new YourImplementation.ImgCodecMemBitmapIO(); // new PixelFarm.Drawing.WinGdi.GdiBitmapIO();
 
             //------------------------------------------------------------------------
-            //optional:
-            if (s_viewroot.GetGLPainter() is GLPainter glPainter)
-            {
-                glPainter.SmoothingMode = SmoothingMode.AntiAlias;
-            }
-
-
-            //------------------------------------------------------------------------
-            //optional:
+            // 
             //if we don't set this, it will error on read-write image
             //you can implement this with other lib that can read-write images
 
@@ -194,6 +143,53 @@ namespace TestGlfw
             };
             PixelFarm.Platforms.ImageIOPortal.Setup(pars);
             //------------------------------------------------------------------------
+
+
+            //3. setup text-breaker
+            string icu_datadir = "brkitr"; //see brkitr folder, we link data from Typography project and copy to output if newer
+            if (!System.IO.Directory.Exists(icu_datadir))
+            {
+                throw new System.NotSupportedException("dic");
+            }
+            Typography.TextBreak.CustomBreakerBuilder.Setup(new Typography.TextBreak.IcuSimpleTextFileDictionaryProvider() { DataDir = icu_datadir });
+
+            //---------------------------------------------------------------------------
+            //4. Typography TextService             
+            OpenFontTextService textService = new OpenFontTextService();
+            textService.LoadFontsFromFolder("Fonts");
+            GlobalRootGraphic.TextService = textService;
+            //---------------------------------------------------------------------------
+
+            //PART2: root graphics
+            s_myRootGfx = new MyRootGraphic(s_formW, s_formH, textService);
+            //---------------------------------------------------------------------------
+
+
+            s_viewroot = new GraphicsViewRoot(s_formW, s_formH);
+            MyGlfwTopWindowBridge bridge1 = new MyGlfwTopWindowBridge(s_myRootGfx, s_myRootGfx.TopWinEventPortal);
+            ((MyGlfwTopWindowBridge.GlfwEventBridge)(form.WindowEventListener)).SetWindowBridge(bridge1);
+
+
+            var glfwWindowWrapper = new GlfwWindowWrapper(form);
+            bridge1.BindWindowControl(glfwWindowWrapper);
+
+            s_viewroot.InitRootGraphics(s_myRootGfx,
+                  s_myRootGfx.TopWinEventPortal,
+                  InnerViewportKind.GLES,
+                  glfwWindowWrapper,
+                  bridge1);
+
+
+
+            //------------------------------------------------------------------------
+            //optional:
+            if (s_viewroot.GetGLPainter() is GLPainter glPainter)
+            {
+                glPainter.SmoothingMode = SmoothingMode.AntiAlias;
+            }
+
+
+            
         }
 #if DEBUG
         public static void dbugStart_Basic()

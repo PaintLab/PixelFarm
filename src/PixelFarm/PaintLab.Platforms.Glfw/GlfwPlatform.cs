@@ -6,9 +6,47 @@ using LayoutFarm.UI;
 using PixelFarm.Drawing;
 namespace PixelFarm.Forms
 {
+
+
     public class GlfwPlatform : UIPlatform
     {
-        public GlfwPlatform()
+
+        static GlfwPlatform s_platform;
+
+        public static void Init()
+        {
+            if (s_platform != null)
+            {
+                return;
+            }
+
+            s_platform = new GlfwPlatform();
+            //----------
+            //we use gles API,
+            //so we need to hint before create a window
+            //(if we hint after create a window,it will use default GL,
+            // GL swapBuffer != GLES'sEGL swapBuffer())
+            //see https://www.khronos.org/registry/EGL/sdk/docs/man/html/eglSwapBuffers.xhtml
+            //----------
+#if DEBUG
+            string versionStr3 = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(Glfw.Glfw3.glfwGetVersionString());
+#endif
+            Glfw.Glfw3.glfwWindowHint(Glfw.Glfw3.GLFW_CLIENT_API, Glfw.Glfw3.GLFW_OPENGL_ES_API);
+            Glfw.Glfw3.glfwWindowHint(Glfw.Glfw3.GLFW_CONTEXT_CREATION_API, Glfw.Glfw3.GLFW_EGL_CONTEXT_API);
+            Glfw.Glfw3.glfwWindowHint(Glfw.Glfw3.GLFW_CONTEXT_VERSION_MAJOR, 3);
+            Glfw.Glfw3.glfwWindowHint(Glfw.Glfw3.GLFW_CONTEXT_VERSION_MINOR, 1);
+            Glfw.Glfw3.glfwSwapInterval(1);
+
+            OpenTK.Platform.Factory.GetCustomPlatformFactory = () => OpenTK.Platform.Egl.EglAngle.NewFactory();
+            OpenTK.Toolkit.Init(new OpenTK.ToolkitOptions {
+                Backend = OpenTK.PlatformBackend.PreferNative,
+            });
+            OpenTK.Graphics.PlatformAddressPortal.GetAddressDelegate = OpenTK.Platform.Utilities.CreateGetAddress();
+
+            GLESInit.InitGLES();
+
+        }
+        private GlfwPlatform()
         {
             SetAsDefaultPlatform();
         }
@@ -28,8 +66,6 @@ namespace PixelFarm.Forms
         {
             throw new NotImplementedException();
         }
-
-
         protected override Cursor CreateCursorImpl(CursorRequest curReq) => new GlfwCursor();
 
         public override void SetClipboardImage(Image img)
