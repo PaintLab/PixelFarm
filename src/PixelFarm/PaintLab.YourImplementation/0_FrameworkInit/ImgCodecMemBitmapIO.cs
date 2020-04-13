@@ -69,8 +69,10 @@ namespace YourImplementation
                 input.Seek(-4, SeekOrigin.Current);
                 return LoadImage(input, OutputImageFormat.Jpeg);
             }
-
         }
+
+
+
         public MemBitmap LoadImage(Stream input, OutputImageFormat format)
         {
             ImageTools.ExtendedImage extendedImg = new ImageTools.ExtendedImage();

@@ -8,7 +8,7 @@ using System;
 using System.Diagnostics;
 
 using System.IO;
-using System.Collections.Generic; 
+using System.Collections.Generic;
 using ImageTools.IO;
 
 namespace ImageTools
@@ -66,37 +66,18 @@ namespace ImageTools
         public int DensityXInt32 { get; set; }
         public int DensityYInt32 { get; set; }
 
-        private ImageFrameCollection _frames = new ImageFrameCollection();
         /// <summary>
         /// Get the other frames for the animation.
         /// </summary>
         /// <value>The list of frame images.</value>
-        public ImageFrameCollection Frames
-        {
-            get
-            {
-                //Contract.Ensures(Contract.Result<ImageFrameCollection>() != null);
-                return _frames;
-            }
-        }
+        public ImageFrameCollection Frames { get; } = new ImageFrameCollection();
 
-        private ImagePropertyCollection _properties = new ImagePropertyCollection();
         /// <summary>
         /// Gets the list of properties for storing meta information about this image.
         /// </summary>
         /// <value>A list of image properties.</value>
-        public ImagePropertyCollection Properties
-        {
-            get
-            {
-                // Contract.Ensures(Contract.Result<ImagePropertyCollection>() != null);
-                return _properties;
-            }
-        }
-
-
-
-
+        public ImagePropertyCollection Properties { get; } = new ImagePropertyCollection();
+         
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExtendedImage"/> class
@@ -152,11 +133,7 @@ namespace ImageTools
         {
             DensityXInt32 = DefaultDensityX;
             DensityYInt32 = DefaultDensityY;
-        }
-
-
-
-
+        } 
 
         static int FindMax(List<IImageDecoder> imgCodecs)
         {

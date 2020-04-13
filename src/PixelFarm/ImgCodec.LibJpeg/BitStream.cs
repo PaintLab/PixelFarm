@@ -5,18 +5,11 @@ namespace BitMiracle.LibJpeg
 {
     class BitStream : IDisposable
     {
-        private bool m_alreadyDisposed;
-
-        private const int bitsInByte = 8;
-        private Stream m_stream;
-        private int m_positionInByte;
-
-        private int m_size;
-
-        public BitStream()
-        {
-            m_stream = new MemoryStream();
-        }
+        bool m_alreadyDisposed;
+        const int bitsInByte = 8;
+        Stream m_stream;
+        int m_positionInByte;
+        int m_size;
 
         public BitStream(byte[] buffer)
         {
@@ -33,7 +26,7 @@ namespace BitMiracle.LibJpeg
             GC.SuppressFinalize(this);
         }
 
-        protected virtual void Dispose(bool disposing)
+        protected void Dispose(bool disposing)
         {
             if (!m_alreadyDisposed)
             {
@@ -116,6 +109,7 @@ namespace BitMiracle.LibJpeg
             return (int)m_stream.Length * bitsInByte;
         }
 
+        byte[] _byte_buffer1 = new byte[1];
         private int read(int bitsCount)
         {
             //Codes are packed into a continuous bit stream, high-order bit first. 
@@ -131,13 +125,13 @@ namespace BitMiracle.LibJpeg
 
             int bitsRead = 0;
             int result = 0;
-            byte[] bt = new byte[1];
+             
             while (bitsRead == 0 || (bitsRead - m_positionInByte < bitsCount))
             {
-                m_stream.Read(bt, 0, 1);
+                m_stream.Read(_byte_buffer1, 0, 1);
 
                 result = (result << bitsInByte);
-                result += bt[0];
+                result += _byte_buffer1[0];
 
                 bitsRead += 8;
             }
