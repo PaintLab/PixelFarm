@@ -43,10 +43,8 @@ namespace ImageTools.IO.Gif
         /// Gets the size of the header for this image type.
         /// </summary>
         /// <value>The size of the header.</value>
-        public int HeaderSize
-        {
-            get { return 6; }
-        }
+        public int HeaderSize => 6;
+
 
         /// <summary>
         /// Indicates if the image decoder supports the specified
@@ -378,7 +376,7 @@ namespace ImageTools.IO.Gif
             }
             else
             {
-                SimpleImage frame = new SimpleImage(); 
+                SimpleImage frame = new SimpleImage();
                 currentImage = frame;
                 currentImage.SetPixels(imageWidth, imageHeight, pixels);
 

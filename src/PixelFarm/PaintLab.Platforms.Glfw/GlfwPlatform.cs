@@ -37,12 +37,7 @@ namespace PixelFarm.Forms
             Glfw.Glfw3.glfwWindowHint(Glfw.Glfw3.GLFW_CONTEXT_VERSION_MINOR, 1);
             Glfw.Glfw3.glfwSwapInterval(1);
 
-            OpenTK.Platform.Factory.GetCustomPlatformFactory = () => OpenTK.Platform.Egl.EglAngle.NewFactory();
-            OpenTK.Toolkit.Init(new OpenTK.ToolkitOptions {
-                Backend = OpenTK.PlatformBackend.PreferNative,
-            });
-            OpenTK.Graphics.PlatformAddressPortal.GetAddressDelegate = OpenTK.Platform.Utilities.CreateGetAddress();
-
+         
             GLESInit.InitGLES();
 
         }

@@ -46,7 +46,7 @@ namespace ImageTools
 #endif
 
 
-
+        public BitMiracle.LibJpeg.IDecompressDestination JpegDecompressDest { get; set; }
 
         ///// <summary>
         ///// Gets or sets the resolution of the image in x direction. It is defined as 
@@ -77,7 +77,7 @@ namespace ImageTools
         /// </summary>
         /// <value>A list of image properties.</value>
         public ImagePropertyCollection Properties { get; } = new ImagePropertyCollection();
-         
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExtendedImage"/> class
@@ -109,6 +109,7 @@ namespace ImageTools
             // Contract.Requires<ArgumentException>(other.IsFilled, "Other image has not been loaded.");
             //Contract.Ensures(IsFilled);
 
+
             foreach (SimpleImage frame in other.Frames)
             {
                 if (frame != null)
@@ -122,6 +123,9 @@ namespace ImageTools
                 }
             }
 
+
+
+
             DensityXInt32 = DefaultDensityX;
             DensityYInt32 = DefaultDensityY;
         }
@@ -133,7 +137,7 @@ namespace ImageTools
         {
             DensityXInt32 = DefaultDensityX;
             DensityYInt32 = DefaultDensityY;
-        } 
+        }
 
         static int FindMax(List<IImageDecoder> imgCodecs)
         {

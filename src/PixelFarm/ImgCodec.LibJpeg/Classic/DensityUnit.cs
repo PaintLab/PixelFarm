@@ -5,10 +5,8 @@
     /// </summary>
     /// <seealso cref="jpeg_compress_struct.Density_unit"/>
     /// <seealso cref="jpeg_decompress_struct.Density_unit"/>
-#if EXPOSE_LIBJPEG
-    public
-#endif
-    enum DensityUnit
+
+    public enum DensityUnit
     {
         /// <summary>
         /// Unknown density

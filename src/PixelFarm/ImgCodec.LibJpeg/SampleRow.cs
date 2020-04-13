@@ -5,9 +5,7 @@ namespace BitMiracle.LibJpeg
     /// <summary>
     /// Represents a row of image - collection of samples.
     /// </summary>
-#if EXPOSE_LIBJPEG
-    public
-#endif
+
     class SampleRow
     {
 
@@ -16,6 +14,7 @@ namespace BitMiracle.LibJpeg
 
         readonly int _columnCount;
         readonly int _componentsPerSample;
+
 
         /// <summary>
         /// Creates a row from raw samples data.
@@ -48,8 +47,10 @@ namespace BitMiracle.LibJpeg
 
             _columnCount = columnCount;
 
-            using (BitStream bitStream = new BitStream(row))
+            using (BitStream bitStream = new BitStream())
             {
+                bitStream.ResetInput(row);
+
                 //create long buffer for a single line                
                 _lineBuffer16 = new short[columnCount * componentsPerSample];
                 int byteIndex = 0;

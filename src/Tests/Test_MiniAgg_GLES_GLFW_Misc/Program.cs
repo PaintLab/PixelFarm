@@ -18,7 +18,7 @@ namespace TestGlfw
             }
             PixelFarm.Forms.GlfwPlatform.Init();
 
-         
+
 
             ////----------
             Glfw.Glfw3.glfwGetMonitorWorkarea(Glfw.Glfw3.glfwGetPrimaryMonitor(), out int xpos, out int ypos, out int width, out int height);
@@ -28,8 +28,14 @@ namespace TestGlfw
             MyApp3.s_formH = height;
 
 
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
 
             MyApp3.Start();
+
+
+            sw.Stop();
+            System.Diagnostics.Debug.WriteLine("load (ms):" + sw.ElapsedMilliseconds);
 
             PixelFarm.Forms.GlfwAppLoop.Run(); //main app loop
         }

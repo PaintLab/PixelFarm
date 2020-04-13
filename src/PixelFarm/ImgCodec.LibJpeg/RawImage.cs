@@ -13,9 +13,7 @@ namespace BitMiracle.LibJpeg
         {
             Debug.Assert(samples != null);
             Debug.Assert(samples.Count > 0);
-            Debug.Assert(colorspace != Colorspace.Unknown);
-
-
+            Debug.Assert(colorspace != Colorspace.Unknown); 
             _samples = samples;
             _colorspace = colorspace;
         }

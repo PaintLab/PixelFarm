@@ -166,7 +166,17 @@ namespace ImageTools.IO.Jpeg
             }
             else
             {
-                JpegImage jpg = new JpegImage(stream);
+                JpegImage jpg;
+                if (image.JpegDecompressDest != null)
+                {
+                    jpg = new JpegImage(stream, image.JpegDecompressDest);
+                    return;
+                }
+                else
+                {
+                    jpg = new JpegImage(stream);
+                }
+
 
                 int pixelWidth = jpg.Width;
                 int pixelHeight = jpg.Height;
@@ -205,7 +215,7 @@ namespace ImageTools.IO.Jpeg
                 image.SetPixels(pixelWidth, pixelHeight, pixels);
             }
         }
-   
+
         #endregion
     }
 }
