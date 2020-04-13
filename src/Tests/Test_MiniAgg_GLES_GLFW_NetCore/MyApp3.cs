@@ -83,15 +83,14 @@ namespace TestGlfw
     static class MyApp3
     {
 
-        public static int s_formW = 800;
-        public static int s_formH = 600;
-
         static MyRootGraphic s_myRootGfx;
         static GraphicsViewRoot s_viewroot;
         static GlFwForm s_mainForm;
         static void Init()
         {
-            Init(new GlFwForm(s_formW, s_formH, "GLES_GLFW", new MyGlfwTopWindowBridge.GlfwEventBridge()));
+            Size prim_size = UIPlatform.CurrentPlatform.GetPrimaryMonitorSize();
+
+            Init(new GlFwForm(prim_size.Width, prim_size.Height, "GLES_GLFW", new MyGlfwTopWindowBridge.GlfwEventBridge()));
         }
         static void Init(GlFwForm form)
         {
@@ -179,12 +178,12 @@ namespace TestGlfw
             textService.LoadFontsFromFolder("Fonts");
             GlobalRootGraphic.TextService = textService;
             //---------------------------------------------------------------------------
-             
+
 
             //PART2: root graphics
-            s_myRootGfx = new MyRootGraphic(s_formW, s_formH, textService);
-
-            s_viewroot = new GraphicsViewRoot(s_formW, s_formH);
+            Size primScreenSize = UIPlatform.CurrentPlatform.GetPrimaryMonitorSize();
+            s_myRootGfx = new MyRootGraphic(primScreenSize.Width, primScreenSize.Height, textService);
+            s_viewroot = new GraphicsViewRoot(primScreenSize.Width, primScreenSize.Height);
             MyGlfwTopWindowBridge bridge1 = new MyGlfwTopWindowBridge(s_myRootGfx, s_myRootGfx.TopWinEventPortal);
             ((MyGlfwTopWindowBridge.GlfwEventBridge)(form.WindowEventListener)).SetWindowBridge(bridge1);
 
@@ -220,7 +219,9 @@ namespace TestGlfw
             //------ 
 
             //this is an app detail
-            Box bgBox = new Box(s_formW, s_formH);
+            Size primScreenSize = UIPlatform.CurrentPlatform.GetPrimaryMonitorSize();
+
+            Box bgBox = new Box(primScreenSize.Width, primScreenSize.Height);
             bgBox.BackColor = Color.White;
             s_myRootGfx.AddChild(bgBox.GetPrimaryRenderElement(s_myRootGfx));
 
@@ -240,15 +241,15 @@ namespace TestGlfw
             //
             Init();
             //------
-
+            Size primScreenSize = UIPlatform.CurrentPlatform.GetPrimaryMonitorSize();
             AppHost appHost = new AppHost();
             AppHostConfig config = new AppHostConfig();
             config.RootGfx = s_myRootGfx;
-            config.ScreenW = s_formW;
-            config.ScreenH = s_formH;
+            config.ScreenW = primScreenSize.Width;
+            config.ScreenH = primScreenSize.Height;
             appHost.Setup(config);
             //------
-            Box bgBox = new Box(s_formW, s_formH);
+            Box bgBox = new Box(s_myRootGfx.Width, s_myRootGfx.Height);
             bgBox.BackColor = Color.White;
             s_myRootGfx.AddChild(bgBox.GetPrimaryRenderElement(s_myRootGfx));
             //------ 

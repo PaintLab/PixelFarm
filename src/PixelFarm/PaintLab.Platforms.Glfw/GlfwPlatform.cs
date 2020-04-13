@@ -7,12 +7,12 @@ using PixelFarm.Drawing;
 namespace PixelFarm.Forms
 {
 
-
     public class GlfwPlatform : UIPlatform
     {
-
         static GlfwPlatform s_platform;
-
+        bool s_checkPrimaryMonitorSize;
+        int _primscreen_w;
+        int _primscreen_h;
         public static void Init()
         {
             if (s_platform != null)
@@ -49,6 +49,16 @@ namespace PixelFarm.Forms
         {
             SetAsDefaultPlatform();
         }
+       
+        public override Size GetPrimaryMonitorSize()
+        {
+            if (!s_checkPrimaryMonitorSize)
+            {
+                Glfw.Glfw3.glfwGetMonitorWorkarea(Glfw.Glfw3.glfwGetPrimaryMonitor(), out int xpos, out int ypos, out _primscreen_w, out _primscreen_h);
+                s_checkPrimaryMonitorSize = true;
+            }
+            return new Size(_primscreen_w, _primscreen_h);
+        }
         public override void ClearClipboardData()
         {
 
@@ -67,12 +77,12 @@ namespace PixelFarm.Forms
         }
         protected override Cursor CreateCursorImpl(CursorRequest curReq) => new GlfwCursor();
 
-        public override void SetClipboardImage(Image img)
+        public override void SetClipboardImage(Drawing.Image img)
         {
 
         }
 
-        public override Image GetClipboardImage()
+        public override Drawing.Image GetClipboardImage()
         {
             return null;
         }
@@ -131,7 +141,7 @@ namespace PixelFarm.Forms
             return IntPtr.Zero;
         }
 
-        public Size GetSize() => new Size(_form.Width, _form.Height);
+        public Drawing.Size GetSize() => new Drawing.Size(_form.Width, _form.Height);
 
         public void Invalidate()
         {
@@ -149,7 +159,7 @@ namespace PixelFarm.Forms
         }
         public void Refresh()
         {
-            
+
         }
         public void SetBounds(int left, int top, int width, int height)
         {

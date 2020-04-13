@@ -14,17 +14,7 @@ namespace TestGlfw
 
 
             PixelFarm.Forms.GlfwPlatform.Init();
-
-            //----------
-            Glfw.Glfw3.glfwGetMonitorWorkarea(Glfw.Glfw3.glfwGetPrimaryMonitor(), out int xpos, out int ypos, out int width, out int height);
-
-
-
-            //----------
-            Mini.RootDemoPath.Path = @"..\Data";
-
-            MyApp3.s_formW = width;
-            MyApp3.s_formH = height;
+            Mini.RootDemoPath.Path = @"..\Data"; 
 
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             sw.Start();
