@@ -52,6 +52,7 @@
     <Compile Include="ColorBlender\IAlgorithm.cs" />
     <Compile Include="ColorBlender\MathHelpers.cs" />
     <Compile Include="ColorBlender\RGB.cs" />
+    <Compile Include="ColorToolExtensions.cs" />
     <Compile Include="KnownColors.cs" />
   </ItemGroup>
   <ItemGroup>

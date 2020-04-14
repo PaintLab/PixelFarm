@@ -8,24 +8,50 @@ namespace PaintLab.ChromaJs
 {
     public class Chroma
     {
+        //TODO: vector4?
         RGBColor _rgb;
-        Color _argb;
         double _alpha = 1;
-        ColourfulConverter _converter = new ColourfulConverter();
 
-        public Chroma(Color color)
+        static Chroma s_black;
+        static Chroma s_white;
+
+        static Chroma()
         {
-            _argb = color;
-            _rgb = new RGBColor((double)color.R / 255, (double)color.G / 255, (double)color.B / 255);
-            _alpha = color.A / 255;
+            s_black = new Chroma();
+            s_black.SetColor(Color.Black);
+
+            s_white = new Chroma();
+            s_white.SetColor(Color.White);
+        }
+        public Chroma()
+        {
+
         }
 
+        public void Reset() { }
+        public Chroma SetColor(Color color)
+        {
+
+            _rgb = new RGBColor((double)color.R / 255, (double)color.G / 255, (double)color.B / 255);
+            _alpha = color.A / 255;
+
+            return this;
+        }
+        public void SetColor(RGBColor color)
+        {
+
+            _rgb = color;
+            _alpha = 1;
+        }
         public Color Darken(double amount = 1)
         {
             LabColor lab = this.Lab();
             LabColor lab2 = new LabColor(lab.L - (LabConsts.Kn * amount), lab.a, lab.b);
-            RGBColor rgb = _converter.ToRGB(lab2);
-            return Alpha(rgb, Alpha(), true);
+            using (ColorToolExtensions.BorrowColourfulConverter(out var conv))
+            {
+                RGBColor rgb = conv.ToRGB(lab2);
+                return Alpha(rgb, Alpha(), true);
+            }
         }
 
         public Color Brighten(double amount = 1)
@@ -35,15 +61,19 @@ namespace PaintLab.ChromaJs
 
         public Color Saturate(double amount = 1)
         {
-            LChabColor lch = _converter.ToLChab(_rgb);
-            double C = lch.C + (LabConsts.Kn * amount);
-            if (C < 0)
+            using (ColorToolExtensions.BorrowColourfulConverter(out var conv))
             {
-                C = 0;
+                LChabColor lch = conv.ToLChab(_rgb);
+                double C = lch.C + (LabConsts.Kn * amount);
+                if (C < 0)
+                {
+                    C = 0;
+                }
+                LChabColor lch2 = new LChabColor(lch.L, C, lch.h);
+                RGBColor rgb = conv.ToRGB(lch2);
+
+                return Alpha(rgb, Alpha(), true);
             }
-            LChabColor lch2 = new LChabColor(lch.L, C, lch.h);
-            RGBColor rgb = _converter.ToRGB(lch2);
-            return Alpha(rgb, Alpha(), true);
         }
 
         public Color Desaturate(double amount = 1)
@@ -70,23 +100,22 @@ namespace PaintLab.ChromaJs
             int maxIter = MAX_ITER;
             Color test(Chroma low, Chroma high)
             {
-                Chroma mid = low.Interpolate(low, high, 0.5);
-                double lm = mid.Luminance();
-                if (Math.Abs(lum - lm) < EPS || (maxIter--) > 0)
+                using (ColorToolExtensions.BorrowChromaTool(out Chroma mid))
                 {
-                    return ToArgb(mid._rgb, (byte)(Alpha() * 255));
+                    mid.SetColor(Interpolate(low, high, 0.5));
+                    double lm = mid.Luminance();
+                    if (Math.Abs(lum - lm) < EPS || (maxIter--) > 0)
+                    {
+                        return ToArgb(mid._rgb, (byte)(Alpha() * 255));
+                    }
+                    return lm > lum ? test(low, mid) : test(mid, high);
                 }
-                return lm > lum ? test(low, mid) : test(mid, high);
             }
-            Color rgb = cur_lum > lum ? test(new Chroma(Color.Black), this) : test(this, new Chroma(Color.White));
-            return rgb;
+
+            return cur_lum > lum ? test(s_black, this) : test(this, s_white);
         }
 
-        public double Luminance()
-        {
-            double temp = Rgb2Luminance(_argb.R, _argb.G, _argb.B);
-            return temp;
-        }
+        public double Luminance() => Rgb2Luminance(_rgb.R, _rgb.G, _rgb.B);
 
         private double Rgb2Luminance(double r, double g, double b)
         {
@@ -104,7 +133,7 @@ namespace PaintLab.ChromaJs
             return x <= 0.03928 ? x / 12.92 : Math.Pow((x + 0.055) / 1.055, 2.4);
         }
 
-        private Chroma Interpolate(Chroma color1, Chroma color2, double f)
+        static RGBColor Interpolate(Chroma color1, Chroma color2, double f)
         {
             RGBColor rgb1 = color1._rgb;
             RGBColor rgb2 = color2._rgb;
@@ -113,19 +142,19 @@ namespace PaintLab.ChromaJs
                 rgb1.G + f * (rgb2.G - rgb1.G),
                 rgb1.B + f * (rgb2.B - rgb1.B)
                 );
-            return new Chroma(ToArgb(result, 255));
+            return result;
         }
         #endregion
 
         public LabColor Lab()
         {
-            return _converter.ToLab(_rgb);
+            using (ColorToolExtensions.BorrowColourfulConverter(out var conv))
+            {
+                return conv.ToLab(_rgb);
+            }
         }
 
-        public double Alpha()
-        {
-            return _alpha;
-        }
+        public double Alpha() => _alpha;
 
         public Color Alpha(RGBColor rgb, double alpha, bool mutate = false)
         {
@@ -134,8 +163,7 @@ namespace PaintLab.ChromaJs
             {
                 a = (byte)(alpha * 255);
             }
-            Color color = ToArgb(rgb, a);
-            return color;
+            return ToArgb(rgb, a);
         }
 
         private static Color ToArgb(RGBColor rgb, byte alpha)

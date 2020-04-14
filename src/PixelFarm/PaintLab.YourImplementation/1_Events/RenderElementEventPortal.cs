@@ -437,12 +437,28 @@ namespace LayoutFarm.UI
 #endif
         }
 
-        bool _isFirstMouseEnter = false;
+
         bool _mouseMoveFoundSomeHit = false;
 
 
         internal IUIEventListener _latestMouseActive;
 
+        void IEventPortal.PortalMouseLeaveFromViewport()
+        {
+            //mouse out from viewport
+
+            if (_latestMouseActive != null)
+            {
+                _mouseLeaveEventArgs.IsDragging = false;
+                UIMouseLeaveEventArgs.SetDiff(_mouseLeaveEventArgs, 0, 0);
+                _mouseLeaveEventArgs.SetCurrentContextElement(null);
+
+                _latestMouseActive.ListenMouseLeave(_mouseLeaveEventArgs);
+                _latestMouseActive = null;
+            }
+        }
+
+        bool _mouseMoveFoundLastMouseActive;
         void IEventPortal.PortalMouseMove(UIMouseMoveEventArgs e)
         {
 
@@ -465,42 +481,49 @@ namespace LayoutFarm.UI
             if (!e.CancelBubbling)
             {
                 _mouseMoveFoundSomeHit = false;
-
+                _mouseMoveFoundLastMouseActive = false;
                 ForEachEventListenerBubbleUp(e, hitPointChain, (e1, listener) =>
                 {
                     //please ensure=> no local var/pararmeter capture inside lambda
                     _mouseMoveFoundSomeHit = true;
-                    _isFirstMouseEnter = false;
 
-                    if (_latestMouseActive != null &&
-                        _latestMouseActive != listener)
+                    bool _bubble = true; //temp fix
+                    if (_latestMouseActive != listener && !_mouseMoveFoundLastMouseActive)
                     {
-                        _mouseLeaveEventArgs.SetCurrentContextElement(_latestMouseActive);
-                        UIMouseLeaveEventArgs.SetDiff(_mouseLeaveEventArgs, e.XDiff, e.YDiff);
-                        _latestMouseActive.ListenMouseLeave(_mouseLeaveEventArgs);
-                        _isFirstMouseEnter = true;
+                        //----------    
+                        e1.CancelBubbling = _bubble; //temp fix
+                        listener.ListenMouseEnter(e1);
+                        _bubble = e1.CancelBubbling;
+                        //----------
+
+                        if (_latestMouseActive != null)
+                        {
+                            _mouseLeaveEventArgs.SetCurrentContextElement(_latestMouseActive);
+                            UIMouseLeaveEventArgs.SetDiff(_mouseLeaveEventArgs, e1.XDiff, e1.YDiff);
+                            _latestMouseActive.ListenMouseLeave(_mouseLeaveEventArgs);
+                        }
 
                         _latestMouseActive = listener;
                     }
-                    else if (_latestMouseActive == null)
-                    {
-                        _isFirstMouseEnter = true;
-                    }
-
 
 
                     if (!e1.IsCanceled)
                     {
                         //TODO: review here
-                        if (_isFirstMouseEnter)
-                        {
-                            listener.ListenMouseEnter(e1);
-                        }
+                        e1.CancelBubbling = _bubble; //temp fix
                         listener.ListenMouseMove(e1);
 
-                        _latestMouseActive = e1.CurrentContextElement;
+                        if (!_mouseMoveFoundLastMouseActive)
+                        {
+                            _latestMouseActive = e1.CurrentContextElement;
+                        }
                     }
-                    return true;//stop
+
+                    if (!e1.CancelBubbling)
+                    {
+                        _mouseMoveFoundLastMouseActive = true;
+                    }
+                    return e1.CancelBubbling;
                 });
 
                 if (!_mouseMoveFoundSomeHit)

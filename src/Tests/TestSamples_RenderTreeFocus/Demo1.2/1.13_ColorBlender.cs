@@ -7,6 +7,8 @@ using System;
 using LayoutFarm.CustomWidgets;
 //
 using PaintLab.ColorBlender;
+using PixelFarm.CpuBlit;
+using PixelFarm.Drawing;
 
 namespace LayoutFarm.ColorBlenderSample
 {
@@ -181,16 +183,18 @@ namespace LayoutFarm.ColorBlenderSample
                 evListener.MouseDown += (s, e) =>
                 {
                     PixelFarm.Drawing.Color color = PixelFarm.Drawing.KnownColors.DeepPink;
-                    PaintLab.ChromaJs.Chroma chroma = new PaintLab.ChromaJs.Chroma(color);
-
-                    PixelFarm.Drawing.Color[] colors = new[] {
-                        color,
-                        chroma.Darken() ,
-                        chroma.Darken(2),
-                        chroma.Darken(2.6)
-                    };
-                    //present in the box                     
-                    ShowColorBoxs(colorPanel, colors);
+                    using (Tools.More.BorrowChromaTool(out var chroma))
+                    {
+                        chroma.SetColor(color);
+                        PixelFarm.Drawing.Color[] colors = new[] {
+                            color,
+                            chroma.Darken() ,
+                            chroma.Darken(2),
+                            chroma.Darken(2.6)
+                        };
+                        //present in the box                     
+                        ShowColorBoxs(colorPanel, colors);
+                    }
                 };
                 lblChromaDarken.AttachExternalEventListener(evListener);
                 x += 50;
@@ -210,16 +214,18 @@ namespace LayoutFarm.ColorBlenderSample
                     evListener.MouseDown += (s, e) =>
                     {
                         PixelFarm.Drawing.Color color = PixelFarm.Drawing.KnownColors.DeepPink;
-                        PaintLab.ChromaJs.Chroma chroma = new PaintLab.ChromaJs.Chroma(color);
-
-                        PixelFarm.Drawing.Color[] colors = new[] {
-                            color,
-                            chroma.Brighten(),
-                            chroma.Brighten(2),
-                            chroma.Brighten(3)
-                        };
-                        //present in the box                     
-                        ShowColorBoxs(colorPanel, colors);
+                        using (Tools.More.BorrowChromaTool(out var chroma))
+                        {
+                            chroma.SetColor(color);
+                            PixelFarm.Drawing.Color[] colors = new[] {
+                                color,
+                                chroma.Brighten(),
+                                chroma.Brighten(2),
+                                chroma.Brighten(3)
+                            };
+                            //present in the box                     
+                            ShowColorBoxs(colorPanel, colors);
+                        }
                     };
                     lblLighten.AttachExternalEventListener(evListener);
                 }

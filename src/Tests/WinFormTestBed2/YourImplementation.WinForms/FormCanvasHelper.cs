@@ -264,6 +264,22 @@ namespace LayoutFarm.UI
             _keyEventArgs.SetEventInfo((uint)e.KeyCode, e.Shift, e.Alt, e.Control, UIEventName.KeyUp);
             _topWindowBridge.HandleKeyUp(_keyEventArgs);
         }
+        protected override void OnMouseLeave(EventArgs e)
+        {
+            if (_topWindowBridge != null)
+            {
+                _topWindowBridge.HandleMouseLeaveFromViewport();
+            }
+            base.OnMouseLeave(e);
+        }
+        protected override void OnMouseEnter(EventArgs e)
+        {
+            if (_topWindowBridge != null)
+            {
+                _topWindowBridge.HandleMouseEnterToViewport();
+            }
+            base.OnMouseEnter(e);
+        }
         protected override void OnMouseDown(MouseEventArgs e)
         {
             if (_topWindowBridge != null)
