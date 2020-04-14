@@ -446,7 +446,7 @@ namespace LayoutFarm.UI
         void IEventPortal.PortalMouseLeaveFromViewport()
         {
             //mouse out from viewport
-            
+
             if (_latestMouseActive != null)
             {
                 _mouseLeaveEventArgs.IsDragging = false;
@@ -485,12 +485,15 @@ namespace LayoutFarm.UI
                 ForEachEventListenerBubbleUp(e, hitPointChain, (e1, listener) =>
                 {
                     //please ensure=> no local var/pararmeter capture inside lambda
-                    _mouseMoveFoundSomeHit = true; 
+                    _mouseMoveFoundSomeHit = true;
 
+                    bool _bubble = true; //temp fix
                     if (_latestMouseActive != listener && !_mouseMoveFoundLastMouseActive)
                     {
-                        //----------                        
+                        //----------    
+                        e1.CancelBubbling = _bubble; //temp fix
                         listener.ListenMouseEnter(e1);
+                        _bubble = e1.CancelBubbling;
                         //----------
 
                         if (_latestMouseActive != null)
@@ -507,7 +510,7 @@ namespace LayoutFarm.UI
                     if (!e1.IsCanceled)
                     {
                         //TODO: review here
-                        e1.CancelBubbling = true;
+                        e1.CancelBubbling = _bubble; //temp fix
                         listener.ListenMouseMove(e1);
 
                         if (!_mouseMoveFoundLastMouseActive)
