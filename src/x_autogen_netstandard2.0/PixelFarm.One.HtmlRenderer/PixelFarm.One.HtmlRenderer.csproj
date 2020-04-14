@@ -623,6 +623,7 @@
     <Compile Include="..\..\PixelFarm\PaintLab.Color\ColorBlender\IAlgorithm.cs" Link="PixelFarm\PaintLab.Color\ColorBlender\IAlgorithm.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.Color\ColorBlender\MathHelpers.cs" Link="PixelFarm\PaintLab.Color\ColorBlender\MathHelpers.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.Color\ColorBlender\RGB.cs" Link="PixelFarm\PaintLab.Color\ColorBlender\RGB.cs" />
+    <Compile Include="..\..\PixelFarm\PaintLab.Color\ColorToolExtensions.cs" Link="PixelFarm\PaintLab.Color\ColorToolExtensions.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.Color\KnownColors.cs" Link="PixelFarm\PaintLab.Color\KnownColors.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.PaintFx\BrightnesssAndContrast.cs" Link="PixelFarm\PaintLab.PaintFx\BrightnesssAndContrast.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.PaintFx\IImageFilterFunc.cs" Link="PixelFarm\PaintLab.PaintFx\IImageFilterFunc.cs" />

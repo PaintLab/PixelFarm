@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
+using PixelFarm.CpuBlit;
 namespace LayoutFarm.CustomWidgets
 {
 
@@ -29,12 +30,15 @@ namespace LayoutFarm.CustomWidgets
             //dbugBreakMe = true;
 #endif
             this.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
-            this.BackColor = KnownColors.LightGray; 
-            this.AcceptKeyboardFocus = true; 
+            this.BackColor = KnownColors.LightGray;
+            this.AcceptKeyboardFocus = true;
             this.NeedClipArea = true;
+
+            ListItemNormalColor = KnownColors.LightGray;
+            ListItemSelectedColor = KnownColors.Yellow;
         }
         protected override void OnMouseDown(UIMouseDownEventArgs e)
-        { 
+        {
             //check what item is selected
             if (e.SourceHitElement is ListItem src)
             {
@@ -54,11 +58,8 @@ namespace LayoutFarm.CustomWidgets
                 {
                     SelectedIndex = found;
                 }
-                if (ListItemMouseEvent != null)
-                {
-                   
-                    ListItemMouseEvent(this, e);
-                }
+
+                ListItemMouseEvent?.Invoke(this, e);
             }
             base.OnMouseDown(e);
         }
@@ -66,7 +67,7 @@ namespace LayoutFarm.CustomWidgets
         {
             if (_selectedItem != null && ListItemKeyboardEvent != null)
             {
-                 
+
                 ListItemKeyboardEvent(this, e);
             }
             base.OnKeyDown(e);
@@ -76,11 +77,11 @@ namespace LayoutFarm.CustomWidgets
             base.OnDoubleClick(e);
             //raise event mouse double click
             if (e.SourceHitElement is ListItem src && ListItemMouseEvent != null)
-            {             
+            {
                 ListItemMouseEvent(this, e);
             }
         }
-        
+
 
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
@@ -134,6 +135,8 @@ namespace LayoutFarm.CustomWidgets
         }
         //----------------------------------------------------
 
+        public Color ListItemNormalColor { get; set; }
+        public Color ListItemSelectedColor { get; set; }
         public int SelectedIndex
         {
             get => _selectedIndex;
@@ -152,7 +155,7 @@ namespace LayoutFarm.CustomWidgets
                         if (_selectedIndex > -1)
                         {
                             //switch back    
-                            GetItem(_selectedIndex).BackColor = KnownColors.LightGray;
+                            GetItem(_selectedIndex).BackColor = ListItemNormalColor;
                         }
 
                         _selectedIndex = value;
@@ -165,7 +168,7 @@ namespace LayoutFarm.CustomWidgets
                         {
                             //highlight selection item
                             _selectedItem = GetItem(value);
-                            _selectedItem.BackColor = Color.Yellow;
+                            _selectedItem.BackColor = ListItemSelectedColor;
                         }
                     }
                 }
@@ -249,12 +252,31 @@ namespace LayoutFarm.CustomWidgets
         string _itemText;
         Color _backColor;
         RequestFont _font;
-        //
+
+        Color _normalStateColor; //TODO: add themeed
         public ListItem(int width, int height)
             : base(width, height)
         {
             this.TransparentForMouseEvents = true;
+            //TODO: add theme
+            _normalStateColor = BackColor = KnownColors.LightGray;
+        }
+        protected override void OnMouseEnter(UIMouseMoveEventArgs e)
+        {
+            _normalStateColor = BackColor;
 
+            using (Tools.More.BorrowChromaTool(out var chroma))
+            {
+                BackColor = chroma.SetColor(_normalStateColor).Brighten(0.5); 
+            }
+
+          
+            base.OnMouseEnter(e);
+        }
+        protected override void OnMouseLeave(UIMouseLeaveEventArgs e)
+        {
+            BackColor = _normalStateColor; //switch back
+            base.OnMouseLeave(e);
         }
         //
         public override RenderElement CurrentPrimaryRenderElement => _primElement;
@@ -297,6 +319,7 @@ namespace LayoutFarm.CustomWidgets
             get => _backColor;
             set
             {
+                //set current back color
                 _backColor = value;
                 if (HasReadyRenderElement)
                 {
@@ -326,5 +349,7 @@ namespace LayoutFarm.CustomWidgets
                 _listItemText.RequestFont = font;
             }
         }
+
+
     }
 }
