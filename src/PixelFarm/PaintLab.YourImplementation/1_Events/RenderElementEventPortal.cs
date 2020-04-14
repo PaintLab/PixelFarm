@@ -451,7 +451,7 @@ namespace LayoutFarm.UI
             {
                 _mouseLeaveEventArgs.IsDragging = false;
                 UIMouseLeaveEventArgs.SetDiff(_mouseLeaveEventArgs, 0, 0);
-                _mouseLeaveEventArgs.SetCurrentContextElement(_latestMouseActive);
+                _mouseLeaveEventArgs.SetCurrentContextElement(null);
 
                 _latestMouseActive.ListenMouseLeave(_mouseLeaveEventArgs);
                 _latestMouseActive = null;
