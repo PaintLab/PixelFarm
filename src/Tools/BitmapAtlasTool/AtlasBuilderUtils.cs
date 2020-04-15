@@ -140,7 +140,8 @@ namespace Mini
             string onlyFilename = Path.GetFileNameWithoutExtension(atlasProj.Filename);
 
             //TODO: config this
-            outputFile.AppendLine("namespace " + onlyFilename + "_Atlas_AUTOGEN{");
+            outputFile.AppendLine("namespace " + atlasProj.CsSourceNamespace + "{");
+
             outputFile.AppendLine("public static class Resource{");
 
             StringBuilder info_sb = ReadBinaryAndConvertToHexArr(info);

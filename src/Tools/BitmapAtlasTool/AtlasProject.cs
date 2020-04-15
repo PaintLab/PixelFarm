@@ -16,6 +16,7 @@ namespace Mini
         public override string ToString() => Filename;
         public List<AtlasItemSourceFile> Items { get; private set; }
         public bool GenerateCsSource { get; set; } = true;
+        public string CsSourceNamespace { get; set; }
 
         public string OutputFilename { get; set; }
         public void LoadProjectDetail()
@@ -81,9 +82,11 @@ namespace Mini
                     //relative to the project file
 
                 }
-
-
             }
+
+            string onlyFilename = Path.GetFileNameWithoutExtension(Filename);
+            CsSourceNamespace = "Atlas_AUTOGEN_" + onlyFilename;
+
         }
     }
     class AtlasItemSourceFile

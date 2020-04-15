@@ -1,7 +1,7 @@
-//AUTOGEN, 2020-04-15T16:33:17
+//AUTOGEN, 2020-04-15T17:18:03
 //source: D:\projects\PixelFarm\src\x_resource_projects\TestAtlas1\TestAtlas1.csproj
 //tools: D:\projects\PixelFarm\src\Tools\BitmapAtlasTool\bin\Debug\BitmapAtlasTool.exe
-namespace TestAtlas1_Atlas_AUTOGEN{
+namespace Atlas_AUTOGEN_TestAtlas1{
 public static class Resource{
 //D:\projects\PixelFarm\src\x_resource_projects\TestAtlas1\TestAtlas1.info
 public static readonly byte[] info=new byte[]{
