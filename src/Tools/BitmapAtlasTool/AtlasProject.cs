@@ -19,8 +19,13 @@ namespace Mini
         public string CsSourceNamespace { get; set; }
 
         public string OutputFilename { get; set; }
+
         public void LoadProjectDetail()
         {
+
+            //we support bitmap font atlas
+            //and font-atlas
+
             Items = new List<AtlasItemSourceFile>();
 
             string dir = Path.GetDirectoryName(FullFilename);
@@ -47,12 +52,14 @@ namespace Mini
             {
                 //content node
                 string include = content.GetAttribute("Include");
-                switch (Path.GetExtension(include))
+                string extension = Path.GetExtension(include);
+                switch (extension)
                 {
                     case ".png":
                         {
                             var atlasItemFile = new AtlasItemSourceFile();
                             atlasItemFile.Include = include;
+                            atlasItemFile.Extension = extension;
                             atlasItemFile.AbsoluteFilename = PathUtils.GetAbsolutePathRelativeTo(include, onlyDirName);
                             atlasItemFile.FileExist = File.Exists(atlasItemFile.AbsoluteFilename);
                             if (content.SelectSingleNode(ns + "Link", nsmgr) is XmlElement linkNode)
@@ -60,6 +67,28 @@ namespace Mini
                                 atlasItemFile.Link = linkNode.InnerText;
                             }
                             Items.Add(atlasItemFile);
+                        }
+                        break;
+                    case ".ttf":
+                    case ".otf":
+                        {
+                            //TODO: include webfont (woff2, woff1), ttc,otc  
+                            var atlasItemFile = new AtlasItemSourceFile();
+                            atlasItemFile.Include = include;
+                            atlasItemFile.Extension = extension;
+                            atlasItemFile.AbsoluteFilename = PathUtils.GetAbsolutePathRelativeTo(include, onlyDirName);
+                            atlasItemFile.FileExist = File.Exists(atlasItemFile.AbsoluteFilename);
+                            if (content.SelectSingleNode(ns + "Link", nsmgr) is XmlElement linkNode)
+                            {
+                                atlasItemFile.Link = linkNode.InnerText;
+                            }
+                            Items.Add(atlasItemFile);
+                        }
+                        break;
+                    case ".xml":
+                        {
+                            //data / config
+
                         }
                         break;
                 }
@@ -95,6 +124,7 @@ namespace Mini
         public string Link { get; set; }
         public string AbsoluteFilename { get; set; }
         public bool FileExist { get; set; }
+        public string Extension { get; set; }
         public override string ToString()
         {
             if (Link != null)
