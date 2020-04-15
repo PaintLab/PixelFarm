@@ -36,7 +36,11 @@
   <ItemGroup>
     <None Include="..\..\..\..\Typography\Demo\Windows\TestFonts\SourceSansPro-Regular.ttf">
       <Link>SourceSansPro-Regular.ttf</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="font_atlas_build_config.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

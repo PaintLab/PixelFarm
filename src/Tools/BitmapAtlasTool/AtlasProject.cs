@@ -55,6 +55,7 @@ namespace Mini
                 string extension = Path.GetExtension(include);
                 switch (extension)
                 {
+                    case ".xml": //data or config
                     case ".png":
                         {
                             var atlasItemFile = new AtlasItemSourceFile();
@@ -69,6 +70,15 @@ namespace Mini
                             Items.Add(atlasItemFile);
                         }
                         break;
+                }
+            }
+
+            foreach (XmlElement content in xmldoc.DocumentElement.SelectNodes("//" + ns + "None", nsmgr))
+            {
+                string include = content.GetAttribute("Include");
+                string extension = Path.GetExtension(include);
+                switch (extension)
+                {
                     case ".ttf":
                     case ".otf":
                         {
@@ -84,18 +94,10 @@ namespace Mini
                             }
                             Items.Add(atlasItemFile);
                         }
-                        break;
-                    case ".xml":
-                        {
-                            //data / config
-
-                        }
-                        break;
+                        break; 
                 }
             }
             Isloaded = true;
-
-
 
             //------
             //then resolve for absolute filename
@@ -115,6 +117,9 @@ namespace Mini
 
             string onlyFilename = Path.GetFileNameWithoutExtension(Filename);
             CsSourceNamespace = "Atlas_AUTOGEN_" + onlyFilename;
+            //------
+
+
 
         }
     }
