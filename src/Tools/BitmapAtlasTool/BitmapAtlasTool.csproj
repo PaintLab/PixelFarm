@@ -39,6 +39,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\Typography\Demo\Windows\PixelFarmSample.WinForms\FormFontAtlas.cs">
+      <Link>FormFontAtlas.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Demo\Windows\PixelFarmSample.WinForms\FormFontAtlas.Designer.cs">
+      <Link>FormFontAtlas.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Demo\Windows\PixelFarmSample.WinForms\UIFontAtlasFileViewer.cs">
+      <Link>UIFontAtlasFileViewer.cs</Link>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Demo\Windows\PixelFarmSample.WinForms\UIFontAtlasFileViewer.Designer.cs">
+      <Link>UIFontAtlasFileViewer.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Demo\Windows\PixelFarmSample.WinForms\UIFontScriptOpt.cs">
+      <Link>UIFontScriptOpt.cs</Link>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Demo\Windows\PixelFarmSample.WinForms\UIFontScriptOpt.Designer.cs">
+      <Link>UIFontScriptOpt.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Demo\Windows\PixelFarmSample.WinForms\Utils.cs">
+      <Link>Utils.cs</Link>
+    </Compile>
     <Compile Include="..\..\x_resource_projects\TestAtlas1\TestAtlas1_Atlas_AUTOGEN.cs">
       <Link>TestAtlas1_Atlas_AUTOGEN.cs</Link>
     </Compile>
@@ -53,6 +77,15 @@
     <Compile Include="PathUtils.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="..\..\..\..\Typography\Demo\Windows\PixelFarmSample.WinForms\FormFontAtlas.resx">
+      <Link>FormFontAtlas.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Typography\Demo\Windows\PixelFarmSample.WinForms\UIFontAtlasFileViewer.resx">
+      <Link>UIFontAtlasFileViewer.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Typography\Demo\Windows\PixelFarmSample.WinForms\UIFontScriptOpt.resx">
+      <Link>UIFontScriptOpt.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormBitmapAtlasBuilder.resx">
       <DependentUpon>FormBitmapAtlasBuilder.cs</DependentUpon>
     </EmbeddedResource>
