@@ -38,6 +38,7 @@
             this.lstProjectList = new System.Windows.Forms.ListBox();
             this.cmdOpenOutputFolder = new System.Windows.Forms.Button();
             this.listBox3 = new System.Windows.Forms.ListBox();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -130,11 +131,22 @@
             this.listBox3.Size = new System.Drawing.Size(206, 264);
             this.listBox3.TabIndex = 11;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(12, 712);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(117, 44);
+            this.button1.TabIndex = 12;
+            this.button1.Text = "TestLoadAtlas2";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // FormBitmapAtlasBuilder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1248, 768);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.listBox3);
             this.Controls.Add(this.cmdOpenOutputFolder);
             this.Controls.Add(this.lstProjectList);
@@ -166,5 +178,6 @@
         private System.Windows.Forms.ListBox lstProjectList;
         private System.Windows.Forms.Button cmdOpenOutputFolder;
         private System.Windows.Forms.ListBox listBox3;
+        private System.Windows.Forms.Button button1;
     }
 }

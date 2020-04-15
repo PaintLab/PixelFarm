@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-
+using LayoutFarm;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.BitmapAtlas;
 
@@ -125,6 +125,17 @@ namespace Mini
                 return membmp;
             }
         }
+        static PixelFarm.CpuBlit.MemBitmap LoadBmp2(byte[] buffer)
+        {
+            using (MemoryStream ms = new MemoryStream(buffer))
+            using (System.Drawing.Bitmap bmp = new Bitmap(ms))
+            {
+                var bmpdata = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                PixelFarm.CpuBlit.MemBitmap membmp = PixelFarm.CpuBlit.MemBitmap.CreateFromCopy(bmp.Width, bmp.Height, bmp.Width * bmp.Height * 4, bmpdata.Scan0);
+                bmp.UnlockBits(bmpdata);
+                return membmp;
+            }
+        }
         private void cmdBuildBmpAtlas_Click(object sender, EventArgs e)
         {
             //build current project 
@@ -198,6 +209,7 @@ namespace Mini
                     listBox3.Items.Add(atlas_file);
                 }
             }
+
         }
 
         Graphics _pic2Gfx;
@@ -245,6 +257,44 @@ namespace Mini
             {
                 System.Diagnostics.Process.Start("explorer.exe", Directory.GetCurrentDirectory());
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            TestLoadBitmapAtlas2(
+                Atlas_AUTOGEN_TestAtlas1.Resource.info,
+                Atlas_AUTOGEN_TestAtlas1.Resource.img);
+
+        }
+        void TestLoadBitmapAtlas2(byte[] atlasInfo, byte[] atlasImg)
+        {
+            //bitmap atlas file
+
+
+            _bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
+            using (MemoryStream ms = new MemoryStream(atlasInfo))
+            {
+                _bitmapAtlas = _bmpAtlasBuilder.LoadAtlasInfo(ms)[0];//default atlas
+            }
+
+            _totalAtlasImg = LoadBmp2(atlasImg);
+
+            //-----
+            int count = _bitmapAtlas.ImgUrlDict.Count;
+            listBox2.Items.Clear();
+
+            foreach (var kv in _bitmapAtlas.ImgUrlDict)
+            {
+                listBox2.Items.Add(kv.Key);
+            }
+
+            DisposeExistingPictureBoxImage(pictureBox2);
+
+            //save to file?           
+            string temp_file = Guid.NewGuid() + ".png";
+            File.WriteAllBytes(temp_file, atlasImg);
+            pictureBox2.Image = new Bitmap(temp_file);
+ 
         }
     }
 }

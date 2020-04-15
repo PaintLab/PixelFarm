@@ -39,6 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\x_resource_projects\TestAtlas1\TestAtlas1_Atlas_AUTOGEN.cs">
+      <Link>TestAtlas1_Atlas_AUTOGEN.cs</Link>
+    </Compile>
     <Compile Include="AtlasBuilderUtils.cs" />
     <Compile Include="AtlasProject.cs" />
     <Compile Include="FormBitmapAtlasBuilder.cs">
