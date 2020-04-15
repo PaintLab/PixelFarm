@@ -35,47 +35,47 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\..\..\htmlrenderer\source\test8_htmlrenderer.demo\samples\0_acid1_dev\arrow_blank.png">
-      <Link>arrow_blank.png</Link>
+      <Link>bitmap\arrow_blank.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\..\..\htmlrenderer\source\test8_htmlrenderer.demo\samples\0_acid1_dev\arrow_close.png">
-      <Link>arrow_close.png</Link>
+      <Link>bitmap\arrow_close.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\..\..\htmlrenderer\source\test8_htmlrenderer.demo\samples\0_acid1_dev\arrow_open.png">
-      <Link>arrow_open.png</Link>
+      <Link>bitmap\arrow_open.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\..\..\htmlrenderer\source\test8_htmlrenderer.demo\samples\0_acid1_dev\check_buttons.png">
-      <Link>check_buttons.png</Link>
+      <Link>bitmap\check_buttons.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\..\..\htmlrenderer\source\test8_htmlrenderer.demo\samples\0_acid1_dev\chk_checked.png">
-      <Link>chk_checked.png</Link>
+      <Link>bitmap\chk_checked.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\..\..\htmlrenderer\source\test8_htmlrenderer.demo\samples\0_acid1_dev\chk_unchecked.png">
-      <Link>chk_unchecked.png</Link>
+      <Link>bitmap\chk_unchecked.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\..\..\htmlrenderer\source\test8_htmlrenderer.demo\samples\0_acid1_dev\drop_down_button.png">
-      <Link>drop_down_button.png</Link>
+      <Link>bitmap\drop_down_button.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\..\..\htmlrenderer\source\test8_htmlrenderer.demo\samples\0_acid1_dev\favorites32.png">
-      <Link>favorites32.png</Link>
+      <Link>bitmap\favorites32.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\..\..\htmlrenderer\source\test8_htmlrenderer.demo\samples\0_acid1_dev\html32.png">
-      <Link>html32.png</Link>
+      <Link>bitmap\html32.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\..\..\htmlrenderer\source\test8_htmlrenderer.demo\samples\0_acid1_dev\opt_checked.png">
-      <Link>opt_checked.png</Link>
+      <Link>bitmap\opt_checked.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\..\..\htmlrenderer\source\test8_htmlrenderer.demo\samples\0_acid1_dev\opt_unchecked.png">
-      <Link>opt_unchecked.png</Link>
+      <Link>bitmap\opt_unchecked.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
