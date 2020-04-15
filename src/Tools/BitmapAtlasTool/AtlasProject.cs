@@ -15,6 +15,7 @@ namespace Mini
         public string FullFilename { get; set; }
         public override string ToString() => Filename;
         public List<AtlasItemSourceFile> Items { get; private set; }
+        public bool GenerateCsSource { get; set; } = true;
 
         public string OutputFilename { get; set; }
         public void LoadProjectDetail()

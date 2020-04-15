@@ -2,6 +2,8 @@
 //MIT, 2020, WinterDev
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.BitmapAtlas;
@@ -60,6 +62,12 @@ namespace Mini
             totalImg.SaveImage(totalImgFile);
 
             //----------------------
+            //7. create an atlas file in a source file version, user can embed the source to file
+            //easy, just read .info and .png then convert to binary buffer
+
+            BuildAtlasInEmbededSourceVersion(atlasProj, atlasInfoFile, totalImgFile);
+
+            //----------------------
             //test, read data back
             //----------------------
             if (test_extract)
@@ -89,6 +97,66 @@ namespace Mini
                     }
                 }
             }
+        }
+
+        static StringBuilder ReadBinaryAndConvertToHexArr(string file)
+        {
+            byte[] buffer = File.ReadAllBytes(file);
+
+            StringBuilder stbuilder = new StringBuilder();
+
+            int charCountInLine = 0;
+
+            stbuilder.AppendLine("new byte[]{");
+            for (int b = 0; b < buffer.Length; ++b)
+            {
+                if (b > 0)
+                {
+                    stbuilder.Append(',');
+                }
+                stbuilder.Append("0x" + buffer[b].ToString("X2") + "");
+                charCountInLine++;
+                if (charCountInLine > 63)
+                {
+                    stbuilder.Append("\r\n");
+                    charCountInLine = 0; //reset
+                }
+            }
+            stbuilder.AppendLine();
+            stbuilder.AppendLine("}");
+            return stbuilder;
+        }
+
+        static void BuildAtlasInEmbededSourceVersion(AtlasProject atlasProj, string info, string img)
+        {
+            //7. create an atlas file in a source file version, user can embed the source to file
+            //easy, just read .info and .png then convert to binary buffer
+
+            StringBuilder outputFile = new StringBuilder();
+            outputFile.AppendLine("//AUTOGEN, " + DateTime.Now.ToString("s"));
+            outputFile.AppendLine("//source: " + atlasProj.FullFilename);
+            outputFile.AppendLine("//tools: " + System.Windows.Forms.Application.ExecutablePath);
+
+            string onlyFilename = Path.GetFileNameWithoutExtension(atlasProj.Filename);
+
+            //TODO: config this
+            outputFile.AppendLine("namespace " + onlyFilename + "_Atlas_AUTOGEN{");
+            outputFile.AppendLine("public static class Resource{");
+
+            StringBuilder info_sb = ReadBinaryAndConvertToHexArr(info);
+
+            StringBuilder img_sb = ReadBinaryAndConvertToHexArr(img);
+
+            outputFile.AppendLine("//" + info);
+            outputFile.AppendLine("public static readonly byte[] info=" + info_sb.ToString() + ";");
+
+            outputFile.AppendLine("//" + img);
+            outputFile.AppendLine("public static readonly byte[] img=" + img_sb.ToString() + ";");
+
+            outputFile.AppendLine("}");
+            outputFile.AppendLine("}");
+
+            File.WriteAllText(atlasProj.OutputFilename + "_Atlas_AUTOGEN.cs", outputFile.ToString());
         }
 
     }
