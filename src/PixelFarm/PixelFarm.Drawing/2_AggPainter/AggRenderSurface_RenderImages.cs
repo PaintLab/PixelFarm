@@ -68,8 +68,7 @@ namespace PixelFarm.CpuBlit
             output.AddLineTo(srcW, srcH);
             output.AddLineTo(0, srcH);
             output.AddCloseFigure();
-        } 
-   
+        }
         /// <summary>
         /// we do NOT store vxs
         /// </summary>
