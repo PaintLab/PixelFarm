@@ -1,6 +1,6 @@
 ﻿namespace Mini
 {
-    partial class FormTestBitmapAtlas
+    partial class FormBitmapAtlasBuilder
     {
         /// <summary>
         /// Required designer variable.

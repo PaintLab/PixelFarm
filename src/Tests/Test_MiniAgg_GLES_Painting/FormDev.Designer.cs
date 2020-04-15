@@ -35,7 +35,6 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
-            this.cmdTestBitmapAtlas = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lstExamples
@@ -111,22 +110,11 @@
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
-            // cmdTestBitmapAtlas
-            // 
-            this.cmdTestBitmapAtlas.Location = new System.Drawing.Point(88, 628);
-            this.cmdTestBitmapAtlas.Name = "cmdTestBitmapAtlas";
-            this.cmdTestBitmapAtlas.Size = new System.Drawing.Size(150, 32);
-            this.cmdTestBitmapAtlas.TabIndex = 25;
-            this.cmdTestBitmapAtlas.Text = "TestBitmapAtlas";
-            this.cmdTestBitmapAtlas.UseVisualStyleBackColor = true;
-            this.cmdTestBitmapAtlas.Click += new System.EventHandler(this.cmdTestBitmapAtlas_Click);
-            // 
             // FormDev
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(688, 748);
-            this.Controls.Add(this.cmdTestBitmapAtlas);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button1);
@@ -152,6 +140,5 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button cmdTestBitmapAtlas;
     }
 }

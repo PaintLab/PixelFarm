@@ -10,16 +10,15 @@ using PixelFarm.CpuBlit.BitmapAtlas;
 
 namespace Mini
 {
-    public partial class FormTestBitmapAtlas : Form
+    public partial class FormBitmapAtlasBuilder : Form
     {
 
-        string _srcDir = "Samples\\BmpAtlasItems";
+        //string _srcDir = "Samples\\BmpAtlasItems";
 
-        public FormTestBitmapAtlas()
+        public FormBitmapAtlasBuilder()
         {
             InitializeComponent();
             listBox1.SelectedIndexChanged += ListBox1_SelectedIndexChanged;
-
             listBox2.SelectedIndexChanged += ListBox2_SelectedIndexChanged;
         }
 
@@ -50,13 +49,13 @@ namespace Mini
 
         private void FormTestBitmapAtlas_Load(object sender, EventArgs e)
         {
-            //load bitmap file list
-            lbl_src.Text = "src:" + _srcDir;
-            string[] filenames = Directory.GetFiles(_srcDir, "*.png");
-            foreach (string filename in filenames)
-            {
-                listBox1.Items.Add(filename);
-            }
+            ////load bitmap file list
+            //lbl_src.Text = "src:" + _srcDir;
+            //string[] filenames = Directory.GetFiles(_srcDir, "*.png");
+            //foreach (string filename in filenames)
+            //{
+            //    listBox1.Items.Add(filename);
+            //}
 
         }
         static PixelFarm.CpuBlit.MemBitmap LoadBmp(string filename)
@@ -75,14 +74,14 @@ namespace Mini
         private void cmdBuildBmpAtlas_Click(object sender, EventArgs e)
         {
 
-            string atlas_file = "test1_atlas";
-            BuildBitmapAtlas(_srcDir, LoadBmp, atlas_file);
-            txtOutput.Text = "output:" + atlas_file;
+            //string atlas_file = "test1_atlas";
+            //BuildBitmapAtlas(_srcDir, LoadBmp, atlas_file);
+            //txtOutput.Text = "output:" + atlas_file;
 
-            DisposeExistingPictureBoxImage(pictureBox2);
+            //DisposeExistingPictureBoxImage(pictureBox2);
 
-            //total atlas
-            pictureBox2.Image = new Bitmap(atlas_file + ".png");
+            ////total atlas
+            //pictureBox2.Image = new Bitmap(atlas_file + ".png");
         }
 
 

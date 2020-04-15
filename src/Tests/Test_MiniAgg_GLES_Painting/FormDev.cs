@@ -375,11 +375,7 @@ namespace Mini
             formImgResampling.Show();
         }
 
-        private void cmdTestBitmapAtlas_Click(object sender, EventArgs e)
-        {
-            FormTestBitmapAtlas formTestBmpAtlas = new FormTestBitmapAtlas();
-            formTestBmpAtlas.Show();
-        }
+        
     }
 }
 
