@@ -25,6 +25,8 @@ namespace Mini
             _srcDir = PathUtils.GetAbsolutePathRelativeTo(_srcDir, Directory.GetCurrentDirectory());
             _output_Dir = _srcDir + "\\atlas_output";
 
+
+            listBox3.SelectedIndexChanged += ListBox3_SelectedIndexChanged;
 #if DEBUG
             if (!Directory.Exists(_srcDir))
             {
@@ -35,6 +37,14 @@ namespace Mini
 
         }
 
+        private void ListBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listBox3.SelectedItem is string atlasFile)
+            {
+                string file = Path.GetFileNameWithoutExtension(atlasFile);
+                TestLoadBitmapAtlas(file);
+            }
+        }
 
         AtlasProject _currentAtlasProj;
         bool _latestAtlasProjSuccess;
@@ -83,15 +93,6 @@ namespace Mini
             }
 
         }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            foreach (AtlasItemSourceFile file in _currentAtlasProj.Items)
-            {
-
-            }
-        }
-
 
 
         private void FormTestBitmapAtlas_Load(object sender, EventArgs e)
@@ -185,11 +186,17 @@ namespace Mini
         private void cmdReadBmpAtlas_Click(object sender, EventArgs e)
         {
             //testload bitmap atlas
+            listBox3.Items.Clear();
             string[] dirs = Directory.GetDirectories(_srcDir);
             foreach (string dir in dirs)
             {
                 //in this dir
-                //
+                //check if we have bitmap atlas file or not
+                string atlas_file = dir + "//" + Path.GetFileName(dir) + ".info";
+                if (File.Exists(atlas_file))
+                {
+                    listBox3.Items.Add(atlas_file);
+                }
             }
         }
 
