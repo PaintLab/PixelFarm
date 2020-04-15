@@ -11,6 +11,7 @@
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -38,12 +39,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AtlasBuilderUtils.cs" />
+    <Compile Include="AtlasProject.cs" />
     <Compile Include="FormBitmapAtlasBuilder.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormBitmapAtlasBuilder.Designer.cs">
       <DependentUpon>FormBitmapAtlasBuilder.cs</DependentUpon>
     </Compile>
+    <Compile Include="PathUtils.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FormBitmapAtlasBuilder.resx">
@@ -57,7 +61,9 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -69,6 +75,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.Platforms.Win32\PaintLab.Platforms.Win32.csproj">
+      <Project>{e5f2b317-2205-4727-92c4-6190a2fa3ddc}</Project>
+      <Name>PaintLab.Platforms.Win32</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\x_autogen2\PixelFarm.One.HtmlRenderer\PixelFarm.One.HtmlRenderer.csproj">
       <Project>{662f2274-d6f8-413a-a908-1b2f10c01348}</Project>
       <Name>PixelFarm.One.HtmlRenderer</Name>

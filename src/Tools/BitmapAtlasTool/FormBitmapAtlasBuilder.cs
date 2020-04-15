@@ -13,15 +13,51 @@ namespace Mini
     public partial class FormBitmapAtlasBuilder : Form
     {
 
-        //string _srcDir = "Samples\\BmpAtlasItems";
+        string _srcDir = "../../../../x_resource_projects";
 
         public FormBitmapAtlasBuilder()
         {
             InitializeComponent();
             listBox1.SelectedIndexChanged += ListBox1_SelectedIndexChanged;
             listBox2.SelectedIndexChanged += ListBox2_SelectedIndexChanged;
+            lstProjectList.SelectedIndexChanged += LstProjectList_SelectedIndexChanged;
+
+
+            _srcDir = PathUtils.GetAbsolutePathRelativeTo(_srcDir, Directory.GetCurrentDirectory());
+#if DEBUG
+            if (!Directory.Exists(_srcDir))
+            {
+
+            }
+#endif
         }
 
+
+        AtlasProject _currentAtlasProj;
+        bool _latestAtlasProjSuccess;
+
+        private void LstProjectList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lstProjectList.SelectedItem is AtlasProject atlasProj)
+            {
+                _currentAtlasProj = atlasProj;
+
+                //read project detail 
+                //extract only interested files
+                //eg. image files
+                if (!atlasProj.Isloaded)
+                {
+                    //load content
+                    atlasProj.LoadProjectDetail();
+                }
+                //show detail 
+                listBox1.Items.Clear();
+                foreach (AtlasItemSourceFile file in atlasProj.Items)
+                {
+                    listBox1.Items.Add(file);
+                }
+            }
+        }
 
         static void DisposeExistingPictureBoxImage(PictureBox pictureBox)
         {
@@ -29,34 +65,49 @@ namespace Mini
             {
                 pictureBox.Image = null;
                 currentBmp.Dispose();
-                currentBmp = null;
             }
         }
+
+
         private void ListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (listBox1.SelectedIndex < 0) return;
-            string filename = (string)listBox1.SelectedItem;
+            if (listBox1.SelectedItem is AtlasItemSourceFile atlasItemFile)
+            {
 
-            DisposeExistingPictureBoxImage(pictureBox1);
+                DisposeExistingPictureBoxImage(pictureBox1);
+                pictureBox1.Image = new Bitmap(atlasItemFile.AbsoluteFilename);
+            }
 
-            pictureBox1.Image = new Bitmap(filename);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            foreach (AtlasItemSourceFile file in _currentAtlasProj.Items)
+            {
 
+            }
         }
+
+
 
         private void FormTestBitmapAtlas_Load(object sender, EventArgs e)
         {
-            ////load bitmap file list
-            //lbl_src.Text = "src:" + _srcDir;
-            //string[] filenames = Directory.GetFiles(_srcDir, "*.png");
-            //foreach (string filename in filenames)
-            //{
-            //    listBox1.Items.Add(filename);
-            //}
+            //load project list from specific folder
 
+            string[] project_dirs = Directory.GetDirectories(_srcDir);
+
+            lstProjectList.Items.Clear();
+            foreach (string dir in project_dirs)
+            {
+                //check cs project file
+                foreach (string cs_proj in Directory.GetFiles(dir, "*.csproj"))
+                {
+                    //convert to absolute path relative to specific path
+                    string fullFilename = PathUtils.GetAbsolutePathRelativeTo(cs_proj, _srcDir);
+                    lstProjectList.Items.Add(new AtlasProject() { Filename = Path.GetFileName(cs_proj), FullFilename = cs_proj });
+                }
+            }
         }
         static PixelFarm.CpuBlit.MemBitmap LoadBmp(string filename)
         {
@@ -68,23 +119,15 @@ namespace Mini
                 return membmp;
             }
         }
-
-
-
         private void cmdBuildBmpAtlas_Click(object sender, EventArgs e)
         {
-
-            //string atlas_file = "test1_atlas";
-            //BuildBitmapAtlas(_srcDir, LoadBmp, atlas_file);
-            //txtOutput.Text = "output:" + atlas_file;
-
-            //DisposeExistingPictureBoxImage(pictureBox2);
-
-            ////total atlas
-            //pictureBox2.Image = new Bitmap(atlas_file + ".png");
+            //build current project 
+            _latestAtlasProjSuccess = false;
+            AtlasBuilderUtils.BuildBitmapAtlas(_currentAtlasProj, LoadBmp);
+            txtOutput.Text = "finish";
+            _latestAtlasProjSuccess = true;
         }
-
-
+        //------------
         SimpleBitmapAtlasBuilder _bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
         SimpleBitmapAtlas _bitmapAtlas;
         MemBitmap _totalAtlasImg;
@@ -168,91 +211,12 @@ namespace Mini
             }
         }
 
-        public static void BuildBitmapAtlas(string imgdir, Func<string, MemBitmap> imgLoader, string outputFilename, bool test_extract = false)
+        private void cmdOpenOutputFolder_Click(object sender, EventArgs e)
         {
-
-            //demonstrate how to build a bitmap atlas
-
-            //1. create builder
-            var bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
-
-            //2. collect all image-files
-            int imgdirNameLen = imgdir.Length;
-            string[] filenames = System.IO.Directory.GetFiles(imgdir, "*.png");
-            ushort index = 0;
-
-            Dictionary<string, ushort> imgDic = new Dictionary<string, ushort>();
-            foreach (string f in filenames)
-            {
-                //3. load a bitmap
-                MemBitmap itemBmp = imgLoader(f);
-                //4. get information about it
-
-                var atlasItem = new BitmapAtlasItemSource(itemBmp.Width, itemBmp.Height);
-                atlasItem.SetImageBuffer(MemBitmap.CopyImgBuffer(itemBmp));
-                atlasItem.UniqueInt16Name = index;
-                //5. add to builder
-                //bmpAtlasBuilder.AddAtlasItemImage(index, atlasItem);
-                bmpAtlasBuilder.AddItemSource(atlasItem);
-                string imgPath = f.Substring(imgdirNameLen);
-                imgDic.Add(imgPath, index);
-                index++;
-
-                //------------
-#if DEBUG
-                if (index >= ushort.MaxValue)
-                {
-                    throw new NotSupportedException();
-                }
-#endif
-                //------------
+            if (_latestAtlasProjSuccess)
+            {                 
+                System.Diagnostics.Process.Start("explorer.exe", Directory.GetCurrentDirectory());
             }
-
-
-            string atlasInfoFile = outputFilename + ".info";
-            string totalImgFile = outputFilename + ".png";
-
-            //5. merge all small images into a bigone 
-            MemBitmap totalImg = bmpAtlasBuilder.BuildSingleImage(false);
-            bmpAtlasBuilder.ImgUrlDict = imgDic;
-            bmpAtlasBuilder.SetAtlasInfo(TextureKind.Bitmap, 0);//font size
-            //6. save atlas info and total-img (.png file)
-            bmpAtlasBuilder.SaveAtlasInfo(atlasInfoFile);
-            totalImg.SaveImage(totalImgFile);
-
-            //----------------------
-            //test, read data back
-            //----------------------
-            if (test_extract)
-            {
-                bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
-                SimpleBitmapAtlas bitmapAtlas = bmpAtlasBuilder.LoadAtlasInfo(atlasInfoFile)[0];
-                //
-                MemBitmap totalAtlasImg = imgLoader(totalImgFile);
-                bitmapAtlas.SetMainBitmap(imgLoader(totalImgFile), true);
-
-                //-----
-                for (int i = 0; i < index; ++i)
-                {
-                    if (bitmapAtlas.TryGetItem((ushort)i, out AtlasItem bmpMapData))
-                    {
-                        //test copy data from bitmap
-                        MemBitmap itemImg = totalAtlasImg.CopyImgBuffer(bmpMapData.Left, bmpMapData.Top, bmpMapData.Width, bmpMapData.Height);
-                        itemImg.SaveImage("test1_atlas_item" + i + ".png");
-                    }
-                }
-                //test,
-                {
-                    if (bitmapAtlas.TryGetItem(@"\chk_checked.png", out AtlasItem bmpMapData))
-                    {
-                        MemBitmap itemImg = totalAtlasImg.CopyImgBuffer(bmpMapData.Left, bmpMapData.Top, bmpMapData.Width, bmpMapData.Height);
-                        itemImg.SaveImage("test1_atlas_item_a.png");
-                    }
-                }
-            }
-
-
         }
-
     }
 }
