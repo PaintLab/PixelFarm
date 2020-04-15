@@ -37,6 +37,7 @@
             this.txtOutput = new System.Windows.Forms.TextBox();
             this.lstProjectList = new System.Windows.Forms.ListBox();
             this.cmdOpenOutputFolder = new System.Windows.Forms.Button();
+            this.listBox3 = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -79,18 +80,18 @@
             // 
             // cmdReadBmpAtlas
             // 
-            this.cmdReadBmpAtlas.Location = new System.Drawing.Point(1009, 22);
+            this.cmdReadBmpAtlas.Location = new System.Drawing.Point(941, 22);
             this.cmdReadBmpAtlas.Name = "cmdReadBmpAtlas";
             this.cmdReadBmpAtlas.Size = new System.Drawing.Size(117, 44);
             this.cmdReadBmpAtlas.TabIndex = 6;
-            this.cmdReadBmpAtlas.Text = "Read BmpAtlas";
+            this.cmdReadBmpAtlas.Text = "Load BitmapAtlas List";
             this.cmdReadBmpAtlas.UseVisualStyleBackColor = true;
             this.cmdReadBmpAtlas.Click += new System.EventHandler(this.cmdReadBmpAtlas_Click);
             // 
             // listBox2
             // 
             this.listBox2.FormattingEnabled = true;
-            this.listBox2.Location = new System.Drawing.Point(1009, 72);
+            this.listBox2.Location = new System.Drawing.Point(941, 342);
             this.listBox2.Name = "listBox2";
             this.listBox2.Size = new System.Drawing.Size(206, 277);
             this.listBox2.TabIndex = 7;
@@ -121,11 +122,20 @@
             this.cmdOpenOutputFolder.UseVisualStyleBackColor = true;
             this.cmdOpenOutputFolder.Click += new System.EventHandler(this.cmdOpenOutputFolder_Click);
             // 
+            // listBox3
+            // 
+            this.listBox3.FormattingEnabled = true;
+            this.listBox3.Location = new System.Drawing.Point(941, 72);
+            this.listBox3.Name = "listBox3";
+            this.listBox3.Size = new System.Drawing.Size(206, 264);
+            this.listBox3.TabIndex = 11;
+            // 
             // FormBitmapAtlasBuilder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1240, 532);
+            this.ClientSize = new System.Drawing.Size(1248, 768);
+            this.Controls.Add(this.listBox3);
             this.Controls.Add(this.cmdOpenOutputFolder);
             this.Controls.Add(this.lstProjectList);
             this.Controls.Add(this.txtOutput);
@@ -155,5 +165,6 @@
         private System.Windows.Forms.TextBox txtOutput;
         private System.Windows.Forms.ListBox lstProjectList;
         private System.Windows.Forms.Button cmdOpenOutputFolder;
+        private System.Windows.Forms.ListBox listBox3;
     }
 }

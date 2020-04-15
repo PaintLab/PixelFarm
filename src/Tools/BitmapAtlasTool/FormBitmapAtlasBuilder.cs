@@ -14,7 +14,7 @@ namespace Mini
     {
 
         string _srcDir = "../../../../x_resource_projects";
-
+        string _output_Dir = "";
         public FormBitmapAtlasBuilder()
         {
             InitializeComponent();
@@ -22,14 +22,17 @@ namespace Mini
             listBox2.SelectedIndexChanged += ListBox2_SelectedIndexChanged;
             lstProjectList.SelectedIndexChanged += LstProjectList_SelectedIndexChanged;
 
-
             _srcDir = PathUtils.GetAbsolutePathRelativeTo(_srcDir, Directory.GetCurrentDirectory());
+            _output_Dir = _srcDir + "\\atlas_output";
+
 #if DEBUG
             if (!Directory.Exists(_srcDir))
             {
 
             }
 #endif
+
+
         }
 
 
@@ -94,9 +97,7 @@ namespace Mini
         private void FormTestBitmapAtlas_Load(object sender, EventArgs e)
         {
             //load project list from specific folder
-
             string[] project_dirs = Directory.GetDirectories(_srcDir);
-
             lstProjectList.Items.Clear();
             foreach (string dir in project_dirs)
             {
@@ -108,6 +109,10 @@ namespace Mini
                     lstProjectList.Items.Add(new AtlasProject() { Filename = Path.GetFileName(cs_proj), FullFilename = cs_proj });
                 }
             }
+
+            //---------
+            //load atlas output folder
+
         }
         static PixelFarm.CpuBlit.MemBitmap LoadBmp(string filename)
         {
@@ -126,15 +131,20 @@ namespace Mini
             AtlasBuilderUtils.BuildBitmapAtlas(_currentAtlasProj, LoadBmp);
             txtOutput.Text = "finish";
             _latestAtlasProjSuccess = true;
+
+            //test load the atlas on right side
+            TestLoadBitmapAtlas(_currentAtlasProj.OutputFilename);
+
         }
         //------------
         SimpleBitmapAtlasBuilder _bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
         SimpleBitmapAtlas _bitmapAtlas;
         MemBitmap _totalAtlasImg;
 
-        private void cmdReadBmpAtlas_Click(object sender, EventArgs e)
+        void TestLoadBitmapAtlas(string atlas_file)
         {
-            string atlas_file = "test1_atlas";
+            //bitmap atlas file
+
 
             _bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
             _bitmapAtlas = _bmpAtlasBuilder.LoadAtlasInfo(atlas_file + ".info")[0];//default atlas
@@ -170,6 +180,17 @@ namespace Mini
             //        //itemImg.SaveImage("test1_atlas_item_a.png");
             //    }
             //}
+        }
+
+        private void cmdReadBmpAtlas_Click(object sender, EventArgs e)
+        {
+            //testload bitmap atlas
+            string[] dirs = Directory.GetDirectories(_srcDir);
+            foreach (string dir in dirs)
+            {
+                //in this dir
+                //
+            }
         }
 
         Graphics _pic2Gfx;
@@ -214,7 +235,7 @@ namespace Mini
         private void cmdOpenOutputFolder_Click(object sender, EventArgs e)
         {
             if (_latestAtlasProjSuccess)
-            {                 
+            {
                 System.Diagnostics.Process.Start("explorer.exe", Directory.GetCurrentDirectory());
             }
         }

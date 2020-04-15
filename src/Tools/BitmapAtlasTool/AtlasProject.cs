@@ -8,6 +8,8 @@ namespace Mini
 
     class AtlasProject
     {
+        public AtlasProject() { }
+
         public bool Isloaded { get; private set; }
         public string Filename { get; set; }
         public string FullFilename { get; set; }
@@ -18,19 +20,28 @@ namespace Mini
         public void LoadProjectDetail()
         {
             Items = new List<AtlasItemSourceFile>();
-            
-            OutputFilename = Path.GetFileNameWithoutExtension(FullFilename);
+
+            string dir = Path.GetDirectoryName(FullFilename);
+            OutputFilename = dir + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(FullFilename);
 
             XmlDocument xmldoc = new XmlDocument();
             xmldoc.Load(FullFilename);
+            string xmlNs = xmldoc.DocumentElement.GetAttribute("xmlns");
 
             XmlNamespaceManager nsmgr = new XmlNamespaceManager(xmldoc.NameTable);
             //check if project file has namespace or not
             //if it has namespace=> we need to add namespace manager too
 
             string onlyDirName = Path.GetDirectoryName(FullFilename);
-            nsmgr.AddNamespace("cs", "http://schemas.microsoft.com/developer/msbuild/2003");
-            foreach (XmlElement content in xmldoc.DocumentElement.SelectNodes("//cs:Content", nsmgr))
+            string ns = "";
+            if (xmlNs != "")
+            {
+                ns = "cs";
+                nsmgr.AddNamespace(ns, xmlNs);
+                ns += ":";
+            }
+
+            foreach (XmlElement content in xmldoc.DocumentElement.SelectNodes("//" + ns + "Content", nsmgr))
             {
                 //content node
                 string include = content.GetAttribute("Include");
@@ -42,7 +53,7 @@ namespace Mini
                             atlasItemFile.Include = include;
                             atlasItemFile.AbsoluteFilename = PathUtils.GetAbsolutePathRelativeTo(include, onlyDirName);
                             atlasItemFile.FileExist = File.Exists(atlasItemFile.AbsoluteFilename);
-                            if (content.SelectSingleNode("cs:Link", nsmgr) is XmlElement linkNode)
+                            if (content.SelectSingleNode(ns + "Link", nsmgr) is XmlElement linkNode)
                             {
                                 atlasItemFile.Link = linkNode.InnerText;
                             }
