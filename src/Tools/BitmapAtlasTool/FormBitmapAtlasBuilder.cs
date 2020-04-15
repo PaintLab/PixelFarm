@@ -294,7 +294,19 @@ namespace Mini
             string temp_file = Guid.NewGuid() + ".png";
             File.WriteAllBytes(temp_file, atlasImg);
             pictureBox2.Image = new Bitmap(temp_file);
- 
+
+        }
+
+        private void cmdShowFontAtlas_Click(object sender, EventArgs e)
+        {
+
+
+            SampleWinForms.FormFontAtlas formFontAtlas = new SampleWinForms.FormFontAtlas();
+            //formFontAtlas.SetFont()
+
+
+
+            formFontAtlas.Show();
         }
     }
 }
