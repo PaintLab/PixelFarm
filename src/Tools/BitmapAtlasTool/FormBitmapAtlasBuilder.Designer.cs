@@ -144,9 +144,9 @@
             // 
             // cmdShowFontAtlas
             // 
-            this.cmdShowFontAtlas.Location = new System.Drawing.Point(150, 712);
+            this.cmdShowFontAtlas.Location = new System.Drawing.Point(256, 326);
             this.cmdShowFontAtlas.Name = "cmdShowFontAtlas";
-            this.cmdShowFontAtlas.Size = new System.Drawing.Size(117, 44);
+            this.cmdShowFontAtlas.Size = new System.Drawing.Size(111, 44);
             this.cmdShowFontAtlas.TabIndex = 13;
             this.cmdShowFontAtlas.Text = "Show FontAtlas";
             this.cmdShowFontAtlas.UseVisualStyleBackColor = true;

@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using LayoutFarm;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.BitmapAtlas;
+using Typography.OpenFont;
 
 namespace Mini
 {
@@ -53,6 +54,7 @@ namespace Mini
         {
             if (lstProjectList.SelectedItem is AtlasProject atlasProj)
             {
+                _selectedAtlasItemSourceFile = null;//reset
                 _currentAtlasProj = atlasProj;
 
                 //read project detail 
@@ -81,15 +83,23 @@ namespace Mini
             }
         }
 
-
+        AtlasItemSourceFile _selectedAtlasItemSourceFile;
         private void ListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (listBox1.SelectedIndex < 0) return;
             if (listBox1.SelectedItem is AtlasItemSourceFile atlasItemFile)
             {
-
+                _selectedAtlasItemSourceFile = atlasItemFile;
+                //check if it is image file or not   
                 DisposeExistingPictureBoxImage(pictureBox1);
-                pictureBox1.Image = new Bitmap(atlasItemFile.AbsoluteFilename);
+                switch (atlasItemFile.Extension)
+                {
+                    case ".png":
+                        pictureBox1.Image = new Bitmap(atlasItemFile.AbsoluteFilename);
+                        break;
+                    default:
+                        break;
+                }
             }
 
         }
@@ -300,13 +310,33 @@ namespace Mini
         private void cmdShowFontAtlas_Click(object sender, EventArgs e)
         {
 
+            if (_selectedAtlasItemSourceFile != null)
+            {
+                //check if this is a font file?
+                Typeface selectedTypeface = null;
+                switch (_selectedAtlasItemSourceFile.Extension)
+                {
+                    case ".ttf":
+                    case ".otf":
+                        {
 
-            SampleWinForms.FormFontAtlas formFontAtlas = new SampleWinForms.FormFontAtlas();
-            //formFontAtlas.SetFont()
+                            using (FileStream fs = new FileStream(_selectedAtlasItemSourceFile.AbsoluteFilename, FileMode.Open))
+                            {
+                                OpenFontReader reader = new OpenFontReader();
+                                selectedTypeface = reader.Read(fs);
+                            }
+                        }
+                        break;
+                }
 
+                if (selectedTypeface != null)
+                {
+                    SampleWinForms.FormFontAtlas formFontAtlas = new SampleWinForms.FormFontAtlas();
+                    formFontAtlas.SetFont(selectedTypeface, 34);//load with init size
+                    formFontAtlas.ShowDialog();
+                }
+            }
 
-
-            formFontAtlas.Show();
         }
     }
 }

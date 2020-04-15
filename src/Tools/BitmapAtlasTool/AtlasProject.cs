@@ -1,6 +1,7 @@
 ﻿//MIT, 2020, WinterDev
 using System;
 using System.Collections.Generic;
+
 using System.IO;
 using System.Xml;
 namespace Mini
@@ -94,7 +95,7 @@ namespace Mini
                             }
                             Items.Add(atlasItemFile);
                         }
-                        break; 
+                        break;
                 }
             }
             Isloaded = true;
@@ -120,9 +121,88 @@ namespace Mini
             //------
 
 
+            //------
+            //check for config data
+            foreach (AtlasItemSourceFile atlasSrcItem in Items)
+            {
+                switch (atlasSrcItem.Extension)
+                {
+                    case ".ttc":
+                    case ".otf":
+                    case ".ttf":
+                    case ".otc":
+                        atlasSrcItem.Kind = AtlasItemSourceKind.Font;
+                        break;
+                    case ".png":
+                    case ".jpg":
+                        atlasSrcItem.Kind = AtlasItemSourceKind.Image;
+                        break;
+                    case ".xml":
+                        //this may be data or config
+                        ReadConfigFile(atlasSrcItem);
+                        break;
+                }
+            }
+        }
+
+        static void ReadConfigFile(AtlasItemSourceFile atlasSrcItem)
+        {
+            atlasSrcItem.Kind = AtlasItemSourceKind.Config;
+            XmlDocument xmldoc = new XmlDocument();
+            xmldoc.Load(atlasSrcItem.AbsoluteFilename);
+            XmlElement docElem = xmldoc.DocumentElement;
+            switch (docElem.Name)
+            {
+                case "typeface_builder_config":
+                    //this  typeface config
+                    ReadFontBuilderConfig(atlasSrcItem, docElem);
+                    break;
+            }
 
         }
+        static void ReadFontBuilderConfig(AtlasItemSourceFile atlasSrcItem, XmlElement docElem)
+        {
+            FontBuilderConfig fontBuilderConfig = new FontBuilderConfig();
+            fontBuilderConfig.FontFilename = Path.GetFileNameWithoutExtension(atlasSrcItem.AbsoluteFilename);
+            atlasSrcItem.FontBuilderConfig = fontBuilderConfig;
+
+            foreach (XmlElement setElem in docElem.SelectNodes("set"))
+            {
+                //defail
+                fontBuilderConfig.SetTextureKind(setElem.GetAttribute("texture_kind"));
+                foreach (XmlNode cc in setElem.ChildNodes)
+                {
+                    if (cc is XmlElement childElem)
+                    {
+                        switch (childElem.Name)
+                        {
+                            case "script_lang":
+                                fontBuilderConfig.AddScriptLangAndHint(
+                                    childElem.GetAttribute("lang"),
+                                    childElem.GetAttribute("hint"));
+                                break;
+                            case "size":
+                                fontBuilderConfig.SetSizeList(childElem.InnerText);
+                                break;
+
+                        }
+                    }
+                }
+            }
+
+            fontBuilderConfig.BuildConfigDetail();
+        }
     }
+
+
+    enum AtlasItemSourceKind
+    {
+        Image,
+        Font,
+        Config,
+        Data,
+    }
+
     class AtlasItemSourceFile
     {
         public string Include { get; set; }
@@ -141,7 +221,13 @@ namespace Mini
                 return Include;
             }
         }
+
+        public AtlasItemSourceKind Kind { get; set; }
+
+
+        public FontBuilderConfig FontBuilderConfig { get; set; }
     }
+
 
 
 }

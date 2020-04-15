@@ -1,5 +1,4 @@
 ﻿//MIT, 2020, WinterDev
-//MIT, 2020, WinterDev
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,6 +6,7 @@ using System.Text;
 
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.BitmapAtlas;
+
 namespace Mini
 {
     static class AtlasBuilderUtils
@@ -23,6 +23,11 @@ namespace Mini
             Dictionary<string, ushort> imgDic = new Dictionary<string, ushort>();
             foreach (AtlasItemSourceFile f in fileList)
             {
+                if (f.Kind != AtlasItemSourceKind.Image)
+                {
+                    continue;
+                }
+
                 //3. load a bitmap
                 MemBitmap itemBmp = imgLoader(f.AbsoluteFilename);
                 //4. get information about it
@@ -48,7 +53,11 @@ namespace Mini
 #endif
                 //------------
             }
-
+            if (imgDic.Count == 0)
+            {
+                //no file
+                return;
+            }
 
             string atlasInfoFile = atlasProj.OutputFilename + ".info";
             string totalImgFile = atlasProj.OutputFilename + ".png";

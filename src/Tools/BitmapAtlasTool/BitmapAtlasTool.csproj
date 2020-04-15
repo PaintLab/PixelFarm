@@ -68,6 +68,7 @@
     </Compile>
     <Compile Include="AtlasBuilderUtils.cs" />
     <Compile Include="AtlasProject.cs" />
+    <Compile Include="FontBuilderConfig.cs" />
     <Compile Include="FormBitmapAtlasBuilder.cs">
       <SubType>Form</SubType>
     </Compile>
