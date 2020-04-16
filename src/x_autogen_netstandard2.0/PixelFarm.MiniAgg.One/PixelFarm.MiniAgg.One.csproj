@@ -114,10 +114,8 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\Drawing\CombineMode.cs" Link="PixelFarm\PixelFarm.DrawingCore\Drawing\CombineMode.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\Drawing\CRC32Calculator.cs" Link="PixelFarm\PixelFarm.DrawingCore\Drawing\CRC32Calculator.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\Drawing\DashStyle.cs" Link="PixelFarm\PixelFarm.DrawingCore\Drawing\DashStyle.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\Drawing\DrawBoard.cs" Link="PixelFarm\PixelFarm.DrawingCore\Drawing\DrawBoard.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\Drawing\Image.cs" Link="PixelFarm\PixelFarm.DrawingCore\Drawing\Image.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\Drawing\LenAndLenUnit.cs" Link="PixelFarm\PixelFarm.DrawingCore\Drawing\LenAndLenUnit.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\Drawing\Painter.cs" Link="PixelFarm\PixelFarm.DrawingCore\Drawing\Painter.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\Drawing\Region.cs" Link="PixelFarm\PixelFarm.DrawingCore\Drawing\Region.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\Drawing\RenderVx.cs" Link="PixelFarm\PixelFarm.DrawingCore\Drawing\RenderVx.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\Drawing\RequestFont.cs" Link="PixelFarm\PixelFarm.DrawingCore\Drawing\RequestFont.cs" />
@@ -144,12 +142,14 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\CpuBlit\MemBitmap.cs" Link="PixelFarm\PixelFarm.Painter\CpuBlit\MemBitmap.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\CpuBlit\PathWriter.cs" Link="PixelFarm\PixelFarm.Painter\CpuBlit\PathWriter.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\CpuBlit\TempMemPtr.cs" Link="PixelFarm\PixelFarm.Painter\CpuBlit\TempMemPtr.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\DrawBoard.cs" Link="PixelFarm\PixelFarm.Painter\DrawBoard.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\Drawing.Internal\CO.cs" Link="PixelFarm\PixelFarm.Painter\Drawing.Internal\CO.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\Drawing.Internal\MicroPainter.cs" Link="PixelFarm\PixelFarm.Painter\Drawing.Internal\MicroPainter.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\Drawing\ClipingTechnique.cs" Link="PixelFarm\PixelFarm.Painter\Drawing\ClipingTechnique.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\Drawing\ColorEx.cs" Link="PixelFarm\PixelFarm.Painter\Drawing\ColorEx.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\Drawing\ITextPrinter.cs" Link="PixelFarm\PixelFarm.Painter\Drawing\ITextPrinter.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\Drawing\TextBaseline.cs" Link="PixelFarm\PixelFarm.Painter\Drawing\TextBaseline.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\Painter.cs" Link="PixelFarm\PixelFarm.Painter\Painter.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\TempContext.cs" Link="PixelFarm\PixelFarm.Painter\TempContext.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\AffineMat.cs" Link="PixelFarm\PixelFarm.PrimitiveGeo\AffineMat.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\BasicGeometries.cs" Link="PixelFarm\PixelFarm.PrimitiveGeo\BasicGeometries.cs" />
@@ -283,9 +283,9 @@
     <Folder Include="PixelFarm\PixelFarm.Painter\0_Base" />
     <Folder Include="PixelFarm\PixelFarm.Painter\CpuBlit.VertexProcessing" />
     <Folder Include="PixelFarm\PixelFarm.Painter\CpuBlit" />
+    <Folder Include="PixelFarm\PixelFarm.Painter" />
     <Folder Include="PixelFarm\PixelFarm.Painter\Drawing.Internal" />
     <Folder Include="PixelFarm\PixelFarm.Painter\Drawing" />
-    <Folder Include="PixelFarm\PixelFarm.Painter" />
     <Folder Include="PixelFarm\PixelFarm.PrimitiveGeo" />
     <Folder Include="PixelFarm\PixelFarm.Vectors\1_vectormaths" />
     <Folder Include="PixelFarm\PixelFarm.Vectors\2_geometry" />
