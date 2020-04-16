@@ -37,7 +37,7 @@ namespace Mini
                     //4. get information about it 
                     atlasItem = new BitmapAtlasItemSource(itemBmp.Width, itemBmp.Height);
                     atlasItem.SetImageBuffer(MemBitmap.CopyImgBuffer(itemBmp));
-                } 
+                }
 
                 atlasItem.UniqueInt16Name = index;
                 //5. add to builder                
@@ -81,7 +81,7 @@ namespace Mini
             //7. create an atlas file in a source file version, user can embed the source to file
             //easy, just read .info and .png then convert to binary buffer
 
-            BuildAtlasInEmbededSourceVersion(atlasProj, atlasInfoFile, totalImgFile);
+            BuildAtlasInEmbededSourceVersion(atlasProj, atlasInfoFile, totalImgFile, imgDic);
 
             //----------------------
             //test, read data back
@@ -143,7 +143,7 @@ namespace Mini
             return stbuilder;
         }
 
-        static void BuildAtlasInEmbededSourceVersion(AtlasProject atlasProj, string info, string img)
+        static void BuildAtlasInEmbededSourceVersion(AtlasProject atlasProj, string info, string img, Dictionary<string, ushort> imgUrlDic)
         {
             //7. create an atlas file in a source file version, user can embed the source to file
             //easy, just read .info and .png then convert to binary buffer
@@ -159,6 +159,15 @@ namespace Mini
             outputFile.AppendLine("namespace " + atlasProj.CsSourceNamespace + "{");
 
             outputFile.AppendLine("public static class Resource{");
+
+
+            outputFile.AppendLine("//img_links:");
+            foreach (string url in imgUrlDic.Keys)
+            {
+                outputFile.AppendLine("// " + url);
+            }
+            outputFile.AppendLine("");
+
 
             StringBuilder info_sb = ReadBinaryAndConvertToHexArr(info);
 

@@ -121,7 +121,7 @@ namespace Mini
         public float Size;
         public List<GlyphTextureBuildDetail> TextureBuildDetails;
         public TextureKind TextureKind;
-        public int FontKey;
+      
 #if DEBUG
         public override string ToString()
         {
