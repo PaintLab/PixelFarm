@@ -66,8 +66,8 @@
     <Compile Include="..\..\..\..\Typography\Demo\Windows\PixelFarmSample.WinForms\UIFontScriptOpt.Designer.cs">
       <Link>UIFontScriptOpt.Designer.cs</Link>
     </Compile>
-    <Compile Include="..\..\x_resource_projects\TestAtlas1\TestAtlas1_Atlas_AUTOGEN.cs">
-      <Link>TestAtlas1_Atlas_AUTOGEN.cs</Link>
+    <Compile Include="..\..\x_resource_projects\TestAtlas1\x_TestAtlas1_Atlas_AUTOGEN.cs">
+      <Link>x_TestAtlas1_Atlas_AUTOGEN.cs</Link>
     </Compile>
     <Compile Include="BitmapAtlasBuilderUtils.cs" />
     <Compile Include="AtlasProject.cs" />

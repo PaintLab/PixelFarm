@@ -127,7 +127,7 @@ namespace Mini
             }
 
             string onlyFilename = Path.GetFileNameWithoutExtension(Filename);
-            CsSourceNamespace = "Atlas_AUTOGEN_" + onlyFilename;
+            CsSourceNamespace = "Atlas_AUTOGEN_." + onlyFilename;
             //------ 
             //check for config data 
 
@@ -225,7 +225,7 @@ namespace Mini
                                 break;
                             case "size":
                                 fontBuilderConfig.SetSizeList(childElem.InnerText);
-                                break; 
+                                break;
                         }
                     }
                 }

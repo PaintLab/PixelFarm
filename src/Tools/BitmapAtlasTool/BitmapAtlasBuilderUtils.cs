@@ -30,14 +30,17 @@ namespace Mini
                 }
 
                 //3. load a bitmap
-                MemBitmap itemBmp = imgLoader(f.AbsoluteFilename);
-                //4. get information about it
 
-                var atlasItem = new BitmapAtlasItemSource(itemBmp.Width, itemBmp.Height);
-                atlasItem.SetImageBuffer(MemBitmap.CopyImgBuffer(itemBmp));
+                BitmapAtlasItemSource atlasItem = null;
+                using (MemBitmap itemBmp = imgLoader(f.AbsoluteFilename))
+                {
+                    //4. get information about it 
+                    atlasItem = new BitmapAtlasItemSource(itemBmp.Width, itemBmp.Height);
+                    atlasItem.SetImageBuffer(MemBitmap.CopyImgBuffer(itemBmp));
+                } 
+
                 atlasItem.UniqueInt16Name = index;
-                //5. add to builder
-                //bmpAtlasBuilder.AddAtlasItemImage(index, atlasItem);
+                //5. add to builder                
                 bmpAtlasBuilder.AddItemSource(atlasItem);
 
                 //get relative filename
@@ -64,12 +67,15 @@ namespace Mini
             string totalImgFile = atlasProj.OutputFilename + ".png";
 
             //5. merge all small images into a bigone 
-            MemBitmap totalImg = bmpAtlasBuilder.BuildSingleImage(false);
-            bmpAtlasBuilder.ImgUrlDict = imgDic;
-            bmpAtlasBuilder.SetAtlasInfo(TextureKind.Bitmap, 0);//font size
-            //6. save atlas info and total-img (.png file)
-            bmpAtlasBuilder.SaveAtlasInfo(atlasInfoFile);
-            totalImg.SaveImage(totalImgFile);
+            using (MemBitmap totalImg = bmpAtlasBuilder.BuildSingleImage(false))
+            {
+                bmpAtlasBuilder.ImgUrlDict = imgDic;
+                bmpAtlasBuilder.SetAtlasInfo(TextureKind.Bitmap, 0);//font size
+                                                                    //6. save atlas info and total-img (.png file)
+                bmpAtlasBuilder.SaveAtlasInfo(atlasInfoFile);
+                totalImg.SaveImage(totalImgFile);
+            }
+
 
             //----------------------
             //7. create an atlas file in a source file version, user can embed the source to file
@@ -167,7 +173,10 @@ namespace Mini
             outputFile.AppendLine("}");
             outputFile.AppendLine("}");
 
-            File.WriteAllText(atlasProj.OutputFilename + "_Atlas_AUTOGEN.cs", outputFile.ToString());
+
+            string dirname = Path.GetDirectoryName(atlasProj.OutputFilename);
+
+            File.WriteAllText(dirname + Path.DirectorySeparatorChar + "x_" + onlyFilename + "_Atlas_AUTOGEN.cs", outputFile.ToString());
         }
 
     }
