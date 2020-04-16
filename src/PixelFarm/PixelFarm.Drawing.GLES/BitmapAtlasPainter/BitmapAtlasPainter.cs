@@ -27,7 +27,7 @@ namespace PixelFarm.DrawingGL
         public void DrawImage(GLPainter glPainter, AtlasImageBinder atlasImgBinder, float left, float top)
         {
 
-            if (atlasImgBinder.State == BinderState.Loaded && atlasImgBinder.OwnerAtlas != this)
+            if (atlasImgBinder.State == BinderState.Loaded && atlasImgBinder.LatestPainterId != _painterId)
             {
                 atlasImgBinder.State = BinderState.Unload;
                 atlasImgBinder.LatestPainterId = _painterId;
@@ -55,10 +55,10 @@ namespace PixelFarm.DrawingGL
                                     throw new NotSupportedException();
                                 case TextureKind.Bitmap:
                                     {
-                                        atlasImgBinder.State = BinderState.Loaded;
-                                        ImageBinder.SetCacheInnerImage(atlasImgBinder, glbmp, false);
+                                        //atlasImgBinder.State = BinderState.Loaded;
+                                        //ImageBinder.SetCacheInnerImage(atlasImgBinder, glbmp, false);
+                                        //atlasImgBinder.AtlasItem = atlasItem;
 
-                                        atlasImgBinder.AtlasItem = atlasItem;
                                         glPainter.Core.DrawSubImage(glbmp,
                                             srcRect,
                                             left,
@@ -71,7 +71,7 @@ namespace PixelFarm.DrawingGL
                     break;
                 case BinderState.Unload:
                     {
-                        atlasImgBinder.OwnerAtlas = this;
+                        atlasImgBinder.LatestPainterId = _painterId;
                         //load img first
                         if (_bmpAtlas == null || _lastestImgFile != atlasImgBinder.AtlasName)
                         {
