@@ -7,7 +7,7 @@
     <ProjectGuid>{11557D2E-9404-4C55-B12A-0D43D5BB7813}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>BitmapAtlasTool</RootNamespace>
-    <AssemblyName>BitmapAtlasTool</AssemblyName>
+    <AssemblyName>PaintLabResTool</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
