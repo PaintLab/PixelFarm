@@ -148,57 +148,95 @@ namespace Mini
             //7. create an atlas file in a source file version, user can embed the source to file
             //easy, just read .info and .png then convert to binary buffer
 
-            StringBuilder outputFile = new StringBuilder();
-            outputFile.AppendLine("//AUTOGEN, " + DateTime.Now.ToString("s"));
-            outputFile.AppendLine("//source: " + atlasProj.FullFilename);
-            outputFile.AppendLine("//tools: " + System.Windows.Forms.Application.ExecutablePath);
-
-            string onlyFilename = Path.GetFileNameWithoutExtension(atlasProj.Filename);
-
-            //TODO: config this
-            outputFile.AppendLine("namespace " + atlasProj.CsSourceNamespace + "{");
-
-            outputFile.AppendLine("public partial class BitmapAtlas{");
-
-            outputFile.AppendLine("public const string NAME=\"" + onlyFilename + "\";");
-
-            outputFile.AppendLine("//img_links:");
-            foreach (string url in imgUrlDic.Keys)
+            //PART1: 
+            string timestamp = DateTime.Now.ToString("s");
             {
-                outputFile.AppendLine("// " + url);
+                StringBuilder outputFile = new StringBuilder();
+                outputFile.AppendLine("//AUTOGEN, " + timestamp);
+                outputFile.AppendLine("//source: " + atlasProj.FullFilename);
+                outputFile.AppendLine("//tools: " + System.Windows.Forms.Application.ExecutablePath);
+
+                string onlyFilename = Path.GetFileNameWithoutExtension(atlasProj.Filename);
+
+                //TODO: config this
+                outputFile.AppendLine("namespace " + atlasProj.CsSourceNamespace + "{");
+
+                outputFile.AppendLine("public partial class BitmapAtlas{");
+
+                outputFile.AppendLine("public const string NAME=\"" + onlyFilename + "\";");
+
+                outputFile.AppendLine("//img_links:");
+                foreach (string url in imgUrlDic.Keys)
+                {
+                    outputFile.AppendLine("// " + url);
+                }
+                outputFile.AppendLine("");
+
+
+                outputFile.AppendLine("//items names");
+                outputFile.AppendLine("public static class Names{");
+                foreach (string url in imgUrlDic.Keys)
+                {
+                    string url2 = url.Replace("\\", "_");
+                    url2 = url2.Replace("//", "_");
+                    url2 = url2.Replace(".", "_");
+
+                    outputFile.AppendLine("public const string " + url2 + "=\"" + url + "\";");
+                }
+                outputFile.AppendLine("}");
+
+                StringBuilder info_sb = ReadBinaryAndConvertToHexArr(info);
+
+                StringBuilder img_sb = ReadBinaryAndConvertToHexArr(img);
+
+                outputFile.AppendLine("//bitmap_atlas_info");
+                outputFile.AppendLine("//" + info);
+                outputFile.AppendLine("public static readonly byte[] info=" + info_sb.ToString() + ";");
+
+                outputFile.AppendLine("//bitmap_atlas_total_img");
+                outputFile.AppendLine("//" + img);
+                outputFile.AppendLine("public static readonly byte[] img=" + img_sb.ToString() + ";");
+
+                outputFile.AppendLine("}");
+                outputFile.AppendLine("}");
+
+
+                string dirname = Path.GetDirectoryName(atlasProj.OutputFilename);
+
+                File.WriteAllText(dirname + Path.DirectorySeparatorChar + "x_" + onlyFilename + "_Atlas_AUTOGEN.cs", outputFile.ToString());
             }
-            outputFile.AppendLine("");
-
-
-            outputFile.AppendLine("//items names");
-            foreach (string url in imgUrlDic.Keys)
+            //----------------------
+            //PART2: autogen atlas binder
             {
-                string url2 = url.Replace("\\", "_");
-                url2 = url2.Replace("//", "_");
-                url2 = url2.Replace(".", "_");
+                StringBuilder outputFile = new StringBuilder();
+                outputFile.AppendLine("//AUTOGEN, " + timestamp);
+                outputFile.AppendLine("//source: " + atlasProj.FullFilename);
+                outputFile.AppendLine("//tools: " + System.Windows.Forms.Application.ExecutablePath);
 
-                outputFile.AppendLine("public const string " + url2 + "=\"" + url + "\";");
+                string onlyFilename = Path.GetFileNameWithoutExtension(atlasProj.Filename);
+
+
+                outputFile.AppendLine("using PixelFarm.Drawing;");
+
+                outputFile.AppendLine("namespace " + atlasProj.CsSourceNamespace + "{");
+
+                outputFile.AppendLine("public partial class BitmapAtlas{");
+
+                foreach (string url in imgUrlDic.Keys)
+                {
+                    string url2 = url.Replace("\\", "_");
+                    url2 = url2.Replace("//", "_");
+                    url2 = url2.Replace(".", "_");
+
+                    outputFile.AppendLine("public static readonly AtlasImageBinder " + url2 + "=new AtlasImageBinder(NAME, \"" + url + "\");");
+                }
+                outputFile.AppendLine("}"); //class
+                outputFile.AppendLine("}"); //namespace
+
+                string dirname = Path.GetDirectoryName(atlasProj.OutputFilename);
+                File.WriteAllText(dirname + Path.DirectorySeparatorChar + "x_" + onlyFilename + "_Atlas_AUTOGEN_BINDERS.cs", outputFile.ToString());
             }
 
-            StringBuilder info_sb = ReadBinaryAndConvertToHexArr(info);
-
-            StringBuilder img_sb = ReadBinaryAndConvertToHexArr(img);
-
-            outputFile.AppendLine("//bitmap_atlas_info");
-            outputFile.AppendLine("//" + info);
-            outputFile.AppendLine("public static readonly byte[] info=" + info_sb.ToString() + ";");
-
-            outputFile.AppendLine("//bitmap_atlas_total_img");
-            outputFile.AppendLine("//" + img);
-            outputFile.AppendLine("public static readonly byte[] img=" + img_sb.ToString() + ";");
-
-            outputFile.AppendLine("}");
-            outputFile.AppendLine("}");
-
-
-            string dirname = Path.GetDirectoryName(atlasProj.OutputFilename);
-
-            File.WriteAllText(dirname + Path.DirectorySeparatorChar + "x_" + onlyFilename + "_Atlas_AUTOGEN.cs", outputFile.ToString());
         }
 
     }
