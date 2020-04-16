@@ -1,4 +1,4 @@
-//AUTOGEN, 2020-04-16T21:26:36
+//AUTOGEN, 2020-04-16T21:33:09
 //source: D:\projects\PixelFarm\src\x_resource_projects\TestAtlas1\TestAtlas1.csproj
 //tools: D:\projects\PixelFarm\src\Tools\BitmapAtlasTool\bin\Debug\BitmapAtlasTool.exe
 namespace Atlas_AUTOGEN_.TestAtlas1{
