@@ -40,6 +40,8 @@
             this.listBox3 = new System.Windows.Forms.ListBox();
             this.button1 = new System.Windows.Forms.Button();
             this.cmdShowFontAtlas = new System.Windows.Forms.Button();
+            this.txtProjectDir = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -47,7 +49,7 @@
             // listBox1
             // 
             this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(12, 178);
+            this.listBox1.Location = new System.Drawing.Point(12, 215);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(238, 212);
             this.listBox1.TabIndex = 1;
@@ -55,7 +57,7 @@
             // pictureBox1
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.pictureBox1.Location = new System.Drawing.Point(256, 178);
+            this.pictureBox1.Location = new System.Drawing.Point(256, 215);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(111, 92);
             this.pictureBox1.TabIndex = 2;
@@ -63,7 +65,7 @@
             // 
             // cmdBuildAtlas
             // 
-            this.cmdBuildAtlas.Location = new System.Drawing.Point(256, 276);
+            this.cmdBuildAtlas.Location = new System.Drawing.Point(256, 313);
             this.cmdBuildAtlas.Name = "cmdBuildAtlas";
             this.cmdBuildAtlas.Size = new System.Drawing.Size(111, 44);
             this.cmdBuildAtlas.TabIndex = 3;
@@ -100,7 +102,7 @@
             // 
             // txtOutput
             // 
-            this.txtOutput.Location = new System.Drawing.Point(12, 403);
+            this.txtOutput.Location = new System.Drawing.Point(12, 440);
             this.txtOutput.Multiline = true;
             this.txtOutput.Name = "txtOutput";
             this.txtOutput.Size = new System.Drawing.Size(239, 117);
@@ -109,14 +111,14 @@
             // lstProjectList
             // 
             this.lstProjectList.FormattingEnabled = true;
-            this.lstProjectList.Location = new System.Drawing.Point(12, 12);
+            this.lstProjectList.Location = new System.Drawing.Point(12, 49);
             this.lstProjectList.Name = "lstProjectList";
             this.lstProjectList.Size = new System.Drawing.Size(152, 160);
             this.lstProjectList.TabIndex = 9;
             // 
             // cmdOpenOutputFolder
             // 
-            this.cmdOpenOutputFolder.Location = new System.Drawing.Point(256, 403);
+            this.cmdOpenOutputFolder.Location = new System.Drawing.Point(256, 440);
             this.cmdOpenOutputFolder.Name = "cmdOpenOutputFolder";
             this.cmdOpenOutputFolder.Size = new System.Drawing.Size(111, 44);
             this.cmdOpenOutputFolder.TabIndex = 10;
@@ -144,7 +146,7 @@
             // 
             // cmdShowFontAtlas
             // 
-            this.cmdShowFontAtlas.Location = new System.Drawing.Point(256, 326);
+            this.cmdShowFontAtlas.Location = new System.Drawing.Point(256, 363);
             this.cmdShowFontAtlas.Name = "cmdShowFontAtlas";
             this.cmdShowFontAtlas.Size = new System.Drawing.Size(111, 44);
             this.cmdShowFontAtlas.TabIndex = 13;
@@ -152,11 +154,29 @@
             this.cmdShowFontAtlas.UseVisualStyleBackColor = true;
             this.cmdShowFontAtlas.Click += new System.EventHandler(this.cmdShowFontAtlas_Click);
             // 
+            // txtProjectDir
+            // 
+            this.txtProjectDir.Location = new System.Drawing.Point(12, 22);
+            this.txtProjectDir.Name = "txtProjectDir";
+            this.txtProjectDir.Size = new System.Drawing.Size(340, 20);
+            this.txtProjectDir.TabIndex = 14;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 3);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(56, 13);
+            this.label1.TabIndex = 15;
+            this.label1.Text = "ProjectDir:";
+            // 
             // FormBitmapAtlasBuilder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1248, 768);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.txtProjectDir);
             this.Controls.Add(this.cmdShowFontAtlas);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.listBox3);
@@ -192,5 +212,7 @@
         private System.Windows.Forms.ListBox listBox3;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button cmdShowFontAtlas;
+        private System.Windows.Forms.TextBox txtProjectDir;
+        private System.Windows.Forms.Label label1;
     }
 }
