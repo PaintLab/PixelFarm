@@ -1,9 +1,9 @@
-//AUTOGEN, 2020-04-16T21:33:09
+//AUTOGEN, 2020-04-16T21:45:24
 //source: D:\projects\PixelFarm\src\x_resource_projects\TestAtlas1\TestAtlas1.csproj
 //tools: D:\projects\PixelFarm\src\Tools\BitmapAtlasTool\bin\Debug\BitmapAtlasTool.exe
 using PixelFarm.Drawing;
 namespace Atlas_AUTOGEN_.TestAtlas1{
-public partial class BitmapAtlas{
+public partial class Binders{
 public readonly AtlasImageBinder _arrow_blank_png=new AtlasImageBinder(RawAtlasData.NAME, "//arrow_blank.png");
 public readonly AtlasImageBinder _arrow_close_png=new AtlasImageBinder(RawAtlasData.NAME, "//arrow_close.png");
 public readonly AtlasImageBinder _arrow_open_png=new AtlasImageBinder(RawAtlasData.NAME, "//arrow_open.png");

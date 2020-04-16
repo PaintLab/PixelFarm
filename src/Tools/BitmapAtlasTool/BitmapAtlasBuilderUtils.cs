@@ -220,7 +220,7 @@ namespace Mini
 
                 outputFile.AppendLine("namespace " + atlasProj.CsSourceNamespace + "{");
 
-                outputFile.AppendLine("public partial class BitmapAtlas{");
+                outputFile.AppendLine("public partial class Binders{");
 
                 foreach (string url in imgUrlDic.Keys)
                 {
