@@ -78,6 +78,11 @@ namespace Mini
                             {
                                 atlasItemFile.Link = linkNode.InnerText;
                             }
+                            else
+                            {
+                                //no link node, use include
+                                atlasItemFile.Link = include;
+                            }
                             Items.Add(atlasItemFile);
                         }
                         break;
@@ -102,6 +107,11 @@ namespace Mini
                             if (content.SelectSingleNode(ns + "Link", nsmgr) is XmlElement linkNode)
                             {
                                 atlasItemFile.Link = linkNode.InnerText;
+                            }
+                            else
+                            {
+                                //no link node, use include
+                                atlasItemFile.Link = include;
                             }
                             Items.Add(atlasItemFile);
                         }

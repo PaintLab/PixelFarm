@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using LayoutFarm;
+
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.BitmapAtlas;
 using Typography.OpenFont;
@@ -14,29 +14,99 @@ namespace Mini
     public partial class FormBitmapAtlasBuilder : Form
     {
 
-        string _srcDir = "../../../../x_resource_projects";
-        string _output_Dir = "";
+        string _atlasProjectsDir = "../../../../x_resource_projects";
+
+
+        class ProjectDirHistoryMx
+        {
+            string _projectDirHxFile = "latest_proj_dirs.txt";
+            public readonly Dictionary<string, bool> Dirs = new Dictionary<string, bool>();
+            public ProjectDirHistoryMx() { }
+            public void LoadHistory()
+            {
+                Dirs.Clear();
+                if (File.Exists(_projectDirHxFile))
+                {
+                    //read history
+                    string[] hxLines = File.ReadAllLines(_projectDirHxFile);
+                    foreach (string hx_line in hxLines)
+                    {
+                        string hx_line2 = hx_line.Trim();
+                        if (hx_line2.Length == 0) { continue; }
+                        //
+                        Dirs[hx_line2] = (Directory.Exists(hx_line2));
+                    }
+                }
+            }
+            public void AddHistoryAndSave(string dir)
+            {
+                Dirs[dir] = (Directory.Exists(dir));
+                //save to files
+                using (FileStream fs = new FileStream(_projectDirHxFile + ".tmp", FileMode.Create))
+                using (StreamWriter w = new StreamWriter(fs))
+                {
+                    foreach (string s in Dirs.Keys)
+                    {
+                        w.WriteLine(s);
+                    }
+                    w.Flush();
+                }
+                //
+                File.Move(_projectDirHxFile + ".tmp", _projectDirHxFile);
+            }
+
+        }
+
+        ProjectDirHistoryMx _projectDirHxMx = new ProjectDirHistoryMx();
+
         public FormBitmapAtlasBuilder()
         {
             InitializeComponent();
             listBox1.SelectedIndexChanged += ListBox1_SelectedIndexChanged;
             listBox2.SelectedIndexChanged += ListBox2_SelectedIndexChanged;
             lstProjectList.SelectedIndexChanged += LstProjectList_SelectedIndexChanged;
-
-            _srcDir = PathUtils.GetAbsolutePathRelativeTo(_srcDir, Directory.GetCurrentDirectory());
-            _output_Dir = _srcDir + "\\atlas_output";
-
-
             listBox3.SelectedIndexChanged += ListBox3_SelectedIndexChanged;
+
+            //default
+            _atlasProjectsDir = PathUtils.GetAbsolutePathRelativeTo(_atlasProjectsDir, Directory.GetCurrentDirectory());
+            _projectDirHxMx.LoadHistory();//***
+
+            if (_projectDirHxMx.Dirs.Count > 0)
+            {
+                //load into combo box
+                foreach (string dir in _projectDirHxMx.Dirs.Keys)
+                {
+                    cmbProjectDirs.Items.Add(dir);
+                    _atlasProjectsDir = dir;
+                }
+            }
+
+
+            cmbProjectDirs.Text = _atlasProjectsDir;
+            cmbProjectDirs.KeyDown += (s, e) =>
+            {
+                if (e.KeyCode == Keys.Enter)
+                {
+                    if (Directory.Exists(cmbProjectDirs.Text))
+                    {
+                        LoadAtlasProjects(cmbProjectDirs.Text);
+                        _projectDirHxMx.AddHistoryAndSave(cmbProjectDirs.Text);
+                    }
+                }
+            };
+            cmbProjectDirs.SelectedIndexChanged += (s, e) =>
+            {
+                LoadAtlasProjects(cmbProjectDirs.Text);
+            };
+
 #if DEBUG
-            if (!Directory.Exists(_srcDir))
+            if (!Directory.Exists(_atlasProjectsDir))
             {
 
             }
 #endif
-
-
         }
+
 
         private void ListBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -104,11 +174,12 @@ namespace Mini
 
         }
 
-
-        private void FormTestBitmapAtlas_Load(object sender, EventArgs e)
+        void LoadAtlasProjects(string projDir)
         {
-            //load project list from specific folder
-            string[] project_dirs = Directory.GetDirectories(_srcDir);
+            if (!Directory.Exists(projDir)) { return; }
+
+            _atlasProjectsDir = projDir;
+            string[] project_dirs = Directory.GetDirectories(projDir);
             lstProjectList.Items.Clear();
             foreach (string dir in project_dirs)
             {
@@ -116,11 +187,16 @@ namespace Mini
                 foreach (string cs_proj in Directory.GetFiles(dir, "*.csproj"))
                 {
                     //convert to absolute path relative to specific path
-                    string fullFilename = PathUtils.GetAbsolutePathRelativeTo(cs_proj, _srcDir);
+                    string fullFilename = PathUtils.GetAbsolutePathRelativeTo(cs_proj, projDir);
                     lstProjectList.Items.Add(new AtlasProject() { Filename = Path.GetFileName(cs_proj), FullFilename = cs_proj });
                 }
             }
+        }
 
+        private void FormTestBitmapAtlas_Load(object sender, EventArgs e)
+        {
+            //load project list from specific folder
+            LoadAtlasProjects(_atlasProjectsDir);
             //---------
             //load atlas output folder
 
@@ -217,7 +293,7 @@ namespace Mini
         {
             //testload bitmap atlas
             listBox3.Items.Clear();
-            string[] dirs = Directory.GetDirectories(_srcDir);
+            string[] dirs = Directory.GetDirectories(_atlasProjectsDir);
             foreach (string dir in dirs)
             {
                 //in this dir
