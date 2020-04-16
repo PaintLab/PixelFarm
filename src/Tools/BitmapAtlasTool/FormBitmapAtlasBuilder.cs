@@ -282,10 +282,10 @@ namespace Mini
         }
 
         private void button1_Click(object sender, EventArgs e)
-        {                          
+        {
             TestLoadBitmapAtlas2(
-                Atlas_AUTOGEN_.TestAtlas1.Resource.info,
-                Atlas_AUTOGEN_.TestAtlas1.Resource.img);
+                Atlas_AUTOGEN_.TestAtlas1.BitmapAtlas.info,
+                Atlas_AUTOGEN_.TestAtlas1.BitmapAtlas.img);
 
         }
         void TestLoadBitmapAtlas2(byte[] atlasInfo, byte[] atlasImg)

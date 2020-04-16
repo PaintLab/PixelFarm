@@ -158,8 +158,7 @@ namespace Mini
             //TODO: config this
             outputFile.AppendLine("namespace " + atlasProj.CsSourceNamespace + "{");
 
-            outputFile.AppendLine("public static class Resource{");
-
+            outputFile.AppendLine("public partial class BitmapAtlas{");
 
             outputFile.AppendLine("//img_links:");
             foreach (string url in imgUrlDic.Keys)
@@ -169,13 +168,25 @@ namespace Mini
             outputFile.AppendLine("");
 
 
+            outputFile.AppendLine("//items names");
+            foreach (string url in imgUrlDic.Keys)
+            {
+                string url2 = url.Replace("\\", "_");
+                url2 = url2.Replace("//", "_");
+                url2 = url2.Replace(".", "_");
+
+                outputFile.AppendLine("public const string " + url2 + "=\"" + url + "\";");
+            }
+
             StringBuilder info_sb = ReadBinaryAndConvertToHexArr(info);
 
             StringBuilder img_sb = ReadBinaryAndConvertToHexArr(img);
 
+            outputFile.AppendLine("//bitmap_atlas_info");
             outputFile.AppendLine("//" + info);
             outputFile.AppendLine("public static readonly byte[] info=" + info_sb.ToString() + ";");
 
+            outputFile.AppendLine("//bitmap_atlas_total_img");
             outputFile.AppendLine("//" + img);
             outputFile.AppendLine("public static readonly byte[] img=" + img_sb.ToString() + ";");
 
