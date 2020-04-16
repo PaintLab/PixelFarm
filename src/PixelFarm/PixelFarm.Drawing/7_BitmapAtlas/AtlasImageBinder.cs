@@ -24,8 +24,8 @@ namespace PixelFarm.Drawing
         public AtlasItem AtlasItem { get; set; }
 
         public TextureKind TextureKind { get; set; } //set by loadder
-        public object OwnerAtlas { get; set; }
 
+        public int LatestPainterId { get; set; } //temp fix***
     }
 
 }

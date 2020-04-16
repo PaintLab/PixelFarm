@@ -14,9 +14,11 @@ namespace PixelFarm.DrawingGL
         BitmapAtlasManager<GLBitmap> _atlasManager;
         string _lastestImgFile = null;
 
+        readonly int _painterId;
+        static int s_totalId;
         public GLBitmapAtlasPainter()
         {
-
+            _painterId = System.Threading.Interlocked.Increment(ref s_totalId);
         }
         public void SetBitmapAtlasManager(BitmapAtlasManager<GLBitmap> atlasManager)
         {
@@ -25,12 +27,12 @@ namespace PixelFarm.DrawingGL
         public void DrawImage(GLPainter glPainter, AtlasImageBinder atlasImgBinder, float left, float top)
         {
 
-            if (atlasImgBinder.OwnerAtlas != this)
+            if (atlasImgBinder.State == BinderState.Loaded && atlasImgBinder.OwnerAtlas != this)
             {
                 atlasImgBinder.State = BinderState.Unload;
-                atlasImgBinder.OwnerAtlas = this;
+                atlasImgBinder.LatestPainterId = _painterId;
             }
-            
+
 
             switch (atlasImgBinder.State)
             {
@@ -44,8 +46,8 @@ namespace PixelFarm.DrawingGL
                                new Rectangle(atlasItem.Left,
                                    atlasItem.Top,  //diff from font atlas***
                                    atlasItem.Width,
-                                   atlasItem.Height); 
-                            
+                                   atlasItem.Height);
+
                             switch (atlasImgBinder.TextureKind)
                             {
                                 default:
