@@ -700,9 +700,16 @@ namespace PixelFarm.DrawingGL
                 }
                 else
                 {
-
+                     
+#if XAMARIN
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, ((int)0x812D)); //ClampToBorder
+                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, ((int)0x812D)); //ClampToBorder
+#else
                     GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToBorder);
                     GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToBorder);
+#endif
+
+
                 }
             }
         }
@@ -1051,7 +1058,7 @@ namespace PixelFarm.DrawingGL
             {
                 System.Diagnostics.Debug.WriteLine(nameof(DrawSubImageWithMsdf) + ":not a bgra");
             }
-#endif            
+#endif
             _conv3x3TextureShader.SetBitmapSize(bmp.Width, bmp.Height);
             _conv3x3TextureShader.SetConvolutionKernel(kernel3x3);
             _conv3x3TextureShader.Render(bmp, left, top, bmp.Width, bmp.Height);

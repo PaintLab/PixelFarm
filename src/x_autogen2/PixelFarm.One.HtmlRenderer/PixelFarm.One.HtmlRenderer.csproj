@@ -1818,6 +1818,9 @@
     <Compile Include="..\..\PixelFarm\PaintLab.Color\ColorBlender\RGB.cs">
       <Link>PixelFarm\PaintLab.Color\ColorBlender\RGB.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.Color\ColorToolExtensions.cs">
+      <Link>PixelFarm\PaintLab.Color\ColorToolExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Color\KnownColors.cs">
       <Link>PixelFarm\PaintLab.Color\KnownColors.cs</Link>
     </Compile>

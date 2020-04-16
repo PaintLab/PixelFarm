@@ -52,18 +52,13 @@
       <Link>0_REF_Win32Utils\NativeWin32MemoryDc.cs</Link>
     </Compile>
     <Compile Include="0_Platform\FrameworkInitWinGDI.cs" />
-    <Compile Include="1_GraphicsViewAndBridges\GLControl.cs" />
+    <Compile Include="1_GraphicsViewAndBridges\GLESContext.cs" />
     <Compile Include="1_GraphicsViewAndBridges\GLControlFactory.cs" />
-    <Compile Include="1_GraphicsViewAndBridges\GraphicsViewRoot.cs" />
     <Compile Include="1_GraphicsViewAndBridges\IGLControl.cs" />
-    <Compile Include="1_GraphicsViewAndBridges\IGpuSurfaceViewport.cs" />
     <Compile Include="1_GraphicsViewAndBridges\WinGLControl.cs" />
     <Compile Include="4_GdiPlus\Conv.cs" />
     <Compile Include="4_GdiPlus\1_GdiPlusCanvasViewport.cs" />
-    <Compile Include="1_GraphicsViewAndBridges\AbstractTopWindowBridge.cs" />
-    <Compile Include="1_GraphicsViewAndBridges\AbstractTopWindowBridge_dbug.cs" />
     <Compile Include="4_GdiPlus\3_MyTopWindowBridgeGdiPlus.cs" />
-    <Compile Include="2_GLES\3_MyTopWindowBridgeOpenGL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -79,6 +74,7 @@
       <Name>MiniOpenTK_Net20</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="..\PixelFarm.Drawing.GdiPlus_SH\PixelFarm.Drawing.GdiPlus_SH.projitems" Label="Shared" />
   <Import Project="..\PaintLab.Platforms.SH\PaintLab.Platforms.SH.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

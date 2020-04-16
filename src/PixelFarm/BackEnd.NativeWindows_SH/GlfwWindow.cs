@@ -272,7 +272,8 @@ namespace PixelFarm.Forms
                 s_mainMsgWin.RenderDel?.Invoke();
 
                 /* Poll for and process events */
-                Glfw3.glfwPollEvents();
+                //Glfw3.glfwPollEvents();
+                Glfw3.glfwWaitEvents();
             }
             Glfw3.glfwTerminate();
         }
@@ -308,6 +309,7 @@ namespace PixelFarm.Forms
             _title = title;
             _winEventListener = eventListener;
             //
+
             SetGlfwWindowHandler(Glfw3.glfwCreateWindow(_width, _height, title, IntPtr.Zero, IntPtr.Zero));
             GlfwAppLoop.RegisterGlfwForm(this);
         }
@@ -387,6 +389,12 @@ namespace PixelFarm.Forms
 
         void SetGlfwWindowHandler(IntPtr glfwWindow)
         {
+#if DEBUG
+            if (glfwWindow == IntPtr.Zero)
+            {
+
+            }
+#endif
             _glfwWindow = glfwWindow;
             _nativeWindowPtr = glfwGetWin32Window(glfwWindow);
 

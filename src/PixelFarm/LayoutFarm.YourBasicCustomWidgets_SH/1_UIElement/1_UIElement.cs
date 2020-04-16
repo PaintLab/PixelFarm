@@ -430,6 +430,9 @@ namespace LayoutFarm.UI
         //-------------------------------------------------------
         //events ...
         bool _transparentAllMouseEvents; //TODO: review here
+        /// <summary>
+        /// transparent for all mouse event?
+        /// </summary>
         public bool TransparentForMouseEvents
         {
             get => _transparentAllMouseEvents;

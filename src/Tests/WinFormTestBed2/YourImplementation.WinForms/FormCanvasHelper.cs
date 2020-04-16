@@ -9,7 +9,7 @@ using LayoutFarm.UI.ForImplementator;
 namespace LayoutFarm.UI
 {
 
-    public static class FormCanvasHelper
+    static class FormCanvasHelper
     {
         static UIPlatformWinForm s_platform;
 
@@ -187,9 +187,7 @@ namespace LayoutFarm.UI
 
         }
     }
-}
-namespace LayoutFarm.UI
-{
+
 
     sealed class MyWinFormsControl : UserControl, IGpuOpenGLSurfaceView
     {
@@ -266,6 +264,22 @@ namespace LayoutFarm.UI
             _keyEventArgs.SetEventInfo((uint)e.KeyCode, e.Shift, e.Alt, e.Control, UIEventName.KeyUp);
             _topWindowBridge.HandleKeyUp(_keyEventArgs);
         }
+        protected override void OnMouseLeave(EventArgs e)
+        {
+            if (_topWindowBridge != null)
+            {
+                _topWindowBridge.HandleMouseLeaveFromViewport();
+            }
+            base.OnMouseLeave(e);
+        }
+        protected override void OnMouseEnter(EventArgs e)
+        {
+            if (_topWindowBridge != null)
+            {
+                _topWindowBridge.HandleMouseEnterToViewport();
+            }
+            base.OnMouseEnter(e);
+        }
         protected override void OnMouseDown(MouseEventArgs e)
         {
             if (_topWindowBridge != null)
@@ -324,19 +338,6 @@ namespace LayoutFarm.UI
         {
             if (_topWindowBridge != null)
             {
-                LayoutFarm.UI.UIMouseButtons buttons = UIMouseButtons.Left;
-                switch (e.Button)
-                {
-                    case MouseButtons.Left:
-                        buttons = UIMouseButtons.Left;
-                        break;
-                    case MouseButtons.Middle:
-                        buttons = UIMouseButtons.Middle;
-                        break;
-                    case MouseButtons.Right:
-                        buttons = UIMouseButtons.Right;
-                        break;
-                }
 
                 _mouseEventArgs.SetMouseWheelEventInfo(e.X, e.Y, e.Delta);
                 _topWindowBridge.HandleMouseWheel(_mouseEventArgs);

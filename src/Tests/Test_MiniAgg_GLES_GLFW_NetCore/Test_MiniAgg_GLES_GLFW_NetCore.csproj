@@ -1,0 +1,141 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\..\..\typography\typography.textbreak\textbreakertest\IcuSimpleTextFileDictionaryProvider.cs" Link="0_YourImplementation\IcuSimpleTextFileDictionaryProvider.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\de.txt" Link="brkitr\de.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\dictionaries\burmesedict.txt" Link="brkitr\dictionaries\burmesedict.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\dictionaries\cjdict.txt" Link="brkitr\dictionaries\cjdict.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\dictionaries\khmerdict.txt" Link="brkitr\dictionaries\khmerdict.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\dictionaries\laodict.txt" Link="brkitr\dictionaries\laodict.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\dictionaries\thaidict.txt" Link="brkitr\dictionaries\thaidict.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\el.txt" Link="brkitr\el.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\en.txt" Link="brkitr\en.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\en_US.txt" Link="brkitr\en_US.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\en_US_POSIX.txt" Link="brkitr\en_US_POSIX.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\es.txt" Link="brkitr\es.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\fr.txt" Link="brkitr\fr.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\it.txt" Link="brkitr\it.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\ja.txt" Link="brkitr\ja.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\pt.txt" Link="brkitr\pt.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\root.txt" Link="brkitr\root.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\ru.txt" Link="brkitr\ru.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\zh.txt" Link="brkitr\zh.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\..\typography\typography.textbreak\icu63\brkitr\zh_Hant.txt" Link="brkitr\zh_Hant.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Tools\dlls\angle\_x64\d3dcompiler_47.dll" Link="d3dcompiler_47.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Tools\dlls\angle\_x64\libEGL.dll" Link="libEGL.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Tools\dlls\angle\_x64\libGLESv2.dll" Link="libGLESv2.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\tools\dlls\angle\_x64\swiftshader\libegl.dll" Link="swiftshader\libegl.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\tools\dlls\angle\_x64\swiftshader\libglesv2.dll" Link="swiftshader\libglesv2.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Tools\dlls\glfw3.3\glfw3.dll" Link="glfw3.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Data\imgs\01.jpg" Link="Data\01.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Data\imgs\02.jpg" Link="Data\02.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Data\imgs\03.jpg" Link="Data\03.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Data\imgs\04.jpg" Link="Data\04.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Data\imgs\05.jpg" Link="Data\05.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Test_MiniAgg_GLES_Painting\Samples\lion.svg" Link="lion.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\PixelFarm\BackEnd.MiniOpenTK\src\Builds\Net20\MiniOpenTK_Net20\MiniOpenTK_Net20.csproj" />
+    <ProjectReference Include="..\..\PixelFarm\BackEnd.NativeWindows\BackEnd.NativeWindows.csproj" />
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.Platforms.Glfw\PaintLab.Platforms.Glfw.csproj" />
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.Svg.One\PaintLab.Svg.One.csproj" />
+    <ProjectReference Include="..\..\x_autogen2\PixelFarm.One.HtmlRenderer\PixelFarm.One.HtmlRenderer.csproj" />
+    <ProjectReference Include="..\TestSamples_Painting_Focus\TestSamples_Painting_Focus.csproj" />
+    <ProjectReference Include="..\TestSamples_RenderTreeFocus\TestSamples_RenderTreeFocus.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="0_YourImplementation\" />
+    <Folder Include="brkitr\dictionaries\" />
+    <Folder Include="Data\" />
+    <Folder Include="Fonts\" />
+    <Folder Include="swiftshader\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\..\Typography\Demo\Windows\TestFonts\SourceSansPro-Regular.ttf" Link="Fonts\SourceSansPro-Regular.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SkiaSharp" Version="1.68.1.1" />
+  </ItemGroup>
+
+</Project>

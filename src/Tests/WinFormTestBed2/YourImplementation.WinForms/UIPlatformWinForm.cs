@@ -1,11 +1,12 @@
 ﻿//Apache2, 2014-present, WinterDev
 
-
-using PixelFarm.CpuBlit;
-using PixelFarm.Drawing;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+
+using PixelFarm.CpuBlit;
+using PixelFarm.Drawing;
+
 namespace LayoutFarm.UI
 {
 
@@ -92,6 +93,7 @@ namespace LayoutFarm.UI
         static UIPlatformWinForm s_platform;
         //TODO: review how to adjust this value
         const int UI_MSG_TIMER_INTERVAL = 5;
+
         static UIPlatformWinForm()
         {
             //actual timer
@@ -120,15 +122,7 @@ namespace LayoutFarm.UI
             {
                 s_platform = this;
                 SetAsDefaultPlatform();
-
-                //PixelFarm.Drawing.Internal.UIMsgQueue.RegisterRunOnceImpl(runOnceDelegate =>
-                //{
-                //    UIPlatform.RegisterRunOnceTask(tt => runOnceDelegate());
-                //});
             }
-
-            //var installedTypefaces = new Typography.FontManagement.InstalledTypefaceCollection();
-
 
             try
             {
@@ -157,7 +151,11 @@ namespace LayoutFarm.UI
             //_gdiPlusIFonts = new PixelFarm.Drawing.WinGdi.Gdi32IFonts();
         }
 
-
+        public override Size GetPrimaryMonitorSize()
+        {
+            var prim_workingArea = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea;
+            return new Size(prim_workingArea.Width, prim_workingArea.Height);
+        }
         public override void ClearClipboardData()
         {
             System.Windows.Forms.Clipboard.Clear();

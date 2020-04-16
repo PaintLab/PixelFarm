@@ -160,10 +160,6 @@ namespace LayoutFarm.UI
         {
             //System.Windows.Forms.Cursor.Hide();
         }
-        public void HandleMouseLeaveFromViewport()
-        {
-            //System.Windows.Forms.Cursor.Show();
-        }
 
         public void HandleGotFocus(EventArgs e)
         {
@@ -213,6 +209,13 @@ namespace LayoutFarm.UI
         public void HandleMouseMove(PrimaryMouseEventArgs mouseEventArgs)
         {
             _topWinEventRoot.RootMouseMove(mouseEventArgs);
+            UpdateCursor();
+            PrepareRenderAndFlushAccumGraphics();
+        }
+        public void HandleMouseLeaveFromViewport()
+        {
+            //move leave from viewport
+            _topWinEventRoot.RootMouseLeave();
             UpdateCursor();
             PrepareRenderAndFlushAccumGraphics();
         }

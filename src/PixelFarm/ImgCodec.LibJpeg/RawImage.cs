@@ -5,53 +5,26 @@ namespace BitMiracle.LibJpeg
 {
     class RawImage : IRawImage
     {
-        private List<SampleRow> m_samples;
-        private Colorspace m_colorspace;
+        List<SampleRow> _samples;
+        Colorspace _colorspace;
 
-        private int m_currentRow = -1;
-
+        int m_currentRow = -1;
         internal RawImage(List<SampleRow> samples, Colorspace colorspace)
         {
             Debug.Assert(samples != null);
             Debug.Assert(samples.Count > 0);
-            Debug.Assert(colorspace != Colorspace.Unknown);
-
-            m_samples = samples;
-            m_colorspace = colorspace;
+            Debug.Assert(colorspace != Colorspace.Unknown); 
+            _samples = samples;
+            _colorspace = colorspace;
         }
 
-        public int Width
-        {
-            get
-            {
-                return m_samples[0].Length;
-            }
-        }
+        public int Width => _samples[0].Length;
 
-        public int Height
-        {
-            get
-            {
-                return m_samples.Count;
-            }
-        }
+        public int Height => _samples.Count;
 
-        public Colorspace Colorspace
-        {
-            get
-            {
-                return m_colorspace;
-            }
-        }
+        public Colorspace Colorspace => _colorspace;
 
-        public int ComponentsPerPixel
-        {
-            get
-            {
-                return m_samples[0].ComponentsPerSample;
-                //return m_samples[0][0].ComponentCount;
-            }
-        }
+        public int ComponentsPerPixel => _samples[0].ComponentsPerSample;
 
         public void BeginRead()
         {
@@ -60,7 +33,7 @@ namespace BitMiracle.LibJpeg
 
         public byte[] GetPixelRow()
         {
-            SampleRow row = m_samples[m_currentRow];
+            SampleRow row = _samples[m_currentRow];
             List<byte> result = new List<byte>();
             for (int i = 0; i < row.Length; ++i)
             {

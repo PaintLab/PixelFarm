@@ -13,7 +13,7 @@ namespace LayoutFarm.UI
         void RootMouseUp(PrimaryMouseEventArgs mouseEventArgs);
         void RootMouseWheel(PrimaryMouseEventArgs mouseEventArgs);
         void RootMouseMove(PrimaryMouseEventArgs mouseEventArgs);
-
+        void RootMouseLeave();
         //---------------
         void RootGotFocus(UIFocusEventArgs e);
         void RootLostFocus(UIFocusEventArgs e);

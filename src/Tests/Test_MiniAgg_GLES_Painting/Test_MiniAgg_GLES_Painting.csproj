@@ -89,12 +89,6 @@
     <Compile Include="FormImgResampling.Designer.cs">
       <DependentUpon>FormImgResampling.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormTestBitmapAtlas.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormTestBitmapAtlas.Designer.cs">
-      <DependentUpon>FormTestBitmapAtlas.cs</DependentUpon>
-    </Compile>
     <Compile Include="FormTestMsdfGen.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -119,9 +113,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormImgResampling.resx">
       <DependentUpon>FormImgResampling.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormTestBitmapAtlas.resx">
-      <DependentUpon>FormTestBitmapAtlas.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormTestMsdfGen.resx">
       <DependentUpon>FormTestMsdfGen.cs</DependentUpon>

@@ -96,11 +96,12 @@ namespace LayoutFarm.UI
         public GLPainterCore GLPainterCore() => _pcx;
         PixelFarm.Drawing.DrawBoard CreateSoftwareDrawBoard(int width, int height, InnerViewportKind innerViewportKind)
         {
+            //TODO: use Agg 
+            return null;
+            //PixelFarm.Drawing.WinGdi.GdiPlusRenderSurface gdiRenderSurface = new PixelFarm.Drawing.WinGdi.GdiPlusRenderSurface(width, height);
+            //var drawBoard = new PixelFarm.Drawing.WinGdi.GdiPlusDrawBoard(gdiRenderSurface);
 
-            PixelFarm.Drawing.WinGdi.GdiPlusRenderSurface gdiRenderSurface = new PixelFarm.Drawing.WinGdi.GdiPlusRenderSurface(width, height);
-            var drawBoard = new PixelFarm.Drawing.WinGdi.GdiPlusDrawBoard(gdiRenderSurface);
-
-            return drawBoard;
+            //return drawBoard;
         }
 
         public void InitRootGraphics(RootGraphic rootgfx,
