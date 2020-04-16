@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using PixelFarm.Platforms;
 
 namespace PixelFarm.CpuBlit.BitmapAtlas
@@ -73,6 +74,30 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
             _loadAtlases = new BitmapCache<SimpleBitmapAtlas, B>(_createNewDel);
         }
 
+        public void RegisterBitmapAtlas(string atlasName, byte[] atlasInfoBuffer, byte[] totalImgBuffer)
+        {
+            //direct register atlas
+            //instead of loading it from file
+            if (!_createdAtlases.ContainsKey(atlasName))
+            {
+                SimpleBitmapAtlasBuilder atlasBuilder = new SimpleBitmapAtlasBuilder();
+                using (System.IO.Stream fontAtlasTextureInfo = new MemoryStream(atlasInfoBuffer))
+                using (System.IO.Stream fontImgStream = new MemoryStream(totalImgBuffer))
+                {
+                    try
+                    {
+                        List<SimpleBitmapAtlas> atlasList = atlasBuilder.LoadAtlasInfo(fontAtlasTextureInfo);
+                        SimpleBitmapAtlas foundAtlas = atlasList[0];
+                        foundAtlas.SetMainBitmap(MemBitmap.LoadBitmap(fontImgStream), true);
+                        _createdAtlases.Add(atlasName, foundAtlas);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
+                }
+            }
+        }
 #if DEBUG
         System.Diagnostics.Stopwatch _dbugStopWatch = new System.Diagnostics.Stopwatch();
 #endif 
@@ -101,12 +126,12 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
                     StorageService.Provider.DataExists(textureImgFilename))
                 {
                     SimpleBitmapAtlasBuilder atlasBuilder = new SimpleBitmapAtlasBuilder();
-                    using (System.IO.Stream dataStream = StorageService.Provider.ReadDataStream(textureInfoFile))
+                    using (System.IO.Stream fontAtlasTextureInfo = StorageService.Provider.ReadDataStream(textureInfoFile))
                     using (System.IO.Stream fontImgStream = StorageService.Provider.ReadDataStream(textureImgFilename))
                     {
                         try
                         {
-                            List<SimpleBitmapAtlas> atlasList = atlasBuilder.LoadAtlasInfo(dataStream);
+                            List<SimpleBitmapAtlas> atlasList = atlasBuilder.LoadAtlasInfo(fontAtlasTextureInfo);
                             foundAtlas = atlasList[0];
                             foundAtlas.SetMainBitmap(MemBitmap.LoadBitmap(fontImgStream), true);
                             _createdAtlases.Add(atlasName, foundAtlas);
