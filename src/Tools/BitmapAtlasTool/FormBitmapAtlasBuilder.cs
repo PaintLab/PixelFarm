@@ -51,7 +51,11 @@ namespace Mini
                     }
                     w.Flush();
                 }
-                //
+
+                if (File.Exists(_projectDirHxFile))
+                {
+                    File.Delete(_projectDirHxFile);
+                }
                 File.Move(_projectDirHxFile + ".tmp", _projectDirHxFile);
             }
 
@@ -360,8 +364,8 @@ namespace Mini
         private void button1_Click(object sender, EventArgs e)
         {
             TestLoadBitmapAtlas2(
-                Atlas_AUTOGEN_.TestAtlas1.BitmapAtlas.info,
-                Atlas_AUTOGEN_.TestAtlas1.BitmapAtlas.img);
+                Atlas_AUTOGEN_.TestAtlas1.RawAtlasData.info,
+                Atlas_AUTOGEN_.TestAtlas1.RawAtlasData.img);
 
         }
         void TestLoadBitmapAtlas2(byte[] atlasInfo, byte[] atlasImg)

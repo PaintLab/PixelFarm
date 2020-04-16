@@ -16,7 +16,7 @@ namespace PixelFarm.DrawingGL
 
         public GLBitmapAtlasPainter()
         {
-            
+
         }
         public void SetBitmapAtlasManager(BitmapAtlasManager<GLBitmap> atlasManager)
         {
@@ -24,10 +24,19 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawImage(GLPainter glPainter, AtlasImageBinder atlasImgBinder, float left, float top)
         {
+
+            if (atlasImgBinder.OwnerAtlas != this)
+            {
+                atlasImgBinder.State = BinderState.Unload;
+                atlasImgBinder.OwnerAtlas = this;
+            }
+            
+
             switch (atlasImgBinder.State)
             {
                 case BinderState.Loaded:
                     {
+
                         if (PixelFarm.Drawing.ImageBinder.GetCacheInnerImage(atlasImgBinder) is GLBitmap glbmp)
                         {
                             AtlasItem atlasItem = atlasImgBinder.AtlasItem;
@@ -35,10 +44,9 @@ namespace PixelFarm.DrawingGL
                                new Rectangle(atlasItem.Left,
                                    atlasItem.Top,  //diff from font atlas***
                                    atlasItem.Width,
-                                   atlasItem.Height);
-
-                            TextureKind textureKind = _bmpAtlas.TextureKind;
-                            switch (textureKind)
+                                   atlasItem.Height); 
+                            
+                            switch (atlasImgBinder.TextureKind)
                             {
                                 default:
                                 case TextureKind.Msdf:
@@ -46,10 +54,10 @@ namespace PixelFarm.DrawingGL
                                 case TextureKind.Bitmap:
                                     {
                                         atlasImgBinder.State = BinderState.Loaded;
-                                        ImageBinder.SetCacheInnerImage(atlasImgBinder, _glBmp, false);
+                                        ImageBinder.SetCacheInnerImage(atlasImgBinder, glbmp, false);
 
                                         atlasImgBinder.AtlasItem = atlasItem;
-                                        glPainter.Core.DrawSubImage(_glBmp,
+                                        glPainter.Core.DrawSubImage(glbmp,
                                             srcRect,
                                             left,
                                             top);
@@ -61,8 +69,9 @@ namespace PixelFarm.DrawingGL
                     break;
                 case BinderState.Unload:
                     {
+                        atlasImgBinder.OwnerAtlas = this;
                         //load img first
-                        if (_lastestImgFile != atlasImgBinder.AtlasName)
+                        if (_bmpAtlas == null || _lastestImgFile != atlasImgBinder.AtlasName)
                         {
                             _bmpAtlas = _atlasManager.GetBitmapAtlas(atlasImgBinder.AtlasName, out _glBmp);
                             if (_bmpAtlas == null)
@@ -97,7 +106,7 @@ namespace PixelFarm.DrawingGL
                                         atlasImgBinder.AtlasItem = atlasItem;
                                         atlasImgBinder.SetPreviewImageSize(atlasItem.Width, atlasItem.Height);
                                         atlasImgBinder.RaiseImageChanged();
-
+                                        atlasImgBinder.TextureKind = textureKind;
                                         glPainter.Core.DrawSubImage(_glBmp,
                                             srcRect,
                                             left,
