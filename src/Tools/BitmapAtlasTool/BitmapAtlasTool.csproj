@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{11557D2E-9404-4C55-B12A-0D43D5BB7813}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>BitmapAtlasTool</RootNamespace>
+    <AssemblyName>BitmapAtlasTool</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\..\Typography\Demo\Windows\PixelFarmSample.WinForms\FontAtlasBuilderHelper.cs">
+      <Link>FontAtlasBuilderHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Demo\Windows\PixelFarmSample.WinForms\FormFontAtlas.cs">
+      <Link>FormFontAtlas.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Demo\Windows\PixelFarmSample.WinForms\FormFontAtlas.Designer.cs">
+      <Link>FormFontAtlas.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Demo\Windows\PixelFarmSample.WinForms\SimpleUtils.cs">
+      <Link>SimpleUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Demo\Windows\PixelFarmSample.WinForms\UIFontAtlasFileViewer.cs">
+      <Link>UIFontAtlasFileViewer.cs</Link>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Demo\Windows\PixelFarmSample.WinForms\UIFontAtlasFileViewer.Designer.cs">
+      <Link>UIFontAtlasFileViewer.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Demo\Windows\PixelFarmSample.WinForms\UIFontScriptOpt.cs">
+      <Link>UIFontScriptOpt.cs</Link>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Demo\Windows\PixelFarmSample.WinForms\UIFontScriptOpt.Designer.cs">
+      <Link>UIFontScriptOpt.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\x_resource_projects\TestAtlas1\x_TestAtlas1_Atlas_AUTOGEN.cs">
+      <Link>x_TestAtlas1_Atlas_AUTOGEN.cs</Link>
+    </Compile>
+    <Compile Include="BitmapAtlasBuilderUtils.cs" />
+    <Compile Include="AtlasProject.cs" />
+    <Compile Include="FontBuilderConfig.cs" />
+    <Compile Include="FormBitmapAtlasBuilder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormBitmapAtlasBuilder.Designer.cs">
+      <DependentUpon>FormBitmapAtlasBuilder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PathUtils.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="..\..\..\..\Typography\Demo\Windows\PixelFarmSample.WinForms\FormFontAtlas.resx">
+      <Link>FormFontAtlas.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Typography\Demo\Windows\PixelFarmSample.WinForms\UIFontAtlasFileViewer.resx">
+      <Link>UIFontAtlasFileViewer.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\..\Typography\Demo\Windows\PixelFarmSample.WinForms\UIFontScriptOpt.resx">
+      <Link>UIFontScriptOpt.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormBitmapAtlasBuilder.resx">
+      <DependentUpon>FormBitmapAtlasBuilder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.Platforms.Win32\PaintLab.Platforms.Win32.csproj">
+      <Project>{e5f2b317-2205-4727-92c4-6190a2fa3ddc}</Project>
+      <Name>PaintLab.Platforms.Win32</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\x_autogen2\PixelFarm.One.HtmlRenderer\PixelFarm.One.HtmlRenderer.csproj">
+      <Project>{662f2274-d6f8-413a-a908-1b2f10c01348}</Project>
+      <Name>PixelFarm.One.HtmlRenderer</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

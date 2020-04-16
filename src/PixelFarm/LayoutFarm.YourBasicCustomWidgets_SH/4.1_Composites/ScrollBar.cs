@@ -6,8 +6,6 @@ using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
 
-
-
     public static class UIThemeConfig
     {
         public static ScrollBar.ScrollBarSettings s_defaultScrollBarSettings = new ScrollBar.ScrollBarSettings();//default scr

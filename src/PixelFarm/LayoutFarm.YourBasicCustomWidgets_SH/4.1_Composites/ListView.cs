@@ -253,7 +253,7 @@ namespace LayoutFarm.CustomWidgets
         Color _backColor;
         RequestFont _font;
 
-        Color _normalStateColor; //TODO: add themeed
+        Color _normalStateColor; //TODO: add theme
         public ListItem(int width, int height)
             : base(width, height)
         {

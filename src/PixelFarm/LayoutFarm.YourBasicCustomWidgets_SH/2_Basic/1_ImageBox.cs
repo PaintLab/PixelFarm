@@ -28,6 +28,7 @@ namespace LayoutFarm.CustomWidgets
             get => _imageBinder;
             set
             {
+                
                 if (_imageBinder != null)
                 {
                     //remove prev sub
@@ -91,7 +92,7 @@ namespace LayoutFarm.CustomWidgets
         }
         protected override void OnContentUpdate()
         {
-            if (_imageBinder.State == BinderState.Loaded)
+            if (_imageBinder != null && _imageBinder.State == BinderState.Loaded)
             {
                 SetProperSize();
                 this.ParentUI?.NotifyContentUpdate(this);
@@ -117,6 +118,7 @@ namespace LayoutFarm.CustomWidgets
         void SetProperSize()
         {
             //auto scale image
+            if (_imageBinder == null) return;
 
             if (this.HasSpecificWidthAndHeight)
             {

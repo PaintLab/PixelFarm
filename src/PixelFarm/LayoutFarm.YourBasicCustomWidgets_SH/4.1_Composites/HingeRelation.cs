@@ -19,10 +19,10 @@ namespace LayoutFarm.CustomWidgets
         {
 
         }
-        
+
         public AbstractRectUI LandPart { get; set; }
-        public AbstractRectUI FloatPart { get; set; } 
-        public bool IsOpen => _isOpen; 
+        public AbstractRectUI FloatPart { get; set; }
+        public bool IsOpen => _isOpen;
         public void ToggleOpenOrClose()
         {
             if (_isOpen)
@@ -40,7 +40,8 @@ namespace LayoutFarm.CustomWidgets
             _isOpen = true;
             //-----------------------------------
             if (LandPart == null) return;
-            if (FloatPart == null) return;
+            if (FloatPart == null) return;//may be null
+
             switch (FloatPartStyle)
             {
                 default:
@@ -87,7 +88,7 @@ namespace LayoutFarm.CustomWidgets
                             if (topRenderBox != null)
                             {
                                 topRenderBox.RemoveChild(_floatPartRenderElement);
-                            }                             
+                            }
                         }
                     }
                     break;
