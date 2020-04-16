@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{11557D2E-9404-4C55-B12A-0D43D5BB7813}</ProjectGuid>
+    <ProjectGuid>{E6A0BB9E-5B9B-449B-B844-3019FF51826B}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>BitmapAtlasTool</RootNamespace>
-    <AssemblyName>BitmapAtlasTool</AssemblyName>
+    <AssemblyName>PaintLabResTool</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
