@@ -207,7 +207,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestAtlas1", "x_resource_pr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestFontAtlas", "x_resource_projects\TestFontAtlas\TestFontAtlas.csproj", "{BCB55CF7-08DC-4410-BDBE-CB3DA976BF6A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitmapAtlasTool", "Tools\PaintLabResTool\BitmapAtlasTool.csproj", "{11557D2E-9404-4C55-B12A-0D43D5BB7813}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaintLabResTool", "Tools\PaintLabResTool\PaintLabResTool.csproj", "{11557D2E-9404-4C55-B12A-0D43D5BB7813}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
