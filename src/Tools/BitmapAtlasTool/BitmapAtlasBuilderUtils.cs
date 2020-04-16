@@ -160,6 +160,8 @@ namespace Mini
 
             outputFile.AppendLine("public partial class BitmapAtlas{");
 
+            outputFile.AppendLine("public const string NAME=\"" + onlyFilename + "\";");
+
             outputFile.AppendLine("//img_links:");
             foreach (string url in imgUrlDic.Keys)
             {
