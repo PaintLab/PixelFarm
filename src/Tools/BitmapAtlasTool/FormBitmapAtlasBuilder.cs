@@ -16,35 +16,87 @@ namespace Mini
 
         string _atlasProjectsDir = "../../../../x_resource_projects";
 
+
+        class ProjectDirHistoryMx
+        {
+            string _projectDirHxFile = "latest_proj_dirs.txt";
+            public readonly Dictionary<string, bool> Dirs = new Dictionary<string, bool>();
+            public ProjectDirHistoryMx() { }
+            public void LoadHistory()
+            {
+                Dirs.Clear();
+                if (File.Exists(_projectDirHxFile))
+                {
+                    //read history
+                    string[] hxLines = File.ReadAllLines(_projectDirHxFile);
+                    foreach (string hx_line in hxLines)
+                    {
+                        string hx_line2 = hx_line.Trim();
+                        if (hx_line2.Length == 0) { continue; }
+                        //
+                        Dirs[hx_line2] = (Directory.Exists(hx_line2));
+                    }
+                }
+            }
+            public void AddHistoryAndSave(string dir)
+            {
+                Dirs[dir] = (Directory.Exists(dir));
+                //save to files
+                using (FileStream fs = new FileStream(_projectDirHxFile + ".tmp", FileMode.Create))
+                using (StreamWriter w = new StreamWriter(fs))
+                {
+                    foreach (string s in Dirs.Keys)
+                    {
+                        w.WriteLine(s);
+                    }
+                    w.Flush();
+                }
+                //
+                File.Move(_projectDirHxFile + ".tmp", _projectDirHxFile);
+            }
+
+        }
+
+        ProjectDirHistoryMx _projectDirHxMx = new ProjectDirHistoryMx();
+
         public FormBitmapAtlasBuilder()
         {
             InitializeComponent();
             listBox1.SelectedIndexChanged += ListBox1_SelectedIndexChanged;
             listBox2.SelectedIndexChanged += ListBox2_SelectedIndexChanged;
             lstProjectList.SelectedIndexChanged += LstProjectList_SelectedIndexChanged;
+            listBox3.SelectedIndexChanged += ListBox3_SelectedIndexChanged;
 
-
+            //default
             _atlasProjectsDir = PathUtils.GetAbsolutePathRelativeTo(_atlasProjectsDir, Directory.GetCurrentDirectory());
-            string latest_proj_dir_user_file = "latest_proj_dir.txt";
-            if (File.Exists(latest_proj_dir_user_file))
+            _projectDirHxMx.LoadHistory();//***
+
+            if (_projectDirHxMx.Dirs.Count > 0)
             {
-                //read
-                string latest_proj_dir = File.ReadAllText(latest_proj_dir_user_file);
-                if (Directory.Exists(latest_proj_dir))
+                //load into combo box
+                foreach (string dir in _projectDirHxMx.Dirs.Keys)
                 {
-                    //use this
-                    _atlasProjectsDir = latest_proj_dir;
+                    cmbProjectDirs.Items.Add(dir);
+                    _atlasProjectsDir = dir;
                 }
             }
 
-            listBox3.SelectedIndexChanged += ListBox3_SelectedIndexChanged;
-            txtProjectDir.Text = _atlasProjectsDir;
-            txtProjectDir.KeyDown += (s, e) =>
-            {
-                LoadAtlasProjects(txtProjectDir.Text);
 
-                //save latest project dir to local
-                File.WriteAllText("latest_proj_dir.txt", txtProjectDir.Text);
+            cmbProjectDirs.Text = _atlasProjectsDir;
+            cmbProjectDirs.KeyDown += (s, e) =>
+            {
+                if (e.KeyCode == Keys.Enter)
+                {
+                    if (Directory.Exists(cmbProjectDirs.Text))
+                    {
+                        LoadAtlasProjects(cmbProjectDirs.Text);
+                        _projectDirHxMx.AddHistoryAndSave(cmbProjectDirs.Text);
+                    }
+                }
+            };
+            cmbProjectDirs.SelectedIndexChanged += (s, e) =>
+            {
+                LoadAtlasProjects(cmbProjectDirs.Text);
             };
 
 #if DEBUG
@@ -54,6 +106,7 @@ namespace Mini
             }
 #endif
         }
+
 
         private void ListBox3_SelectedIndexChanged(object sender, EventArgs e)
         {

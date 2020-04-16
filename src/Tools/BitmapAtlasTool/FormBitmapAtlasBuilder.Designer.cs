@@ -40,8 +40,8 @@
             this.listBox3 = new System.Windows.Forms.ListBox();
             this.button1 = new System.Windows.Forms.Button();
             this.cmdShowFontAtlas = new System.Windows.Forms.Button();
-            this.txtProjectDir = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.cmbProjectDirs = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -154,13 +154,6 @@
             this.cmdShowFontAtlas.UseVisualStyleBackColor = true;
             this.cmdShowFontAtlas.Click += new System.EventHandler(this.cmdShowFontAtlas_Click);
             // 
-            // txtProjectDir
-            // 
-            this.txtProjectDir.Location = new System.Drawing.Point(12, 22);
-            this.txtProjectDir.Name = "txtProjectDir";
-            this.txtProjectDir.Size = new System.Drawing.Size(340, 20);
-            this.txtProjectDir.TabIndex = 14;
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -170,13 +163,21 @@
             this.label1.TabIndex = 15;
             this.label1.Text = "ProjectDir:";
             // 
+            // cmbProjectDirs
+            // 
+            this.cmbProjectDirs.FormattingEnabled = true;
+            this.cmbProjectDirs.Location = new System.Drawing.Point(12, 19);
+            this.cmbProjectDirs.Name = "cmbProjectDirs";
+            this.cmbProjectDirs.Size = new System.Drawing.Size(316, 21);
+            this.cmbProjectDirs.TabIndex = 16;
+            // 
             // FormBitmapAtlasBuilder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1248, 768);
+            this.Controls.Add(this.cmbProjectDirs);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.txtProjectDir);
             this.Controls.Add(this.cmdShowFontAtlas);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.listBox3);
@@ -212,7 +213,7 @@
         private System.Windows.Forms.ListBox listBox3;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button cmdShowFontAtlas;
-        private System.Windows.Forms.TextBox txtProjectDir;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox cmbProjectDirs;
     }
 }
