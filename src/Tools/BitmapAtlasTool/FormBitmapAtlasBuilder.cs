@@ -146,17 +146,26 @@ namespace Mini
                 return membmp;
             }
         }
-        private void cmdBuildBmpAtlas_Click(object sender, EventArgs e)
+        private void cmdBuildAtlas_Click(object sender, EventArgs e)
         {
             //build current project 
             _latestAtlasProjSuccess = false;
-            AtlasBuilderUtils.BuildBitmapAtlas(_currentAtlasProj, LoadBmp);
-            txtOutput.Text = "finish";
-            _latestAtlasProjSuccess = true;
 
-            //test load the atlas on right side
-            TestLoadBitmapAtlas(_currentAtlasProj.OutputFilename);
+            if (_currentAtlasProj.IsBitmapAtlasProject)
+            {
+                BitmapAtlasBuilderUtils.BuildBitmapAtlas(_currentAtlasProj, LoadBmp);
+                txtOutput.Text += "build bitmap-atlas=> finish\r\n";
+                _latestAtlasProjSuccess = true;
+                //test load the atlas on right side
+                TestLoadBitmapAtlas(_currentAtlasProj.OutputFilename);
+            }
 
+            if (_currentAtlasProj.IsFontAtlasProject)
+            {
+                //build font atlas
+                FontAtlasBuilderUtils.BuildFontAtlas(_currentAtlasProj);
+                txtOutput.Text += "build bitmap-atlas=> finish\r\n";
+            }
         }
         //------------
         SimpleBitmapAtlasBuilder _bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
@@ -246,9 +255,12 @@ namespace Mini
                     new Rectangle(bmpMapData.Left, bmpMapData.Top, bmpMapData.Width, bmpMapData.Height));
 
                 //example
-                MemBitmap itemImg = _totalAtlasImg.CopyImgBuffer(bmpMapData.Left, bmpMapData.Top, bmpMapData.Width, bmpMapData.Height);
+                int[] buffer = null;
+                using (MemBitmap itemImg = _totalAtlasImg.CopyImgBuffer(bmpMapData.Left, bmpMapData.Top, bmpMapData.Width, bmpMapData.Height))
+                {
+                    buffer = MemBitmap.CopyImgBuffer(itemImg);
+                }
                 //convert from membitmap to bmp
-                int[] buffer = MemBitmap.CopyImgBuffer(itemImg);
 
                 System.Drawing.Bitmap test = new Bitmap(bmpMapData.Width, bmpMapData.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                 var bmp_data = test.LockBits(new Rectangle(0, 0, bmpMapData.Width, bmpMapData.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, test.PixelFormat);

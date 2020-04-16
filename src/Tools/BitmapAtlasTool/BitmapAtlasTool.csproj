@@ -39,12 +39,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\Typography\Demo\Windows\PixelFarmSample.WinForms\FontAtlasBuilderHelper.cs">
+      <Link>FontAtlasBuilderHelper.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\..\Typography\Demo\Windows\PixelFarmSample.WinForms\FormFontAtlas.cs">
       <Link>FormFontAtlas.cs</Link>
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\..\..\Typography\Demo\Windows\PixelFarmSample.WinForms\FormFontAtlas.Designer.cs">
       <Link>FormFontAtlas.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Demo\Windows\PixelFarmSample.WinForms\SimpleUtils.cs">
+      <Link>SimpleUtils.cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\Typography\Demo\Windows\PixelFarmSample.WinForms\UIFontAtlasFileViewer.cs">
       <Link>UIFontAtlasFileViewer.cs</Link>
@@ -60,13 +66,10 @@
     <Compile Include="..\..\..\..\Typography\Demo\Windows\PixelFarmSample.WinForms\UIFontScriptOpt.Designer.cs">
       <Link>UIFontScriptOpt.Designer.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\Typography\Demo\Windows\PixelFarmSample.WinForms\Utils.cs">
-      <Link>Utils.cs</Link>
-    </Compile>
     <Compile Include="..\..\x_resource_projects\TestAtlas1\TestAtlas1_Atlas_AUTOGEN.cs">
       <Link>TestAtlas1_Atlas_AUTOGEN.cs</Link>
     </Compile>
-    <Compile Include="AtlasBuilderUtils.cs" />
+    <Compile Include="BitmapAtlasBuilderUtils.cs" />
     <Compile Include="AtlasProject.cs" />
     <Compile Include="FontBuilderConfig.cs" />
     <Compile Include="FormBitmapAtlasBuilder.cs">

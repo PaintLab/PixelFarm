@@ -3,13 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.BitmapAtlas;
+using PixelFarm.Drawing;
+using SampleWinForms;
 
 namespace Mini
 {
-    static class AtlasBuilderUtils
+    static class BitmapAtlasBuilderUtils
     {
         public static void BuildBitmapAtlas(AtlasProject atlasProj, Func<string, MemBitmap> imgLoader, bool test_extract = false)
         {
@@ -169,5 +170,53 @@ namespace Mini
             File.WriteAllText(atlasProj.OutputFilename + "_Atlas_AUTOGEN.cs", outputFile.ToString());
         }
 
+    }
+
+    static class FontAtlasBuilderUtils
+    {
+        public static void BuildFontAtlas(AtlasProject atlasProj)
+        {
+
+            foreach (AtlasItemSourceFile atlasSourceFile in atlasProj.Items)
+            {
+                if (atlasSourceFile.Kind == AtlasItemSourceKind.Config &&
+                    atlasSourceFile.FontBuilderConfig != null)
+                {
+                    FontBuilderConfig config = atlasSourceFile.FontBuilderConfig;
+                    foreach (FontBuilderTask builderTask in config.BuilderTasks)
+                    {
+                        //1. create glyph-texture-bitmap generator
+                        var glyphTextureGen = new GlyphTextureBitmapGenerator();
+                        //2. generate the glyphs
+                        if (builderTask.TextureKind == TextureKind.Msdf)
+                        {
+                            glyphTextureGen.MsdfGenVersion = 3;
+                        }
+
+                        Typography.OpenFont.Typeface typeface = atlasProj.GetTypeface(config.FontFilename);
+
+                        //TODO: add other font styles 
+                        RequestFont reqFont = new RequestFont(typeface.Name, builderTask.Size, FontStyle.Regular);
+
+
+                        string textureName = typeface.Name.ToLower() + "_" + reqFont.FontKey;
+                        string outputDir = Path.GetDirectoryName(atlasProj.OutputFilename);
+                        FontAtlasBuilderHelper builderHelper = new FontAtlasBuilderHelper();
+
+                        builderHelper.TextureInfoFilename = outputDir + Path.DirectorySeparatorChar + textureName;
+                        builderHelper.OutputImgFilename = outputDir + Path.DirectorySeparatorChar + textureName + ".png";
+
+                        builderHelper.Build(glyphTextureGen,
+                            typeface,
+                            builderTask.Size,
+                            builderTask.TextureKind,
+                            builderTask.TextureBuildDetails.ToArray(),
+                            reqFont.FontKey
+                            );
+                    }
+                }
+
+            }
+        }
     }
 }

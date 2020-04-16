@@ -5,6 +5,7 @@ using System.IO;
 using Typography.OpenFont;
 using Typography.Contours;
 using PixelFarm.CpuBlit.BitmapAtlas;
+using PixelFarm.Drawing;
 
 namespace Mini
 {
@@ -13,7 +14,7 @@ namespace Mini
 
         readonly Dictionary<string, GlyphTextureBuildDetail> _scriptDic = new Dictionary<string, GlyphTextureBuildDetail>();
         readonly Dictionary<string, float> _sizeDic = new Dictionary<string, float>();
-        readonly Dictionary<string, TextureKind> _textureKindDic = new Dictionary<string, TextureKind>();
+
         public List<FontBuilderTask> BuilderTasks { get; private set; } = new List<FontBuilderTask>();
         public TextureKind TextureKind { get; set; }
         public string FontFilename { get; set; }
@@ -91,25 +92,23 @@ namespace Mini
             BuilderTasks.Clear();
             foreach (float fontSize in _sizeDic.Values)
             {
-                foreach (var kv in _textureKindDic)
+
+                var fontBuildTask = new FontBuilderTask
                 {
-                    var fontBuildTask = new FontBuilderTask
-                    {
-                        Size = fontSize,
-                        TextureKind = this.TextureKind,
+                    Size = fontSize,
+                    TextureKind = this.TextureKind,
+                };
 
-                    };
-
-                    //script and hint technique
-                    List<GlyphTextureBuildDetail> textureDetails = new List<GlyphTextureBuildDetail>();
-                    foreach (GlyphTextureBuildDetail detail in _scriptDic.Values)
-                    {
-                        textureDetails.Add(detail);
-                    }
-
-                    fontBuildTask.TextureBuildDetails = textureDetails;
-                    BuilderTasks.Add(fontBuildTask);
+                //script and hint technique
+                List<GlyphTextureBuildDetail> textureDetails = new List<GlyphTextureBuildDetail>();
+                foreach (GlyphTextureBuildDetail detail in _scriptDic.Values)
+                {
+                    textureDetails.Add(detail);
                 }
+
+                fontBuildTask.TextureBuildDetails = textureDetails;
+                BuilderTasks.Add(fontBuildTask);
+
             }
         }
     }
@@ -122,6 +121,7 @@ namespace Mini
         public float Size;
         public List<GlyphTextureBuildDetail> TextureBuildDetails;
         public TextureKind TextureKind;
+        public int FontKey;
 #if DEBUG
         public override string ToString()
         {

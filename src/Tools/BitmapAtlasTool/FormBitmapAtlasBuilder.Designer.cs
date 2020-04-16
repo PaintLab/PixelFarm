@@ -30,7 +30,7 @@
         {
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.cmdBuildBmpAtlas = new System.Windows.Forms.Button();
+            this.cmdBuildAtlas = new System.Windows.Forms.Button();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.cmdReadBmpAtlas = new System.Windows.Forms.Button();
             this.listBox2 = new System.Windows.Forms.ListBox();
@@ -61,15 +61,15 @@
             this.pictureBox1.TabIndex = 2;
             this.pictureBox1.TabStop = false;
             // 
-            // cmdBuildBmpAtlas
+            // cmdBuildAtlas
             // 
-            this.cmdBuildBmpAtlas.Location = new System.Drawing.Point(256, 276);
-            this.cmdBuildBmpAtlas.Name = "cmdBuildBmpAtlas";
-            this.cmdBuildBmpAtlas.Size = new System.Drawing.Size(111, 44);
-            this.cmdBuildBmpAtlas.TabIndex = 3;
-            this.cmdBuildBmpAtlas.Text = "Build BmpAtlas";
-            this.cmdBuildBmpAtlas.UseVisualStyleBackColor = true;
-            this.cmdBuildBmpAtlas.Click += new System.EventHandler(this.cmdBuildBmpAtlas_Click);
+            this.cmdBuildAtlas.Location = new System.Drawing.Point(256, 276);
+            this.cmdBuildAtlas.Name = "cmdBuildAtlas";
+            this.cmdBuildAtlas.Size = new System.Drawing.Size(111, 44);
+            this.cmdBuildAtlas.TabIndex = 3;
+            this.cmdBuildAtlas.Text = "Build Atlas";
+            this.cmdBuildAtlas.UseVisualStyleBackColor = true;
+            this.cmdBuildAtlas.Click += new System.EventHandler(this.cmdBuildAtlas_Click);
             // 
             // pictureBox2
             // 
@@ -166,7 +166,7 @@
             this.Controls.Add(this.listBox2);
             this.Controls.Add(this.cmdReadBmpAtlas);
             this.Controls.Add(this.pictureBox2);
-            this.Controls.Add(this.cmdBuildBmpAtlas);
+            this.Controls.Add(this.cmdBuildAtlas);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.listBox1);
             this.Name = "FormBitmapAtlasBuilder";
@@ -182,7 +182,7 @@
         #endregion
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Button cmdBuildBmpAtlas;
+        private System.Windows.Forms.Button cmdBuildAtlas;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Button cmdReadBmpAtlas;
         private System.Windows.Forms.ListBox listBox2;
