@@ -12,6 +12,11 @@ namespace PixelFarm.DrawingGL
     {
         ReusableAffineMatrix _reusableAffineMat = new ReusableAffineMatrix();
         GLBitmapAtlasPainter _bmpAtlasPainter = new GLBitmapAtlasPainter();
+        public void SetBitmapAtlasManager(PixelFarm.CpuBlit.BitmapAtlas.BitmapAtlasManager<GLBitmap> atlasManager)
+        {
+            _bmpAtlasPainter.SetBitmapAtlasManager(atlasManager);
+        }
+        
         public override void ApplyFilter(PixelFarm.Drawing.IImageFilter imgFilter)
         {
             //TODO: 

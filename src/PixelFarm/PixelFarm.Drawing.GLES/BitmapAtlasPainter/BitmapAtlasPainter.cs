@@ -11,14 +11,17 @@ namespace PixelFarm.DrawingGL
     {
         SimpleBitmapAtlas _bmpAtlas;
         GLBitmap _glBmp;//current bitmap
-        MySimpleGLBitmapAtlasManager _atlasManager;
+        BitmapAtlasManager<GLBitmap> _atlasManager;
         string _lastestImgFile = null;
 
-        public GLBitmapAtlasPainter(TextureKind textureKind = TextureKind.Bitmap)
+        public GLBitmapAtlasPainter()
         {
-            _atlasManager = new MySimpleGLBitmapAtlasManager(textureKind);
+            
         }
-
+        public void SetBitmapAtlasManager(BitmapAtlasManager<GLBitmap> atlasManager)
+        {
+            _atlasManager = atlasManager;
+        }
         public void DrawImage(GLPainter glPainter, AtlasImageBinder atlasImgBinder, float left, float top)
         {
             switch (atlasImgBinder.State)
