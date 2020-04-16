@@ -1,8 +1,9 @@
-//AUTOGEN, 2020-04-16T10:10:09
+//AUTOGEN, 2020-04-16T21:26:36
 //source: D:\projects\PixelFarm\src\x_resource_projects\TestAtlas1\TestAtlas1.csproj
 //tools: D:\projects\PixelFarm\src\Tools\BitmapAtlasTool\bin\Debug\BitmapAtlasTool.exe
 namespace Atlas_AUTOGEN_.TestAtlas1{
-public partial class BitmapAtlas{
+public partial class RawAtlasData{
+public const string NAME="TestAtlas1";
 //img_links:
 // //arrow_blank.png
 // //arrow_close.png
@@ -17,6 +18,7 @@ public partial class BitmapAtlas{
 // //opt_unchecked.png
 
 //items names
+public static class Names{
 public const string _arrow_blank_png="//arrow_blank.png";
 public const string _arrow_close_png="//arrow_close.png";
 public const string _arrow_open_png="//arrow_open.png";
@@ -28,6 +30,7 @@ public const string _favorites32_png="//favorites32.png";
 public const string _html32_png="//html32.png";
 public const string _opt_checked_png="//opt_checked.png";
 public const string _opt_unchecked_png="//opt_unchecked.png";
+}
 //bitmap_atlas_info
 //D:\projects\PixelFarm\src\x_resource_projects\TestAtlas1\TestAtlas1.info
 public static readonly byte[] info=new byte[]{

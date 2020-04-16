@@ -161,7 +161,7 @@ namespace Mini
                 //TODO: config this
                 outputFile.AppendLine("namespace " + atlasProj.CsSourceNamespace + "{");
 
-                outputFile.AppendLine("public partial class BitmapAtlas{");
+                outputFile.AppendLine("public partial class RawAtlasData{");
 
                 outputFile.AppendLine("public const string NAME=\"" + onlyFilename + "\";");
 
@@ -220,7 +220,7 @@ namespace Mini
 
                 outputFile.AppendLine("namespace " + atlasProj.CsSourceNamespace + "{");
 
-                outputFile.AppendLine("public partial class BitmapAtlas{");
+                outputFile.AppendLine("public partial class BitmapAtlas<T>{");
 
                 foreach (string url in imgUrlDic.Keys)
                 {
@@ -228,7 +228,7 @@ namespace Mini
                     url2 = url2.Replace("//", "_");
                     url2 = url2.Replace(".", "_");
 
-                    outputFile.AppendLine("public static readonly AtlasImageBinder " + url2 + "=new AtlasImageBinder(NAME, \"" + url + "\");");
+                    outputFile.AppendLine("public static readonly AtlasImageBinder " + url2 + "=new AtlasImageBinder(RawAtlasData.NAME, \"" + url + "\");");
                 }
                 outputFile.AppendLine("}"); //class
                 outputFile.AppendLine("}"); //namespace
