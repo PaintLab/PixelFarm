@@ -68,9 +68,7 @@
     <Compile Include="Drawing\Image.cs" />
     <Compile Include="Drawing\Region.cs" />
     <Compile Include="Drawing\CRC32Calculator.cs" />
-    <Compile Include="Drawing\DrawBoard.cs" />
     <Compile Include="Drawing\LenAndLenUnit.cs" />
-    <Compile Include="Drawing\Painter.cs" />
     <Compile Include="Drawing\RenderVx.cs" />
     <Compile Include="Drawing\RequestFont.cs" />
     <Compile Include="Drawing\VertexCommandAndOrientation.cs" />
