@@ -129,13 +129,14 @@ namespace PixelFarm.CpuBlit
                             Q1RectD bounds = vxs.GetBoundingRect();
 
                             Point prevOrg = linearSpanGen.SpanOrigin;
-                            //TODO: rounding
+                            //TODO: rounding 
 
-                            linearSpanGen.SpanOrigin = new Point((int)(OriginX + bounds.Left), (int)(OriginY + bounds.Bottom)); //*** 
+                            linearSpanGen.SpanOrigin = new Point((int)(bounds.Left), (int)(bounds.Bottom)); //*** 
 
                             Fill(vxs, linearSpanGen);
 
                             linearSpanGen.SpanOrigin = prevOrg;//restore
+
 
                         }
                         break;
@@ -145,7 +146,7 @@ namespace PixelFarm.CpuBlit
                             RadialGradientSpanGen radialSpanGen = ResolveRadialGrBrush((RadialGradientBrush)br);
                             //radialSpanGen.SetOrigin(0, 0);//TODO: review this offset 
                             Point prevOrg = radialSpanGen.SpanOrigin;
-                            radialSpanGen.SpanOrigin = new Point((int)(OriginX + bounds.Left), (int)(OriginY + bounds.Bottom)); //*** 
+                            radialSpanGen.SpanOrigin = new Point((int)(OriginX), (int)(OriginY)); //*** 
                             radialSpanGen.Opactiy = FillOpacity;
                             Fill(vxs, radialSpanGen);
                             radialSpanGen.SpanOrigin = prevOrg;//restore
@@ -209,12 +210,12 @@ namespace PixelFarm.CpuBlit
             //1. switch to mask layer 
             SetClipRgn(vxs);
 
-             
+
             float ox = OriginX;
             float oy = OriginY;
 
             Point newOrg = new Point((int)(bounds.Left + ox), (int)(bounds.Bottom + oy));
-             
+
 
             PolygonGradientBrush brush = ResolvePolygonGradientBrush(polygonGrBrush);
 
@@ -233,7 +234,7 @@ namespace PixelFarm.CpuBlit
             }
 
             SetClipRgn(null);
-           
+
 
             SetOrigin(ox, oy);
         }
@@ -336,19 +337,16 @@ namespace PixelFarm.CpuBlit
                                 //if not then create a new one
                                 //-------------------------------------------  
                                 //check inner object
-                                LinearGradientSpanGen linearGradientSpanGen = ResolveLinearGrBrush((LinearGradientBrush)br);
-                                Point prev_o = linearGradientSpanGen.SpanOrigin;
-                                linearGradientSpanGen.SpanOrigin = new Point((int)(left + OriginX), (int)(top + OriginY));
-                                Fill(rectTool.MakeVxs(v1), linearGradientSpanGen);
-                                linearGradientSpanGen.SpanOrigin = prev_o;
+                                LinearGradientSpanGen linearGradientSpanGen = ResolveLinearGrBrush((LinearGradientBrush)br);                                
+                                Fill(rectTool.MakeVxs(v1), linearGradientSpanGen);                           
                             }
                             break;
                         case BrushKind.CircularGraident:
                             {
-                                //var radialGr = (Drawing.RadialGradientBrush)br;
+
                                 RadialGradientSpanGen radialSpanGen = ResolveRadialGrBrush((Drawing.RadialGradientBrush)br);
                                 Point prev_o = radialSpanGen.SpanOrigin;
-                                radialSpanGen.SpanOrigin = new Point((int)(left + OriginX), (int)(top + OriginY));
+                                radialSpanGen.SpanOrigin = new Point((int)OriginX, (int)OriginY);
                                 Fill(rectTool.MakeVxs(v1), radialSpanGen);
                                 radialSpanGen.SpanOrigin = prev_o;
                             }
@@ -356,9 +354,9 @@ namespace PixelFarm.CpuBlit
                         case BrushKind.PolygonGradient:
                             {
                                 //we use mask technique (simlar to texture brush)  
-                                
+
                                 float ox = OriginX;
-                                float oy = OriginY; 
+                                float oy = OriginY;
 
                                 PolygonGradientBrush brush = ResolvePolygonGradientBrush((Drawing.PolygonGradientBrush)br);
 
@@ -377,7 +375,7 @@ namespace PixelFarm.CpuBlit
                                 }
 
                                 SetClipRgn(null);
-                               
+
 
                                 SetOrigin(ox, oy); //restore
                             }

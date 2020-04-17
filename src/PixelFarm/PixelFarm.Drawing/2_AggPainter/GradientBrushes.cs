@@ -178,7 +178,7 @@ namespace PixelFarm.CpuBlit
         float _fillOpacity = 1;
         LinearGradientPair[] _orgList;
 
-        static float[] s_simpleDistanceTable = new float[1024 * 1024];
+        static readonly float[] s_simpleDistanceTable = new float[1024 * 1024];
         static RadialGradientSpanGen()
         {
             int index = 0;
@@ -292,13 +292,53 @@ namespace PixelFarm.CpuBlit
 
             return _endColor;
         }
+        //public void GenerateColors(Color[] outputColors, int startIndex, int x, int y, int spanLen)
+        //{
+        //    //start at current span generator 
+        //    int new_centerX = _center_x + SpanOrigin.X;
+        //    int new_centerY = _center_y + SpanOrigin.Y;
+        //    if (SpanOrigin.X != 0)
+        //    {
+        //        new_centerX = _center_x;
+        //        new_centerY = _center_y;
+        //    }
+        //    if (_invertCoordTx != null)
+        //    {
 
+        //        for (int cur_x = x; cur_x < x + spanLen; ++cur_x)
+        //        {
+        //            double new_x = cur_x;
+        //            double new_y = y;
+        //            _invertCoordTx.Transform(ref new_x, ref new_y);
+
+        //            float r = (float)Math.Sqrt(
+        //               (new_x - new_centerX) * (new_x - new_centerX) +
+        //               (new_y - new_centerY) * (new_y - new_centerY));
+
+        //            outputColors[startIndex] = GetProperColor(r);
+
+        //            startIndex++;
+        //        }
+
+        //    }
+        //    else
+        //    {
+
+        //        for (int cur_x = x; cur_x < x + spanLen; ++cur_x)
+        //        {
+        //            float r = CalculateDistance((cur_x - new_centerX), (y - new_centerY));
+        //            outputColors[startIndex] = GetProperColor(r);
+        //            startIndex++;
+        //        }
+        //    }
+        //}
         public void GenerateColors(Color[] outputColors, int startIndex, int x, int y, int spanLen)
         {
             //start at current span generator 
-            int new_centerX = _center_x + SpanOrigin.X;
-            int new_centerY = _center_y + SpanOrigin.Y;
+            int new_centerX = _center_x;
+            int new_centerY = _center_y;
 
+            
             if (_invertCoordTx != null)
             {
 
@@ -316,13 +356,13 @@ namespace PixelFarm.CpuBlit
 
                     startIndex++;
                 }
-
             }
             else
             {
 
                 for (int cur_x = x; cur_x < x + spanLen; ++cur_x)
                 {
+                    //float r = CalculateDistance((cur_x - SpanOrigin.X - new_centerX), (y - SpanOrigin.Y - new_centerY));
                     float r = CalculateDistance((cur_x - new_centerX), (y - new_centerY));
                     outputColors[startIndex] = GetProperColor(r);
                     startIndex++;
