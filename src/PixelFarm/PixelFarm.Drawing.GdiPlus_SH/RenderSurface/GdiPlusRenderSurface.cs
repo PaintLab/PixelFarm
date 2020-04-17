@@ -581,7 +581,7 @@ namespace PixelFarm.Drawing.WinGdi
                 IntPtr bufferHeaderPtr = binder.GetRawBufferHead();
                 unsafe
                 {
-                    PixelFarm.Drawing.Internal.NativeMemMx.memcpy((byte*)bmpdata.Scan0, (byte*)bufferHeaderPtr, bmpdata.Stride * bmpdata.Height);
+                    PixelFarm.Drawing.Internal.MemMx.memcpy((byte*)bmpdata.Scan0, (byte*)bufferHeaderPtr, bmpdata.Stride * bmpdata.Height);
                 }
                 bmp.UnlockBits(bmpdata);
                 //

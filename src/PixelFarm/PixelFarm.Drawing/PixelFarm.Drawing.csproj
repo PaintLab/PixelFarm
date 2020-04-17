@@ -236,6 +236,12 @@
     <Compile Include="..\PixelFarm.DrawingCore\LenAndLenUnit.cs">
       <Link>0_REF_DrawingCore\LenAndLenUnit.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.DrawingCore\MemMx.cs">
+      <Link>0_REF_DrawingCore\MemMx.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingCore\NativeMemMx.cs">
+      <Link>0_REF_DrawingCore\NativeMemMx.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.DrawingCore\Painter.cs">
       <Link>0_REF_DrawingCore\Painter.cs</Link>
     </Compile>
@@ -349,12 +355,6 @@
     </Compile>
     <Compile Include="..\PixelFarm.PrimitiveGeo\ICoordTransformer.cs">
       <Link>0_REF_DrawingCore\1_PrimitiveGeo\ICoordTransformer.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.PrimitiveGeo\MemMx.cs">
-      <Link>0_REF_DrawingCore\1_PrimitiveGeo\MemMx.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.PrimitiveGeo\NativeMemMx.cs">
-      <Link>0_REF_DrawingCore\1_PrimitiveGeo\NativeMemMx.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.PrimitiveGeo\Rectangle.cs">
       <Link>0_REF_DrawingCore\1_PrimitiveGeo\Rectangle.cs</Link>

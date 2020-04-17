@@ -27,7 +27,7 @@ namespace PixelFarm.Drawing.Internal
 {
     public static class MemMx
     {
-        //----------------------------------------------------------filling_rule_e
+        
         public static void memcpy(byte[] dest,
             int destIndex, byte[] source,
             int sourceIndex, int count)

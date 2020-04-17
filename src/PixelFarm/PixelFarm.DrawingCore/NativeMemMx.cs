@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 namespace PixelFarm.Drawing.Internal
 {
     [System.Security.SuppressUnmanagedCodeSecurity] //apply this to all native methods in this class 
-    public static class NativeMemMx
+      static class NativeMemMx
     {
         //check this ....
         //for cross platform code

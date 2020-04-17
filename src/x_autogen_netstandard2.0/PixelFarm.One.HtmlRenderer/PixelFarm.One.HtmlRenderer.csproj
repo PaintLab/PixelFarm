@@ -743,6 +743,8 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\DrawBoard.cs" Link="PixelFarm\PixelFarm.DrawingCore\DrawBoard.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\Image.cs" Link="PixelFarm\PixelFarm.DrawingCore\Image.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\LenAndLenUnit.cs" Link="PixelFarm\PixelFarm.DrawingCore\LenAndLenUnit.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\MemMx.cs" Link="PixelFarm\PixelFarm.DrawingCore\MemMx.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\NativeMemMx.cs" Link="PixelFarm\PixelFarm.DrawingCore\NativeMemMx.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\Painter.cs" Link="PixelFarm\PixelFarm.DrawingCore\Painter.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\Region.cs" Link="PixelFarm\PixelFarm.DrawingCore\Region.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\RenderVx.cs" Link="PixelFarm\PixelFarm.DrawingCore\RenderVx.cs" />
@@ -781,8 +783,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\BasicGeometries.cs" Link="PixelFarm\PixelFarm.PrimitiveGeo\BasicGeometries.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\Color.cs" Link="PixelFarm\PixelFarm.PrimitiveGeo\Color.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\ICoordTransformer.cs" Link="PixelFarm\PixelFarm.PrimitiveGeo\ICoordTransformer.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\MemMx.cs" Link="PixelFarm\PixelFarm.PrimitiveGeo\MemMx.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\NativeMemMx.cs" Link="PixelFarm\PixelFarm.PrimitiveGeo\NativeMemMx.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\Rectangle.cs" Link="PixelFarm\PixelFarm.PrimitiveGeo\Rectangle.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\RectangleF.cs" Link="PixelFarm\PixelFarm.PrimitiveGeo\RectangleF.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\1_vectormaths\AggMath.cs" Link="PixelFarm\PixelFarm.Vectors\1_vectormaths\AggMath.cs" />
