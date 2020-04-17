@@ -67,7 +67,7 @@ namespace Mini
                     case ".html":
                     case ".htm":
                     case ".svg":
-
+                    case ".txt":
                     case ".xml": //data or config
                     case ".png":
                         {
