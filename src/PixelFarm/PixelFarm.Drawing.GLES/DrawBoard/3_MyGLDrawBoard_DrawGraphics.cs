@@ -60,7 +60,7 @@ namespace PixelFarm.Drawing.GLES2
                     break;
                 case BrushKind.LinearGradient:
                 case BrushKind.PolygonGradient:
-                case BrushKind.CircularGraident:
+                case BrushKind.CircularGradient:
                 case BrushKind.Texture:
                     {
                         _latestFillCouldbeUsedAsTextBgHint = false;

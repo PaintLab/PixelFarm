@@ -1304,7 +1304,7 @@ namespace PixelFarm.DrawingGL
                         _rectFillShader.Render(glGrBrush._v2f, glGrBrush._colors);
                     }
                     break;
-                case BrushKind.CircularGraident:
+                case BrushKind.CircularGradient:
                     {
                         RadialGradientBrush glGrBrush = RadialGradientBrush.Resolve((Drawing.RadialGradientBrush)brush);
                         _radialGradientShader.Render(
@@ -1413,7 +1413,7 @@ namespace PixelFarm.DrawingGL
                             //DrawImage(color_src, 0, 0);//for debug show color-gradient
                         }
                         break;
-                    case BrushKind.CircularGraident:
+                    case BrushKind.CircularGradient:
                         {
                             RadialGradientBrush glGrBrush = RadialGradientBrush.Resolve((Drawing.RadialGradientBrush)brush);
                             if (glGrBrush.CacheGradientBitmap != null)
