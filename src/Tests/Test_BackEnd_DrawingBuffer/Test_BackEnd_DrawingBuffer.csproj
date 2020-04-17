@@ -41,6 +41,12 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\MemMx.cs">
+      <Link>MemMx.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\NativeMemMx.cs">
+      <Link>NativeMemMx.cs</Link>
+    </Compile>
     <Compile Include="BlitDemo\Particle.cs" />
     <Compile Include="BlitDemo\HslColor.cs" />
     <Compile Include="BlitDemo\ParticleEmitter.cs" />

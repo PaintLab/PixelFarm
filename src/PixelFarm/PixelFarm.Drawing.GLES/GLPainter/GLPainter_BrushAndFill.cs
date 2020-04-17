@@ -82,7 +82,7 @@ namespace PixelFarm.DrawingGL
                         {
                         }
                         break;
-                    case BrushKind.CircularGraident:
+                    case BrushKind.CircularGradient:
                         break;
 
                     case BrushKind.Texture:
@@ -115,7 +115,7 @@ namespace PixelFarm.DrawingGL
 #endif
                         break;
                     case BrushKind.Texture:
-                    case BrushKind.CircularGraident:
+                    case BrushKind.CircularGradient:
                     case BrushKind.LinearGradient:
                     case BrushKind.PolygonGradient:
 
@@ -167,7 +167,7 @@ namespace PixelFarm.DrawingGL
                     System.Diagnostics.Debug.WriteLine("unknown brush!");
 #endif
                     break;
-                case BrushKind.CircularGraident:
+                case BrushKind.CircularGradient:
                 case BrushKind.LinearGradient:
                 case BrushKind.PolygonGradient:
                     {

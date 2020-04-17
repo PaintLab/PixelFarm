@@ -56,7 +56,7 @@ namespace WinFormGdiPlus
             //int[] buffer = new int[bufferLenInBytes / 4];
             unsafe
             {
-                PixelFarm.Drawing.Internal.NativeMemMx.memcpy((byte*)newBuffer, (byte*)_bmpdata.Scan0, bufferLenInBytes);
+                PixelFarm.Drawing.Internal.MemMx.memcpy((byte*)newBuffer, (byte*)_bmpdata.Scan0, bufferLenInBytes);
             }
             //System.Runtime.InteropServices.Marshal.Copy(_bmpdata.Scan0, newBuffer, 0, bufferLenInBytes / 4);
 
@@ -77,7 +77,7 @@ namespace WinFormGdiPlus
             //write data back
             unsafe
             {
-                PixelFarm.Drawing.Internal.NativeMemMx.memcpy((byte*)_writeableBitmap.Pixels, (byte*)_bmpdata.Scan0, bufferLenInBytes);
+                PixelFarm.Drawing.Internal.MemMx.memcpy((byte*)_writeableBitmap.Pixels, (byte*)_bmpdata.Scan0, bufferLenInBytes);
             }
 
             //System.Runtime.InteropServices.Marshal.Copy(
