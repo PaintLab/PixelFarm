@@ -19,7 +19,23 @@ namespace LayoutFarm
         public override RectangleF GetResultBounds() => new RectangleF(_yogaNode.LayoutX, _yogaNode.LayoutY, _yogaNode.LayoutWidth, _yogaNode.LayoutHeight);
     }
 
-    public static class YogaNodeExtensions
+    public delegate void YogaDecor<T>(T t);
+
+    public static partial class YogaNodeExtensions
+    {
+        public static YogaNode Append(this YogaNode node, YogaNode child)
+        {
+            return node.Insert(node.Count, child);
+        }
+        public static void Append(this YogaNode node, YogaNode child, YogaDecor<YogaNode> childDecor)
+        {
+            childDecor(child);
+            node.Insert(node.Count, child);
+        }
+    }
+
+
+    public static partial class YogaNodeExtensions
     {
         public static YogaLayoutInstance ToLayoutInstance(this YogaNode node) => new YogaLayoutInstance(node);
     }
@@ -59,7 +75,9 @@ namespace LayoutFarm
             host.AddChild(minusWidthBtn);
 
             //Init1();
-            Init2();
+            //Init2();
+            Init2_1();
+            //Init3();
 
             _rootPanel.LayoutInstance = root.ToLayoutInstance();
         }
@@ -206,6 +224,105 @@ namespace LayoutFarm
             _rootPanel.Add(fb1);
 
             _rootPanel.UpdateLayout();
+        }
+        private void Init2_1()
+        {
+            YogaConfig config = new YogaConfig();
+
+            root = new YogaNode(config)
+            {
+                FlexDirection = YogaFlexDirection.Column,
+                Width = _rootPanel.Width,
+                Height = _rootPanel.Height,
+                Padding = 20,
+                AlignItems = YogaAlign.Stretch
+            };
+
+            root_child0 = root.Append(new YogaNode(config)
+            {
+                FlexDirection = YogaFlexDirection.Row,
+                Width = root.Width,
+                Height = 100,
+                AlignItems = YogaAlign.Center,
+                AlignSelf = YogaAlign.Center,
+                Flex = 1,
+                FlexShrink = 1,
+                StyleDirection = YogaDirection.RightToLeft,
+                Note = "yellow",
+            });
+
+            YogaNode c1r0_child0 = root_child0.Append(new YogaNode(config)
+            {
+                Width = 100,
+                Height = 100,
+                FlexShrink = 1,
+                Note = "blue",
+            });
+
+            YogaNode c1r0_child1 = root_child0.Append(new YogaNode(config)
+            {
+                Width = 100,
+                Height = 100,
+                MarginHorizontal = 20,
+                FlexGrow = 1,
+                FlexShrink = 1,
+                Note = "blue",
+            });
+
+            YogaNode c1r0_child2 = root_child0.Append(new YogaNode(config)
+            {
+                Width = 100,
+                Height = 100,
+                FlexShrink = 1,
+                Note = "blue",
+            });
+
+
+            YogaNode root_child1 = root.Append(new YogaNode(config)
+            {
+                Width = 100,
+                Height = 100,
+                MarginHorizontal = 20,
+                FlexGrow = 1,
+                FlexShrink = 1,
+                Note = "red",
+            });
+
+            //YogaNode root_child2 = new YogaNode(config);
+            //root_child2.Width = 100;
+            //root_child2.Height = 100;
+            //root_child2.FlexShrink = 1;
+            //root.Insert(2, root_child2);
+
+            root.StyleDirection = YogaDirection.LeftToRight;
+            root.CalculateLayout();
+
+            foreach (YogaNode child in root)
+            {
+                _rootPanel.Add(CreateBoxFromYogaNode(child, (y_node, b_node) =>
+                {
+                    switch (y_node.Note)
+                    {
+                        case "yellow": b_node.BackColor = Color.Yellow; break;
+                        case "blue": b_node.BackColor = Color.Blue; break;
+                        case "red": b_node.BackColor = Color.Red; break;
+                    }
+                }));
+            }
+
+            _rootPanel.UpdateLayout();
+        }
+
+        static Box CreateBoxFromYogaNode(YogaNode node, Action<YogaNode, Box> decor)
+        {
+            CustomWidgets.Box fb0 = new CustomWidgets.Box(100, 100) { LayoutInstance = node.ToLayoutInstance() };
+            decor(node, fb0);
+
+            foreach (YogaNode child in node)
+            {
+                fb0.Add(CreateBoxFromYogaNode(child, decor));
+            }
+            return fb0;
         }
 
         private void MinusWidthBtn_MouseDown(object sender, UI.UIMouseDownEventArgs e)
