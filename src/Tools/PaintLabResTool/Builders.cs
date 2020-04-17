@@ -10,6 +10,37 @@ using SampleWinForms;
 
 namespace Mini
 {
+
+    static class BinToHexUtils
+    {
+        public static StringBuilder ReadBinaryAndConvertToHexArr(string file)
+        {
+            return ReadBinaryAndConvertToHexArr(File.ReadAllBytes(file));
+        }
+        public static StringBuilder ReadBinaryAndConvertToHexArr(byte[] buffer)
+        {
+            StringBuilder stbuilder = new StringBuilder();
+            int charCountInLine = 0;
+            stbuilder.AppendLine("new byte[]{");
+            for (int b = 0; b < buffer.Length; ++b)
+            {
+                if (b > 0)
+                {
+                    stbuilder.Append(',');
+                }
+                stbuilder.Append("0x" + buffer[b].ToString("X2") + "");
+                charCountInLine++;
+                if (charCountInLine > 32)
+                {
+                    stbuilder.Append("\r\n");
+                    charCountInLine = 0; //reset
+                }
+            }
+            stbuilder.AppendLine();
+            stbuilder.AppendLine("}");
+            return stbuilder;
+        }
+    }
     static class BitmapAtlasBuilderUtils
     {
         public static void BuildBitmapAtlas(AtlasProject atlasProj, Func<string, MemBitmap> imgLoader, bool test_extract = false)
@@ -115,33 +146,6 @@ namespace Mini
             }
         }
 
-        static StringBuilder ReadBinaryAndConvertToHexArr(string file)
-        {
-            byte[] buffer = File.ReadAllBytes(file);
-
-            StringBuilder stbuilder = new StringBuilder();
-
-            int charCountInLine = 0;
-
-            stbuilder.AppendLine("new byte[]{");
-            for (int b = 0; b < buffer.Length; ++b)
-            {
-                if (b > 0)
-                {
-                    stbuilder.Append(',');
-                }
-                stbuilder.Append("0x" + buffer[b].ToString("X2") + "");
-                charCountInLine++;
-                if (charCountInLine > 63)
-                {
-                    stbuilder.Append("\r\n");
-                    charCountInLine = 0; //reset
-                }
-            }
-            stbuilder.AppendLine();
-            stbuilder.AppendLine("}");
-            return stbuilder;
-        }
 
         static void BuildAtlasInEmbededSourceVersion(AtlasProject atlasProj, string info, string img, Dictionary<string, ushort> imgUrlDic)
         {
@@ -185,9 +189,9 @@ namespace Mini
                 }
                 outputFile.AppendLine("}");
 
-                StringBuilder info_sb = ReadBinaryAndConvertToHexArr(info);
+                StringBuilder info_sb = BinToHexUtils.ReadBinaryAndConvertToHexArr(info);
 
-                StringBuilder img_sb = ReadBinaryAndConvertToHexArr(img);
+                StringBuilder img_sb = BinToHexUtils.ReadBinaryAndConvertToHexArr(img);
 
                 outputFile.AppendLine("//bitmap_atlas_info");
                 outputFile.AppendLine("//" + info);
@@ -248,7 +252,7 @@ namespace Mini
 
             foreach (AtlasItemSourceFile atlasSourceFile in atlasProj.Items)
             {
-                if (atlasSourceFile.Kind == AtlasItemSourceKind.Config &&
+                if (atlasSourceFile.Kind == AtlasItemSourceKind.FontAtlasConfig &&
                     atlasSourceFile.FontBuilderConfig != null)
                 {
                     FontBuilderConfig config = atlasSourceFile.FontBuilderConfig;
@@ -288,4 +292,76 @@ namespace Mini
             }
         }
     }
+
+
+    static class ResourceBuilderUtils
+    {
+        class ConvertedFile
+        {
+            public AtlasItemSourceFile itemSourceFile;
+            public StringBuilder Data;
+            public string Name;
+        }
+
+        public static void BuildResources(AtlasProject atlasProj)
+        {
+            //1. load resouce
+            //2. convert buffer to C# code
+            List<ConvertedFile> selectedItems = new List<ConvertedFile>();
+            foreach (AtlasItemSourceFile f in atlasProj.Items)
+            {
+                if (f.IsConfig)
+                {
+                    continue;
+                }
+                //------
+                //load and convert
+                ConvertedFile convertedFile = new ConvertedFile();
+                convertedFile.Data = BinToHexUtils.ReadBinaryAndConvertToHexArr(f.AbsoluteFilename);
+                convertedFile.itemSourceFile = f;
+
+
+                string url2 = f.Link.Replace("\\", "_");
+                url2 = url2.Replace("//", "_");
+                url2 = url2.Replace(".", "_");
+                convertedFile.Name = url2;//field name
+                selectedItems.Add(convertedFile);
+            }
+            BuildCsSource(atlasProj, selectedItems);
+        }
+
+        static void BuildCsSource(AtlasProject atlasProj, List<ConvertedFile> selectedItems)
+        {
+            //7. create an atlas file in a source file version, user can embed the source to file
+            //easy, just read .info and .png then convert to binary buffer
+
+            //PART1: 
+            string timestamp = DateTime.Now.ToString("s");
+            {
+                StringBuilder outputFile = new StringBuilder();
+                outputFile.AppendLine("//AUTOGEN, " + timestamp);
+                outputFile.AppendLine("//source: " + atlasProj.FullFilename);
+                outputFile.AppendLine("//tools: " + System.Windows.Forms.Application.ExecutablePath);
+
+                string onlyFilename = Path.GetFileNameWithoutExtension(atlasProj.Filename);
+
+                //TODO: config this
+                outputFile.AppendLine("namespace " + atlasProj.CsSourceNamespace + "{");
+                outputFile.AppendLine("public partial class RawResourceData{");
+                foreach (ConvertedFile f in selectedItems)
+                {
+                    outputFile.AppendLine("public readonly byte[] " + f.Name + "=" + f.Data.ToString() + ";");
+                }
+
+                outputFile.AppendLine("}");//class
+                outputFile.AppendLine("}");//namespace                
+
+                string dirname = Path.GetDirectoryName(atlasProj.OutputFilename);
+
+                File.WriteAllText(dirname + Path.DirectorySeparatorChar + "x_" + onlyFilename + "_Resource_AUTOGEN.cs", outputFile.ToString());
+            }
+
+        }
+    }
+
 }

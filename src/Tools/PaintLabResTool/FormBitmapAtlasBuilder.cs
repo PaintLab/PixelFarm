@@ -226,7 +226,7 @@ namespace Mini
                 return membmp;
             }
         }
-        private void cmdBuildAtlas_Click(object sender, EventArgs e)
+        private void cmdBuild_Click(object sender, EventArgs e)
         {
             //build current project 
             _latestAtlasProjSuccess = false;
@@ -245,6 +245,11 @@ namespace Mini
                 //build font atlas
                 FontAtlasBuilderUtils.BuildFontAtlas(_currentAtlasProj);
                 txtOutput.Text += "build bitmap-atlas=> finish\r\n";
+            }
+
+            if (_currentAtlasProj.IsResourceProject)
+            {
+                ResourceBuilderUtils.BuildResources(_currentAtlasProj);
             }
         }
         //------------
