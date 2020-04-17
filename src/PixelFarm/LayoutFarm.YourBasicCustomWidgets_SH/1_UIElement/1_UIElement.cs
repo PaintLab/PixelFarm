@@ -1,5 +1,6 @@
 ﻿//Apache2, 2014-present, WinterDev
 
+using PixelFarm.Drawing;
 using System.Collections.Generic;
 namespace LayoutFarm.UI
 {
@@ -62,6 +63,11 @@ namespace LayoutFarm.UI
     }
 
 
+    public abstract class LayoutInstance
+    {
+        public abstract RectangleF GetResultBounds();
+    }
+
     public abstract partial class UIElement : IUIEventListener
     {
 
@@ -72,7 +78,7 @@ namespace LayoutFarm.UI
 
 #endif
         bool _hide;
-
+      
         //bounds
         float _left;
         float _top;
@@ -87,6 +93,15 @@ namespace LayoutFarm.UI
             //if (dbugId == 114)
             //{ 
             //}
+        }
+
+      
+        /// <summary>
+        /// update layout data from layout instance
+        /// </summary>
+        public virtual void UpdateLayout()
+        {
+            
         }
         public bool DisableAutoMouseCapture { get; set; }
         public abstract RenderElement GetPrimaryRenderElement(RootGraphic rootgfx);

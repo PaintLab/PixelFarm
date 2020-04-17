@@ -442,13 +442,14 @@ namespace LayoutFarm.CustomWidgets
         }
 
         //----------------------------------------------------
+        static UIElement[] s_empty = new UIElement[0];
         public IEnumerable<UIElement> GetChildIter()
         {
             if (_uiList != null)
             {
                 return _uiList.GetIter();
             }
-            return null;
+            return s_empty;
         }
 
         public override void AddAfter(UIElement afterUI, UIElement ui)
@@ -839,6 +840,17 @@ namespace LayoutFarm.CustomWidgets
 #endif
         }
 
+        public override void UpdateLayout()
+        {
+            base.UpdateLayout();
+            foreach (var chlid in GetChildIter())
+            {
+                if (chlid != null)
+                {
+                    chlid.UpdateLayout();
+                }
+            }
+        }
 
         protected override void OnGuestMsg(UIGuestMsgEventArgs e)
         {
