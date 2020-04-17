@@ -2,20 +2,112 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Text;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.BitmapAtlas;
 using PixelFarm.Drawing;
 using SampleWinForms;
 
+
 namespace Mini
 {
+    enum BinCompression
+    {
+        None,
+        Deflate,
+    }
 
+    static class DeflateCompressionUtils
+    {
+
+        public static byte[] Compress(byte[] inputdata)
+        {
+            using (MemoryStream compressedFileStream = new MemoryStream())
+            {
+                using (DeflateStream compressionStream = new DeflateStream(compressedFileStream, CompressionMode.Compress))
+                {
+                    compressionStream.Write(inputdata, 0, inputdata.Length);
+                }
+                compressedFileStream.Flush();
+                return compressedFileStream.ToArray();
+            }
+        }
+
+        public static byte[] Decompress(byte[] compressedData)
+        {
+
+            using (MemoryStream outputStream = new MemoryStream())
+            {
+                using (MemoryStream input = new MemoryStream(compressedData))
+                {
+                    using (DeflateStream decompressionStream = new DeflateStream(input, CompressionMode.Decompress))
+                    {
+
+                        byte[] readBuffer = new byte[1024];
+                        int byteRead = decompressionStream.Read(readBuffer, 0, readBuffer.Length);
+                        while (byteRead > 0)
+                        {
+                            outputStream.Write(readBuffer, 0, byteRead);
+                            byteRead = decompressionStream.Read(readBuffer, 0, readBuffer.Length);
+                        }
+                    }
+                }
+                return outputStream.ToArray();
+            }
+        }
+    }
     static class BinToHexUtils
     {
-        public static StringBuilder ReadBinaryAndConvertToHexArr(string file)
+        public static StringBuilder ReadBinaryAndConvertToHexArr(string filename, BinCompression compression)
         {
-            return ReadBinaryAndConvertToHexArr(File.ReadAllBytes(file));
+            byte[] rawBuffer = File.ReadAllBytes(filename);
+            switch (compression)
+            {
+                case BinCompression.Deflate:
+                    {
+
+                        byte[] compressedData = DeflateCompressionUtils.Compress(rawBuffer);
+#if DEBUG                         
+                        byte[] decompressedData = DeflateCompressionUtils.Decompress(compressedData);
+                        if (decompressedData.Length != rawBuffer.Length)
+                        {
+                            throw new NotSupportedException();
+                        }
+#endif
+
+                        return ReadBinaryAndConvertToHexArr(compressedData);
+                    }
+                default:
+
+                    return ReadBinaryAndConvertToHexArr(rawBuffer);
+            }
+        }
+        public static StringBuilder ReadBinaryAndConvertToHexArr(ConvertedFile file, BinCompression compression)
+        {
+            byte[] rawBuffer = File.ReadAllBytes(file.itemSourceFile.AbsoluteFilename);
+            file.OriginalFileLength = rawBuffer.Length;
+            switch (compression)
+            {
+                case BinCompression.Deflate:
+                    {
+
+                        byte[] compressedData = DeflateCompressionUtils.Compress(rawBuffer);
+                        file.CompressedFileLength = compressedData.Length;
+#if DEBUG
+                        byte[] decompressedData = DeflateCompressionUtils.Decompress(compressedData);
+                        if (decompressedData.Length != rawBuffer.Length)
+                        {
+                            throw new NotSupportedException();
+                        }
+#endif
+
+                        return ReadBinaryAndConvertToHexArr(compressedData);
+                    }
+                default:
+
+                    return ReadBinaryAndConvertToHexArr(rawBuffer);
+            }
         }
         public static StringBuilder ReadBinaryAndConvertToHexArr(byte[] buffer)
         {
@@ -189,9 +281,9 @@ namespace Mini
                 }
                 outputFile.AppendLine("}");
 
-                StringBuilder info_sb = BinToHexUtils.ReadBinaryAndConvertToHexArr(info);
+                StringBuilder info_sb = BinToHexUtils.ReadBinaryAndConvertToHexArr(info, BinCompression.None);
 
-                StringBuilder img_sb = BinToHexUtils.ReadBinaryAndConvertToHexArr(img);
+                StringBuilder img_sb = BinToHexUtils.ReadBinaryAndConvertToHexArr(img, BinCompression.None);
 
                 outputFile.AppendLine("//bitmap_atlas_info");
                 outputFile.AppendLine("//" + info);
@@ -292,16 +384,18 @@ namespace Mini
             }
         }
     }
-
+    class ConvertedFile
+    {
+        public AtlasItemSourceFile itemSourceFile;
+        public StringBuilder Data;
+        public string Name;
+        public BinCompression Compression;
+        public int OriginalFileLength;
+        public int CompressedFileLength;
+    }
 
     static class ResourceBuilderUtils
     {
-        class ConvertedFile
-        {
-            public AtlasItemSourceFile itemSourceFile;
-            public StringBuilder Data;
-            public string Name;
-        }
 
         public static void BuildResources(AtlasProject atlasProj)
         {
@@ -317,8 +411,9 @@ namespace Mini
                 //------
                 //load and convert
                 ConvertedFile convertedFile = new ConvertedFile();
-                convertedFile.Data = BinToHexUtils.ReadBinaryAndConvertToHexArr(f.AbsoluteFilename);
+                convertedFile.Compression = BinCompression.Deflate;
                 convertedFile.itemSourceFile = f;
+                convertedFile.Data = BinToHexUtils.ReadBinaryAndConvertToHexArr(convertedFile, convertedFile.Compression);
 
 
                 string url2 = f.Link.Replace("\\", "_");
@@ -350,6 +445,12 @@ namespace Mini
                 outputFile.AppendLine("public partial class RawResourceData{");
                 foreach (ConvertedFile f in selectedItems)
                 {
+                    if (f.Compression != BinCompression.None)
+                    {
+                        outputFile.AppendLine("///<summary>");
+                        outputFile.AppendLine("///compression: " + f.Compression + ",org_file_length=" + f.OriginalFileLength + ", compressed_length=" + f.CompressedFileLength);
+                        outputFile.AppendLine("///</summary>");
+                    }
                     outputFile.AppendLine("public readonly byte[] " + f.Name + "=" + f.Data.ToString() + ";");
                 }
 

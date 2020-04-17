@@ -17,10 +17,11 @@ namespace Mini
         static void Main()
         {
 
+            //----------
+
+             
 
             PixelFarm.Platforms.StorageService.RegisterProvider(new YourImplementation.LocalFileStorageProvider(""));
-
-            
             string icu_datadir = YourImplementation.RelativePathBuilder.SearchBackAndBuildFolderPath(System.IO.Directory.GetCurrentDirectory(), "PixelFarm", @"..\Typography\Typography.TextBreak\icu62\brkitr");
             if (!System.IO.Directory.Exists(icu_datadir))
             {
@@ -28,9 +29,6 @@ namespace Mini
             }
             var dicProvider = new Typography.TextBreak.IcuSimpleTextFileDictionaryProvider() { DataDir = icu_datadir };
             Typography.TextBreak.CustomBreakerBuilder.Setup(dicProvider);
-
-
-
             PixelFarm.CpuBlit.MemBitmapExtensions.DefaultMemBitmapIO = new PixelFarm.Drawing.WinGdi.GdiBitmapIO();
             YourImplementation.TestBedStartup.Setup();
 
