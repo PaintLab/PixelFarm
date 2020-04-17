@@ -209,12 +209,12 @@ namespace PixelFarm.CpuBlit
             //1. switch to mask layer 
             SetClipRgn(vxs);
 
-            Point prevOrg = _rgbaGourandSpanGen.SpanOrigin;
+             
             float ox = OriginX;
             float oy = OriginY;
 
             Point newOrg = new Point((int)(bounds.Left + ox), (int)(bounds.Bottom + oy));
-            _rgbaGourandSpanGen.SpanOrigin = newOrg;
+             
 
             PolygonGradientBrush brush = ResolvePolygonGradientBrush(polygonGrBrush);
 
@@ -233,7 +233,7 @@ namespace PixelFarm.CpuBlit
             }
 
             SetClipRgn(null);
-            _rgbaGourandSpanGen.SpanOrigin = prevOrg;//restore
+           
 
             SetOrigin(ox, oy);
         }
@@ -355,15 +355,10 @@ namespace PixelFarm.CpuBlit
                             break;
                         case BrushKind.PolygonGradient:
                             {
-                                //we use mask technique (simlar to texture brush) 
-
-
-                                Point prevOrg = _rgbaGourandSpanGen.SpanOrigin;
+                                //we use mask technique (simlar to texture brush)  
+                                
                                 float ox = OriginX;
-                                float oy = OriginY;
-
-                                Point newOrg = new Point((int)(left + ox), (int)(top + oy));
-                                _rgbaGourandSpanGen.SpanOrigin = newOrg;
+                                float oy = OriginY; 
 
                                 PolygonGradientBrush brush = ResolvePolygonGradientBrush((Drawing.PolygonGradientBrush)br);
 
@@ -372,7 +367,7 @@ namespace PixelFarm.CpuBlit
 
                                 int partCount = brush.CachePartCount;
 
-                                SetOrigin(newOrg.X, newOrg.Y);
+                                SetOrigin((int)(left + ox), (int)(top + oy));
 
                                 for (int i = 0; i < partCount; i++)
                                 {
@@ -382,9 +377,9 @@ namespace PixelFarm.CpuBlit
                                 }
 
                                 SetClipRgn(null);
-                                _rgbaGourandSpanGen.SpanOrigin = prevOrg;//restore
+                               
 
-                                SetOrigin(ox, oy);
+                                SetOrigin(ox, oy); //restore
                             }
                             break;
                         case BrushKind.Solid:
