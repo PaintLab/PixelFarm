@@ -474,7 +474,7 @@ namespace PixelFarm.Drawing.WinGdi
                     {
                     }
                     break;
-                case BrushKind.CircularGraident:
+                case BrushKind.CircularGradient:
                     {
                     }
                     break;
