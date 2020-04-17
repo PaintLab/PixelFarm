@@ -14,11 +14,10 @@ namespace LayoutFarm.Dev
             InitializeComponent();
             this.Load += new EventHandler(Form1_Load);
             //------
-
-            this.lstPlatformSelectors.Items.Add(InnerViewportKind.GdiPlus);
             this.lstPlatformSelectors.Items.Add(InnerViewportKind.GLES);
+            this.lstPlatformSelectors.Items.Add(InnerViewportKind.GdiPlus);           
             //this.lstPlatformSelectors.Items.Add(InnerViewportKind.Skia);
-            this.lstPlatformSelectors.Items.Add(InnerViewportKind.AggOnGLES);
+            //this.lstPlatformSelectors.Items.Add(InnerViewportKind.AggOnGLES);
             this.lstPlatformSelectors.Items.Add(InnerViewportKind.GdiPlusOnGLES);
             this.lstPlatformSelectors.SelectedIndex = 0;//set default
         }

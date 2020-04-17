@@ -35,6 +35,12 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\PixelFarm.DrawingCore\MemMx.cs">
+      <Link>MemMx.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm.DrawingCore\NativeMemMx.cs">
+      <Link>NativeMemMx.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm.Vectors\3_Transform\1_Affine.cs">
       <Link>00_Porting\1_Affine.cs</Link>
     </Compile>
