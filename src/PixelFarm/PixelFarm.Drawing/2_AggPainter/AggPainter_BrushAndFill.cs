@@ -43,7 +43,7 @@ namespace PixelFarm.CpuBlit
                         break;
                     case BrushKind.LinearGradient:
                         break;
-                    case BrushKind.CircularGraident:
+                    case BrushKind.CircularGradient:
                         break;
                     case BrushKind.PolygonGradient:
                         break;
@@ -140,13 +140,14 @@ namespace PixelFarm.CpuBlit
 
                         }
                         break;
-                    case BrushKind.CircularGraident:
+                    case BrushKind.CircularGradient:
                         {
+                          
                             Q1RectD bounds = vxs.GetBoundingRect();
                             RadialGradientSpanGen radialSpanGen = ResolveRadialGrBrush((RadialGradientBrush)br);
                             //radialSpanGen.SetOrigin(0, 0);//TODO: review this offset 
                             Point prevOrg = radialSpanGen.SpanOrigin;
-                            radialSpanGen.SpanOrigin = new Point((int)(OriginX), (int)(OriginY)); //*** 
+                            radialSpanGen.SpanOrigin = new Point((int)(bounds.Left), (int)(bounds.Bottom)); //*** 
                             radialSpanGen.Opactiy = FillOpacity;
                             Fill(vxs, radialSpanGen);
                             radialSpanGen.SpanOrigin = prevOrg;//restore
@@ -337,16 +338,16 @@ namespace PixelFarm.CpuBlit
                                 //if not then create a new one
                                 //-------------------------------------------  
                                 //check inner object
-                                LinearGradientSpanGen linearGradientSpanGen = ResolveLinearGrBrush((LinearGradientBrush)br);                                
-                                Fill(rectTool.MakeVxs(v1), linearGradientSpanGen);                           
+                                LinearGradientSpanGen linearGradientSpanGen = ResolveLinearGrBrush((LinearGradientBrush)br);
+                                Fill(rectTool.MakeVxs(v1), linearGradientSpanGen);
                             }
                             break;
-                        case BrushKind.CircularGraident:
+                        case BrushKind.CircularGradient:
                             {
 
                                 RadialGradientSpanGen radialSpanGen = ResolveRadialGrBrush((Drawing.RadialGradientBrush)br);
                                 Point prev_o = radialSpanGen.SpanOrigin;
-                                radialSpanGen.SpanOrigin = new Point((int)OriginX, (int)OriginY);
+                                radialSpanGen.SpanOrigin = new Point(0, 0);
                                 Fill(rectTool.MakeVxs(v1), radialSpanGen);
                                 radialSpanGen.SpanOrigin = prev_o;
                             }
@@ -369,8 +370,7 @@ namespace PixelFarm.CpuBlit
 
                                 for (int i = 0; i < partCount; i++)
                                 {
-                                    brush.SetSpanGenWithCurrentValues(i, _rgbaGourandSpanGen); //*** this affects assoc gouraudSpanGen 
-
+                                    brush.SetSpanGenWithCurrentValues(i, _rgbaGourandSpanGen); //*** this affects assoc gouraudSpanGen  
                                     this.Fill(brush.CurrentVxs, _rgbaGourandSpanGen);
                                 }
 
