@@ -249,17 +249,24 @@ namespace PixelFarm.CpuBlit
             this.SpreadMethod = radialGrBrush.SpreadMethod;
             Opactiy = 1;
         }
+
+        bool _partListInit;
+
         public float Opactiy
         {
             get => _fillOpacity;
             set
             {
+
+                if (_partListInit && _fillOpacity == value)
+                {
+                    return;
+                }
+
+                _partListInit = true;
                 _fillOpacity = value;
                 //apply to all
-                if (value < 1)
-                {
 
-                }
                 for (int i = 0; i < _orgList.Length; ++i)
                 {
                     _pairList[i] = _orgList[i].CreateWithNewOpacity(value);
@@ -338,7 +345,7 @@ namespace PixelFarm.CpuBlit
             int new_centerX = _center_x;
             int new_centerY = _center_y;
 
-            
+
             if (_invertCoordTx != null)
             {
 
