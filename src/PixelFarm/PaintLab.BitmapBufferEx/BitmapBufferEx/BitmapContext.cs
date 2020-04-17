@@ -136,7 +136,7 @@ namespace BitmapBufferEx
                 byte* srcStartAt = (byte*)src.Pixels._inf32Buffer + srcOffset;
                 byte* destStartAt = (byte*)dest.Pixels._inf32Buffer + destOffset;
 
-                PixelFarm.Drawing.Internal.NativeMemMx.memcpy((byte*)destStartAt, (byte*)srcStartAt, count);
+                PixelFarm.Drawing.Internal.MemMx.memcpy((byte*)destStartAt, (byte*)srcStartAt, count);
             }
             //Buffer.BlockCopy(src.Pixels, srcOffset, dest.Pixels, destOffset, count);
         }
@@ -151,7 +151,7 @@ namespace BitmapBufferEx
 
             byte* srcStartAt = (byte*)src + srcOffset;
             byte* destStartAt = (byte*)dest.Pixels._inf32Buffer + destOffset;
-            PixelFarm.Drawing.Internal.NativeMemMx.memcpy((byte*)destStartAt, (byte*)srcStartAt, count);
+            PixelFarm.Drawing.Internal.MemMx.memcpy((byte*)destStartAt, (byte*)srcStartAt, count);
 
             //PixelFarm.CpuBlit.NativeMemMx.memcpy((byte*)destStartAt, (byte*)srcStartAt, count);
         }
@@ -178,7 +178,7 @@ namespace BitmapBufferEx
             unsafe
             {
                 byte* px = (byte*)_writeableBitmap.Pixels;
-                PixelFarm.Drawing.Internal.NativeMemMx.memset((byte*)px, 0, _writeableBitmap.LenInBytes);
+                PixelFarm.Drawing.Internal.MemMx.memset_unsafe((IntPtr)px, 0, _writeableBitmap.LenInBytes);
             }
             ////int[] pixels = _writeableBitmap.Pixels;
             //Array.Clear(pixels, 0, pixels.Length);
