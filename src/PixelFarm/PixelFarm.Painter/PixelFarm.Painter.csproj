@@ -157,7 +157,9 @@
     </Compile>
     <Compile Include="0_Base\ForNet20.cs" />
     <Compile Include="CpuBlit\TempMemPtr.cs" />
+    <Compile Include="DrawBoard.cs" />
     <Compile Include="Drawing\ClipingTechnique.cs" />
+    <Compile Include="Painter.cs" />
     <Compile Include="TempContext.cs" />
     <Compile Include="Drawing\TextBaseline.cs" />
     <Compile Include="CpuBlit\ColorRGBAf.cs" />

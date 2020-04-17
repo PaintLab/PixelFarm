@@ -30,7 +30,7 @@
         {
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.cmdBuildAtlas = new System.Windows.Forms.Button();
+            this.cmdBuild = new System.Windows.Forms.Button();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.cmdReadBmpAtlas = new System.Windows.Forms.Button();
             this.listBox2 = new System.Windows.Forms.ListBox();
@@ -40,6 +40,8 @@
             this.listBox3 = new System.Windows.Forms.ListBox();
             this.button1 = new System.Windows.Forms.Button();
             this.cmdShowFontAtlas = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.cmbProjectDirs = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -47,7 +49,7 @@
             // listBox1
             // 
             this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(12, 178);
+            this.listBox1.Location = new System.Drawing.Point(12, 215);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(238, 212);
             this.listBox1.TabIndex = 1;
@@ -55,21 +57,21 @@
             // pictureBox1
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.pictureBox1.Location = new System.Drawing.Point(256, 178);
+            this.pictureBox1.Location = new System.Drawing.Point(256, 215);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(111, 92);
             this.pictureBox1.TabIndex = 2;
             this.pictureBox1.TabStop = false;
             // 
-            // cmdBuildAtlas
+            // cmdBuild
             // 
-            this.cmdBuildAtlas.Location = new System.Drawing.Point(256, 276);
-            this.cmdBuildAtlas.Name = "cmdBuildAtlas";
-            this.cmdBuildAtlas.Size = new System.Drawing.Size(111, 44);
-            this.cmdBuildAtlas.TabIndex = 3;
-            this.cmdBuildAtlas.Text = "Build Atlas";
-            this.cmdBuildAtlas.UseVisualStyleBackColor = true;
-            this.cmdBuildAtlas.Click += new System.EventHandler(this.cmdBuildAtlas_Click);
+            this.cmdBuild.Location = new System.Drawing.Point(256, 313);
+            this.cmdBuild.Name = "cmdBuild";
+            this.cmdBuild.Size = new System.Drawing.Size(111, 44);
+            this.cmdBuild.TabIndex = 3;
+            this.cmdBuild.Text = "Build";
+            this.cmdBuild.UseVisualStyleBackColor = true;
+            this.cmdBuild.Click += new System.EventHandler(this.cmdBuild_Click);
             // 
             // pictureBox2
             // 
@@ -100,7 +102,7 @@
             // 
             // txtOutput
             // 
-            this.txtOutput.Location = new System.Drawing.Point(12, 403);
+            this.txtOutput.Location = new System.Drawing.Point(12, 440);
             this.txtOutput.Multiline = true;
             this.txtOutput.Name = "txtOutput";
             this.txtOutput.Size = new System.Drawing.Size(239, 117);
@@ -109,14 +111,14 @@
             // lstProjectList
             // 
             this.lstProjectList.FormattingEnabled = true;
-            this.lstProjectList.Location = new System.Drawing.Point(12, 12);
+            this.lstProjectList.Location = new System.Drawing.Point(12, 49);
             this.lstProjectList.Name = "lstProjectList";
             this.lstProjectList.Size = new System.Drawing.Size(152, 160);
             this.lstProjectList.TabIndex = 9;
             // 
             // cmdOpenOutputFolder
             // 
-            this.cmdOpenOutputFolder.Location = new System.Drawing.Point(256, 403);
+            this.cmdOpenOutputFolder.Location = new System.Drawing.Point(256, 440);
             this.cmdOpenOutputFolder.Name = "cmdOpenOutputFolder";
             this.cmdOpenOutputFolder.Size = new System.Drawing.Size(111, 44);
             this.cmdOpenOutputFolder.TabIndex = 10;
@@ -144,7 +146,7 @@
             // 
             // cmdShowFontAtlas
             // 
-            this.cmdShowFontAtlas.Location = new System.Drawing.Point(256, 326);
+            this.cmdShowFontAtlas.Location = new System.Drawing.Point(256, 363);
             this.cmdShowFontAtlas.Name = "cmdShowFontAtlas";
             this.cmdShowFontAtlas.Size = new System.Drawing.Size(111, 44);
             this.cmdShowFontAtlas.TabIndex = 13;
@@ -152,11 +154,30 @@
             this.cmdShowFontAtlas.UseVisualStyleBackColor = true;
             this.cmdShowFontAtlas.Click += new System.EventHandler(this.cmdShowFontAtlas_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 3);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(56, 13);
+            this.label1.TabIndex = 15;
+            this.label1.Text = "ProjectDir:";
+            // 
+            // cmbProjectDirs
+            // 
+            this.cmbProjectDirs.FormattingEnabled = true;
+            this.cmbProjectDirs.Location = new System.Drawing.Point(12, 19);
+            this.cmbProjectDirs.Name = "cmbProjectDirs";
+            this.cmbProjectDirs.Size = new System.Drawing.Size(316, 21);
+            this.cmbProjectDirs.TabIndex = 16;
+            // 
             // FormBitmapAtlasBuilder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1248, 768);
+            this.Controls.Add(this.cmbProjectDirs);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.cmdShowFontAtlas);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.listBox3);
@@ -166,7 +187,7 @@
             this.Controls.Add(this.listBox2);
             this.Controls.Add(this.cmdReadBmpAtlas);
             this.Controls.Add(this.pictureBox2);
-            this.Controls.Add(this.cmdBuildAtlas);
+            this.Controls.Add(this.cmdBuild);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.listBox1);
             this.Name = "FormBitmapAtlasBuilder";
@@ -182,7 +203,7 @@
         #endregion
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Button cmdBuildAtlas;
+        private System.Windows.Forms.Button cmdBuild;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Button cmdReadBmpAtlas;
         private System.Windows.Forms.ListBox listBox2;
@@ -192,5 +213,7 @@
         private System.Windows.Forms.ListBox listBox3;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button cmdShowFontAtlas;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox cmbProjectDirs;
     }
 }

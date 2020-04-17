@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Mini;
-namespace BitmapAtlasTool
+namespace PaintLabResTool
 {
     static class Program
     {

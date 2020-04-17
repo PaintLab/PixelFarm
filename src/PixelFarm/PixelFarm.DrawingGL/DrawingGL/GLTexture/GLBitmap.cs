@@ -9,7 +9,7 @@ using PixelFarm.Drawing;
 namespace PixelFarm.DrawingGL
 {
 
-    public class GLBitmap : Image
+    public sealed class GLBitmap : Image
     {
         int _textureId;
         bool _createFromBlank;

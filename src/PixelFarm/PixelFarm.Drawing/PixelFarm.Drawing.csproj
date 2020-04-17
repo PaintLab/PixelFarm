@@ -224,17 +224,11 @@
     <Compile Include="..\PixelFarm.DrawingCore\Drawing\DashStyle.cs">
       <Link>0_REF_DrawingCore\DashStyle.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\Drawing\DrawBoard.cs">
-      <Link>0_REF_DrawingCore\DrawBoard.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.DrawingCore\Drawing\Image.cs">
       <Link>0_REF_DrawingCore\Image.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.DrawingCore\Drawing\LenAndLenUnit.cs">
       <Link>0_REF_DrawingCore\LenAndLenUnit.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\Drawing\Painter.cs">
-      <Link>0_REF_DrawingCore\Painter.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.DrawingCore\Drawing\Region.cs">
       <Link>0_REF_DrawingCore\Region.cs</Link>
@@ -314,6 +308,9 @@
     <Compile Include="..\PixelFarm.Painter\CpuBlit\TempMemPtr.cs">
       <Link>0_REF_Painter\CpuBlit\TempMemPtr.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.Painter\DrawBoard.cs">
+      <Link>0_REF_Painter\DrawBoard.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.Painter\Drawing.Internal\CO.cs">
       <Link>0_REF_Painter\Drawing.Internal\CO.cs</Link>
     </Compile>
@@ -331,6 +328,9 @@
     </Compile>
     <Compile Include="..\PixelFarm.Painter\Drawing\TextBaseline.cs">
       <Link>0_REF_Painter\Drawing\TextBaseline.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.Painter\Painter.cs">
+      <Link>0_REF_Painter\Painter.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.Painter\TempContext.cs">
       <Link>0_REF_Painter\TempContext.cs</Link>

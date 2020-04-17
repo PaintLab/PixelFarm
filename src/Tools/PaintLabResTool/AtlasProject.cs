@@ -25,10 +25,7 @@ namespace Mini
 
         public bool IsBitmapAtlasProject { get; set; }
         public bool IsFontAtlasProject { get; set; }
-
-
-
-
+        public bool IsResourceProject { get; set; }
 
         public void LoadProjectDetail()
         {
@@ -66,6 +63,11 @@ namespace Mini
                 string extension = Path.GetExtension(include);
                 switch (extension)
                 {
+                    case ".css":
+                    case ".html":
+                    case ".htm":
+                    case ".svg":
+
                     case ".xml": //data or config
                     case ".png":
                         {
@@ -77,6 +79,11 @@ namespace Mini
                             if (content.SelectSingleNode(ns + "Link", nsmgr) is XmlElement linkNode)
                             {
                                 atlasItemFile.Link = linkNode.InnerText;
+                            }
+                            else
+                            {
+                                //no link node, use include
+                                atlasItemFile.Link = include;
                             }
                             Items.Add(atlasItemFile);
                         }
@@ -102,6 +109,11 @@ namespace Mini
                             if (content.SelectSingleNode(ns + "Link", nsmgr) is XmlElement linkNode)
                             {
                                 atlasItemFile.Link = linkNode.InnerText;
+                            }
+                            else
+                            {
+                                //no link node, use include
+                                atlasItemFile.Link = include;
                             }
                             Items.Add(atlasItemFile);
                         }
@@ -168,6 +180,12 @@ namespace Mini
                             }
                         }
                         break;
+                    case ".css":
+                    case ".html":
+                    case ".htm":
+                    case ".svg":
+                        atlasSrcItem.Kind = AtlasItemSourceKind.Text;
+                        break;
                     case ".png":
                     case ".jpg":
                         atlasSrcItem.Kind = AtlasItemSourceKind.Image;
@@ -177,9 +195,14 @@ namespace Mini
                         {
                             atlasSrcItem.Kind = AtlasItemSourceKind.Data;
                             TryReadConfigFile(atlasSrcItem);
-                            if (atlasSrcItem.FontBuilderConfig != null)
+                            switch (atlasSrcItem.Kind)
                             {
-                                IsFontAtlasProject = true;
+                                case AtlasItemSourceKind.FontAtlasConfig:
+                                    IsFontAtlasProject = true;
+                                    break;
+                                case AtlasItemSourceKind.ResourceConfig:
+                                    IsResourceProject = true;
+                                    break;
                             }
                         }
                         break;
@@ -198,7 +221,12 @@ namespace Mini
                     //this  typeface config
                     ReadFontBuilderConfig(atlasSrcItem, docElem);
                     //change item kind to config
-                    atlasSrcItem.Kind = AtlasItemSourceKind.Config;
+                    atlasSrcItem.Kind = AtlasItemSourceKind.FontAtlasConfig;
+                    atlasSrcItem.IsConfig = true;
+                    break;
+                case "resource_builder_config":
+                    atlasSrcItem.Kind = AtlasItemSourceKind.ResourceConfig;
+                    atlasSrcItem.IsConfig = true;
                     break;
             }
         }
@@ -240,8 +268,13 @@ namespace Mini
     {
         Image,
         Font,
-        Config,
         Data,
+        Text,
+
+
+        FontAtlasConfig,
+        BitmapAtlasConfig,
+        ResourceConfig,
     }
 
     class AtlasItemSourceFile
@@ -267,6 +300,7 @@ namespace Mini
 
 
         public FontBuilderConfig FontBuilderConfig { get; set; }
+        public bool IsConfig { get; set; }
     }
 
 

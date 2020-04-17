@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BitmapAtlasTool.Properties {
+namespace PaintLabResTool.Properties {
     using System;
     
     

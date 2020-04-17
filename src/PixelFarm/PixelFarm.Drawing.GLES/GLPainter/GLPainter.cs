@@ -27,7 +27,7 @@ namespace PixelFarm.DrawingGL
 
         TargetBuffer _targetBuffer;
         PixelFarm.Drawing.GLES2.MyGLDrawBoard _drawBoard;
-
+        CpuBlit.BitmapAtlas.MySimpleGLBitmapAtlasManager _mySimpleGLBitmapAtlas;
 
         public GLPainter()
         {
@@ -38,7 +38,12 @@ namespace PixelFarm.DrawingGL
             _defaultBrush = _currentBrush = new SolidBrush(Color.Black); //default brush 
             _pathRenderVxBuilder2 = new PathRenderVxBuilder2();
 
+
+            //default
+            _mySimpleGLBitmapAtlas = new CpuBlit.BitmapAtlas.MySimpleGLBitmapAtlasManager(CpuBlit.BitmapAtlas.TextureKind.Bitmap);
+            SetBitmapAtlasManager(_mySimpleGLBitmapAtlas);
         }
+        
         public void SetDrawboard(PixelFarm.Drawing.GLES2.MyGLDrawBoard drawBoard)
         {
             _drawBoard = drawBoard;

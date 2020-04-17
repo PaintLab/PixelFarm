@@ -11,20 +11,34 @@ namespace PixelFarm.DrawingGL
     {
         SimpleBitmapAtlas _bmpAtlas;
         GLBitmap _glBmp;//current bitmap
-        MySimpleGLBitmapAtlasManager _atlasManager;
+        BitmapAtlasManager<GLBitmap> _atlasManager;
         string _lastestImgFile = null;
 
-        public GLBitmapAtlasPainter(TextureKind textureKind = TextureKind.Bitmap)
+        readonly int _painterId;
+        static int s_totalId;
+        public GLBitmapAtlasPainter()
         {
-            _atlasManager = new MySimpleGLBitmapAtlasManager(textureKind);
+            _painterId = System.Threading.Interlocked.Increment(ref s_totalId);
         }
-
+        public void SetBitmapAtlasManager(BitmapAtlasManager<GLBitmap> atlasManager)
+        {
+            _atlasManager = atlasManager;
+        }
         public void DrawImage(GLPainter glPainter, AtlasImageBinder atlasImgBinder, float left, float top)
         {
+
+            if (atlasImgBinder.State == BinderState.Loaded && atlasImgBinder.LatestPainterId != _painterId)
+            {
+                atlasImgBinder.State = BinderState.Unload;
+                atlasImgBinder.LatestPainterId = _painterId;
+            }
+
+
             switch (atlasImgBinder.State)
             {
                 case BinderState.Loaded:
                     {
+
                         if (PixelFarm.Drawing.ImageBinder.GetCacheInnerImage(atlasImgBinder) is GLBitmap glbmp)
                         {
                             AtlasItem atlasItem = atlasImgBinder.AtlasItem;
@@ -34,19 +48,18 @@ namespace PixelFarm.DrawingGL
                                    atlasItem.Width,
                                    atlasItem.Height);
 
-                            TextureKind textureKind = _bmpAtlas.TextureKind;
-                            switch (textureKind)
+                            switch (atlasImgBinder.TextureKind)
                             {
                                 default:
                                 case TextureKind.Msdf:
                                     throw new NotSupportedException();
                                 case TextureKind.Bitmap:
                                     {
-                                        atlasImgBinder.State = BinderState.Loaded;
-                                        ImageBinder.SetCacheInnerImage(atlasImgBinder, _glBmp, false);
+                                        //atlasImgBinder.State = BinderState.Loaded;
+                                        //ImageBinder.SetCacheInnerImage(atlasImgBinder, glbmp, false);
+                                        //atlasImgBinder.AtlasItem = atlasItem;
 
-                                        atlasImgBinder.AtlasItem = atlasItem;
-                                        glPainter.Core.DrawSubImage(_glBmp,
+                                        glPainter.Core.DrawSubImage(glbmp,
                                             srcRect,
                                             left,
                                             top);
@@ -58,8 +71,9 @@ namespace PixelFarm.DrawingGL
                     break;
                 case BinderState.Unload:
                     {
+                        atlasImgBinder.LatestPainterId = _painterId;
                         //load img first
-                        if (_lastestImgFile != atlasImgBinder.AtlasName)
+                        if (_bmpAtlas == null || _lastestImgFile != atlasImgBinder.AtlasName)
                         {
                             _bmpAtlas = _atlasManager.GetBitmapAtlas(atlasImgBinder.AtlasName, out _glBmp);
                             if (_bmpAtlas == null)
@@ -94,7 +108,7 @@ namespace PixelFarm.DrawingGL
                                         atlasImgBinder.AtlasItem = atlasItem;
                                         atlasImgBinder.SetPreviewImageSize(atlasItem.Width, atlasItem.Height);
                                         atlasImgBinder.RaiseImageChanged();
-
+                                        atlasImgBinder.TextureKind = textureKind;
                                         glPainter.Core.DrawSubImage(_glBmp,
                                             srcRect,
                                             left,
