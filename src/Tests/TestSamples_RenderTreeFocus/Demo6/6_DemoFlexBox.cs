@@ -6,7 +6,7 @@ using LayoutFarm.CustomWidgets;
 using LayoutFarm.UI;
 using System.Xml;
 using System.Collections.Generic;
-
+using System.Runtime.Remoting.Channels;
 
 namespace LayoutFarm
 {
@@ -146,8 +146,8 @@ namespace LayoutFarm
             //Init2();
 
             //Init2_1();
-            //Init2_2();
-            Init2_3();
+            Init2_2();
+            //Init2_3();
 
             _rootPanel.LayoutInstance = _root.ToLayoutInstance();
         }
@@ -455,9 +455,120 @@ namespace LayoutFarm
             return dic;
         }
 
+        static YogaJustify GetJustify(string value)
+        {
+            switch (value)
+            {
+                default: throw new NotSupportedException();
+                case "flex_start": return YogaJustify.FlexStart;
+                case "center": return YogaJustify.Center;
+                case "flex_end": return YogaJustify.FlexEnd;
+                case "space_between": return YogaJustify.SpaceBetween;
+                case "space_around": return YogaJustify.SpaceAround;
+                case "space_evently": return YogaJustify.SpaceEvenly;
+            }
+        }
+        static YogaWrap GetYogaWrap(string value)
+        {
+            switch (value)
+            {
+                default: throw new NotSupportedException();
+                case "no_wrap": return YogaWrap.NoWrap;
+                case "wrap": return YogaWrap.Wrap;
+                case "wrap_reverse": return YogaWrap.WrapReverse;
+            }
+        }
+        static YogaDisplay GetDisplay(string value)
+        {
+            switch (value)
+            {
+                default: throw new NotSupportedException();
+                case "flex": return YogaDisplay.Flex;
+                case "none": return YogaDisplay.None;
+            }
+        }
+        static YogaAlign GetYogaAlign(string value)
+        {
+            switch (value)
+            {
+                case "auto": return YogaAlign.Auto;
+                case "flex_start": return YogaAlign.FlexStart;
+                case "center": return YogaAlign.Center;
+                case "flex_end": return YogaAlign.FlexEnd;
+                case "stretch": return YogaAlign.Stretch;
+                case "baseline": return YogaAlign.Baseline;
+                case "space_between": return YogaAlign.SpaceBetween;
+                case "space_around": return YogaAlign.SpaceBetween;
+                default: throw new NotSupportedException();
+            }
+        }
+        static YogaOverflow GetOverflow(string value)
+        {
+            switch (value)
+            {
+                default: throw new NotSupportedException();
+                case "visible": return YogaOverflow.Visible;
+                case "hidden": return YogaOverflow.Hidden;
+                case "scroll": return YogaOverflow.Scroll;
+            }
+        }
+        static YogaDirection GetYogaDirection(string value)
+        {
+            switch (value)
+            {
+                default: throw new NotSupportedException();
+                case "right_to_left":
+                    return YogaDirection.RightToLeft;
+                case "left_to_right":
+                    return YogaDirection.LeftToRight;
+                case "inherit":
+                    return YogaDirection.Inherit;
+            }
+        }
+        static YogaPositionType GetYogaPosition(string value)
+        {
+            switch (value)
+            {
+                default: throw new NotSupportedException();
+                case "relative": return YogaPositionType.Relative;
+                case "absolute": return YogaPositionType.Absolute;
+            }
+        }
+        static YogaFlexDirection GetFlexDirection(string value)
+        {
+            switch (value)
+            {
+                default: throw new NotSupportedException();
+                case "column": return YogaFlexDirection.Column;
+                case "column_reverse": return YogaFlexDirection.ColumnReverse;
+                case "row": return YogaFlexDirection.Row;
+                case "row_reverse": return YogaFlexDirection.RowReverse;
+            }
+        }
 
-
-
+        static YogaValue ParseYogaValue(string value)
+        {
+            if (value.EndsWith("%"))
+            {
+                return YogaValue.Percent(float.Parse(value.Substring(0, value.Length - 1)));
+            }
+            else if (value.EndsWith("pt"))
+            {
+                return YogaValue.Point(float.Parse(value.Substring(0, value.Length - 2)));
+            }
+            else if (float.TryParse(value, out float result))
+            {
+                return YogaValue.Point(result);
+            }
+            else if (value == "auto")
+            {
+                return YogaValue.Auto;
+            }
+            else
+            {
+                return YogaValue.Undefined;
+            }
+        }
         static YogaNode CreateYogaNode(XmlElement elem, YogaConfig conf)
         {
 
@@ -484,44 +595,25 @@ namespace LayoutFarm
                 {
                     default: throw new NotSupportedException();
                     case "width":
-                        node.Width = float.Parse(kv.Value);
+                        node.Width = ParseYogaValue(kv.Value);
                         break;
                     case "height":
-                        node.Height = float.Parse(kv.Value);
+                        node.Height = ParseYogaValue(kv.Value);
                         break;
                     case "padding":
-                        node.Padding = float.Parse(kv.Value);
+                        node.Padding = ParseYogaValue(kv.Value);
                         break;
                     case "align-items":
-                        {
-                            switch (kv.Value)
-                            {
-                                default: throw new NotSupportedException();
-                                case "stretch":
-                                    node.AlignItems = YogaAlign.Stretch;
-                                    break;
-                                case "center":
-                                    node.AlignItems = YogaAlign.Center;
-                                    break;
-                            }
-                        }
+                        node.AlignItems = GetYogaAlign(kv.Value);
                         break;
                     case "align-self":
-                        {
-                            switch (kv.Value)
-                            {
-                                default: throw new NotSupportedException();
-                                case "stretch":
-                                    node.AlignSelf = YogaAlign.Stretch;
-                                    break;
-                                case "center":
-                                    node.AlignSelf = YogaAlign.Center;
-                                    break;
-                            }
-                        }
+                        node.AlignSelf = GetYogaAlign(kv.Value);
+                        break;
+                    case "align-content":
+                        node.AlignContent = GetYogaAlign(kv.Value);
                         break;
                     case "margin-horizontal":
-                        node.MarginHorizontal = float.Parse(kv.Value);
+                        node.MarginHorizontal = ParseYogaValue(kv.Value);
                         break;
                     case "flex":
                         node.Flex = float.Parse(kv.Value);
@@ -532,23 +624,44 @@ namespace LayoutFarm
                     case "flex-glow":
                         node.FlexGrow = float.Parse(kv.Value);
                         break;
-                    case "style-direction":
-                        {
-                            switch (kv.Value)
-                            {
-                                default: throw new NotSupportedException();
-                                case "right_to_left":
-                                    node.StyleDirection = YogaDirection.RightToLeft;
-                                    break;
-                                case "left_to_right":
-                                    node.StyleDirection = YogaDirection.LeftToRight;
-                                    break;
-                            }
-                        }
+                   
+                    case "max-width":
+                        node.MaxWidth = ParseYogaValue(kv.Value);
                         break;
-
+                    case "max-height":
+                        node.MaxHeight = ParseYogaValue(kv.Value);
+                        break;
+                    case "min-width":
+                        node.MinWidth = ParseYogaValue(kv.Value);
+                        break;
+                    case "min-height":
+                        node.MinHeight = ParseYogaValue(kv.Value);
+                        break;
+                    case "aspect-ratio":
+                        node.MinHeight = float.Parse(kv.Value);
+                        break;
+                    case "overflow":
+                        node.Overflow = GetOverflow(kv.Value);
+                        break;
+                    case "flex-basis":
+                        node.FlexBasis = ParseYogaValue(kv.Value);
+                        break;
+                    case "wrap":
+                        node.Wrap = GetYogaWrap(kv.Value);
+                        break;
+                    case "position-type":
+                        node.PositionType = GetYogaPosition(kv.Value);
+                        break;
+                    case "justify-content":
+                        node.JustifyContent = GetJustify(kv.Value);
+                        break;
+                    case "flex-direction":
+                        node.FlexDirection = GetFlexDirection(kv.Value);
+                        break;
+                    case "style-direction":
+                        node.StyleDirection = GetYogaDirection(kv.Value);
+                        break;
                 }
-
             }
 
 
