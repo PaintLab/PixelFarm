@@ -6,21 +6,85 @@ using LayoutFarm.CustomWidgets;
 using LayoutFarm.UI;
 using System.Xml;
 using System.Collections.Generic;
-using OpenTK.Graphics.ES20;
+
 
 namespace LayoutFarm
 {
 
+    public class YogaSpec
+    {
+        public YogaFlexDirection FlexDirection;
+        public YogaValue Width;
+        public YogaValue Height;
+        public YogaAlign AlignItems;
+        public YogaAlign AlignSelf;
+        public float? FlexShrink;
+        public float? FlexGlow;
+        public float? Flex;
+        public YogaDirection StyleDirection;
+        public YogaValue MarginHorizontal;
+        public YogaValue Padding;
+    }
+
     public class YogaLayoutInstance : LayoutInstance
     {
         YogaNode _yogaNode;
+        YogaSpec _spec;
         public YogaLayoutInstance(YogaNode yogaNode)
         {
             _yogaNode = yogaNode;
+
+        }
+        public YogaLayoutInstance(YogaSpec spec)
+        {
+            _spec = spec;
         }
 
-        public override RectangleF GetResultBounds() => new RectangleF(_yogaNode.LayoutX, _yogaNode.LayoutY, _yogaNode.LayoutWidth, _yogaNode.LayoutHeight);
+        public void SetNode(YogaNode value)
+        {
+            if (value == null)
+            {
+                //clear _yoganode
+                _yogaNode = null;
+                return;
+            }
+
+            if (_spec != null)
+            {
+                value.FlexDirection = _spec.FlexDirection;
+                //apply spec
+                value.Width = _spec.Width;
+                value.Height = _spec.Height;
+                value.AlignItems = _spec.AlignItems;
+                value.AlignSelf = _spec.AlignSelf;
+
+                value.Flex = _spec.Flex;
+                value.FlexGrow = _spec.FlexGlow;
+                value.FlexShrink = _spec.FlexShrink;
+
+                value.StyleDirection = _spec.StyleDirection;
+                value.MarginHorizontal = _spec.MarginHorizontal;
+                value.Padding = _spec.Padding;
+            }
+            _yogaNode = value;
+        }
+        public YogaNode YogaNode => _yogaNode;
+
+        public override bool GetResultBounds(out RectangleF rects)
+        {
+            if (_yogaNode != null)
+            {
+                rects = new RectangleF(_yogaNode.LayoutX, _yogaNode.LayoutY, _yogaNode.LayoutWidth, _yogaNode.LayoutHeight);
+                return true;
+            }
+            else
+            {
+                rects = RectangleF.Empty;
+                return false;
+            }
+        }
     }
+
 
     public delegate void YogaDecor<T>(T t);
 
@@ -41,6 +105,7 @@ namespace LayoutFarm
     public static partial class YogaNodeExtensions
     {
         public static YogaLayoutInstance ToLayoutInstance(this YogaNode node) => new YogaLayoutInstance(node);
+        public static YogaLayoutInstance ToLayoutInstance(this YogaSpec spec) => new YogaLayoutInstance(spec);
     }
 
 
@@ -81,7 +146,8 @@ namespace LayoutFarm
             //Init2();
 
             //Init2_1();
-            Init2_2();
+            //Init2_2();
+            Init2_3();
 
             _rootPanel.LayoutInstance = _root.ToLayoutInstance();
         }
@@ -317,10 +383,14 @@ namespace LayoutFarm
             _rootPanel.UpdateLayout();
         }
 
+        /// <summary>
+        /// create yoga tree first then create boxes
+        /// </summary>
         void Init2_2()
         {
-            //simple, custom  :)
 
+
+            //1. markup
             string myYogaMarkup = $@"
             <column style='width:{_rootPanel.Width}; height:{_rootPanel.Height }; padding:20; align-items:stretch'>
                 <row style='width:{_rootPanel.Width}; height:100; align-items:center; align-self:center; flex:1; flex-shrink:1; style-direction:right_to_left;' note='yellow'>
@@ -332,7 +402,8 @@ namespace LayoutFarm
                 </box>
             </column>
             ";
-            //parse this markup
+
+            //2. parse to yoga tree
             YogaConfig conf = new YogaConfig();
             _root = Parse(myYogaMarkup, conf);
             _root_child0 = _root[0];
@@ -342,6 +413,7 @@ namespace LayoutFarm
             _root.CalculateLayout();
 
 
+            //3. create box from yoga tree
             _rootPanel.Add(CreateBoxFromYogaNode(_root, (y_node, b_node) =>
             {
                 switch (y_node.Note)
@@ -351,8 +423,6 @@ namespace LayoutFarm
                     case "red": b_node.BackColor = Color.Red; break;
                 }
             }));
-
-
             _rootPanel.UpdateLayout();
         }
         static YogaNode Parse(string markup, YogaConfig conf)
@@ -370,7 +440,6 @@ namespace LayoutFarm
             }
             return CreateYogaNode(xml.DocumentElement, conf);
         }
-
         static Dictionary<string, string> ParseStyle(string style)
         {
             Dictionary<string, string> dic = new Dictionary<string, string>();
@@ -385,6 +454,9 @@ namespace LayoutFarm
             }
             return dic;
         }
+
+
+
 
         static YogaNode CreateYogaNode(XmlElement elem, YogaConfig conf)
         {
@@ -501,6 +573,124 @@ namespace LayoutFarm
             return fb0;
         }
 
+        YogaNode CreateYogaNode(Box ui, YogaConfig config, bool updateMode)
+        {
+            LayoutInstance instance = ui.LayoutInstance;
+            if (instance is YogaLayoutInstance inst)
+            {
+
+                if (inst.YogaNode == null)
+                {
+                    //create yoga node 
+                    YogaNode node = new YogaNode(config);
+                    inst.SetNode(node);
+                }
+
+                //already has node
+                foreach (UIElement childUI in ui.GetChildIter())
+                {
+                    if (childUI is Box childBox)
+                    {
+                        inst.YogaNode.Append(CreateYogaNode(childBox, config, updateMode));
+                    }
+                }
+                return inst.YogaNode;
+            }
+            return null;
+
+        }
+        /// <summary>
+        /// create boxes first and assign yoga spec then arrange the boxes
+        /// </summary>
+        void Init2_3()
+        {
+            //if the yoga-node is expensive=> use yoga-spec and reusable yoga-node
+
+            ////1. markup
+            //string myYogaMarkup = $@"
+            //<column style='width:{_rootPanel.Width}; height:{_rootPanel.Height }; padding:20; align-items:stretch'>
+            //    <row style='width:{_rootPanel.Width}; height:100; align-items:center; align-self:center; flex:1; flex-shrink:1; style-direction:right_to_left;' note='yellow'>
+            //           <box style='width:100; height: 100; flex-shrink:1;' note='blue'></box>
+            //           <box style='width:100; height: 100; margin-horizontal:20; flex-glow:1; flex-shrink:1;' note='blue'></box>
+            //           <box style='width:100; height: 100; flex-shrink:1;' note='blue'></box>
+            //    </row>
+            //    <box style='width:100; height:100; margin-horizontal:20; flex-glow:1; flex-shrink:1' note='red'>
+            //    </box>
+            //</column>
+            //";
+
+
+            Box columnBox = new Box(100, 100)
+            {
+                LayoutInstance = (new YogaSpec()
+                {
+                    FlexDirection = YogaFlexDirection.Column,
+                    Width = _rootPanel.Width,
+                    Height = _rootPanel.Height,
+                    Padding = 20,
+                    AlignItems = YogaAlign.Stretch
+                }).ToLayoutInstance()
+            };
+            Box row = new Box(100, 100)
+            {
+                BackColor = Color.Yellow,
+                LayoutInstance = (new YogaSpec()
+                {
+                    FlexDirection = YogaFlexDirection.Row,
+                    Width = _rootPanel.Width,
+                    Height = 100,
+                    AlignItems = YogaAlign.Center,
+                    AlignSelf = YogaAlign.Center,
+                    Flex = 1,
+                    FlexShrink = 1,
+                    StyleDirection = YogaDirection.RightToLeft
+                }).ToLayoutInstance()
+            };
+
+            columnBox.Add(row);
+            {
+                Box b1 = new Box(100, 100)
+                {
+                    BackColor = Color.Blue,
+                    LayoutInstance = (new YogaSpec() { Width = 100, Height = 100, FlexShrink = 1 }).ToLayoutInstance()
+                };
+                Box b2 = new Box(100, 100)
+                {
+                    BackColor = Color.Blue,
+                    LayoutInstance = (new YogaSpec() { Width = 100, Height = 100, MarginHorizontal = 20, FlexGlow = 1, FlexShrink = 1, }).ToLayoutInstance()
+                };
+                Box b3 = new Box(100, 100)
+                {
+                    BackColor = Color.Blue,
+                    LayoutInstance = (new YogaSpec() { Width = 100, Height = 100, FlexShrink = 1 }).ToLayoutInstance()
+                };
+                row.Add(b1);
+                row.Add(b2);
+                row.Add(b3);
+            }
+            Box b4 = new Box(100, 100)
+            {
+                BackColor = Color.Red,
+                LayoutInstance = (new YogaSpec() { Width = 100, Height = 100, MarginHorizontal = 20, FlexGlow = 1, FlexShrink = 1 }).ToLayoutInstance()
+            };
+            columnBox.Add(b4);
+            _rootPanel.Add(columnBox);
+
+
+            //------------------------
+            //now create yoga node from YogaSpec
+            //------------------------ 
+            ////2. parse to yoga tree
+            YogaConfig conf = new YogaConfig();
+            _root = CreateYogaNode(columnBox, conf, false);
+            _root_child0 = _root[0];
+            _root.StyleDirection = YogaDirection.LeftToRight;
+            //------------             
+            _root.CalculateLayout();
+            _rootPanel.UpdateLayout();
+        }
+
+
         private void MinusWidthBtn_MouseDown(object sender, UI.UIMouseDownEventArgs e)
         {
             _rootPanel.SetSize(_rootPanel.Width - 20, _rootPanel.Height);
@@ -525,6 +715,8 @@ namespace LayoutFarm
             _root.CalculateLayout();
             //update data
             _rootPanel.UpdateLayout();
+
+
         }
     }
 }

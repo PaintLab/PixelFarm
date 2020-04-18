@@ -232,7 +232,7 @@ namespace LayoutFarm.MariusYoga
         // Methods related to positions, margin, padding and border
         public float? GetLeadingPosition(YogaFlexDirection axis, float? axisSize)
         {
-            var leadingPosition = default(YogaValue);
+            YogaValue leadingPosition;
             if (axis.IsRow())
             {
                 leadingPosition = ComputedEdgeValue(_style.Position, YogaEdge.Start, YogaValue.Undefined);
@@ -246,7 +246,7 @@ namespace LayoutFarm.MariusYoga
 
         public float? GetTrailingPosition(YogaFlexDirection axis, float? axisSize)
         {
-            var trailingPosition = default(YogaValue);
+            YogaValue trailingPosition;
             if (axis.IsRow())
             {
                 trailingPosition = ComputedEdgeValue(_style.Position, YogaEdge.End, YogaValue.Undefined);
@@ -594,9 +594,12 @@ namespace LayoutFarm.MariusYoga
             {
                 IsDirty = true;
 
-                Layout.ComputedFlexBasis = default(float?);
+                Layout.ComputedFlexBasis = default;
                 if (Owner != null)
+                {
+                    //propagate up to root
                     Owner.MarkDirty();
+                }
             }
         }
 

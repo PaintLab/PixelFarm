@@ -84,12 +84,10 @@ namespace LayoutFarm.UI
         }
         public override void UpdateLayout()
         {
-            if (_layoutInstance != null)
+            if (_layoutInstance != null && _layoutInstance.GetResultBounds(out RectangleF bounds))
             {
-                RectangleF bounds = _layoutInstance.GetResultBounds();
                 SetLocationAndSize((int)bounds.Left, (int)bounds.Top, (int)bounds.Width, (int)bounds.Height);
-            }            
-
+            }
         }
         public RectUIAlignment Alignment { get; set; }
 

@@ -65,7 +65,8 @@ namespace LayoutFarm.UI
 
     public abstract class LayoutInstance
     {
-        public abstract RectangleF GetResultBounds();
+         
+        public abstract bool GetResultBounds(out RectangleF rects);
     }
 
     public abstract partial class UIElement : IUIEventListener
@@ -78,7 +79,7 @@ namespace LayoutFarm.UI
 
 #endif
         bool _hide;
-      
+
         //bounds
         float _left;
         float _top;
@@ -95,13 +96,13 @@ namespace LayoutFarm.UI
             //}
         }
 
-      
+
         /// <summary>
         /// update layout data from layout instance
         /// </summary>
         public virtual void UpdateLayout()
         {
-            
+
         }
         public bool DisableAutoMouseCapture { get; set; }
         public abstract RenderElement GetPrimaryRenderElement(RootGraphic rootgfx);
