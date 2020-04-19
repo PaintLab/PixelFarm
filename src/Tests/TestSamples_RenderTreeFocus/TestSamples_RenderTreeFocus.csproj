@@ -34,6 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Demo1.1\1.10_Demo_Images.cs" />
@@ -68,7 +69,6 @@
     <Compile Include="Demo4\PxMotion.cs" />
     <Compile Include="Demo5\Boxes_with_Beh.cs" />
     <Compile Include="Demo6\6_DemoFlexBox.cs" />
-    <Compile Include="Demo6\FlexBoxControl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

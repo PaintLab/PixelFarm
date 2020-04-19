@@ -15,11 +15,13 @@ namespace LayoutFarm.MariusYoga
 {
     public partial class YogaNode : IEnumerable<YogaNode>
     {
-        public const float DefaultFlexGrow = 0.0f;
-        public const float DefaultFlexShrink = 0.0f;
-        public const float WebDefaultFlexShrink = 1.0f;
+        public const float DEFAULT_FLEX_GLOW = 0.0f;
+        public const float DEFAULT_FLEX_SHRINK = 0.0f;
+        public const float WEB_DEFAULT_FLEX_SHRINK = 1.0f;
 
-        private static int _instanceCount = 0;
+#if DEBUG
+        private static int s_dbuginstanceCount = 0;
+#endif
         private YogaMeasure _measure;
         private bool _isReferenceBaseline;
         private YogaStyle _style;
@@ -44,8 +46,9 @@ namespace LayoutFarm.MariusYoga
             Config = new YogaConfig();
             _isDirty = false;
             ResolvedDimensions = new YogaArray<YogaValue>(new YogaValue[] { YogaValue.Undefined, YogaValue.Undefined });
-
-            Interlocked.Increment(ref _instanceCount);
+#if DEBUG
+            Interlocked.Increment(ref s_dbuginstanceCount);
+#endif
         }
 
         public YogaNode(YogaNode node)
@@ -66,7 +69,9 @@ namespace LayoutFarm.MariusYoga
             _isDirty = node._isDirty;
             ResolvedDimensions = YogaArray.From(node.ResolvedDimensions);
 
-            Interlocked.Increment(ref _instanceCount);
+#if DEBUG
+            Interlocked.Increment(ref s_dbuginstanceCount);
+#endif
         }
 
         public YogaNode(YogaNode node, YogaNode owner)
@@ -108,7 +113,9 @@ namespace LayoutFarm.MariusYoga
             _isDirty = isDirty;
             ResolvedDimensions = YogaArray.From(resolvedDimensions);
 
-            Interlocked.Increment(ref _instanceCount);
+#if DEBUG
+            Interlocked.Increment(ref s_dbuginstanceCount);
+#endif
         }
 
         public YogaNode(YogaConfig config) : this()
@@ -121,18 +128,21 @@ namespace LayoutFarm.MariusYoga
                 Style.AlignContent = YogaAlign.Stretch;
             }
         }
-
+#if DEBUG
         ~YogaNode()
         {
-            Interlocked.Decrement(ref _instanceCount);
+            //TODO: review here
+            Interlocked.Decrement(ref s_dbuginstanceCount);
         }
 
-        // Getters
 
-        public static int GetInstanceCount()
+        public static int dbugGetInstanceCount()
         {
-            return _instanceCount;
+            return s_dbuginstanceCount;
         }
+#endif
+
+        public string Note { get; set; }
 
         public YogaPrint PrintFunction { get; set; }
 
@@ -142,7 +152,7 @@ namespace LayoutFarm.MariusYoga
 
         public YogaMeasure Measure
         {
-            get { return _measure; }
+            get => _measure;
             set
             {
                 if (_children.Count > 0)
@@ -173,14 +183,14 @@ namespace LayoutFarm.MariusYoga
 
         public YogaStyle Style
         {
-            get { return _style; }
-            set { _style.CopyFrom(value); }
+            get => _style;
+            set => _style.CopyFrom(value);
         }
 
         public YogaLayout Layout
         {
-            get { return _layout; }
-            set { _layout.CopyFrom(value); }
+            get => _layout;
+            set => _layout.CopyFrom(value);
         }
 
         public int LineIndex { get; set; }
@@ -195,7 +205,7 @@ namespace LayoutFarm.MariusYoga
             set { _children = (value != null) ? new List<YogaNode>(value) : new List<YogaNode>(); }
         }
 
-        public YogaNode GetChild(int index) { return _children[index]; }
+        public YogaNode GetChild(int index) => _children[index];
 
         public YogaNode NextChild { get; set; }
 
@@ -203,7 +213,7 @@ namespace LayoutFarm.MariusYoga
 
         public bool IsDirty
         {
-            get =>_isDirty; 
+            get => _isDirty;
             set
             {
                 if (value == _isDirty)
@@ -217,12 +227,12 @@ namespace LayoutFarm.MariusYoga
 
         public YogaArray<YogaValue> ResolvedDimensions { get; private set; }
 
-        public YogaValue GetResolvedDimension(YogaDimension index) { return ResolvedDimensions[index]; }
+        public YogaValue GetResolvedDimension(YogaDimension index) => ResolvedDimensions[index];
 
         // Methods related to positions, margin, padding and border
         public float? GetLeadingPosition(YogaFlexDirection axis, float? axisSize)
         {
-            var leadingPosition = default(YogaValue);
+            YogaValue leadingPosition;
             if (axis.IsRow())
             {
                 leadingPosition = ComputedEdgeValue(_style.Position, YogaEdge.Start, YogaValue.Undefined);
@@ -236,7 +246,7 @@ namespace LayoutFarm.MariusYoga
 
         public float? GetTrailingPosition(YogaFlexDirection axis, float? axisSize)
         {
-            var trailingPosition = default(YogaValue);
+            YogaValue trailingPosition;
             if (axis.IsRow())
             {
                 trailingPosition = ComputedEdgeValue(_style.Position, YogaEdge.End, YogaValue.Undefined);
@@ -382,7 +392,7 @@ namespace LayoutFarm.MariusYoga
             if (_style.Flex != null && _style.Flex.Value > 0.0f)
                 return _style.Flex.Value;
 
-            return DefaultFlexGrow;
+            return DEFAULT_FLEX_GLOW;
         }
 
         public float ResolveFlexShrink()
@@ -396,7 +406,7 @@ namespace LayoutFarm.MariusYoga
             if (!Config.UseWebDefaults && _style.Flex != null && _style.Flex.Value < 0.0f)
                 return -_style.Flex.Value;
 
-            return Config.UseWebDefaults ? WebDefaultFlexShrink : DefaultFlexShrink;
+            return Config.UseWebDefaults ? WEB_DEFAULT_FLEX_SHRINK : DEFAULT_FLEX_SHRINK;
         }
 
         public YogaValue ResolveFlexBasis()
@@ -541,7 +551,7 @@ namespace LayoutFarm.MariusYoga
             MarkDirty();
         }
 
-        public void Insert(int index, YogaNode child)
+        public YogaNode Insert(int index, YogaNode child)
         {
             if (child.Owner != null)
                 throw new InvalidOperationException("Child already has a owner, it must be removed first.");
@@ -553,6 +563,8 @@ namespace LayoutFarm.MariusYoga
             _children.Insert(index, child);
 
             MarkDirty();
+
+            return child;
         }
 
         public bool Remove(YogaNode child)
@@ -582,9 +594,12 @@ namespace LayoutFarm.MariusYoga
             {
                 IsDirty = true;
 
-                Layout.ComputedFlexBasis = default(float?);
+                Layout.ComputedFlexBasis = default;
                 if (Owner != null)
+                {
+                    //propagate up to root
                     Owner.MarkDirty();
+                }
             }
         }
 
@@ -607,7 +622,7 @@ namespace LayoutFarm.MariusYoga
                 return true;
 
             var isLayoutTreeEqual = true;
-            var otherNodeChildren = default(YogaNode);
+            YogaNode otherNodeChildren;
             for (var i = 0; i < _children.Count; ++i)
             {
                 otherNodeChildren = node._children[i];
@@ -645,14 +660,14 @@ namespace LayoutFarm.MariusYoga
             for (var i = 0; i < childCount; ++i)
             {
                 var oldChild = _children[i];
-                var newChild = new YogaNode(oldChild) {
+                var newChild = new YogaNode(oldChild)
+                {
                     Owner = null
                 };
 
                 ReplaceChild(newChild, i);
                 newChild.Owner = this;
-                if (cloneNodeCallback != null)
-                    cloneNodeCallback(oldChild, newChild, this, i);
+                cloneNodeCallback?.Invoke(oldChild, newChild, this, i);
             }
         }
 
