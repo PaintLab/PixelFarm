@@ -18,7 +18,7 @@ namespace PixelFarm.DrawingGL
         int _height;
         bool _isOwner;
         PixelFarm.CpuBlit.MemBitmap _memBitmap;
-        BitmapBufferProvider _bmpBufferProvider;//bmp binder  
+        ImageBinder _bmpBufferProvider;//bmp binder  
 
         public GLBitmap(int w, int h, BitmapBufferFormat format = BitmapBufferFormat.RGBA)//native gl
         {
@@ -29,7 +29,7 @@ namespace PixelFarm.DrawingGL
             IsYFlipped = true;
             BitmapFormat = format;
         }
-        public GLBitmap(BitmapBufferProvider bmpBuffProvider)
+        public GLBitmap(ImageBinder bmpBuffProvider)
         {
             _width = bmpBuffProvider.Width;
             _height = bmpBuffProvider.Height;
@@ -51,10 +51,10 @@ namespace PixelFarm.DrawingGL
 #if DEBUG
         internal void dbugNotifyUsage()
         {
-            if (_bmpBufferProvider != null)
-            {
-                _bmpBufferProvider.dbugNotifyUsage();
-            }
+            //if (_bmpBufferProvider != null)
+            //{
+            //    _bmpBufferProvider.dbugNotifyUsage();
+            //}
         }
 #endif
         public BitmapBufferFormat BitmapFormat { get; private set; }
@@ -136,7 +136,7 @@ namespace PixelFarm.DrawingGL
                        PixelInternalFormat.Rgba, _width, _height, 0,
                        PixelFormat.Rgba,
                        PixelType.UnsignedByte, bmpScan0);
-                _bmpBufferProvider.ReleaseBufferHead();
+                _bmpBufferProvider.ReleaseRawBufferHead(bmpScan0);
 
 #if DEBUG
                 _bmpBufferProvider.dbugNotifyUsage();
@@ -196,6 +196,7 @@ namespace PixelFarm.DrawingGL
             {
                 //use lazy provider 
                 IntPtr bmpScan0 = _bmpBufferProvider.GetRawBufferHead();
+
                 //GL.TexSubImage2D((TextureTarget2d)TextureTarget.Texture2D, 0,
                 //     updateArea.X, updateArea.Y, updateArea.Width, updateArea.Height,
                 //     PixelFormat.Rgba, // 
@@ -206,13 +207,21 @@ namespace PixelFarm.DrawingGL
                   PixelFormat.Rgba, // 
                   PixelType.UnsignedByte, (IntPtr)bmpScan0);
 
-
-                _bmpBufferProvider.ReleaseBufferHead();
 #if DEBUG
                 _bmpBufferProvider.dbugNotifyUsage();
 #endif
             }
         }
+        public override IntPtr GetRawBufferHead()
+        {
+            System.Diagnostics.Debugger.Break();
+            return IntPtr.Zero;
+        }
+        public override void ReleaseRawBufferHead(IntPtr ptr)
+        {
+            System.Diagnostics.Debugger.Break();
+        }
+
         public override void Dispose()
         {
             if (TextureContainer != null)
@@ -233,6 +242,7 @@ namespace PixelFarm.DrawingGL
             }
         }
 
+      
         internal TextureContainter TextureContainer { get; set; }
 #if DEBUG
 

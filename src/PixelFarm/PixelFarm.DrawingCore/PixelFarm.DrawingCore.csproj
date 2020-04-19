@@ -50,6 +50,9 @@
     <Compile Include="..\PixelFarm.PrimitiveDrawing\Image.cs">
       <Link>0_REF_PrimitiveDrawing\Image.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.PrimitiveDrawing\ImageBinder.cs">
+      <Link>0_REF_PrimitiveDrawing\ImageBinder.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.PrimitiveDrawing\LenAndLenUnit.cs">
       <Link>0_REF_PrimitiveDrawing\LenAndLenUnit.cs</Link>
     </Compile>

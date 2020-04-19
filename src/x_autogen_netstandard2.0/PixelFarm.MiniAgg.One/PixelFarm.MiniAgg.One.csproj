@@ -154,6 +154,7 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\Color.cs" Link="PixelFarm\PixelFarm.PrimitiveDrawing\Color.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\CRC32Calculator.cs" Link="PixelFarm\PixelFarm.PrimitiveDrawing\CRC32Calculator.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\Image.cs" Link="PixelFarm\PixelFarm.PrimitiveDrawing\Image.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\ImageBinder.cs" Link="PixelFarm\PixelFarm.PrimitiveDrawing\ImageBinder.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\LenAndLenUnit.cs" Link="PixelFarm\PixelFarm.PrimitiveDrawing\LenAndLenUnit.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\RequestFont.cs" Link="PixelFarm\PixelFarm.PrimitiveDrawing\RequestFont.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\BasicGeometries.cs" Link="PixelFarm\PixelFarm.PrimitiveGeo\BasicGeometries.cs" />
@@ -209,7 +210,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\6_Contours\OutlineWalker.cs" Link="PixelFarm\PixelFarm.Vectors\6_Contours\OutlineWalker.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\6_Contours\PartFlattener.cs" Link="PixelFarm\PixelFarm.Vectors\6_Contours\PartFlattener.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\6_Contours\Vertex.cs" Link="PixelFarm\PixelFarm.Vectors\6_Contours\Vertex.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\1_IO\ImageBinder.cs" Link="PixelFarm\PixelFarm.Drawing\1_IO\ImageBinder.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\1_IO\ImageReaders.cs" Link="PixelFarm\PixelFarm.Drawing\1_IO\ImageReaders.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\1_IO\StorageService.cs" Link="PixelFarm\PixelFarm.Drawing\1_IO\StorageService.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\2_AggPainter\AggPainter.cs" Link="PixelFarm\PixelFarm.Drawing\2_AggPainter\AggPainter.cs" />

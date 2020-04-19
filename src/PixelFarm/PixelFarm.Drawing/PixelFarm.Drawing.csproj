@@ -344,6 +344,9 @@
     <Compile Include="..\PixelFarm.PrimitiveDrawing\Image.cs">
       <Link>0_REF_DrawingCore\1_PrimitiveDrawing\Image.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.PrimitiveDrawing\ImageBinder.cs">
+      <Link>0_REF_DrawingCore\1_PrimitiveDrawing\ImageBinder.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.PrimitiveDrawing\LenAndLenUnit.cs">
       <Link>0_REF_DrawingCore\1_PrimitiveDrawing\LenAndLenUnit.cs</Link>
     </Compile>
@@ -575,7 +578,6 @@
     <Compile Include="..\PixelFarm.Vectors\6_Contours\Vertex.cs">
       <Link>0_REF_Painter\1_Vectors\6_Contours\Vertex.cs</Link>
     </Compile>
-    <Compile Include="1_IO\ImageBinder.cs" />
     <Compile Include="1_IO\StorageService.cs" />
     <Compile Include="3_VertexProcessoring\Figures.cs" />
     <Compile Include="2_AggPainter\AggPainter.cs" />

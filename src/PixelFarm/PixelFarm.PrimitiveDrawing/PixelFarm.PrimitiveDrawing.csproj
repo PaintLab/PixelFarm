@@ -39,6 +39,7 @@
     <Compile Include="CRC32Calculator.cs" />
     <Compile Include="ExtensionAttribute.cs" />
     <Compile Include="Image.cs" />
+    <Compile Include="ImageBinder.cs" />
     <Compile Include="LenAndLenUnit.cs" />
     <Compile Include="RequestFont.cs" />
   </ItemGroup>

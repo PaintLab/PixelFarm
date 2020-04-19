@@ -100,7 +100,7 @@ namespace OpenTkEssTest
             //var bmpdata = bmp.LockBits();
             GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0, (TextureComponentCount)PixelInternalFormat.Rgba, bmp.Width, bmp.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, ptr);
             // bmp.UnlockBits(bmpdata);
-            memBmpBinder.ReleaseBufferHead();
+            memBmpBinder.ReleaseRawBufferHead(ptr);
 
 
             //glGenerateMipmap(GL_TEXTURE_2D);
