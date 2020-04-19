@@ -44,8 +44,17 @@
     <Compile Include="..\PixelFarm.PrimitiveDrawing\Color.cs">
       <Link>0_REF_PrimitiveDrawing\Color.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.PrimitiveDrawing\CRC32Calculator.cs">
+      <Link>0_REF_PrimitiveDrawing\CRC32Calculator.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.PrimitiveDrawing\Image.cs">
+      <Link>0_REF_PrimitiveDrawing\Image.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.PrimitiveDrawing\LenAndLenUnit.cs">
       <Link>0_REF_PrimitiveDrawing\LenAndLenUnit.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.PrimitiveDrawing\RequestFont.cs">
+      <Link>0_REF_PrimitiveDrawing\RequestFont.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.PrimitiveGeo\BasicGeometries.cs">
       <Link>0_REF_PrimitiveGeo\BasicGeometries.cs</Link>
@@ -63,13 +72,10 @@
     <Compile Include="Brushes_Pens.cs" />
     <Compile Include="CombineMode.cs" />
     <Compile Include="DashStyle.cs" />
-    <Compile Include="Image.cs" />
     <Compile Include="MemMx.cs" />
     <Compile Include="NativeMemMx.cs" />
     <Compile Include="Region.cs" />
-    <Compile Include="CRC32Calculator.cs" />
     <Compile Include="RenderVx.cs" />
-    <Compile Include="RequestFont.cs" />
     <Compile Include="VertexCommandAndOrientation.cs" />
     <Compile Include="VertexStore.cs" />
     <Compile Include="ExtensionAttribute.cs" />

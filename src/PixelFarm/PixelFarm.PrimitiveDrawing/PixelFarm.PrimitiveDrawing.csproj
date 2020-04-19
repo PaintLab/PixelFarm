@@ -36,8 +36,11 @@
   <ItemGroup>
     <Compile Include="AffineMat.cs" />
     <Compile Include="Color.cs" />
+    <Compile Include="CRC32Calculator.cs" />
     <Compile Include="ExtensionAttribute.cs" />
+    <Compile Include="Image.cs" />
     <Compile Include="LenAndLenUnit.cs" />
+    <Compile Include="RequestFont.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PixelFarm.PrimitiveGeo\PixelFarm.PrimitiveGeo.csproj">

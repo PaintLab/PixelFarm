@@ -218,9 +218,6 @@
     <Compile Include="..\PixelFarm.DrawingCore\CombineMode.cs">
       <Link>0_REF_DrawingCore\CombineMode.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\CRC32Calculator.cs">
-      <Link>0_REF_DrawingCore\CRC32Calculator.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.DrawingCore\DashStyle.cs">
       <Link>0_REF_DrawingCore\DashStyle.cs</Link>
     </Compile>
@@ -229,9 +226,6 @@
     </Compile>
     <Compile Include="..\PixelFarm.DrawingCore\ExtensionAttribute.cs">
       <Link>0_REF_DrawingCore\ExtensionAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\Image.cs">
-      <Link>0_REF_DrawingCore\Image.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.DrawingCore\MemMx.cs">
       <Link>0_REF_DrawingCore\MemMx.cs</Link>
@@ -247,9 +241,6 @@
     </Compile>
     <Compile Include="..\PixelFarm.DrawingCore\RenderVx.cs">
       <Link>0_REF_DrawingCore\RenderVx.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\RequestFont.cs">
-      <Link>0_REF_DrawingCore\RequestFont.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.DrawingCore\VertexCommandAndOrientation.cs">
       <Link>0_REF_DrawingCore\VertexCommandAndOrientation.cs</Link>
@@ -347,8 +338,17 @@
     <Compile Include="..\PixelFarm.PrimitiveDrawing\Color.cs">
       <Link>0_REF_DrawingCore\1_PrimitiveDrawing\Color.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.PrimitiveDrawing\CRC32Calculator.cs">
+      <Link>0_REF_DrawingCore\1_PrimitiveDrawing\CRC32Calculator.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.PrimitiveDrawing\Image.cs">
+      <Link>0_REF_DrawingCore\1_PrimitiveDrawing\Image.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.PrimitiveDrawing\LenAndLenUnit.cs">
       <Link>0_REF_DrawingCore\1_PrimitiveDrawing\LenAndLenUnit.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.PrimitiveDrawing\RequestFont.cs">
+      <Link>0_REF_DrawingCore\1_PrimitiveDrawing\RequestFont.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.PrimitiveGeo\BasicGeometries.cs">
       <Link>0_REF_DrawingCore\1_PrimitiveGeo\BasicGeometries.cs</Link>
