@@ -157,6 +157,7 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\ImageBinder.cs" Link="PixelFarm\PixelFarm.PrimitiveDrawing\ImageBinder.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\LenAndLenUnit.cs" Link="PixelFarm\PixelFarm.PrimitiveDrawing\LenAndLenUnit.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\RequestFont.cs" Link="PixelFarm\PixelFarm.PrimitiveDrawing\RequestFont.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\TextMeasurement.cs" Link="PixelFarm\PixelFarm.PrimitiveDrawing\TextMeasurement.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\BasicGeometries.cs" Link="PixelFarm\PixelFarm.PrimitiveGeo\BasicGeometries.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\ICoordTransformer.cs" Link="PixelFarm\PixelFarm.PrimitiveGeo\ICoordTransformer.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\Rectangle.cs" Link="PixelFarm\PixelFarm.PrimitiveGeo\Rectangle.cs" />

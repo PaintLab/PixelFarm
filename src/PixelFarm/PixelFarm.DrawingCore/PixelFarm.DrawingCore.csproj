@@ -59,6 +59,9 @@
     <Compile Include="..\PixelFarm.PrimitiveDrawing\RequestFont.cs">
       <Link>0_REF_PrimitiveDrawing\RequestFont.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.PrimitiveDrawing\TextMeasurement.cs">
+      <Link>0_REF_PrimitiveDrawing\TextMeasurement.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.PrimitiveGeo\BasicGeometries.cs">
       <Link>0_REF_PrimitiveGeo\BasicGeometries.cs</Link>
     </Compile>

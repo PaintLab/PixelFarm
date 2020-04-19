@@ -791,6 +791,7 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveDrawing\ImageBinder.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveDrawing\LenAndLenUnit.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveDrawing\RequestFont.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveDrawing\TextMeasurement.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\BasicGeometries.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\ICoordTransformer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\Rectangle.cs" />

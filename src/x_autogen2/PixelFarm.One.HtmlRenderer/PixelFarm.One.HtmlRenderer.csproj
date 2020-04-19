@@ -2295,6 +2295,9 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\RequestFont.cs">
       <Link>PixelFarm\PixelFarm.PrimitiveDrawing\RequestFont.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\TextMeasurement.cs">
+      <Link>PixelFarm\PixelFarm.PrimitiveDrawing\TextMeasurement.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\BasicGeometries.cs">
       <Link>PixelFarm\PixelFarm.PrimitiveGeo\BasicGeometries.cs</Link>
     </Compile>
