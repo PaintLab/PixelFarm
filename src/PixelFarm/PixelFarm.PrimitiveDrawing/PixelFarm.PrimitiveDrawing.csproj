@@ -4,39 +4,46 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B951FF5B-D7A0-4259-880D-CB7A0C001956}</ProjectGuid>
+    <ProjectGuid>{112196BA-8717-4435-BAF1-5014C2E05CFD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PixelFarm.PrimitiveGeo</RootNamespace>
-    <AssemblyName>PixelFarm.PrimitiveGeo</AssemblyName>
+    <RootNamespace>PixelFarm.PrimitiveDrawing</RootNamespace>
+    <AssemblyName>PixelFarm.PrimitiveDrawing</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;PIXEL_FARM_NET20</DefineConstants>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;PIXEL_FARM_NET20</DefineConstants>
+    <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="BasicGeometries.cs" />
-    <Compile Include="ICoordTransformer.cs" />
-    <Compile Include="Rectangle.cs" />
-    <Compile Include="RectangleF.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AffineMat.cs" />
+    <Compile Include="Color.cs" />
+    <Compile Include="ExtensionAttribute.cs" />
+    <Compile Include="LenAndLenUnit.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PixelFarm.PrimitiveGeo\PixelFarm.PrimitiveGeo.csproj">
+      <Project>{b951ff5b-d7a0-4259-880d-cb7a0c001956}</Project>
+      <Name>PixelFarm.PrimitiveGeo</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

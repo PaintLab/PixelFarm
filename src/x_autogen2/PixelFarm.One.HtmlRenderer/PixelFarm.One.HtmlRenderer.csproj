@@ -2175,9 +2175,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\Image.cs">
       <Link>PixelFarm\PixelFarm.DrawingCore\Image.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\LenAndLenUnit.cs">
-      <Link>PixelFarm\PixelFarm.DrawingCore\LenAndLenUnit.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\MemMx.cs">
       <Link>PixelFarm\PixelFarm.DrawingCore\MemMx.cs</Link>
     </Compile>
@@ -2286,14 +2283,17 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\TempContext.cs">
       <Link>PixelFarm\PixelFarm.Painter\TempContext.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\AffineMat.cs">
-      <Link>PixelFarm\PixelFarm.PrimitiveGeo\AffineMat.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\AffineMat.cs">
+      <Link>PixelFarm\PixelFarm.PrimitiveDrawing\AffineMat.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\Color.cs">
+      <Link>PixelFarm\PixelFarm.PrimitiveDrawing\Color.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\LenAndLenUnit.cs">
+      <Link>PixelFarm\PixelFarm.PrimitiveDrawing\LenAndLenUnit.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\BasicGeometries.cs">
       <Link>PixelFarm\PixelFarm.PrimitiveGeo\BasicGeometries.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\Color.cs">
-      <Link>PixelFarm\PixelFarm.PrimitiveGeo\Color.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\ICoordTransformer.cs">
       <Link>PixelFarm\PixelFarm.PrimitiveGeo\ICoordTransformer.cs</Link>

@@ -38,14 +38,17 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\PixelFarm.PrimitiveGeo\AffineMat.cs">
-      <Link>0_REF_PrimitiveGeo\AffineMat.cs</Link>
+    <Compile Include="..\PixelFarm.PrimitiveDrawing\AffineMat.cs">
+      <Link>0_REF_PrimitiveDrawing\AffineMat.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.PrimitiveDrawing\Color.cs">
+      <Link>0_REF_PrimitiveDrawing\Color.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.PrimitiveDrawing\LenAndLenUnit.cs">
+      <Link>0_REF_PrimitiveDrawing\LenAndLenUnit.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.PrimitiveGeo\BasicGeometries.cs">
       <Link>0_REF_PrimitiveGeo\BasicGeometries.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.PrimitiveGeo\Color.cs">
-      <Link>0_REF_PrimitiveGeo\Color.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.PrimitiveGeo\ICoordTransformer.cs">
       <Link>0_REF_PrimitiveGeo\ICoordTransformer.cs</Link>
@@ -65,7 +68,6 @@
     <Compile Include="NativeMemMx.cs" />
     <Compile Include="Region.cs" />
     <Compile Include="CRC32Calculator.cs" />
-    <Compile Include="LenAndLenUnit.cs" />
     <Compile Include="RenderVx.cs" />
     <Compile Include="RequestFont.cs" />
     <Compile Include="VertexCommandAndOrientation.cs" />

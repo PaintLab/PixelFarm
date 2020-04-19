@@ -69,6 +69,10 @@
       <Project>{8fba6297-44a9-4c3f-b22d-d33e00669942}</Project>
       <Name>PaintLab.WebLexer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PixelFarm.PrimitiveDrawing\PixelFarm.PrimitiveDrawing.csproj">
+      <Project>{112196ba-8717-4435-baf1-5014c2e05cfd}</Project>
+      <Name>PixelFarm.PrimitiveDrawing</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PixelFarm.PrimitiveGeo\PixelFarm.PrimitiveGeo.csproj">
       <Project>{b951ff5b-d7a0-4259-880d-cb7a0c001956}</Project>
       <Name>PixelFarm.PrimitiveGeo</Name>
