@@ -38,42 +38,6 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\PixelFarm.PrimitiveDrawing\AffineMat.cs">
-      <Link>0_REF_PrimitiveDrawing\AffineMat.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.PrimitiveDrawing\Color.cs">
-      <Link>0_REF_PrimitiveDrawing\Color.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.PrimitiveDrawing\CRC32Calculator.cs">
-      <Link>0_REF_PrimitiveDrawing\CRC32Calculator.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.PrimitiveDrawing\Image.cs">
-      <Link>0_REF_PrimitiveDrawing\Image.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.PrimitiveDrawing\ImageBinder.cs">
-      <Link>0_REF_PrimitiveDrawing\ImageBinder.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.PrimitiveDrawing\LenAndLenUnit.cs">
-      <Link>0_REF_PrimitiveDrawing\LenAndLenUnit.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.PrimitiveDrawing\RequestFont.cs">
-      <Link>0_REF_PrimitiveDrawing\RequestFont.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.PrimitiveDrawing\TextMeasurement.cs">
-      <Link>0_REF_PrimitiveDrawing\TextMeasurement.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.PrimitiveGeo\BasicGeometries.cs">
-      <Link>0_REF_PrimitiveGeo\BasicGeometries.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.PrimitiveGeo\ICoordTransformer.cs">
-      <Link>0_REF_PrimitiveGeo\ICoordTransformer.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.PrimitiveGeo\Rectangle.cs">
-      <Link>0_REF_PrimitiveGeo\Rectangle.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.PrimitiveGeo\RectangleF.cs">
-      <Link>0_REF_PrimitiveGeo\RectangleF.cs</Link>
-    </Compile>
     <Compile Include="DrawBoard.cs" />
     <Compile Include="Brushes_Pens.cs" />
     <Compile Include="CombineMode.cs" />
@@ -89,6 +53,16 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PixelFarm.PrimitiveDrawing\PixelFarm.PrimitiveDrawing.csproj">
+      <Project>{112196ba-8717-4435-baf1-5014c2e05cfd}</Project>
+      <Name>PixelFarm.PrimitiveDrawing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PixelFarm.PrimitiveGeo\PixelFarm.PrimitiveGeo.csproj">
+      <Project>{b951ff5b-d7a0-4259-880d-cb7a0c001956}</Project>
+      <Name>PixelFarm.PrimitiveGeo</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
