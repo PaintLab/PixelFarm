@@ -112,8 +112,7 @@ namespace LayoutFarm
     [DemoNote("6 FlexBox")]
     public class Demo_FlexBox : App
     {
-        YogaNode _root;
-        YogaNode _root_child0;
+        YogaNode _rootNode;
         CustomWidgets.Box _rootPanel;
         protected override void OnStart(AppHost host)
         {
@@ -149,14 +148,14 @@ namespace LayoutFarm
             Init2_2();
             //Init2_3();
 
-            _rootPanel.LayoutInstance = _root.ToLayoutInstance();
+            _rootPanel.LayoutInstance = _rootNode.ToLayoutInstance();
         }
 
         void Init1()
         {
             YogaConfig config = new YogaConfig();
 
-            _root = new YogaNode(config)
+            _rootNode = new YogaNode(config)
             {
                 FlexDirection = YogaFlexDirection.Row,
                 Width = _rootPanel.Width,
@@ -172,7 +171,7 @@ namespace LayoutFarm
                 FlexShrink = 1
             };
 
-            _root.Insert(0, root_child0);
+            _rootNode.Insert(0, root_child0);
 
             YogaNode root_child1 = new YogaNode(config)
             {
@@ -182,7 +181,7 @@ namespace LayoutFarm
                 FlexGrow = 1,
                 FlexShrink = 1
             };
-            _root.Insert(1, root_child1);
+            _rootNode.Insert(1, root_child1);
 
             YogaNode root_child2 = new YogaNode(config)
             {
@@ -190,10 +189,10 @@ namespace LayoutFarm
                 Height = 100,
                 FlexShrink = 1
             };
-            _root.Insert(2, root_child2);
+            _rootNode.Insert(2, root_child2);
 
-            _root.StyleDirection = YogaDirection.LeftToRight;
-            _root.CalculateLayout();
+            _rootNode.StyleDirection = YogaDirection.LeftToRight;
+            _rootNode.CalculateLayout();
 
             CustomWidgets.Box fb0 = new CustomWidgets.Box(100, 100) { BackColor = PixelFarm.Drawing.Color.Blue, LayoutInstance = root_child0.ToLayoutInstance() };
             _rootPanel.Add(fb0);
@@ -211,7 +210,7 @@ namespace LayoutFarm
         {
             YogaConfig config = new YogaConfig();
 
-            _root = new YogaNode(config)
+            _rootNode = new YogaNode(config)
             {
                 FlexDirection = YogaFlexDirection.Column,
                 Width = _rootPanel.Width,
@@ -220,10 +219,10 @@ namespace LayoutFarm
                 AlignItems = YogaAlign.Stretch
             };
 
-            _root_child0 = new YogaNode(config)
+            var _root_child0 = new YogaNode(config)
             {
                 FlexDirection = YogaFlexDirection.Row,
-                Width = _root.Width,
+                Width = _rootNode.Width,
                 Height = 100,
                 AlignItems = YogaAlign.Center,
                 AlignSelf = YogaAlign.Center,
@@ -231,7 +230,7 @@ namespace LayoutFarm
                 FlexShrink = 1,
                 StyleDirection = YogaDirection.RightToLeft
             };
-            _root.Insert(0, _root_child0);
+            _rootNode.Insert(0, _root_child0);
 
             YogaNode c1r0_child0 = new YogaNode(config)
             {
@@ -267,7 +266,7 @@ namespace LayoutFarm
                 FlexGrow = 1,
                 FlexShrink = 1
             };
-            _root.Insert(1, root_child1);
+            _rootNode.Insert(1, root_child1);
 
             //YogaNode root_child2 = new YogaNode(config);
             //root_child2.Width = 100;
@@ -275,8 +274,8 @@ namespace LayoutFarm
             //root_child2.FlexShrink = 1;
             //root.Insert(2, root_child2);
 
-            _root.StyleDirection = YogaDirection.LeftToRight;
-            _root.CalculateLayout();
+            _rootNode.StyleDirection = YogaDirection.LeftToRight;
+            _rootNode.CalculateLayout();
 
             CustomWidgets.Box fb0 = new CustomWidgets.Box(100, 100) { BackColor = PixelFarm.Drawing.Color.Yellow, LayoutInstance = _root_child0.ToLayoutInstance() };
             _rootPanel.Add(fb0);
@@ -299,7 +298,7 @@ namespace LayoutFarm
         {
             YogaConfig config = new YogaConfig();
 
-            _root = new YogaNode(config)
+            _rootNode = new YogaNode(config)
             {
                 FlexDirection = YogaFlexDirection.Column,
                 Width = _rootPanel.Width,
@@ -308,10 +307,10 @@ namespace LayoutFarm
                 AlignItems = YogaAlign.Stretch
             };
 
-            _root_child0 = _root.Append(new YogaNode(config)
+            YogaNode root_child0 = _rootNode.Append(new YogaNode(config)
             {
                 FlexDirection = YogaFlexDirection.Row,
-                Width = _root.Width,
+                Width = _rootNode.Width,
                 Height = 100,
                 AlignItems = YogaAlign.Center,
                 AlignSelf = YogaAlign.Center,
@@ -321,7 +320,7 @@ namespace LayoutFarm
                 Note = "yellow",
             });
 
-            YogaNode c1r0_child0 = _root_child0.Append(new YogaNode(config)
+            YogaNode c1r0_child0 = root_child0.Append(new YogaNode(config)
             {
                 Width = 100,
                 Height = 100,
@@ -329,7 +328,7 @@ namespace LayoutFarm
                 Note = "blue",
             });
 
-            YogaNode c1r0_child1 = _root_child0.Append(new YogaNode(config)
+            YogaNode c1r0_child1 = root_child0.Append(new YogaNode(config)
             {
                 Width = 100,
                 Height = 100,
@@ -339,7 +338,7 @@ namespace LayoutFarm
                 Note = "blue",
             });
 
-            YogaNode c1r0_child2 = _root_child0.Append(new YogaNode(config)
+            YogaNode c1r0_child2 = root_child0.Append(new YogaNode(config)
             {
                 Width = 100,
                 Height = 100,
@@ -348,7 +347,7 @@ namespace LayoutFarm
             });
 
 
-            YogaNode root_child1 = _root.Append(new YogaNode(config)
+            YogaNode root_child1 = _rootNode.Append(new YogaNode(config)
             {
                 Width = 100,
                 Height = 100,
@@ -364,10 +363,10 @@ namespace LayoutFarm
             //root_child2.FlexShrink = 1;
             //root.Insert(2, root_child2);
 
-            _root.StyleDirection = YogaDirection.LeftToRight;
-            _root.CalculateLayout();
+            _rootNode.StyleDirection = YogaDirection.LeftToRight;
+            _rootNode.CalculateLayout();
 
-            foreach (YogaNode child in _root)
+            foreach (YogaNode child in _rootNode)
             {
                 _rootPanel.Add(CreateBoxFromYogaNode(child, (y_node, b_node) =>
                 {
@@ -405,16 +404,16 @@ namespace LayoutFarm
 
             //2. parse to yoga tree
             YogaConfig conf = new YogaConfig();
-            _root = Parse(myYogaMarkup, conf);
-            _root_child0 = _root[0];
+            _rootNode = Parse(myYogaMarkup, conf);
+            YogaNode root_child0 = _rootNode[0];
 
             //------------
-            _root.StyleDirection = YogaDirection.LeftToRight;
-            _root.CalculateLayout();
+            _rootNode.StyleDirection = YogaDirection.LeftToRight;
+            _rootNode.CalculateLayout();
 
 
             //3. create box from yoga tree
-            _rootPanel.Add(CreateBoxFromYogaNode(_root, (y_node, b_node) =>
+            _rootPanel.Add(CreateBoxFromYogaNode(_rootNode, (y_node, b_node) =>
             {
                 switch (y_node.Note)
                 {
@@ -624,7 +623,7 @@ namespace LayoutFarm
                     case "flex-glow":
                         node.FlexGrow = float.Parse(kv.Value);
                         break;
-                   
+
                     case "max-width":
                         node.MaxWidth = ParseYogaValue(kv.Value);
                         break;
@@ -795,11 +794,10 @@ namespace LayoutFarm
             //------------------------ 
             ////2. parse to yoga tree
             YogaConfig conf = new YogaConfig();
-            _root = CreateYogaNode(columnBox, conf, false);
-            _root_child0 = _root[0];
-            _root.StyleDirection = YogaDirection.LeftToRight;
+            _rootNode = CreateYogaNode(columnBox, conf, false);
+            _rootNode.StyleDirection = YogaDirection.LeftToRight;
             //------------             
-            _root.CalculateLayout();
+            _rootNode.CalculateLayout();
             _rootPanel.UpdateLayout();
         }
 
@@ -818,14 +816,15 @@ namespace LayoutFarm
 
         private void Update()
         {
-            _root.Width = _rootPanel.Width;
-            _root.Height = _rootPanel.Height;
-            if (_root_child0 != null)
+            _rootNode.Width = _rootPanel.Width;
+            _rootNode.Height = _rootPanel.Height;
+            var root_child0 = _rootNode[0];
+            if (root_child0 != null)
             {
-                _root_child0.Width = _rootPanel.Width;
+                root_child0.Width = _rootPanel.Width;
             }
 
-            _root.CalculateLayout();
+            _rootNode.CalculateLayout();
             //update data
             _rootPanel.UpdateLayout();
 
