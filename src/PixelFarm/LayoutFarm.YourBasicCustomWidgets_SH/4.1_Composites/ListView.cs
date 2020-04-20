@@ -97,10 +97,15 @@ namespace LayoutFarm.CustomWidgets
                 return base.GetPrimaryRenderElement(rootgfx);
             }
         }
-        public void AddItem(ListItem ui)
+        public void AddItem(ListItem item)
         {
-            _items.Add(ui);
-            Add(ui);
+            _items.Add(item);
+            Add(item);
+        }
+        public void InsertItem(int index, ListItem item)
+        {
+            _items.Insert(index, item);
+            Insert(index, item);
         }
         //
         public int ItemCount => _items.Count;
@@ -267,10 +272,10 @@ namespace LayoutFarm.CustomWidgets
 
             using (Tools.More.BorrowChromaTool(out var chroma))
             {
-                BackColor = chroma.SetColor(_normalStateColor).Brighten(0.5); 
+                BackColor = chroma.SetColor(_normalStateColor).Brighten(0.5);
             }
 
-          
+
             base.OnMouseEnter(e);
         }
         protected override void OnMouseLeave(UIMouseLeaveEventArgs e)

@@ -83,6 +83,35 @@ namespace LayoutFarm.UI
             ui.ParentUI = null; //
             return true;
         }
+        
+        public LinkedListNode<UIElement> GetUIElementLinkedListNode(int index)
+        {
+            //since we use linked-list,
+            //get element at index need to search 
+            //TODO: review this again, consider more proper collection
+
+            if (index <= _uiList.Count / 2)
+            {
+                //1st half
+                LinkedListNode<UIElement> node = _uiList.First;
+                int i = 0;
+                while (i < index)
+                {
+                    node = node.Next;//next node 
+                }
+                return node;
+            }
+            else
+            {
+                LinkedListNode<UIElement> node = _uiList.Last;
+                int i = _uiList.Count - 1;
+                while (i > index)
+                {
+                    node = node.Previous;
+                }
+                return node;
+            }
+        }
         public void Clear()
         {
             //clear all parent relation
@@ -95,7 +124,6 @@ namespace LayoutFarm.UI
                 ui.ParentUI = null;
                 UIElement.UnsafeRemoveLinkedNode(ui);
             }
-
             _uiList.Clear();
         }
 

@@ -493,7 +493,6 @@ namespace LayoutFarm.CustomWidgets
             {
                 ui.InvalidateLayout();
             }
-
         }
         public override void AddFirst(UIElement ui)
         {
@@ -521,7 +520,29 @@ namespace LayoutFarm.CustomWidgets
                 ui.InvalidateLayout();
             }
         }
+        public void Insert(int index, UIElement ui)
+        {
+            _needContentLayout = true;
+            LinkedListNode<UIElement> insertAt = _uiList.GetUIElementLinkedListNode(index);
 
+            if (this.HasReadyRenderElement)
+            {
+                _primElement.InsertBefore(
+                        insertAt.Value.GetPrimaryRenderElement(_primElement.Root),
+                        ui.GetPrimaryRenderElement(_primElement.Root)); 
+
+                if (_supportViewport)
+                {
+                    this.InvalidateLayout();
+                }
+            }
+
+            if (ui.NeedContentLayout)
+            {
+                ui.InvalidateLayout();
+            }
+
+        }
         public void AddLast(UIElement ui) => Add(ui);
         public override void Add(UIElement ui)
         {

@@ -33,7 +33,9 @@ namespace LayoutFarm
         //cursor
         protected abstract Cursor CreateCursorImpl(CursorRequest curReq);
         public static Cursor CreateCursor(CursorRequest curReq) => s_ui_platform.CreateCursorImpl(curReq);
+        //----------------------------------------------------------------
 
+     
 
         //----------------------------------------------------------------
         protected void SetAsDefaultPlatform()
