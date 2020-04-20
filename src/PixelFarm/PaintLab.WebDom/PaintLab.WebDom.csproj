@@ -36,9 +36,6 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\PixelFarm.DrawingCore\ExtensionAttribute.cs">
-      <Link>Net20\ExtensionAttribute.cs</Link>
-    </Compile>
     <Compile Include="1_Css_Parser\CssParser.cs" />
     <Compile Include="1_Css_Parser\CssParserHelper.cs" />
     <Compile Include="1_Css_Parser\CssValueParser.cs" />
