@@ -1,6 +1,6 @@
-//AUTOGEN, 2020-04-16T21:45:24
+//AUTOGEN, 2020-04-20T21:27:56
 //source: D:\projects\PixelFarm\src\x_resource_projects\TestAtlas1\TestAtlas1.csproj
-//tools: D:\projects\PixelFarm\src\Tools\BitmapAtlasTool\bin\Debug\BitmapAtlasTool.exe
+//tools: D:\projects\PixelFarm\src\Tools\PaintLabResTool\bin\Debug\PaintLabResTool.exe
 using PixelFarm.Drawing;
 namespace Atlas_AUTOGEN_.TestAtlas1{
 public partial class Binders{
@@ -15,5 +15,19 @@ public readonly AtlasImageBinder _favorites32_png=new AtlasImageBinder(RawAtlasD
 public readonly AtlasImageBinder _html32_png=new AtlasImageBinder(RawAtlasData.NAME, "//html32.png");
 public readonly AtlasImageBinder _opt_checked_png=new AtlasImageBinder(RawAtlasData.NAME, "//opt_checked.png");
 public readonly AtlasImageBinder _opt_unchecked_png=new AtlasImageBinder(RawAtlasData.NAME, "//opt_unchecked.png");
+
+
+                    static bool s_registered;
+                    public Binders(){
+                            if(!s_registered){        
+                                    try{
+                                         PixelFarm.Platforms.InMemStorage.AddData(RawAtlasData.NAME + ".info", RawAtlasData.info);
+                                         PixelFarm.Platforms.InMemStorage.AddData(RawAtlasData.NAME + ".png", RawAtlasData.img);
+                                    }catch(System.Exception ex){
+                                    }
+                            s_registered= true;
+                            }
+                    }
+                
 }
 }

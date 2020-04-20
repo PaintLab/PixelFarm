@@ -39,8 +39,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)4.1_Composites\ScrollBar.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)4.1_Composites\TextBoxContainer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)4.1_Composites\TreeView.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)6_InternalResourceMx\ClientBinder.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)6_InternalResourceMx\ResImageList.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)6_InternalResourceMx\x_TestAtlas1_Atlas_AUTOGEN.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)6_InternalResourceMx\x_TestAtlas1_Atlas_AUTOGEN_BINDERS.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)7_WindowUI\UIFloatWindow.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)8.2_Canvas\MiniAggCanvasBox.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)8.2_Canvas\MiniAggCanvasRenderElement.cs" />

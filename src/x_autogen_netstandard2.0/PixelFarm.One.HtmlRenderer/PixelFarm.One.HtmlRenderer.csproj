@@ -143,8 +143,8 @@
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\4.1_Composites\ScrollBar.cs" Link="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\4.1_Composites\ScrollBar.cs" />
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\4.1_Composites\TextBoxContainer.cs" Link="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\4.1_Composites\TextBoxContainer.cs" />
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\4.1_Composites\TreeView.cs" Link="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\4.1_Composites\TreeView.cs" />
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\6_InternalResourceMx\ClientBinder.cs" Link="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\6_InternalResourceMx\ClientBinder.cs" />
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\6_InternalResourceMx\ResImageList.cs" Link="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\6_InternalResourceMx\ResImageList.cs" />
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\6_InternalResourceMx\x_TestAtlas1_Atlas_AUTOGEN.cs" Link="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\6_InternalResourceMx\x_TestAtlas1_Atlas_AUTOGEN.cs" />
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\6_InternalResourceMx\x_TestAtlas1_Atlas_AUTOGEN_BINDERS.cs" Link="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\6_InternalResourceMx\x_TestAtlas1_Atlas_AUTOGEN_BINDERS.cs" />
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\7_WindowUI\UIFloatWindow.cs" Link="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\7_WindowUI\UIFloatWindow.cs" />
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\8.2_Canvas\MiniAggCanvasBox.cs" Link="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\8.2_Canvas\MiniAggCanvasBox.cs" />
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\8.2_Canvas\MiniAggCanvasRenderElement.cs" Link="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\8.2_Canvas\MiniAggCanvasRenderElement.cs" />
