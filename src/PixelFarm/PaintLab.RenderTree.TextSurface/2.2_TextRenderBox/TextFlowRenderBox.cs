@@ -301,39 +301,30 @@ namespace LayoutFarm.TextEditing
                 //dbugMouseDragBegin++;
                 //first time
                 _isDragBegin = true;
-                //if (e.Buttons == UIMouseButtons.Left)
-                //{
-                    _editSession.SetCaretPos(e.X, e.Y);
-                    _editSession.StartSelect();
-                    _editSession.EndSelect();
-
-                    InvalidateGraphicOfCurrentSelectionArea();
-                //}
+                _editSession.SetCaretPos(e.X, e.Y);
+                _editSession.StartSelect();
+                _editSession.EndSelect();
             }
             else
             {
                 //dbugMouseDragging++;
-                //if (e.Buttons == UIMouseButtons.Left)
-                //{
-                    _editSession.StartSelectIfNoSelection();
-                    _editSession.SetCaretPos(e.X, e.Y);
-                    _editSession.EndSelect();
 
-                    InvalidateGraphicOfCurrentSelectionArea();
-                //}
+                _editSession.StartSelectIfNoSelection();
+                _editSession.SetCaretPos(e.X, e.Y);
+                _editSession.EndSelect();
             }
+
+            InvalidateGraphicOfCurrentSelectionArea();
         }
         public virtual void HandleDragEnd(UIMouseUpEventArgs e)
         {
             _isDragBegin = false;
-            if (e.Buttons == UIMouseButtons.Left)
-            {
-                _editSession.StartSelectIfNoSelection();
-                _editSession.SetCaretPos(e.X, e.Y);
-                _editSession.EndSelect();
-                //this.InvalidateGraphics();
-                InvalidateGraphicOfCurrentSelectionArea();
-            }
+
+            _editSession.StartSelectIfNoSelection();
+            _editSession.SetCaretPos(e.X, e.Y);
+            _editSession.EndSelect();
+            //this.InvalidateGraphics();
+            InvalidateGraphicOfCurrentSelectionArea(); 
         }
 
         public virtual void HandleKeyPress(UIKeyEventArgs e)
@@ -359,8 +350,6 @@ namespace LayoutFarm.TextEditing
         public virtual void HandleKeyUp(UIKeyEventArgs e) { }
         public virtual void HandleKeyDown(UIKeyEventArgs e)
         {
-
-
 
         }
         public virtual void DoHome(bool pressShitKey)
