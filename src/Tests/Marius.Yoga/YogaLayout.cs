@@ -39,7 +39,7 @@ namespace LayoutFarm.MariusYoga
         public bool DidUseLegacyFlag;
         public bool DoesLegacyStretchFlagAffectsLayout;
 
-        public static readonly float?[] DefaultDimensionValues = new float?[] { default(float?), default(float?) };
+        public static readonly float?[] DefaultDimensionValues = new float?[] { default, default };
 
         public YogaLayout()
         {

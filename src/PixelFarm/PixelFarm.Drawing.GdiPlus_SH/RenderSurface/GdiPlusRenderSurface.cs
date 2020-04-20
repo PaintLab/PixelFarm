@@ -558,18 +558,16 @@ namespace PixelFarm.Drawing.WinGdi
             }
             return null;
         }
+        
         static System.Drawing.Bitmap ResolveInnerBmp(Image image)
         {
-
-            var cacheBmp = Image.GetCacheInnerImage(image) as System.Drawing.Bitmap;
-            if (cacheBmp != null)
+            if (Image.GetCacheInnerImage(image) is System.Drawing.Bitmap cacheBmp)
             {
                 //check if cache image is update or not 
                 return cacheBmp;
             }
 
-            var binder = image as BitmapBufferProvider;
-            if (binder != null)
+            if (image is ImageBinder binder)
             {
                 //convert bmp to gdi+ bmp
                 System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(image.Width,

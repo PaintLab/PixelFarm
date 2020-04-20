@@ -431,14 +431,14 @@ namespace PixelFarm.DrawingGL
             }
             //
 
-            if (image is BitmapBufferProvider bmpBuffProvider)
+            if (image is ImageBinder bmpBuffProvider)
             {
                 glBmp = new GLBitmap(bmpBuffProvider);
             }
             else if (image is CpuBlit.MemBitmap memBmp)
             {
                 glBmp = new GLBitmap(memBmp, false);
-            }
+            }            
             else
             {
                 ////TODO: review here

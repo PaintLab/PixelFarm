@@ -247,7 +247,7 @@ namespace PixelFarm.Drawing.GLES2
         }
         public GLPainter GetGLPainter() => _gpuPainter;
 
-        public override BitmapBufferProvider GetInternalBitmapProvider()
+        public override ImageBinder GetInternalBitmapProvider()
         {
             //TODO: implement this
             //copy bitmap data to target 
@@ -272,7 +272,7 @@ namespace PixelFarm.Drawing.GLES2
             if (!src.IsGpuDrawBoard)
             {
                 //cpu draw board
-                BitmapBufferProvider bmpProvider = src.GetInternalBitmapProvider();
+                ImageBinder bmpProvider = src.GetInternalBitmapProvider();
 
                 if (_tmpGLBmp == null)
                 {

@@ -63,8 +63,7 @@ namespace LayoutFarm.UI
         short _marginRight;
         short _marginBottom;
         // 
-
-
+        LayoutInstance _layoutInstance;
         public AbstractRectUI(int width, int height)
         {
             //default,           
@@ -75,7 +74,21 @@ namespace LayoutFarm.UI
             //default for box
             this.AutoStopMouseEventPropagation = true;
         }
-
+        public LayoutInstance LayoutInstance
+        {
+            get => _layoutInstance;
+            set
+            {
+                _layoutInstance = value;
+            }
+        }
+        public override void UpdateLayout()
+        {
+            if (_layoutInstance != null && _layoutInstance.GetResultBounds(out RectangleF bounds))
+            {
+                SetLocationAndSize((int)bounds.Left, (int)bounds.Top, (int)bounds.Width, (int)bounds.Height);
+            }
+        }
         public RectUIAlignment Alignment { get; set; }
 
         public event EventHandler<ViewportChangedEventArgs> ViewportChanged;

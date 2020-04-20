@@ -151,15 +151,11 @@ namespace OpenTkEssTest
 
             var memBmpBinder = new PixelFarm.Drawing.MemBitmapBinder(bmp, true);
             IntPtr ptr = memBmpBinder.GetRawBufferHead();
-
             GL.TexImage2D((TextureTarget2d)TextureTarget.Texture2D, 0, (TextureComponentCount)PixelInternalFormat.Rgba, bmp.Width, bmp.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, ptr);
-
-
-
             //bmp.UnlockBits(bmpdata);
             //glGenerateMipmap(GL_TEXTURE_2D);
             GL.GenerateMipmap(TextureTarget.Texture2D);
-            memBmpBinder.ReleaseBufferHead();
+            memBmpBinder.ReleaseRawBufferHead(ptr);
 
             return texture;
         }

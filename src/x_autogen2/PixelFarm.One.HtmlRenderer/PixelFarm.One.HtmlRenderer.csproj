@@ -2163,20 +2163,11 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\CombineMode.cs">
       <Link>PixelFarm\PixelFarm.DrawingCore\CombineMode.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\CRC32Calculator.cs">
-      <Link>PixelFarm\PixelFarm.DrawingCore\CRC32Calculator.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\DashStyle.cs">
       <Link>PixelFarm\PixelFarm.DrawingCore\DashStyle.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\DrawBoard.cs">
       <Link>PixelFarm\PixelFarm.DrawingCore\DrawBoard.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\Image.cs">
-      <Link>PixelFarm\PixelFarm.DrawingCore\Image.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\LenAndLenUnit.cs">
-      <Link>PixelFarm\PixelFarm.DrawingCore\LenAndLenUnit.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\MemMx.cs">
       <Link>PixelFarm\PixelFarm.DrawingCore\MemMx.cs</Link>
@@ -2192,9 +2183,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\RenderVx.cs">
       <Link>PixelFarm\PixelFarm.DrawingCore\RenderVx.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\RequestFont.cs">
-      <Link>PixelFarm\PixelFarm.DrawingCore\RequestFont.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\VertexCommandAndOrientation.cs">
       <Link>PixelFarm\PixelFarm.DrawingCore\VertexCommandAndOrientation.cs</Link>
@@ -2286,14 +2274,32 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\TempContext.cs">
       <Link>PixelFarm\PixelFarm.Painter\TempContext.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\AffineMat.cs">
-      <Link>PixelFarm\PixelFarm.PrimitiveGeo\AffineMat.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\AffineMat.cs">
+      <Link>PixelFarm\PixelFarm.PrimitiveDrawing\AffineMat.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\Color.cs">
+      <Link>PixelFarm\PixelFarm.PrimitiveDrawing\Color.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\CRC32Calculator.cs">
+      <Link>PixelFarm\PixelFarm.PrimitiveDrawing\CRC32Calculator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\Image.cs">
+      <Link>PixelFarm\PixelFarm.PrimitiveDrawing\Image.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\ImageBinder.cs">
+      <Link>PixelFarm\PixelFarm.PrimitiveDrawing\ImageBinder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\LenAndLenUnit.cs">
+      <Link>PixelFarm\PixelFarm.PrimitiveDrawing\LenAndLenUnit.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\RequestFont.cs">
+      <Link>PixelFarm\PixelFarm.PrimitiveDrawing\RequestFont.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\TextMeasurement.cs">
+      <Link>PixelFarm\PixelFarm.PrimitiveDrawing\TextMeasurement.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\BasicGeometries.cs">
       <Link>PixelFarm\PixelFarm.PrimitiveGeo\BasicGeometries.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\Color.cs">
-      <Link>PixelFarm\PixelFarm.PrimitiveGeo\Color.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\ICoordTransformer.cs">
       <Link>PixelFarm\PixelFarm.PrimitiveGeo\ICoordTransformer.cs</Link>
@@ -2450,9 +2456,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\6_Contours\Vertex.cs">
       <Link>PixelFarm\PixelFarm.Vectors\6_Contours\Vertex.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\1_IO\ImageBinder.cs">
-      <Link>PixelFarm\PixelFarm.Drawing\1_IO\ImageBinder.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\1_IO\ImageReaders.cs">
       <Link>PixelFarm\PixelFarm.Drawing\1_IO\ImageReaders.cs</Link>
