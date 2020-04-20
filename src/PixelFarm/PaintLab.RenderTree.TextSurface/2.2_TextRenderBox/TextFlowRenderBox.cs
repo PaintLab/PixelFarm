@@ -301,26 +301,26 @@ namespace LayoutFarm.TextEditing
                 //dbugMouseDragBegin++;
                 //first time
                 _isDragBegin = true;
-                if (e.Buttons == UIMouseButtons.Left)
-                {
+                //if (e.Buttons == UIMouseButtons.Left)
+                //{
                     _editSession.SetCaretPos(e.X, e.Y);
                     _editSession.StartSelect();
                     _editSession.EndSelect();
 
                     InvalidateGraphicOfCurrentSelectionArea();
-                }
+                //}
             }
             else
             {
                 //dbugMouseDragging++;
-                if (e.Buttons == UIMouseButtons.Left)
-                {
+                //if (e.Buttons == UIMouseButtons.Left)
+                //{
                     _editSession.StartSelectIfNoSelection();
                     _editSession.SetCaretPos(e.X, e.Y);
                     _editSession.EndSelect();
 
                     InvalidateGraphicOfCurrentSelectionArea();
-                }
+                //}
             }
         }
         public virtual void HandleDragEnd(UIMouseUpEventArgs e)
