@@ -10,7 +10,7 @@ namespace LayoutFarm
     public class Demo_SingleLineText_WithSuggestion : App
     {
         LayoutFarm.CustomWidgets.TextBox _textbox;
-        LayoutFarm.CustomWidgets.ListBox _listView;
+        LayoutFarm.CustomWidgets.ListBox _listbox;
         Dictionary<char, List<string>> _words = new Dictionary<char, List<string>>();
         //
         protected override void OnStart(AppHost host)
@@ -24,9 +24,9 @@ namespace LayoutFarm
 
             var textSplitter = new LayoutFarm.CustomWidgets.ContentTextSplitter();
             _textbox.TextSplitter = textSplitter;
-            _listView = new CustomWidgets.ListBox(300, 200);
-            _listView.SetLocation(0, 40);
-            _listView.Visible = false;
+            _listbox = new CustomWidgets.ListBox(300, 200);
+            _listbox.SetLocation(0, 40);
+            _listbox.Visible = false;
             //------------------------------------
             //create special text surface listener
             var textSurfaceListener = new LayoutFarm.TextEditing.TextSurfaceEventListener();
@@ -37,7 +37,7 @@ namespace LayoutFarm
             _textbox.TextEventListener = textSurfaceListener;
             //------------------------------------ 
             host.AddChild(_textbox);
-            host.AddChild(_listView);
+            host.AddChild(_listbox);
             //------------------------------------ 
             BuildSampleCountryList();
         }
@@ -50,17 +50,17 @@ namespace LayoutFarm
             {
                 case UIKeys.Down:
                     {
-                        if (_listView.SelectedIndex < _listView.ItemCount - 1)
+                        if (_listbox.SelectedIndex < _listbox.ItemCount - 1)
                         {
-                            _listView.SelectedIndex++;
+                            _listbox.SelectedIndex++;
                         }
                     }
                     break;
                 case UIKeys.Up:
                     {
-                        if (_listView.SelectedIndex > 0)
+                        if (_listbox.SelectedIndex > 0)
                         {
-                            _listView.SelectedIndex--;
+                            _listbox.SelectedIndex--;
                         }
                     }
                     break;
@@ -72,14 +72,14 @@ namespace LayoutFarm
 
             if (_textbox.CurrentTextSpan != null)
             {
-                if (_listView.SelectedIndex >= 0)
+                if (_listbox.SelectedIndex >= 0)
                 {
                     _textbox.ReplaceCurrentTextRunContent(currentLocalText.Length,
-                        (string)_listView.GetItem(_listView.SelectedIndex).Tag);
+                        (string)_listbox.GetItem(_listbox.SelectedIndex).Tag);
                     //------------------------------------- 
                     //then hide suggestion list
-                    _listView.ClearItems();
-                    _listView.Visible = false;
+                    _listbox.ClearItems();
+                    _listbox.Visible = false;
                     //-------------------------------------- 
                 }
             }
@@ -95,10 +95,10 @@ namespace LayoutFarm
         {
             //find suggestion words 
             this.currentLocalText = null;
-            _listView.ClearItems();
+            _listbox.ClearItems();
             if (_textbox.CurrentTextSpan == null)
             {
-                _listView.Visible = false;
+                _listbox.Visible = false;
                 return;
             }
             //-------------------------------------------------------------------------
@@ -123,7 +123,7 @@ namespace LayoutFarm
             if (_words.TryGetValue(firstChar, out keywords))
             {
                 int j = keywords.Count;
-                int listViewWidth = _listView.Width;
+                int listViewWidth = _listbox.Width;
                 for (int i = 0; i < j; ++i)
                 {
                     string choice = keywords[i].ToUpper();
@@ -132,17 +132,17 @@ namespace LayoutFarm
                         CustomWidgets.ListItem item = new CustomWidgets.ListItem(listViewWidth, 17);
                         item.BackColor = KnownColors.LightGray;
                         item.Tag = item.Text = keywords[i];
-                        _listView.AddItem(item);
+                        _listbox.AddItem(item);
                     }
                 }
             }
-            if (_listView.ItemCount > 0)
+            if (_listbox.ItemCount > 0)
             {
-                _listView.Visible = true;
+                _listbox.Visible = true;
             }
             else
             {
-                _listView.Visible = false;
+                _listbox.Visible = false;
             }
 
             //-------------------------------------------------------------------------

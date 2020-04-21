@@ -8,11 +8,11 @@ namespace LayoutFarm
     {
         protected override void OnStart(AppHost host)
         {
-            var listview = new LayoutFarm.CustomWidgets.ListBox(300, 400);
-            listview.SetLocation(10, 10);
-            listview.BackColor = KnownColors.FromKnownColor(KnownColor.LightGray);
+            var listbox = new LayoutFarm.CustomWidgets.ListBox(300, 400);
+            listbox.SetLocation(10, 10);
+            listbox.BackColor = KnownColors.FromKnownColor(KnownColor.LightGray);
             //add list view to viewport
-            host.AddChild(listview);
+            host.AddChild(listbox);
             //add 
             RequestFont listItemFont = new RequestFont("tahoma", 18);
             for (int i = 0; i < 10; ++i)
@@ -28,7 +28,7 @@ namespace LayoutFarm
                 }
                 listItem.SetFont(listItemFont);
                 listItem.Text = "A" + i;
-                listview.AddItem(listItem);
+                listbox.AddItem(listItem);
             }
         }
     }
