@@ -10,7 +10,7 @@ namespace LayoutFarm
     public class Demo_MultiLineText_WithSuggestion : App
     {
         LayoutFarm.CustomWidgets.TextBox _textbox;
-        LayoutFarm.CustomWidgets.ListView _listView;
+        LayoutFarm.CustomWidgets.ListBox _listView;
         Dictionary<char, List<string>> _words = new Dictionary<char, List<string>>();
         //
         protected override void OnStart(AppHost host)
@@ -25,7 +25,7 @@ namespace LayoutFarm
 
             var textSplitter = new LayoutFarm.CustomWidgets.ContentTextSplitter();
             _textbox.TextSplitter = textSplitter;
-            _listView = new CustomWidgets.ListView(300, 200);
+            _listView = new CustomWidgets.ListBox(300, 200);
             _listView.SetLocation(0, 40);
             _listView.Visible = false;
             //------------------------------------

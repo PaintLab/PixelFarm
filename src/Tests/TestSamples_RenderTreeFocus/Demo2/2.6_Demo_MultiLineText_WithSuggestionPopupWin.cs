@@ -501,7 +501,7 @@ Zimbabwe");
 
     class SuggestionWindowMx
     {
-        LayoutFarm.CustomWidgets.ListView listView;
+        LayoutFarm.CustomWidgets.ListBox listView;
         LayoutFarm.CustomWidgets.UIFloatWindow floatWindow;
 
         public event EventHandler UserConfirmSelectedItem;
@@ -510,10 +510,10 @@ Zimbabwe");
         public SuggestionWindowMx(int w, int h)
         {
             floatWindow = new CustomWidgets.UIFloatWindow(w, h);
-            listView = new CustomWidgets.ListView(w, h);
+            listView = new CustomWidgets.ListBox(w, h);
             floatWindow.Add(listView);
-            listView.ListItemMouseEvent += new CustomWidgets.ListView.ListItemMouseHandler(listView_ListItemMouseEvent);
-            listView.ListItemKeyboardEvent += new CustomWidgets.ListView.ListItemKeyboardHandler(listView_ListItemKeyboardEvent);
+            listView.ListItemMouseEvent += new CustomWidgets.ListBox.ListItemMouseHandler(listView_ListItemMouseEvent);
+            listView.ListItemKeyboardEvent += new CustomWidgets.ListBox.ListItemKeyboardHandler(listView_ListItemKeyboardEvent);
         }
 
         void listView_ListItemKeyboardEvent(object sender, UIKeyEventArgs e)

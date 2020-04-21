@@ -34,7 +34,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)4.1_Composites\CheckBox.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)4.1_Composites\ComboBox.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)4.1_Composites\HingeRelation.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)4.1_Composites\ListView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)4.1_Composites\ListBox.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)4.1_Composites\Menu.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)4.1_Composites\ScrollBar.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)4.1_Composites\TextBoxContainer.cs" />

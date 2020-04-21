@@ -25,7 +25,7 @@ namespace LayoutFarm.ColorBlenderSample
         Box _pure_rgbBox;
 
         ScrollBar _r_sc, _g_sc, _b_sc;
-        ListView _lstvw_blendAlgo;
+        ListBox _lstvw_blendAlgo;
         IAlgorithm _blenderAlgo;
         protected override void OnStart(AppHost host)
         {
@@ -37,7 +37,7 @@ namespace LayoutFarm.ColorBlenderSample
             //
 
             {
-                _lstvw_blendAlgo = new ListView(200, 400);
+                _lstvw_blendAlgo = new ListBox(200, 400);
                 _lstvw_blendAlgo.SetLocation(500, 20);
                 host.AddChild(_lstvw_blendAlgo);
                 _lstvw_blendAlgo.ListItemMouseEvent += (s, e) =>
@@ -347,7 +347,7 @@ namespace LayoutFarm.ColorBlenderSample
 
     static class ListViewItemExtensions
     {
-        public static void AddItem(this ListView lstView, string text)
+        public static void AddItem(this ListBox lstView, string text)
         {
             ListItem listItem = new ListItem(lstView.Width, 20);
             listItem.Text = text;

@@ -6,10 +6,8 @@ using PixelFarm.Drawing;
 using LayoutFarm.UI;
 using PixelFarm.CpuBlit;
 namespace LayoutFarm.CustomWidgets
-{
-
-
-    public class ListView : AbstractBox
+{ 
+    public class ListBox : AbstractBox
     {
         public delegate void ListItemMouseHandler(object sender, UIMouseEventArgs e);
         public delegate void ListItemKeyboardHandler(object sender, UIKeyEventArgs e);
@@ -22,7 +20,7 @@ namespace LayoutFarm.CustomWidgets
         public event ListItemMouseHandler ListItemMouseEvent;
         public event ListItemKeyboardHandler ListItemKeyboardEvent;
 
-        public ListView(int width, int height)
+        public ListBox(int width, int height)
             : base(width, height)
         {
 

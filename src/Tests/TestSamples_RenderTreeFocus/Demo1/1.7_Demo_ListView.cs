@@ -8,7 +8,7 @@ namespace LayoutFarm
     {
         protected override void OnStart(AppHost host)
         {
-            var listview = new LayoutFarm.CustomWidgets.ListView(300, 400);
+            var listview = new LayoutFarm.CustomWidgets.ListBox(300, 400);
             listview.SetLocation(10, 10);
             listview.BackColor = KnownColors.FromKnownColor(KnownColor.LightGray);
             //add list view to viewport
