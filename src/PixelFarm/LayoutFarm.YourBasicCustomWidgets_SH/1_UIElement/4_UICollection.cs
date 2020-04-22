@@ -4,16 +4,18 @@ using System;
 using System.Collections.Generic;
 namespace LayoutFarm.UI
 {
-    public class UICollection
+    public struct UICollection
     {
-        readonly LinkedList<UIElement> _uiList = new LinkedList<UIElement>();
+        readonly LinkedList<UIElement> _uiList;
         readonly UIElement _owner;
         public UICollection(UIElement owner)
         {
             _owner = owner;
+            _uiList = new LinkedList<UIElement>();
         }
 
-        public int Count => _uiList.Count;
+        public bool IsNull => _owner == null;
+        public int Count => _uiList == null ? 0 : _uiList.Count;
         public IEnumerable<UIElement> GetIter()
         {
             var node = _uiList.First;
@@ -83,7 +85,7 @@ namespace LayoutFarm.UI
             ui.ParentUI = null; //
             return true;
         }
-        
+
         public LinkedListNode<UIElement> GetUIElementLinkedListNode(int index)
         {
             //since we use linked-list,

@@ -1,16 +1,35 @@
 ﻿//Apache2, 2014-present, WinterDev
 
 using LayoutFarm.UI;
+using System;
+
 namespace LayoutFarm.CustomWidgets
 {
-    public class UIFloatWindow : Box, ITopWindowBox
+    public class UIFloatWindow : AbstractBox, ITopWindowBox
     {
         IPlatformWindowBox _platformWindowBox;
+        AbstractRectUI _content;
         public UIFloatWindow(int w, int h)
             : base(w, h)
         {
 
         }
+        public void SetContent(AbstractRectUI content)
+        {
+            //clear existing elem
+            RenderElement primRenderE = CurrentPrimaryRenderElement;
+            if (primRenderE != null)
+            {
+                primRenderE.ClearAllChildren();
+                primRenderE.AddChild(content);
+            }
+            else
+            {
+                //??
+                throw new NotSupportedException();
+            }
+        }
+
         IPlatformWindowBox ITopWindowBox.PlatformWinBox
         {
             get => _platformWindowBox;
@@ -20,11 +39,9 @@ namespace LayoutFarm.CustomWidgets
                 _platformWindowBox = value;
                 if (isFirstTime)
                 {
-
                     _platformWindowBox.SetLocation(this.Left, this.Top);
                     _platformWindowBox.SetSize(this.Width, this.Height);
                     _platformWindowBox.Visible = this.Visible;
-
                 }
             }
         }

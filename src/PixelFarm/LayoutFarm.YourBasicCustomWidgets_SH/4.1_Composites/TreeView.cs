@@ -30,7 +30,7 @@ namespace LayoutFarm.CustomWidgets
 
         protected override void OnAcceptVisitor(UIVisitor visitor)
         {
-            if (_uiList != null)
+            if (!_uiList.IsNull)
             {
                 UICollection.AcceptVisitor(_uiList, visitor);
             }

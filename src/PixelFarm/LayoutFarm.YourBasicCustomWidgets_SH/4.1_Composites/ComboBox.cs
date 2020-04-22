@@ -4,9 +4,9 @@ using System;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public class ComboBox : Box
+    public class ComboBox : AbstractBox
     {
-        HingeRelation _hingeRel = new HingeRelation();
+        HingeRelation _hingeRel = new HingeRelation();  
         public ComboBox(int width, int height)
             : base(width, height)
         {
@@ -22,19 +22,21 @@ namespace LayoutFarm.CustomWidgets
             _hingeRel.ToggleOpenOrClose();
             base.OnMouseDown(e);
         }
-        public Box FloatPart
+        public AbstractRectUI FloatPart
         {
             get => _hingeRel.FloatPart;
             set => _hingeRel.FloatPart = value;
         }
         public bool IsOpen => _hingeRel.IsOpen;
         public void OpenHinge() => _hingeRel.OpenHinge();
-        public void CloseHinge() => _hingeRel.CloseHinge();
+        public void CloseHinge() => _hingeRel.CloseHinge(); 
         public HingeFloatPartStyle FloatPartStyle
         {
             get => _hingeRel.FloatPartStyle;
             set => _hingeRel.FloatPartStyle = value;
         }
+
+    
     }
 
 }

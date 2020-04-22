@@ -20,8 +20,8 @@ namespace LayoutFarm.CustomWidgets
 
         }
 
-        public Box LandPart { get; set; }
-        public Box FloatPart { get; set; }
+        public AbstractRectUI LandPart { get; set; }
+        public AbstractRectUI FloatPart { get; set; }
         public bool IsOpen => _isOpen;
         public void ToggleOpenOrClose()
         {

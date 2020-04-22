@@ -3,6 +3,7 @@
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
 using LayoutFarm.UI.ForImplementator;
+using System.Collections.Generic;
 
 namespace LayoutFarm.CustomWidgets
 {
@@ -506,13 +507,15 @@ namespace LayoutFarm.CustomWidgets
     }
 
 
-    public class GridView : Box
+    public class GridView : AbstractBox
     {
         GridViewRenderBox _gridViewRenderE;
         CellSizeStyle _cellSizeStyle;
         GridTable _gridTable;
         GridSelectionSession _gridSelectionSession;
         Color _gridBorderColor;
+
+        UICollection _children;
 
         public struct GridCellInfo
         {
@@ -545,6 +548,14 @@ namespace LayoutFarm.CustomWidgets
             AcceptKeyboardFocus = true;
 
             _gridBorderColor = Color.Black; //default//TODO: impl Theme classes...
+        }
+        public void Add(UIElement ui)
+        {
+            if (_children.IsNull)
+            {
+                _children = new UICollection(this);
+            }
+            _children.AddUI(ui);
         }
         public override void PerformContentLayout()
         {
@@ -693,6 +704,7 @@ namespace LayoutFarm.CustomWidgets
             int cur_vwLeft = this.ViewportLeft;
             int cur_vwTop = this.ViewportTop;
             int newVwLeft = (int)(cur_vwTop - (e.Delta * 10f / 120f));
+            //TODO: review this
             if (newVwLeft > -1 && newVwLeft < (this.InnerHeight - this.Height + 17))
             {
                 this.SetViewport(cur_vwLeft, newVwLeft);
@@ -1032,9 +1044,9 @@ namespace LayoutFarm.CustomWidgets
                     }
                 }
 
-                if (ChildCount > 0)
+                if (_children.Count > 0)
                 {
-                    foreach (UIElement ui in GetChildIter())
+                    foreach (UIElement ui in _children.GetIter())
                     {
                         _gridViewRenderE.AddChild(ui);
 

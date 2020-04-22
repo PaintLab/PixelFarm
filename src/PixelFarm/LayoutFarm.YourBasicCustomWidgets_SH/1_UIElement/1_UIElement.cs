@@ -115,14 +115,14 @@ namespace LayoutFarm.UI
 
         public bool AcceptKeyboardFocus { get; set; }
 
-        public virtual object Tag
-        {
-            get => null;
-            set
-            {
-                throw new System.NotSupportedException("user must override this");
-            }
-        }
+        //public virtual object Tag
+        //{
+        //    get => null;
+        //    set
+        //    {
+        //        throw new System.NotSupportedException("user must override this");
+        //    }
+        //}
 
         public virtual void Focus()
         {
@@ -144,40 +144,10 @@ namespace LayoutFarm.UI
         public UIElement ParentUI
         {
             get => _parent;
-            set
-            {
-                _parent = value;
-            }
+            set => _parent = value;
         }
 
         public LinkedListNode<UIElement> GetLinkedNode() => _collectionLinkNode;
-
-        //public UIElement NextUIElement
-        //{
-        //    get
-        //    {
-        //        if (_collectionLinkNode != null)
-        //        {
-        //            LinkedListNode<UIElement> nextNode = _collectionLinkNode.Next;
-        //            return (nextNode != null) ? nextNode.Value : null;
-        //        }
-        //        return null;
-        //    }
-        //}
-        //public UIElement PrevUIElement
-        //{
-        //    get
-        //    {
-        //        if (_collectionLinkNode != null)
-        //        {
-        //            LinkedListNode<UIElement> prevNode = _collectionLinkNode.Previous;
-        //            return (prevNode != null) ? prevNode.Value : null;
-        //        }
-        //        return null;
-        //    }
-        //}
-        //------------------------------
-
         //------------------------------
         public virtual void InvalidateOuterGraphics()
         {

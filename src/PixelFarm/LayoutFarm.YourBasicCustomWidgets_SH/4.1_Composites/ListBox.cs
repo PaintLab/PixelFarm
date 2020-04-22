@@ -6,8 +6,8 @@ using PixelFarm.Drawing;
 using LayoutFarm.UI;
 using PixelFarm.CpuBlit;
 namespace LayoutFarm.CustomWidgets
-{ 
-    public class ListBox : Box
+{
+    public class ListBox : AbstractBox
     {
         public delegate void ListItemMouseHandler(object sender, UIMouseEventArgs e);
         public delegate void ListItemKeyboardHandler(object sender, UIKeyEventArgs e);
@@ -16,7 +16,8 @@ namespace LayoutFarm.CustomWidgets
         List<ListItem> _items = new List<ListItem>();
         int _selectedIndex = -1;//default = no selection
         ListItem _selectedItem = null;
-
+        UICollection _uiCollection;
+        Box _bgBox;
         public event ListItemMouseHandler ListItemMouseEvent;
         public event ListItemKeyboardHandler ListItemKeyboardEvent;
 
@@ -34,6 +35,10 @@ namespace LayoutFarm.CustomWidgets
 
             ListItemNormalColor = KnownColors.LightGray;
             ListItemSelectedColor = KnownColors.Yellow;
+
+            _uiCollection = new UICollection(this);
+            _bgBox = new Box(width, height);
+            _uiCollection.AddUI(_bgBox);
         }
         protected override void OnMouseDown(UIMouseDownEventArgs e)
         {
@@ -88,6 +93,12 @@ namespace LayoutFarm.CustomWidgets
                 CustomRenderBox newone = base.GetPrimaryRenderElement(rootgfx) as CustomRenderBox;
                 newone.LayoutHint = this.ContentLayoutKind;
                 newone.HasSpecificWidthAndHeight = true;
+
+                foreach (UIElement child in _uiCollection.GetIter())
+                {
+                    newone.AddChild(child.GetPrimaryRenderElement(rootgfx));
+                }
+
                 return newone;
             }
             else
@@ -95,23 +106,32 @@ namespace LayoutFarm.CustomWidgets
                 return base.GetPrimaryRenderElement(rootgfx);
             }
         }
+        public int ItemCount => _items.Count;
         public void AddItem(ListItem item)
         {
-            _items.Add(item);
-            Add(item);
+            _items.Add(item); //logical collection
+            if (CurrentPrimaryRenderElement is CustomRenderBox customPrim)
+            {
+                customPrim.AddChild(item);
+                item.InvalidateGraphics();
+            }
         }
         public void InsertItem(int index, ListItem item)
         {
+            ListItem existing = _items[index];
             _items.Insert(index, item);
-            Insert(index, item);
+            if (CurrentPrimaryRenderElement is CustomRenderBox customPrim)
+            {
+                customPrim.InsertBefore(existing.CurrentPrimaryRenderElement, item.GetPrimaryRenderElement(customPrim.Root));
+            }
         }
-        //
-        public int ItemCount => _items.Count;
-        //
         public void RemoveAt(int index)
         {
-            var item = _items[index];
-            RemoveChild(item);
+            ListItem item = _items[index];
+            if (CurrentPrimaryRenderElement is CustomRenderBox customPrim)
+            {
+                customPrim.RemoveChild(item.GetPrimaryRenderElement(customPrim.Root));
+            }
             _items.RemoveAt(index);
         }
         public ListItem GetItem(int index)
@@ -128,13 +148,22 @@ namespace LayoutFarm.CustomWidgets
         public void Remove(ListItem item)
         {
             _items.Remove(item);
-            RemoveChild(item);
+            if (CurrentPrimaryRenderElement is CustomRenderBox customPrim)
+            {
+                customPrim.RemoveChild(item.GetPrimaryRenderElement(customPrim.Root));
+                customPrim.InvalidateGraphics();
+            }
         }
         public void ClearItems()
         {
             _selectedIndex = -1;
             _items.Clear();
-            ClearChildren();
+            if (CurrentPrimaryRenderElement is CustomRenderBox customPrim)
+            {
+                customPrim.ClearAllChildren();
+                customPrim.InvalidateGraphics();
+            }
+
         }
         //----------------------------------------------------
 
@@ -264,6 +293,7 @@ namespace LayoutFarm.CustomWidgets
             //TODO: add theme
             _normalStateColor = BackColor = KnownColors.LightGray;
         }
+        public object Tag { get; set; }
         protected override void OnMouseEnter(UIMouseMoveEventArgs e)
         {
             _normalStateColor = BackColor;
@@ -272,8 +302,6 @@ namespace LayoutFarm.CustomWidgets
             {
                 BackColor = chroma.SetColor(_normalStateColor).Brighten(0.5);
             }
-
-
             base.OnMouseEnter(e);
         }
         protected override void OnMouseLeave(UIMouseLeaveEventArgs e)

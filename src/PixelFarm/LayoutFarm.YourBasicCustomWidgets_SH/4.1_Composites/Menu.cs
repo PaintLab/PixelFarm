@@ -5,10 +5,12 @@ using System.Collections.Generic;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public class MenuItem : Box
+    public class MenuItem : AbstractBox
     {
         HingeRelation _hingeRelation;
         List<MenuItem> _childItems;
+        Box _floatPart;
+
         public MenuItem(int width, int height)
             : base(width, height)
         {
@@ -18,8 +20,12 @@ namespace LayoutFarm.CustomWidgets
 
         public Box FloatPart
         {
-            get => _hingeRelation.FloatPart;
-            set => _hingeRelation.FloatPart = value;
+            get => _floatPart;
+            set
+            {
+                _floatPart = value;
+                _hingeRelation.FloatPart = value;
+            }
         }
         public bool IsOpened => _hingeRelation.IsOpen;
         public void Open() => _hingeRelation.OpenHinge();

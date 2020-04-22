@@ -1,9 +1,10 @@
 ﻿//Apache2, 2014-present, WinterDev
 
+using LayoutFarm.UI;
 using System;
 namespace LayoutFarm.CustomWidgets
 {
-    public class CheckBox : Box
+    public class CheckBox : AbstractBox
     {
         //check icon
         ImageBox _imageBox;
@@ -19,8 +20,6 @@ namespace LayoutFarm.CustomWidgets
         }
         void EnsureImgBinders()
         {
-             
-
             //if (s_checkedImg == null)
             //{
             //    s_checkedImg = ResImageList.GetImageBinder(ImageName.CheckBoxChecked);
@@ -38,14 +37,18 @@ namespace LayoutFarm.CustomWidgets
                 EnsureImgBinders();
 
                 RenderElement baseRenderElement = base.GetPrimaryRenderElement(rootgfx);
-                _imageBox = new ImageBox();
-                _imageBox.ImageBinder = _isChecked ? s_checkedImg : s_uncheckedImg;
-                _imageBox.MouseDown += (s, e) =>
+                if (baseRenderElement is CustomRenderBox customRenderBox)
                 {
-                    //toggle checked/unchecked
-                    this.Checked = !this.Checked;
-                };
-                this.Add(_imageBox);
+                    _imageBox = new ImageBox();
+                    _imageBox.ImageBinder = _isChecked ? s_checkedImg : s_uncheckedImg;
+                    _imageBox.MouseDown += (s, e) =>
+                    {
+                        //toggle checked/unchecked
+                        this.Checked = !this.Checked;
+                    };
+                    customRenderBox.AddChild(_imageBox);
+                }
+
                 return baseRenderElement;
             }
             else
