@@ -375,7 +375,10 @@ namespace Mini
             formImgResampling.Show();
         }
 
-        
+        private void cmdRBTreeTest_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
 

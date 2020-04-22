@@ -27,7 +27,7 @@
 using System;
 
 //from namespace MonoDevelop.Core.Text
-namespace PixelFarm.TreeCollection
+namespace LayoutFarm.TreeCollection
 {
     /// <summary>
     /// An (Offset,Length)-pair.

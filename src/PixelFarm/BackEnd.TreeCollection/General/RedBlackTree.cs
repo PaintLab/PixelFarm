@@ -32,7 +32,7 @@ using System.Text;
 using System.Diagnostics;
 
 //from namespace Mono.TextEditor.Utils
-namespace PixelFarm.TreeCollection
+namespace LayoutFarm.TreeCollection
 {
     public enum RedBlackColor : byte
     {
@@ -506,7 +506,7 @@ namespace PixelFarm.TreeCollection
             }
         }
 
-        #region ICollection<T> implementation
+       
         public int Count { get; internal set; }
 
         public void Clear()
@@ -562,9 +562,7 @@ namespace PixelFarm.TreeCollection
             foreach (T value in this)
                 array[i++] = value;
         }
-
-        #endregion
-
+         
         public class RedBlackTreeNodeEventArgs : EventArgs
         {
             public T Node { get; private set; }
