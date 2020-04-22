@@ -1,8 +1,8 @@
 ﻿//Apache2, 2014-present, WinterDev
 
+using LayoutFarm.UI;
 using System;
 using System.Collections.Generic;
-using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
     public class MenuItem : AbstractBox
@@ -11,13 +11,23 @@ namespace LayoutFarm.CustomWidgets
         List<MenuItem> _childItems;
         Box _floatPart;
 
+        UICollection _landPart;
         public MenuItem(int width, int height)
             : base(width, height)
         {
             _hingeRelation = new HingeRelation();
             _hingeRelation.LandPart = this;
+            _landPart = new UICollection();
         }
-
+        public void AddLandPart(UIElement ui)
+        {
+            //add to its
+            _landPart.AddUI(ui);
+            if (_primElement != null)
+            {
+                _primElement.AddChild(ui);
+            }
+        }
         public Box FloatPart
         {
             get => _floatPart;

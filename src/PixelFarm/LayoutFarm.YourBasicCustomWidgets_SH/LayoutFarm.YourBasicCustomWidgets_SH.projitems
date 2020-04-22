@@ -9,7 +9,6 @@
     <Import_RootNamespace>LayoutFarm.YourBasicCustomWidgets_SH</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)0_CustomRenderElements\CustomContainerRenderBox.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)0_CustomRenderElements\CustomImageRenderBox.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)0_CustomRenderElements\CustomRenderElements.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)0_CustomRenderElements\CustomTextRun.cs" />
