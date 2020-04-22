@@ -4,12 +4,11 @@ using PixelFarm.Drawing;
 using System.Collections.Generic;
 namespace LayoutFarm.UI
 {
-    static class UISystem
+    static class UILayoutQueue
     {
-        static Queue<UIElement> s_layoutQueue = new Queue<UIElement>();
+        static Queue<UIElement> s_layoutQueue = new Queue<UIElement>(); 
 
-
-        static UISystem()
+        static UILayoutQueue()
         {
             LayoutFarm.EventQueueSystem.CentralEventQueue.RegisterEventQueue(ClearLayoutQueue);
         }
@@ -382,17 +381,17 @@ namespace LayoutFarm.UI
         public void InvalidateLayout()
         {
             //add to layout queue
-            UISystem.AddToLayoutQueue(this);
+            UILayoutQueue.AddToLayoutQueue(this);
         }
         public void SuspendLayout()
         {
             //temp
-            UISystem.AddToLayoutQueue(this);
+            UILayoutQueue.AddToLayoutQueue(this);
         }
         public void ResumeLayout()
         {
             //temp
-            UISystem.AddToLayoutQueue(this);
+            UILayoutQueue.AddToLayoutQueue(this);
         }
         public virtual void NotifyContentUpdate(UIElement childContent)
         {
