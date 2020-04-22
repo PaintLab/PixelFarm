@@ -306,9 +306,6 @@
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\1_UIElement\1_UIElement.cs">
       <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\1_UIElement\1_UIElement.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\1_UIElement\2_UIElement_Container.cs">
-      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\1_UIElement\2_UIElement_Container.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\1_UIElement\2_UIElement_EventListener.cs">
       <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\1_UIElement\2_UIElement_EventListener.cs</Link>
     </Compile>
@@ -341,6 +338,9 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\2_Basic\3_Box.cs">
       <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\2_Basic\3_Box.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\2_Basic\3_IContainerUI.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\2_Basic\3_IContainerUI.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\2_Basic\4_Label.cs">
       <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\2_Basic\4_Label.cs</Link>

@@ -15,7 +15,7 @@ namespace LayoutFarm.CustomWidgets
         Both,
     }
 
-    public class Box : AbstractBox, IBoxContainer
+    public class Box : AbstractBox, IContainerUI
     {
         UICollection _uiList;
         public Box(int w, int h)
@@ -471,6 +471,51 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
+
+        public virtual bool BringChildToFront(UIElement ui, int steps)
+        {
+            //TODO: more step
+            //support steps=1
+            LinkedListNode<UIElement> currentNode = ui.GetLinkedNode();
+            LinkedListNode<UIElement> nextNode = currentNode.Next;
+            if (nextNode != null)
+            {
+                UIElement next = nextNode.Value;
+                RemoveChild(ui);
+                AddAfter(next, ui);
+                return true;
+            }
+            return false;
+        }
+
+        public virtual bool BringChildToFrontMost(UIElement ui)
+        {
+            RemoveChild(ui);
+            AddLast(ui);
+            return true;
+        }
+
+        public virtual bool SendChildToBack(UIElement ui, int steps)
+        {
+            LinkedListNode<UIElement> currentNode = ui.GetLinkedNode();
+            LinkedListNode<UIElement> prevNode = currentNode.Previous;
+            if (prevNode != null)
+            {
+                UIElement prev = prevNode.Value;
+                RemoveChild(ui);
+                AddBefore(prev, ui);
+                return true;
+            }
+            return false;
+        }
+
+        public virtual bool SendChildToBackMost(UIElement ui)
+        {
+            RemoveChild(ui);
+            AddFirst(ui);
+            return true;
+        }
+
         public override BoxContentLayoutKind ContentLayoutKind
         {
             get => base.ContentLayoutKind;
@@ -485,6 +530,8 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
+
+
     }
 
 

@@ -65,11 +65,11 @@ namespace LayoutFarm.UI
 
     public abstract class LayoutInstance
     {
-         
+
         public abstract bool GetResultBounds(out RectangleF rects);
     }
 
-    
+
 
 
     public abstract partial class UIElement : IUIEventListener
@@ -146,42 +146,38 @@ namespace LayoutFarm.UI
             get => _parent;
             set
             {
-
-                //if (value == null)
-                //{
-
-                //}
-
                 _parent = value;
             }
         }
 
-        public UIElement NextUIElement
-        {
-            get
-            {
-                if (_collectionLinkNode != null)
-                {
-                    LinkedListNode<UIElement> nextNode = _collectionLinkNode.Next;
-                    return (nextNode != null) ? nextNode.Value : null;
-                }
-                return null;
-            }
-        }
-        public UIElement PrevUIElement
-        {
-            get
-            {
-                if (_collectionLinkNode != null)
-                {
-                    LinkedListNode<UIElement> prevNode = _collectionLinkNode.Previous;
-                    return (prevNode != null) ? prevNode.Value : null;
-                }
-                return null;
-            }
-        }
+        public LinkedListNode<UIElement> GetLinkedNode() => _collectionLinkNode;
+
+        //public UIElement NextUIElement
+        //{
+        //    get
+        //    {
+        //        if (_collectionLinkNode != null)
+        //        {
+        //            LinkedListNode<UIElement> nextNode = _collectionLinkNode.Next;
+        //            return (nextNode != null) ? nextNode.Value : null;
+        //        }
+        //        return null;
+        //    }
+        //}
+        //public UIElement PrevUIElement
+        //{
+        //    get
+        //    {
+        //        if (_collectionLinkNode != null)
+        //        {
+        //            LinkedListNode<UIElement> prevNode = _collectionLinkNode.Previous;
+        //            return (prevNode != null) ? prevNode.Value : null;
+        //        }
+        //        return null;
+        //    }
+        //}
         //------------------------------
-   
+
         //------------------------------
         public virtual void InvalidateOuterGraphics()
         {
