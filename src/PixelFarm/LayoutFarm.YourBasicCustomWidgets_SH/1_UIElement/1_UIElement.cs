@@ -69,6 +69,9 @@ namespace LayoutFarm.UI
         public abstract bool GetResultBounds(out RectangleF rects);
     }
 
+    
+
+
     public abstract partial class UIElement : IUIEventListener
     {
 
@@ -178,121 +181,7 @@ namespace LayoutFarm.UI
             }
         }
         //------------------------------
-        public virtual void RemoveChild(UIElement ui)
-        {
-#if DEBUG
-            throw new System.NotSupportedException("user must impl this");
-#endif
-        }
-        public virtual void ClearChildren()
-        {
-#if DEBUG
-            throw new System.NotSupportedException("user must impl this");
-#endif
-        }
-        public virtual void RemoveSelf()
-        {
-
-
-            RenderElement currentRenderE = this.CurrentPrimaryRenderElement;
-            if (currentRenderE != null &&
-                currentRenderE.HasParent)
-            {
-                currentRenderE.RemoveSelf();
-            }
-            if (_parent != null)
-            {
-                _parent.RemoveChild(this);
-            }
-            this.InvalidateOuterGraphics();
-#if DEBUG
-            if (_collectionLinkNode != null || _parent != null)
-            {
-                throw new System.Exception("");
-            }
-#endif
-        }
-
-        public virtual void AddFirst(UIElement ui)
-        {
-#if DEBUG
-            throw new System.Exception("empty!");
-#endif
-
-        }
-        public virtual void AddAfter(UIElement afterUI, UIElement ui)
-        {
-#if DEBUG
-            throw new System.Exception("empty!");
-#endif
-        }
-        public virtual void AddBefore(UIElement beforeUI, UIElement ui)
-        {
-#if DEBUG
-            throw new System.Exception("empty!");
-#endif
-        }
-        public virtual void Add(UIElement ui)
-        {
-#if DEBUG
-            throw new System.Exception("empty!");
-#endif
-        }
-        public virtual void BringToTopMost()
-        {
-            if (_parent != null)
-            {
-                //after RemoveSelf_parent is set to null
-                //so we backup it before RemoveSelf
-                UIElement parentUI = _parent;
-                parentUI.RemoveChild(this);
-                parentUI.Add(this);
-                this.InvalidateGraphics();
-            }
-        }
-        public virtual void BringToTopOneStep()
-        {
-            if (_parent != null)
-            {
-                //find next element
-                UIElement next = this.NextUIElement;
-                if (next != null)
-                {
-                    UIElement parentUI = _parent;
-                    parentUI.RemoveChild(this);
-                    parentUI.AddAfter(next, this);
-                    this.InvalidateGraphics();
-                }
-            }
-        }
-        public virtual void SendToBackMost()
-        {
-            if (_parent != null)
-            {
-                //after RemoveSelf_parent is set to null
-                //so we backup it before RemoveSelf
-
-                UIElement parentUI = _parent;
-                parentUI.RemoveChild(this);
-                parentUI.AddFirst(this);
-                this.InvalidateGraphics();
-            }
-        }
-        public virtual void SendOneStepToBack()
-        {
-            if (_parent != null)
-            {
-                //find next element
-                UIElement prev = this.PrevUIElement;
-                if (prev != null)
-                {
-                    UIElement parentUI = _parent;
-                    parentUI.RemoveChild(this);
-                    parentUI.AddBefore(prev, this);
-                }
-            }
-        }
-
+   
         //------------------------------
         public virtual void InvalidateOuterGraphics()
         {

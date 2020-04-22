@@ -128,6 +128,7 @@
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\0_CustomRenderElements\CustomTextRun.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\0_CustomRenderElements\RenderElementExtension.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\1_UIElement\1_UIElement.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\1_UIElement\2_UIElement_Container.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\1_UIElement\2_UIElement_EventListener.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\1_UIElement\3_AbstractRect.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\1_UIElement\4_UICollection.cs" />

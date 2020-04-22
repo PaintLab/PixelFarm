@@ -22,7 +22,7 @@ namespace LayoutFarm.CustomWidgets
             _hingeRel.ToggleOpenOrClose();
             base.OnMouseDown(e);
         }
-        public AbstractRectUI FloatPart
+        public Box FloatPart
         {
             get => _hingeRel.FloatPart;
             set => _hingeRel.FloatPart = value;

@@ -3,7 +3,7 @@
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public class UIFloatWindow : AbstractBox, ITopWindowBox
+    public class UIFloatWindow : Box, ITopWindowBox
     {
         IPlatformWindowBox _platformWindowBox;
         public UIFloatWindow(int w, int h)
@@ -13,7 +13,7 @@ namespace LayoutFarm.CustomWidgets
         }
         IPlatformWindowBox ITopWindowBox.PlatformWinBox
         {
-            get { return _platformWindowBox; }
+            get => _platformWindowBox;
             set
             {
                 bool isFirstTime = _platformWindowBox == null;
@@ -47,10 +47,7 @@ namespace LayoutFarm.CustomWidgets
         }
         public override bool Visible
         {
-            get
-            {
-                return base.Visible;
-            }
+            get => base.Visible;
             set
             {
                 if (_platformWindowBox != null)

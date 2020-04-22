@@ -16,7 +16,7 @@ namespace LayoutFarm.CustomWidgets
             _hingeRelation.LandPart = this;
         }
 
-        public AbstractRectUI FloatPart
+        public Box FloatPart
         {
             get => _hingeRelation.FloatPart;
             set => _hingeRelation.FloatPart = value;

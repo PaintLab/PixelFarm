@@ -3,14 +3,13 @@
 using System;
 namespace LayoutFarm.CustomWidgets
 {
-    public class CheckBox : AbstractBox
+    public class CheckBox : Box
     {
         //check icon
         ImageBox _imageBox;
         bool _isChecked;
 
         static Atlas_AUTOGEN_.TestAtlas1.Binders s_binders = new Atlas_AUTOGEN_.TestAtlas1.Binders();
-
         static PixelFarm.Drawing.ImageBinder s_checkedImg = s_binders._chk_checked_png;
         static PixelFarm.Drawing.ImageBinder s_uncheckedImg = s_binders._chk_unchecked_png;
 

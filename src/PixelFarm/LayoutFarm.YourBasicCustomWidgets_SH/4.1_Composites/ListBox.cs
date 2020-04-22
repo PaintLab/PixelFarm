@@ -7,7 +7,7 @@ using LayoutFarm.UI;
 using PixelFarm.CpuBlit;
 namespace LayoutFarm.CustomWidgets
 { 
-    public class ListBox : AbstractBox
+    public class ListBox : Box
     {
         public delegate void ListItemMouseHandler(object sender, UIMouseEventArgs e);
         public delegate void ListItemKeyboardHandler(object sender, UIKeyEventArgs e);

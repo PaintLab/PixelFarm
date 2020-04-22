@@ -506,7 +506,7 @@ namespace LayoutFarm.CustomWidgets
     }
 
 
-    public class GridView : AbstractBox
+    public class GridView : Box
     {
         GridViewRenderBox _gridViewRenderE;
         CellSizeStyle _cellSizeStyle;
