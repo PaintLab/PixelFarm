@@ -236,9 +236,14 @@ namespace LayoutFarm.UI
         public class UIList<T> : IUICollection<T>
             where T : UIElement
         {
-            readonly List<T> _list = new List<T>();
+            readonly List<T> _list;
             public UIList()
             {
+                _list = new List<T>();
+            }
+            public UIList(int listCapacity)
+            {
+                _list = new List<T>(listCapacity);
             }
             public void Add(UIElement parent, T ui)
             {
