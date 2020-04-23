@@ -515,7 +515,7 @@ namespace LayoutFarm.CustomWidgets
         GridSelectionSession _gridSelectionSession;
         Color _gridBorderColor;
 
-        UICollection _children;
+        UIList<UIElement> _children;
 
         public struct GridCellInfo
         {
@@ -551,11 +551,11 @@ namespace LayoutFarm.CustomWidgets
         }
         public void Add(UIElement ui)
         {
-            if (_children.IsNull)
+            if (_children == null)
             {
-                _children = new UICollection(this);
+                _children = new UIList<UIElement>();
             }
-            _children.AddUI(ui);
+            _children.Add(this, ui);
         }
         public override void PerformContentLayout()
         {

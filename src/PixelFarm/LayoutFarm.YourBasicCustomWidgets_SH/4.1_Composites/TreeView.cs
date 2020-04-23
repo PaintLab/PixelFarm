@@ -12,28 +12,25 @@ namespace LayoutFarm.CustomWidgets
         CustomRenderBox _primElement;//background
         Color _backColor = KnownColors.LightGray;
         int _viewportLeft, _viewportTop;
-        UICollection _uiList;
+
+        UIList<TreeNode> _uiList;
         int _latestItemY;
-        Box _panel; //panel 
+
+        BoxContentLayoutKind _layoutKind;
+        bool _needClip = true;
 
         public TreeView(int width, int height)
             : base(width, height)
         {
             //panel for listview items
-            _panel = new Box(width, height);
-            _panel.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
-            _panel.BackColor = KnownColors.LightGray;
-            _panel.NeedClipArea = true;
-            _uiList = new UICollection(this);
-            _uiList.AddUI(_panel);
+
+            _layoutKind = BoxContentLayoutKind.VerticalStack;
+            _uiList = new UIList<TreeNode>();
         }
 
         protected override void OnAcceptVisitor(UIVisitor visitor)
         {
-            if (!_uiList.IsNull)
-            {
-                UICollection.AcceptVisitor(_uiList, visitor);
-            }
+            _uiList.AcceptVisitor(visitor);
         }
         //
         public override RenderElement CurrentPrimaryRenderElement => _primElement;
@@ -75,18 +72,16 @@ namespace LayoutFarm.CustomWidgets
             treeNode.SetLocation(0, _latestItemY);
             _latestItemY += treeNode.Height;
             treeNode.SetOwnerTreeView(this);
-            _panel.Add(treeNode);
+            //add to primary renderE
         }
         //----------------------------------------------------
         protected override void OnMouseDown(UIMouseDownEventArgs e)
         {
-
             MouseDown?.Invoke(this, e);
         }
 
         protected override void OnMouseUp(UIMouseUpEventArgs e)
         {
-
             MouseUp?.Invoke(this, e);
             base.OnMouseUp(e);
         }
@@ -100,7 +95,7 @@ namespace LayoutFarm.CustomWidgets
             _viewportTop = top;
             if (this.HasReadyRenderElement)
             {
-                _panel.SetViewport(left, top, this);
+                _primElement.SetViewport(left, top);
             }
         }
         //----------------------------------------------------
@@ -108,12 +103,12 @@ namespace LayoutFarm.CustomWidgets
         public event EventHandler<UIMouseEventArgs> MouseDown;
         public event EventHandler<UIMouseEventArgs> MouseUp;
         //----------------------------------------------------  
-        public override void PerformContentLayout()
-        {
-            //manually perform layout of its content 
-            //here: arrange item in panel
-            _panel.PerformContentLayout();
-        }
+        //public override void PerformContentLayout()
+        //{
+        //    //manually perform layout of its content 
+        //    //here: arrange item in panel
+        //    _panel.PerformContentLayout();
+        //}
 
     }
 

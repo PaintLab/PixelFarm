@@ -6,7 +6,7 @@ namespace LayoutFarm.UI
 {
     static class UILayoutQueue
     {
-        static Queue<UIElement> s_layoutQueue = new Queue<UIElement>(); 
+        static Queue<UIElement> s_layoutQueue = new Queue<UIElement>();
 
         static UILayoutQueue()
         {
@@ -89,6 +89,8 @@ namespace LayoutFarm.UI
         float _bottom;
         //object _tag;
         UIElement _parent;
+        protected bool _needContentLayout;
+
         internal LinkedListNode<UIElement> _collectionLinkNode;
 
         public UIElement()
@@ -114,15 +116,6 @@ namespace LayoutFarm.UI
 
         public bool AcceptKeyboardFocus { get; set; }
 
-        //public virtual object Tag
-        //{
-        //    get => null;
-        //    set
-        //    {
-        //        throw new System.NotSupportedException("user must override this");
-        //    }
-        //}
-
         public virtual void Focus()
         {
             //make this keyboard focusable
@@ -146,8 +139,8 @@ namespace LayoutFarm.UI
             set => _parent = value;
         }
 
-        public LinkedListNode<UIElement> GetLinkedNode() => _collectionLinkNode;
-        //------------------------------
+       
+
         public virtual void InvalidateOuterGraphics()
         {
 

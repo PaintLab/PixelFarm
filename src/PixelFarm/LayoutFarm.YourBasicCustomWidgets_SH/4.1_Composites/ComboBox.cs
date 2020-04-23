@@ -7,12 +7,12 @@ namespace LayoutFarm.CustomWidgets
     public class ComboBox : AbstractBox
     {
         HingeRelation _hingeRel = new HingeRelation();
-        UICollection _children;
+        UIList<UIElement> _children;
         public ComboBox(int width, int height)
             : base(width, height)
         {
             _hingeRel.LandPart = this;
-            _children = new UICollection(this);
+            _children = new UIList<UIElement>();
         }
         protected override void OnLostMouseFocus(UIMouseLostFocusEventArgs e)
         {
@@ -40,7 +40,7 @@ namespace LayoutFarm.CustomWidgets
 
         public void AddLandPartContent(UIElement ui)
         {
-            _children.AddUI(ui);
+            _children.Add(this, ui);
             if (_primElement != null)
             {
                 _primElement.AddChild(ui);

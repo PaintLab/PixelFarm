@@ -18,7 +18,7 @@ namespace LayoutFarm.CustomWidgets
 
     public sealed class Box : AbstractBox, IContainerUI
     {
-        UICollection _uiList;
+        UIList<UIElement> _uiList;
         public Box(int w, int h)
             : base(w, h)
         {
@@ -44,186 +44,176 @@ namespace LayoutFarm.CustomWidgets
         static UIElement[] s_empty = new UIElement[0];
         public IEnumerable<UIElement> GetChildIter()
         {
-            if (!_uiList.IsNull)
+            if (_uiList != null)
             {
                 return _uiList.GetIter();
             }
             return s_empty;
         }
 
-        public int ChildCount => _uiList.Count;
+        public int ChildCount => (_uiList != null) ? _uiList.Count : 0;
 
         public void Insert(int index, UIElement ui)
         {
             _needContentLayout = true;
-            LinkedListNode<UIElement> insertAt = _uiList.GetUIElementLinkedListNode(index);
+            _uiList.Insert(this, index, ui);
 
-            if (this.HasReadyRenderElement)
-            {
-                _primElement.InsertBefore(
-                        insertAt.Value.GetPrimaryRenderElement(_primElement.Root),
-                        ui.GetPrimaryRenderElement(_primElement.Root));
+            //LinkedListNode<UIElement> insertAt = _uiList.GetUIElementLinkedListNode(index);
 
-                if (_supportViewport)
-                {
-                    this.InvalidateLayout();
-                }
-            }
+            //if (this.HasReadyRenderElement)
+            //{
+            //    _primElement.InsertBefore(
+            //            insertAt.Value.GetPrimaryRenderElement(_primElement.Root),
+            //            ui.GetPrimaryRenderElement(_primElement.Root));
 
-            if (ui.NeedContentLayout)
-            {
-                ui.InvalidateLayout();
-            }
+            //    if (_supportViewport)
+            //    {
+            //        this.InvalidateLayout();
+            //    }
+            //}
+
+            //if (ui.NeedContentLayout)
+            //{
+            //    ui.InvalidateLayout();
+            //}
         }
 
         public void AddAfter(UIElement afterUI, UIElement ui)
         {
-            _uiList.AddAfter(afterUI, ui);
+            _uiList.AddAfter(this, afterUI, ui);
+            //_uiList.AddAfter(afterUI, ui); 
+            //_needContentLayout = true;
+            ////insert new child after existing one 
+            //if (this.HasReadyRenderElement)
+            //{
+            //    _primElement.InsertAfter(
+            //        afterUI.GetPrimaryRenderElement(_primElement.Root),
+            //        ui.GetPrimaryRenderElement(_primElement.Root));
 
-            _needContentLayout = true;
-            //insert new child after existing one
+            //    if (_supportViewport)
+            //    {
+            //        this.InvalidateLayout();
+            //    }
+            //}
 
-            if (this.HasReadyRenderElement)
-            {
-                _primElement.InsertAfter(
-                    afterUI.GetPrimaryRenderElement(_primElement.Root),
-                    ui.GetPrimaryRenderElement(_primElement.Root));
-
-                if (_supportViewport)
-                {
-                    this.InvalidateLayout();
-                }
-            }
-
-            if (ui.NeedContentLayout)
-            {
-                ui.InvalidateLayout();
-            }
+            //if (ui.NeedContentLayout)
+            //{
+            //    ui.InvalidateLayout();
+            //}
         }
         public void AddBefore(UIElement beforeUI, UIElement ui)
         {
             _needContentLayout = true;
-            _uiList.AddBefore(beforeUI, ui);
+            _uiList.AddBefore(this, beforeUI, ui);
 
-            if (this.HasReadyRenderElement)
-            {
-                _primElement.InsertBefore(
-                    beforeUI.GetPrimaryRenderElement(_primElement.Root),
-                    ui.GetPrimaryRenderElement(_primElement.Root));
+            //if (this.HasReadyRenderElement)
+            //{
+            //    _primElement.InsertBefore(
+            //        beforeUI.GetPrimaryRenderElement(_primElement.Root),
+            //        ui.GetPrimaryRenderElement(_primElement.Root));
 
-                if (_supportViewport)
-                {
-                    this.InvalidateLayout();
-                }
-            }
+            //    if (_supportViewport)
+            //    {
+            //        this.InvalidateLayout();
+            //    }
+            //}
 
-            if (ui.NeedContentLayout)
-            {
-                ui.InvalidateLayout();
-            }
+            //if (ui.NeedContentLayout)
+            //{
+            //    ui.InvalidateLayout();
+            //}
         }
         public void AddFirst(UIElement ui)
         {
-            if (_uiList.IsNull)
+            if (_uiList == null)
             {
-                _uiList = new UICollection(this);
+                _uiList = new UIList<UIElement>();
             }
 
-            _needContentLayout = true;
+            //_needContentLayout = true;
+            _uiList.AddFirst(this, ui);
 
-            _uiList.AddFirst(ui);
-            if (this.HasReadyRenderElement)
-            {
-                _primElement.AddFirst(
-                    ui.GetPrimaryRenderElement(_primElement.Root));
+            //if (this.HasReadyRenderElement)
+            //{
+            //    _primElement.AddFirst(
+            //        ui.GetPrimaryRenderElement(_primElement.Root));
 
-                if (_supportViewport)
-                {
-                    this.InvalidateLayout();
-                }
-            }
+            //    if (_supportViewport)
+            //    {
+            //        this.InvalidateLayout();
+            //    }
+            //}
 
-            if (ui.NeedContentLayout)
-            {
-                ui.InvalidateLayout();
-            }
+            //if (ui.NeedContentLayout)
+            //{
+            //    ui.InvalidateLayout();
+            //}
         }
 
         public void Add(UIElement ui)
         {
-            if (_uiList.IsNull)
+            if (_uiList == null)
             {
-                _uiList = new UICollection(this);
+                _uiList = new UIList<UIElement>();
             }
 
             _needContentLayout = true;
-            _uiList.AddUI(ui);
+            _uiList.Add(this, ui);
 
-            if (this.HasReadyRenderElement)
-            {
-                _primElement.AddChild(ui);
-                if (_supportViewport)
-                {
-                    this.InvalidateLayout();
-                }
-            }
 
-            if (ui.NeedContentLayout)
-            {
-                if (!this.IsInLayoutQueue) //if this elem is in layout queue, the ui will be layout with this
-                {
-                    if (this.ParentUI != null)
-                    {
-                        //if this elem is add to the host
-                        //the parent UI is not null, 
-                        ui.InvalidateLayout();
-                    }
-                }
-            }
         }
         public void AddLast(UIElement ui) => Add(ui);
         public void RemoveChild(UIElement ui)
         {
-            _needContentLayout = true;
-            _uiList.RemoveUI(ui);
-            if (this.HasReadyRenderElement)
-            {
-                if (_supportViewport)
-                {
-                    this.InvalidateLayout();
-                }
-                _primElement.RemoveChild(ui.CurrentPrimaryRenderElement);
-            }
+            _uiList.Remove(this, ui);
+
+             
+            //_needContentLayout = true;
+            //_uiList.RemoveUI(ui);
+            //if (this.HasReadyRenderElement)
+            //{
+            //    if (_supportViewport)
+            //    {
+            //        this.InvalidateLayout();
+            //    }
+            //    _primElement.RemoveChild(ui.CurrentPrimaryRenderElement);
+            //}
         }
         public void ClearChildren()
         {
             _needContentLayout = true;
-            if (!_uiList.IsNull)
+            if (_uiList != null)
             {
-                _uiList.Clear();
+                _uiList.Clear(this);
             }
-            if (this.HasReadyRenderElement)
-            {
-                _primElement.ClearAllChildren();
-                if (Visible)
-                {
-                    if (_supportViewport)
-                    {
-                        this.InvalidateLayout();
-                    }
-                }
-            }
+            //if (!_uiList.IsNull)
+            //{
+            //    _uiList.Clear();
+            //}
+            //if (this.HasReadyRenderElement)
+            //{
+            //    _primElement.ClearAllChildren();
+            //    if (Visible)
+            //    {
+            //        if (_supportViewport)
+            //        {
+            //            this.InvalidateLayout();
+            //        }
+            //    }
+            //}
         }
 
         public bool BringChildToFront(UIElement ui, int steps)
         {
             //TODO: more step
             //support steps=1
-            LinkedListNode<UIElement> currentNode = ui.GetLinkedNode();
-            LinkedListNode<UIElement> nextNode = currentNode.Next;
-            if (nextNode != null)
+            //now we need to find this node in the list
+
+            var currentNode = _uiList.GetNodeLocator(ui);
+
+            if (currentNode.HasNext())
             {
-                UIElement next = nextNode.Value;
+                UIElement next = currentNode.MoveNext();
                 RemoveChild(ui);
                 AddAfter(next, ui);
                 return true;
@@ -240,16 +230,17 @@ namespace LayoutFarm.CustomWidgets
 
         public bool SendChildToBack(UIElement ui, int steps)
         {
-            LinkedListNode<UIElement> currentNode = ui.GetLinkedNode();
-            LinkedListNode<UIElement> prevNode = currentNode.Previous;
-            if (prevNode != null)
+            var currentNode = _uiList.GetNodeLocator(ui);
+
+            if (currentNode.HasPrev())
             {
-                UIElement prev = prevNode.Value;
+                UIElement prev = currentNode.MovePrev();
                 RemoveChild(ui);
                 AddBefore(prev, ui);
                 return true;
             }
             return false;
+
         }
 
         public bool SendChildToBackMost(UIElement ui)
@@ -274,9 +265,9 @@ namespace LayoutFarm.CustomWidgets
 
         protected override void OnAcceptVisitor(UIVisitor visitor)
         {
-            if (!_uiList.IsNull)
+            if (_uiList != null)
             {
-                UICollection.AcceptVisitor(_uiList, visitor);
+                _uiList.AcceptVisitor(visitor);
             }
         }
         public override void PerformContentLayout()

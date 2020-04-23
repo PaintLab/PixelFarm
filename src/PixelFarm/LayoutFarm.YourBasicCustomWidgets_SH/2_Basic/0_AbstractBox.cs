@@ -118,7 +118,7 @@ namespace LayoutFarm.CustomWidgets
 
         protected bool _supportViewport;
         protected bool _needClipArea;
-        protected bool _needContentLayout;
+       
         protected CustomRenderBox _primElement;
 
         public AbstractBox(int width, int height)

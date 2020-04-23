@@ -13,11 +13,11 @@ namespace LayoutFarm.CustomWidgets
         public delegate void ListItemKeyboardHandler(object sender, UIKeyEventArgs e);
         //composite          
 
-        List<ListItem> _items = new List<ListItem>();
+
         int _selectedIndex = -1;//default = no selection
         ListItem _selectedItem = null;
-        UICollection _uiCollection;
-        Box _bgBox;
+        UIList<ListItem> _items = new UIList<ListItem>();
+
         public event ListItemMouseHandler ListItemMouseEvent;
         public event ListItemKeyboardHandler ListItemKeyboardEvent;
 
@@ -35,10 +35,6 @@ namespace LayoutFarm.CustomWidgets
 
             ListItemNormalColor = KnownColors.LightGray;
             ListItemSelectedColor = KnownColors.Yellow;
-
-            _uiCollection = new UICollection(this);
-            _bgBox = new Box(width, height);
-            _uiCollection.AddUI(_bgBox);
         }
         protected override void OnMouseDown(UIMouseDownEventArgs e)
         {
@@ -94,7 +90,7 @@ namespace LayoutFarm.CustomWidgets
                 newone.LayoutHint = this.ContentLayoutKind;
                 newone.HasSpecificWidthAndHeight = true;
 
-                foreach (UIElement child in _uiCollection.GetIter())
+                foreach (UIElement child in _items.GetIter())
                 {
                     newone.AddChild(child.GetPrimaryRenderElement(rootgfx));
                 }
@@ -109,30 +105,32 @@ namespace LayoutFarm.CustomWidgets
         public int ItemCount => _items.Count;
         public void AddItem(ListItem item)
         {
-            _items.Add(item); //logical collection
-            if (CurrentPrimaryRenderElement is CustomRenderBox customPrim)
-            {
-                customPrim.AddChild(item);
-                item.InvalidateGraphics();
-            }
+            _items.Add(this, item); //logical collection
+
+            //if (CurrentPrimaryRenderElement is CustomRenderBox customPrim)
+            //{
+            //    customPrim.AddChild(item);
+            //    item.InvalidateGraphics();
+            //}
         }
         public void InsertItem(int index, ListItem item)
         {
-            ListItem existing = _items[index];
-            _items.Insert(index, item);
-            if (CurrentPrimaryRenderElement is CustomRenderBox customPrim)
-            {
-                customPrim.InsertBefore(existing.CurrentPrimaryRenderElement, item.GetPrimaryRenderElement(customPrim.Root));
-            }
+            _items.Insert(this, index, item);
+
+            //if (CurrentPrimaryRenderElement is CustomRenderBox customPrim)
+            //{
+            //    customPrim.InsertBefore(existing.CurrentPrimaryRenderElement, item.GetPrimaryRenderElement(customPrim.Root));
+            //}
         }
         public void RemoveAt(int index)
         {
-            ListItem item = _items[index];
-            if (CurrentPrimaryRenderElement is CustomRenderBox customPrim)
-            {
-                customPrim.RemoveChild(item.GetPrimaryRenderElement(customPrim.Root));
-            }
-            _items.RemoveAt(index);
+            _items.RemoveAt(this, index);
+            //ListItem item = _items[index];
+            //if (CurrentPrimaryRenderElement is CustomRenderBox customPrim)
+            //{
+            //    customPrim.RemoveChild(item.GetPrimaryRenderElement(customPrim.Root));
+            //}
+            //_items.RemoveAt(index);
         }
         public ListItem GetItem(int index)
         {
@@ -147,22 +145,22 @@ namespace LayoutFarm.CustomWidgets
         }
         public void Remove(ListItem item)
         {
-            _items.Remove(item);
-            if (CurrentPrimaryRenderElement is CustomRenderBox customPrim)
-            {
-                customPrim.RemoveChild(item.GetPrimaryRenderElement(customPrim.Root));
-                customPrim.InvalidateGraphics();
-            }
+            _items.Remove(this, item);
+            //if (CurrentPrimaryRenderElement is CustomRenderBox customPrim)
+            //{
+            //    customPrim.RemoveChild(item.GetPrimaryRenderElement(customPrim.Root));
+            //    customPrim.InvalidateGraphics();
+            //}
         }
         public void ClearItems()
         {
             _selectedIndex = -1;
-            _items.Clear();
-            if (CurrentPrimaryRenderElement is CustomRenderBox customPrim)
-            {
-                customPrim.ClearAllChildren();
-                customPrim.InvalidateGraphics();
-            }
+            _items.Clear(this);
+            //if (CurrentPrimaryRenderElement is CustomRenderBox customPrim)
+            //{
+            //    customPrim.ClearAllChildren();
+            //    customPrim.InvalidateGraphics();
+            //}
 
         }
         //----------------------------------------------------

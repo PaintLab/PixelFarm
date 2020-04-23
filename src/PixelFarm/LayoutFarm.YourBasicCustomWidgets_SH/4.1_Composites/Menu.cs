@@ -11,18 +11,19 @@ namespace LayoutFarm.CustomWidgets
         List<MenuItem> _childItems;
         Box _floatPart;
 
-        UICollection _landPart;
+        UIList<UIElement> _landPart;
         public MenuItem(int width, int height)
             : base(width, height)
         {
             _hingeRelation = new HingeRelation();
             _hingeRelation.LandPart = this;
-            _landPart = new UICollection();
+            _landPart = new UIList<UIElement>();
         }
         public void AddLandPart(UIElement ui)
         {
             //add to its
-            _landPart.AddUI(ui);
+            _landPart.Add(this, ui);
+
             if (_primElement != null)
             {
                 _primElement.AddChild(ui);
