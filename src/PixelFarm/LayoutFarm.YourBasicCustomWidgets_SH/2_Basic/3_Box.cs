@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-
-
-    public enum ContentStretch
+    public enum ContentStretch : byte
     {
         None,
         Horizontal,

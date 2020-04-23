@@ -25,7 +25,7 @@ namespace LayoutFarm.UI
             public static void CheckUI<T>(UIElement parent, T ui)
                 where T : UIElement
             {
-                if (ui._parent != null)
+                if (ui.ParentUI != null)
                 {
                     throw new Exception("has some parent");
                 }
@@ -128,9 +128,16 @@ namespace LayoutFarm.UI
             {
                 //ui must not have parent before!
                 CollectionHelper.CheckUI(parent, ui);
-                LinkedListNode<UIElement> linkedNode = afterUI._collectionLinkNode;
-                ui._collectionLinkNode = (LinkedListNode<UIElement>)(object)_linkedList.AddAfter((LinkedListNode<T>)(object)linkedNode, ui);
-                ui.ParentUI = parent;
+
+                if (afterUI._collectionLinkNode is LinkedListNode<UIElement> linkedNode)
+                {
+                    ui._collectionLinkNode = (LinkedListNode<UIElement>)(object)_linkedList.AddAfter((LinkedListNode<T>)(object)linkedNode, ui);
+                    ui.ParentUI = parent;
+                }
+                else
+                {
+                    throw new NotSupportedException();
+                }
 
                 //---
                 //presentation 
@@ -148,9 +155,16 @@ namespace LayoutFarm.UI
             public void AddBefore(UIElement parent, T beforeUI, T ui)
             {
                 CollectionHelper.CheckUI(parent, ui);
-                LinkedListNode<UIElement> linkedNode = beforeUI._collectionLinkNode;
-                ui._collectionLinkNode = (LinkedListNode<UIElement>)(object)_linkedList.AddBefore((LinkedListNode<T>)(object)linkedNode, ui);
-                ui.ParentUI = parent;
+
+                if (beforeUI._collectionLinkNode is LinkedListNode<UIElement> linkedNode)
+                {
+                    ui._collectionLinkNode = (LinkedListNode<UIElement>)(object)_linkedList.AddBefore((LinkedListNode<T>)(object)linkedNode, ui);
+                    ui.ParentUI = parent;
+                }
+                else
+                {
+                    throw new NotSupportedException();
+                }
 
 
                 //---
@@ -202,8 +216,15 @@ namespace LayoutFarm.UI
 
                 //we must ensure linked node is valid
                 parent._needContentLayout = true;
-                LinkedListNode<UIElement> linkedNode = ui._collectionLinkNode;
-                _linkedList.Remove((LinkedListNode<T>)(object)linkedNode);
+                if (ui._collectionLinkNode is LinkedListNode<UIElement> linkedNode)
+                {
+                    _linkedList.Remove((LinkedListNode<T>)(object)linkedNode);
+                }
+                else
+                {
+                    throw new NotSupportedException();
+                }
+
 
                 parent?.InvalidateLayout();
             }
@@ -249,7 +270,7 @@ namespace LayoutFarm.UI
             {
                 CollectionHelper.CheckUI(parent, ui);
                 _list.Add(ui);
-                ui._parent = parent;
+                ui.ParentUI = parent;
 
                 //---
                 //presentation
@@ -265,7 +286,7 @@ namespace LayoutFarm.UI
             {
                 CollectionHelper.CheckUI(parent, ui);
                 _list.Insert(0, ui);
-                ui._parent = parent;
+                ui.ParentUI = parent;
 
                 //---
                 //presentation

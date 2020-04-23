@@ -87,11 +87,10 @@ namespace LayoutFarm.UI
         float _top;
         float _right;
         float _bottom;
-        //object _tag;
-        UIElement _parent;
         protected bool _needContentLayout;
 
-        internal LinkedListNode<UIElement> _collectionLinkNode;
+
+        internal object _collectionLinkNode; //optional, eg for linked-list node, RB-tree-node
 
         public UIElement()
         {
@@ -133,13 +132,9 @@ namespace LayoutFarm.UI
                 this.CurrentPrimaryRenderElement.Root.SetCurrentKeyboardFocus(null);
             }
         }
-        public UIElement ParentUI
-        {
-            get => _parent;
-            set => _parent = value;
-        }
+        public UIElement ParentUI { get; set; }
 
-       
+
 
         public virtual void InvalidateOuterGraphics()
         {
@@ -308,8 +303,9 @@ namespace LayoutFarm.UI
                 }
             }
         }
-        //
-        public bool AutoStopMouseEventPropagation { get; set; }
+
+
+        public bool AutoStopMouseEventPropagation { get; set; } //TODO: review this
         //
         protected virtual void OnShown()
         {
