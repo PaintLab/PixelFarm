@@ -123,6 +123,7 @@
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.Triangulation\Util\PointGenerator.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.Triangulation\Util\PolygonGenerator.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\0_CustomRenderElements\CustomImageRenderBox.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\0_CustomRenderElements\CustomRenderBoxSpec.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\0_CustomRenderElements\CustomRenderElements.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\0_CustomRenderElements\CustomTextRun.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\0_CustomRenderElements\RenderElementExtension.cs" />

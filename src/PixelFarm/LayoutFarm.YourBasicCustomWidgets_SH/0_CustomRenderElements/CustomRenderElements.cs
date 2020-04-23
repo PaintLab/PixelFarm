@@ -4,6 +4,8 @@ using LayoutFarm.RenderBoxes;
 using PixelFarm.Drawing;
 namespace LayoutFarm.CustomWidgets
 {
+    
+
     public class CustomRenderBox : RenderBoxBase
     {
         Color _backColor;

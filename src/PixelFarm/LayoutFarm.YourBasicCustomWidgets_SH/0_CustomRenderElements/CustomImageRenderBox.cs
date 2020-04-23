@@ -5,8 +5,6 @@ namespace LayoutFarm.CustomWidgets
 {
     public class CustomImageRenderBox : CustomRenderBox
     {
-
-        ImageBinder _imageBinder;
         public CustomImageRenderBox(RootGraphic rootgfx, int width, int height)
             : base(rootgfx, width, height)
         {
@@ -15,11 +13,7 @@ namespace LayoutFarm.CustomWidgets
         public override void ClearAllChildren()
         {
         }
-        public ImageBinder ImageBinder
-        {
-            get => _imageBinder;
-            set => _imageBinder = value;
-        }
+        public ImageBinder ImageBinder { get; set; }
 
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
@@ -30,15 +24,15 @@ namespace LayoutFarm.CustomWidgets
 
             if (WaitForStartRenderElement) { return; }
 
-            if (_imageBinder == null) { return; }
+            if (ImageBinder == null) { return; }
 
             //----------------------------------
-            switch (_imageBinder.State)
+            switch (ImageBinder.State)
             {
                 case BinderState.Loaded:
                     {
                         d.FillRectangle(this.BackColor, 0, 0, this.Width, this.Height);
-                        d.DrawImage(_imageBinder,
+                        d.DrawImage(ImageBinder,
                             new RectangleF(
                             ContentLeft, ContentTop,
                             ContentWidth,
@@ -48,14 +42,14 @@ namespace LayoutFarm.CustomWidgets
                 case BinderState.Unload:
                     {
                         //wait next round ...
-                        if (_imageBinder.HasLazyFunc)
+                        if (ImageBinder.HasLazyFunc)
                         {
-                            _imageBinder.LazyLoadImage();
+                            ImageBinder.LazyLoadImage();
                         }
-                        else if (_imageBinder is AtlasImageBinder)
+                        else if (ImageBinder is AtlasImageBinder)
                         {
                             //resolve this and draw
-                            d.DrawImage(_imageBinder,
+                            d.DrawImage(ImageBinder,
                                new RectangleF(
                                ContentLeft, ContentTop,
                                ContentWidth,
