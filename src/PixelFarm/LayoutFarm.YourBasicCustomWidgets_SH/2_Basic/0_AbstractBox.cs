@@ -704,9 +704,6 @@ namespace LayoutFarm.CustomWidgets
             //this.DragOver?.Invoke(this, e);
             base.OnGuestMsg(e);
         }
-
-
-
     }
 
 
@@ -731,10 +728,6 @@ namespace LayoutFarm.CustomWidgets
             }
             _items.Add(this, ui);
         }
-        protected virtual void Clear()
-        {
-            _items?.Clear(this);
-        }
-
+        protected virtual void Clear() => _items?.Clear(this);
     }
 }
