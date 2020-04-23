@@ -23,7 +23,8 @@ namespace LayoutFarm.UI
             int count = s_layoutQueue.Count;
 
 #if DEBUG
-            //if (UIElement.s_dbugBreakOnSetBounds)
+    
+        //if (UIElement.s_dbugBreakOnSetBounds)
             //{
             //    for (int i = count - 1; i >= 0; --i)
             //    {

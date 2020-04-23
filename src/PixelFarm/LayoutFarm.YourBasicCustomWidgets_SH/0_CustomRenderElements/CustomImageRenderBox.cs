@@ -7,7 +7,7 @@ namespace LayoutFarm.CustomWidgets
     {
         public CustomImageRenderBox(RootGraphic rootgfx, int width, int height)
             : base(rootgfx, width, height)
-        {
+        {  
             this.BackColor = KnownColors.LightGray;
         }
         public override void ClearAllChildren()

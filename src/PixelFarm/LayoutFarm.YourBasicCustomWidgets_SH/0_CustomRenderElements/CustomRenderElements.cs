@@ -25,7 +25,7 @@ namespace LayoutFarm.CustomWidgets
         byte _borderTop;
         byte _borderRight;
         byte _borderBottom;
-        BoxContentLayoutKind _layoutHint;
+        BoxContentLayoutKind _contentLayoutKind;
 
         public CustomRenderBox(RootGraphic rootgfx, int width, int height)
             : base(rootgfx, width, height)
@@ -41,15 +41,15 @@ namespace LayoutFarm.CustomWidgets
             }
 #endif
             PlainLayer layer = new PlainLayer(this);
-            layer.LayoutHint = _layoutHint;
+            layer.LayoutHint = _contentLayoutKind;
             return layer;
         }
         public BoxContentLayoutKind LayoutHint
         {
-            get => _layoutHint;
+            get => _contentLayoutKind;
             set
             {
-                _layoutHint = value;
+                _contentLayoutKind = value;
                 if (_defaultLayer != null)
                 {
                     _defaultLayer.LayoutHint = value;

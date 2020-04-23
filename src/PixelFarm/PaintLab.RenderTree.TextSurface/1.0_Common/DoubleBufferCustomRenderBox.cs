@@ -13,7 +13,7 @@ namespace LayoutFarm.TextEditing
         DrawboardBuffer _builtInBackBuffer;
         bool _hasAccumRect;
         Rectangle _invalidateRect;
-        bool _enableDoubleBuffer;
+
         public DoubleBufferCustomRenderBox(RootGraphic rootgfx, int width, int height)
           : base(rootgfx, width, height)
         {
@@ -22,14 +22,7 @@ namespace LayoutFarm.TextEditing
 
         public RenderBoxBase ContentBox { get; set; }
 
-        public bool EnableDoubleBuffer
-        {
-            get => _enableDoubleBuffer;
-            set
-            {
-                _enableDoubleBuffer = value;
-            }
-        }
+        public bool EnableDoubleBuffer { get; set; }
         protected override PlainLayer CreateDefaultLayer()
         {
             return new PlainLayer(this);
@@ -77,7 +70,7 @@ namespace LayoutFarm.TextEditing
         {
             if (ContentBox == null) return;
             //
-            if (_enableDoubleBuffer)
+            if (EnableDoubleBuffer)
             {
                 var painter = new PixelFarm.Drawing.Internal.MicroPainter(d);
                 if (_builtInBackBuffer == null)

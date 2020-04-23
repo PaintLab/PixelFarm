@@ -28,8 +28,8 @@ namespace LayoutFarm
             this.MayHasChild = true;
         }
         protected abstract PlainLayer CreateDefaultLayer();
-        //
-        public bool UseAsFloatWindow { get; set; }
+        ////
+        //public bool UseAsFloatWindow { get; set; }
 
         public override void ChildrenHitTestCore(HitChain hitChain)
         {

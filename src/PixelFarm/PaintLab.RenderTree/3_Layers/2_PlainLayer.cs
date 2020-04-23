@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 namespace LayoutFarm.RenderBoxes
 {
-    public class PlainLayer : RenderElementLayer
+    public sealed class PlainLayer : RenderElementLayer
     {
-        LinkedList<RenderElement> _myElements = new LinkedList<RenderElement>();
+        readonly LinkedList<RenderElement> _myElements = new LinkedList<RenderElement>();
         public PlainLayer(RenderElement owner)
             : base(owner)
         {
