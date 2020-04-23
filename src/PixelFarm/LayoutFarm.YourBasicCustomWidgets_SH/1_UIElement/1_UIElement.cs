@@ -80,16 +80,16 @@ namespace LayoutFarm.UI
         public readonly int dbugId = s_dbugTotalId++;
 
 #endif
-        bool _hide;
+
 
         //bounds
         float _left;
         float _top;
         float _right;
         float _bottom;
+
+        bool _hide;
         protected bool _needContentLayout;
-
-
         internal object _collectionLinkNode; //optional, eg for linked-list node, RB-tree-node
 
         public UIElement()
@@ -99,7 +99,7 @@ namespace LayoutFarm.UI
             //}
         }
 
-
+        public UIElement ParentUI { get; set; }
         /// <summary>
         /// update layout data from layout instance
         /// </summary>
@@ -107,14 +107,11 @@ namespace LayoutFarm.UI
         {
 
         }
-        public bool DisableAutoMouseCapture { get; set; }
+
         public abstract RenderElement GetPrimaryRenderElement(RootGraphic rootgfx);
         public abstract RenderElement CurrentPrimaryRenderElement { get; }
         protected virtual bool HasReadyRenderElement => CurrentPrimaryRenderElement != null;
         public abstract void InvalidateGraphics();
-
-        public bool AcceptKeyboardFocus { get; set; }
-
         public virtual void Focus()
         {
             //make this keyboard focusable
@@ -132,9 +129,6 @@ namespace LayoutFarm.UI
                 this.CurrentPrimaryRenderElement.Root.SetCurrentKeyboardFocus(null);
             }
         }
-        public UIElement ParentUI { get; set; }
-
-
 
         public virtual void InvalidateOuterGraphics()
         {
@@ -303,8 +297,8 @@ namespace LayoutFarm.UI
                 }
             }
         }
-
-
+        public bool AcceptKeyboardFocus { get; set; }
+        public bool DisableAutoMouseCapture { get; set; }
         public bool AutoStopMouseEventPropagation { get; set; } //TODO: review this
         //
         protected virtual void OnShown()
