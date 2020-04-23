@@ -19,6 +19,7 @@ namespace LayoutFarm.UI
 
     partial class UIElement
     {
+
         struct CollectionHelper
         {
             public static void CheckUI<T>(UIElement parent, T ui)
@@ -46,9 +47,10 @@ namespace LayoutFarm.UI
             }
         }
 
-        protected interface IUICollection1<T> where T : UIElement
+        public interface IUICollection<T> where T : UIElement
         {
             IEnumerable<T> GetIter();
+            int Count { get; }
         }
 
         struct UICollectionNodeLocator1<T> : IUICollectionNodeLocator<T>
@@ -80,7 +82,7 @@ namespace LayoutFarm.UI
                 return _curNode.Value;
             }
         }
-        protected class UILinkedList<T> : IUICollection1<T>
+        public class UILinkedList<T> : IUICollection<T>
             where T : UIElement
         {
             readonly LinkedList<T> _linkedList = new LinkedList<T>();
@@ -182,7 +184,7 @@ namespace LayoutFarm.UI
                 parent._needContentLayout = true;
                 RenderElement parentRenderE = parent.CurrentPrimaryRenderElement;
 
-                parentRenderE?.ClearAllChildren();  
+                parentRenderE?.ClearAllChildren();
             }
 
             public void Remove(UIElement parent, T ui)
@@ -203,7 +205,7 @@ namespace LayoutFarm.UI
                 LinkedListNode<UIElement> linkedNode = ui._collectionLinkNode;
                 _linkedList.Remove((LinkedListNode<T>)(object)linkedNode);
 
-                parent?.InvalidateLayout(); 
+                parent?.InvalidateLayout();
             }
             public IEnumerable<T> GetIter()
             {
@@ -231,7 +233,7 @@ namespace LayoutFarm.UI
 
         }
         //
-        protected class UIList<T> : IUICollection1<T>
+        public class UIList<T> : IUICollection<T>
             where T : UIElement
         {
             readonly List<T> _list = new List<T>();
@@ -433,6 +435,10 @@ namespace LayoutFarm.UI
                 return _list[_index];
             }
         }
+
+
+        public static readonly UIElement[] EmptyArr = new UIElement[0];
+
 
     }
 

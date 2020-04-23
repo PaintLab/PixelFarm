@@ -117,11 +117,8 @@ namespace LayoutFarm
                 : base(w, h)
             {
             }
-            public LayoutFarm.UI.AbstractRectUI TargetBox
-            {
-                get;
-                set;
-            }
+            protected override IUICollection<UIElement> GetDefaultChildrenIter() => null;
+            public LayoutFarm.UI.AbstractRectUI TargetBox { get; set; }
             //get primary render element
             public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
             {

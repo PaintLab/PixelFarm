@@ -14,6 +14,8 @@ namespace LayoutFarm.CustomWidgets
             _hingeRel.LandPart = this;
             _children = new UIList<UIElement>();
         }
+        protected override IUICollection<UIElement> GetDefaultChildrenIter() => _children;
+
         protected override void OnLostMouseFocus(UIMouseLostFocusEventArgs e)
         {
             _hingeRel.CloseHinge();

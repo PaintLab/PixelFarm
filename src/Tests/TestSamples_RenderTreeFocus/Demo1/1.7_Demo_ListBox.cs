@@ -3,8 +3,8 @@
 using PixelFarm.Drawing;
 namespace LayoutFarm
 {
-    [DemoNote("1.7 ListView")]
-    public class Demo_ListView : App
+    [DemoNote("1.7 ListBox")]
+    public class Demo_ListBox : App
     {
         protected override void OnStart(AppHost host)
         {
@@ -30,6 +30,7 @@ namespace LayoutFarm
                 listItem.Text = "A" + i;
                 listbox.AddItem(listItem);
             }
+            
         }
     }
 }

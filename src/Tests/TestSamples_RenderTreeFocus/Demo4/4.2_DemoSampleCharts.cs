@@ -37,7 +37,7 @@ namespace LayoutFarm.ColorBlenderSample
     {
 
         //sample chart! 
-        class PlotBox : LayoutFarm.CustomWidgets.AbstractBox
+        class PlotBox : LayoutFarm.CustomWidgets.AbstractControlBox
         {
             public PlotBox(int w, int h)
                 : base(w, h)

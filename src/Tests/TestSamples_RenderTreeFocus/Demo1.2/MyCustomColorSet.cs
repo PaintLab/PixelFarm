@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace LayoutFarm.ColorBlenderSample
 {
 
-    class ColorBox : AbstractBox
+    class ColorBox : AbstractControlBox
     {
         string _note;
         public ColorBox(int w, int h) : base(w, h)

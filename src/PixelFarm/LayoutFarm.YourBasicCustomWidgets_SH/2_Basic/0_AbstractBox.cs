@@ -118,7 +118,7 @@ namespace LayoutFarm.CustomWidgets
 
         protected bool _supportViewport;
         protected bool _needClipArea;
-       
+
         protected CustomRenderBox _primElement;
 
         public AbstractBox(int width, int height)
@@ -129,6 +129,8 @@ namespace LayoutFarm.CustomWidgets
             _supportViewport = true;
             _needClipArea = true;
         }
+
+
 
         public bool EnableDoubleBuffer { get; set; }
 
@@ -355,9 +357,6 @@ namespace LayoutFarm.CustomWidgets
             base.OnLostMouseFocus(e);
             this.LostMouseFocus?.Invoke(this, e);
         }
-
-
-
         //----------------------------------------------------
         public override int ViewportLeft => _viewportLeft;
         public override int ViewportTop => _viewportTop;
@@ -464,23 +463,257 @@ namespace LayoutFarm.CustomWidgets
         public bool AllowAutoContentExpand { get; set; }
 
 
-        //public override void UpdateLayout()
-        //{
-        //    base.UpdateLayout();
-        //    foreach (var chlid in GetChildIter())
-        //    {
-        //        if (chlid != null)
-        //        {
-        //            chlid.UpdateLayout();
-        //        }
-        //    }
-        //}
+        protected abstract IUICollection<UIElement> GetDefaultChildrenIter();
 
+        public override void PerformContentLayout()
+        {
+            //****
+            //this.InvalidateGraphics();
+            //temp : arrange as vertical stack***
+            Rectangle preBounds = this.Bounds;
+            switch (this.ContentLayoutKind)
+            {
+                case BoxContentLayoutKind.VerticalStack:
+                    {
+                        int maxRight = 0;
+
+                        int xpos = this.PaddingLeft; //start X at paddingLeft
+                        int ypos = this.PaddingTop; //start Y at padding top
+
+                        IUICollection<UIElement> childrenIter = GetDefaultChildrenIter();
+                        if (childrenIter != null && childrenIter.Count > 0)
+                        {
+                            foreach (UIElement ui in childrenIter.GetIter())
+                            {
+                                if (ui is AbstractRectUI element)
+                                {
+                                    element.PerformContentLayout();
+                                    element.SetLocationAndSize(xpos + element.MarginLeft, ypos + element.MarginTop, element.Width, element.Height);
+                                    ypos += element.Height + element.MarginTopBottom;
+
+                                    int tmp_right = element.Right;
+                                    if (tmp_right > maxRight)
+                                    {
+                                        maxRight = tmp_right;
+                                    }
+                                }
+                            }
+                        }
+
+                        this.SetInnerContentSize(maxRight, ypos);
+
+
+                    }
+                    break;
+                case BoxContentLayoutKind.HorizontalStack:
+                    {
+
+                        int maxBottom = 0;
+
+                        //experiment
+                        bool allowAutoContentExpand = this.AllowAutoContentExpand;
+
+                        int xpos = this.PaddingLeft; //start X at paddingLeft
+                        int ypos = this.PaddingTop; //start Y at padding top
+                        IUICollection<UIElement> childrenIter = GetDefaultChildrenIter();
+                        if (childrenIter != null && childrenIter.Count > 0)
+                        {
+                            List<AbstractRectUI> alignToEnds = null;
+                            var alignToEndsContext = MayBeEmptyTempContext<List<AbstractRectUI>>.Empty;
+
+                            List<AbstractRectUI> notHaveSpecificWidthElems = null;
+                            var notHaveSpecificWidthElemsContext = MayBeEmptyTempContext<List<AbstractRectUI>>.Empty;
+
+                            int left_to_right_max_x = 0;
+
+                            foreach (UIElement ui in childrenIter.GetIter())
+                            {
+                                if (ui is AbstractRectUI element)
+                                {
+                                    element.PerformContentLayout();
+
+                                    //TODO: review Middle again
+                                    if (element.Alignment == RectUIAlignment.End)
+                                    {
+                                        //skip this
+                                        if (alignToEnds == null)
+                                        {
+                                            alignToEndsContext = LayoutTools.BorrowList(out alignToEnds);
+                                        }
+                                        alignToEnds.Add(element);
+                                    }
+                                    else
+                                    {
+                                        if (allowAutoContentExpand && !element.HasSpecificWidth)
+                                        {
+                                            if (notHaveSpecificWidthElems == null)
+                                            {
+                                                notHaveSpecificWidthElemsContext = LayoutTools.BorrowList(out notHaveSpecificWidthElems);
+                                            }
+                                            notHaveSpecificWidthElems.Add(element);
+                                        }
+
+                                        element.SetLocationAndSize(xpos, ypos + element.MarginTop, element.Width, element.Height); //
+                                        xpos += element.Width + element.MarginLeftRight;
+                                        int tmp_bottom = element.Bottom;
+                                        if (tmp_bottom > maxBottom)
+                                        {
+                                            maxBottom = tmp_bottom;
+                                        }
+                                    }
+                                }
+                            }
+
+                            left_to_right_max_x = xpos;
+
+                            //--------
+                            //arrange alignToEnd again
+                            if (alignToEnds != null)
+                            {
+                                //var node = alignToEnds.Last; //start from last node
+                                int n = alignToEnds.Count;
+                                xpos = this.Width - PaddingRight;
+                                while (n > 0)
+                                {
+                                    --n;
+                                    AbstractRectUI rectUI = alignToEnds[n];
+                                    xpos -= rectUI.Width + rectUI.MarginLeft;
+                                    rectUI.SetLocationAndSize(xpos, ypos + rectUI.MarginTop, rectUI.Width, rectUI.Height); //
+
+                                    //
+                                    int tmp_bottom = rectUI.Bottom;
+                                    if (tmp_bottom > maxBottom)
+                                    {
+                                        maxBottom = tmp_bottom;
+                                    }
+                                }
+
+                                //release back to pool
+                                alignToEndsContext.Dispose();
+                            }
+                            //--------
+
+                            if (notHaveSpecificWidthElems != null && (xpos > left_to_right_max_x))
+                            {
+                                //this mean this allow content expand
+                                float avaliable_w = xpos - left_to_right_max_x;
+                                //distribute this 
+                                float avg_w = avaliable_w / notHaveSpecificWidthElems.Count;
+
+                                for (int m = notHaveSpecificWidthElems.Count - 1; m >= 0; --m)
+                                {
+                                    AbstractRectUI ui = notHaveSpecificWidthElems[m];
+                                    ui.SetWidth((int)(ui.Width + avg_w));
+                                }
+
+                                //arrange location again
+                                xpos = this.PaddingLeft; //start X at paddingLeft
+                                foreach (UIElement ui in childrenIter.GetIter())
+                                {
+                                    if (ui is AbstractRectUI element && element.Alignment != RectUIAlignment.End)
+                                    {
+                                        //TODO: review here again
+                                        element.SetLocation(xpos, ypos + element.MarginTop);
+                                        xpos += element.Width + element.MarginLeftRight;
+                                    }
+                                }
+
+                            }
+                            notHaveSpecificWidthElemsContext.Dispose();
+                            //--------
+                        }
+
+                        this.SetInnerContentSize(xpos, maxBottom);
+                    }
+                    break;
+                default:
+                    {
+
+                        //this case : no action about paddings, margins, borders...
+
+
+                        int maxRight = 0;
+                        int maxBottom = 0;
+                        IUICollection<UIElement> childrenIter = GetDefaultChildrenIter();
+                        if (childrenIter != null && childrenIter.Count > 0)
+                        {
+                            foreach (UIElement ui in childrenIter.GetIter())
+                            {
+                                if (ui is AbstractRectUI element)
+                                {
+                                    element.PerformContentLayout();
+                                    int tmp_right = element.Right;// element.InnerWidth + element.Left;
+                                    if (tmp_right > maxRight)
+                                    {
+                                        maxRight = tmp_right;
+                                    }
+                                    int tmp_bottom = element.Bottom;// element.InnerHeight + element.Top;
+                                    if (tmp_bottom > maxBottom)
+                                    {
+                                        maxBottom = tmp_bottom;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (!this.HasSpecificWidth)
+                        {
+                            this.SetInnerContentSize(maxRight, this.InnerHeight);
+                        }
+                        if (!this.HasSpecificHeight)
+                        {
+                            this.SetInnerContentSize(this.InnerWidth, maxBottom);
+                        }
+                    }
+                    break;
+            }
+
+#if DEBUG
+            Rectangle postBounds = this.Bounds;
+            if (preBounds != postBounds)
+            {
+
+            }
+#endif
+            //------------------------------------------------
+            base.RaiseLayoutFinished();
+
+#if DEBUG
+            if (HasReadyRenderElement)
+            {
+                // this.InvalidateGraphics();
+            }
+#endif
+        }
         protected override void OnGuestMsg(UIGuestMsgEventArgs e)
         {
             //?
             //this.DragOver?.Invoke(this, e);
             base.OnGuestMsg(e);
+        }
+    }
+
+
+    public abstract class AbstractBox<T> : AbstractBox
+        where T : UIElement.IUICollection<UIElement>
+    {
+        protected T _items;
+        public AbstractBox(int w, int h) : base(w, h)
+        {
+        }
+        protected override IUICollection<UIElement> GetDefaultChildrenIter() => _items;
+    }
+    public abstract class AbstractControlBox : AbstractBox<UIElement.UIList<UIElement>>
+    {
+        public AbstractControlBox(int w, int h) : base(w, h) { }
+
+        protected void AddChild(UIElement ui)
+        {
+            if (_items == null)
+            {
+                _items = new UIList<UIElement>();
+            }
+            _items.Add(this, ui);
         }
     }
 }

@@ -7,17 +7,13 @@ using LayoutFarm.UI;
 using PixelFarm.CpuBlit;
 namespace LayoutFarm.CustomWidgets
 {
-    public class ListBox : AbstractBox
+    public class ListBox : AbstractControlBox
     {
         public delegate void ListItemMouseHandler(object sender, UIMouseEventArgs e);
         public delegate void ListItemKeyboardHandler(object sender, UIKeyEventArgs e);
-        //composite          
-
-
+        //composite           
         int _selectedIndex = -1;//default = no selection
         ListItem _selectedItem = null;
-        UIList<ListItem> _items = new UIList<ListItem>();
-
         public event ListItemMouseHandler ListItemMouseEvent;
         public event ListItemKeyboardHandler ListItemKeyboardEvent;
 
@@ -28,6 +24,7 @@ namespace LayoutFarm.CustomWidgets
 #if DEBUG
             //dbugBreakMe = true;
 #endif
+            _items = new UIList<UIElement>();
             this.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
             this.BackColor = KnownColors.LightGray;
             this.AcceptKeyboardFocus = true;
@@ -140,7 +137,7 @@ namespace LayoutFarm.CustomWidgets
             }
             else
             {
-                return _items[index];
+                return (ListItem)_items[index];
             }
         }
         public void Remove(ListItem item)
@@ -215,7 +212,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 if (_items.Count > 0)
                 {
-                    ListItem lastOne = _items[_items.Count - 1];
+                    ListItem lastOne = (ListItem)_items[_items.Count - 1];
                     return lastOne.Bottom;
                 }
                 return this.Height;

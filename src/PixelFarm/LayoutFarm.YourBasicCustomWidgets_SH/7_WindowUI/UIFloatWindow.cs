@@ -9,25 +9,17 @@ namespace LayoutFarm.CustomWidgets
     {
         IPlatformWindowBox _platformWindowBox;
         AbstractRectUI _content;
+        UIList<UIElement> _list = new UIList<UIElement>();
         public UIFloatWindow(int w, int h)
             : base(w, h)
         {
 
         }
+        protected override IUICollection<UIElement> GetDefaultChildrenIter() => _list;
         public void SetContent(AbstractRectUI content)
         {
-            //clear existing elem
-            RenderElement primRenderE = CurrentPrimaryRenderElement;
-            if (primRenderE != null)
-            {
-                primRenderE.ClearAllChildren();
-                primRenderE.AddChild(content);
-            }
-            else
-            {
-                //??
-                throw new NotSupportedException();
-            }
+            _list.Clear(this);  //clear existing elem
+            _list.Add(this, content);
         }
 
         IPlatformWindowBox ITopWindowBox.PlatformWinBox

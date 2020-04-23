@@ -5,24 +5,25 @@ using System;
 using System.Collections.Generic;
 namespace LayoutFarm.CustomWidgets
 {
-    public class MenuItem : AbstractBox
+    public class MenuItem : AbstractControlBox
     {
         HingeRelation _hingeRelation;
         List<MenuItem> _childItems;
         Box _floatPart;
 
-        UIList<UIElement> _landPart;
+
         public MenuItem(int width, int height)
             : base(width, height)
         {
             _hingeRelation = new HingeRelation();
             _hingeRelation.LandPart = this;
-            _landPart = new UIList<UIElement>();
+
         }
         public void AddLandPart(UIElement ui)
         {
-            //add to its
-            _landPart.Add(this, ui);
+            //add to its             
+
+            AddChild(ui);
 
             if (_primElement != null)
             {

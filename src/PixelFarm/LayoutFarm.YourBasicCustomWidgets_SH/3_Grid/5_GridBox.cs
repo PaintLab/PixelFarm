@@ -549,6 +549,8 @@ namespace LayoutFarm.CustomWidgets
 
             _gridBorderColor = Color.Black; //default//TODO: impl Theme classes...
         }
+        protected override IUICollection<UIElement> GetDefaultChildrenIter() => _children;
+
         public void Add(UIElement ui)
         {
             if (_children == null)
