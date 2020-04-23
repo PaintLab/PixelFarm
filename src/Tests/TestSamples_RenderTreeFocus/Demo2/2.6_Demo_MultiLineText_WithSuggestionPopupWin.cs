@@ -511,7 +511,7 @@ Zimbabwe");
         {
             _floatWindow = new CustomWidgets.UIFloatWindow(w, h);
             _listbox = new CustomWidgets.ListBox(w, h);
-            _floatWindow.SetContent(_listbox);
+            _floatWindow.AddContent(_listbox);
             _listbox.ListItemMouseEvent += new CustomWidgets.ListBox.ListItemMouseHandler(listView_ListItemMouseEvent);
             _listbox.ListItemKeyboardEvent += new CustomWidgets.ListBox.ListItemKeyboardHandler(listView_ListItemKeyboardEvent);
         }
