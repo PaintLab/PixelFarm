@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
+
 namespace LayoutFarm.CustomWidgets
 {
     struct MayBeEmptyTempContext<T> : IDisposable
@@ -207,14 +208,16 @@ namespace LayoutFarm.CustomWidgets
             parent.HasSpecificWidthAndHeight = true; //?
             parent.SetViewport(this.ViewportLeft, this.ViewportTop);
 
-            //if (ChildCount > 0)
-            //{
+            var childIter = GetDefaultChildrenIter();
+            if (childIter != null && childIter.Count > 0)
+            {
+                RootGraphic root = parent.Root;
+                foreach (UIElement child in childIter.GetIter())
+                {
+                    parent.AddChild(child.GetPrimaryRenderElement(root));
+                }
+            }
 
-            //    foreach (UIElement ui in GetChildIter())
-            //    {
-            //        parent.AddChild(ui);
-            //    }
-            //}
 
             GlobalRootGraphic.ReleaseGraphicsUpdate();
             parent.InvalidateGraphics();
@@ -691,6 +694,9 @@ namespace LayoutFarm.CustomWidgets
             //this.DragOver?.Invoke(this, e);
             base.OnGuestMsg(e);
         }
+
+
+
     }
 
 
@@ -717,7 +723,8 @@ namespace LayoutFarm.CustomWidgets
         }
         protected virtual void Clear()
         {
-            _items?.Clear(this);             
+            _items?.Clear(this);
         }
+
     }
 }

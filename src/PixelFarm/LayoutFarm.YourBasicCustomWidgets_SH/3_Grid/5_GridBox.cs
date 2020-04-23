@@ -1035,8 +1035,7 @@ namespace LayoutFarm.CustomWidgets
                     for (int r = 0; r < nrows; ++r)
                     {
                         GridCell gridCell = _gridTable.GetCell(r, c);
-                        var content = gridCell.ContentElement as UIElement;
-                        if (content != null)
+                        if (gridCell.ContentElement is UIElement content)
                         {
                             myGridBox.SetContent(r, c, content);
                             RenderElement uiRenderE = content.GetPrimaryRenderElement(rootgfx);
@@ -1046,7 +1045,7 @@ namespace LayoutFarm.CustomWidgets
                     }
                 }
 
-                if (_children.Count > 0)
+                if (_children != null && _children.Count > 0)
                 {
                     foreach (UIElement ui in _children.GetIter())
                     {
