@@ -106,10 +106,11 @@ namespace LayoutFarm.CustomWidgets
     /// </summary>
     public abstract class AbstractBox : AbstractRectUI
     {
-        BoxContentLayoutKind _boxContentLayoutKind;
 
+        //some basic rect-properties
+        BoxContentLayoutKind _boxContentLayoutKind;
         Color _backColor = KnownColors.LightGray;
-        Color _borderColor = Color.Transparent;
+        Color _borderColor = Color.Transparent; 
 
         int _innerWidth;
         int _innerHeight;
@@ -127,17 +128,14 @@ namespace LayoutFarm.CustomWidgets
         {
             _innerHeight = height;
             _innerWidth = width;
-            _supportViewport = true;
+            _supportViewport = true;//default for all rect
             _needClipArea = true;
         }
-
-
 
         public bool EnableDoubleBuffer { get; set; }
 
         //TODO: review this fields 
         public event EventHandler<UIMouseDownEventArgs> MouseDown;
-
         public event EventHandler<UIMouseMoveEventArgs> MouseMove;
         public event EventHandler<UIMouseMoveEventArgs> MouseEnter;
         public event EventHandler<UIMouseMoveEventArgs> MouseDrag;
@@ -162,9 +160,12 @@ namespace LayoutFarm.CustomWidgets
             {
                 //var renderE = new CustomRenderBox(rootgfx, this.Width, this.Height);
 
+                GlobalRootGraphic.BlockGraphicsUpdate();
+
                 var renderE = EnableDoubleBuffer ?
                     new DoubleBufferCustomRenderBox(rootgfx, this.Width, this.Height) { EnableDoubleBuffer = true } :
                     new CustomRenderBox(rootgfx, this.Width, this.Height);
+
                 renderE.SetLocation(this.Left, this.Top);
                 renderE.NeedClipArea = this.NeedClipArea;
                 renderE.TransparentForMouseEvents = this.TransparentForMouseEvents;
@@ -177,7 +178,24 @@ namespace LayoutFarm.CustomWidgets
                 renderE.dbugBreak = this.dbugBreakMe;
 #endif
 
-                BuildChildrenRenderElement(renderE);
+
+                renderE.HasSpecificHeight = this.HasSpecificHeight;
+                renderE.HasSpecificWidth = this.HasSpecificWidth;
+                renderE.SetController(this);
+                renderE.SetLocation(this.Left, this.Top);
+                renderE.SetViewport(this.ViewportLeft, this.ViewportTop); 
+
+                IUICollection<UIElement> childIter = GetDefaultChildrenIter();
+                if (childIter != null && childIter.Count > 0)
+                {
+                    foreach (UIElement child in childIter.GetIter())
+                    {
+                        renderE.AddChild(child.GetPrimaryRenderElement(rootgfx));
+                    }
+                }
+
+                GlobalRootGraphic.ReleaseGraphicsUpdate();
+                renderE.InvalidateGraphics();
 
                 _primElement = renderE;
             }
@@ -196,35 +214,11 @@ namespace LayoutFarm.CustomWidgets
             _primElement?.ResumeGraphicsUpdate();
         }
 
-        protected virtual void BuildChildrenRenderElement(RenderElement parent)
-        {
-            //TODO: review here
-            GlobalRootGraphic.BlockGraphicsUpdate();
-            parent.HasSpecificHeight = this.HasSpecificHeight;
-            parent.HasSpecificWidth = this.HasSpecificWidth;
-            parent.SetController(this);
-            parent.SetVisible(this.Visible);
-            parent.SetLocation(this.Left, this.Top);
-            parent.HasSpecificWidthAndHeight = true; //?
-            parent.SetViewport(this.ViewportLeft, this.ViewportTop);
 
-            var childIter = GetDefaultChildrenIter();
-            if (childIter != null && childIter.Count > 0)
-            {
-                RootGraphic root = parent.Root;
-                foreach (UIElement child in childIter.GetIter())
-                {
-                    parent.AddChild(child.GetPrimaryRenderElement(root));
-                }
-            }
-
-            GlobalRootGraphic.ReleaseGraphicsUpdate();
-            parent.InvalidateGraphics();
-        }
         public override void UpdateLayout()
         {
             base.UpdateLayout();
-            var childIter = GetDefaultChildrenIter();
+            IUICollection<UIElement> childIter = GetDefaultChildrenIter();
             if (childIter != null && childIter.Count > 0)
             {
                 foreach (UIElement ui in childIter.GetIter())

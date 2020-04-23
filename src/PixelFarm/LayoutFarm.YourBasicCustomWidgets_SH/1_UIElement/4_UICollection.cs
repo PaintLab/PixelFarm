@@ -5,8 +5,6 @@ using System.Collections.Generic;
 
 namespace LayoutFarm.UI
 {
-
-
     public interface IUICollectionNodeLocator<T>
         where T : UIElement
     {

@@ -46,10 +46,10 @@ namespace LayoutFarm.UI
             AllSideSameValue,
             AllSide
         }
-     
+
+        //some properties about our rect
         bool _specificWidth;
         bool _specificHeight;
-
 
         ushort _paddingLeft;
         ushort _paddingTop;
@@ -66,11 +66,6 @@ namespace LayoutFarm.UI
         short _marginRight;
         short _marginBottom;
 
-
-
-
-
-         
         public AbstractRectUI(int width, int height)
         {
             //default,           
@@ -81,7 +76,7 @@ namespace LayoutFarm.UI
             //default for box
             this.AutoStopMouseEventPropagation = true;
         }
-         
+
         public RectUIAlignment Alignment { get; set; }
 
         public event EventHandler<ViewportChangedEventArgs> ViewportChanged;

@@ -6,7 +6,7 @@ namespace LayoutFarm.UI
 {
     static class UILayoutQueue
     {
-        static Queue<UIElement> s_layoutQueue = new Queue<UIElement>();
+        static readonly Queue<UIElement> s_layoutQueue = new Queue<UIElement>();
 
         static UILayoutQueue()
         {

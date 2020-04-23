@@ -273,21 +273,13 @@ namespace LayoutFarm.CustomWidgets
         DrawboardBuffer _builtInBackBuffer;
         bool _hasAccumRect;
         Rectangle _invalidateRect;
-        bool _enableDoubleBuffer;
+
         public DoubleBufferCustomRenderBox(RootGraphic rootgfx, int width, int height)
           : base(rootgfx, width, height)
         {
             NeedInvalidateRectEvent = true;
         }
-        public bool EnableDoubleBuffer
-        {
-            get => _enableDoubleBuffer;
-            set
-            {
-                _enableDoubleBuffer = value;
-            }
-        }
-
+        public bool EnableDoubleBuffer { get; set; }
 
         protected override void OnInvalidateGraphicsNoti(bool fromMe, ref Rectangle totalBounds)
         {
@@ -328,7 +320,7 @@ namespace LayoutFarm.CustomWidgets
         }
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
-            if (_enableDoubleBuffer)
+            if (EnableDoubleBuffer)
             {
                 var painter = new PixelFarm.Drawing.Internal.MicroPainter(d);
                 if (_builtInBackBuffer == null)
