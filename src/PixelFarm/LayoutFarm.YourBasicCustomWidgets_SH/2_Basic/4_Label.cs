@@ -63,7 +63,7 @@ namespace LayoutFarm.CustomWidgets
             //-----------
             return _myTextRun;
         }
-        protected override void InvalidatePadding(PaddingName paddingName, byte newValue)
+        protected override void InvalidatePadding(PaddingName paddingName, ushort newValue)
         {
             if (_myTextRun == null) return;
             //
@@ -82,10 +82,12 @@ namespace LayoutFarm.CustomWidgets
                     _myTextRun.PaddingBottom = newValue;
                     break;
                 case PaddingName.AllSide:
-                    _myTextRun.SetPaddings(this.PaddingLeft, this.PaddingTop, this.PaddingRight, this.PaddingBottom);
+                    //for Label, padding is limit to 0-255
+                    _myTextRun.SetPaddings((byte)this.PaddingLeft, (byte)this.PaddingTop, (byte)this.PaddingRight, (byte)this.PaddingBottom);
                     break;
                 case PaddingName.AllSideSameValue:
-                    _myTextRun.SetPaddings(newValue);
+                    //for Label, padding is limit to 0-255
+                    _myTextRun.SetPaddings((byte)newValue);
                     break;
             }
         }

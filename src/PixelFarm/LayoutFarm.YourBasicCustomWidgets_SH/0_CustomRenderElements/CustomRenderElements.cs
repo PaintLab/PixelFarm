@@ -14,10 +14,10 @@ namespace LayoutFarm.CustomWidgets
         //we use pixel unit for our RenderBox
         //with limitation of int8 number
 
-        byte _contentLeft;
-        byte _contentTop;
-        byte _contentRight;
-        byte _contentBottom;
+        ushort _contentLeft;
+        ushort _contentTop;
+        ushort _contentRight;
+        ushort _contentBottom;
 
         byte _borderLeft;
         byte _borderTop;
@@ -57,38 +57,38 @@ namespace LayoutFarm.CustomWidgets
         public int PaddingLeft
         {
             get => _contentLeft - _borderLeft;
-            set => _contentLeft = (byte)(value + _borderLeft);
+            set => _contentLeft = (ushort)(value + _borderLeft);
         }
 
         public int PaddingTop
         {
             get => _contentTop - _borderTop;
-            set => _contentTop = (byte)(value + _borderTop);
+            set => _contentTop = (ushort)(value + _borderTop);
         }
         public int PaddingRight
         {
             get => _contentRight - _borderRight;
-            set => _contentRight = (byte)(value + _borderRight);
+            set => _contentRight = (ushort)(value + _borderRight);
 
         }
         public int PaddingBottom
         {
             get => _contentBottom - _borderBottom;
-            set => _contentBottom = (byte)(value + _borderBottom);
+            set => _contentBottom = (ushort)(value + _borderBottom);
         }
-        public void SetPadding(byte left, byte top, byte right, byte bottom)
+        public void SetPadding(ushort left, ushort top, ushort right, ushort bottom)
         {
-            _contentLeft = (byte)(left + _borderLeft);
-            _contentTop = (byte)(top + _borderTop);
-            _contentRight = (byte)(right + _borderRight);
-            _contentBottom = (byte)(bottom + _borderBottom);
+            _contentLeft = (ushort)(left + _borderLeft);
+            _contentTop = (ushort)(top + _borderTop);
+            _contentRight = (ushort)(right + _borderRight);
+            _contentBottom = (ushort)(bottom + _borderBottom);
         }
-        public void SetPadding(byte sameValue)
+        public void SetPadding(ushort sameValue)
         {
-            _contentLeft = (byte)(sameValue + _borderLeft);
-            _contentTop = (byte)(sameValue + _borderTop);
-            _contentRight = (byte)(sameValue + _borderRight);
-            _contentBottom = (byte)(sameValue + _borderBottom);
+            _contentLeft = (ushort)(sameValue + _borderLeft);
+            _contentTop = (ushort)(sameValue + _borderTop);
+            _contentRight = (ushort)(sameValue + _borderRight);
+            _contentBottom = (ushort)(sameValue + _borderBottom);
         }
         //------------------ 
         public int BorderTop

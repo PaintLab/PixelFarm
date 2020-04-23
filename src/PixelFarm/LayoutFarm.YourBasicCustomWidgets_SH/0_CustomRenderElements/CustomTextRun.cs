@@ -12,6 +12,7 @@ namespace LayoutFarm.CustomWidgets
         Color _backColor = Color.Transparent;
         RequestFont _font;
         RenderVxFormattedString _renderVxFormattedString;
+
         byte _contentLeft;
         byte _contentTop;
         byte _contentRight;

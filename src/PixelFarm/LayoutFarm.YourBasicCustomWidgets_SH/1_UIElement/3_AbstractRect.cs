@@ -12,6 +12,8 @@ namespace LayoutFarm.UI
         Middle,
         End, //right, if host is horizontal stack ,or bottom if host is vertical stack
     }
+
+
     /// <summary>
     /// abstract Rect UI Element
     /// </summary>
@@ -44,14 +46,15 @@ namespace LayoutFarm.UI
             AllSideSameValue,
             AllSide
         }
+     
         bool _specificWidth;
         bool _specificHeight;
 
 
-        byte _paddingLeft;
-        byte _paddingTop;
-        byte _paddingRight;
-        byte _paddingBottom;
+        ushort _paddingLeft;
+        ushort _paddingTop;
+        ushort _paddingRight;
+        ushort _paddingBottom;
         //
         byte _borderLeft;
         byte _borderTop;
@@ -62,6 +65,10 @@ namespace LayoutFarm.UI
         short _marginTop;
         short _marginRight;
         short _marginBottom;
+
+
+
+
 
          
         public AbstractRectUI(int width, int height)
@@ -250,25 +257,25 @@ namespace LayoutFarm.UI
         }
 
         //---------------------------------------------------------------
-        protected virtual void InvalidatePadding(PaddingName paddingName, byte newValue)
+        protected virtual void InvalidatePadding(PaddingName paddingName, ushort newValue)
         {
         }
-        public byte PaddingLeft
+        public ushort PaddingLeft
         {
             get => _paddingLeft;
             set => InvalidatePadding(PaddingName.Left, _paddingLeft = value);
         }
-        public byte PaddingTop
+        public ushort PaddingTop
         {
             get => _paddingTop;
             set => InvalidatePadding(PaddingName.Top, _paddingTop = value);
         }
-        public byte PaddingRight
+        public ushort PaddingRight
         {
             get => _paddingRight;
             set => InvalidatePadding(PaddingName.Right, _paddingRight = value);
         }
-        public byte PaddingBottom
+        public ushort PaddingBottom
         {
             get => _paddingBottom;
             set => InvalidatePadding(PaddingName.Bottom, _paddingBottom = value);

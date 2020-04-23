@@ -246,7 +246,7 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-        protected override void InvalidatePadding(PaddingName paddingName, byte newValue)
+        protected override void InvalidatePadding(PaddingName paddingName, ushort newValue)
         {
             if (_primElement == null) return;
             //
