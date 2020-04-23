@@ -412,8 +412,8 @@ namespace LayoutFarm.UI
             }
             public T this[int index] => _list[index];
         }
-        public struct UICollectionNodeLocator2<T> : IUICollectionNodeLocator<T>
-            where T : UIElement
+        struct UICollectionNodeLocator2<T> : IUICollectionNodeLocator<T>
+          where T : UIElement
         {
             readonly List<T> _list;
             int _index;
