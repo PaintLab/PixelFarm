@@ -16,7 +16,7 @@ namespace LayoutFarm.CustomWidgets
     }
 
 
-    public sealed class Box : AbstractBox, IContainerUI
+    public sealed class Box : AbstractBox, IContainerUI, ISimpleContainerUI
     {
         UIList<UIElement> _uiList;
         public Box(int w, int h)
@@ -150,6 +150,7 @@ namespace LayoutFarm.CustomWidgets
             //}
         }
 
+       
         public void Add(UIElement ui)
         {
             if (_uiList == null)
@@ -159,9 +160,8 @@ namespace LayoutFarm.CustomWidgets
 
             _needContentLayout = true;
             _uiList.Add(this, ui);
-
-
         }
+        public void AddContent(UIElement ui) => Add(ui);
         public void AddLast(UIElement ui) => Add(ui);
         public void RemoveChild(UIElement ui)
         {

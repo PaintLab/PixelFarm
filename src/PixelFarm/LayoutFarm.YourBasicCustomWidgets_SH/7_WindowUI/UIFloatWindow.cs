@@ -5,21 +5,25 @@ using System;
 
 namespace LayoutFarm.CustomWidgets
 {
-    public class UIFloatWindow : AbstractBox, ITopWindowBox
+    public class UIFloatWindow : AbstractBox, ITopWindowBox, ISimpleContainerUI
     {
         IPlatformWindowBox _platformWindowBox;
-        AbstractRectUI _content;
         UIList<UIElement> _list = new UIList<UIElement>();
+        UIElement _content;
         public UIFloatWindow(int w, int h)
             : base(w, h)
         {
 
         }
         protected override IUICollection<UIElement> GetDefaultChildrenIter() => _list;
-        public void SetContent(AbstractRectUI content)
+        public void AddContent(UIElement content)
         {
             _list.Clear(this);  //clear existing elem
-            _list.Add(this, content);
+            _content = content;
+            if (content != null)
+            {
+                _list.Add(this, content);
+            }
         }
 
         IPlatformWindowBox ITopWindowBox.PlatformWinBox

@@ -47,12 +47,18 @@ namespace LayoutFarm.UI
             if (ui.ParentUI is IContainerUI parentUI)
             {
                 //find next element
-               
+
                 parentUI.SendChildToBack(ui, 1);
             }
         }
     }
 
+    public interface ISimpleContainerUI
+    {
+        void AddContent(UIElement ui);
+        int Width { get; }
+        int Height { get; }
+    }
     public interface IContainerUI
     {
         void RemoveChild(UIElement ui);
