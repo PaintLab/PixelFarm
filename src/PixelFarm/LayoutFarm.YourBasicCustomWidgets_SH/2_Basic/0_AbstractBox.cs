@@ -175,7 +175,18 @@ namespace LayoutFarm.CustomWidgets
             renderE.SetController(absRect);
             renderE.SetLocation(absRect.Left, absRect.Top);
             renderE.SetViewport(absRect.ViewportLeft, absRect.ViewportTop);
-
+        }
+        protected static void BuildChildren(CustomRenderBox renderE, AbstractBox absRect)
+        {
+            IUICollection<UIElement> childIter = absRect.GetDefaultChildrenIter();
+            if (childIter != null && childIter.Count > 0)
+            {
+                RootGraphic rootgfx = renderE.Root;                    
+                foreach (UIElement child in childIter.GetIter())
+                {
+                    renderE.AddChild(child.GetPrimaryRenderElement(rootgfx));
+                }
+            }
         }
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
@@ -190,15 +201,7 @@ namespace LayoutFarm.CustomWidgets
                     new CustomRenderBox(rootgfx, this.Width, this.Height);
 
                 SetCommonProperties(renderE, this);
-
-                IUICollection<UIElement> childIter = GetDefaultChildrenIter();
-                if (childIter != null && childIter.Count > 0)
-                {
-                    foreach (UIElement child in childIter.GetIter())
-                    {
-                        renderE.AddChild(child.GetPrimaryRenderElement(rootgfx));
-                    }
-                }
+                BuildChildren(renderE, this);
 
                 GlobalRootGraphic.ReleaseGraphicsUpdate();
                 renderE.InvalidateGraphics();
