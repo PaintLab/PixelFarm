@@ -1,6 +1,7 @@
 ﻿//Apache2, 2014-present, WinterDev
 
 using System;
+using LayoutFarm.UI;
 using PixelFarm.Drawing;
 namespace LayoutFarm.CustomWidgets
 {
@@ -17,6 +18,9 @@ namespace LayoutFarm.CustomWidgets
             //(this feature  found in label, image box, and text-flow-label)
             HasSpecificWidthAndHeight = false;
         }
+
+        protected override IUICollection<UIElement> GetDefaultChildrenIter() => null;
+
         public ImageBox(int width, int height)
             : base(width, height)
         {
@@ -28,7 +32,7 @@ namespace LayoutFarm.CustomWidgets
             get => _imageBinder;
             set
             {
-                
+
                 if (_imageBinder != null)
                 {
                     //remove prev sub

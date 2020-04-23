@@ -7,7 +7,7 @@ using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
 
-    public class TextBoxContainer : AbstractBox
+    public class TextBoxContainer : AbstractControlBox
     {
 
         TextBoxSwitcher _textboxSwitcher;

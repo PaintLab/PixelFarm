@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
+
 namespace LayoutFarm.CustomWidgets
 {
     struct MayBeEmptyTempContext<T> : IDisposable
@@ -106,7 +107,7 @@ namespace LayoutFarm.CustomWidgets
     public abstract class AbstractBox : AbstractRectUI
     {
         BoxContentLayoutKind _boxContentLayoutKind;
-        bool _needContentLayout;
+
         Color _backColor = KnownColors.LightGray;
         Color _borderColor = Color.Transparent;
 
@@ -116,10 +117,10 @@ namespace LayoutFarm.CustomWidgets
         int _viewportLeft;
         int _viewportTop;
 
-        bool _supportViewport;
-        bool _needClipArea;
-        CustomRenderBox _primElement;
-        UICollection _uiList;
+        protected bool _supportViewport;
+        protected bool _needClipArea;
+
+        protected CustomRenderBox _primElement;
 
         public AbstractBox(int width, int height)
             : base(width, height)
@@ -129,6 +130,8 @@ namespace LayoutFarm.CustomWidgets
             _supportViewport = true;
             _needClipArea = true;
         }
+
+
 
         public bool EnableDoubleBuffer { get; set; }
 
@@ -152,13 +155,7 @@ namespace LayoutFarm.CustomWidgets
 
         public override RenderElement CurrentPrimaryRenderElement => _primElement;
 
-        protected override void OnAcceptVisitor(UIVisitor visitor)
-        {
-            if (_uiList != null)
-            {
-                UICollection.AcceptVisitor(_uiList, visitor);
-            }
-        }
+
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
             if (_primElement == null)
@@ -199,7 +196,7 @@ namespace LayoutFarm.CustomWidgets
             _primElement?.ResumeGraphicsUpdate();
         }
 
-        protected void BuildChildrenRenderElement(RenderElement parent)
+        protected virtual void BuildChildrenRenderElement(RenderElement parent)
         {
             //TODO: review here
             GlobalRootGraphic.BlockGraphicsUpdate();
@@ -210,14 +207,17 @@ namespace LayoutFarm.CustomWidgets
             parent.SetLocation(this.Left, this.Top);
             parent.HasSpecificWidthAndHeight = true; //?
             parent.SetViewport(this.ViewportLeft, this.ViewportTop);
-            if (ChildCount > 0)
-            {
 
-                foreach (UIElement ui in GetChildIter())
+            var childIter = GetDefaultChildrenIter();
+            if (childIter != null && childIter.Count > 0)
+            {
+                RootGraphic root = parent.Root;
+                foreach (UIElement child in childIter.GetIter())
                 {
-                    parent.AddChild(ui);
+                    parent.AddChild(child.GetPrimaryRenderElement(root));
                 }
             }
+
 
             GlobalRootGraphic.ReleaseGraphicsUpdate();
             parent.InvalidateGraphics();
@@ -360,9 +360,6 @@ namespace LayoutFarm.CustomWidgets
             base.OnLostMouseFocus(e);
             this.LostMouseFocus?.Invoke(this, e);
         }
-
-
-
         //----------------------------------------------------
         public override int ViewportLeft => _viewportLeft;
         public override int ViewportTop => _viewportTop;
@@ -441,186 +438,10 @@ namespace LayoutFarm.CustomWidgets
             _innerHeight = h;
         }
 
-        //----------------------------------------------------
-        static UIElement[] s_empty = new UIElement[0];
-        public IEnumerable<UIElement> GetChildIter()
-        {
-            if (_uiList != null)
-            {
-                return _uiList.GetIter();
-            }
-            return s_empty;
-        }
-
-        public override void AddAfter(UIElement afterUI, UIElement ui)
-        {
-            //insert new child after existing one
-            _uiList.AddAfter(afterUI, ui);
-            if (this.HasReadyRenderElement)
-            {
-                _primElement.InsertAfter(
-                    afterUI.CurrentPrimaryRenderElement,
-                    ui.GetPrimaryRenderElement(_primElement.Root));
-
-                if (_supportViewport)
-                {
-                    this.InvalidateLayout();
-                }
-            }
-
-            if (ui.NeedContentLayout)
-            {
-                ui.InvalidateLayout();
-            }
-        }
-        public override void AddBefore(UIElement beforeUI, UIElement ui)
-        {
-            _uiList.AddBefore(beforeUI, ui);
-
-            if (this.HasReadyRenderElement)
-            {
-                _primElement.InsertBefore(
-                    beforeUI.CurrentPrimaryRenderElement,
-                    ui.GetPrimaryRenderElement(_primElement.Root));
-
-                if (_supportViewport)
-                {
-                    this.InvalidateLayout();
-                }
-            }
-
-            if (ui.NeedContentLayout)
-            {
-                ui.InvalidateLayout();
-            }
-        }
-        public override void AddFirst(UIElement ui)
-        {
-            if (_uiList == null)
-            {
-                _uiList = new UICollection(this);
-            }
-
-            _needContentLayout = true;
-
-            _uiList.AddFirst(ui);
-            if (this.HasReadyRenderElement)
-            {
-                _primElement.AddFirst(
-                    ui.GetPrimaryRenderElement(_primElement.Root));
-
-                if (_supportViewport)
-                {
-                    this.InvalidateLayout();
-                }
-            }
-
-            if (ui.NeedContentLayout)
-            {
-                ui.InvalidateLayout();
-            }
-        }
-        public void Insert(int index, UIElement ui)
-        {
-            _needContentLayout = true;
-            LinkedListNode<UIElement> insertAt = _uiList.GetUIElementLinkedListNode(index);
-
-            if (this.HasReadyRenderElement)
-            {
-                _primElement.InsertBefore(
-                        insertAt.Value.GetPrimaryRenderElement(_primElement.Root),
-                        ui.GetPrimaryRenderElement(_primElement.Root)); 
-
-                if (_supportViewport)
-                {
-                    this.InvalidateLayout();
-                }
-            }
-
-            if (ui.NeedContentLayout)
-            {
-                ui.InvalidateLayout();
-            }
-
-        }
-        public void AddLast(UIElement ui) => Add(ui);
-        public override void Add(UIElement ui)
-        {
-            if (_uiList == null)
-            {
-                _uiList = new UICollection(this);
-            }
-
-            _needContentLayout = true;
-            _uiList.AddUI(ui);
-            if (this.HasReadyRenderElement)
-            {
-                _primElement.AddChild(ui);
-
-                //if (this.panelLayoutKind != BoxContentLayoutKind.Absolute)
-                //{
-                //    this.InvalidateLayout();
-                //}
-                //check if we support
-                if (_supportViewport)
-                {
-                    this.InvalidateLayout();
-                }
-            }
-
-            if (ui.NeedContentLayout)
-            {
-                if (!this.IsInLayoutQueue) //if this elem is in layout queue, the ui will be layout with this
-                {
-                    if (this.ParentUI != null)
-                    {
-                        //if this elem is add to the host
-                        //the parent UI is not null, 
-
-                        ui.InvalidateLayout();
-                    }
-                }
-            }
-        }
-        public override void RemoveChild(UIElement ui)
-        {
-            _needContentLayout = true;
-            _uiList.RemoveUI(ui);
-            if (this.HasReadyRenderElement)
-            {
-                if (_supportViewport)
-                {
-                    this.InvalidateLayout();
-                }
-                _primElement.RemoveChild(ui.CurrentPrimaryRenderElement);
-            }
-        }
-
-        public override void ClearChildren()
-        {
-            _needContentLayout = true;
-            if (_uiList != null)
-            {
-                _uiList.Clear();
-            }
-            if (this.HasReadyRenderElement)
-            {
-                _primElement.ClearAllChildren();
-                if (Visible)
-                {
-                    if (_supportViewport)
-                    {
-                        this.InvalidateLayout();
-                    }
-                }
-            }
-        }
-
-        public int ChildCount => (_uiList != null) ? _uiList.Count : 0;
 
         public override bool NeedContentLayout => _needContentLayout;
 
-        public BoxContentLayoutKind ContentLayoutKind
+        public virtual BoxContentLayoutKind ContentLayoutKind
         {
             get => _boxContentLayoutKind;
             set
@@ -631,10 +452,10 @@ namespace LayoutFarm.CustomWidgets
                     _primElement.LayoutHint = value;
                 }
 
-                if (_uiList != null && _uiList.Count > 0)
-                {
-                    this.InvalidateLayout();
-                }
+                //if (_uiList != null && _uiList.Count > 0)
+                //{
+                //    this.InvalidateLayout();
+                //}
             }
         }
         protected override void OnContentLayout()
@@ -643,6 +464,9 @@ namespace LayoutFarm.CustomWidgets
         }
 
         public bool AllowAutoContentExpand { get; set; }
+
+
+        protected abstract IUICollection<UIElement> GetDefaultChildrenIter();
 
         public override void PerformContentLayout()
         {
@@ -654,15 +478,15 @@ namespace LayoutFarm.CustomWidgets
             {
                 case BoxContentLayoutKind.VerticalStack:
                     {
-
                         int maxRight = 0;
 
                         int xpos = this.PaddingLeft; //start X at paddingLeft
                         int ypos = this.PaddingTop; //start Y at padding top
 
-                        if (ChildCount > 0)
+                        IUICollection<UIElement> childrenIter = GetDefaultChildrenIter();
+                        if (childrenIter != null && childrenIter.Count > 0)
                         {
-                            foreach (UIElement ui in GetChildIter())
+                            foreach (UIElement ui in childrenIter.GetIter())
                             {
                                 if (ui is AbstractRectUI element)
                                 {
@@ -680,6 +504,8 @@ namespace LayoutFarm.CustomWidgets
                         }
 
                         this.SetInnerContentSize(maxRight, ypos);
+
+
                     }
                     break;
                 case BoxContentLayoutKind.HorizontalStack:
@@ -692,7 +518,8 @@ namespace LayoutFarm.CustomWidgets
 
                         int xpos = this.PaddingLeft; //start X at paddingLeft
                         int ypos = this.PaddingTop; //start Y at padding top
-                        if (ChildCount > 0)
+                        IUICollection<UIElement> childrenIter = GetDefaultChildrenIter();
+                        if (childrenIter != null && childrenIter.Count > 0)
                         {
                             List<AbstractRectUI> alignToEnds = null;
                             var alignToEndsContext = MayBeEmptyTempContext<List<AbstractRectUI>>.Empty;
@@ -702,7 +529,7 @@ namespace LayoutFarm.CustomWidgets
 
                             int left_to_right_max_x = 0;
 
-                            foreach (UIElement ui in GetChildIter())
+                            foreach (UIElement ui in childrenIter.GetIter())
                             {
                                 if (ui is AbstractRectUI element)
                                 {
@@ -784,7 +611,7 @@ namespace LayoutFarm.CustomWidgets
 
                                 //arrange location again
                                 xpos = this.PaddingLeft; //start X at paddingLeft
-                                foreach (UIElement ui in GetChildIter())
+                                foreach (UIElement ui in childrenIter.GetIter())
                                 {
                                     if (ui is AbstractRectUI element && element.Alignment != RectUIAlignment.End)
                                     {
@@ -807,12 +634,13 @@ namespace LayoutFarm.CustomWidgets
 
                         //this case : no action about paddings, margins, borders...
 
-                        int count = this.ChildCount;
+
                         int maxRight = 0;
                         int maxBottom = 0;
-                        if (ChildCount > 0)
+                        IUICollection<UIElement> childrenIter = GetDefaultChildrenIter();
+                        if (childrenIter != null && childrenIter.Count > 0)
                         {
-                            foreach (UIElement ui in GetChildIter())
+                            foreach (UIElement ui in childrenIter.GetIter())
                             {
                                 if (ui is AbstractRectUI element)
                                 {
@@ -860,24 +688,43 @@ namespace LayoutFarm.CustomWidgets
             }
 #endif
         }
-
-        public override void UpdateLayout()
-        {
-            base.UpdateLayout();
-            foreach (var chlid in GetChildIter())
-            {
-                if (chlid != null)
-                {
-                    chlid.UpdateLayout();
-                }
-            }
-        }
-
         protected override void OnGuestMsg(UIGuestMsgEventArgs e)
         {
             //?
             //this.DragOver?.Invoke(this, e);
             base.OnGuestMsg(e);
         }
+
+
+
+    }
+
+
+    public abstract class AbstractBox<T> : AbstractBox
+        where T : UIElement.IUICollection<UIElement>
+    {
+        protected T _items;
+        public AbstractBox(int w, int h) : base(w, h)
+        {
+        }
+        protected override IUICollection<UIElement> GetDefaultChildrenIter() => _items;
+    }
+    public abstract class AbstractControlBox : AbstractBox<UIElement.UIList<UIElement>>
+    {
+        public AbstractControlBox(int w, int h) : base(w, h) { }
+
+        protected void AddChild(UIElement ui)
+        {
+            if (_items == null)
+            {
+                _items = new UIList<UIElement>();
+            }
+            _items.Add(this, ui);
+        }
+        protected virtual void Clear()
+        {
+            _items?.Clear(this);
+        }
+
     }
 }

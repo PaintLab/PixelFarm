@@ -156,8 +156,7 @@ namespace LayoutFarm
 
 
             char firstChar = currentLocalText[0];
-            List<string> keywords;
-            if (_words.TryGetValue(firstChar, out keywords))
+            if (_words.TryGetValue(firstChar, out List<string> keywords))
             {
                 int j = keywords.Count;
                 int listViewWidth = _listbox.Width;

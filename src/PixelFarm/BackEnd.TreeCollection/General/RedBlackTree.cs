@@ -30,9 +30,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
+using System.Runtime.Remoting.Channels;
 
 //from namespace Mono.TextEditor.Utils
-namespace PixelFarm.TreeCollection
+namespace LayoutFarm.TreeCollection
 {
     public enum RedBlackColor : byte
     {
@@ -58,6 +59,52 @@ namespace PixelFarm.TreeCollection
 
     public static class RedBlackTreeExtensionMethods
     {
+        public static T GetNodeAt<T>(this RedBlackTree<T> tree, int index) where T : class, IRedBlackTreeNode<T>
+        {
+            //get node at specific position
+            if (index > tree.Count - 1)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            //start from first
+            T rootNode = tree.Root;
+
+            if (index < tree.Count / 2)
+            {
+                T node = GetLastNode(tree);
+                int i = 0;
+                while (i < index)
+                {
+                    node = node.GetPrevNode();
+                    i++;
+                }
+                return node;
+            }
+            else
+            {
+                //latest
+                T node = GetFirstNode(tree);
+                int i = tree.Count - 1;
+                while (i > index)
+                {
+                    node = node.GetNextNode();
+                    i--;
+                }
+                return node;
+            }
+
+        }
+        public static T GetFirstNode<T>(this RedBlackTree<T> tree) where T : class, IRedBlackTreeNode<T>
+        {
+            if (tree.Root == null)
+            {
+                return null;
+            }
+            else
+            {
+                return tree.Root.GetOuterLeft();
+            }
+        }
         public static T GetLastNode<T>(this RedBlackTree<T> tree) where T : class, IRedBlackTreeNode<T>
         {
             if (tree.Root == null)
@@ -166,7 +213,7 @@ namespace PixelFarm.TreeCollection
         {
 
         }
-        public T Root { get; set; }
+        public T Root { get; internal set; }
 
         bool ICollection<T>.Remove(T node)
         {
@@ -506,7 +553,7 @@ namespace PixelFarm.TreeCollection
             }
         }
 
-        #region ICollection<T> implementation
+
         public int Count { get; internal set; }
 
         public void Clear()
@@ -562,8 +609,6 @@ namespace PixelFarm.TreeCollection
             foreach (T value in this)
                 array[i++] = value;
         }
-
-        #endregion
 
         public class RedBlackTreeNodeEventArgs : EventArgs
         {

@@ -9,7 +9,6 @@
     <Import_RootNamespace>LayoutFarm.YourBasicCustomWidgets_SH</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)0_CustomRenderElements\CustomContainerRenderBox.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)0_CustomRenderElements\CustomImageRenderBox.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)0_CustomRenderElements\CustomRenderElements.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)0_CustomRenderElements\CustomTextRun.cs" />
@@ -21,6 +20,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)1_UIElement\5_IScrollable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)1_UIElement\ElementBehaviors.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)1_UIElement\UIDragHitCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)2_Basic\3_IContainerUI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)1_UIElement\UIVisitor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)2_Basic\0_AbstractBox.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)2_Basic\1_ImageBox.cs" />

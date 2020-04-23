@@ -1,30 +1,43 @@
 ﻿//Apache2, 2014-present, WinterDev
 
 using LayoutFarm.UI;
+using System;
+
 namespace LayoutFarm.CustomWidgets
 {
-    public class UIFloatWindow : AbstractBox, ITopWindowBox
+    public class UIFloatWindow : AbstractBox, ITopWindowBox, ISimpleContainerUI
     {
         IPlatformWindowBox _platformWindowBox;
+        UIList<UIElement> _list = new UIList<UIElement>();
+        UIElement _content;
         public UIFloatWindow(int w, int h)
             : base(w, h)
         {
 
         }
+        protected override IUICollection<UIElement> GetDefaultChildrenIter() => _list;
+        public void AddContent(UIElement content)
+        {
+            _list.Clear(this);  //clear existing elem
+            _content = content;
+            if (content != null)
+            {
+                _list.Add(this, content);
+            }
+        }
+
         IPlatformWindowBox ITopWindowBox.PlatformWinBox
         {
-            get { return _platformWindowBox; }
+            get => _platformWindowBox;
             set
             {
                 bool isFirstTime = _platformWindowBox == null;
                 _platformWindowBox = value;
                 if (isFirstTime)
                 {
-
                     _platformWindowBox.SetLocation(this.Left, this.Top);
                     _platformWindowBox.SetSize(this.Width, this.Height);
                     _platformWindowBox.Visible = this.Visible;
-
                 }
             }
         }
@@ -47,10 +60,7 @@ namespace LayoutFarm.CustomWidgets
         }
         public override bool Visible
         {
-            get
-            {
-                return base.Visible;
-            }
+            get => base.Visible;
             set
             {
                 if (_platformWindowBox != null)

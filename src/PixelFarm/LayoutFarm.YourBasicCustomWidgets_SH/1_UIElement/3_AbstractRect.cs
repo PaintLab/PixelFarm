@@ -153,7 +153,7 @@ namespace LayoutFarm.UI
         }
 
 
-        public override object Tag { get; set; }
+
 
         /// <summary>
         /// set visual size (or viewport size) of this rect
@@ -608,6 +608,13 @@ namespace LayoutFarm.UI
         {
             if (!DisableAutoBehRaising) RaiseBehLostMouseFocus(e);
         }
+
+
+        protected static void AssignProperties(LayoutFarm.CustomWidgets.CustomRenderBox customRenderE, AbstractRectUI ui)
+        {
+            customRenderE.SetLocation(ui.Left, ui.Top);
+            
+        }
     }
 
     public static class UIElementExtensions
@@ -625,4 +632,5 @@ namespace LayoutFarm.UI
             ui.SetSize(ui.Width, newH);
         }
     }
+
 }

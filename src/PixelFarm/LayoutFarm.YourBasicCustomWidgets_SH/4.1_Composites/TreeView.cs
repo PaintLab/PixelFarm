@@ -6,115 +6,27 @@ using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public class TreeView : AbstractRectUI
+    public class TreeView : AbstractControlBox
     {
-        //composite          
-        CustomRenderBox _primElement;//background
-        Color _backColor = KnownColors.LightGray;
-        int _viewportLeft, _viewportTop;
-        UICollection _uiList;
+        //composite           
         int _latestItemY;
-        Box _panel; //panel 
-
         public TreeView(int width, int height)
             : base(width, height)
         {
             //panel for listview items
-            _panel = new Box(width, height);
-            _panel.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
-            _panel.BackColor = KnownColors.LightGray;
-            _panel.NeedClipArea = true;
-            _uiList = new UICollection(this);
-            _uiList.AddUI(_panel);
+            NeedClipArea = true;
+            this.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
+            _items = new UIList<UIElement>();
         }
-
-        protected override void OnAcceptVisitor(UIVisitor visitor)
-        {
-            if (_uiList != null)
-            {
-                UICollection.AcceptVisitor(_uiList, visitor);
-            }
-        }
-        //
         public override RenderElement CurrentPrimaryRenderElement => _primElement;
-        //
-        public Color BackColor
-        {
-            get => _backColor;
-            set
-            {
-                _backColor = value;
-                if (HasReadyRenderElement)
-                {
-                    _primElement.BackColor = value;
-                }
-            }
-        }
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
-        {
-            if (_primElement == null)
-            {
-                var renderE = new CustomRenderBox(rootgfx, this.Width, this.Height);
-                renderE.SetLocation(this.Left, this.Top);
-                renderE.BackColor = _backColor;
-                renderE.SetController(this);
-                renderE.HasSpecificWidthAndHeight = true;
-                //------------------------------------------------
-                //create visual layer                  
-                foreach (UIElement ui in _uiList.GetIter())
-                {
-                    renderE.AddChild(ui);
-                }
-                //---------------------------------
-                _primElement = renderE;
-            }
-            return _primElement;
-        }
+
         public void AddItem(TreeNode treeNode)
         {
             treeNode.SetLocation(0, _latestItemY);
             _latestItemY += treeNode.Height;
             treeNode.SetOwnerTreeView(this);
-            _panel.Add(treeNode);
+            _items.Add(this, treeNode);
         }
-        //----------------------------------------------------
-        protected override void OnMouseDown(UIMouseDownEventArgs e)
-        {
-
-            MouseDown?.Invoke(this, e);
-        }
-
-        protected override void OnMouseUp(UIMouseUpEventArgs e)
-        {
-
-            MouseUp?.Invoke(this, e);
-            base.OnMouseUp(e);
-        }
-        //
-        public override int ViewportLeft => _viewportLeft;
-        public override int ViewportTop => _viewportTop;
-        //
-        public override void SetViewport(int left, int top, object reqBy)
-        {
-            _viewportLeft = left;
-            _viewportTop = top;
-            if (this.HasReadyRenderElement)
-            {
-                _panel.SetViewport(left, top, this);
-            }
-        }
-        //----------------------------------------------------
-
-        public event EventHandler<UIMouseEventArgs> MouseDown;
-        public event EventHandler<UIMouseEventArgs> MouseUp;
-        //----------------------------------------------------  
-        public override void PerformContentLayout()
-        {
-            //manually perform layout of its content 
-            //here: arrange item in panel
-            _panel.PerformContentLayout();
-        }
-
     }
 
     public class TreeNode : AbstractRectUI

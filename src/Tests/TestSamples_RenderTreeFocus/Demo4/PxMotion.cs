@@ -18,7 +18,7 @@ namespace LayoutFarm.UI
 
         public int Width { get; set; }
         public int Height { get; set; }
-        public override object Tag { get; set; }
+        
     }
 
 

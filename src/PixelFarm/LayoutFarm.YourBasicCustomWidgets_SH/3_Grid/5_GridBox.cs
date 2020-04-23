@@ -3,7 +3,7 @@
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
 using LayoutFarm.UI.ForImplementator;
-
+ 
 namespace LayoutFarm.CustomWidgets
 {
     class GridViewRenderBox : CustomRenderBox
@@ -514,6 +514,8 @@ namespace LayoutFarm.CustomWidgets
         GridSelectionSession _gridSelectionSession;
         Color _gridBorderColor;
 
+        UIList<UIElement> _children;
+
         public struct GridCellInfo
         {
             public readonly int Row;
@@ -545,6 +547,16 @@ namespace LayoutFarm.CustomWidgets
             AcceptKeyboardFocus = true;
 
             _gridBorderColor = Color.Black; //default//TODO: impl Theme classes...
+        }
+        protected override IUICollection<UIElement> GetDefaultChildrenIter() => _children;
+
+        public void Add(UIElement ui)
+        {
+            if (_children == null)
+            {
+                _children = new UIList<UIElement>();
+            }
+            _children.Add(this, ui);
         }
         public override void PerformContentLayout()
         {
@@ -693,6 +705,7 @@ namespace LayoutFarm.CustomWidgets
             int cur_vwLeft = this.ViewportLeft;
             int cur_vwTop = this.ViewportTop;
             int newVwLeft = (int)(cur_vwTop - (e.Delta * 10f / 120f));
+            //TODO: review this
             if (newVwLeft > -1 && newVwLeft < (this.InnerHeight - this.Height + 17))
             {
                 this.SetViewport(cur_vwLeft, newVwLeft);
@@ -1021,8 +1034,7 @@ namespace LayoutFarm.CustomWidgets
                     for (int r = 0; r < nrows; ++r)
                     {
                         GridCell gridCell = _gridTable.GetCell(r, c);
-                        var content = gridCell.ContentElement as UIElement;
-                        if (content != null)
+                        if (gridCell.ContentElement is UIElement content)
                         {
                             myGridBox.SetContent(r, c, content);
                             RenderElement uiRenderE = content.GetPrimaryRenderElement(rootgfx);
@@ -1032,9 +1044,9 @@ namespace LayoutFarm.CustomWidgets
                     }
                 }
 
-                if (ChildCount > 0)
+                if (_children != null && _children.Count > 0)
                 {
-                    foreach (UIElement ui in GetChildIter())
+                    foreach (UIElement ui in _children.GetIter())
                     {
                         _gridViewRenderE.AddChild(ui);
 
