@@ -3,8 +3,7 @@
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
 using LayoutFarm.UI.ForImplementator;
-using System.Collections.Generic;
-
+ 
 namespace LayoutFarm.CustomWidgets
 {
     class GridViewRenderBox : CustomRenderBox
