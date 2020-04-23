@@ -110,7 +110,7 @@ namespace LayoutFarm.CustomWidgets
         //some basic rect-properties
         BoxContentLayoutKind _boxContentLayoutKind;
         Color _backColor = KnownColors.LightGray;
-        Color _borderColor = Color.Transparent; 
+        Color _borderColor = Color.Transparent;
 
         int _innerWidth;
         int _innerHeight;
@@ -154,6 +154,29 @@ namespace LayoutFarm.CustomWidgets
         public override RenderElement CurrentPrimaryRenderElement => _primElement;
 
 
+        protected static void SetCommonProperties(CustomRenderBox renderE, AbstractBox absRect)
+        {
+            renderE.SetLocation(absRect.Left, absRect.Top);
+            renderE.NeedClipArea = absRect.NeedClipArea;
+            renderE.TransparentForMouseEvents = absRect.TransparentForMouseEvents;
+            renderE.SetVisible(absRect.Visible);
+
+            renderE.BackColor = absRect._backColor;
+            renderE.BorderColor = absRect._borderColor;
+            renderE.SetBorders(absRect.BorderLeft, absRect.BorderTop, absRect.BorderRight, absRect.BorderBottom);
+
+#if DEBUG
+            renderE.dbugBreak = absRect.dbugBreakMe;
+#endif
+
+
+            renderE.HasSpecificHeight = absRect.HasSpecificHeight;
+            renderE.HasSpecificWidth = absRect.HasSpecificWidth;
+            renderE.SetController(absRect);
+            renderE.SetLocation(absRect.Left, absRect.Top);
+            renderE.SetViewport(absRect.ViewportLeft, absRect.ViewportTop);
+
+        }
         public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
         {
             if (_primElement == null)
@@ -166,24 +189,7 @@ namespace LayoutFarm.CustomWidgets
                     new DoubleBufferCustomRenderBox(rootgfx, this.Width, this.Height) { EnableDoubleBuffer = true } :
                     new CustomRenderBox(rootgfx, this.Width, this.Height);
 
-                renderE.SetLocation(this.Left, this.Top);
-                renderE.NeedClipArea = this.NeedClipArea;
-                renderE.TransparentForMouseEvents = this.TransparentForMouseEvents;
-                renderE.SetVisible(this.Visible);
-                renderE.BackColor = _backColor;
-                renderE.BorderColor = _borderColor;
-                renderE.SetBorders(BorderLeft, BorderTop, BorderRight, BorderBottom);
-
-#if DEBUG
-                renderE.dbugBreak = this.dbugBreakMe;
-#endif
-
-
-                renderE.HasSpecificHeight = this.HasSpecificHeight;
-                renderE.HasSpecificWidth = this.HasSpecificWidth;
-                renderE.SetController(this);
-                renderE.SetLocation(this.Left, this.Top);
-                renderE.SetViewport(this.ViewportLeft, this.ViewportTop); 
+                SetCommonProperties(renderE, this);
 
                 IUICollection<UIElement> childIter = GetDefaultChildrenIter();
                 if (childIter != null && childIter.Count > 0)
