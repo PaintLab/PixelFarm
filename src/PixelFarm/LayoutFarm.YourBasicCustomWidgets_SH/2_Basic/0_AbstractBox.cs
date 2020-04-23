@@ -218,11 +218,21 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
 
-
             GlobalRootGraphic.ReleaseGraphicsUpdate();
             parent.InvalidateGraphics();
         }
-
+        public override void UpdateLayout()
+        {
+            base.UpdateLayout();
+            var childIter = GetDefaultChildrenIter();
+            if (childIter != null && childIter.Count > 0)
+            {
+                foreach (UIElement ui in childIter.GetIter())
+                {
+                    ui.UpdateLayout();
+                }
+            }
+        }
 
         public bool NeedClipArea
         {

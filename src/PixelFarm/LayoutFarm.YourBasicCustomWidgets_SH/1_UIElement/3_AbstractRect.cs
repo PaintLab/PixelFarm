@@ -17,7 +17,7 @@ namespace LayoutFarm.UI
     /// </summary>
     public abstract class AbstractRectUI : UIElement, IScrollable, IBoxElement, IAcceptBehviour
     {
-        protected enum PaddingName
+        protected enum PaddingName : byte
         {
             Left,
             Top,
@@ -26,7 +26,7 @@ namespace LayoutFarm.UI
             AllSideSameValue,
             AllSide
         }
-        protected enum MarginName
+        protected enum MarginName : byte
         {
             Left,
             Top,
@@ -35,7 +35,7 @@ namespace LayoutFarm.UI
             AllSideSameValue,
             AllSide
         }
-        protected enum BorderName
+        protected enum BorderName : byte
         {
             Left,
             Top,
@@ -62,8 +62,8 @@ namespace LayoutFarm.UI
         short _marginTop;
         short _marginRight;
         short _marginBottom;
-        // 
-        LayoutInstance _layoutInstance;
+
+         
         public AbstractRectUI(int width, int height)
         {
             //default,           
@@ -74,21 +74,7 @@ namespace LayoutFarm.UI
             //default for box
             this.AutoStopMouseEventPropagation = true;
         }
-        public LayoutInstance LayoutInstance
-        {
-            get => _layoutInstance;
-            set
-            {
-                _layoutInstance = value;
-            }
-        }
-        public override void UpdateLayout()
-        {
-            if (_layoutInstance != null && _layoutInstance.GetResultBounds(out RectangleF bounds))
-            {
-                SetLocationAndSize((int)bounds.Left, (int)bounds.Top, (int)bounds.Width, (int)bounds.Height);
-            }
-        }
+         
         public RectUIAlignment Alignment { get; set; }
 
         public event EventHandler<ViewportChangedEventArgs> ViewportChanged;
@@ -151,9 +137,6 @@ namespace LayoutFarm.UI
                 this.CurrentPrimaryRenderElement.SetLocation(left, top);
             }
         }
-
-
-
 
         /// <summary>
         /// set visual size (or viewport size) of this rect
@@ -608,12 +591,20 @@ namespace LayoutFarm.UI
         {
             if (!DisableAutoBehRaising) RaiseBehLostMouseFocus(e);
         }
-
-
         protected static void AssignProperties(LayoutFarm.CustomWidgets.CustomRenderBox customRenderE, AbstractRectUI ui)
         {
             customRenderE.SetLocation(ui.Left, ui.Top);
-            
+        }
+
+        //--------------
+        //layout instance feature
+        public LayoutInstance LayoutInstance { get; set; }
+        public override void UpdateLayout()
+        {
+            if (LayoutInstance != null && LayoutInstance.GetResultBounds(out RectangleF bounds))
+            {
+                SetLocationAndSize((int)bounds.Left, (int)bounds.Top, (int)bounds.Width, (int)bounds.Height);
+            }
         }
     }
 
