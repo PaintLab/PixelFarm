@@ -4,17 +4,20 @@ using LayoutFarm.RenderBoxes;
 using PixelFarm.Drawing;
 namespace LayoutFarm.CustomWidgets
 {
-    
+
 
     public class CustomRenderBox : RenderBoxBase
     {
+        //LIMITATION:
+        //these are NOT CSS borders/margins/paddings***
+        //we use pixel unit for our RenderBox
+
+        //if we want a sophisticate render element
+        //we can create it in another render element class
+
         Color _backColor;
         Color _borderColor;
         bool _hasSomeBorderW;
-
-        //these are NOT CSS borders/margins/paddings***
-        //we use pixel unit for our RenderBox
-        //with limitation of int8 number
 
         ushort _contentLeft;
         ushort _contentTop;
@@ -24,7 +27,8 @@ namespace LayoutFarm.CustomWidgets
         byte _borderLeft;
         byte _borderTop;
         byte _borderRight;
-        byte _borderBottom;
+        byte _borderBottom; 
+
         BoxContentLayoutKind _contentLayoutKind;
 
         public CustomRenderBox(RootGraphic rootgfx, int width, int height)
@@ -32,6 +36,7 @@ namespace LayoutFarm.CustomWidgets
         {
             this.BackColor = KnownColors.LightGray;
         }
+
         protected override PlainLayer CreateDefaultLayer()
         {
 #if DEBUG
@@ -59,24 +64,36 @@ namespace LayoutFarm.CustomWidgets
         public int PaddingLeft
         {
             get => _contentLeft - _borderLeft;
-            set => _contentLeft = (ushort)(value + _borderLeft);
+            set
+            {
+                _contentLeft = (ushort)(value + _borderLeft);
+            }
         }
 
         public int PaddingTop
         {
             get => _contentTop - _borderTop;
-            set => _contentTop = (ushort)(value + _borderTop);
+            set
+            {
+                _contentTop = (ushort)(value + _borderTop);
+            }
         }
         public int PaddingRight
         {
             get => _contentRight - _borderRight;
-            set => _contentRight = (ushort)(value + _borderRight);
-
+            set
+            {
+                _contentRight = (ushort)(value + _borderRight);
+            }
         }
         public int PaddingBottom
+
         {
             get => _contentBottom - _borderBottom;
-            set => _contentBottom = (ushort)(value + _borderBottom);
+            set
+            {
+                _contentBottom = (ushort)(value + _borderBottom);
+            }
         }
         public void SetPadding(ushort left, ushort top, ushort right, ushort bottom)
         {
@@ -197,6 +214,7 @@ namespace LayoutFarm.CustomWidgets
                 if (_backColor == value) return;
 
                 _backColor = value;
+
                 BgIsNotOpaque = value.A < 255;
 
                 if (this.HasParentLink)

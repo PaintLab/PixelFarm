@@ -5,6 +5,7 @@ namespace LayoutFarm.CustomWidgets
 {
     public class CustomImageRenderBox : CustomRenderBox
     {
+        //
         public CustomImageRenderBox(RootGraphic rootgfx, int width, int height)
             : base(rootgfx, width, height)
         {  

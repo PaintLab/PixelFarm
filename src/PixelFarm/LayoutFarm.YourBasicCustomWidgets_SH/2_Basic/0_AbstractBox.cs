@@ -98,6 +98,7 @@ namespace LayoutFarm.CustomWidgets
             return MayBeEmptyTempContext<List<T>>.Borrow(out linkedlist);
         }
     }
+ 
 
     /// <summary>
     /// abstract box ui element.
@@ -122,7 +123,7 @@ namespace LayoutFarm.CustomWidgets
         protected bool _needClipArea;
 
         protected CustomRenderBox _primElement;
-
+        CustomRenderBoxSpec _boxSpec;
         public AbstractBox(int width, int height)
             : base(width, height)
         {
@@ -132,6 +133,33 @@ namespace LayoutFarm.CustomWidgets
             _needClipArea = true;
         }
 
+        public CustomRenderBoxSpec BoxSpec
+        {
+            get => _boxSpec;
+            set
+            {
+                //assign box spec
+                _boxSpec = value;
+
+                if (_primElement != null && value != null)
+                {
+                    //set this to primary render ele  
+                    //some prop in spec has effect on layout phase
+                    //eg. width, height, margin,
+                    if (value.BackColor.HasValue)
+                    {
+                        _primElement.BackColor = value.BackColor.Value;
+                    }
+                    if (value.BorderColor.HasValue)
+                    {
+                        _primElement.BorderColor = value.BorderColor.Value;
+                    }
+
+                    //TODO:...
+                    //add more...
+                }
+            }
+        }
         public bool EnableDoubleBuffer { get; set; }
 
         //TODO: review this fields 
@@ -156,14 +184,17 @@ namespace LayoutFarm.CustomWidgets
 
         protected static void SetCommonProperties(CustomRenderBox renderE, AbstractBox absRect)
         {
-            renderE.SetLocation(absRect.Left, absRect.Top);
+
             renderE.NeedClipArea = absRect.NeedClipArea;
-            renderE.TransparentForMouseEvents = absRect.TransparentForMouseEvents;
+            renderE.SetPadding(absRect.PaddingLeft, absRect.PaddingTop, absRect.PaddingRight, absRect.PaddingBottom);
+
+            renderE.SetLocation(absRect.Left, absRect.Top);
+            renderE.SetViewport(absRect.ViewportLeft, absRect.ViewportTop);
             renderE.SetVisible(absRect.Visible);
+            renderE.SetBorders(absRect.BorderLeft, absRect.BorderTop, absRect.BorderRight, absRect.BorderBottom);
 
             renderE.BackColor = absRect._backColor;
             renderE.BorderColor = absRect._borderColor;
-            renderE.SetBorders(absRect.BorderLeft, absRect.BorderTop, absRect.BorderRight, absRect.BorderBottom);
 
 #if DEBUG
             renderE.dbugBreak = absRect.dbugBreakMe;
@@ -173,15 +204,14 @@ namespace LayoutFarm.CustomWidgets
             renderE.HasSpecificHeight = absRect.HasSpecificHeight;
             renderE.HasSpecificWidth = absRect.HasSpecificWidth;
             renderE.SetController(absRect);
-            renderE.SetLocation(absRect.Left, absRect.Top);
-            renderE.SetViewport(absRect.ViewportLeft, absRect.ViewportTop);
+            renderE.TransparentForMouseEvents = absRect.TransparentForMouseEvents;
         }
         protected static void BuildChildren(CustomRenderBox renderE, AbstractBox absRect)
         {
             IUICollection<UIElement> childIter = absRect.GetDefaultChildrenIter();
             if (childIter != null && childIter.Count > 0)
             {
-                RootGraphic rootgfx = renderE.Root;                    
+                RootGraphic rootgfx = renderE.Root;
                 foreach (UIElement child in childIter.GetIter())
                 {
                     renderE.AddChild(child.GetPrimaryRenderElement(rootgfx));
@@ -192,8 +222,7 @@ namespace LayoutFarm.CustomWidgets
         {
             if (_primElement == null)
             {
-                //var renderE = new CustomRenderBox(rootgfx, this.Width, this.Height);
-
+                //create primary render element
                 GlobalRootGraphic.BlockGraphicsUpdate();
 
                 var renderE = EnableDoubleBuffer ?

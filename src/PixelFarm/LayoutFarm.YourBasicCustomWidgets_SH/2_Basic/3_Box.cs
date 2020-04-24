@@ -21,7 +21,7 @@ namespace LayoutFarm.CustomWidgets
         {
 
         }
-
+        
         public override void NotifyContentUpdate(UIElement childContent)
         {
             //set propersize

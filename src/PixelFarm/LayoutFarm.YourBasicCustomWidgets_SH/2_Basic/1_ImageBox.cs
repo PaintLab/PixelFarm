@@ -61,17 +61,8 @@ namespace LayoutFarm.CustomWidgets
             if (_imgRenderBox == null)
             {
                 var renderBox = new CustomImageRenderBox(rootgfx, this.Width, this.Height);
-                renderBox.SetLocation(this.Left, this.Top);
+                SetCommonProperties(renderBox, this); 
                 renderBox.ImageBinder = _imageBinder;
-                renderBox.SetController(this);
-                renderBox.BackColor = this.BackColor;
-                renderBox.NeedClipArea = this.NeedClipArea;
-                renderBox.PaddingLeft = PaddingLeft;
-                renderBox.PaddingRight = PaddingRight;
-                renderBox.PaddingTop = PaddingTop;
-                renderBox.PaddingBottom = PaddingBottom;
-                renderBox.SetVisible(this.Visible);
-                renderBox.TransparentForMouseEvents = this.TransparentForMouseEvents;
 
                 SetPrimaryRenderElement(renderBox);
                 _imgRenderBox = renderBox;

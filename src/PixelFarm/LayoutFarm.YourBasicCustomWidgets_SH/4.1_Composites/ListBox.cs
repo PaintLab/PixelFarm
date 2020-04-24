@@ -78,27 +78,7 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
-
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
-        {
-            if (!HasReadyRenderElement)
-            {
-                CustomRenderBox newone = base.GetPrimaryRenderElement(rootgfx) as CustomRenderBox;
-                newone.LayoutHint = this.ContentLayoutKind;
-                newone.HasSpecificWidthAndHeight = true;
-
-                foreach (UIElement child in _items.GetIter())
-                {
-                    newone.AddChild(child.GetPrimaryRenderElement(rootgfx));
-                }
-
-                return newone;
-            }
-            else
-            {
-                return base.GetPrimaryRenderElement(rootgfx);
-            }
-        }
+         
         public int ItemCount => _items.Count;
         public void AddItem(ListItem item)
         {

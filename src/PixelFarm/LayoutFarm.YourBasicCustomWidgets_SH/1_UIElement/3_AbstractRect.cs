@@ -19,6 +19,8 @@ namespace LayoutFarm.UI
     /// </summary>
     public abstract class AbstractRectUI : UIElement, IScrollable, IBoxElement, IAcceptBehviour
     {
+        //dimension only
+
         protected enum PaddingName : byte
         {
             Left,

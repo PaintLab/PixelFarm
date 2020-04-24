@@ -339,7 +339,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 var tbox = new TextEditRenderBox(rootgfx, this.Width, this.Height, _multiline, _isEditable);
                 tbox.SetLocation(this.Left, this.Top);
-                tbox.HasSpecificWidthAndHeight = true;
+                tbox.HasSpecificWidthAndHeight = true;//***
                 if (_defaultSpanStyle.IsEmpty())
                 {
                     _defaultSpanStyle = new TextSpanStyle();
@@ -353,6 +353,7 @@ namespace LayoutFarm.CustomWidgets
                 }
                 tbox.BackgroundColor = _backgroundColor;
                 tbox.SetController(this);
+
                 tbox.ViewportChanged += (s, e) =>
                 {
                     RaiseViewportChanged();
