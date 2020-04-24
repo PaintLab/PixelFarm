@@ -529,15 +529,25 @@ namespace LayoutFarm.CustomWidgets
                         IUICollection<UIElement> childrenIter = GetDefaultChildrenIter();
                         if (childrenIter != null && childrenIter.Count > 0)
                         {
+                            int width = this.Width;
                             foreach (UIElement ui in childrenIter.GetIter())
                             {
-                                if (ui is AbstractRectUI element)
+                                if (ui is AbstractRectUI rect)
                                 {
-                                    element.PerformContentLayout();
-                                    element.SetLocationAndSize(xpos + element.MarginLeft, ypos + element.MarginTop, element.Width, element.Height);
-                                    ypos += element.Height + element.MarginTopBottom;
+                                    rect.PerformContentLayout();
+                                    if (!rect.HasSpecificWidth)
+                                    {
+                                        //expand full width 
+                                        rect.SetLocationAndSize(xpos + rect.MarginLeft, ypos + rect.MarginTop, width, rect.Height);
+                                    }
+                                    else
+                                    {
+                                        rect.SetLocationAndSize(xpos + rect.MarginLeft, ypos + rect.MarginTop, rect.Width, rect.Height);
+                                    }
 
-                                    int tmp_right = element.Right;
+                                    ypos += rect.Height + rect.MarginTopBottom;
+
+                                    int tmp_right = rect.Right;
                                     if (tmp_right > maxRight)
                                     {
                                         maxRight = tmp_right;
@@ -558,6 +568,7 @@ namespace LayoutFarm.CustomWidgets
 
                         //experiment
                         bool allowAutoContentExpand = this.AllowAutoContentExpand;
+                        allowAutoContentExpand = true;
 
                         int xpos = this.PaddingLeft; //start X at paddingLeft
                         int ypos = this.PaddingTop; //start Y at padding top
@@ -574,34 +585,34 @@ namespace LayoutFarm.CustomWidgets
 
                             foreach (UIElement ui in childrenIter.GetIter())
                             {
-                                if (ui is AbstractRectUI element)
+                                if (ui is AbstractRectUI rect)
                                 {
-                                    element.PerformContentLayout();
+                                    rect.PerformContentLayout();
 
                                     //TODO: review Middle again
-                                    if (element.Alignment == RectUIAlignment.End)
+                                    if (rect.Alignment == RectUIAlignment.End)
                                     {
                                         //skip this
                                         if (alignToEnds == null)
                                         {
                                             alignToEndsContext = LayoutTools.BorrowList(out alignToEnds);
                                         }
-                                        alignToEnds.Add(element);
+                                        alignToEnds.Add(rect);
                                     }
                                     else
                                     {
-                                        if (allowAutoContentExpand && !element.HasSpecificWidth)
+                                        if (allowAutoContentExpand && !rect.HasSpecificWidth)
                                         {
                                             if (notHaveSpecificWidthElems == null)
                                             {
                                                 notHaveSpecificWidthElemsContext = LayoutTools.BorrowList(out notHaveSpecificWidthElems);
                                             }
-                                            notHaveSpecificWidthElems.Add(element);
+                                            notHaveSpecificWidthElems.Add(rect);
                                         }
 
-                                        element.SetLocationAndSize(xpos, ypos + element.MarginTop, element.Width, element.Height); //
-                                        xpos += element.Width + element.MarginLeftRight;
-                                        int tmp_bottom = element.Bottom;
+                                        rect.SetLocationAndSize(xpos, ypos + rect.MarginTop, rect.Width, rect.Height); //
+                                        xpos += rect.Width + rect.MarginLeftRight;
+                                        int tmp_bottom = rect.Bottom;
                                         if (tmp_bottom > maxBottom)
                                         {
                                             maxBottom = tmp_bottom;
@@ -639,28 +650,42 @@ namespace LayoutFarm.CustomWidgets
                             }
                             //--------
 
-                            if (notHaveSpecificWidthElems != null && (xpos > left_to_right_max_x))
+                            if (notHaveSpecificWidthElems != null)
                             {
-                                //this mean this allow content expand
-                                float avaliable_w = xpos - left_to_right_max_x;
-                                //distribute this 
-                                float avg_w = avaliable_w / notHaveSpecificWidthElems.Count;
+                                float avaliable_w = 0;
 
-                                for (int m = notHaveSpecificWidthElems.Count - 1; m >= 0; --m)
+                                if (xpos > left_to_right_max_x)
                                 {
-                                    AbstractRectUI ui = notHaveSpecificWidthElems[m];
-                                    ui.SetWidth((int)(ui.Width + avg_w));
+
+                                    //this mean this allow content expand
+                                    avaliable_w = xpos - left_to_right_max_x;
+                                }
+                                else if (alignToEnds == null && xpos < this.Width)
+                                {
+                                    avaliable_w = this.Width - xpos;
                                 }
 
-                                //arrange location again
-                                xpos = this.PaddingLeft; //start X at paddingLeft
-                                foreach (UIElement ui in childrenIter.GetIter())
+                                if (avaliable_w > 0)
                                 {
-                                    if (ui is AbstractRectUI element && element.Alignment != RectUIAlignment.End)
+                                    //distribute this 
+                                    float avg_w = avaliable_w / notHaveSpecificWidthElems.Count;
+
+                                    for (int m = notHaveSpecificWidthElems.Count - 1; m >= 0; --m)
                                     {
-                                        //TODO: review here again
-                                        element.SetLocation(xpos, ypos + element.MarginTop);
-                                        xpos += element.Width + element.MarginLeftRight;
+                                        AbstractRectUI ui = notHaveSpecificWidthElems[m];
+                                        ui.SetWidth((int)(ui.Width + avg_w));
+                                    }
+
+                                    //arrange location again
+                                    xpos = this.PaddingLeft; //start X at paddingLeft
+                                    foreach (UIElement ui in childrenIter.GetIter())
+                                    {
+                                        if (ui is AbstractRectUI element && element.Alignment != RectUIAlignment.End)
+                                        {
+                                            //TODO: review here again
+                                            element.SetLocation(xpos, ypos + element.MarginTop);
+                                            xpos += element.Width + element.MarginLeftRight;
+                                        }
                                     }
                                 }
 

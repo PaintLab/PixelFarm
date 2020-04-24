@@ -5,7 +5,7 @@ using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm
 {
-    [DemoNote("1.2 MultipleBoxes")]
+    [DemoNote("1.2.0 MultipleBoxes")]
     public class Demo_MultipleBoxes : App
     {
         LayoutFarm.CustomWidgets.CheckBox _currentSingleCheckedBox;
