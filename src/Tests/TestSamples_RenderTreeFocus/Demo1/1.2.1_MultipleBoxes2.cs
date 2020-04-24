@@ -22,8 +22,9 @@ namespace LayoutFarm
 
             Box hostBox = new Box(400, 600);
             hostBox.BackColor = Color.White;
-            hostBox.ContentLayoutKind = BoxContentLayoutKind.HorizontalStack;
+            //hostBox.ContentLayoutKind = BoxContentLayoutKind.HorizontalStack;
             //hostBox.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
+            hostBox.ContentLayoutKind = BoxContentLayoutKind.HorizontalFlow;
             host.AddChild(hostBox);
 
             int boxHeight = 20;
@@ -31,13 +32,13 @@ namespace LayoutFarm
             int boxY = 0;
 
 
-            for (int i = 0; i < 4; ++i)
+            for (int i = 0; i < 30; ++i)
             {
                 var box = new Box(20, boxHeight);
-                box.HasSpecificWidth = false;
-                box.HasSpecificHeight = false;
+                //box.HasSpecificWidth = false;
+                //box.HasSpecificHeight = false;
 
-                box.BackColor = _colors[i];
+                box.BackColor = _colors[i % 5];
                 box.SetMargins(1);
                 box.SetLocation(boxX, boxY);
                 hostBox.Add(box);

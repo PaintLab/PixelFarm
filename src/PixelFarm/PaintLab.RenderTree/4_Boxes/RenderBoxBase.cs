@@ -8,7 +8,8 @@ namespace LayoutFarm
     {
         Absolute,
         VerticalStack,
-        HorizontalStack
+        HorizontalStack,
+        HorizontalFlow,
     }
 
 

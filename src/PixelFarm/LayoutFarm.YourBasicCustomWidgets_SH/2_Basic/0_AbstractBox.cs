@@ -557,15 +557,12 @@ namespace LayoutFarm.CustomWidgets
                         }
 
                         this.SetInnerContentSize(maxRight, ypos);
-
-
                     }
                     break;
                 case BoxContentLayoutKind.HorizontalStack:
                     {
 
                         int maxBottom = 0;
-
                         //experiment
                         bool allowAutoContentExpand = this.AllowAutoContentExpand;
                         allowAutoContentExpand = true;
@@ -620,7 +617,6 @@ namespace LayoutFarm.CustomWidgets
                                     }
                                 }
                             }
-
                             left_to_right_max_x = xpos;
 
                             //--------
@@ -697,6 +693,60 @@ namespace LayoutFarm.CustomWidgets
                         this.SetInnerContentSize(xpos, maxBottom);
                     }
                     break;
+                case BoxContentLayoutKind.HorizontalFlow:
+                    {
+                        //horizontal flow
+                        int maxBottom = 0;
+                        //experiment
+                        bool allowAutoContentExpand = this.AllowAutoContentExpand;
+                        allowAutoContentExpand = true;
+
+                        int xpos = this.PaddingLeft; //start X at paddingLeft
+                        int ypos = this.PaddingTop; //start Y at padding top
+                        IUICollection<UIElement> childrenIter = GetDefaultChildrenIter();
+                        if (childrenIter != null && childrenIter.Count > 0)
+                        {
+                            int hostW = this.Width;//***
+
+                            //flow layout
+                            //we need to flow it into multi-linebox
+
+                            foreach (UIElement ui in childrenIter.GetIter())
+                            {
+                                if (ui is AbstractRectUI rect)
+                                {
+                                    rect.PerformContentLayout();
+
+                                    int right = xpos + rect.Width + rect.MarginLeftRight; //new pos
+                                    if (right > hostW)
+                                    {
+                                        //start a new line
+                                        xpos = this.PaddingLeft;
+                                        ypos += maxBottom + 1; //we need some margin 
+
+                                        maxBottom = 0;
+                                        right = xpos + rect.Width + rect.MarginLeftRight;
+                                    }
+
+                                    rect.SetLocationAndSize(xpos, ypos + rect.MarginTop, rect.Width, rect.Height); //
+                                                                                                                   //
+                                    int tmp_bottom = rect.Height;
+                                    if (tmp_bottom > maxBottom)
+                                    {
+                                        maxBottom = tmp_bottom;
+                                    }
+
+
+                                    xpos = right;
+
+                                }
+                            }
+                        }
+                        this.SetInnerContentSize(xpos, maxBottom);
+
+
+                    }
+                    break;
                 default:
                     {
 
@@ -710,15 +760,16 @@ namespace LayoutFarm.CustomWidgets
                         {
                             foreach (UIElement ui in childrenIter.GetIter())
                             {
-                                if (ui is AbstractRectUI element)
+                                if (ui is AbstractRectUI rect)
                                 {
-                                    element.PerformContentLayout();
-                                    int tmp_right = element.Right;// element.InnerWidth + element.Left;
+                                    rect.PerformContentLayout();
+
+                                    int tmp_right = rect.Right;// element.InnerWidth + element.Left;
                                     if (tmp_right > maxRight)
                                     {
                                         maxRight = tmp_right;
                                     }
-                                    int tmp_bottom = element.Bottom;// element.InnerHeight + element.Top;
+                                    int tmp_bottom = rect.Bottom;// element.InnerHeight + element.Top;
                                     if (tmp_bottom > maxBottom)
                                     {
                                         maxBottom = tmp_bottom;
