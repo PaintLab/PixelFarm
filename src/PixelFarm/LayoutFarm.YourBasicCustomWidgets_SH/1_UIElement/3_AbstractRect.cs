@@ -20,6 +20,8 @@ namespace LayoutFarm.UI
     public abstract class AbstractRectUI : UIElement, IScrollable, IBoxElement, IAcceptBehviour
     {
         //dimension only
+        //no color,
+        //no children
 
         protected enum PaddingName : byte
         {
@@ -628,4 +630,12 @@ namespace LayoutFarm.UI
         }
     }
 
+
+    public class BoxLayoutEngine
+    {
+
+
+
+
+    }
 }

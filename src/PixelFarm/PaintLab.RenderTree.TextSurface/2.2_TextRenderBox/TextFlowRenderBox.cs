@@ -64,9 +64,7 @@ namespace LayoutFarm.TextEditing
         {
             return textEditRenderBox._editSession;
         }
-
-        protected override PlainLayer CreateDefaultLayer() => new PlainLayer(this);
-
+ 
         public TextSpanStyle CurrentTextSpanStyle
         {
             get

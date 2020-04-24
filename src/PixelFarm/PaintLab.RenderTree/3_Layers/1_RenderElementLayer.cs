@@ -16,6 +16,11 @@ namespace LayoutFarm.RenderBoxes
         public int dbug_ValidateCount = 0;
 #endif
 
+        //purposes:
+        //1. layout management
+        //2. hit-test mx
+        //3. drawing-mx
+
 
         protected const int IS_LAYER_HIDDEN = 1 << (14 - 1);
         protected const int IS_GROUND_LAYER = 1 << (15 - 1);
@@ -42,9 +47,7 @@ namespace LayoutFarm.RenderBoxes
 #endif
         }
         public RenderElement OwnerRenderElement => _owner;
-        //
-        public RootGraphic Root => _owner.Root;
-        //
+
         public abstract void Clear();
 
         public bool Visible

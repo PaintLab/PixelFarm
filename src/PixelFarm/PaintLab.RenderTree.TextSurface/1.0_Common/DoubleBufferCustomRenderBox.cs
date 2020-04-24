@@ -23,10 +23,7 @@ namespace LayoutFarm.TextEditing
         public RenderBoxBase ContentBox { get; set; }
 
         public bool EnableDoubleBuffer { get; set; }
-        protected override PlainLayer CreateDefaultLayer()
-        {
-            return new PlainLayer(this);
-        }
+ 
 
         protected override void OnInvalidateGraphicsNoti(bool fromMe, ref Rectangle totalBounds)
         {

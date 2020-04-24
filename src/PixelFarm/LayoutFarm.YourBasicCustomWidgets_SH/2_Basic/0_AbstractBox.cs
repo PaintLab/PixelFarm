@@ -492,7 +492,7 @@ namespace LayoutFarm.CustomWidgets
                 _boxContentLayoutKind = value; //invalidate layout after change this
                 if (_primElement != null)
                 {
-                    _primElement.LayoutHint = value;
+                    _primElement.LayoutKind = value;
                 }
 
                 //if (_uiList != null && _uiList.Count > 0)

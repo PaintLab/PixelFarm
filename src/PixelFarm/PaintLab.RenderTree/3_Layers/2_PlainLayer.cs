@@ -79,11 +79,7 @@ namespace LayoutFarm.RenderBoxes
             _myElements.Clear();
             this.OwnerRenderElement.InvalidateGraphics();
         }
-
-#if DEBUG
-        public int dbugChildCount => _myElements.Count;
-#endif
-
+ 
         IEnumerable<RenderElement> GetDrawingIter()
         {
             LinkedListNode<RenderElement> curNode = _myElements.First;
@@ -102,7 +98,6 @@ namespace LayoutFarm.RenderBoxes
                 curNode = curNode.Previous;
             }
         }
-
 
         public override void DrawChildContent(DrawBoard d, UpdateArea updateArea)
         {
@@ -199,19 +194,7 @@ namespace LayoutFarm.RenderBoxes
 
             this.FinishDrawingChildContent();
         }
-#if DEBUG
-        public override void dbug_DumpElementProps(dbugLayoutMsgWriter writer)
-        {
-            writer.Add(new dbugLayoutMsg(
-                this, this.ToString()));
-            writer.EnterNewLevel();
-            foreach (RenderElement child in this.GetDrawingIter())
-            {
-                child.dbug_DumpVisualProps(writer);
-            }
-            writer.LeaveCurrentLevel();
-        }
-#endif
+ 
         public override bool HitTestCore(HitChain hitChain)
         {
             if ((_layerFlags & IS_LAYER_HIDDEN) == 0)
@@ -287,6 +270,18 @@ namespace LayoutFarm.RenderBoxes
 #endif
         }
 #if DEBUG
+        public override void dbug_DumpElementProps(dbugLayoutMsgWriter writer)
+        {
+            writer.Add(new dbugLayoutMsg(
+                this, this.ToString()));
+            writer.EnterNewLevel();
+            foreach (RenderElement child in this.GetDrawingIter())
+            {
+                child.dbug_DumpVisualProps(writer);
+            }
+            writer.LeaveCurrentLevel();
+        }
+        public int dbugChildCount => _myElements.Count;
         public override string ToString()
         {
             return "plain layer " + "(L" + dbug_layer_id + this.dbugLayerState + ") postcal:" +

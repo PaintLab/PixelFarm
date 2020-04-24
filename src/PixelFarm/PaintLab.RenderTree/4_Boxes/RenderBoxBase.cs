@@ -18,8 +18,8 @@ namespace LayoutFarm
 #endif
     public abstract class RenderBoxBase : RenderElement
     {
-
-        protected PlainLayer _defaultLayer;
+        BoxContentLayoutKind _contentLayoutKind;
+        PlainLayer _defaultLayer;
         protected bool _disableDefaultLayer;
 
         public RenderBoxBase(RootGraphic rootgfx, int width, int height)
@@ -28,9 +28,7 @@ namespace LayoutFarm
             this.MayHasViewport = true;
             this.MayHasChild = true;
         }
-        protected abstract PlainLayer CreateDefaultLayer();
-        ////
-        //public bool UseAsFloatWindow { get; set; }
+
 
         public override void ChildrenHitTestCore(HitChain hitChain)
         {
@@ -119,7 +117,7 @@ namespace LayoutFarm
 
             if (_defaultLayer == null)
             {
-                _defaultLayer = CreateDefaultLayer();
+                _defaultLayer = new PlainLayer(this);
             }
             _defaultLayer.AddChild(renderE);
         }
@@ -129,7 +127,7 @@ namespace LayoutFarm
 
             if (_defaultLayer == null)
             {
-                _defaultLayer = CreateDefaultLayer();
+                _defaultLayer = new PlainLayer(this);
             }
             _defaultLayer.AddFirst(renderE);
         }
@@ -204,6 +202,18 @@ namespace LayoutFarm
             }
         }
 
+        public BoxContentLayoutKind LayoutKind
+        {
+            get => _contentLayoutKind;
+            set
+            {
+                _contentLayoutKind = value;
+                if (_defaultLayer != null)
+                {
+                    _defaultLayer.LayoutHint = value;
+                }
+            }
+        }
 #if DEBUG
         public bool debugDefaultLayerHasChild
         {

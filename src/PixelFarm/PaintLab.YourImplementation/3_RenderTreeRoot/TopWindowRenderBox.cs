@@ -12,7 +12,7 @@ namespace LayoutFarm
             this.IsTopWindow = true;
             this.HasSpecificWidthAndHeight = true;
         }
-        protected override PlainLayer CreateDefaultLayer() => new PlainLayer(this);
+        
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
             //TODO: implement FillRect() with no blending ... , or FastClear() 

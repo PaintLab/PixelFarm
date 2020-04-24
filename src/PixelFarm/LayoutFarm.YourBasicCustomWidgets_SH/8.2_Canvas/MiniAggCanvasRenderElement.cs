@@ -26,7 +26,7 @@ namespace LayoutFarm.CustomWidgets
             _needUpdate = true;
             this.BackColor = Color.White;
         }
-        protected override PlainLayer CreateDefaultLayer() => new PlainLayer(this);
+         
         public override void ClearAllChildren()
         {
         }

@@ -27,40 +27,14 @@ namespace LayoutFarm.CustomWidgets
         byte _borderLeft;
         byte _borderTop;
         byte _borderRight;
-        byte _borderBottom; 
-
-        BoxContentLayoutKind _contentLayoutKind;
+        byte _borderBottom;
 
         public CustomRenderBox(RootGraphic rootgfx, int width, int height)
             : base(rootgfx, width, height)
         {
             this.BackColor = KnownColors.LightGray;
         }
-
-        protected override PlainLayer CreateDefaultLayer()
-        {
-#if DEBUG
-            if (dbugBreak)
-            {
-
-            }
-#endif
-            PlainLayer layer = new PlainLayer(this);
-            layer.LayoutHint = _contentLayoutKind;
-            return layer;
-        }
-        public BoxContentLayoutKind LayoutHint
-        {
-            get => _contentLayoutKind;
-            set
-            {
-                _contentLayoutKind = value;
-                if (_defaultLayer != null)
-                {
-                    _defaultLayer.LayoutHint = value;
-                }
-            }
-        }
+         
         public int PaddingLeft
         {
             get => _contentLeft - _borderLeft;

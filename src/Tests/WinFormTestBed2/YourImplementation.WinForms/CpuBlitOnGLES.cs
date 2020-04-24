@@ -218,8 +218,7 @@ namespace YourImplementation
         public void SetOwnerDemoUI(CpuBlitGLESUIElement ui)
         {
             _ui = ui;
-        }
-        protected override PlainLayer CreateDefaultLayer() => new PlainLayer(this);
+        } 
 
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
