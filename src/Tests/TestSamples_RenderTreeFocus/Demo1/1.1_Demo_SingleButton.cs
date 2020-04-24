@@ -19,8 +19,8 @@ namespace LayoutFarm
 
             boxspec.BackColor = PixelFarm.Drawing.Color.Red;
             boxspec.BorderColor = PixelFarm.Drawing.Color.Black;
-
             sampleButton.BoxSpec = boxspec;
+
 
             sampleButton.MouseDown += (s, e2) =>
             {
