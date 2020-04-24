@@ -3,7 +3,8 @@
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
 using LayoutFarm.UI.ForImplementator;
- 
+using LayoutFarm.RenderBoxes;
+
 namespace LayoutFarm.CustomWidgets
 {
     class GridViewRenderBox : CustomRenderBox
@@ -12,12 +13,8 @@ namespace LayoutFarm.CustomWidgets
         public GridViewRenderBox(RootGraphic rootgfx, int w, int h)
             : base(rootgfx, w, h)
         {
-            //this.LayoutHint = BoxContentLayoutKind.VerticalStack;
+
         }
-        //public override void AddChild(RenderElement renderE)
-        //{
-        //    base.AddChild(renderE);
-        //}
         public void BuildGrid(GridTable gridTable, CellSizeStyle cellSizeStyle)
         {
             _gridLayer = new GridLayer(this, cellSizeStyle, gridTable);
@@ -42,7 +39,6 @@ namespace LayoutFarm.CustomWidgets
 #endif
 
             //sample bg  
-
             //this render element dose not have child node, so
             //if WaitForStartRenderElement == true,
             //then we skip rendering its content
@@ -60,14 +56,9 @@ namespace LayoutFarm.CustomWidgets
             {
                 this.DrawDefaultLayer(d, updateArea);
             }
-#if DEBUG
-            //canvas.dbug_DrawCrossRect(PixelFarm.Drawing.Color.Black,
-            //    new Rectangle(0, 0, this.Width, this.Height));
-
-            //canvas.dbug_DrawCrossRect(PixelFarm.Drawing.Color.Black,
-            //   new Rectangle(updateArea.Left, updateArea.Top, updateArea.Width, updateArea.Height));
-#endif
         }
+        
+        
     }
 
     enum GridSelectionStyle : byte
