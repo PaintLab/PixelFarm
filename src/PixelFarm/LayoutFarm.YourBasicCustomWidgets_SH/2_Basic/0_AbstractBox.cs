@@ -98,7 +98,9 @@ namespace LayoutFarm.CustomWidgets
             return MayBeEmptyTempContext<List<T>>.Borrow(out linkedlist);
         }
     }
- 
+
+
+
 
     /// <summary>
     /// abstract box ui element.
@@ -346,10 +348,9 @@ namespace LayoutFarm.CustomWidgets
                     case BorderName.AllSide:
                         _primElement.SetBorders(newValue);
                         break;
+                        //TODO: 
                 }
             }
-
-            base.InvalidateBorder(borderName, newValue);
         }
 
         protected override void OnDoubleClick(UIMouseEventArgs e)
