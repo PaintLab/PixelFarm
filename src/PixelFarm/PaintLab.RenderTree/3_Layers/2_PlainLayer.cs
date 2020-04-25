@@ -4,14 +4,15 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 namespace LayoutFarm.RenderBoxes
 {
-    public sealed class PlainLayer : RenderElementLayer
+
+    sealed class PlainLayer : RenderElementLayer
     {
         readonly LinkedList<RenderElement> _myElements = new LinkedList<RenderElement>();
         public PlainLayer(RenderElement owner)
             : base(owner)
         {
         }
-        public BoxContentLayoutKind LayoutHint { get; set; }
+        public BoxContentLayoutKind LayoutKind { get; set; }
         public override IEnumerable<RenderElement> GetRenderElementReverseIter()
         {
             LinkedListNode<RenderElement> cur = _myElements.Last;
@@ -66,7 +67,7 @@ namespace LayoutFarm.RenderBoxes
 
             RenderElement.InvalidateGraphicLocalArea(this.OwnerRenderElement, bounds);
         }
-        public override void Clear()
+        public void Clear()
         {
 
             LinkedListNode<RenderElement> curNode = _myElements.First;
@@ -79,7 +80,7 @@ namespace LayoutFarm.RenderBoxes
             _myElements.Clear();
             this.OwnerRenderElement.InvalidateGraphics();
         }
- 
+
         IEnumerable<RenderElement> GetDrawingIter()
         {
             LinkedListNode<RenderElement> curNode = _myElements.First;
@@ -111,7 +112,7 @@ namespace LayoutFarm.RenderBoxes
             int enter_canvas_y = d.OriginY;
 
 
-            switch (LayoutHint)
+            switch (LayoutKind)
             {
                 case BoxContentLayoutKind.Absolute:
                     {
@@ -194,7 +195,7 @@ namespace LayoutFarm.RenderBoxes
 
             this.FinishDrawingChildContent();
         }
- 
+
         public override bool HitTestCore(HitChain hitChain)
         {
             if ((_layerFlags & IS_LAYER_HIDDEN) == 0)

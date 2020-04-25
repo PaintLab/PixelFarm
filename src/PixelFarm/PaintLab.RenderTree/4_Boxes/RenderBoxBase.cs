@@ -12,23 +12,31 @@ namespace LayoutFarm
         HorizontalFlow,
     }
 
+    public interface IContainerRenderElement
+    {
+        void AddChild(RenderElement renderE);
+        void AddFirst(RenderElement renderE);
+        void InsertAfter(RenderElement afterElem, RenderElement renderE);
+        void InsertBefore(RenderElement beforeElem, RenderElement renderE);
+        void RemoveChild(RenderElement renderE);
+        void ClearAllChildren();
+        RootGraphic Root { get; }
+    }
+
 
 #if DEBUG
     [System.Diagnostics.DebuggerDisplay("RenderBoxBase {dbugGetCssBoxInfo}")]
 #endif
-    public abstract class RenderBoxBase : RenderElement
+    public abstract class RenderBoxBase : RenderElement, IContainerRenderElement
     {
         BoxContentLayoutKind _contentLayoutKind;
         PlainLayer _defaultLayer;
-        protected bool _disableDefaultLayer;
-
         public RenderBoxBase(RootGraphic rootgfx, int width, int height)
             : base(rootgfx, width, height)
         {
             this.MayHasViewport = true;
             this.MayHasChild = true;
         }
-
 
         public override void ChildrenHitTestCore(HitChain hitChain)
         {
@@ -40,7 +48,6 @@ namespace LayoutFarm
 #endif
             }
         }
-
 
         public override sealed void TopDownReCalculateContentSize()
         {
@@ -111,20 +118,16 @@ namespace LayoutFarm
             }
         }
 
-        public override void AddChild(RenderElement renderE)
+        public virtual void AddChild(RenderElement renderE)
         {
-            if (_disableDefaultLayer) return;
-
             if (_defaultLayer == null)
             {
                 _defaultLayer = new PlainLayer(this);
             }
             _defaultLayer.AddChild(renderE);
         }
-        public override void AddFirst(RenderElement renderE)
+        public virtual void AddFirst(RenderElement renderE)
         {
-            if (_disableDefaultLayer) return;
-
             if (_defaultLayer == null)
             {
                 _defaultLayer = new PlainLayer(this);
@@ -132,19 +135,19 @@ namespace LayoutFarm
             _defaultLayer.AddFirst(renderE);
         }
 
-        public override void InsertAfter(RenderElement afterElem, RenderElement renderE)
+        public virtual void InsertAfter(RenderElement afterElem, RenderElement renderE)
         {
             _defaultLayer.InsertChildAfter(afterElem, renderE);
         }
-        public override void InsertBefore(RenderElement beforeElem, RenderElement renderE)
+        public virtual void InsertBefore(RenderElement beforeElem, RenderElement renderE)
         {
             _defaultLayer.InsertChildBefore(beforeElem, renderE);
         }
-        public override void RemoveChild(RenderElement renderE)
+        public virtual void RemoveChild(RenderElement renderE)
         {
             _defaultLayer?.RemoveChild(renderE);
         }
-        public override void ClearAllChildren()
+        public virtual void ClearAllChildren()
         {
             _defaultLayer?.Clear();
         }
@@ -186,9 +189,9 @@ namespace LayoutFarm
             }
         }
 
-        protected bool HasDefaultLayer => _defaultLayer != null;
+        
 
-        protected void DrawDefaultLayer(DrawBoard d, UpdateArea updateArea)
+        protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
             if (_defaultLayer != null)
             {
@@ -201,7 +204,7 @@ namespace LayoutFarm
                 _defaultLayer.DrawChildContent(d, updateArea);
             }
         }
-
+        
         public BoxContentLayoutKind LayoutKind
         {
             get => _contentLayoutKind;
@@ -210,7 +213,7 @@ namespace LayoutFarm
                 _contentLayoutKind = value;
                 if (_defaultLayer != null)
                 {
-                    _defaultLayer.LayoutHint = value;
+                    _defaultLayer.LayoutKind = value;
                 }
             }
         }

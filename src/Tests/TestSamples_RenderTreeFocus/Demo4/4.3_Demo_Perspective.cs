@@ -158,7 +158,7 @@ namespace LayoutFarm
             _approxRectBounds = new RectangleF(0, 0, 300, 300);
             this.NeedClipArea = false; //special for quad control
         }
-        public override void AddChild(RenderElement renderE)
+        public void AddChild(RenderElement renderE)
         {
 
         }

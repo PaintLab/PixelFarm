@@ -218,7 +218,7 @@ namespace YourImplementation
         public void SetOwnerDemoUI(CpuBlitGLESUIElement ui)
         {
             _ui = ui;
-        } 
+        }
 
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
@@ -240,7 +240,7 @@ namespace YourImplementation
                     board.SetClipRect(updateArea.CurrentRect);
                     board.Clear(Color.White); //clear background, clear with white solid
 
-                    DrawDefaultLayer(board, updateArea);
+                    base.RenderClientContent(d, updateArea);
 #if DEBUG
                     //_ui.dbugSaveAggBmp("a001.png");
 #endif

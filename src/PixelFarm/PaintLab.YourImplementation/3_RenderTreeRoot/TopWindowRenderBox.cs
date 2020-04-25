@@ -12,7 +12,7 @@ namespace LayoutFarm
             this.IsTopWindow = true;
             this.HasSpecificWidthAndHeight = true;
         }
-        
+
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
             //TODO: implement FillRect() with no blending ... , or FastClear() 
@@ -22,9 +22,7 @@ namespace LayoutFarm
                 d.FillRectangle(Color.White, 0, 0, this.Width, this.Height);
                 d.SetLatestFillAsTextBackgroundColorHint();
             }
-
-            this.DrawDefaultLayer(d, updateArea); 
-
+            base.RenderClientContent(d, updateArea);
         }
     }
 }

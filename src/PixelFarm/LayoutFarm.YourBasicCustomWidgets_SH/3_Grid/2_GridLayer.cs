@@ -112,12 +112,7 @@ namespace LayoutFarm.UI
             }
             return false;
         }
-        public override void Clear()
-        {
-            //clear content in each rows and columns
-
-        }
-        //
+        
         public int RowCount => _gridRows.Count;
         //
         public override void TopDownReArrangeContent()

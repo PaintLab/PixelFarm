@@ -64,7 +64,7 @@ namespace LayoutFarm.TextEditing
         {
             return textEditRenderBox._editSession;
         }
- 
+
         public TextSpanStyle CurrentTextSpanStyle
         {
             get
@@ -322,7 +322,7 @@ namespace LayoutFarm.TextEditing
             _editSession.SetCaretPos(e.X, e.Y);
             _editSession.EndSelect();
             //this.InvalidateGraphics();
-            InvalidateGraphicOfCurrentSelectionArea(); 
+            InvalidateGraphicOfCurrentSelectionArea();
         }
 
         public virtual void HandleKeyPress(UIKeyEventArgs e)
@@ -585,10 +585,9 @@ namespace LayoutFarm.TextEditing
 
             //3.2 actual editable layer
             _textLayer.DrawChildContent(d, updateArea);
-            if (this.HasDefaultLayer)
-            {
-                this.DrawDefaultLayer(d, updateArea);
-            }
+
+            base.RenderClientContent(d, updateArea);
+
             //----------------------------------------------
 
 #if DEBUG

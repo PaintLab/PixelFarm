@@ -91,11 +91,8 @@ namespace LayoutFarm.TextEditing
             _textLayer.DrawChildContent(d, updateArea);
             GlobalRootGraphic.CurrentRenderElement = null; //temp fix
 
-            if (this.HasDefaultLayer)
-            {
-                this.DrawDefaultLayer(d, updateArea);
-            }
 
+            base.RenderClientContent(d, updateArea);
 #if DEBUG
             //for debug
             //canvas.FillRectangle(Color.Red, 0, 0, 5, 5);

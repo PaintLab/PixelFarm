@@ -48,20 +48,7 @@ namespace LayoutFarm.RenderBoxes
         }
         public RenderElement OwnerRenderElement => _owner;
 
-        public abstract void Clear();
-
-        public bool Visible
-        {
-            get => (_layerFlags & IS_LAYER_HIDDEN) == 0;
-
-            set
-            {
-                _layerFlags = value ?
-                    _layerFlags & ~IS_LAYER_HIDDEN :
-                    _layerFlags | IS_LAYER_HIDDEN;
-            }
-        }
-        //
+        
         public Size PostCalculateContentSize => new Size(_postCalculateContentWidth, _postCalculateContentHeight);
         //
         protected void OwnerInvalidateGraphic()
