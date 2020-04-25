@@ -64,35 +64,7 @@ namespace LayoutFarm.RenderBoxes
         {
             _layerFlags &= ~CONTENT_DRAWING;
         }
-
-        public bool DoubleBackCanvasWidth
-        {
-            get => (_layerFlags & DOUBLE_BACKCANVAS_WIDTH) != 0;
-
-            set
-            {
-                _layerFlags = value ?
-                    _layerFlags | DOUBLE_BACKCANVAS_WIDTH :
-                    _layerFlags & ~DOUBLE_BACKCANVAS_WIDTH;
-            }
-        }
-
-        public bool DoubleBackCanvasHeight
-        {
-            get => (_layerFlags & DOUBLE_BACKCANVAS_HEIGHT) != 0;
-
-            set
-            {
-                _layerFlags = value ?
-                    _layerFlags | DOUBLE_BACKCANVAS_HEIGHT :
-                    _layerFlags & ~DOUBLE_BACKCANVAS_HEIGHT;
-            }
-        }
-        protected void SetDoubleCanvas(bool useWithWidth, bool useWithHeight)
-        {
-            DoubleBackCanvasWidth = useWithWidth;
-            DoubleBackCanvasHeight = useWithHeight;
-        }
+         
         protected void SetPostCalculateLayerContentSize(int width, int height)
         {
             ValidateCalculateContentSize();
