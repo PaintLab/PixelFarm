@@ -223,9 +223,6 @@
     <Compile Include="..\PaintLab.RenderTree\3_Layers\0_IParentLink.cs">
       <Link>0_REF_PaintLab.RenderTree\3_Layer\0_IParentLink.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree\3_Layers\1_RenderElementLayer.cs">
-      <Link>0_REF_PaintLab.RenderTree\3_Layer\1_RenderElementLayer.cs</Link>
-    </Compile>
     <Compile Include="..\PaintLab.RenderTree\3_Layers\2_PlainLayer.cs">
       <Link>0_REF_PaintLab.RenderTree\3_Layer\2_PlainLayer.cs</Link>
     </Compile>

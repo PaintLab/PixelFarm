@@ -1692,9 +1692,6 @@
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\3_Layers\0_IParentLink.cs">
       <Link>PixelFarm\PaintLab.RenderTree\3_Layers\0_IParentLink.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\3_Layers\1_RenderElementLayer.cs">
-      <Link>PixelFarm\PaintLab.RenderTree\3_Layers\1_RenderElementLayer.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\3_Layers\2_PlainLayer.cs">
       <Link>PixelFarm\PaintLab.RenderTree\3_Layers\2_PlainLayer.cs</Link>
     </Compile>

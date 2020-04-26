@@ -44,7 +44,7 @@ namespace LayoutFarm
             {
                 _defaultLayer.HitTestCore(hitChain);
 #if DEBUG
-                debug_RecordLayerInfo(_defaultLayer);
+                debug_RecordLayerInfo(_defaultLayer.dbugGetLayerInfo());
 #endif
             }
         }
@@ -236,11 +236,11 @@ namespace LayoutFarm
             this.dbug_BeginArr++;
             debug_PushTopDownElement(this);
             this.MarkValidContentArrangement();
-            //IsInTopDownReArrangePhase = true;
-            if (_defaultLayer != null)
-            {
-                _defaultLayer.TopDownReArrangeContent();
-            }
+            ////IsInTopDownReArrangePhase = true;
+            //if (_defaultLayer != null)
+            //{
+            //    _defaultLayer.TopDownReArrangeContent();
+            //}
 
             // BoxEvaluateScrollBar();
 
@@ -282,7 +282,7 @@ namespace LayoutFarm
             writer.EnterNewLevel();
             writer.LeaveCurrentLevel();
         }
-        void debug_RecordLayerInfo(RenderElementLayer layer)
+        void debug_RecordLayerInfo(dbugLayoutInfo layer)
         {
             RootGraphic visualroot = RootGraphic.dbugCurrentGlobalVRoot;
             if (visualroot.dbug_RecordDrawingChain)

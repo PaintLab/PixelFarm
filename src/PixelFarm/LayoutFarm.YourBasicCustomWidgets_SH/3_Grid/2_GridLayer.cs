@@ -6,7 +6,7 @@ using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
 namespace LayoutFarm.UI
 {
-    sealed class GridLayer : RenderElementLayer
+    sealed class GridLayer
     {
         GridTable.GridRowCollection _gridRows;
         GridTable.GridColumnCollection _gridCols;
@@ -14,6 +14,16 @@ namespace LayoutFarm.UI
         int _uniformCellHeight;
         CellSizeStyle _cellSizeStyle;
         GridTable _gridTable;
+
+        bool _validSize;
+        int _calculatedWidth;
+        int _calculatedHeight;
+
+#if DEBUG
+        static int dbugTotalId;
+        public readonly int dbug_layer_id = dbugTotalId++;
+#endif
+
         public GridLayer(int width, int height, CellSizeStyle cellSizeStyle, GridTable gridTable)
         {
             _cellSizeStyle = cellSizeStyle;
@@ -94,7 +104,7 @@ namespace LayoutFarm.UI
 
             //------------------------------------------------------------
         }
-        public override bool HitTestCore(HitChain hitChain)
+        public bool HitTestCore(HitChain hitChain)
         {
             hitChain.GetTestPoint(out int testX, out int testY);
             GridCell cell = GetCellByPosition(testX, testY);
@@ -114,10 +124,10 @@ namespace LayoutFarm.UI
 
         public int RowCount => _gridRows.Count;
         //
-        public override void TopDownReArrangeContent()
+        public void TopDownReArrangeContent()
         {
 #if DEBUG
-            vinv_dbug_EnterLayerReArrangeContent(this);
+            //vinv_dbug_EnterLayerReArrangeContent(this);
 #endif
             //--------------------------------- 
             //this.BeginLayerLayoutUpdate();
@@ -139,12 +149,13 @@ namespace LayoutFarm.UI
                 }
             }
 
-            ValidateArrangement();
+            _validSize = true;
+
             //---------------------------------
             //this.EndLayerLayoutUpdate();
 
 #if DEBUG
-            vinv_dbug_ExitLayerReArrangeContent();
+            //            vinv_dbug_ExitLayerReArrangeContent();
 #endif
         }
 
@@ -175,7 +186,7 @@ namespace LayoutFarm.UI
                 }
             }
         }
-        public override IEnumerable<RenderElement> GetRenderElementIter()
+        public IEnumerable<RenderElement> GetRenderElementIter()
         {
             if (_gridCols != null && _gridCols.Count > 0)
             {
@@ -192,7 +203,7 @@ namespace LayoutFarm.UI
                 }
             }
         }
-        public override IEnumerable<RenderElement> GetRenderElementReverseIter()
+        public IEnumerable<RenderElement> GetRenderElementReverseIter()
         {
             if (_gridCols != null && _gridCols.Count > 0)
             {
@@ -428,21 +439,13 @@ namespace LayoutFarm.UI
         public void MoveColumnAfter(GridColumn tobeMoveColumn, GridColumn afterColumn)
         {
             _gridCols.MoveColumnAfter(tobeMoveColumn, afterColumn);
-
         }
-        public override void TopDownReCalculateContentSize()
+        public void TopDownReCalculateContentSize()
         {
-#if DEBUG
-            vinv_dbug_EnterLayerReCalculateContent(this);
-#endif
-
-
             if (_gridRows == null || _gridCols.Count < 1)
             {
-                SetCalculatedLayerContentSize(0, 0);
-#if DEBUG
-                vinv_dbug_ExitLayerReCalculateContent();
-#endif
+
+                _calculatedWidth = _calculatedHeight = 0;
                 return;
             }
             //---------------------------------------------------------- 
@@ -480,9 +483,11 @@ namespace LayoutFarm.UI
                 maxHeight = 1;
             }
 
-            SetCalculatedLayerContentSize(sumWidth, maxHeight);
+            _calculatedWidth = sumWidth;
+            _calculatedHeight = maxHeight;
+
 #if DEBUG
-            vinv_dbug_ExitLayerReCalculateContent();
+            //vinv_dbug_ExitLayerReCalculateContent();
 #endif
 
 
@@ -555,8 +560,7 @@ namespace LayoutFarm.UI
 #if DEBUG
         public override string ToString()
         {
-            return "grid layer (L" + dbug_layer_id + this.dbugLayerState + ") postcal:" +
-                 this.CalculatedContentSize.ToString();
+            return "grid layer (L" + dbug_layer_id + ") postcal:";
         }
 
 #endif
@@ -569,7 +573,7 @@ namespace LayoutFarm.UI
             set => _gridBorderColor = value;
             //invalidate?
         }
-        public override void DrawChildContent(DrawBoard d, UpdateArea updateArea)
+        public void DrawChildContent(DrawBoard d, UpdateArea updateArea)
         {
 
             //TODO: temp fixed, review here again,
@@ -585,7 +589,7 @@ namespace LayoutFarm.UI
             {
                 return;
             }
-            this.BeginDrawingChildContent();
+
             GridColumn startColumn = leftTopGridItem._column;
             GridColumn currentColumn = startColumn;
             GridRow startRow = leftTopGridItem._row;
@@ -694,11 +698,11 @@ namespace LayoutFarm.UI
             }
 
             //...
-            this.FinishDrawingChildContent();
+
         }
 
 #if  DEBUG
-        public override void dbug_DumpElementProps(dbugLayoutMsgWriter writer)
+        public void dbug_DumpElementProps(dbugLayoutMsgWriter writer)
         {
             writer.Add(new dbugLayoutMsg(this, this.ToString()));
         }

@@ -4,15 +4,35 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 namespace LayoutFarm.RenderBoxes
 {
-
-    sealed class PlainLayer : RenderElementLayer
+#if DEBUG
+    public struct dbugLayoutInfo
     {
+        public readonly int dbugLayerId;
+        public dbugLayoutInfo(int dbugLayerId) => this.dbugLayerId = dbugLayerId;
+    }
+#endif
+
+    sealed class PlainLayer
+    {
+
         readonly LinkedList<RenderElement> _myElements = new LinkedList<RenderElement>();
+        int _contentW;
+        int _contentH;
+        bool _isHidden;
+        bool _isContentValid;
+#if DEBUG
+        static int dbug_TotalId;
+        public readonly int dbug_layer_id;
+#endif
         public PlainLayer()
         {
+#if DEBUG
+            dbug_layer_id = dbug_TotalId++;
+#endif
+
         }
         public BoxContentLayoutKind LayoutKind { get; set; }
-        public override IEnumerable<RenderElement> GetRenderElementReverseIter()
+        public IEnumerable<RenderElement> GetRenderElementReverseIter()
         {
             LinkedListNode<RenderElement> cur = _myElements.Last;
             while (cur != null)
@@ -21,7 +41,7 @@ namespace LayoutFarm.RenderBoxes
                 cur = cur.Previous;
             }
         }
-        public override IEnumerable<RenderElement> GetRenderElementIter()
+        public IEnumerable<RenderElement> GetRenderElementIter()
         {
             LinkedListNode<RenderElement> cur = _myElements.First;
             while (cur != null)
@@ -97,13 +117,13 @@ namespace LayoutFarm.RenderBoxes
             }
         }
 
-        public override void DrawChildContent(DrawBoard d, UpdateArea updateArea)
+        public void DrawChildContent(DrawBoard d, UpdateArea updateArea)
         {
-            if ((_layerFlags & IS_LAYER_HIDDEN) != 0)
+            if (_isHidden)
             {
                 return;
             }
-            this.BeginDrawingChildContent();
+
 
             int enter_canvas_x = d.OriginX;
             int enter_canvas_y = d.OriginY;
@@ -190,21 +210,22 @@ namespace LayoutFarm.RenderBoxes
                     break;
             }
 
-            this.FinishDrawingChildContent();
+
         }
 
-        public override bool HitTestCore(HitChain hitChain)
+        public bool HitTestCore(HitChain hitChain)
         {
-            if ((_layerFlags & IS_LAYER_HIDDEN) == 0)
+            if (_isHidden) return false;
+
+            //TODO: use LayoutKind to hint this test too if possible
+            foreach (RenderElement renderE in this.GetHitTestIter())
             {
-                foreach (RenderElement renderE in this.GetHitTestIter())
+                if (renderE.HitTestCore(hitChain))
                 {
-                    if (renderE.HitTestCore(hitChain))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
+
             return false;
         }
 
@@ -238,12 +259,13 @@ namespace LayoutFarm.RenderBoxes
         }
 
 
-        public override void TopDownReArrangeContent()
+        public void TopDownReArrangeContent()
         {
+            //content layout is 
             //vinv_IsInTopDownReArrangePhase = true;
-#if DEBUG
-            vinv_dbug_EnterLayerReArrangeContent(this);
-#endif
+            //#if DEBUG
+            //            vinv_dbug_EnterLayerReArrangeContent(this);
+            //#endif
             //this.BeginLayerLayoutUpdate();
             //if (CustomRearrangeContent != null)
             //{
@@ -251,24 +273,29 @@ namespace LayoutFarm.RenderBoxes
             //}
 
             //this.EndLayerLayoutUpdate();
-#if DEBUG
-            vinv_dbug_ExitLayerReArrangeContent();
-#endif
+            //#if DEBUG
+            //            vinv_dbug_ExitLayerReArrangeContent();
+            //#endif
         }
-        public override void TopDownReCalculateContentSize()
-        {
-#if DEBUG
 
-            vinv_dbug_EnterLayerReCalculateContent(this);
-#endif
+        public void TopDownReCalculateContentSize()
+        {
+            //#if DEBUG
+
+            //            vinv_dbug_EnterLayerReCalculateContent(this);
+            //#endif
             Size s = ReCalculateContentSizeNoLayout(_myElements);
-            SetCalculatedLayerContentSize(s.Width, s.Height);
-#if DEBUG
-            vinv_dbug_ExitLayerReCalculateContent();
-#endif
+            _contentW = s.Width;
+            _contentH = s.Height;
+
+            //#if DEBUG
+            //            vinv_dbug_ExitLayerReCalculateContent();
+            //#endif
         }
+        public Size CalculatedContentSize => new Size(_contentW, _contentH);
 #if DEBUG
-        public override void dbug_DumpElementProps(dbugLayoutMsgWriter writer)
+        public dbugLayoutInfo dbugGetLayerInfo() => new dbugLayoutInfo(this.dbug_layer_id);
+        public void dbug_DumpElementProps(dbugLayoutMsgWriter writer)
         {
             writer.Add(new dbugLayoutMsg(
                 this, this.ToString()));
@@ -282,8 +309,8 @@ namespace LayoutFarm.RenderBoxes
         public int dbugChildCount => _myElements.Count;
         public override string ToString()
         {
-            return "plain layer " + "(L" + dbug_layer_id + this.dbugLayerState + ") postcal:" +
-                this.CalculatedContentSize.ToString();
+            return "plain layer " + "(L" + dbug_layer_id + ") postcal:" +
+                new Size(_contentW, _contentH);
         }
 #endif
     }
