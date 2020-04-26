@@ -28,7 +28,7 @@ namespace LayoutFarm.CustomWidgets
         }
         public void BuildGrid(GridTable gridTable, CellSizeStyle cellSizeStyle)
         {
-            _gridLayer = new GridLayer(this, cellSizeStyle, gridTable);
+            _gridLayer = new GridLayer(this.Width, this.Height, cellSizeStyle, gridTable);
         }
         public GridColumn GetColumn(int col) => _gridLayer.GetColumn(col);
         public GridRow GetRow(int row) => _gridLayer.GetRow(row);

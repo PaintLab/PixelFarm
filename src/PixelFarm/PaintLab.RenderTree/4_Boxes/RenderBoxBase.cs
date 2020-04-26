@@ -122,34 +122,35 @@ namespace LayoutFarm
         {
             if (_defaultLayer == null)
             {
-                _defaultLayer = new PlainLayer(this);
+                _defaultLayer = new PlainLayer();
             }
-            _defaultLayer.AddChild(renderE);
+            _defaultLayer.AddChild(this, renderE);
         }
         public virtual void AddFirst(RenderElement renderE)
         {
             if (_defaultLayer == null)
             {
-                _defaultLayer = new PlainLayer(this);
+                _defaultLayer = new PlainLayer();
             }
-            _defaultLayer.AddFirst(renderE);
+            _defaultLayer.AddFirst(this, renderE);
         }
 
         public virtual void InsertAfter(RenderElement afterElem, RenderElement renderE)
         {
-            _defaultLayer.InsertChildAfter(afterElem, renderE);
+            _defaultLayer.InsertChildAfter(this, afterElem, renderE);
         }
         public virtual void InsertBefore(RenderElement beforeElem, RenderElement renderE)
         {
-            _defaultLayer.InsertChildBefore(beforeElem, renderE);
+            _defaultLayer.InsertChildBefore(this, beforeElem, renderE);
         }
         public virtual void RemoveChild(RenderElement renderE)
         {
-            _defaultLayer?.RemoveChild(renderE);
+            _defaultLayer?.RemoveChild(this, renderE);
         }
         public virtual void ClearAllChildren()
         {
             _defaultLayer?.Clear();
+            this.InvalidateGraphics();
         }
 
         public override RenderElement FindUnderlyingSiblingAtPoint(Point point)
@@ -189,7 +190,7 @@ namespace LayoutFarm
             }
         }
 
-        
+
 
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
@@ -204,7 +205,7 @@ namespace LayoutFarm
                 _defaultLayer.DrawChildContent(d, updateArea);
             }
         }
-        
+
         public BoxContentLayoutKind LayoutKind
         {
             get => _contentLayoutKind;

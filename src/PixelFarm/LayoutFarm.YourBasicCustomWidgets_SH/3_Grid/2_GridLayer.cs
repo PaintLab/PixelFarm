@@ -14,8 +14,7 @@ namespace LayoutFarm.UI
         int _uniformCellHeight;
         CellSizeStyle _cellSizeStyle;
         GridTable _gridTable;
-        public GridLayer(RenderElement owner, CellSizeStyle cellSizeStyle, GridTable gridTable)
-            : base(owner)
+        public GridLayer(int width, int height, CellSizeStyle cellSizeStyle, GridTable gridTable)
         {
             _cellSizeStyle = cellSizeStyle;
             _gridTable = gridTable;
@@ -56,7 +55,7 @@ namespace LayoutFarm.UI
             }
             else
             {
-                int columnWidth = owner.Width;
+                int columnWidth = width;
                 if (nColumns > 0)
                 {
                     columnWidth = columnWidth / nColumns;
@@ -79,7 +78,7 @@ namespace LayoutFarm.UI
                 int nRows = gridTable.RowCount;
                 if (nRows > 0)
                 {
-                    int rowHeight = owner.Height / nRows;
+                    int rowHeight = height / nRows;
                     int cy = 0;
                     for (int r = 0; r < nRows; r++)
                     {
@@ -112,7 +111,7 @@ namespace LayoutFarm.UI
             }
             return false;
         }
-        
+
         public int RowCount => _gridRows.Count;
         //
         public override void TopDownReArrangeContent()
@@ -424,12 +423,12 @@ namespace LayoutFarm.UI
         public void MoveRowAfter(GridRow fromRow, GridRow toRow)
         {
             _gridRows.MoveRowAfter(fromRow, toRow);
-            this.OwnerInvalidateGraphic();
+
         }
         public void MoveColumnAfter(GridColumn tobeMoveColumn, GridColumn afterColumn)
         {
             _gridCols.MoveColumnAfter(tobeMoveColumn, afterColumn);
-            this.OwnerInvalidateGraphic();
+
         }
         public override void TopDownReCalculateContentSize()
         {
@@ -557,8 +556,7 @@ namespace LayoutFarm.UI
         public override string ToString()
         {
             return "grid layer (L" + dbug_layer_id + this.dbugLayerState + ") postcal:" +
-                 this.PostCalculateContentSize.ToString() +
-                " of " + this.OwnerRenderElement.dbug_FullElementDescription();
+                 this.PostCalculateContentSize.ToString();
         }
 
 #endif
@@ -627,9 +625,9 @@ namespace LayoutFarm.UI
                         d.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
 
                         updateArea.CurrentRect = backup;//restore
-                        
+
                         if (d.PushClipAreaRect(gridItem.Width, gridItem.Height, updateArea))
-                        {                            
+                        {
                             updateArea.Offset(-x, -y);
                             RenderElement.Render(renderContent, d, updateArea);
                             updateArea.Offset(x, y);//not need to offset back -since we reset (1)
@@ -651,8 +649,8 @@ namespace LayoutFarm.UI
 
             d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);
 
-            
-            updateArea.CurrentRect = backup; 
+
+            updateArea.CurrentRect = backup;
             //----------------------
             currentColumn = startColumn;
             int n = 0;

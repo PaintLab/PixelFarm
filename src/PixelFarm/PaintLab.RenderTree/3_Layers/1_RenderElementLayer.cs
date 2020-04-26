@@ -34,27 +34,22 @@ namespace LayoutFarm.RenderBoxes
         //
 
         protected int _layerFlags;
-        protected RenderElement _owner;
         int _postCalculateContentWidth;
         int _postCalculateContentHeight;
 
-        public RenderElementLayer(RenderElement owner)
+        public RenderElementLayer()
         {
-            _owner = owner;
+
 #if DEBUG
             this.dbug_layer_id = dbug_layer_id_count;
             ++dbug_layer_id_count;
 #endif
         }
-        public RenderElement OwnerRenderElement => _owner;
 
-        
+
         public Size PostCalculateContentSize => new Size(_postCalculateContentWidth, _postCalculateContentHeight);
         //
-        protected void OwnerInvalidateGraphic()
-        {
-            _owner?.InvalidateGraphics();
-        }
+
 
         protected void BeginDrawingChildContent()
         {
@@ -64,7 +59,7 @@ namespace LayoutFarm.RenderBoxes
         {
             _layerFlags &= ~CONTENT_DRAWING;
         }
-         
+
         protected void SetPostCalculateLayerContentSize(int width, int height)
         {
             ValidateCalculateContentSize();

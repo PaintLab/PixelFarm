@@ -8,8 +8,7 @@ namespace LayoutFarm.RenderBoxes
     sealed class PlainLayer : RenderElementLayer
     {
         readonly LinkedList<RenderElement> _myElements = new LinkedList<RenderElement>();
-        public PlainLayer(RenderElement owner)
-            : base(owner)
+        public PlainLayer()
         {
         }
         public BoxContentLayoutKind LayoutKind { get; set; }
@@ -31,31 +30,31 @@ namespace LayoutFarm.RenderBoxes
                 cur = cur.Next;
             }
         }
-        public void InsertChildBefore(RenderElement before, RenderElement re)
+        public void InsertChildBefore(RenderElement parent, RenderElement before, RenderElement re)
         {
             re._internalLinkedNode = _myElements.AddBefore(before._internalLinkedNode, re);
-            RenderElement.SetParentLink(re, _owner);
+            RenderElement.SetParentLink(re, parent);
             re.InvalidateGraphics();
         }
-        public void InsertChildAfter(RenderElement after, RenderElement re)
+        public void InsertChildAfter(RenderElement parent, RenderElement after, RenderElement re)
         {
             re._internalLinkedNode = _myElements.AddAfter(after._internalLinkedNode, re);
-            RenderElement.SetParentLink(re, _owner);
+            RenderElement.SetParentLink(re, parent);
             re.InvalidateGraphics();
         }
-        public void AddFirst(RenderElement re)
+        public void AddFirst(RenderElement parent, RenderElement re)
         {
             re._internalLinkedNode = _myElements.AddFirst(re);
-            RenderElement.SetParentLink(re, _owner);
+            RenderElement.SetParentLink(re, parent);
             re.InvalidateGraphics();
         }
-        public void AddChild(RenderElement re)
+        public void AddChild(RenderElement parent, RenderElement re)
         {
             re._internalLinkedNode = _myElements.AddLast(re);
-            RenderElement.SetParentLink(re, _owner);
+            RenderElement.SetParentLink(re, parent);
             re.InvalidateGraphics();
         }
-        public void RemoveChild(RenderElement re)
+        public void RemoveChild(RenderElement parent, RenderElement re)
         {
             if (re._internalLinkedNode != null)
             {
@@ -64,8 +63,7 @@ namespace LayoutFarm.RenderBoxes
             }
             Rectangle bounds = re.RectBounds;
             RenderElement.SetParentLink(re, null);
-
-            RenderElement.InvalidateGraphicLocalArea(this.OwnerRenderElement, bounds);
+            RenderElement.InvalidateGraphicLocalArea(parent, bounds);
         }
         public void Clear()
         {
@@ -78,7 +76,6 @@ namespace LayoutFarm.RenderBoxes
             }
 
             _myElements.Clear();
-            this.OwnerRenderElement.InvalidateGraphics();
         }
 
         IEnumerable<RenderElement> GetDrawingIter()
@@ -286,7 +283,7 @@ namespace LayoutFarm.RenderBoxes
         public override string ToString()
         {
             return "plain layer " + "(L" + dbug_layer_id + this.dbugLayerState + ") postcal:" +
-                this.PostCalculateContentSize.ToString() + " of " + this.OwnerRenderElement.dbug_FullElementDescription();
+                this.PostCalculateContentSize.ToString();
         }
 #endif
     }
