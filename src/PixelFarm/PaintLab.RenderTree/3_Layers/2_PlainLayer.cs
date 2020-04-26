@@ -261,8 +261,8 @@ namespace LayoutFarm.RenderBoxes
 
             vinv_dbug_EnterLayerReCalculateContent(this);
 #endif
-
-            SetPostCalculateLayerContentSize(ReCalculateContentSizeNoLayout(_myElements));
+            Size s = ReCalculateContentSizeNoLayout(_myElements);
+            SetCalculatedLayerContentSize(s.Width, s.Height);
 #if DEBUG
             vinv_dbug_ExitLayerReCalculateContent();
 #endif
@@ -283,7 +283,7 @@ namespace LayoutFarm.RenderBoxes
         public override string ToString()
         {
             return "plain layer " + "(L" + dbug_layer_id + this.dbugLayerState + ") postcal:" +
-                this.PostCalculateContentSize.ToString();
+                this.CalculatedContentSize.ToString();
         }
 #endif
     }

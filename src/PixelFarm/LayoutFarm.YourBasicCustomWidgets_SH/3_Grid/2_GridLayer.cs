@@ -439,7 +439,7 @@ namespace LayoutFarm.UI
 
             if (_gridRows == null || _gridCols.Count < 1)
             {
-                SetPostCalculateLayerContentSize(0, 0);
+                SetCalculatedLayerContentSize(0, 0);
 #if DEBUG
                 vinv_dbug_ExitLayerReCalculateContent();
 #endif
@@ -480,7 +480,7 @@ namespace LayoutFarm.UI
                 maxHeight = 1;
             }
 
-            SetPostCalculateLayerContentSize(sumWidth, maxHeight);
+            SetCalculatedLayerContentSize(sumWidth, maxHeight);
 #if DEBUG
             vinv_dbug_ExitLayerReCalculateContent();
 #endif
@@ -556,7 +556,7 @@ namespace LayoutFarm.UI
         public override string ToString()
         {
             return "grid layer (L" + dbug_layer_id + this.dbugLayerState + ") postcal:" +
-                 this.PostCalculateContentSize.ToString();
+                 this.CalculatedContentSize.ToString();
         }
 
 #endif

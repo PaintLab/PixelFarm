@@ -20,20 +20,20 @@ namespace LayoutFarm.RenderBoxes
         //1. layout management
         //2. hit-test mx
         //3. drawing-mx
-         
+
         protected const int IS_LAYER_HIDDEN = 1 << (14 - 1);
-        
+
         protected const int MAY_HAS_OTHER_OVERLAP_CHILD = 1 << (16 - 1);
- 
+
         protected const int CONTENT_DRAWING = 1 << (22 - 1);
         protected const int ARRANGEMENT_VALID = 1 << (23 - 1);
         protected const int HAS_CALCULATE_SIZE = 1 << (24 - 1);
-       
-        //
 
+        // 
         protected int _layerFlags;
-        int _postCalculateContentWidth;
-        int _postCalculateContentHeight;
+
+        int _calculatedContentWidth;
+        int _calculatedContentHeight;
 
         public RenderElementLayer()
         {
@@ -42,11 +42,25 @@ namespace LayoutFarm.RenderBoxes
             this.dbug_layer_id = dbug_layer_id_count;
             ++dbug_layer_id_count;
 #endif
+        } 
+
+        public Size CalculatedContentSize => new Size(_calculatedContentWidth, _calculatedContentHeight);      
+        
+        protected void SetCalculatedLayerContentSize(int width, int height)
+        {
+            _layerFlags |= HAS_CALCULATE_SIZE;
+            _calculatedContentWidth = width;
+            _calculatedContentHeight = height;
         }
 
+          
+        public abstract bool HitTestCore(HitChain hitChain);
+        public abstract void TopDownReCalculateContentSize();
+        public abstract void TopDownReArrangeContent();
+        public abstract IEnumerable<RenderElement> GetRenderElementIter();
+        public abstract IEnumerable<RenderElement> GetRenderElementReverseIter();
+        public abstract void DrawChildContent(DrawBoard d, UpdateArea updateArea);
 
-        public Size PostCalculateContentSize => new Size(_postCalculateContentWidth, _postCalculateContentHeight);
-        //
 
 
         protected void BeginDrawingChildContent()
@@ -58,26 +72,7 @@ namespace LayoutFarm.RenderBoxes
             _layerFlags &= ~CONTENT_DRAWING;
         }
 
-        protected void SetPostCalculateLayerContentSize(int width, int height)
-        {
-            ValidateCalculateContentSize();
-            _postCalculateContentWidth = width;
-            _postCalculateContentHeight = height;
-        }
 
-        protected void SetPostCalculateLayerContentSize(Size s)
-        {
-            ValidateCalculateContentSize();
-            _postCalculateContentWidth = s.Width;
-            _postCalculateContentHeight = s.Height;
-        }
-
-        public abstract bool HitTestCore(HitChain hitChain);
-        public abstract void TopDownReCalculateContentSize();
-        public abstract void TopDownReArrangeContent();
-        public abstract IEnumerable<RenderElement> GetRenderElementIter();
-        public abstract IEnumerable<RenderElement> GetRenderElementReverseIter();
-        public abstract void DrawChildContent(DrawBoard d, UpdateArea updateArea);
         protected void ValidateArrangement()
         {
 #if DEBUG
@@ -89,11 +84,7 @@ namespace LayoutFarm.RenderBoxes
 
         //
         bool NeedReArrangeContent => (_layerFlags & ARRANGEMENT_VALID) == 0;
-        //
-        void ValidateCalculateContentSize()
-        {
-            _layerFlags |= HAS_CALCULATE_SIZE;
-        }
+
 #if DEBUG
         public RootGraphic dbugVRoot
         {

@@ -64,7 +64,7 @@ namespace LayoutFarm
             if (_defaultLayer != null)
             {
                 _defaultLayer.TopDownReCalculateContentSize();
-                ground_contentSize = _defaultLayer.PostCalculateContentSize;
+                ground_contentSize = _defaultLayer.CalculatedContentSize;
             }
             int finalWidth = ground_contentSize.Width;
             if (finalWidth == 0)
@@ -169,7 +169,7 @@ namespace LayoutFarm
             {
                 if (_defaultLayer != null)
                 {
-                    Size s1 = _defaultLayer.PostCalculateContentSize;
+                    Size s1 = _defaultLayer.CalculatedContentSize;
                     int s1_w = s1.Width;
                     int s1_h = s1.Height;
 
