@@ -21,6 +21,14 @@ namespace LayoutFarm.RenderBoxes
 #endif
 
     }
+
+    enum LayoutHint
+    {
+        Absolute,
+        HorizontalRow,
+        VerticalColumn
+    }
+
     sealed class RenderElementCollection
     {
         readonly LinkedList<RenderElement> _myElements = new LinkedList<RenderElement>();
@@ -38,7 +46,8 @@ namespace LayoutFarm.RenderBoxes
 #endif
 
         }
-        public BoxContentLayoutKind LayoutKind { get; set; }
+
+        public LayoutHint LayoutHint { get; set; }
         public IEnumerable<RenderElement> GetRenderElementReverseIter()
         {
             LinkedListNode<RenderElement> cur = _myElements.Last;
@@ -132,9 +141,9 @@ namespace LayoutFarm.RenderBoxes
             int enter_canvas_y = d.OriginY;
 
 
-            switch (LayoutKind)
+            switch (LayoutHint)
             {
-                case BoxContentLayoutKind.Absolute:
+                case LayoutHint.Absolute:
                     {
                         foreach (RenderElement child in this.GetDrawingIter())
                         {
@@ -157,7 +166,7 @@ namespace LayoutFarm.RenderBoxes
                         d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);
                     }
                     break;
-                case BoxContentLayoutKind.HorizontalStack:
+                case LayoutHint.HorizontalRow:
                     {
                         bool found = false;
                         foreach (RenderElement child in this.GetDrawingIter())
@@ -185,7 +194,7 @@ namespace LayoutFarm.RenderBoxes
                         d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);
                     }
                     break;
-                case BoxContentLayoutKind.VerticalStack:
+                case LayoutHint.VerticalColumn:
                     {
                         bool found = false;
                         foreach (RenderElement child in this.GetDrawingIter())
@@ -216,7 +225,6 @@ namespace LayoutFarm.RenderBoxes
 
         public bool HitTestCore(HitChain hitChain)
         {
-           
 
             //TODO: use LayoutKind to hint this test too if possible
             foreach (RenderElement renderE in this.GetHitTestIter())
