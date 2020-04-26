@@ -11,23 +11,30 @@ namespace LayoutFarm.RenderBoxes
         public dbugLayoutInfo(int dbugLayerId) => this.dbugLayerId = dbugLayerId;
     }
 #endif
-
-    sealed class PlainLayer
+    public interface IParentLink
     {
+        RenderElement ParentRenderElement { get; }
+        void AdjustLocation(ref int px, ref int py);
+        RenderElement FindOverlapedChildElementAtPoint(RenderElement afterThisChild, Point point);
+#if DEBUG
+        string dbugGetLinkInfo();
+#endif
 
+    }
+    sealed class RenderElementCollection
+    {
         readonly LinkedList<RenderElement> _myElements = new LinkedList<RenderElement>();
         int _contentW;
         int _contentH;
-        bool _isHidden;
-        bool _isContentValid;
+
 #if DEBUG
         static int dbug_TotalId;
-        public readonly int dbug_layer_id;
+        public readonly int dbug_id;
 #endif
-        public PlainLayer()
+        public RenderElementCollection()
         {
 #if DEBUG
-            dbug_layer_id = dbug_TotalId++;
+            dbug_id = dbug_TotalId++;
 #endif
 
         }
@@ -119,10 +126,6 @@ namespace LayoutFarm.RenderBoxes
 
         public void DrawChildContent(DrawBoard d, UpdateArea updateArea)
         {
-            if (_isHidden)
-            {
-                return;
-            }
 
 
             int enter_canvas_x = d.OriginX;
@@ -209,13 +212,11 @@ namespace LayoutFarm.RenderBoxes
                     }
                     break;
             }
-
-
         }
 
         public bool HitTestCore(HitChain hitChain)
         {
-            if (_isHidden) return false;
+           
 
             //TODO: use LayoutKind to hint this test too if possible
             foreach (RenderElement renderE in this.GetHitTestIter())
@@ -259,24 +260,6 @@ namespace LayoutFarm.RenderBoxes
         }
 
 
-        public void TopDownReArrangeContent()
-        {
-            //content layout is 
-            //vinv_IsInTopDownReArrangePhase = true;
-            //#if DEBUG
-            //            vinv_dbug_EnterLayerReArrangeContent(this);
-            //#endif
-            //this.BeginLayerLayoutUpdate();
-            //if (CustomRearrangeContent != null)
-            //{
-            //    CustomRearrangeContent(this, EventArgs.Empty);
-            //}
-
-            //this.EndLayerLayoutUpdate();
-            //#if DEBUG
-            //            vinv_dbug_ExitLayerReArrangeContent();
-            //#endif
-        }
 
         public void TopDownReCalculateContentSize()
         {
@@ -294,7 +277,7 @@ namespace LayoutFarm.RenderBoxes
         }
         public Size CalculatedContentSize => new Size(_contentW, _contentH);
 #if DEBUG
-        public dbugLayoutInfo dbugGetLayerInfo() => new dbugLayoutInfo(this.dbug_layer_id);
+        public dbugLayoutInfo dbugGetLayerInfo() => new dbugLayoutInfo(this.dbug_id);
         public void dbug_DumpElementProps(dbugLayoutMsgWriter writer)
         {
             writer.Add(new dbugLayoutMsg(
@@ -309,7 +292,7 @@ namespace LayoutFarm.RenderBoxes
         public int dbugChildCount => _myElements.Count;
         public override string ToString()
         {
-            return "plain layer " + "(L" + dbug_layer_id + ") postcal:" +
+            return "elems " + "(L" + dbug_id + ") postcal:" +
                 new Size(_contentW, _contentH);
         }
 #endif

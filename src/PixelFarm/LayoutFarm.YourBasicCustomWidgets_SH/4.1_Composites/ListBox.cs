@@ -1,10 +1,9 @@
 ﻿//Apache2, 2014-present, WinterDev
 
-using System;
-using System.Collections.Generic;
+using PixelFarm.CpuBlit;
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
-using PixelFarm.CpuBlit;
+
 namespace LayoutFarm.CustomWidgets
 {
     public class ListBox : AbstractControlBox
@@ -78,7 +77,7 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
-         
+
         public int ItemCount => _items.Count;
         public void AddItem(ListItem item)
         {

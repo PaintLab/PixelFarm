@@ -30,7 +30,8 @@ namespace LayoutFarm
     public abstract class RenderBoxBase : RenderElement, IContainerRenderElement
     {
         BoxContentLayoutKind _contentLayoutKind;
-        PlainLayer _defaultLayer;
+        RenderElementCollection _elements;
+
         public RenderBoxBase(RootGraphic rootgfx, int width, int height)
             : base(rootgfx, width, height)
         {
@@ -40,11 +41,11 @@ namespace LayoutFarm
 
         public override void ChildrenHitTestCore(HitChain hitChain)
         {
-            if (_defaultLayer != null)
+            if (_elements != null)
             {
-                _defaultLayer.HitTestCore(hitChain);
+                _elements.HitTestCore(hitChain);
 #if DEBUG
-                debug_RecordLayerInfo(_defaultLayer.dbugGetLayerInfo());
+                debug_RecordLayerInfo(_elements.dbugGetLayerInfo());
 #endif
             }
         }
@@ -61,10 +62,10 @@ namespace LayoutFarm
             int cHeight = this.Height;
             int cWidth = this.Width;
             Size ground_contentSize = Size.Empty;
-            if (_defaultLayer != null)
+            if (_elements != null)
             {
-                _defaultLayer.TopDownReCalculateContentSize();
-                ground_contentSize = _defaultLayer.CalculatedContentSize;
+                _elements.TopDownReCalculateContentSize();
+                ground_contentSize = _elements.CalculatedContentSize;
             }
             int finalWidth = ground_contentSize.Width;
             if (finalWidth == 0)
@@ -108,9 +109,9 @@ namespace LayoutFarm
             if (this.Root != rootgfx)
             {
                 DirectSetRootGraphics(this, rootgfx);
-                if (_defaultLayer != null)
+                if (_elements != null)
                 {
-                    foreach (var r in _defaultLayer.GetRenderElementIter())
+                    foreach (var r in _elements.GetRenderElementIter())
                     {
                         r.ResetRootGraphics(rootgfx);
                     }
@@ -120,36 +121,36 @@ namespace LayoutFarm
 
         public virtual void AddChild(RenderElement renderE)
         {
-            if (_defaultLayer == null)
+            if (_elements == null)
             {
-                _defaultLayer = new PlainLayer();
+                _elements = new RenderElementCollection();
             }
-            _defaultLayer.AddChild(this, renderE);
+            _elements.AddChild(this, renderE);
         }
         public virtual void AddFirst(RenderElement renderE)
         {
-            if (_defaultLayer == null)
+            if (_elements == null)
             {
-                _defaultLayer = new PlainLayer();
+                _elements = new RenderElementCollection();
             }
-            _defaultLayer.AddFirst(this, renderE);
+            _elements.AddFirst(this, renderE);
         }
 
         public virtual void InsertAfter(RenderElement afterElem, RenderElement renderE)
         {
-            _defaultLayer.InsertChildAfter(this, afterElem, renderE);
+            _elements.InsertChildAfter(this, afterElem, renderE);
         }
         public virtual void InsertBefore(RenderElement beforeElem, RenderElement renderE)
         {
-            _defaultLayer.InsertChildBefore(this, beforeElem, renderE);
+            _elements.InsertChildBefore(this, beforeElem, renderE);
         }
         public virtual void RemoveChild(RenderElement renderE)
         {
-            _defaultLayer?.RemoveChild(this, renderE);
+            _elements?.RemoveChild(this, renderE);
         }
         public virtual void ClearAllChildren()
         {
-            _defaultLayer?.Clear();
+            _elements?.Clear();
             this.InvalidateGraphics();
         }
 
@@ -167,9 +168,9 @@ namespace LayoutFarm
         {
             get
             {
-                if (_defaultLayer != null)
+                if (_elements != null)
                 {
-                    Size s1 = _defaultLayer.CalculatedContentSize;
+                    Size s1 = _elements.CalculatedContentSize;
                     int s1_w = s1.Width;
                     int s1_h = s1.Height;
 
@@ -194,7 +195,7 @@ namespace LayoutFarm
 
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
-            if (_defaultLayer != null)
+            if (_elements != null)
             {
 #if DEBUG
                 if (!debugBreaK1)
@@ -202,7 +203,7 @@ namespace LayoutFarm
                     debugBreaK1 = true;
                 }
 #endif
-                _defaultLayer.DrawChildContent(d, updateArea);
+                _elements.DrawChildContent(d, updateArea);
             }
         }
 
@@ -212,9 +213,9 @@ namespace LayoutFarm
             set
             {
                 _contentLayoutKind = value;
-                if (_defaultLayer != null)
+                if (_elements != null)
                 {
-                    _defaultLayer.LayoutKind = value;
+                    _elements.LayoutKind = value;
                 }
             }
         }
@@ -223,7 +224,7 @@ namespace LayoutFarm
         {
             get
             {
-                return _defaultLayer != null && _defaultLayer.dbugChildCount > 0;
+                return _elements != null && _elements.dbugChildCount > 0;
             }
         }
 
