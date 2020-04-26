@@ -20,17 +20,15 @@ namespace LayoutFarm.RenderBoxes
         //1. layout management
         //2. hit-test mx
         //3. drawing-mx
-
-
+         
         protected const int IS_LAYER_HIDDEN = 1 << (14 - 1);
-        protected const int IS_GROUND_LAYER = 1 << (15 - 1);
+        
         protected const int MAY_HAS_OTHER_OVERLAP_CHILD = 1 << (16 - 1);
-        protected const int DOUBLE_BACKCANVAS_WIDTH = 1 << (18 - 1);
-        protected const int DOUBLE_BACKCANVAS_HEIGHT = 1 << (19 - 1);
+ 
         protected const int CONTENT_DRAWING = 1 << (22 - 1);
         protected const int ARRANGEMENT_VALID = 1 << (23 - 1);
         protected const int HAS_CALCULATE_SIZE = 1 << (24 - 1);
-        protected const int FLOWLAYER_HAS_MULTILINE = 1 << (25 - 1);
+       
         //
 
         protected int _layerFlags;
