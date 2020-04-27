@@ -2,8 +2,35 @@
 
 
 using PixelFarm.Drawing;
+using System.Collections.Generic;
+using LayoutFarm.RenderBoxes;
+
 namespace LayoutFarm.CustomWidgets
 {
+
+    public class MultiLineLayer
+    {
+        List<LineBox> _linesBoxes = new List<LineBox>();
+        public MultiLineLayer()
+        {
+
+        }
+        public void Add(LineBox line)
+        {
+            _linesBoxes.Add(line);
+        }
+        public void Clear()
+        {
+            _linesBoxes.Clear();
+        }
+    }
+    public class LineBox
+    {
+        LinkedList<RenderElement> _renderElems = new LinkedList<RenderElement>();
+        public void Add(RenderElement renderE) => _renderElems.AddLast(renderE);
+        public void Clear() => _renderElems.Clear();
+        public int Count => _renderElems.Count;
+    }
 
 
     public class CustomRenderBox : RenderBoxBase
@@ -28,6 +55,8 @@ namespace LayoutFarm.CustomWidgets
         byte _borderTop;
         byte _borderRight;
         byte _borderBottom;
+
+        MultiLineLayer _multiLines;
 
         public CustomRenderBox(RootGraphic rootgfx, int width, int height)
             : base(rootgfx, width, height)
@@ -261,6 +290,18 @@ namespace LayoutFarm.CustomWidgets
             //   new Rectangle(updateArea.Left, updateArea.Top, updateArea.Width, updateArea.Height));
 #endif
         }
+
+
+        protected override bool CustomHitTest(HitChain hitChain)
+        {
+            return base.CustomHitTest(hitChain);
+        }
+        public override void ChildrenHitTestCore(HitChain hitChain)
+        {
+            base.ChildrenHitTestCore(hitChain);
+        }
+
+        public MultiLineLayer MultiLinesLayer { get; set; }
     }
 
     public class DoubleBufferCustomRenderBox : CustomRenderBox

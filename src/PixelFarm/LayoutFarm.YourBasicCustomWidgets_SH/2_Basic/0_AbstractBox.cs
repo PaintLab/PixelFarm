@@ -126,6 +126,9 @@ namespace LayoutFarm.CustomWidgets
 
         protected CustomRenderBox _primElement;
         CustomRenderBoxSpec _boxSpec;
+        
+
+
         public AbstractBox(int width, int height)
             : base(width, height)
         {
@@ -517,6 +520,18 @@ namespace LayoutFarm.CustomWidgets
             //this.InvalidateGraphics();
             //temp : arrange as vertical stack***
             Rectangle preBounds = this.Bounds;
+
+            //we can use manual layout here
+            //or use default built-in layout machanism
+
+            int limitW = 99999;
+            if (this.HasSpecificWidth)
+            {
+                limitW = this.Width;
+            }
+            _primElement.LayoutKind = this.ContentLayoutKind;
+
+
             switch (this.ContentLayoutKind)
             {
                 case BoxContentLayoutKind.VerticalStack:
@@ -704,20 +719,71 @@ namespace LayoutFarm.CustomWidgets
                         int xpos = this.PaddingLeft; //start X at paddingLeft
                         int ypos = this.PaddingTop; //start Y at padding top
                         IUICollection<UIElement> childrenIter = GetDefaultChildrenIter();
+
+                        //check if we want to use line-box or not 
+
+                        //our primary renderElement is CustomRenderBox
+                        //
+                        MultiLineLayer multiLines = _primElement.MultiLinesLayer;
+                        if (multiLines == null)
+                        {
+                            _primElement.MultiLinesLayer = multiLines = new MultiLineLayer();
+                        }
+                        else
+                        {
+                            _primElement.ClearAllChildren();
+                        }
+
                         if (childrenIter != null && childrenIter.Count > 0)
                         {
                             int hostW = this.Width;//***
 
                             //flow layout
                             //we need to flow it into multi-linebox
+                            LineBox linebox = new LineBox();
+                            multiLines.Add(linebox);
+
+                            RootGraphic root = _primElement.Root;
 
                             foreach (UIElement ui in childrenIter.GetIter())
                             {
-                                if (ui is AbstractRectUI rect)
+                                if (ui is AbstractRectUI rectUI)
                                 {
-                                    rect.PerformContentLayout();
+                                    rectUI.PerformContentLayout();
 
-                                    int right = xpos + rect.Width + rect.MarginLeftRight; //new pos
+                                    int right = xpos + rectUI.Width + rectUI.MarginLeftRight; //new pos
+                                    if (right > hostW)
+                                    {
+                                        //start a new line
+                                        xpos = this.PaddingLeft;
+                                        ypos += maxBottom + 1; //we need some margin 
+                                        maxBottom = 0;
+                                        right = xpos + rectUI.Width + rectUI.MarginLeftRight;
+
+                                        linebox = new LineBox();
+                                        multiLines.Add(linebox);
+                                    }
+
+                                    rectUI.SetLocationAndSize(xpos, ypos + rectUI.MarginTop, rectUI.Width, rectUI.Height); //
+                                                                                                                           //
+                                    int tmp_bottom = rectUI.Height;
+                                    if (tmp_bottom > maxBottom)
+                                    {
+                                        maxBottom = tmp_bottom;
+                                    }
+
+                                    xpos = right;
+                                    //--------
+                                 
+                                    RenderElement renderE = ui.GetPrimaryRenderElement(root);
+                                    linebox.Add(renderE);
+                                }
+                                else
+                                {
+                                    //ui is not rect
+                                    RenderElement renderE = ui.GetPrimaryRenderElement(root);
+
+                                    int right = xpos + renderE.Width;
                                     if (right > hostW)
                                     {
                                         //start a new line
@@ -725,26 +791,25 @@ namespace LayoutFarm.CustomWidgets
                                         ypos += maxBottom + 1; //we need some margin 
 
                                         maxBottom = 0;
-                                        right = xpos + rect.Width + rect.MarginLeftRight;
+                                        right = xpos + renderE.Width;
+                                        linebox = new LineBox();
+                                        multiLines.Add(linebox);
                                     }
 
-                                    rect.SetLocationAndSize(xpos, ypos + rect.MarginTop, rect.Width, rect.Height); //
-                                                                                                                   //
-                                    int tmp_bottom = rect.Height;
+                                    renderE.SetLocation(xpos, ypos);
+ 
+                                    int tmp_bottom = renderE.Height;
                                     if (tmp_bottom > maxBottom)
                                     {
                                         maxBottom = tmp_bottom;
                                     }
 
-
                                     xpos = right;
-
+                                    linebox.Add(renderE);
                                 }
                             }
                         }
                         this.SetInnerContentSize(xpos, maxBottom);
-
-
                     }
                     break;
                 default:

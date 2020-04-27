@@ -2,6 +2,10 @@
 
 using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
+
+using System.Collections.Generic;
+using System;
+
 namespace LayoutFarm
 {
     public enum BoxContentLayoutKind : byte
@@ -31,6 +35,7 @@ namespace LayoutFarm
     {
         BoxContentLayoutKind _contentLayoutKind;
         RenderElementCollection _elements;
+        bool _layoutValid;
 
         public RenderBoxBase(RootGraphic rootgfx, int width, int height)
             : base(rootgfx, width, height)
@@ -125,6 +130,7 @@ namespace LayoutFarm
             {
                 _elements = new RenderElementCollection();
             }
+            _layoutValid = false;
             _elements.AddChild(this, renderE);
         }
         public virtual void AddFirst(RenderElement renderE)
@@ -133,23 +139,28 @@ namespace LayoutFarm
             {
                 _elements = new RenderElementCollection();
             }
+            _layoutValid = false;
             _elements.AddFirst(this, renderE);
         }
 
         public virtual void InsertAfter(RenderElement afterElem, RenderElement renderE)
         {
+            _layoutValid = false;
             _elements.InsertChildAfter(this, afterElem, renderE);
         }
         public virtual void InsertBefore(RenderElement beforeElem, RenderElement renderE)
         {
+            _layoutValid = false;
             _elements.InsertChildBefore(this, beforeElem, renderE);
         }
         public virtual void RemoveChild(RenderElement renderE)
         {
+            _layoutValid = false;
             _elements?.RemoveChild(this, renderE);
         }
         public virtual void ClearAllChildren()
         {
+            _layoutValid = false;
             _elements?.Clear();
             this.InvalidateGraphics();
         }
@@ -191,7 +202,7 @@ namespace LayoutFarm
             }
         }
 
-
+        internal RenderElementCollection GetElemCollection() => _elements;
 
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
@@ -212,13 +223,13 @@ namespace LayoutFarm
             get => _contentLayoutKind;
             set
             {
+                if (_contentLayoutKind == value) { return; }
+                _layoutValid = false;
                 _contentLayoutKind = value;
-                if (_elements != null)
-                {
-                    _elements.LayoutKind = value;
-                }
             }
         }
+
+         
 #if DEBUG
         public bool debugDefaultLayerHasChild
         {
@@ -295,4 +306,5 @@ namespace LayoutFarm
 #endif
 
     }
+     
 }
