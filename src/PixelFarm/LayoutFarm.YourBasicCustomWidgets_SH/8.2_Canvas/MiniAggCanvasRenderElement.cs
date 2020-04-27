@@ -27,9 +27,7 @@ namespace LayoutFarm.CustomWidgets
             this.BackColor = Color.White;
         }
          
-        public override void ClearAllChildren()
-        {
-        }
+         
         public Color BackColor { get; set; }
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {

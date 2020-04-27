@@ -48,24 +48,7 @@ namespace LayoutFarm.RenderBoxes
         }
 
         public LayoutHint LayoutHint { get; set; }
-        public IEnumerable<RenderElement> GetRenderElementReverseIter()
-        {
-            LinkedListNode<RenderElement> cur = _myElements.Last;
-            while (cur != null)
-            {
-                yield return cur.Value;
-                cur = cur.Previous;
-            }
-        }
-        public IEnumerable<RenderElement> GetRenderElementIter()
-        {
-            LinkedListNode<RenderElement> cur = _myElements.First;
-            while (cur != null)
-            {
-                yield return cur.Value;
-                cur = cur.Next;
-            }
-        }
+      
         public void InsertChildBefore(RenderElement parent, RenderElement before, RenderElement re)
         {
             re._internalLinkedNode = _myElements.AddBefore(before._internalLinkedNode, re);
@@ -132,7 +115,24 @@ namespace LayoutFarm.RenderBoxes
                 curNode = curNode.Previous;
             }
         }
-
+        public IEnumerable<RenderElement> GetRenderElementReverseIter()
+        {
+            LinkedListNode<RenderElement> cur = _myElements.Last;
+            while (cur != null)
+            {
+                yield return cur.Value;
+                cur = cur.Previous;
+            }
+        }
+        public IEnumerable<RenderElement> GetRenderElementIter()
+        {
+            LinkedListNode<RenderElement> cur = _myElements.First;
+            while (cur != null)
+            {
+                yield return cur.Value;
+                cur = cur.Next;
+            }
+        }
         public void DrawChildContent(DrawBoard d, UpdateArea updateArea)
         {
 
