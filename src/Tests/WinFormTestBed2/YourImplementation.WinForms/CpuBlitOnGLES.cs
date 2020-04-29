@@ -264,11 +264,7 @@ namespace YourImplementation
             //------------------------------------------------------------------------- 
         }
 
-
-        public override void ResetRootGraphics(RootGraphic rootgfx)
-        {
-
-        }
+         
         public void Dispose()
         {
 
