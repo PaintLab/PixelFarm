@@ -21,6 +21,7 @@ namespace LayoutFarm
 
 
             Box hostBox = new Box(400, 600);
+            hostBox.SetLocation(10, 10);
             hostBox.BackColor = Color.White;
             //hostBox.ContentLayoutKind = BoxContentLayoutKind.HorizontalStack;
             //hostBox.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
@@ -34,13 +35,13 @@ namespace LayoutFarm
 
             for (int i = 0; i < 30; ++i)
             {
-                var box = new Box(20, boxHeight);
+                var box = new Box(350, boxHeight);
                 //box.HasSpecificWidth = false;
-                //box.HasSpecificHeight = false;
-
+                //box.HasSpecificHeight = false; 
                 box.BackColor = _colors[i % 5];
                 box.SetMargins(1);
                 box.SetLocation(boxX, boxY);
+                box.MouseDown += Box_MouseDown;
                 hostBox.Add(box);
                 boxY += 30;
                 boxX += 20;
@@ -52,5 +53,15 @@ namespace LayoutFarm
 
         }
 
+        private void Box_MouseDown(object sender, UIMouseDownEventArgs e)
+        {
+            if (sender is Box box)
+            {
+#if DEBUG
+                box.CurrentPrimaryRenderElement.dbugBreak = true;
+#endif
+                box.BackColor = PixelFarm.Drawing.Color.White;
+            }
+        }
     }
 }

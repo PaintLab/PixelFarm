@@ -139,43 +139,43 @@ namespace LayoutFarm
         public bool HasParent => _parentLink != null;
 
 
-//        public virtual void ClearAllChildren()
-//        {
-//#if DEBUG
-//            System.Diagnostics.Debug.WriteLine(nameof(ClearAllChildren) + " no IMPL");
-//#endif
+        //        public virtual void ClearAllChildren()
+        //        {
+        //#if DEBUG
+        //            System.Diagnostics.Debug.WriteLine(nameof(ClearAllChildren) + " no IMPL");
+        //#endif
 
-//        }
-//        public virtual void AddFirst(RenderElement renderE)
-//        {
-//#if DEBUG
-//            System.Diagnostics.Debug.WriteLine(nameof(AddChild) + " no IMPL");
-//#endif
-//        }
-//        public virtual void AddChild(RenderElement renderE)
-//        {
-//#if DEBUG
-//            System.Diagnostics.Debug.WriteLine(nameof(AddChild) + " no IMPL");
-//#endif
-//        }
-//        public virtual void InsertAfter(RenderElement afterElem, RenderElement renderE)
-//        {
-//#if DEBUG
-//            System.Diagnostics.Debug.WriteLine(nameof(InsertAfter) + " no IMPL");
-//#endif
-//        }
-//        public virtual void InsertBefore(RenderElement beforeElem, RenderElement renderE)
-//        {
-//#if DEBUG
-//            System.Diagnostics.Debug.WriteLine(nameof(InsertBefore) + " no IMPL");
-//#endif
-//        }
-//        public virtual void RemoveChild(RenderElement renderE)
-//        {
-//#if DEBUG
-//            System.Diagnostics.Debug.WriteLine(nameof(RemoveChild) + " no IMPL");
-//#endif
-//        }
+        //        }
+        //        public virtual void AddFirst(RenderElement renderE)
+        //        {
+        //#if DEBUG
+        //            System.Diagnostics.Debug.WriteLine(nameof(AddChild) + " no IMPL");
+        //#endif
+        //        }
+        //        public virtual void AddChild(RenderElement renderE)
+        //        {
+        //#if DEBUG
+        //            System.Diagnostics.Debug.WriteLine(nameof(AddChild) + " no IMPL");
+        //#endif
+        //        }
+        //        public virtual void InsertAfter(RenderElement afterElem, RenderElement renderE)
+        //        {
+        //#if DEBUG
+        //            System.Diagnostics.Debug.WriteLine(nameof(InsertAfter) + " no IMPL");
+        //#endif
+        //        }
+        //        public virtual void InsertBefore(RenderElement beforeElem, RenderElement renderE)
+        //        {
+        //#if DEBUG
+        //            System.Diagnostics.Debug.WriteLine(nameof(InsertBefore) + " no IMPL");
+        //#endif
+        //        }
+        //        public virtual void RemoveChild(RenderElement renderE)
+        //        {
+        //#if DEBUG
+        //            System.Diagnostics.Debug.WriteLine(nameof(RemoveChild) + " no IMPL");
+        //#endif
+        //        }
 
         //public virtual void RemoveSelf()
         //{   
@@ -501,6 +501,12 @@ namespace LayoutFarm
         public static void Render(RenderElement renderE, DrawBoard d, UpdateArea updateArea)
         {
             //TODO: rename Canvas to Drawboard ?
+#if DEBUG
+            if (renderE.dbugBreak)
+            {
+
+            }
+#endif
             if ((renderE._propFlags & RenderElementConst.HIDDEN) == RenderElementConst.HIDDEN)
             {
                 return;
