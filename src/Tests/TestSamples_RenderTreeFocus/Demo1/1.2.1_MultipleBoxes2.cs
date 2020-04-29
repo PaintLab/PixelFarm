@@ -33,9 +33,9 @@ namespace LayoutFarm
             int boxY = 0;
 
 
-            for (int i = 0; i < 3; ++i)
+            for (int i = 0; i <30; ++i)
             {
-                var box = new Box(300, boxHeight);
+                var box = new Box(20, boxHeight);
                 //box.HasSpecificWidth = false;
                 //box.HasSpecificHeight = false; 
                 box.BackColor = _colors[i % 5];
