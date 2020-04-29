@@ -25,7 +25,9 @@ namespace LayoutFarm.RenderBoxes
     public enum LayoutHint : byte
     {
         Custom,
+
         HorizontalRowNonOverlap,
+
         VerticalColumnNonOverlap,
     }
     sealed class RenderElementCollection
