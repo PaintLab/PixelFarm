@@ -515,7 +515,7 @@ namespace LayoutFarm.CustomWidgets
         protected abstract IUICollection<UIElement> GetDefaultChildrenIter();
 
 
-        bool _preserveLineBoxes = false;
+        bool _preserveLineBoxes = true;
         public bool PreserverLineBoxes
         {
             get => _preserveLineBoxes;
@@ -774,23 +774,28 @@ namespace LayoutFarm.CustomWidgets
                                     if (new_x > limit_w)
                                     {
                                         //start new line
-                                        new_x = xpos = PaddingLeft; //start
+                                        xpos = PaddingLeft; //start
                                         ypos += max_lineHeight + 1;
                                         max_lineHeight = 0;//reset
 
                                         linebox = new LineBox(_primElement);
                                         linebox.LineTop = ypos;
                                         multiLineLayer.Add(linebox);
+
+                                        new_x = xpos + rect.Width + rect.MarginLeftRight;
                                     }
 
+                                    int tmp_bottom = 0;
                                     if (_preserveLineBoxes)
                                     {
                                         //new top is relative to linetop
                                         rect.SetLocationAndSize(xpos, rect.MarginTop, rect.Width, rect.Height); //
+                                        tmp_bottom = ypos + rect.Bottom;
                                     }
                                     else
                                     {
                                         rect.SetLocationAndSize(xpos, ypos + rect.MarginTop, rect.Width, rect.Height); //
+                                        tmp_bottom = rect.Bottom;
                                     }
 
 
@@ -802,7 +807,7 @@ namespace LayoutFarm.CustomWidgets
                                         linebox.LineHeight = max_lineHeight;
                                     }
 
-                                    int tmp_bottom = rect.Bottom;
+
                                     if (tmp_bottom > maxBottom)
                                     {
                                         //start 
@@ -810,7 +815,14 @@ namespace LayoutFarm.CustomWidgets
                                     }
                                 }
                                 //
-                                linebox.Add(ui.GetPrimaryRenderElement(_primElement.Root));
+
+                                RenderElement renderE = ui.GetPrimaryRenderElement(_primElement.Root);
+                                linebox.Add(renderE);
+                                if (_preserveLineBoxes)
+                                {
+                                    RenderElement.SetParentLink(renderE, linebox);
+                                }
+
                             }
                             left_to_right_max_x = xpos;
                         }

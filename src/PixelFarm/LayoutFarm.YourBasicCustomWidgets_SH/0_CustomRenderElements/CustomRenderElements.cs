@@ -73,13 +73,10 @@ namespace LayoutFarm.CustomWidgets
         public void Clear()
         {
             _linkList.Clear();
-
-            //TODO: need to clear all parent link?
-
+            //TODO: need to clear all parent link? 
         }
         public void Add(RenderElement renderE)
-        {
-            RenderElement.SetParentLink(renderE, this);
+        {   
             _linkList.AddLast(renderE);
         }
         public int Count => _linkList.Count;
