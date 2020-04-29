@@ -37,7 +37,7 @@ namespace LayoutFarm
     static class RenderElemHelper
     {
 
-        public static void DrawChildContent(LayoutHint layoutHint, IEnumerable<RenderElement> drawingIter, DrawBoard d, UpdateArea updateArea)
+        public static void DrawChildContent(HitTestHint layoutHint, IEnumerable<RenderElement> drawingIter, DrawBoard d, UpdateArea updateArea)
         {
             int enter_canvas_x = d.OriginX;
             int enter_canvas_y = d.OriginY;
@@ -67,7 +67,7 @@ namespace LayoutFarm
                         d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);
                     }
                     break;
-                case LayoutHint.HorizontalRowNonOverlap:
+                case HitTestHint.HorizontalRowNonOverlap:
                     {
                         bool found = false;
                         foreach (RenderElement child in drawingIter)
@@ -95,7 +95,7 @@ namespace LayoutFarm
                         d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);
                     }
                     break;
-                case LayoutHint.VerticalColumnNonOverlap:
+                case HitTestHint.VerticalColumnNonOverlap:
                     {
                         bool found = false;
                         foreach (RenderElement child in drawingIter)
@@ -124,7 +124,7 @@ namespace LayoutFarm
             }
         }
 
-        public static bool HitTestCore(HitChain hitChain, LayoutHint layoutHint, IEnumerable<RenderElement> hitTestIter)
+        public static bool HitTestCore(HitChain hitChain, HitTestHint layoutHint, IEnumerable<RenderElement> hitTestIter)
         {
             switch (layoutHint)
             {
@@ -139,7 +139,7 @@ namespace LayoutFarm
                         }
                     }
                     return false;
-                case LayoutHint.HorizontalRowNonOverlap:
+                case HitTestHint.HorizontalRowNonOverlap:
                     {
                         foreach (RenderElement renderE in hitTestIter)
                         {
@@ -160,7 +160,7 @@ namespace LayoutFarm
 
                     }
                     return false;
-                case LayoutHint.VerticalColumnNonOverlap:
+                case HitTestHint.VerticalColumnNonOverlap:
                     {
                         foreach (RenderElement renderE in hitTestIter)
                         {
@@ -234,7 +234,7 @@ namespace LayoutFarm
         {
             if (_elements != null)
             {
-                RenderElemHelper.HitTestCore(hitChain, ContentLayoutHint, _elements.GetHitTestIter());
+                RenderElemHelper.HitTestCore(hitChain, ContentHitTestHint, _elements.GetHitTestIter());
 #if DEBUG
                 debug_RecordLayerInfo(_elements.dbugGetLayerInfo());
 #endif
@@ -386,14 +386,14 @@ namespace LayoutFarm
                 //***                
 
                 RenderElemHelper.DrawChildContent(
-                    ContentLayoutHint,
+                    ContentHitTestHint,
                     _elements.GetDrawingIter(),
                     d, updateArea);
             }
         }
 
 
-        public LayoutHint ContentLayoutHint { get; set; }
+        public HitTestHint ContentHitTestHint { get; set; }
 
 #if DEBUG
         public bool debugDefaultLayerHasChild

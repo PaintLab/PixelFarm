@@ -22,7 +22,7 @@ namespace LayoutFarm.RenderBoxes
 
     }
 
-    public enum LayoutHint : byte
+    public enum HitTestHint : byte
     {
         Custom,
 

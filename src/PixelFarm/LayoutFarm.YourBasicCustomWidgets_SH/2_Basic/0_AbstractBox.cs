@@ -585,7 +585,7 @@ namespace LayoutFarm.CustomWidgets
                 if (_primElement != null)
                 {
                     //assign layout hint 
-                    _primElement.ContentLayoutHint = RenderBoxes.LayoutHint.Custom;
+                    _primElement.ContentHitTestHint = RenderBoxes.HitTestHint.Custom;
                 }
             }
         }
@@ -648,7 +648,7 @@ namespace LayoutFarm.CustomWidgets
                 case BoxContentLayoutKind.VerticalStack:
                     {
                         //TODO: check if non-overlap or not
-                        _primElement.ContentLayoutHint = RenderBoxes.LayoutHint.VerticalColumnNonOverlap;
+                        _primElement.ContentHitTestHint = RenderBoxes.HitTestHint.VerticalColumnNonOverlap;
 
                         int maxRight = 0;
 
@@ -691,7 +691,7 @@ namespace LayoutFarm.CustomWidgets
 
                 case BoxContentLayoutKind.HorizontalStack:
                     {
-                        _primElement.ContentLayoutHint = RenderBoxes.LayoutHint.HorizontalRowNonOverlap;
+                        _primElement.ContentHitTestHint = RenderBoxes.HitTestHint.HorizontalRowNonOverlap;
 
                         int maxBottom = 0;
                         //experiment
@@ -826,7 +826,7 @@ namespace LayoutFarm.CustomWidgets
                     break;
                 case BoxContentLayoutKind.HorizontalFlow:
                     {
-                        _primElement.ContentLayoutHint = RenderBoxes.LayoutHint.Custom;
+                        _primElement.ContentHitTestHint = RenderBoxes.HitTestHint.Custom;
 
                         int maxBottom = 0;
                         //experiment
