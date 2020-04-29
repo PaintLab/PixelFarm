@@ -567,7 +567,6 @@ namespace LayoutFarm.CustomWidgets
 
         public override int InnerWidth => _innerWidth;
         public override int InnerHeight => _innerHeight;
-
         public virtual void SetInnerContentSize(int w, int h)
         {
             _innerWidth = w;
@@ -585,13 +584,9 @@ namespace LayoutFarm.CustomWidgets
                 _boxContentLayoutKind = value; //invalidate layout after change this
                 if (_primElement != null)
                 {
-                    _primElement.LayoutKind = value;
+                    //assign layout hint 
+                    _primElement.LayoutHint = RenderBoxes.LayoutHint.Custom;
                 }
-
-                //if (_uiList != null && _uiList.Count > 0)
-                //{
-                //    this.InvalidateLayout();
-                //}
             }
         }
 
@@ -643,13 +638,16 @@ namespace LayoutFarm.CustomWidgets
             {
                 limitW = this.Width;
             }
-            _primElement.LayoutKind = this.ContentLayoutKind;
+
 
 
             switch (this.ContentLayoutKind)
             {
                 case BoxContentLayoutKind.VerticalStack:
                     {
+                        //TODO: check if non-overlap or not
+                        _primElement.LayoutHint = RenderBoxes.LayoutHint.VerticalColumnNonOverlap;
+
                         int maxRight = 0;
 
                         int xpos = this.PaddingLeft; //start X at paddingLeft
@@ -691,6 +689,7 @@ namespace LayoutFarm.CustomWidgets
 
                 case BoxContentLayoutKind.HorizontalStack:
                     {
+                        _primElement.LayoutHint = RenderBoxes.LayoutHint.HorizontalRowNonOverlap;
 
                         int maxBottom = 0;
                         //experiment
@@ -825,6 +824,8 @@ namespace LayoutFarm.CustomWidgets
                     break;
                 case BoxContentLayoutKind.HorizontalFlow:
                     {
+                        _primElement.LayoutHint = RenderBoxes.LayoutHint.Custom;
+
                         int maxBottom = 0;
                         //experiment
                         bool allowAutoContentExpand = this.AllowAutoContentExpand;
@@ -966,7 +967,7 @@ namespace LayoutFarm.CustomWidgets
             }
 #endif
             //------------------------------------------------
-            base.RaiseLayoutFinished();
+            base.RaiseLayoutFinished(); //TODO: review here again
 
 #if DEBUG
             if (HasReadyRenderElement)

@@ -22,13 +22,12 @@ namespace LayoutFarm.RenderBoxes
 
     }
 
-    enum LayoutHint
+    public enum LayoutHint : byte
     {
-        Absolute,
-        HorizontalRow,
-        VerticalColumn
+        Custom,
+        HorizontalRowNonOverlap,
+        VerticalColumnNonOverlap,
     }
-
     sealed class RenderElementCollection
     {
         readonly LinkedList<RenderElement> _myElements = new LinkedList<RenderElement>();
@@ -47,8 +46,7 @@ namespace LayoutFarm.RenderBoxes
 
         }
 
-        public LayoutHint LayoutHint { get; set; }
-      
+
         public void InsertChildBefore(RenderElement parent, RenderElement before, RenderElement re)
         {
             re._internalLinkedNode = _myElements.AddBefore(before._internalLinkedNode, re);
@@ -97,7 +95,7 @@ namespace LayoutFarm.RenderBoxes
             _myElements.Clear();
         }
 
-        IEnumerable<RenderElement> GetDrawingIter()
+        public IEnumerable<RenderElement> GetDrawingIter()
         {
             LinkedListNode<RenderElement> curNode = _myElements.First;
             while (curNode != null)
@@ -106,7 +104,7 @@ namespace LayoutFarm.RenderBoxes
                 curNode = curNode.Next;
             }
         }
-        IEnumerable<RenderElement> GetHitTestIter()
+        public IEnumerable<RenderElement> GetHitTestIter()
         {
             LinkedListNode<RenderElement> curNode = _myElements.Last;
             while (curNode != null)
@@ -133,111 +131,6 @@ namespace LayoutFarm.RenderBoxes
                 cur = cur.Next;
             }
         }
-        public void DrawChildContent(DrawBoard d, UpdateArea updateArea)
-        {
-
-
-            int enter_canvas_x = d.OriginX;
-            int enter_canvas_y = d.OriginY;
-
-
-            switch (LayoutHint)
-            {
-                case LayoutHint.Absolute:
-                    {
-                        foreach (RenderElement child in this.GetDrawingIter())
-                        {
-                            if (child.IntersectsWith(updateArea) ||
-                               !child.NeedClipArea)
-                            {
-                                //if the child not need clip
-                                //its children (if exist) may intersect 
-                                int x = child.X;
-                                int y = child.Y;
-
-                                d.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
-                                updateArea.Offset(-x, -y);
-                                RenderElement.Render(child, d, updateArea);
-                                updateArea.Offset(x, y);
-                            }
-                        }
-
-                        //restore
-                        d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);
-                    }
-                    break;
-                case LayoutHint.HorizontalRow:
-                    {
-                        bool found = false;
-                        foreach (RenderElement child in this.GetDrawingIter())
-                        {
-                            if (child.IntersectsWith(updateArea))
-                            {
-                                found = true;
-                                //if the child not need clip
-                                //its children (if exist) may intersect 
-                                int x = child.X;
-                                int y = child.Y;
-
-                                d.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
-                                updateArea.Offset(-x, -y);
-                                RenderElement.Render(child, d, updateArea);
-                                updateArea.Offset(x, y);
-                            }
-                            else if (found)
-                            {
-                                break;
-                            }
-                        }
-
-                        //restore
-                        d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);
-                    }
-                    break;
-                case LayoutHint.VerticalColumn:
-                    {
-                        bool found = false;
-                        foreach (RenderElement child in this.GetDrawingIter())
-                        {
-                            if (child.IntersectsWith(updateArea))
-                            {
-                                found = true;
-                                //if the child not need clip
-                                //its children (if exist) may intersect 
-                                int x = child.X;
-                                int y = child.Y;
-
-                                d.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
-                                updateArea.Offset(-x, -y);
-                                RenderElement.Render(child, d, updateArea);
-                                updateArea.Offset(x, y);
-                            }
-                            else if (found)
-                            {
-                                break;
-                            }
-                        }
-                        d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);
-                    }
-                    break;
-            }
-        }
-
-        public bool HitTestCore(HitChain hitChain)
-        {
-
-            //TODO: use LayoutKind to hint this test too if possible
-            foreach (RenderElement renderE in this.GetHitTestIter())
-            {
-                if (renderE.HitTestCore(hitChain))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
 
         static Size ReCalculateContentSizeNoLayout(LinkedList<RenderElement> velist)
         {
@@ -266,8 +159,6 @@ namespace LayoutFarm.RenderBoxes
 
             return new Size(local_lineWidth, local_lineHeight);
         }
-
-
 
         public void TopDownReCalculateContentSize()
         {
