@@ -34,13 +34,133 @@ namespace LayoutFarm
         RootGraphic Root { get; }
     }
 
+    static class RenderElemHelper
+    {
+
+        public static void DrawChildContent(LayoutHint layoutHint, IEnumerable<RenderElement> drawingIter, DrawBoard d, UpdateArea updateArea)
+        {
+            int enter_canvas_x = d.OriginX;
+            int enter_canvas_y = d.OriginY;
+
+            switch (layoutHint)
+            {
+                default:
+                    {
+                        foreach (RenderElement child in drawingIter)
+                        {
+                            if (child.IntersectsWith(updateArea) ||
+                               !child.NeedClipArea)
+                            {
+                                //if the child not need clip
+                                //its children (if exist) may intersect 
+                                int x = child.X;
+                                int y = child.Y;
+
+                                d.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
+                                updateArea.Offset(-x, -y);
+                                RenderElement.Render(child, d, updateArea);
+                                updateArea.Offset(x, y);
+                            }
+                        }
+
+                        //restore
+                        d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);
+                    }
+                    break;
+                case LayoutHint.HorizontalRowNonOverlap:
+                    {
+                        bool found = false;
+                        foreach (RenderElement child in drawingIter)
+                        {
+                            if (child.IntersectsWith(updateArea))
+                            {
+                                found = true;
+                                //if the child not need clip
+                                //its children (if exist) may intersect 
+                                int x = child.X;
+                                int y = child.Y;
+
+                                d.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
+                                updateArea.Offset(-x, -y);
+                                RenderElement.Render(child, d, updateArea);
+                                updateArea.Offset(x, y);
+                            }
+                            else if (found)
+                            {
+                                break;
+                            }
+                        }
+
+                        //restore
+                        d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);
+                    }
+                    break;
+                case LayoutHint.VerticalColumnNonOverlap:
+                    {
+                        bool found = false;
+                        foreach (RenderElement child in drawingIter)
+                        {
+                            if (child.IntersectsWith(updateArea))
+                            {
+                                found = true;
+                                //if the child not need clip
+                                //its children (if exist) may intersect 
+                                int x = child.X;
+                                int y = child.Y;
+
+                                d.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
+                                updateArea.Offset(-x, -y);
+                                RenderElement.Render(child, d, updateArea);
+                                updateArea.Offset(x, y);
+                            }
+                            else if (found)
+                            {
+                                break;
+                            }
+                        }
+                        d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);
+                    }
+                    break;
+            }
+        }
+
+        public static bool HitTestCore(HitChain hitChain, LayoutHint layoutHint, IEnumerable<RenderElement> hitTestIter)
+        {
+            switch (layoutHint)
+            {
+                default:
+                    {
+                        foreach (RenderElement renderE in hitTestIter)
+                        {
+                            if (renderE.HitTestCore(hitChain))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                case LayoutHint.HorizontalRowNonOverlap:
+                    {
+
+                    }
+                    return false;
+                case LayoutHint.VerticalColumnNonOverlap:
+                    {
+
+                    }
+                    return false;
+            }
+        }
+    }
+
+
 
 #if DEBUG
     [System.Diagnostics.DebuggerDisplay("RenderBoxBase {dbugGetCssBoxInfo}")]
 #endif
     public abstract class RenderBoxBase : RenderElement, IContainerRenderElement
     {
-        BoxContentLayoutKind _contentLayoutKind;
+        
         RenderElementCollection _elements;
         bool _layoutValid;
 
@@ -55,7 +175,7 @@ namespace LayoutFarm
         {
             if (_elements != null)
             {
-                _elements.HitTestCore(hitChain);
+                RenderElemHelper.HitTestCore(hitChain, LayoutHint, _elements.GetHitTestIter());
 #if DEBUG
                 debug_RecordLayerInfo(_elements.dbugGetLayerInfo());
 #endif
@@ -174,12 +294,7 @@ namespace LayoutFarm
 
         public override RenderElement FindUnderlyingSiblingAtPoint(Point point)
         {
-            if (this.MyParentLink != null)
-            {
-                return this.MyParentLink.FindOverlapedChildElementAtPoint(this, point);
-            }
-
-            return null;
+            return this.MyParentLink?.FindOverlapedChildElementAtPoint(this, point);
         }
 
         public override Size InnerContentSize
@@ -221,23 +336,19 @@ namespace LayoutFarm
                     debugBreaK1 = true;
                 }
 #endif
-                _elements.DrawChildContent(d, updateArea);
-            }
-        }
 
-        public BoxContentLayoutKind LayoutKind
-        {
-            get => _contentLayoutKind;
-            set
-            {
-                if (_contentLayoutKind == value) { return; }
-                _layoutValid = false;
-                _contentLayoutKind = value;
+                //***                
+
+                RenderElemHelper.DrawChildContent(
+                    LayoutHint,
+                    _elements.GetDrawingIter(),
+                    d, updateArea);
             }
         }
 
 
-      
+        public LayoutHint LayoutHint { get; set; }
+
 #if DEBUG
         public bool debugDefaultLayerHasChild
         {
