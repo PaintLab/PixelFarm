@@ -4,32 +4,13 @@
 using PixelFarm.Drawing;
 using System.Collections.Generic;
 using LayoutFarm.RenderBoxes;
-
+using LayoutFarm.UI;
 
 namespace LayoutFarm.CustomWidgets
 {
 
-    public class MultiLinesLayer
-    {
-        List<LineBox> _linesBoxes = new List<LineBox>();
-        public MultiLinesLayer()
-        {
 
-        }
-        public void Add(LineBox line)
-        {
-            _linesBoxes.Add(line);
-        }
-        public void Clear()
-        {
-            _linesBoxes.Clear();
-        }
-
-        internal List<LineBox> LineBoxes => _linesBoxes;
-
-    }
-
-    public class LineBox : IParentLink
+    class LineBox : IParentLink
     {
         LinkedList<RenderElement> _linkList = new LinkedList<RenderElement>();
 
@@ -37,17 +18,17 @@ namespace LayoutFarm.CustomWidgets
         static int dbugTotalId;
         public readonly int dbugId;
 #endif
-        public LineBox(RenderElement owner)
+        public LineBox()
         {
 #if DEBUG
             dbugId = dbugTotalId++;
 #endif
-            ParentRenderElement = owner;
+
         }
         public int LineTop { get; set; }
         public int LineHeight { get; set; }
 
-        public RenderElement ParentRenderElement { get; private set; }
+        public RenderElement ParentRenderElement { get; internal set; }
 
         public void AdjustLocation(ref int px, ref int py)
         {
@@ -76,9 +57,14 @@ namespace LayoutFarm.CustomWidgets
             //TODO: need to clear all parent link? 
         }
         public void Add(RenderElement renderE)
-        {   
+        {
             _linkList.AddLast(renderE);
+            if (ParentRenderElement != null)
+            {
+                RenderElement.SetParentLink(renderE, this);
+            }
         }
+        
         public int Count => _linkList.Count;
 
         public bool HitTestCore(HitChain hitChain)
@@ -166,7 +152,7 @@ namespace LayoutFarm.CustomWidgets
         }
 
 
-        public MultiLinesLayer MultiLinesLayer { get; set; }
+        internal List<LineBox> Lines { get; set; }
 
         public int PaddingLeft
         {
@@ -381,10 +367,10 @@ namespace LayoutFarm.CustomWidgets
 
             //default content layer
             //check if we use multiline or not
-            if (MultiLinesLayer != null)
+            if (Lines != null)
             {
 
-                List<LineBox> lineboxes = MultiLinesLayer.LineBoxes;
+                List<LineBox> lineboxes = Lines;
                 int j = lineboxes.Count;
                 int enter_canvas_x = d.OriginX;
                 int enter_canvas_y = d.OriginY;
@@ -450,12 +436,12 @@ namespace LayoutFarm.CustomWidgets
 
             }
 #endif
-            if (MultiLinesLayer != null)
+            if (Lines != null)
             {
                 //check if it's overlap line or not
                 //find a properline 
                 //then offset and test at that line
-                List<LineBox> lineboxes = MultiLinesLayer.LineBoxes;
+                List<LineBox> lineboxes = Lines;
                 int j = lineboxes.Count;
 
                 for (int i = 0; i < j; ++i)
