@@ -213,13 +213,7 @@ namespace LayoutFarm
             }
         }
 
-        public override void ResetRootGraphics(RootGraphic rootgfx)
-        {
-            if (this.Root != rootgfx)
-            {
-                DirectSetRootGraphics(this, rootgfx);
-            }
-        }
+         
     }
      
 
@@ -303,22 +297,7 @@ namespace LayoutFarm
 #endif
 
         }
-     
-        
-        public override void ResetRootGraphics(RootGraphic rootgfx)
-        {
-            if (this.Root != rootgfx)
-            {
-                DirectSetRootGraphics(this, rootgfx);
-                if (_elements != null)
-                {
-                    foreach (var r in _elements.GetRenderElementIter())
-                    {
-                        r.ResetRootGraphics(rootgfx);
-                    }
-                }
-            }
-        }
+          
 
         public virtual void AddChild(RenderElement renderE)
         {

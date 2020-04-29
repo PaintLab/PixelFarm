@@ -177,10 +177,7 @@ namespace LayoutFarm
             _controlPoints.Clear();
             InvalidateGraphics();
         }
-        public override void ResetRootGraphics(RootGraphic rootgfx)
-        {
-
-        }
+      
 
         public override bool HasCustomHitTest => true; //set to true, CustomHitTest() will be called
         protected override bool CustomHitTest(HitChain hitChain)

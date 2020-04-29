@@ -74,10 +74,7 @@ namespace TestGlfw
             }
             //d.FillRectangle(Color.Blue, 0, 0, 50, 50);
         }
-        public override void ResetRootGraphics(RootGraphic rootgfx)
-        {
-
-        }
+      
     }
 #endif
     static class MyApp3

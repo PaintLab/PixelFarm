@@ -362,10 +362,7 @@ namespace LayoutFarm.UI
             _vgVisElem.HitTest(hitChain);
         }
 
-        public override void ResetRootGraphics(RootGraphic rootgfx)
-        {
-            DirectSetRootGraphics(this, rootgfx);
-        }
+        
         public override void ChildrenHitTestCore(HitChain hitChain)
         {
             base.ChildrenHitTestCore(hitChain);

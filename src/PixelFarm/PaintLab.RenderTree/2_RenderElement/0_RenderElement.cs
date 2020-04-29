@@ -40,13 +40,13 @@ namespace LayoutFarm
         /// </summary>
         public bool dbugPreferSoftwareRenderer { get; set; }
 #endif
-        // 
-        public abstract void ResetRootGraphics(RootGraphic rootgfx);
-        //
-        protected static void DirectSetRootGraphics(RenderElement r, RootGraphic rootgfx)
-        {
-            r._rootGfx = rootgfx;
-        }
+        //// 
+        //public abstract void ResetRootGraphics(RootGraphic rootgfx);
+        ////
+        //protected static void DirectSetRootGraphics(RenderElement r, RootGraphic rootgfx)
+        //{
+        //    r._rootGfx = rootgfx;
+        //}
         //
         public bool NeedClipArea
         {
