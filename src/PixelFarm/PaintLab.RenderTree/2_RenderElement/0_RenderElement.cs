@@ -40,14 +40,7 @@ namespace LayoutFarm
         /// </summary>
         public bool dbugPreferSoftwareRenderer { get; set; }
 #endif
-        //// 
-        //public abstract void ResetRootGraphics(RootGraphic rootgfx);
-        ////
-        //protected static void DirectSetRootGraphics(RenderElement r, RootGraphic rootgfx)
-        //{
-        //    r._rootGfx = rootgfx;
-        //}
-        //
+
         public bool NeedClipArea
         {
             get => _needClipArea;
@@ -205,10 +198,8 @@ namespace LayoutFarm
                       _propFlags & ~RenderElementConst.NEED_PRE_RENDER_EVAL;
             }
         }
-        public virtual RenderElement FindUnderlyingSiblingAtPoint(Point point)
-        {
-            return null;
-        }
+
+        public virtual RenderElement FindUnderlyingSiblingAtPoint(Point point) => null;
 
         public virtual void ChildrenHitTestCore(HitChain hitChain)
         {
