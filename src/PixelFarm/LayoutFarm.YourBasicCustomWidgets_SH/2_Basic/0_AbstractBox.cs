@@ -639,8 +639,6 @@ namespace LayoutFarm.CustomWidgets
                 limitW = this.Width;
             }
 
-
-
             switch (this.ContentLayoutKind)
             {
                 case BoxContentLayoutKind.VerticalStack:
@@ -892,8 +890,7 @@ namespace LayoutFarm.CustomWidgets
                                         {
                                             max_lineHeight = rect.Height;
                                             linebox.LineHeight = max_lineHeight;
-                                        }
-
+                                        } 
 
                                         if (tmp_bottom > maxBottom)
                                         {

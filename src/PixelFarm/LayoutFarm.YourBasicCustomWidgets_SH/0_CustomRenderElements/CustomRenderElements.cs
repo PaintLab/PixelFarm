@@ -5,6 +5,7 @@ using PixelFarm.Drawing;
 using System.Collections.Generic;
 using LayoutFarm.RenderBoxes;
 using LayoutFarm.UI;
+using PixelFarm.Contours;
 
 namespace LayoutFarm.CustomWidgets
 {
@@ -45,17 +46,12 @@ namespace LayoutFarm.CustomWidgets
             return null;
         }
 
-        public bool IsIntersect(int minY, int maxY)
-        {
-            Rectangle lineRect = new Rectangle(0, LineTop, 4, LineHeight);
-            return new Rectangle(0, minY, 4, maxY - minY).IntersectsWith(lineRect);
-        }
 
-        public void Clear()
-        {
-            _linkList.Clear();
-            //TODO: need to clear all parent link? 
-        }
+        public bool IsIntersect(int minY, int maxY) => !((maxY < LineTop) || (minY > (LineTop + LineHeight)));
+
+        //TODO: need to clear all parent link? 
+        public void Clear() => _linkList.Clear();
+
         public void Add(RenderElement renderE)
         {
             _linkList.AddLast(renderE);
@@ -70,6 +66,8 @@ namespace LayoutFarm.CustomWidgets
         public bool HitTestCore(HitChain hitChain)
         {
 
+           
+
             if (LineTop <= hitChain.TestPointY &&
                (LineTop + LineHeight) > hitChain.TestPointY)
             {
@@ -78,8 +76,6 @@ namespace LayoutFarm.CustomWidgets
                 bool found = false;
                 while (node != null)
                 {
-                    //hitChain.OffsetTestPoint(0, LineTop);
-
                     if (node.Value.HitTestCore(hitChain))
                     {
                         found = true;
@@ -92,8 +88,6 @@ namespace LayoutFarm.CustomWidgets
             }
             return false;
         }
-
-
         public void Render(DrawBoard d, UpdateArea updateArea)
         {
             LinkedListNode<RenderElement> renderNode = _linkList.First;
@@ -238,34 +232,34 @@ namespace LayoutFarm.CustomWidgets
 
         internal List<LineBox> Lines { get; set; }
 
-        public int PaddingLeft
+        public ushort PaddingLeft
         {
-            get => _contentLeft - _borderLeft;
+            get => (ushort)(_contentLeft - _borderLeft);
             set
             {
                 _contentLeft = (ushort)(value + _borderLeft);
             }
         }
-        public int PaddingTop
+        public ushort PaddingTop
         {
-            get => _contentTop - _borderTop;
+            get => (ushort)(_contentTop - _borderTop);
             set
             {
                 _contentTop = (ushort)(value + _borderTop);
             }
         }
-        public int PaddingRight
+        public ushort PaddingRight
         {
-            get => _contentRight - _borderRight;
+            get => (ushort)(_contentRight - _borderRight);
             set
             {
                 _contentRight = (ushort)(value + _borderRight);
             }
         }
-        public int PaddingBottom
+        public ushort PaddingBottom
 
         {
-            get => _contentBottom - _borderBottom;
+            get => (ushort)(_contentBottom - _borderBottom);
             set
             {
                 _contentBottom = (ushort)(value + _borderBottom);
@@ -286,7 +280,7 @@ namespace LayoutFarm.CustomWidgets
             _contentBottom = (ushort)(sameValue + _borderBottom);
         }
         //------------------ 
-        public int BorderTop
+        public byte BorderTop
         {
             get => _borderTop;
             set
@@ -295,7 +289,7 @@ namespace LayoutFarm.CustomWidgets
                 if (!_hasSomeBorderW) _hasSomeBorderW = value > 0;
             }
         }
-        public int BorderBottom
+        public byte BorderBottom
         {
             get => _borderBottom;
             set
@@ -304,7 +298,7 @@ namespace LayoutFarm.CustomWidgets
                 if (!_hasSomeBorderW) _hasSomeBorderW = value > 0;
             }
         }
-        public int BorderRight
+        public byte BorderRight
         {
             get => _borderRight;
             set
@@ -313,7 +307,7 @@ namespace LayoutFarm.CustomWidgets
                 if (!_hasSomeBorderW) _hasSomeBorderW = value > 0;
             }
         }
-        public int BorderLeft
+        public byte BorderLeft
         {
             get => _borderLeft;
             set
@@ -347,22 +341,22 @@ namespace LayoutFarm.CustomWidgets
         public int ContentWidth => Width - (_contentLeft + _contentRight);
         public int ContentHeight => Height - (_contentTop + _contentBottom);
 
-        public int ContentLeft
+        public ushort ContentLeft
         {
             get => _contentLeft;
             set => _contentLeft = (byte)value;
         }
-        public int ContentTop
+        public ushort ContentTop
         {
             get => _contentTop;
             set => _contentTop = (ushort)value;
         }
-        public int ContentRight
+        public ushort ContentRight
         {
             get => _contentRight;
             set => _contentRight = (ushort)value;
         }
-        public int ContentBottom
+        public ushort ContentBottom
         {
             get => _contentBottom;
             set => _contentBottom = (ushort)value;

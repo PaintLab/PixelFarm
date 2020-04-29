@@ -631,11 +631,5 @@ namespace LayoutFarm.UI
     }
 
 
-    public class BoxLayoutEngine
-    {
-
-
-
-
-    }
+    
 }

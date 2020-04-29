@@ -141,12 +141,43 @@ namespace LayoutFarm
                     return false;
                 case LayoutHint.HorizontalRowNonOverlap:
                     {
+                        foreach (RenderElement renderE in hitTestIter)
+                        {
+
+                            if (renderE.HitTestCore(hitChain))
+                            {
+                                return true;
+                            }
+                            else if (renderE.Right < hitChain.TestPointX)
+                            {
+                                //hitTestIter iterates from right to left
+                                //so in this case (eg. we have whitespace between each elem)
+                                //this should be stop
+
+                                return false;
+                            }
+                        }
 
                     }
                     return false;
                 case LayoutHint.VerticalColumnNonOverlap:
                     {
+                        foreach (RenderElement renderE in hitTestIter)
+                        {
 
+
+                            if (renderE.HitTestCore(hitChain))
+                            {
+                                return true;
+                            }
+                            else if (renderE.Bottom < hitChain.TestPointY)
+                            {
+                                //hitTestIter iterates from bottom to top
+                                //so in this case (eg. we have whitespace between each elem)
+                                //this should be stop
+                                return false;
+                            }
+                        }
                     }
                     return false;
             }
@@ -160,7 +191,7 @@ namespace LayoutFarm
 #endif
     public abstract class RenderBoxBase : RenderElement, IContainerRenderElement
     {
-        
+
         RenderElementCollection _elements;
         bool _layoutValid;
 
