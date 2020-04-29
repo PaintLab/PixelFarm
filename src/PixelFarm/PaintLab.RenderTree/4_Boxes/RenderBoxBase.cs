@@ -37,12 +37,12 @@ namespace LayoutFarm
     static class RenderElemHelper
     {
 
-        public static void DrawChildContent(HitTestHint layoutHint, IEnumerable<RenderElement> drawingIter, DrawBoard d, UpdateArea updateArea)
+        public static void DrawChildContent(HitTestHint hitTestHint, IEnumerable<RenderElement> drawingIter, DrawBoard d, UpdateArea updateArea)
         {
             int enter_canvas_x = d.OriginX;
             int enter_canvas_y = d.OriginY;
 
-            switch (layoutHint)
+            switch (hitTestHint)
             {
                 default:
                     {
@@ -124,7 +124,7 @@ namespace LayoutFarm
             }
         }
 
-        public static bool HitTestCore(HitChain hitChain, HitTestHint layoutHint, IEnumerable<RenderElement> hitTestIter)
+        public static bool HitTestCore(HitChain hitTestHint, HitTestHint layoutHint, IEnumerable<RenderElement> hitTestIter)
         {
             switch (layoutHint)
             {
@@ -132,7 +132,7 @@ namespace LayoutFarm
                     {
                         foreach (RenderElement renderE in hitTestIter)
                         {
-                            if (renderE.HitTestCore(hitChain))
+                            if (renderE.HitTestCore(hitTestHint))
                             {
                                 return true;
                             }
@@ -144,11 +144,11 @@ namespace LayoutFarm
                         foreach (RenderElement renderE in hitTestIter)
                         {
 
-                            if (renderE.HitTestCore(hitChain))
+                            if (renderE.HitTestCore(hitTestHint))
                             {
                                 return true;
                             }
-                            else if (renderE.Right < hitChain.TestPointX)
+                            else if (renderE.Right < hitTestHint.TestPointX)
                             {
                                 //hitTestIter iterates from right to left
                                 //so in this case (eg. we have whitespace between each elem)
@@ -166,11 +166,11 @@ namespace LayoutFarm
                         {
 
 
-                            if (renderE.HitTestCore(hitChain))
+                            if (renderE.HitTestCore(hitTestHint))
                             {
                                 return true;
                             }
-                            else if (renderE.Bottom < hitChain.TestPointY)
+                            else if (renderE.Bottom < hitTestHint.TestPointY)
                             {
                                 //hitTestIter iterates from bottom to top
                                 //so in this case (eg. we have whitespace between each elem)
