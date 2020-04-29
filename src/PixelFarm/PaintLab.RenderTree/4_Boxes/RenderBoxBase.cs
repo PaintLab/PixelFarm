@@ -213,19 +213,17 @@ namespace LayoutFarm
             }
         }
 
-         
-    }
-     
 
-//#if DEBUG
-//    [System.Diagnostics.DebuggerDisplay("RenderBoxBase")]
-//#endif
+    }
+
+
+    //#if DEBUG
+    //    [System.Diagnostics.DebuggerDisplay("RenderBoxBase")]
+    //#endif
     public abstract class RenderBoxBase : AbstractRectRenderElement, IContainerRenderElement
     {
 
         RenderElementCollection _elements;
-        bool _layoutValid;
-
         public RenderBoxBase(RootGraphic rootgfx, int width, int height)
             : base(rootgfx, width, height)
         {
@@ -297,7 +295,7 @@ namespace LayoutFarm
 #endif
 
         }
-          
+
 
         public virtual void AddChild(RenderElement renderE)
         {
@@ -305,7 +303,7 @@ namespace LayoutFarm
             {
                 _elements = new RenderElementCollection();
             }
-            _layoutValid = false;
+
             _elements.AddChild(this, renderE);
         }
         public virtual void AddFirst(RenderElement renderE)
@@ -314,28 +312,28 @@ namespace LayoutFarm
             {
                 _elements = new RenderElementCollection();
             }
-            _layoutValid = false;
+
             _elements.AddFirst(this, renderE);
         }
 
         public virtual void InsertAfter(RenderElement afterElem, RenderElement renderE)
         {
-            _layoutValid = false;
+
             _elements.InsertChildAfter(this, afterElem, renderE);
         }
         public virtual void InsertBefore(RenderElement beforeElem, RenderElement renderE)
         {
-            _layoutValid = false;
+
             _elements.InsertChildBefore(this, beforeElem, renderE);
         }
         public virtual void RemoveChild(RenderElement renderE)
         {
-            _layoutValid = false;
+
             _elements?.RemoveChild(this, renderE);
         }
         public virtual void ClearAllChildren()
         {
-            _layoutValid = false;
+
             _elements?.Clear();
             this.InvalidateGraphics();
         }
