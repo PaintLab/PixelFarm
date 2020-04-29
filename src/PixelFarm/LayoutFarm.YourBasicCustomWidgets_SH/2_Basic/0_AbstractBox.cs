@@ -126,7 +126,7 @@ namespace LayoutFarm.CustomWidgets
 
         protected CustomRenderBox _primElement;
         CustomRenderBoxSpec _boxSpec;
-        
+
 
 
         public AbstractBox(int width, int height)
@@ -514,6 +514,20 @@ namespace LayoutFarm.CustomWidgets
 
         protected abstract IUICollection<UIElement> GetDefaultChildrenIter();
 
+
+        bool _preserveLineBoxes = false;
+        public bool PreserverLineBoxes
+        {
+            get => _preserveLineBoxes;
+            set
+            {
+                _preserveLineBoxes = value;
+                if (!value && _primElement != null && _primElement.MultiLinesLayer != null)
+                {
+                    _primElement.MultiLinesLayer = null;
+                }
+            }
+        }
         public override void PerformContentLayout()
         {
             //****
@@ -574,6 +588,7 @@ namespace LayoutFarm.CustomWidgets
                         this.SetInnerContentSize(maxRight, ypos);
                     }
                     break;
+
                 case BoxContentLayoutKind.HorizontalStack:
                     {
 
@@ -710,7 +725,6 @@ namespace LayoutFarm.CustomWidgets
                     break;
                 case BoxContentLayoutKind.HorizontalFlow:
                     {
-                        //horizontal flow
                         int maxBottom = 0;
                         //experiment
                         bool allowAutoContentExpand = this.AllowAutoContentExpand;
@@ -720,95 +734,87 @@ namespace LayoutFarm.CustomWidgets
                         int ypos = this.PaddingTop; //start Y at padding top
                         IUICollection<UIElement> childrenIter = GetDefaultChildrenIter();
 
-                        //check if we want to use line-box or not 
+                        //check if this abstract box want to preserver line box or not
+                        //if just layout, then we can use shared lineboxes 
 
-                        //our primary renderElement is CustomRenderBox
-                        //
-                        MultiLineLayer multiLines = _primElement.MultiLinesLayer;
-                        if (multiLines == null)
+                        MultiLinesLayer multiLineLayer = _primElement.MultiLinesLayer;
+                        if (_preserveLineBoxes)
                         {
-                            _primElement.MultiLinesLayer = multiLines = new MultiLineLayer();
+                            if (multiLineLayer == null)
+                            {
+                                _primElement.MultiLinesLayer = multiLineLayer = new MultiLinesLayer();
+                            }
+                            else
+                            {
+                                multiLineLayer.Clear();
+                            }
                         }
                         else
                         {
-                            _primElement.ClearAllChildren();
+                            //TODO:
+                            //use linebox from pool
+                            multiLineLayer = new MultiLinesLayer();
                         }
 
+                        LineBox linebox = new LineBox(_primElement);
+                        multiLineLayer.Add(linebox);
                         if (childrenIter != null && childrenIter.Count > 0)
                         {
-                            int hostW = this.Width;//***
 
-                            //flow layout
-                            //we need to flow it into multi-linebox
-                            LineBox linebox = new LineBox();
-                            multiLines.Add(linebox);
-
-                            RootGraphic root = _primElement.Root;
-
+                            int left_to_right_max_x = 0;
+                            int limit_w = this.Width;
+                            int max_lineHeight = 0;
                             foreach (UIElement ui in childrenIter.GetIter())
                             {
-                                if (ui is AbstractRectUI rectUI)
+                                if (ui is AbstractRectUI rect)
                                 {
-                                    rectUI.PerformContentLayout();
+                                    rect.PerformContentLayout();
 
-                                    int right = xpos + rectUI.Width + rectUI.MarginLeftRight; //new pos
-                                    if (right > hostW)
+                                    int new_x = xpos + rect.Width + rect.MarginLeftRight;
+                                    if (new_x > limit_w)
                                     {
-                                        //start a new line
-                                        xpos = this.PaddingLeft;
-                                        ypos += maxBottom + 1; //we need some margin 
-                                        maxBottom = 0;
-                                        right = xpos + rectUI.Width + rectUI.MarginLeftRight;
+                                        //start new line
+                                        new_x = xpos = PaddingLeft; //start
+                                        ypos += max_lineHeight + 1;
+                                        max_lineHeight = 0;//reset
 
-                                        linebox = new LineBox();
-                                        multiLines.Add(linebox);
+                                        linebox = new LineBox(_primElement);
+                                        linebox.LineTop = ypos;
+                                        multiLineLayer.Add(linebox);
                                     }
 
-                                    rectUI.SetLocationAndSize(xpos, ypos + rectUI.MarginTop, rectUI.Width, rectUI.Height); //
-                                                                                                                           //
-                                    int tmp_bottom = rectUI.Height;
+                                    if (_preserveLineBoxes)
+                                    {
+                                        //new top is relative to linetop
+                                        rect.SetLocationAndSize(xpos, rect.MarginTop, rect.Width, rect.Height); //
+                                    }
+                                    else
+                                    {
+                                        rect.SetLocationAndSize(xpos, ypos + rect.MarginTop, rect.Width, rect.Height); //
+                                    }
+
+
+                                    xpos = new_x;
+
+                                    if (max_lineHeight < rect.Height)
+                                    {
+                                        max_lineHeight = rect.Height;
+                                        linebox.LineHeight = max_lineHeight;
+                                    }
+
+                                    int tmp_bottom = rect.Bottom;
                                     if (tmp_bottom > maxBottom)
                                     {
+                                        //start 
                                         maxBottom = tmp_bottom;
                                     }
-
-                                    xpos = right;
-                                    //--------
-                                 
-                                    RenderElement renderE = ui.GetPrimaryRenderElement(root);
-                                    linebox.Add(renderE);
                                 }
-                                else
-                                {
-                                    //ui is not rect
-                                    RenderElement renderE = ui.GetPrimaryRenderElement(root);
-
-                                    int right = xpos + renderE.Width;
-                                    if (right > hostW)
-                                    {
-                                        //start a new line
-                                        xpos = this.PaddingLeft;
-                                        ypos += maxBottom + 1; //we need some margin 
-
-                                        maxBottom = 0;
-                                        right = xpos + renderE.Width;
-                                        linebox = new LineBox();
-                                        multiLines.Add(linebox);
-                                    }
-
-                                    renderE.SetLocation(xpos, ypos);
- 
-                                    int tmp_bottom = renderE.Height;
-                                    if (tmp_bottom > maxBottom)
-                                    {
-                                        maxBottom = tmp_bottom;
-                                    }
-
-                                    xpos = right;
-                                    linebox.Add(renderE);
-                                }
+                                //
+                                linebox.Add(ui.GetPrimaryRenderElement(_primElement.Root));
                             }
+                            left_to_right_max_x = xpos;
                         }
+
                         this.SetInnerContentSize(xpos, maxBottom);
                     }
                     break;

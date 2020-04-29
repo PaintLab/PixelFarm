@@ -5,13 +5,14 @@ using PixelFarm.Drawing;
 using System.Collections.Generic;
 using LayoutFarm.RenderBoxes;
 
+
 namespace LayoutFarm.CustomWidgets
 {
 
-    public class MultiLineLayer
+    public class MultiLinesLayer
     {
         List<LineBox> _linesBoxes = new List<LineBox>();
-        public MultiLineLayer()
+        public MultiLinesLayer()
         {
 
         }
@@ -23,13 +24,118 @@ namespace LayoutFarm.CustomWidgets
         {
             _linesBoxes.Clear();
         }
+
+        internal List<LineBox> LineBoxes => _linesBoxes;
+
     }
-    public class LineBox
+
+    public class LineBox : IParentLink
     {
-        LinkedList<RenderElement> _renderElems = new LinkedList<RenderElement>();
-        public void Add(RenderElement renderE) => _renderElems.AddLast(renderE);
-        public void Clear() => _renderElems.Clear();
-        public int Count => _renderElems.Count;
+        LinkedList<RenderElement> _linkList = new LinkedList<RenderElement>();
+
+#if DEBUG
+        static int dbugTotalId;
+        public readonly int dbugId;
+#endif
+        public LineBox(RenderElement owner)
+        {
+#if DEBUG
+            dbugId = dbugTotalId++;
+#endif
+            ParentRenderElement = owner;
+        }
+        public int LineTop { get; set; }
+        public int LineHeight { get; set; }
+
+        public RenderElement ParentRenderElement { get; private set; }
+
+        public void AdjustLocation(ref int px, ref int py)
+        {
+            py += LineTop;
+        }
+#if DEBUG
+        public string dbugGetLinkInfo()
+        {
+            return "linkbox";
+        }
+#endif
+        public RenderElement FindOverlapedChildElementAtPoint(RenderElement afterThisChild, Point point)
+        {
+            return null;
+        }
+
+        public bool IsIntersect(int minY, int maxY)
+        {
+            Rectangle lineRect = new Rectangle(0, LineTop, 4, LineHeight);
+            return new Rectangle(0, minY, 4, maxY - minY).IntersectsWith(lineRect);
+        }
+
+        public void Clear()
+        {
+            _linkList.Clear();
+
+            //TODO: need to clear all parent link?
+
+        }
+        public void Add(RenderElement renderE)
+        {
+            RenderElement.SetParentLink(renderE, this);
+            _linkList.AddLast(renderE);
+        }
+        public int Count => _linkList.Count;
+
+        public bool HitTestCore(HitChain hitChain)
+        {
+
+            if (LineTop <= hitChain.TestPointY &&
+               (LineTop + LineHeight) > hitChain.TestPointY)
+            {
+                LinkedListNode<RenderElement> node = _linkList.First;
+                hitChain.OffsetTestPoint(0, -LineTop);
+                bool found = false;
+                while (node != null)
+                {
+                    //hitChain.OffsetTestPoint(0, LineTop);
+
+                    if (node.Value.HitTestCore(hitChain))
+                    {
+                        found = true;
+                        break;
+                    }
+                    node = node.Next;
+                }
+                hitChain.OffsetTestPoint(0, LineTop);
+                return found;
+            }
+            return false;
+        }
+
+
+        public void Render(DrawBoard d, UpdateArea updateArea)
+        {
+            LinkedListNode<RenderElement> renderNode = _linkList.First;
+            Rectangle backup = updateArea.CurrentRect;
+            int enter_canvas_x = d.OriginX;
+            int enter_canvas_y = d.OriginY;
+
+            while (renderNode != null)
+            {
+                //---------------------------
+                //TODO: review here again
+                RenderElement renderE = renderNode.Value;
+                int x = renderE.X;
+                int y = renderE.Y;
+
+                d.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
+                updateArea.Offset(-x, -y);
+                RenderElement.Render(renderE, d, updateArea);
+                updateArea.Offset(x, y);
+
+                renderNode = renderNode.Next;
+            }
+            updateArea.CurrentRect = backup;//restore  
+            d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);//restore
+        }
     }
 
 
@@ -56,13 +162,14 @@ namespace LayoutFarm.CustomWidgets
         byte _borderRight;
         byte _borderBottom;
 
-        MultiLineLayer _multiLines;
-
         public CustomRenderBox(RootGraphic rootgfx, int width, int height)
             : base(rootgfx, width, height)
         {
             this.BackColor = KnownColors.LightGray;
         }
+
+
+        public MultiLinesLayer MultiLinesLayer { get; set; }
 
         public int PaddingLeft
         {
@@ -72,7 +179,6 @@ namespace LayoutFarm.CustomWidgets
                 _contentLeft = (ushort)(value + _borderLeft);
             }
         }
-
         public int PaddingTop
         {
             get => _contentTop - _borderTop;
@@ -214,7 +320,7 @@ namespace LayoutFarm.CustomWidgets
             get => _backColor;
             set
             {
-                if (_backColor == value) return;
+                //if (_backColor == value) return;
 
                 _backColor = value;
 
@@ -249,13 +355,20 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
+
+
+
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
 #if DEBUG
-            //if (this.dbugBreak)
-            //{
-            //}
+            if (this.dbugBreak)
+            {
+            }
 #endif
+            //if (this.Width < 30 && this.BackColor == Color.White)
+            //{
+
+            //}
 
             //this render element dose not have child node, so
             //if WaitForStartRenderElement == true,
@@ -270,8 +383,44 @@ namespace LayoutFarm.CustomWidgets
             }
 
             //default content layer
+            //check if we use multiline or not
+            if (MultiLinesLayer != null)
+            {
 
-            base.RenderClientContent(d, updateArea);
+                List<LineBox> lineboxes = MultiLinesLayer.LineBoxes;
+                int j = lineboxes.Count;
+                int enter_canvas_x = d.OriginX;
+                int enter_canvas_y = d.OriginY;
+
+                int update_a_top = updateArea.Top;
+                int update_a_bottom = updateArea.Bottom;
+
+                for (int i = 0; i < j; ++i)
+                {
+                    LineBox linebox = lineboxes[i];
+                    if (linebox.IsIntersect(update_a_top, update_a_bottom))
+                    {
+                        //offset to this client
+
+                        //if the child not need clip
+                        //its children (if exist) may intersect 
+                        int x = 0;
+                        int y = linebox.LineTop;
+
+                        d.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
+                        updateArea.Offset(-x, -y);
+
+                        linebox.Render(d, updateArea);
+
+                        updateArea.Offset(x, y);
+                    }
+                }
+                d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y); //restore                
+            }
+            else
+            {
+                base.RenderClientContent(d, updateArea);
+            }
             //
 
             if (!WaitForStartRenderElement &&
@@ -298,10 +447,34 @@ namespace LayoutFarm.CustomWidgets
         }
         public override void ChildrenHitTestCore(HitChain hitChain)
         {
+#if DEBUG
+            if (hitChain.TestPointY > 20 && hitChain.TestPointY < 35)
+            {
+
+            }
+#endif
+            if (MultiLinesLayer != null)
+            {
+                //check if it's overlap line or not
+                //find a properline 
+                //then offset and test at that line
+                List<LineBox> lineboxes = MultiLinesLayer.LineBoxes;
+                int j = lineboxes.Count;
+
+                for (int i = 0; i < j; ++i)
+                {
+                    LineBox linebox = lineboxes[i];
+                    if (linebox.HitTestCore(hitChain))
+                    {
+                        return;
+                    }
+                }
+            }
+
             base.ChildrenHitTestCore(hitChain);
         }
 
-        public MultiLineLayer MultiLinesLayer { get; set; }
+
     }
 
     public class DoubleBufferCustomRenderBox : CustomRenderBox
