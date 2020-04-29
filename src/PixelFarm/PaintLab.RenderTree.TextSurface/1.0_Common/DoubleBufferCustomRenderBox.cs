@@ -1,8 +1,6 @@
 ﻿//MIT, 2019-present, WinterDev
 
-using System.Collections.Generic;
-using System.Text;
- 
+
 using PixelFarm.Drawing;
 
 namespace LayoutFarm.TextEditing
@@ -22,7 +20,7 @@ namespace LayoutFarm.TextEditing
         public RenderBoxBase ContentBox { get; set; }
 
         public bool EnableDoubleBuffer { get; set; }
- 
+
 
         protected override void OnInvalidateGraphicsNoti(bool fromMe, ref Rectangle totalBounds)
         {

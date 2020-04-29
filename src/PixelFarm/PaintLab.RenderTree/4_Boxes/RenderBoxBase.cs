@@ -212,12 +212,20 @@ namespace LayoutFarm
                 this.InvalidateGraphics(args);
             }
         }
+
+        public override void ResetRootGraphics(RootGraphic rootgfx)
+        {
+            if (this.Root != rootgfx)
+            {
+                DirectSetRootGraphics(this, rootgfx);
+            }
+        }
     }
      
 
-#if DEBUG
-    [System.Diagnostics.DebuggerDisplay("RenderBoxBase {dbugGetCssBoxInfo}")]
-#endif
+//#if DEBUG
+//    [System.Diagnostics.DebuggerDisplay("RenderBoxBase")]
+//#endif
     public abstract class RenderBoxBase : AbstractRectRenderElement, IContainerRenderElement
     {
 
@@ -295,6 +303,8 @@ namespace LayoutFarm
 #endif
 
         }
+     
+        
         public override void ResetRootGraphics(RootGraphic rootgfx)
         {
             if (this.Root != rootgfx)

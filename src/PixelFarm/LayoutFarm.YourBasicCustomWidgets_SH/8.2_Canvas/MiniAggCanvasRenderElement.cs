@@ -5,7 +5,7 @@ using PixelFarm.CpuBlit;
 using PixelFarm.Drawing;
 namespace LayoutFarm.CustomWidgets
 {
-    public class MiniAggCanvasRenderElement : RenderBoxBase, IDisposable
+    public class MiniAggCanvasRenderElement : AbstractRectRenderElement, IDisposable
     {
 
         Painter _painter;
