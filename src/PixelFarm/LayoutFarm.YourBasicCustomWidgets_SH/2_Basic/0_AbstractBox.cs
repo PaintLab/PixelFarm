@@ -594,6 +594,16 @@ namespace LayoutFarm.CustomWidgets
                 //}
             }
         }
+
+        VerticalAlignment _boxContentVertAlignment = VerticalAlignment.Bottom;
+        public VerticalAlignment ContentVerticalAlignment
+        {
+            get => _boxContentVertAlignment;
+            set
+            {
+                _boxContentVertAlignment = value;
+            }
+        }
         protected override void OnContentLayout()
         {
             this.PerformContentLayout();
@@ -827,12 +837,11 @@ namespace LayoutFarm.CustomWidgets
                         //check if this abstract box want to preserver line box or not
                         //if just layout, then we can use shared lineboxes 
 
-                        using (var lineboxContext = new LineBoxesContext(_preserveLineBoxes ? _primElement : null))
+                        if (childrenIter != null && childrenIter.Count > 0)
                         {
-                            if (childrenIter != null && childrenIter.Count > 0)
+                            using (var lineboxContext = new LineBoxesContext(_preserveLineBoxes ? _primElement : null))
                             {
                                 LineBox linebox = lineboxContext.AddNewLineBox();
-
                                 int left_to_right_max_x = 0;
                                 int limit_w = this.Width;
                                 int max_lineHeight = 0;
@@ -849,6 +858,13 @@ namespace LayoutFarm.CustomWidgets
                                             xpos = PaddingLeft; //start
                                             ypos += max_lineHeight + 1;
                                             max_lineHeight = 0;//reset
+
+                                            //before we begin a new line
+                                            //adjust current line vertical aligment
+                                            if (_boxContentVertAlignment != VerticalAlignment.Top)
+                                            {
+                                                linebox.AdjustVerticalAlignment(_boxContentVertAlignment);
+                                            }
 
                                             linebox = lineboxContext.AddNewLineBox();
                                             linebox.LineTop = ypos;
@@ -889,6 +905,11 @@ namespace LayoutFarm.CustomWidgets
 
                                 }
                                 left_to_right_max_x = xpos;
+
+                                if (_boxContentVertAlignment != VerticalAlignment.Top)
+                                {
+                                    linebox.AdjustVerticalAlignment(_boxContentVertAlignment);
+                                }
                             }
                         }
                         this.SetInnerContentSize(xpos, maxBottom);

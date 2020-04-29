@@ -64,7 +64,7 @@ namespace LayoutFarm.CustomWidgets
                 RenderElement.SetParentLink(renderE, this);
             }
         }
-        
+
         public int Count => _linkList.Count;
 
         public bool HitTestCore(HitChain hitChain)
@@ -118,6 +118,90 @@ namespace LayoutFarm.CustomWidgets
             }
             updateArea.CurrentRect = backup;//restore  
             d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);//restore
+        }
+
+
+        public void AdjustVerticalAlignment(VerticalAlignment vertAlignment)
+        {
+            LinkedListNode<RenderElement> node = _linkList.First;
+
+            switch (vertAlignment)
+            {
+                case VerticalAlignment.Bottom:
+                    while (node != null)
+                    {
+                        RenderElement r = node.Value;
+                        if (r is CustomRenderBox box)
+                        {
+                            int diff = LineHeight - r.Height;
+                            if (diff > 0)
+                            {
+                                //change location
+                                r.SetLocation(r.Left, box.ContentTop + diff);
+                            }
+                            else
+                            {
+                                //
+                            }
+                        }
+                        else
+                        {
+                            r.SetLocation(r.Left, 0); //***
+                        }
+
+                        node = node.Next;//**
+                    }
+                    break;
+                case VerticalAlignment.Middle:
+                    {
+                        //middle height of this line                        
+
+                        while (node != null)
+                        {
+                            RenderElement r = node.Value;
+                            if (r is CustomRenderBox box)
+                            {
+                                int diff = LineHeight - r.Height;
+                                if (diff > 0)
+                                {
+                                    //change location
+                                    r.SetLocation(r.Left, box.ContentTop + (diff / 2));
+                                }
+                                else
+                                {
+                                    //
+                                }
+                            }
+                            else
+                            {
+                                r.SetLocation(r.Left, 0); //***
+                            }
+
+                            node = node.Next;//**
+                        }
+                    }
+                    break;
+                case VerticalAlignment.Top:
+                    while (node != null)
+                    {
+                        RenderElement r = node.Value;
+                        if (r is CustomRenderBox box)
+                        {
+                            r.SetLocation(r.Left, box.ContentTop);
+                        }
+                        else
+                        {
+                            r.SetLocation(r.Left, 0); //***
+                        }
+
+                        node = node.Next;//**
+                    }
+                    break;
+                case VerticalAlignment.UserSpecific://TODO
+                    break;
+            }
+
+
         }
     }
 
@@ -271,26 +355,26 @@ namespace LayoutFarm.CustomWidgets
         public int ContentTop
         {
             get => _contentTop;
-            set => _contentTop = (byte)value;
+            set => _contentTop = (ushort)value;
         }
         public int ContentRight
         {
             get => _contentRight;
-            set => _contentRight = (byte)value;
+            set => _contentRight = (ushort)value;
         }
         public int ContentBottom
         {
             get => _contentBottom;
-            set => _contentBottom = (byte)value;
+            set => _contentBottom = (ushort)value;
         }
-        public void SetContentOffsets(byte contentLeft, byte contentTop, byte contentRight, byte contentBottom)
+        public void SetContentOffsets(ushort contentLeft, ushort contentTop, ushort contentRight, ushort contentBottom)
         {
             _contentLeft = contentLeft;
             _contentTop = contentTop;
             _contentRight = contentRight;
             _contentBottom = contentBottom;
         }
-        public void SetContentOffsets(byte allside)
+        public void SetContentOffsets(ushort allside)
         {
             _contentLeft = allside;
             _contentTop = allside;
@@ -303,7 +387,7 @@ namespace LayoutFarm.CustomWidgets
             get => _backColor;
             set
             {
-                //if (_backColor == value) return;
+                if (_backColor == value) return;
 
                 _backColor = value;
 

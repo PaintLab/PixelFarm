@@ -15,6 +15,13 @@ namespace LayoutFarm
         HorizontalStack,
         HorizontalFlow,
     }
+    public enum VerticalAlignment : byte
+    {
+        Top,
+        Middle,
+        Bottom,
+        UserSpecific
+    }
 
     public interface IContainerRenderElement
     {
@@ -229,7 +236,8 @@ namespace LayoutFarm
             }
         }
 
-         
+
+      
 #if DEBUG
         public bool debugDefaultLayerHasChild
         {
@@ -306,5 +314,5 @@ namespace LayoutFarm
 #endif
 
     }
-     
+
 }
