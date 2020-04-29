@@ -318,24 +318,20 @@ namespace LayoutFarm
 
         public virtual void InsertAfter(RenderElement afterElem, RenderElement renderE)
         {
-
             _elements.InsertChildAfter(this, afterElem, renderE);
         }
         public virtual void InsertBefore(RenderElement beforeElem, RenderElement renderE)
         {
-
             _elements.InsertChildBefore(this, beforeElem, renderE);
         }
         public virtual void RemoveChild(RenderElement renderE)
         {
-
             _elements?.RemoveChild(this, renderE);
         }
         public virtual void ClearAllChildren()
         {
-
-            _elements?.Clear();
-            this.InvalidateGraphics();
+            _elements?.Clear(this);
+            
         }
 
         public override RenderElement FindUnderlyingSiblingAtPoint(Point point)

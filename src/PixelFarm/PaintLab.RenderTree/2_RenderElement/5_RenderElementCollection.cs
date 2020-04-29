@@ -84,17 +84,21 @@ namespace LayoutFarm.RenderBoxes
             RenderElement.SetParentLink(re, null);
             RenderElement.InvalidateGraphicLocalArea(parent, bounds);
         }
-        public void Clear()
+        public void Clear(RenderElement parent)
         {
 
             LinkedListNode<RenderElement> curNode = _myElements.First;
             while (curNode != null)
             {
-                curNode.Value._internalLinkedNode = null;
+                RenderElement v = curNode.Value;
+                v._internalLinkedNode = null;
+                RenderElement.SetParentLink(v, null);
+
                 curNode = curNode.Next;
             }
 
             _myElements.Clear();
+            parent.InvalidateGraphics();
         }
 
         public IEnumerable<RenderElement> GetDrawingIter()
