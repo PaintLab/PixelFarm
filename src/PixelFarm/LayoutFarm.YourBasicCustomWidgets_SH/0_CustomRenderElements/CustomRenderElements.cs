@@ -1,9 +1,205 @@
 ﻿//Apache2, 2014-present, WinterDev
 
-using LayoutFarm.RenderBoxes;
+
 using PixelFarm.Drawing;
+using System.Collections.Generic;
+using LayoutFarm.RenderBoxes;
+using LayoutFarm.UI;
+
 namespace LayoutFarm.CustomWidgets
 {
+
+
+    class LineBox : IParentLink
+    {
+        LinkedList<RenderElement> _linkList = new LinkedList<RenderElement>();
+
+#if DEBUG
+        static int dbugTotalId;
+        public readonly int dbugId;
+#endif
+        public LineBox()
+        {
+#if DEBUG
+            dbugId = dbugTotalId++;
+#endif
+
+        }
+        public int LineTop { get; set; }
+        public int LineHeight { get; set; }
+        public int LineBottom => LineTop + LineHeight;
+        public RenderElement ParentRenderElement { get; internal set; }
+
+        public void AdjustLocation(ref int px, ref int py)
+        {
+            py += LineTop;
+        }
+#if DEBUG
+        public string dbugGetLinkInfo()
+        {
+            return "linkbox";
+        }
+#endif
+        public RenderElement FindOverlapedChildElementAtPoint(RenderElement afterThisChild, Point point)
+        {
+            return null;
+        }
+
+        public bool IsIntersect(int minY, int maxY) => !((maxY < LineTop) || (minY > (LineTop + LineHeight)));
+
+        //TODO: need to clear all parent link? 
+        public void Clear() => _linkList.Clear();
+
+        public void Add(RenderElement renderE)
+        {
+            _linkList.AddLast(renderE);
+            if (ParentRenderElement != null)
+            {
+                RenderElement.SetParentLink(renderE, this);
+            }
+        }
+
+        public int Count => _linkList.Count;
+
+        public bool HitTestCore(HitChain hitChain)
+        {
+
+            if (LineTop <= hitChain.TestPointY &&
+               (LineTop + LineHeight) > hitChain.TestPointY)
+            {
+                LinkedListNode<RenderElement> node = _linkList.First;
+                hitChain.OffsetTestPoint(0, -LineTop);
+                bool found = false;
+                while (node != null)
+                {
+                    if (node.Value.HitTestCore(hitChain))
+                    {
+                        found = true;
+                        break;
+                    }
+                    node = node.Next;
+                }
+                hitChain.OffsetTestPoint(0, LineTop);
+                return found;
+            }
+            return false;
+        }
+        public void Render(DrawBoard d, UpdateArea updateArea)
+        {
+            LinkedListNode<RenderElement> renderNode = _linkList.First;
+            Rectangle backup = updateArea.CurrentRect;
+            int enter_canvas_x = d.OriginX;
+            int enter_canvas_y = d.OriginY;
+
+            while (renderNode != null)
+            {
+                //---------------------------
+                //TODO: review here again
+                RenderElement renderE = renderNode.Value;
+                if (renderE.IntersectsWith(updateArea))
+                {
+                    int x = renderE.X;
+                    int y = renderE.Y;
+
+                    d.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
+                    updateArea.Offset(-x, -y);
+                    RenderElement.Render(renderE, d, updateArea);
+                    updateArea.Offset(x, y);
+                }
+
+                renderNode = renderNode.Next;
+            }
+            updateArea.CurrentRect = backup;//restore  
+            d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);//restore
+        }
+
+        public void AdjustHorizontalAlignment(RectUIAlignment alignment)
+        {
+            //line, and spread data inside this line
+
+
+        }
+        public void AdjustVerticalAlignment(VerticalAlignment vertAlignment)
+        {
+            LinkedListNode<RenderElement> node = _linkList.First;
+
+            switch (vertAlignment)
+            {
+                case VerticalAlignment.Bottom:
+                    while (node != null)
+                    {
+                        RenderElement r = node.Value;
+                        if (r is CustomRenderBox box)
+                        {
+                            int diff = LineHeight - r.Height;
+                            if (diff > 0)
+                            {
+                                //change location
+                                r.SetLocation(r.Left, box.ContentTop + diff);
+                            }
+                            else
+                            {
+                                //
+                            }
+                        }
+                        else
+                        {
+                            r.SetLocation(r.Left, 0); //***
+                        }
+
+                        node = node.Next;//**
+                    }
+                    break;
+                case VerticalAlignment.Middle:
+                    {
+                        //middle height of this line                        
+
+                        while (node != null)
+                        {
+                            RenderElement r = node.Value;
+                            if (r is CustomRenderBox box)
+                            {
+                                int diff = LineHeight - r.Height;
+                                if (diff > 0)
+                                {
+                                    //change location
+                                    r.SetLocation(r.Left, box.ContentTop + (diff / 2));
+                                }
+                                else
+                                {
+                                    //
+                                }
+                            }
+                            else
+                            {
+                                r.SetLocation(r.Left, 0); //***
+                            }
+
+                            node = node.Next;//**
+                        }
+                    }
+                    break;
+                case VerticalAlignment.Top:
+                    while (node != null)
+                    {
+                        RenderElement r = node.Value;
+                        if (r is CustomRenderBox box)
+                        {
+                            r.SetLocation(r.Left, box.ContentTop);
+                        }
+                        else
+                        {
+                            r.SetLocation(r.Left, 0); //***
+                        }
+
+                        node = node.Next;//**
+                    }
+                    break;
+                case VerticalAlignment.UserSpecific://TODO
+                    break;
+            }
+        }
+    }
 
 
     public class CustomRenderBox : RenderBoxBase
@@ -34,36 +230,38 @@ namespace LayoutFarm.CustomWidgets
         {
             this.BackColor = KnownColors.LightGray;
         }
-         
-        public int PaddingLeft
+
+
+        internal List<LineBox> Lines { get; set; }
+
+        public ushort PaddingLeft
         {
-            get => _contentLeft - _borderLeft;
+            get => (ushort)(_contentLeft - _borderLeft);
             set
             {
                 _contentLeft = (ushort)(value + _borderLeft);
             }
         }
-
-        public int PaddingTop
+        public ushort PaddingTop
         {
-            get => _contentTop - _borderTop;
+            get => (ushort)(_contentTop - _borderTop);
             set
             {
                 _contentTop = (ushort)(value + _borderTop);
             }
         }
-        public int PaddingRight
+        public ushort PaddingRight
         {
-            get => _contentRight - _borderRight;
+            get => (ushort)(_contentRight - _borderRight);
             set
             {
                 _contentRight = (ushort)(value + _borderRight);
             }
         }
-        public int PaddingBottom
+        public ushort PaddingBottom
 
         {
-            get => _contentBottom - _borderBottom;
+            get => (ushort)(_contentBottom - _borderBottom);
             set
             {
                 _contentBottom = (ushort)(value + _borderBottom);
@@ -84,7 +282,7 @@ namespace LayoutFarm.CustomWidgets
             _contentBottom = (ushort)(sameValue + _borderBottom);
         }
         //------------------ 
-        public int BorderTop
+        public byte BorderTop
         {
             get => _borderTop;
             set
@@ -93,7 +291,7 @@ namespace LayoutFarm.CustomWidgets
                 if (!_hasSomeBorderW) _hasSomeBorderW = value > 0;
             }
         }
-        public int BorderBottom
+        public byte BorderBottom
         {
             get => _borderBottom;
             set
@@ -102,7 +300,7 @@ namespace LayoutFarm.CustomWidgets
                 if (!_hasSomeBorderW) _hasSomeBorderW = value > 0;
             }
         }
-        public int BorderRight
+        public byte BorderRight
         {
             get => _borderRight;
             set
@@ -111,7 +309,7 @@ namespace LayoutFarm.CustomWidgets
                 if (!_hasSomeBorderW) _hasSomeBorderW = value > 0;
             }
         }
-        public int BorderLeft
+        public byte BorderLeft
         {
             get => _borderLeft;
             set
@@ -145,34 +343,34 @@ namespace LayoutFarm.CustomWidgets
         public int ContentWidth => Width - (_contentLeft + _contentRight);
         public int ContentHeight => Height - (_contentTop + _contentBottom);
 
-        public int ContentLeft
+        public ushort ContentLeft
         {
             get => _contentLeft;
             set => _contentLeft = (byte)value;
         }
-        public int ContentTop
+        public ushort ContentTop
         {
             get => _contentTop;
-            set => _contentTop = (byte)value;
+            set => _contentTop = (ushort)value;
         }
-        public int ContentRight
+        public ushort ContentRight
         {
             get => _contentRight;
-            set => _contentRight = (byte)value;
+            set => _contentRight = (ushort)value;
         }
-        public int ContentBottom
+        public ushort ContentBottom
         {
             get => _contentBottom;
-            set => _contentBottom = (byte)value;
+            set => _contentBottom = (ushort)value;
         }
-        public void SetContentOffsets(byte contentLeft, byte contentTop, byte contentRight, byte contentBottom)
+        public void SetContentOffsets(ushort contentLeft, ushort contentTop, ushort contentRight, ushort contentBottom)
         {
             _contentLeft = contentLeft;
             _contentTop = contentTop;
             _contentRight = contentRight;
             _contentBottom = contentBottom;
         }
-        public void SetContentOffsets(byte allside)
+        public void SetContentOffsets(ushort allside)
         {
             _contentLeft = allside;
             _contentTop = allside;
@@ -220,13 +418,20 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
+
+
+
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
 #if DEBUG
-            //if (this.dbugBreak)
-            //{
-            //}
+            if (this.dbugBreak)
+            {
+            }
 #endif
+            //if (this.Width < 30 && this.BackColor == Color.White)
+            //{
+
+            //}
 
             //this render element dose not have child node, so
             //if WaitForStartRenderElement == true,
@@ -241,7 +446,44 @@ namespace LayoutFarm.CustomWidgets
             }
 
             //default content layer
-            this.DrawDefaultLayer(d, updateArea);
+            //check if we use multiline or not
+            if (Lines != null)
+            {
+
+                List<LineBox> lineboxes = Lines;
+                int j = lineboxes.Count;
+                int enter_canvas_x = d.OriginX;
+                int enter_canvas_y = d.OriginY;
+
+                int update_a_top = updateArea.Top;
+                int update_a_bottom = updateArea.Bottom;
+
+                for (int i = 0; i < j; ++i)
+                {
+                    LineBox linebox = lineboxes[i];
+                    if (linebox.IsIntersect(update_a_top, update_a_bottom))
+                    {
+                        //offset to this client
+
+                        //if the child not need clip
+                        //its children (if exist) may intersect 
+                        int x = 0;
+                        int y = linebox.LineTop;
+
+                        d.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
+                        updateArea.Offset(-x, -y);
+
+                        linebox.Render(d, updateArea);
+
+                        updateArea.Offset(x, y);
+                    }
+                }
+                d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y); //restore                
+            }
+            else
+            {
+                base.RenderClientContent(d, updateArea);
+            }
             //
 
             if (!WaitForStartRenderElement &&
@@ -259,6 +501,43 @@ namespace LayoutFarm.CustomWidgets
             //canvas.dbug_DrawCrossRect(PixelFarm.Drawing.Color.Black,
             //   new Rectangle(updateArea.Left, updateArea.Top, updateArea.Width, updateArea.Height));
 #endif
+        }
+
+
+        protected override bool CustomHitTest(HitChain hitChain)
+        {
+            return base.CustomHitTest(hitChain);
+        }
+        public override void ChildrenHitTestCore(HitChain hitChain)
+        {
+
+            if (Lines != null)
+            {
+                //check if it's overlap line or not
+                //find a properline 
+                //then offset and test at that line
+                List<LineBox> lineboxes = Lines;
+                int j = lineboxes.Count;
+                for (int i = 0; i < j; ++i)
+                {
+                    LineBox linebox = lineboxes[i];
+                    if (linebox.HitTestCore(hitChain))
+                    {
+                        return;
+                    }
+                    else if (linebox.LineTop > hitChain.TestPointY)
+                    {
+                        //we iterate from top to bottom
+                        //we should stop and return
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                //use default machanism
+                base.ChildrenHitTestCore(hitChain);
+            }
         }
     }
 

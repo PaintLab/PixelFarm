@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
+using PixelFarm.CpuBlit;
 
 namespace LayoutFarm.CustomWidgets
 {
@@ -97,9 +98,98 @@ namespace LayoutFarm.CustomWidgets
             }
             return MayBeEmptyTempContext<List<T>>.Borrow(out linkedlist);
         }
+
+
+        public static MayBeEmptyTempContext<LineBox> BorrowLineBox(out LineBox linebox)
+        {
+            if (!MayBeEmptyTempContext<LineBox>.IsInit())
+            {
+                MayBeEmptyTempContext<LineBox>.SetNewHandler(
+                    () => new LineBox(),
+                    line => line.Clear());
+            }
+            return MayBeEmptyTempContext<LineBox>.Borrow(out linebox);
+        }
     }
 
+    struct LineBoxesContext : IDisposable
+    {
+        RenderElement _owner;
+        MayBeEmptyTempContext<List<LineBox>> _context;
+        List<LineBox> _lineboxes;
 
+        List<MayBeEmptyTempContext<LineBox>> _sharedLineBoxContexts;
+        MayBeEmptyTempContext<List<MayBeEmptyTempContext<LineBox>>> _sharedLineBoxContextListContext;
+
+        public LineBoxesContext(CustomRenderBox owner)
+        {
+            //set owner element if we want to preserver linebox ***
+            _owner = owner;
+            if (_owner == null)
+            {
+                //don't preserve linebox
+                _context = LayoutTools.BorrowList(out _lineboxes);
+                _sharedLineBoxContextListContext = LayoutTools.BorrowList(out _sharedLineBoxContexts);
+            }
+            else
+            {
+                //preserver context
+                _context = MayBeEmptyTempContext<List<LineBox>>.Empty;
+                _lineboxes = owner.Lines;
+                if (_lineboxes == null)
+                {
+                    _lineboxes = owner.Lines = new List<LineBox>();
+                }
+                else
+                {
+                    _lineboxes.Clear();
+                }
+
+                _sharedLineBoxContexts = null;
+                _sharedLineBoxContextListContext = MayBeEmptyTempContext<List<MayBeEmptyTempContext<LineBox>>>.Empty;
+
+            }
+        }
+        public void Dispose()
+        {
+            //release if we use pool
+            _context.Dispose();
+            if (_sharedLineBoxContexts != null)
+            {
+                //release all lineboxes
+                int j = _sharedLineBoxContexts.Count;
+                for (int i = 0; i < j; ++i)
+                {
+                    _sharedLineBoxContexts[i].Dispose();
+                }
+                //
+                _sharedLineBoxContexts.Clear();
+                _sharedLineBoxContexts = null;
+                //
+                _sharedLineBoxContextListContext.Dispose();
+            }
+        }
+
+        public LineBox AddNewLineBox()
+        {
+            if (_owner != null)
+            {
+                LineBox newline = new LineBox();
+                newline.ParentRenderElement = _owner;//***
+                _lineboxes.Add(newline);
+                return newline;
+            }
+            else
+            {
+                //we can use it from pool
+                //and we will release this later
+                _sharedLineBoxContexts.Add(LayoutTools.BorrowLineBox(out LineBox sharedLinebox));
+                _lineboxes.Add(sharedLinebox);
+
+                return sharedLinebox;
+            }
+        }
+    }
 
 
     /// <summary>
@@ -107,7 +197,7 @@ namespace LayoutFarm.CustomWidgets
     /// this control provides 'primary-render-element', 
     /// keyboard-mouse-events, viewport mechanhism.
     /// </summary>
-    public abstract class AbstractBox : AbstractRectUI
+    public abstract partial class AbstractBox : AbstractRectUI
     {
 
         //some basic rect-properties
@@ -126,6 +216,9 @@ namespace LayoutFarm.CustomWidgets
 
         protected CustomRenderBox _primElement;
         CustomRenderBoxSpec _boxSpec;
+
+
+
         public AbstractBox(int width, int height)
             : base(width, height)
         {
@@ -474,7 +567,6 @@ namespace LayoutFarm.CustomWidgets
 
         public override int InnerWidth => _innerWidth;
         public override int InnerHeight => _innerHeight;
-
         public virtual void SetInnerContentSize(int w, int h)
         {
             _innerWidth = w;
@@ -492,13 +584,19 @@ namespace LayoutFarm.CustomWidgets
                 _boxContentLayoutKind = value; //invalidate layout after change this
                 if (_primElement != null)
                 {
-                    _primElement.LayoutKind = value;
+                    //assign layout hint 
+                    _primElement.ContentHitTestHint = RenderBoxes.HitTestHint.Custom;
                 }
+            }
+        }
 
-                //if (_uiList != null && _uiList.Count > 0)
-                //{
-                //    this.InvalidateLayout();
-                //}
+        VerticalAlignment _boxContentVertAlignment = VerticalAlignment.Bottom;
+        public VerticalAlignment ContentVerticalAlignment
+        {
+            get => _boxContentVertAlignment;
+            set
+            {
+                _boxContentVertAlignment = value;
             }
         }
         protected override void OnContentLayout()
@@ -511,16 +609,47 @@ namespace LayoutFarm.CustomWidgets
 
         protected abstract IUICollection<UIElement> GetDefaultChildrenIter();
 
+
+        bool _preserveLineBoxes = true;
+        /// <summary>
+        /// preserve multiple lines 
+        /// </summary>
+        public bool PreserverLineBoxes
+        {
+            get => _preserveLineBoxes;
+            set
+            {
+                _preserveLineBoxes = value;
+                if (!value && _primElement != null && _primElement.Lines != null)
+                {
+                    _primElement.Lines = null;
+                }
+            }
+        }
+
         public override void PerformContentLayout()
         {
             //****
             //this.InvalidateGraphics();
             //temp : arrange as vertical stack***
             Rectangle preBounds = this.Bounds;
+
+            //we can use manual layout here
+            //or use default built-in layout machanism
+
+            int limitW = 99999;
+            if (this.HasSpecificWidth)
+            {
+                limitW = this.Width;
+            }
+
             switch (this.ContentLayoutKind)
             {
                 case BoxContentLayoutKind.VerticalStack:
                     {
+                        //TODO: check if non-overlap or not
+                        _primElement.ContentHitTestHint = RenderBoxes.HitTestHint.VerticalColumnNonOverlap;
+
                         int maxRight = 0;
 
                         int xpos = this.PaddingLeft; //start X at paddingLeft
@@ -559,8 +688,10 @@ namespace LayoutFarm.CustomWidgets
                         this.SetInnerContentSize(maxRight, ypos);
                     }
                     break;
+
                 case BoxContentLayoutKind.HorizontalStack:
                     {
+                        _primElement.ContentHitTestHint = RenderBoxes.HitTestHint.HorizontalRowNonOverlap;
 
                         int maxBottom = 0;
                         //experiment
@@ -695,7 +826,8 @@ namespace LayoutFarm.CustomWidgets
                     break;
                 case BoxContentLayoutKind.HorizontalFlow:
                     {
-                        //horizontal flow
+                        _primElement.ContentHitTestHint = RenderBoxes.HitTestHint.Custom;
+
                         int maxBottom = 0;
                         //experiment
                         bool allowAutoContentExpand = this.AllowAutoContentExpand;
@@ -704,47 +836,85 @@ namespace LayoutFarm.CustomWidgets
                         int xpos = this.PaddingLeft; //start X at paddingLeft
                         int ypos = this.PaddingTop; //start Y at padding top
                         IUICollection<UIElement> childrenIter = GetDefaultChildrenIter();
+
+                        //check if this abstract box want to preserver line box or not
+                        //if just layout, then we can use shared lineboxes 
+
                         if (childrenIter != null && childrenIter.Count > 0)
                         {
-                            int hostW = this.Width;//***
-
-                            //flow layout
-                            //we need to flow it into multi-linebox
-
-                            foreach (UIElement ui in childrenIter.GetIter())
+                            using (var lineboxContext = new LineBoxesContext(_preserveLineBoxes ? _primElement : null))
                             {
-                                if (ui is AbstractRectUI rect)
+                                LineBox linebox = lineboxContext.AddNewLineBox();
+                                int left_to_right_max_x = 0;
+                                int limit_w = this.Width;
+                                int max_lineHeight = 0;
+                                foreach (UIElement ui in childrenIter.GetIter())
                                 {
-                                    rect.PerformContentLayout();
-
-                                    int right = xpos + rect.Width + rect.MarginLeftRight; //new pos
-                                    if (right > hostW)
+                                    if (ui is AbstractRectUI rect)
                                     {
-                                        //start a new line
-                                        xpos = this.PaddingLeft;
-                                        ypos += maxBottom + 1; //we need some margin 
+                                        rect.PerformContentLayout();
 
-                                        maxBottom = 0;
-                                        right = xpos + rect.Width + rect.MarginLeftRight;
+                                        int new_x = xpos + rect.Width + rect.MarginLeftRight;
+                                        if (new_x > limit_w)
+                                        {
+                                            //start new line
+                                            xpos = PaddingLeft; //start
+                                            ypos += max_lineHeight + 1;
+                                            max_lineHeight = 0;//reset
+
+                                            //before we begin a new line
+                                            //adjust current line vertical aligment
+                                            if (_boxContentVertAlignment != VerticalAlignment.Top)
+                                            {
+                                                linebox.AdjustVerticalAlignment(_boxContentVertAlignment);
+                                            }
+
+                                            linebox = lineboxContext.AddNewLineBox();
+                                            linebox.LineTop = ypos;
+
+                                            new_x = xpos + rect.Width + rect.MarginLeftRight;
+                                        }
+
+                                        int tmp_bottom = 0;
+                                        if (_preserveLineBoxes)
+                                        {
+                                            //new top is relative to linetop
+                                            rect.SetLocationAndSize(xpos, rect.MarginTop, rect.Width, rect.Height); //
+                                            tmp_bottom = ypos + rect.Bottom;
+                                        }
+                                        else
+                                        {
+                                            rect.SetLocationAndSize(xpos, ypos + rect.MarginTop, rect.Width, rect.Height); //
+                                            tmp_bottom = rect.Bottom;
+                                        }
+
+                                        xpos = new_x;
+
+                                        if (max_lineHeight < rect.Height)
+                                        {
+                                            max_lineHeight = rect.Height;
+                                            linebox.LineHeight = max_lineHeight;
+                                        } 
+
+                                        if (tmp_bottom > maxBottom)
+                                        {
+                                            //start 
+                                            maxBottom = tmp_bottom;
+                                        }
                                     }
 
-                                    rect.SetLocationAndSize(xpos, ypos + rect.MarginTop, rect.Width, rect.Height); //
-                                                                                                                   //
-                                    int tmp_bottom = rect.Height;
-                                    if (tmp_bottom > maxBottom)
-                                    {
-                                        maxBottom = tmp_bottom;
-                                    }
+                                    linebox.Add(ui.GetPrimaryRenderElement(_primElement.Root));
 
+                                }
+                                left_to_right_max_x = xpos;
 
-                                    xpos = right;
-
+                                if (_boxContentVertAlignment != VerticalAlignment.Top)
+                                {
+                                    linebox.AdjustVerticalAlignment(_boxContentVertAlignment);
                                 }
                             }
                         }
                         this.SetInnerContentSize(xpos, maxBottom);
-
-
                     }
                     break;
                 default:
@@ -798,7 +968,7 @@ namespace LayoutFarm.CustomWidgets
             }
 #endif
             //------------------------------------------------
-            base.RaiseLayoutFinished();
+            base.RaiseLayoutFinished(); //TODO: review here again
 
 #if DEBUG
             if (HasReadyRenderElement)

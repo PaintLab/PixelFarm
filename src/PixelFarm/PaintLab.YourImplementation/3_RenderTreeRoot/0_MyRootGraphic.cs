@@ -301,7 +301,8 @@ namespace LayoutFarm.UI
         {
             if (debugVisualLay != null)
             {
-                debugVisualLay.BeginNewContext(); debugVisualLay.WriteInfo(msg.text, ve);
+                debugVisualLay.BeginNewContext(); 
+                debugVisualLay.WriteInfo(msg.text, ve);
             }
         }
         static void dbug_EndCurrentContext(dbugVisualLayoutTracer debugVisualLay, dbugVisitorMessage msg, RenderElement ve)

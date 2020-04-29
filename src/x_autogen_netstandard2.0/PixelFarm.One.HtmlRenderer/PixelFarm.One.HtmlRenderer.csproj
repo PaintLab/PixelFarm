@@ -576,13 +576,11 @@
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\2_RenderElement\2_RenderElement.ElementPositioning_1_WithSizeChanged.cs" Link="PixelFarm\PaintLab.RenderTree\2_RenderElement\2_RenderElement.ElementPositioning_1_WithSizeChanged.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\2_RenderElement\3_RenderElement.Bubble_Layout.cs" Link="PixelFarm\PaintLab.RenderTree\2_RenderElement\3_RenderElement.Bubble_Layout.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\2_RenderElement\4_RenderElement.Bubble_Repaint.cs" Link="PixelFarm\PaintLab.RenderTree\2_RenderElement\4_RenderElement.Bubble_Repaint.cs" />
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\2_RenderElement\5_RenderElementCollection.cs" Link="PixelFarm\PaintLab.RenderTree\2_RenderElement\5_RenderElementCollection.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\2_RenderElement\RenderElementConst.cs" Link="PixelFarm\PaintLab.RenderTree\2_RenderElement\RenderElementConst.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\2_RenderElement\RenderElement_IParentLink.cs" Link="PixelFarm\PaintLab.RenderTree\2_RenderElement\RenderElement_IParentLink.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\2_RenderElement\x_RenderElement.debug.cs" Link="PixelFarm\PaintLab.RenderTree\2_RenderElement\x_RenderElement.debug.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\2_RenderElement\x_RenderElement_LocationHelper.cs" Link="PixelFarm\PaintLab.RenderTree\2_RenderElement\x_RenderElement_LocationHelper.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\3_Layers\0_IParentLink.cs" Link="PixelFarm\PaintLab.RenderTree\3_Layers\0_IParentLink.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\3_Layers\1_RenderElementLayer.cs" Link="PixelFarm\PaintLab.RenderTree\3_Layers\1_RenderElementLayer.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\3_Layers\2_PlainLayer.cs" Link="PixelFarm\PaintLab.RenderTree\3_Layers\2_PlainLayer.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\4_Boxes\IBoxElement.cs" Link="PixelFarm\PaintLab.RenderTree\4_Boxes\IBoxElement.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\4_Boxes\RenderBoxBase.cs" Link="PixelFarm\PaintLab.RenderTree\4_Boxes\RenderBoxBase.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree\5_HitTest\HitChain.cs" Link="PixelFarm\PaintLab.RenderTree\5_HitTest\HitChain.cs" />
@@ -1114,7 +1112,6 @@
     <Folder Include="PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox" />
     <Folder Include="PixelFarm\PaintLab.RenderTree\1_Root" />
     <Folder Include="PixelFarm\PaintLab.RenderTree\2_RenderElement" />
-    <Folder Include="PixelFarm\PaintLab.RenderTree\3_Layers" />
     <Folder Include="PixelFarm\PaintLab.RenderTree\4_Boxes" />
     <Folder Include="PixelFarm\PaintLab.RenderTree\5_HitTest" />
     <Folder Include="PixelFarm\PaintLab.RenderTree\6_debug" />

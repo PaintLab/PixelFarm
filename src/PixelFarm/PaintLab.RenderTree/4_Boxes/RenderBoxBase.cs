@@ -2,6 +2,10 @@
 
 using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
+
+using System.Collections.Generic;
+
+
 namespace LayoutFarm
 {
     public enum BoxContentLayoutKind : byte
@@ -11,36 +15,231 @@ namespace LayoutFarm
         HorizontalStack,
         HorizontalFlow,
     }
-
-
-#if DEBUG
-    [System.Diagnostics.DebuggerDisplay("RenderBoxBase {dbugGetCssBoxInfo}")]
-#endif
-    public abstract class RenderBoxBase : RenderElement
+    public enum VerticalAlignment : byte
     {
-        BoxContentLayoutKind _contentLayoutKind;
-        PlainLayer _defaultLayer;
-        protected bool _disableDefaultLayer;
+        Top,
+        Middle,
+        Bottom,
+        UserSpecific
+    }
 
-        public RenderBoxBase(RootGraphic rootgfx, int width, int height)
-            : base(rootgfx, width, height)
+    public interface IContainerRenderElement
+    {
+        void AddChild(RenderElement renderE);
+        void AddFirst(RenderElement renderE);
+        void InsertAfter(RenderElement afterElem, RenderElement renderE);
+        void InsertBefore(RenderElement beforeElem, RenderElement renderE);
+        void RemoveChild(RenderElement renderE);
+        void ClearAllChildren();
+        RootGraphic Root { get; }
+    }
+
+    static class RenderElemHelper
+    {
+
+        public static void DrawChildContent(HitTestHint layoutHint, IEnumerable<RenderElement> drawingIter, DrawBoard d, UpdateArea updateArea)
         {
-            this.MayHasViewport = true;
-            this.MayHasChild = true;
-        }
+            int enter_canvas_x = d.OriginX;
+            int enter_canvas_y = d.OriginY;
 
-
-        public override void ChildrenHitTestCore(HitChain hitChain)
-        {
-            if (_defaultLayer != null)
+            switch (layoutHint)
             {
-                _defaultLayer.HitTestCore(hitChain);
-#if DEBUG
-                debug_RecordLayerInfo(_defaultLayer);
-#endif
+                default:
+                    {
+                        foreach (RenderElement child in drawingIter)
+                        {
+                            if (child.IntersectsWith(updateArea) ||
+                               !child.NeedClipArea)
+                            {
+                                //if the child not need clip
+                                //its children (if exist) may intersect 
+                                int x = child.X;
+                                int y = child.Y;
+
+                                d.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
+                                updateArea.Offset(-x, -y);
+                                RenderElement.Render(child, d, updateArea);
+                                updateArea.Offset(x, y);
+                            }
+                        }
+
+                        //restore
+                        d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);
+                    }
+                    break;
+                case HitTestHint.HorizontalRowNonOverlap:
+                    {
+                        bool found = false;
+                        foreach (RenderElement child in drawingIter)
+                        {
+                            if (child.IntersectsWith(updateArea))
+                            {
+                                found = true;
+                                //if the child not need clip
+                                //its children (if exist) may intersect 
+                                int x = child.X;
+                                int y = child.Y;
+
+                                d.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
+                                updateArea.Offset(-x, -y);
+                                RenderElement.Render(child, d, updateArea);
+                                updateArea.Offset(x, y);
+                            }
+                            else if (found)
+                            {
+                                break;
+                            }
+                        }
+
+                        //restore
+                        d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);
+                    }
+                    break;
+                case HitTestHint.VerticalColumnNonOverlap:
+                    {
+                        bool found = false;
+                        foreach (RenderElement child in drawingIter)
+                        {
+                            if (child.IntersectsWith(updateArea))
+                            {
+                                found = true;
+                                //if the child not need clip
+                                //its children (if exist) may intersect 
+                                int x = child.X;
+                                int y = child.Y;
+
+                                d.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
+                                updateArea.Offset(-x, -y);
+                                RenderElement.Render(child, d, updateArea);
+                                updateArea.Offset(x, y);
+                            }
+                            else if (found)
+                            {
+                                break;
+                            }
+                        }
+                        d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);
+                    }
+                    break;
             }
         }
 
+        public static bool HitTestCore(HitChain hitChain, HitTestHint layoutHint, IEnumerable<RenderElement> hitTestIter)
+        {
+            switch (layoutHint)
+            {
+                default:
+                    {
+                        foreach (RenderElement renderE in hitTestIter)
+                        {
+                            if (renderE.HitTestCore(hitChain))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                case HitTestHint.HorizontalRowNonOverlap:
+                    {
+                        foreach (RenderElement renderE in hitTestIter)
+                        {
+
+                            if (renderE.HitTestCore(hitChain))
+                            {
+                                return true;
+                            }
+                            else if (renderE.Right < hitChain.TestPointX)
+                            {
+                                //hitTestIter iterates from right to left
+                                //so in this case (eg. we have whitespace between each elem)
+                                //this should be stop
+
+                                return false;
+                            }
+                        }
+
+                    }
+                    return false;
+                case HitTestHint.VerticalColumnNonOverlap:
+                    {
+                        foreach (RenderElement renderE in hitTestIter)
+                        {
+
+
+                            if (renderE.HitTestCore(hitChain))
+                            {
+                                return true;
+                            }
+                            else if (renderE.Bottom < hitChain.TestPointY)
+                            {
+                                //hitTestIter iterates from bottom to top
+                                //so in this case (eg. we have whitespace between each elem)
+                                //this should be stop
+                                return false;
+                            }
+                        }
+                    }
+                    return false;
+            }
+        }
+    }
+
+    public abstract class AbstractRectRenderElement : RenderElement
+    {
+        protected int _viewportLeft;
+        protected int _viewportTop;
+
+        public AbstractRectRenderElement(RootGraphic rootgfx, int width, int height)
+             : base(rootgfx, width, height)
+        {
+            this.MayHasViewport = true;
+        }
+        public override sealed int ViewportLeft => _viewportLeft;
+        public override sealed int ViewportTop => _viewportTop;
+        public override sealed void SetViewport(int viewportLeft, int viewportTop)
+        {
+            int diffLeft = viewportLeft - _viewportLeft;
+            int diffTop = viewportTop - _viewportTop;
+
+            if (diffLeft != 0 || diffTop != 0)
+            {
+                _viewportLeft = viewportLeft;
+                _viewportTop = viewportTop;
+                //
+
+                InvalidateGfxArgs args = RootGetInvalidateGfxArgs();
+                args.SetReason_ChangeViewport(this, diffLeft, diffTop);
+                this.InvalidateGraphics(args);
+            }
+        }
+
+
+    }
+
+
+    //#if DEBUG
+    //    [System.Diagnostics.DebuggerDisplay("RenderBoxBase")]
+    //#endif
+    public abstract class RenderBoxBase : AbstractRectRenderElement, IContainerRenderElement
+    {
+
+        RenderElementCollection _elements;
+        public RenderBoxBase(RootGraphic rootgfx, int width, int height)
+            : base(rootgfx, width, height)
+        {
+            this.MayHasChild = true;
+        }
+
+        public override void ChildrenHitTestCore(HitChain hitChain)
+        {
+            if (_elements != null)
+            {
+                RenderElemHelper.HitTestCore(hitChain, ContentHitTestHint, _elements.GetHitTestIter());
+#if DEBUG
+                debug_RecordLayerInfo(_elements.dbugGetLayerInfo());
+#endif
+            }
+        }
 
         public override sealed void TopDownReCalculateContentSize()
         {
@@ -54,10 +253,10 @@ namespace LayoutFarm
             int cHeight = this.Height;
             int cWidth = this.Width;
             Size ground_contentSize = Size.Empty;
-            if (_defaultLayer != null)
+            if (_elements != null)
             {
-                _defaultLayer.TopDownReCalculateContentSize();
-                ground_contentSize = _defaultLayer.PostCalculateContentSize;
+                _elements.TopDownReCalculateContentSize();
+                ground_contentSize = _elements.CalculatedContentSize;
             }
             int finalWidth = ground_contentSize.Width;
             if (finalWidth == 0)
@@ -96,76 +295,57 @@ namespace LayoutFarm
 #endif
 
         }
-        public override void ResetRootGraphics(RootGraphic rootgfx)
+
+
+        public virtual void AddChild(RenderElement renderE)
         {
-            if (this.Root != rootgfx)
+            if (_elements == null)
             {
-                DirectSetRootGraphics(this, rootgfx);
-                if (_defaultLayer != null)
-                {
-                    foreach (var r in _defaultLayer.GetRenderElementIter())
-                    {
-                        r.ResetRootGraphics(rootgfx);
-                    }
-                }
+                _elements = new RenderElementCollection();
             }
+
+            _elements.AddChild(this, renderE);
         }
-
-        public override void AddChild(RenderElement renderE)
+        public virtual void AddFirst(RenderElement renderE)
         {
-            if (_disableDefaultLayer) return;
-
-            if (_defaultLayer == null)
+            if (_elements == null)
             {
-                _defaultLayer = new PlainLayer(this);
+                _elements = new RenderElementCollection();
             }
-            _defaultLayer.AddChild(renderE);
-        }
-        public override void AddFirst(RenderElement renderE)
-        {
-            if (_disableDefaultLayer) return;
 
-            if (_defaultLayer == null)
-            {
-                _defaultLayer = new PlainLayer(this);
-            }
-            _defaultLayer.AddFirst(renderE);
+            _elements.AddFirst(this, renderE);
         }
 
-        public override void InsertAfter(RenderElement afterElem, RenderElement renderE)
+        public virtual void InsertAfter(RenderElement afterElem, RenderElement renderE)
         {
-            _defaultLayer.InsertChildAfter(afterElem, renderE);
+            _elements.InsertChildAfter(this, afterElem, renderE);
         }
-        public override void InsertBefore(RenderElement beforeElem, RenderElement renderE)
+        public virtual void InsertBefore(RenderElement beforeElem, RenderElement renderE)
         {
-            _defaultLayer.InsertChildBefore(beforeElem, renderE);
+            _elements.InsertChildBefore(this, beforeElem, renderE);
         }
-        public override void RemoveChild(RenderElement renderE)
+        public virtual void RemoveChild(RenderElement renderE)
         {
-            _defaultLayer?.RemoveChild(renderE);
+            _elements?.RemoveChild(this, renderE);
         }
-        public override void ClearAllChildren()
+        public virtual void ClearAllChildren()
         {
-            _defaultLayer?.Clear();
+            _elements?.Clear(this);
+            
         }
 
         public override RenderElement FindUnderlyingSiblingAtPoint(Point point)
         {
-            if (this.MyParentLink != null)
-            {
-                return this.MyParentLink.FindOverlapedChildElementAtPoint(this, point);
-            }
-
-            return null;
+            return this.MyParentLink?.FindOverlapedChildElementAtPoint(this, point);
         }
 
         public override Size InnerContentSize
         {
             get
             {
-                if (_defaultLayer != null)
+                if (_elements != null)
                 {
-                    Size s1 = _defaultLayer.PostCalculateContentSize;
+                    Size s1 = _elements.CalculatedContentSize;
                     int s1_w = s1.Width;
                     int s1_h = s1.Height;
 
@@ -186,11 +366,11 @@ namespace LayoutFarm
             }
         }
 
-        protected bool HasDefaultLayer => _defaultLayer != null;
+        internal RenderElementCollection GetElemCollection() => _elements;
 
-        protected void DrawDefaultLayer(DrawBoard d, UpdateArea updateArea)
+        protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
-            if (_defaultLayer != null)
+            if (_elements != null)
             {
 #if DEBUG
                 if (!debugBreaK1)
@@ -198,28 +378,25 @@ namespace LayoutFarm
                     debugBreaK1 = true;
                 }
 #endif
-                _defaultLayer.DrawChildContent(d, updateArea);
+
+                //***                
+
+                RenderElemHelper.DrawChildContent(
+                    ContentHitTestHint,
+                    _elements.GetDrawingIter(),
+                    d, updateArea);
             }
         }
 
-        public BoxContentLayoutKind LayoutKind
-        {
-            get => _contentLayoutKind;
-            set
-            {
-                _contentLayoutKind = value;
-                if (_defaultLayer != null)
-                {
-                    _defaultLayer.LayoutHint = value;
-                }
-            }
-        }
+
+        public HitTestHint ContentHitTestHint { get; set; }
+
 #if DEBUG
         public bool debugDefaultLayerHasChild
         {
             get
             {
-                return _defaultLayer != null && _defaultLayer.dbugChildCount > 0;
+                return _elements != null && _elements.dbugChildCount > 0;
             }
         }
 
@@ -232,11 +409,11 @@ namespace LayoutFarm
             this.dbug_BeginArr++;
             debug_PushTopDownElement(this);
             this.MarkValidContentArrangement();
-            //IsInTopDownReArrangePhase = true;
-            if (_defaultLayer != null)
-            {
-                _defaultLayer.TopDownReArrangeContent();
-            }
+            ////IsInTopDownReArrangePhase = true;
+            //if (_defaultLayer != null)
+            //{
+            //    _defaultLayer.TopDownReArrangeContent();
+            //}
 
             // BoxEvaluateScrollBar();
 
@@ -278,7 +455,7 @@ namespace LayoutFarm
             writer.EnterNewLevel();
             writer.LeaveCurrentLevel();
         }
-        void debug_RecordLayerInfo(RenderElementLayer layer)
+        void debug_RecordLayerInfo(dbugLayoutInfo layer)
         {
             RootGraphic visualroot = RootGraphic.dbugCurrentGlobalVRoot;
             if (visualroot.dbug_RecordDrawingChain)
@@ -290,4 +467,5 @@ namespace LayoutFarm
 #endif
 
     }
+
 }

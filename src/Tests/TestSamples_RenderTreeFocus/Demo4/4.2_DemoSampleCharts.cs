@@ -85,10 +85,7 @@ namespace LayoutFarm.ColorBlenderSample
                 }
 
             }
-            public override void ResetRootGraphics(RootGraphic rootgfx)
-            {
-
-            }
+          
             public float X0;
             public float Y0;
             public float X1;

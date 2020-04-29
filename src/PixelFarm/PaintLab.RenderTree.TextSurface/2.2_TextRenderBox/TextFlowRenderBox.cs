@@ -4,14 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using LayoutFarm.RenderBoxes;
 using LayoutFarm.UI;
 
 using PixelFarm.Drawing;
 
 namespace LayoutFarm.TextEditing
 {
-    public class TextFlowRenderBox : RenderBoxBase, ITextFlowLayerOwner
+    public class TextFlowRenderBox : AbstractRectRenderElement, ITextFlowLayerOwner
     {
         internal TextMarkerLayer _markerLayer;
         internal TextFlowLayer _textLayer; //this is a special layer that render text
@@ -64,7 +63,7 @@ namespace LayoutFarm.TextEditing
         {
             return textEditRenderBox._editSession;
         }
- 
+
         public TextSpanStyle CurrentTextSpanStyle
         {
             get
@@ -322,7 +321,7 @@ namespace LayoutFarm.TextEditing
             _editSession.SetCaretPos(e.X, e.Y);
             _editSession.EndSelect();
             //this.InvalidateGraphics();
-            InvalidateGraphicOfCurrentSelectionArea(); 
+            InvalidateGraphicOfCurrentSelectionArea();
         }
 
         public virtual void HandleKeyPress(UIKeyEventArgs e)
@@ -537,12 +536,10 @@ namespace LayoutFarm.TextEditing
             visitor.OnEndTextLayer();
             //5. others? 
         }
-
         //
-        public override void ClearAllChildren()
+        public void ClearAllChildren()
         {
             _editSession.Clear();
-            base.ClearAllChildren();
         }
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
@@ -585,10 +582,6 @@ namespace LayoutFarm.TextEditing
 
             //3.2 actual editable layer
             _textLayer.DrawChildContent(d, updateArea);
-            if (this.HasDefaultLayer)
-            {
-                this.DrawDefaultLayer(d, updateArea);
-            }
             //----------------------------------------------
 
 #if DEBUG

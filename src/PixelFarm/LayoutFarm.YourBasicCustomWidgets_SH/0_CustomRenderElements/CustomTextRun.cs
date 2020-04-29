@@ -37,10 +37,7 @@ namespace LayoutFarm.CustomWidgets
         public DrawTextTechnique DrawTextTechnique { get; set; }
         public bool DelayFormattedString { get; set; }
 
-        public override void ResetRootGraphics(RootGraphic rootgfx)
-        {
-            DirectSetRootGraphics(this, rootgfx);
-        }
+        
         public Color TextColor
         {
             get => _textColor;

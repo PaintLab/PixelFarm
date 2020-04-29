@@ -183,13 +183,11 @@ namespace Mini
                 _painter.DetachCurrentShader();
                 _demo.Draw(_painter);
             }
-            public override void ResetRootGraphics(RootGraphic rootgfx)
-            {
 
-            }
             public void Dispose()
             {
-
+                _painter = null;
+                _demo = null;
             }
         }
     }

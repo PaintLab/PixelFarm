@@ -51,7 +51,7 @@ namespace LayoutFarm.CustomWidgets
                         RenderElement renderE = LandPart.CurrentPrimaryRenderElement;
                         if (renderE != null)
                         {
-                            RenderElement topRenderBox = renderE.GetTopWindowRenderBox();
+                            IContainerRenderElement topRenderBox = renderE.GetTopWindowRenderBox();
                             if (topRenderBox != null)
                             {
                                 Point globalLocation = LandPart.GetGlobalLocation();

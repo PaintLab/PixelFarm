@@ -1,14 +1,11 @@
 ﻿//MIT, 2019-present, WinterDev
 
-using System.Collections.Generic;
-using System.Text;
-
-using LayoutFarm.RenderBoxes;
+ 
 using PixelFarm.Drawing;
 
 namespace LayoutFarm.TextEditing
 {
-    public class DoubleBufferCustomRenderBox : RenderBoxBase
+    public class DoubleBufferCustomRenderBox : AbstractRectRenderElement
     {
         DrawboardBuffer _builtInBackBuffer;
         bool _hasAccumRect;
@@ -20,7 +17,7 @@ namespace LayoutFarm.TextEditing
             NeedInvalidateRectEvent = true;
         }
 
-        public RenderBoxBase ContentBox { get; set; }
+        public RenderElement ContentBox { get; set; }
 
         public bool EnableDoubleBuffer { get; set; }
  

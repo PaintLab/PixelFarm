@@ -202,10 +202,10 @@ namespace YourImplementation
         }
     }
 
-    class CpuBlitGLCanvasRenderElement : RenderBoxBase, IDisposable
+    class CpuBlitGLCanvasRenderElement : AbstractRectRenderElement, IDisposable
     {
 
-        CpuBlitGLESUIElement _ui;
+        CpuBlitGLESUIElement _glesUIElem;
         GLBitmap _glBmp;
         RootGraphic _rootgfx;
 
@@ -215,10 +215,10 @@ namespace YourImplementation
             _rootgfx = rootgfx;
             _glBmp = glBmp;
         }
-        public void SetOwnerDemoUI(CpuBlitGLESUIElement ui)
+        public void SetOwnerDemoUI(CpuBlitGLESUIElement glesUIElem)
         {
-            _ui = ui;
-        } 
+            _glesUIElem = glesUIElem;
+        }
 
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
@@ -234,21 +234,21 @@ namespace YourImplementation
             {
 
                 //update cpu surface part***  
-                DrawBoard board = _ui.GetDrawBoard();
+                DrawBoard board = _glesUIElem.GetDrawBoard();
                 if (board != null)
                 {
                     board.SetClipRect(updateArea.CurrentRect);
                     board.Clear(Color.White); //clear background, clear with white solid
 
-                    DrawDefaultLayer(board, updateArea);
+                 
 #if DEBUG
                     //_ui.dbugSaveAggBmp("a001.png");
 #endif
                 }
 
-                if (_ui.HasCpuBlitUpdateSurfaceDel)
+                if (_glesUIElem.HasCpuBlitUpdateSurfaceDel)
                 {
-                    _ui.UpdateCpuBlitSurface(updateArea.CurrentRect);
+                    _glesUIElem.UpdateCpuBlitSurface(updateArea.CurrentRect);
                 }
             }
 
@@ -264,11 +264,7 @@ namespace YourImplementation
             //------------------------------------------------------------------------- 
         }
 
-
-        public override void ResetRootGraphics(RootGraphic rootgfx)
-        {
-
-        }
+         
         public void Dispose()
         {
 

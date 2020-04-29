@@ -158,7 +158,7 @@ namespace LayoutFarm
             _approxRectBounds = new RectangleF(0, 0, 300, 300);
             this.NeedClipArea = false; //special for quad control
         }
-        public override void AddChild(RenderElement renderE)
+        public void AddChild(RenderElement renderE)
         {
 
         }
@@ -177,10 +177,7 @@ namespace LayoutFarm
             _controlPoints.Clear();
             InvalidateGraphics();
         }
-        public override void ResetRootGraphics(RootGraphic rootgfx)
-        {
-
-        }
+      
 
         public override bool HasCustomHitTest => true; //set to true, CustomHitTest() will be called
         protected override bool CustomHitTest(HitChain hitChain)

@@ -230,8 +230,8 @@ namespace LayoutFarm.UI
 
         public int RowIndex
         {
-            get { return _row_Index; }
-            internal set { _row_Index = value; }
+            get => _row_Index;
+            internal set => _row_Index = value;
         }
         internal void SetOwnerParentRowCollection(GridTable.GridRowCollection parentRowCollection)
         {

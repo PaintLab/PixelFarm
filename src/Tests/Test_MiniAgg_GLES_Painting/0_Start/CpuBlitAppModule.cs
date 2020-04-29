@@ -156,10 +156,7 @@ namespace Mini
                 //copy from actual image and paint to canvas 
                 d.DrawImage(_memBmp, 0, 0);
             }
-            public override void ResetRootGraphics(RootGraphic rootgfx)
-            {
-
-            }
+            
             public void Dispose()
             {
                 if (_nativeWin32DC != null)

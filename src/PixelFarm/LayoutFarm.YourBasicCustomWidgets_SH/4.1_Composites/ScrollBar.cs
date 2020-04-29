@@ -378,7 +378,7 @@ namespace LayoutFarm.CustomWidgets
 
             base.OnMouseDown(e);
         }
-        void SetupVerticalScrollButtonProperties(RenderElement container)
+        void SetupVerticalScrollButtonProperties(RenderBoxBase container)
         {
             //var scroll_button = new ScrollBarButton(this.Width+10, SCROLL_BOX_SIZE_LIMIT, this); //for test
             var scroll_button = new ScrollBarButton(this.Width, SCROLL_BOX_SIZE_LIMIT, this); //create with default value
@@ -502,7 +502,7 @@ namespace LayoutFarm.CustomWidgets
             EvalNeedScrollBox();
         }
 
-        void SetupHorizontalScrollButtonProperties(RenderElement container)
+        void SetupHorizontalScrollButtonProperties(RenderBoxBase container)
         {
             //TODO: use 'theme-concept' eg. css
 
@@ -876,7 +876,7 @@ namespace LayoutFarm.CustomWidgets
             SetScrollBarDetail(_scrollBarSettings);
         }
 
-        void SetupMinButtonProperties(RenderElement container)
+        void SetupMinButtonProperties(RenderBoxBase container)
         {
             ScrollBarButton min_button;
             if (this.ScrollBarType == ScrollBarType.Horizontal)
@@ -892,7 +892,7 @@ namespace LayoutFarm.CustomWidgets
             container.AddChild(min_button);
             _minButton = min_button;
         }
-        void SetupMaxButtonProperties(RenderElement container)
+        void SetupMaxButtonProperties(RenderBoxBase container)
         {
             ScrollBarButton max_button;
             if (this.ScrollBarType == ScrollBarType.Horizontal)
