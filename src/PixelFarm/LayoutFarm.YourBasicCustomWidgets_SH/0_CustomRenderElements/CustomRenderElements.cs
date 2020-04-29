@@ -4,8 +4,7 @@
 using PixelFarm.Drawing;
 using System.Collections.Generic;
 using LayoutFarm.RenderBoxes;
-using LayoutFarm.UI;
-using PixelFarm.Contours;
+using System.Runtime.Remoting;
 
 namespace LayoutFarm.CustomWidgets
 {
@@ -28,7 +27,7 @@ namespace LayoutFarm.CustomWidgets
         }
         public int LineTop { get; set; }
         public int LineHeight { get; set; }
-
+        public int LineBottom => LineTop + LineHeight;
         public RenderElement ParentRenderElement { get; internal set; }
 
         public void AdjustLocation(ref int px, ref int py)
@@ -66,8 +65,6 @@ namespace LayoutFarm.CustomWidgets
         public bool HitTestCore(HitChain hitChain)
         {
 
-           
-
             if (LineTop <= hitChain.TestPointY &&
                (LineTop + LineHeight) > hitChain.TestPointY)
             {
@@ -100,13 +97,16 @@ namespace LayoutFarm.CustomWidgets
                 //---------------------------
                 //TODO: review here again
                 RenderElement renderE = renderNode.Value;
-                int x = renderE.X;
-                int y = renderE.Y;
+                if (renderE.IntersectsWith(updateArea))
+                {
+                    int x = renderE.X;
+                    int y = renderE.Y;
 
-                d.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
-                updateArea.Offset(-x, -y);
-                RenderElement.Render(renderE, d, updateArea);
-                updateArea.Offset(x, y);
+                    d.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
+                    updateArea.Offset(-x, -y);
+                    RenderElement.Render(renderE, d, updateArea);
+                    updateArea.Offset(x, y);
+                }
 
                 renderNode = renderNode.Next;
             }
@@ -508,12 +508,7 @@ namespace LayoutFarm.CustomWidgets
         }
         public override void ChildrenHitTestCore(HitChain hitChain)
         {
-#if DEBUG
-            if (hitChain.TestPointY > 20 && hitChain.TestPointY < 35)
-            {
 
-            }
-#endif
             if (Lines != null)
             {
                 //check if it's overlap line or not
@@ -521,7 +516,6 @@ namespace LayoutFarm.CustomWidgets
                 //then offset and test at that line
                 List<LineBox> lineboxes = Lines;
                 int j = lineboxes.Count;
-
                 for (int i = 0; i < j; ++i)
                 {
                     LineBox linebox = lineboxes[i];
@@ -529,13 +523,20 @@ namespace LayoutFarm.CustomWidgets
                     {
                         return;
                     }
+                    else if (linebox.LineTop > hitChain.TestPointY)
+                    {
+                        //we iterate from top to bottom
+                        //we should stop and return
+                        return;
+                    }
                 }
             }
-
-            base.ChildrenHitTestCore(hitChain);
+            else
+            {
+                //use default machanism
+                base.ChildrenHitTestCore(hitChain);
+            }
         }
-
-
     }
 
     public class DoubleBufferCustomRenderBox : CustomRenderBox

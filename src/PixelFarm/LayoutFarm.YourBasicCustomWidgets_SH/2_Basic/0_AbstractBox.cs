@@ -611,6 +611,9 @@ namespace LayoutFarm.CustomWidgets
 
 
         bool _preserveLineBoxes = true;
+        /// <summary>
+        /// preserve multiple lines 
+        /// </summary>
         public bool PreserverLineBoxes
         {
             get => _preserveLineBoxes;
@@ -623,6 +626,7 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
+
         public override void PerformContentLayout()
         {
             //****
