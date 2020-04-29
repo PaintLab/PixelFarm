@@ -20,8 +20,7 @@ namespace LayoutFarm.CustomWidgets
 
         public Color? BackColor;
         public Color? FontColor;
-        public Color? BorderColor;
-        
+        public Color? BorderColor;        
     }
 
     public struct SideSpec

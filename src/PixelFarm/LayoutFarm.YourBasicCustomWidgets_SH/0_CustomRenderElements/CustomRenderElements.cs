@@ -4,7 +4,6 @@
 using PixelFarm.Drawing;
 using System.Collections.Generic;
 using LayoutFarm.RenderBoxes;
-using System.Runtime.Remoting;
 
 namespace LayoutFarm.CustomWidgets
 {
@@ -44,7 +43,6 @@ namespace LayoutFarm.CustomWidgets
         {
             return null;
         }
-
 
         public bool IsIntersect(int minY, int maxY) => !((maxY < LineTop) || (minY > (LineTop + LineHeight)));
 
@@ -197,6 +195,7 @@ namespace LayoutFarm.CustomWidgets
 
 
         }
+
     }
 
 
