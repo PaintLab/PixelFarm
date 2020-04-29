@@ -1,7 +1,6 @@
 ﻿//Apache2, 2014-present, WinterDev
 
 using System;
-using LayoutFarm.RenderBoxes;
 using PixelFarm.CpuBlit;
 using PixelFarm.Drawing;
 namespace LayoutFarm.CustomWidgets
@@ -26,12 +25,12 @@ namespace LayoutFarm.CustomWidgets
             _needUpdate = true;
             this.BackColor = Color.White;
         }
-         
-         
+
+
         public Color BackColor { get; set; }
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
-            
+
             if (_needUpdate)
             {
                 //default bg => transparent !, 

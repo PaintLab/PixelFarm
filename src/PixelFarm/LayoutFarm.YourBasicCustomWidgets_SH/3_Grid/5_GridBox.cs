@@ -789,7 +789,7 @@ namespace LayoutFarm.CustomWidgets
             GridCell hitCell = _gridViewRenderE.GetCellByMousePosition(e.X, e.Y);
 
             if (hitCell != null &&
-                hitCell.ContentElement is RenderBoxBase box &&
+                hitCell.ContentElement is RenderElement box &&
                 box.ContainPoint(e.X - hitCell.X, e.Y - hitCell.Y) &&
                 box.GetController() is IUIEventListener evenListener)
             {
@@ -816,7 +816,7 @@ namespace LayoutFarm.CustomWidgets
             GridCell hitCell = _gridViewRenderE.GetCellByMousePosition(e.X, e.Y);
             if (hitCell != null)
             {
-                if (hitCell.ContentElement is RenderBoxBase box &&
+                if (hitCell.ContentElement is RenderElement box &&
                     box.ContainPoint(e.X - hitCell.X, e.Y - hitCell.Y) &&
                     box.GetController() is IUIEventListener evenListener)
                 {

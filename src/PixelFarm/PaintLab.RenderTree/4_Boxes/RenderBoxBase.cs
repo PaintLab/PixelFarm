@@ -4,7 +4,7 @@ using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
 
 using System.Collections.Generic;
-using System;
+
 
 namespace LayoutFarm
 {
@@ -184,12 +184,41 @@ namespace LayoutFarm
         }
     }
 
+    public abstract class AbstractRectRenderElement : RenderElement
+    {
+        protected int _viewportLeft;
+        protected int _viewportTop;
 
+        public AbstractRectRenderElement(RootGraphic rootgfx, int width, int height)
+             : base(rootgfx, width, height)
+        {
+            this.MayHasViewport = true;
+        }
+        public override sealed int ViewportLeft => _viewportLeft;
+        public override sealed int ViewportTop => _viewportTop;
+        public override sealed void SetViewport(int viewportLeft, int viewportTop)
+        {
+            int diffLeft = viewportLeft - _viewportLeft;
+            int diffTop = viewportTop - _viewportTop;
+
+            if (diffLeft != 0 || diffTop != 0)
+            {
+                _viewportLeft = viewportLeft;
+                _viewportTop = viewportTop;
+                //
+
+                InvalidateGfxArgs args = RootGetInvalidateGfxArgs();
+                args.SetReason_ChangeViewport(this, diffLeft, diffTop);
+                this.InvalidateGraphics(args);
+            }
+        }
+    }
+     
 
 #if DEBUG
     [System.Diagnostics.DebuggerDisplay("RenderBoxBase {dbugGetCssBoxInfo}")]
 #endif
-    public abstract class RenderBoxBase : RenderElement, IContainerRenderElement
+    public abstract class RenderBoxBase : AbstractRectRenderElement, IContainerRenderElement
     {
 
         RenderElementCollection _elements;
@@ -198,7 +227,6 @@ namespace LayoutFarm
         public RenderBoxBase(RootGraphic rootgfx, int width, int height)
             : base(rootgfx, width, height)
         {
-            this.MayHasViewport = true;
             this.MayHasChild = true;
         }
 
@@ -206,7 +234,7 @@ namespace LayoutFarm
         {
             if (_elements != null)
             {
-                RenderElemHelper.HitTestCore(hitChain, LayoutHint, _elements.GetHitTestIter());
+                RenderElemHelper.HitTestCore(hitChain, ContentLayoutHint, _elements.GetHitTestIter());
 #if DEBUG
                 debug_RecordLayerInfo(_elements.dbugGetLayerInfo());
 #endif
@@ -371,14 +399,14 @@ namespace LayoutFarm
                 //***                
 
                 RenderElemHelper.DrawChildContent(
-                    LayoutHint,
+                    ContentLayoutHint,
                     _elements.GetDrawingIter(),
                     d, updateArea);
             }
         }
 
 
-        public LayoutHint LayoutHint { get; set; }
+        public LayoutHint ContentLayoutHint { get; set; }
 
 #if DEBUG
         public bool debugDefaultLayerHasChild

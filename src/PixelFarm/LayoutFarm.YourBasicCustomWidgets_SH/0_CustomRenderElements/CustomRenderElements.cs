@@ -4,6 +4,7 @@
 using PixelFarm.Drawing;
 using System.Collections.Generic;
 using LayoutFarm.RenderBoxes;
+using LayoutFarm.UI;
 
 namespace LayoutFarm.CustomWidgets
 {
@@ -112,7 +113,12 @@ namespace LayoutFarm.CustomWidgets
             d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);//restore
         }
 
+        public void AdjustHorizontalAlignment(RectUIAlignment alignment)
+        {
+            //line, and spread data inside this line
 
+
+        }
         public void AdjustVerticalAlignment(VerticalAlignment vertAlignment)
         {
             LinkedListNode<RenderElement> node = _linkList.First;
@@ -192,10 +198,7 @@ namespace LayoutFarm.CustomWidgets
                 case VerticalAlignment.UserSpecific://TODO
                     break;
             }
-
-
         }
-
     }
 
 

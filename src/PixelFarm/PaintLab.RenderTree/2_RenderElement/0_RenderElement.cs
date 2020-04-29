@@ -138,59 +138,6 @@ namespace LayoutFarm
         //parent/child ...
         public bool HasParent => _parentLink != null;
 
-
-        //        public virtual void ClearAllChildren()
-        //        {
-        //#if DEBUG
-        //            System.Diagnostics.Debug.WriteLine(nameof(ClearAllChildren) + " no IMPL");
-        //#endif
-
-        //        }
-        //        public virtual void AddFirst(RenderElement renderE)
-        //        {
-        //#if DEBUG
-        //            System.Diagnostics.Debug.WriteLine(nameof(AddChild) + " no IMPL");
-        //#endif
-        //        }
-        //        public virtual void AddChild(RenderElement renderE)
-        //        {
-        //#if DEBUG
-        //            System.Diagnostics.Debug.WriteLine(nameof(AddChild) + " no IMPL");
-        //#endif
-        //        }
-        //        public virtual void InsertAfter(RenderElement afterElem, RenderElement renderE)
-        //        {
-        //#if DEBUG
-        //            System.Diagnostics.Debug.WriteLine(nameof(InsertAfter) + " no IMPL");
-        //#endif
-        //        }
-        //        public virtual void InsertBefore(RenderElement beforeElem, RenderElement renderE)
-        //        {
-        //#if DEBUG
-        //            System.Diagnostics.Debug.WriteLine(nameof(InsertBefore) + " no IMPL");
-        //#endif
-        //        }
-        //        public virtual void RemoveChild(RenderElement renderE)
-        //        {
-        //#if DEBUG
-        //            System.Diagnostics.Debug.WriteLine(nameof(RemoveChild) + " no IMPL");
-        //#endif
-        //        }
-
-        //public virtual void RemoveSelf()
-        //{   
-        //    //TODO: ask parent for this
-        //    RenderElement parentLinkRenderE = ParentRenderElement;
-        //    if (parentLinkRenderE != null)
-        //    {
-        //        parentLinkRenderE.RemoveChild(this);
-        //    }
-        //    else if (_parentLink == null)
-        //    {
-        //        _parentLink = null;
-        //    } 
-        //}
-
         protected bool HasParentLink => _parentLink != null;
 
         public RenderElement ParentRenderElement
@@ -562,7 +509,10 @@ namespace LayoutFarm
 
                     if ((renderE._propFlags & RenderElementConst.MAY_HAS_VIEWPORT) != 0)
                     {
-                        if (renderE._viewportLeft == 0 && renderE._viewportTop == 0)
+                        int viewportLeft = renderE.ViewportLeft;
+                        int viewportTop = renderE.ViewportTop;
+
+                        if (viewportLeft == 0 && viewportTop == 0)
                         {
                             renderE.RenderClientContent(d, updateArea);
                         }
@@ -571,8 +521,8 @@ namespace LayoutFarm
                             int enterCanvasX = d.OriginX;
                             int enterCanvasY = d.OriginY;
 
-                            d.SetCanvasOrigin(enterCanvasX - renderE._viewportLeft, enterCanvasY - renderE._viewportTop);
-                            updateArea.Offset(renderE._viewportLeft, renderE._viewportTop);
+                            d.SetCanvasOrigin(enterCanvasX - viewportLeft, enterCanvasY - viewportTop);
+                            updateArea.Offset(viewportLeft, viewportTop);
 
                             //---------------
                             renderE.RenderClientContent(d, updateArea);
@@ -582,7 +532,7 @@ namespace LayoutFarm
                             // canvas.dbug_DrawCrossRect(Color.Red,updateArea);
 #endif
                             d.SetCanvasOrigin(enterCanvasX, enterCanvasY); //restore 
-                            updateArea.Offset(-renderE._viewportLeft, -renderE._viewportTop);
+                            updateArea.Offset(-viewportLeft, -viewportTop);
 
                         }
                     }
@@ -614,7 +564,11 @@ namespace LayoutFarm
 
                 if ((renderE._propFlags & RenderElementConst.MAY_HAS_VIEWPORT) != 0)
                 {
-                    if (renderE._viewportLeft == 0 && renderE._viewportTop == 0)
+                    int viewportLeft = renderE.ViewportLeft;
+                    int viewportTop = renderE.ViewportTop;
+
+
+                    if (viewportLeft == 0 && viewportTop == 0)
                     {
                         renderE.RenderClientContent(d, updateArea);
                     }
@@ -623,8 +577,8 @@ namespace LayoutFarm
                         int enterCanvasX = d.OriginX;
                         int enterCanvasY = d.OriginY;
 
-                        d.SetCanvasOrigin(enterCanvasX - renderE._viewportLeft, enterCanvasY - renderE._viewportTop);
-                        updateArea.Offset(renderE._viewportLeft, renderE._viewportTop);
+                        d.SetCanvasOrigin(enterCanvasX - viewportLeft, enterCanvasY - viewportTop);
+                        updateArea.Offset(viewportLeft, viewportTop);
 
                         //---------------
                         renderE.RenderClientContent(d, updateArea);
@@ -634,7 +588,7 @@ namespace LayoutFarm
                         // canvas.dbug_DrawCrossRect(Color.Red,updateArea);
 #endif
                         d.SetCanvasOrigin(enterCanvasX, enterCanvasY); //restore 
-                        updateArea.Offset(-renderE._viewportLeft, -renderE._viewportTop);
+                        updateArea.Offset(-viewportLeft, -viewportTop);
 
                     }
                 }

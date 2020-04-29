@@ -12,8 +12,7 @@ namespace LayoutFarm
         int _b_left;
         int _b_width;
         int _b_height;
-        protected int _viewportLeft;
-        protected int _viewportTop;
+
 
         int _uiLayoutFlags;
         //------------------------ 
@@ -39,28 +38,15 @@ namespace LayoutFarm
         public int Height => _b_height;
 
         //-----------------------------------------------
-        public int ViewportLeft => _viewportLeft;
-        public int ViewportTop => _viewportTop;
-
+        public virtual int ViewportLeft => 0;
+        public virtual int ViewportTop => 0;
         //
         public int ViewportBottom => this.ViewportTop + this.Height;
         public int ViewportRight => this.ViewportLeft + this.Width;
+
         //
-        public void SetViewport(int viewportLeft, int viewportTop)
-        {
-            int diffLeft = viewportLeft - _viewportLeft;
-            int diffTop = viewportTop - _viewportTop;
-
-            if (diffLeft != 0 || diffTop != 0)
-            {
-                _viewportLeft = viewportLeft;
-                _viewportTop = viewportTop;
-                //
-
-                InvalidateGfxArgs args = RootGetInvalidateGfxArgs();
-                args.SetReason_ChangeViewport(this, diffLeft, diffTop);
-                this.InvalidateGraphics(args);
-            }
+        public virtual void SetViewport(int viewportLeft, int viewportTop)
+        {            
         }
 
         public virtual Size InnerContentSize => this.Size;
@@ -73,6 +59,7 @@ namespace LayoutFarm
             }
         }
         //-----------------------------------------------
+
         public Point GetGlobalLocation()
         {
             return GetGlobalLocationStatic(this);
