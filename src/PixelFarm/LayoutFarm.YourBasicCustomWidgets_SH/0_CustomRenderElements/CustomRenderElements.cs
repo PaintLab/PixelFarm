@@ -32,6 +32,7 @@ namespace LayoutFarm.CustomWidgets
 
         public void AdjustLocation(ref int px, ref int py)
         {
+            //TODO: line left ?
             py += LineTop;
         }
 #if DEBUG
