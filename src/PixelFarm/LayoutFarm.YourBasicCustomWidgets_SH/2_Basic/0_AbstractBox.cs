@@ -648,7 +648,11 @@ namespace LayoutFarm.CustomWidgets
                 case BoxContentLayoutKind.VerticalStack:
                     {
                         //TODO: check if non-overlap or not
-                        _primElement.ContentHitTestHint = RenderBoxes.HitTestHint.VerticalColumnNonOverlap;
+                        if (_primElement != null)
+                        {
+                            _primElement.ContentHitTestHint = RenderBoxes.HitTestHint.VerticalColumnNonOverlap;
+                        }
+
 
                         int maxRight = 0;
 
@@ -691,7 +695,11 @@ namespace LayoutFarm.CustomWidgets
 
                 case BoxContentLayoutKind.HorizontalStack:
                     {
-                        _primElement.ContentHitTestHint = RenderBoxes.HitTestHint.HorizontalRowNonOverlap;
+                        if (_primElement != null)
+                        {
+                            _primElement.ContentHitTestHint = RenderBoxes.HitTestHint.HorizontalRowNonOverlap;
+                        }
+
 
                         int maxBottom = 0;
                         //experiment
@@ -826,7 +834,11 @@ namespace LayoutFarm.CustomWidgets
                     break;
                 case BoxContentLayoutKind.HorizontalFlow:
                     {
-                        _primElement.ContentHitTestHint = RenderBoxes.HitTestHint.Custom;
+                        if (_primElement != null)
+                        {
+                            _primElement.ContentHitTestHint = RenderBoxes.HitTestHint.Custom;
+                        }
+                        
 
                         int maxBottom = 0;
                         //experiment
@@ -894,7 +906,7 @@ namespace LayoutFarm.CustomWidgets
                                         {
                                             max_lineHeight = rect.Height;
                                             linebox.LineHeight = max_lineHeight;
-                                        } 
+                                        }
 
                                         if (tmp_bottom > maxBottom)
                                         {

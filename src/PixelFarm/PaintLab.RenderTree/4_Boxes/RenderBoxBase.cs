@@ -212,8 +212,7 @@ namespace LayoutFarm
                 this.InvalidateGraphics(args);
             }
         }
-
-
+        
     }
 
 
