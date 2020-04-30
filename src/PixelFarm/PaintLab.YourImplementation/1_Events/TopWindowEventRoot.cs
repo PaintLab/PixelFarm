@@ -36,7 +36,6 @@ namespace LayoutFarm
         int _localMouseDownY;
         UIMouseButtons _mouseDownButton = UIMouseButtons.None;
 
-
         public TopWindowEventRoot(RootGraphic rootgfx, TopWindowRenderBox topRenderElement)
         {
             _mouseDownEventArgs = new UIMouseDownEventArgs();
@@ -46,7 +45,10 @@ namespace LayoutFarm
 
 
             _topWinBoxEventPortal = new RenderElementEventPortal(topRenderElement);
-            _iTopBoxEventPortal = _topWinBoxEventPortal = new RenderElementEventPortal(topRenderElement);
+#if DEBUG
+            _topWinBoxEventPortal.dbugRootGraphics = (MyRootGraphic)rootgfx;
+#endif
+            _iTopBoxEventPortal = _topWinBoxEventPortal;
             _rootgfx = rootgfx;
 
             _hoverMonitoringTask = new UIHoverMonitorTask();

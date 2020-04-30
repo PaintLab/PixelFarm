@@ -234,7 +234,7 @@ namespace LayoutFarm
             }
             //----------
             //now we are on the top of root
-            RootGraphic root = fromElement.Root;
+            RootGraphic root = fromElement.GetRoot();
 
 #if DEBUG
             RootGraphic dbugMyroot = root;

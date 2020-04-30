@@ -31,7 +31,7 @@ namespace LayoutFarm
         void InsertBefore(RenderElement beforeElem, RenderElement renderE);
         void RemoveChild(RenderElement renderE);
         void ClearAllChildren();
-        RootGraphic Root { get; }
+        
     }
 
     static class RenderElemHelper
