@@ -43,7 +43,7 @@ namespace LayoutFarm
                 _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
                 //2.  
                 BubbleInvalidater.InternalBubbleUpInvalidateGraphicArea(args);
-                
+
             }
             else
             {
@@ -125,17 +125,22 @@ namespace LayoutFarm
             {
                 if (!GlobalRootGraphic.SuspendGraphicsUpdate)
                 {
-                     
+
                     InvalidateGfxArgs arg = BubbleInvalidater.GetInvalidateGfxArgs();
                     arg.SetReason_UpdateLocalArea(parent, totalBounds);
                     BubbleInvalidater.InternalBubbleUpInvalidateGraphicArea(arg);//RELATIVE to its parent***
-           
+
                 }
                 else
                 {
 
                 }
             }
+        }
+
+        protected void InvalidateGfxLocalArea(Rectangle localArea)
+        {
+            BubbleInvalidater.InvalidateGraphicLocalArea(this, localArea);
         }
         internal static bool RequestInvalidateGraphicsNoti(RenderElement re)
         {
@@ -146,7 +151,7 @@ namespace LayoutFarm
             re.OnInvalidateGraphicsNoti(fromMe, ref totalBounds);
         }
 
-       
+
 
         public void SuspendGraphicsUpdate()
         {

@@ -170,9 +170,10 @@ namespace LayoutFarm.UI
                             break;
                         case RequestCommand.InvalidateArea:
                             {
-                                InvalidateGfxArgs args = GetInvalidateGfxArgs();
+                                InvalidateGfxArgs args = GetInvalidateGfxArgs(); 
                                 args.SetReason_UpdateLocalArea(req.renderElem, (Rectangle)req.parameters);
-                                this.BubbleUpInvalidateGraphicArea(args);
+                                InternalBubbleup(args);
+                                
                             }
                             break;
                     }

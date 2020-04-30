@@ -138,13 +138,13 @@ namespace LayoutFarm.TextEditing
 
             //}
 #endif
-            BubbleInvalidater.InvalidateGraphicLocalArea(this, lineArea);
+            InvalidateGfxLocalArea(lineArea);
         }
         protected void InvalidateGraphicOfCurrentSelectionArea()
         {
             if (_editSession.SelectionRange != null)
             {
-                BubbleInvalidater.InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
+                InvalidateGfxLocalArea(GetSelectionUpdateArea());
             }
         }
 
@@ -193,7 +193,7 @@ namespace LayoutFarm.TextEditing
                     {
                         Rectangle r = GetSelectionUpdateArea();
                         _editSession.CancelSelect();
-                        BubbleInvalidater.InvalidateGraphicLocalArea(this, r);
+                        InvalidateGfxLocalArea(r);
                     }
                     else
                     {
@@ -339,7 +339,7 @@ namespace LayoutFarm.TextEditing
             if (_editSession.SelectionRange != null
                 && _editSession.SelectionRange.IsValid)
             {
-                BubbleInvalidater.InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
+                InvalidateGfxLocalArea(GetSelectionUpdateArea());
             }
             _editSession.UpdateSelectionRange();
             EnsureCaretVisible();
