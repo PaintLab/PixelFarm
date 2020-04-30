@@ -1,8 +1,8 @@
 ﻿//Apache2, 2014-present, WinterDev
 
+using System.Collections.Generic;
 
 using PixelFarm.Drawing;
-using System.Collections.Generic;
 using LayoutFarm.RenderBoxes;
 
 
@@ -21,7 +21,7 @@ namespace LayoutFarm.CustomWidgets
         Color _backColor;
         Color _borderColor;
         bool _hasSomeBorderW;
-        
+
 
         ushort _contentLeft_offset; //border left + padding left
         ushort _contentTop_offset; //border top + pading top
@@ -32,7 +32,7 @@ namespace LayoutFarm.CustomWidgets
         byte _borderTop; //only border top
         byte _borderRight; //only border right
         byte _borderBottom; //only border bottom 
-        
+
 
         public CustomRenderBox(int width, int height)
             : base(width, height)
