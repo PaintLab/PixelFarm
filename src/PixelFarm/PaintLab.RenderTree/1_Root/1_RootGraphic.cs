@@ -274,76 +274,16 @@ namespace LayoutFarm
             //--------------------------------------------------------------------------------------------------
 
 
-#if DEBUG
-
-            Rectangle previewAccum = root._accumulateInvalidRect;
-            if (!root._hasAccumRect)
-            {
-                previewAccum = elemClientRect;
-            }
-            else
-            {
-
-                previewAccum = Rectangle.Union(previewAccum, elemClientRect);
-            }
-            //if (previewAccum.Height > 30 && previewAccum.Height < 100)
-            //{
-
-            //}
-#endif 
-
             args.GlobalRect = elemClientRect;
+            //if (root.HasViewportOffset = hasviewportOffset)
+            //{
+            //    root.ViewportDiffLeft = viewport_diffLeft;
+            //    root.ViewportDiffTop = viewport_diffTop;
+            //}
 
-            if (root.HasViewportOffset = hasviewportOffset)
-            {
-                root.ViewportDiffLeft = viewport_diffLeft;
-                root.ViewportDiffTop = viewport_diffTop;
-            }
-
-            root._accumInvalidateQueue.Add(args);
-            root._hasRenderTreeInvalidateAccumRect = true;//***
-
-            if (!root._hasAccumRect)
-            {
-
-                root._accumulateInvalidRect = elemClientRect;
-                root._hasAccumRect = true;
-            }
-            else
-            {
-#if DEBUG
-                //if (_accumInvalidateQueue.Count > 50)
-                //{
-
-                //}
-#endif
-
-                //TODO: check if we should do union or separate this into another group 
-                if (!root._accumulateInvalidRect.IntersectsWith(elemClientRect))
-                {
-
-                    root._accumulateInvalidRect = Rectangle.Union(root._accumulateInvalidRect, elemClientRect);
-                }
-                else
-                {
-                    root._accumulateInvalidRect = Rectangle.Union(root._accumulateInvalidRect, elemClientRect);
-                }
-            }
+            root.AddAccumRect(args);
 
 
-#if DEBUG
-            if (dbugMyroot.dbugEnableGraphicInvalidateTrace &&
-                dbugMyroot.dbugGraphicInvalidateTracer != null)
-            {
-                string state_str = "ACC: ";
-                if (root.dbugNeedContentArrangement || root.dbugNeedReCalculateContentSize)
-                {
-                    state_str = "!!" + state_str;
-                }
-                dbugMyroot.dbugGraphicInvalidateTracer.WriteInfo("ACC: " + root._accumulateInvalidRect.ToString());
-                dbugMyroot.dbugGraphicInvalidateTracer.WriteInfo("\r\n");
-            }
-#endif
         }
     }
 
@@ -353,9 +293,9 @@ namespace LayoutFarm
         public delegate void PaintToOutputWindowDelegate();
         protected PaintToOutputWindowDelegate _paintToOutputWindowHandler;
         Action<Rectangle> _canvasInvalidateDelegate;
-        internal Rectangle _accumulateInvalidRect;
-        internal bool _hasAccumRect;
-        internal bool _hasRenderTreeInvalidateAccumRect;
+        Rectangle _accumulateInvalidRect;
+        bool _hasAccumRect;
+        bool _hasRenderTreeInvalidateAccumRect;
 
 #if DEBUG
         static int dbugTotalId;
@@ -374,10 +314,6 @@ namespace LayoutFarm
         public abstract void SetPrimaryContainerElement(RenderBoxBase renderBox);
         public int Width { get; internal set; }
         public int Height { get; internal set; }
-        public int ViewportDiffLeft { get; internal set; }
-        public int ViewportDiffTop { get; internal set; }
-        public bool HasViewportOffset { get; internal set; }
-        //---------------------------------------------      
 
         /// <summary>
         /// close window box root
@@ -467,7 +403,74 @@ namespace LayoutFarm
             rootgfx._hasAccumRect = true;
         }
 
-        internal readonly List<InvalidateGfxArgs> _accumInvalidateQueue = new List<InvalidateGfxArgs>();
+
+        internal void AddAccumRect(InvalidateGfxArgs args)
+        {
+#if DEBUG
+
+            Rectangle previewAccum = _accumulateInvalidRect;
+            if (!_hasAccumRect)
+            {
+                previewAccum = args.GlobalRect;
+            }
+            else
+            {
+
+                previewAccum = Rectangle.Union(previewAccum, args.GlobalRect);
+            }
+            //if (previewAccum.Height > 30 && previewAccum.Height < 100)
+            //{
+
+            //}
+#endif 
+
+            _accumInvalidateQueue.Add(args);
+            _hasRenderTreeInvalidateAccumRect = true;//***
+
+            if (!_hasAccumRect)
+            {
+                _accumulateInvalidRect = args.GlobalRect;
+                _hasAccumRect = true;
+            }
+            else
+            {
+#if DEBUG
+                //if (_accumInvalidateQueue.Count > 50)
+                //{
+
+                //}
+#endif
+
+                //TODO: check if we should do union or separate this into another group 
+                if (!_accumulateInvalidRect.IntersectsWith(args.GlobalRect))
+                {
+
+                    _accumulateInvalidRect = Rectangle.Union(_accumulateInvalidRect, args.GlobalRect);
+                }
+                else
+                {
+                    _accumulateInvalidRect = Rectangle.Union(_accumulateInvalidRect, args.GlobalRect);
+                }
+            }
+
+#if DEBUG
+            if (dbugEnableGraphicInvalidateTrace &&
+                dbugGraphicInvalidateTracer != null)
+            {
+                string state_str = "ACC: ";
+                if (dbugNeedContentArrangement || dbugNeedReCalculateContentSize)
+                {
+                    state_str = "!!" + state_str;
+                }
+                dbugGraphicInvalidateTracer.WriteInfo("ACC: " + _accumulateInvalidRect.ToString());
+                dbugGraphicInvalidateTracer.WriteInfo("\r\n");
+            }
+#endif
+
+
+        }
+
+        readonly List<InvalidateGfxArgs> _accumInvalidateQueue = new List<InvalidateGfxArgs>();
 
         public static List<InvalidateGfxArgs> GetAccumInvalidateGfxArgsQueue(RootGraphic r) => r._accumInvalidateQueue;
 
