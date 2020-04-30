@@ -9,10 +9,6 @@ using LayoutFarm.RenderBoxes;
 namespace LayoutFarm.CustomWidgets
 {
 
-
-  
-
-
     public class CustomRenderBox : RenderBoxBase
     {
         //LIMITATION:
@@ -26,15 +22,17 @@ namespace LayoutFarm.CustomWidgets
         Color _borderColor;
         bool _hasSomeBorderW;
 
-        ushort _contentLeft;
-        ushort _contentTop;
-        ushort _contentRight;
-        ushort _contentBottom;
+        ushort _contentLeft_offset; //border left + padding left
+        ushort _contentTop_offset; //border top + pading top
+        ushort _contentRight_offset; //border right + padding right
+        ushort _contentBottom_offset; //botrder bottom + padding bottom
 
-        byte _borderLeft;
-        byte _borderTop;
-        byte _borderRight;
-        byte _borderBottom;
+        byte _borderLeft; //only border left
+        byte _borderTop; //only border top
+        byte _borderRight; //only border right
+        byte _borderBottom; //only border bottom
+
+        //width or this render element = 
 
         public CustomRenderBox(int width, int height)
             : base(width, height)
@@ -47,50 +45,50 @@ namespace LayoutFarm.CustomWidgets
 
         public ushort PaddingLeft
         {
-            get => (ushort)(_contentLeft - _borderLeft);
+            get => (ushort)(_contentLeft_offset - _borderLeft);
             set
             {
-                _contentLeft = (ushort)(value + _borderLeft);
+                _contentLeft_offset = (ushort)(value + _borderLeft);
             }
         }
         public ushort PaddingTop
         {
-            get => (ushort)(_contentTop - _borderTop);
+            get => (ushort)(_contentTop_offset - _borderTop);
             set
             {
-                _contentTop = (ushort)(value + _borderTop);
+                _contentTop_offset = (ushort)(value + _borderTop);
             }
         }
         public ushort PaddingRight
         {
-            get => (ushort)(_contentRight - _borderRight);
+            get => (ushort)(_contentRight_offset - _borderRight);
             set
             {
-                _contentRight = (ushort)(value + _borderRight);
+                _contentRight_offset = (ushort)(value + _borderRight);
             }
         }
         public ushort PaddingBottom
 
         {
-            get => (ushort)(_contentBottom - _borderBottom);
+            get => (ushort)(_contentBottom_offset - _borderBottom);
             set
             {
-                _contentBottom = (ushort)(value + _borderBottom);
+                _contentBottom_offset = (ushort)(value + _borderBottom);
             }
         }
         public void SetPadding(ushort left, ushort top, ushort right, ushort bottom)
         {
-            _contentLeft = (ushort)(left + _borderLeft);
-            _contentTop = (ushort)(top + _borderTop);
-            _contentRight = (ushort)(right + _borderRight);
-            _contentBottom = (ushort)(bottom + _borderBottom);
+            _contentLeft_offset = (ushort)(left + _borderLeft);
+            _contentTop_offset = (ushort)(top + _borderTop);
+            _contentRight_offset = (ushort)(right + _borderRight);
+            _contentBottom_offset = (ushort)(bottom + _borderBottom);
         }
         public void SetPadding(ushort sameValue)
         {
-            _contentLeft = (ushort)(sameValue + _borderLeft);
-            _contentTop = (ushort)(sameValue + _borderTop);
-            _contentRight = (ushort)(sameValue + _borderRight);
-            _contentBottom = (ushort)(sameValue + _borderBottom);
+            _contentLeft_offset = (ushort)(sameValue + _borderLeft);
+            _contentTop_offset = (ushort)(sameValue + _borderTop);
+            _contentRight_offset = (ushort)(sameValue + _borderRight);
+            _contentBottom_offset = (ushort)(sameValue + _borderBottom);
         }
         //------------------ 
         public byte BorderTop
@@ -151,43 +149,30 @@ namespace LayoutFarm.CustomWidgets
         }
         //-------------
 
-        public int ContentWidth => Width - (_contentLeft + _contentRight);
-        public int ContentHeight => Height - (_contentTop + _contentBottom);
+        public int ContentWidth => Width - (_contentLeft_offset + _contentRight_offset);
+        public int ContentHeight => Height - (_contentTop_offset + _contentBottom_offset);
 
         public ushort ContentLeft
         {
-            get => _contentLeft;
-            set => _contentLeft = (byte)value;
+            get => _contentLeft_offset;
+            set => _contentLeft_offset = (byte)value;
         }
         public ushort ContentTop
         {
-            get => _contentTop;
-            set => _contentTop = (ushort)value;
+            get => _contentTop_offset;
+            set => _contentTop_offset = (ushort)value;
         }
         public ushort ContentRight
         {
-            get => _contentRight;
-            set => _contentRight = (ushort)value;
+            get => _contentRight_offset;
+            set => _contentRight_offset = (ushort)value;
         }
         public ushort ContentBottom
         {
-            get => _contentBottom;
-            set => _contentBottom = (ushort)value;
+            get => _contentBottom_offset;
+            set => _contentBottom_offset = (ushort)value;
         }
-        public void SetContentOffsets(ushort contentLeft, ushort contentTop, ushort contentRight, ushort contentBottom)
-        {
-            _contentLeft = contentLeft;
-            _contentTop = contentTop;
-            _contentRight = contentRight;
-            _contentBottom = contentBottom;
-        }
-        public void SetContentOffsets(ushort allside)
-        {
-            _contentLeft = allside;
-            _contentTop = allside;
-            _contentRight = allside;
-            _contentBottom = allside;
-        }
+
 
         public Color BackColor
         {
