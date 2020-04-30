@@ -268,24 +268,27 @@ namespace LayoutFarm.CustomWidgets
                 if (_textEditRenderElement != null)
                 {
                     //TODO, use string builder pool
+                    using (StringBuilderPool<TextBox>.GetFreeStringBuilder(out StringBuilder sb))
+                    {
+                        CopyContentTo(sb);
+                        return sb.ToString();
+                    }
 
-                    StringBuilder stBuilder = new StringBuilder();
-                    CopyContentTo(stBuilder);
-                    return stBuilder.ToString();
                 }
                 else
                 {
                     //TODO, use string builder pool
-                    StringBuilder stBuilder = new StringBuilder();
-                    bool passFirstLine = false;
-                    foreach (PlainTextLine line in _doc)
+                    using (StringBuilderPool<TextBox>.GetFreeStringBuilder(out StringBuilder sb))
                     {
-                        if (passFirstLine) stBuilder.AppendLine();
-                        line.CopyText(stBuilder);
-                        passFirstLine = true;
+                        bool passFirstLine = false;
+                        foreach (PlainTextLine line in _doc)
+                        {
+                            if (passFirstLine) { sb.AppendLine(); }
+                            line.CopyText(sb);
+                            passFirstLine = true;
+                        }
+                        return sb.ToString();
                     }
-
-                    return stBuilder.ToString();
                 }
             }
             set
@@ -316,9 +319,7 @@ namespace LayoutFarm.CustomWidgets
             _textEditRenderElement.ClearAllChildren();
             int lineCount = 0;
 
-
-
-            RunStyle runstyle = GetDefaultRunStyle();
+            //RunStyle runstyle = GetDefaultRunStyle();
             foreach (PlainTextLine line in _doc)
             {
                 if (lineCount > 0)
