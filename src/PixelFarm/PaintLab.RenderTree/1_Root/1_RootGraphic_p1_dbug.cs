@@ -330,8 +330,8 @@ namespace LayoutFarm
         //--------------------------------------------------------------------------
 
 
-        bool dbugNeedContentArrangement { get; set; }
-        bool dbugNeedReCalculateContentSize { get; set; }
+        internal bool dbugNeedContentArrangement { get; set; }
+        internal bool dbugNeedReCalculateContentSize { get; set; }
         public static void dbugResetAccumRect(RootGraphic rootgfx)
         {
             rootgfx._hasAccumRect = false;

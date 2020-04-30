@@ -17,7 +17,7 @@ namespace LayoutFarm
         RootGraphic _rootGfx;
         IParentLink _parentLink;
         object _controller;
-        int _propFlags;
+        internal int _propFlags;
         bool _needClipArea;
 
         public RenderElement(RootGraphic rootGfx, int width, int height)
@@ -32,7 +32,6 @@ namespace LayoutFarm
 #endif
         }
 
-        internal InvalidateGfxArgs RootGetInvalidateGfxArgs() => _rootGfx.GetInvalidateGfxArgs();
 
 #if DEBUG
         /// <summary>
@@ -48,11 +47,16 @@ namespace LayoutFarm
         }
         //
         public RootGraphic Root => _rootGfx;
+        public RootGraphic GetRoot()
+        {
+            if (_rootGfx != null) return _rootGfx;
+            return _parentLink?.ParentRenderElement?.GetRoot();
+        }
         //
         public IContainerRenderElement GetTopWindowRenderBox()
         {
             if (_parentLink == null) { return null; }
-            return _rootGfx.TopWindowRenderBox as IContainerRenderElement;
+            return GetRoot().TopWindowRenderBox as IContainerRenderElement;
         }
 
         //==============================================================

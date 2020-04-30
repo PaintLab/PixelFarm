@@ -207,7 +207,7 @@ namespace LayoutFarm
                 _viewportTop = viewportTop;
                 //
 
-                InvalidateGfxArgs args = RootGetInvalidateGfxArgs();
+                InvalidateGfxArgs args = BubbleInvalidater.GetInvalidateGfxArgs();
                 args.SetReason_ChangeViewport(this, diffLeft, diffTop);
                 this.InvalidateGraphics(args);
             }

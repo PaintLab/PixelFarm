@@ -155,7 +155,7 @@ namespace LayoutFarm.TextEditing
             if (_editSession.SelectionRange != null
                 && _editSession.SelectionRange.IsValid)
             {
-                InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
+                 BubbleInvalidater.InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
             }
             bool preventDefault = false;
             if (_textSurfaceEventListener != null &&
@@ -266,7 +266,7 @@ namespace LayoutFarm.TextEditing
                         {
                             if (_editSession.SelectionRange != null)
                             {
-                                InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
+                                BubbleInvalidater.InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
                             }
                             else
                             {
@@ -295,7 +295,7 @@ namespace LayoutFarm.TextEditing
                         {
                             if (_editSession.SelectionRange != null)
                             {
-                                InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
+                                BubbleInvalidater.InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
                             }
                             else
                             {
@@ -323,7 +323,7 @@ namespace LayoutFarm.TextEditing
                             UIKeys keycode = e.KeyCode;
                             if (keycode >= UIKeys.F1 && keycode <= UIKeys.F12)
                             {
-                                InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
+                                BubbleInvalidater.InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
                                 TextSurfaceEventListener.NotifyFunctionKeyDown(_textSurfaceEventListener, keycode);
                                 EnsureCaretVisible();
                             }
@@ -387,7 +387,7 @@ namespace LayoutFarm.TextEditing
                             {
                                 if (_editSession.SelectionRange != null)
                                 {
-                                    InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
+                                    BubbleInvalidater.InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
                                 }
 
                                 using (StringBuilderPool<TempTextLineCopyContext>.GetFreeStringBuilder(out StringBuilder stBuilder))
@@ -480,7 +480,7 @@ namespace LayoutFarm.TextEditing
                             {
                                 if (_editSession.SelectionRange != null)
                                 {
-                                    InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
+                                    BubbleInvalidater.InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
                                 }
 
                                 if (_editSession.SelectionRange != null)
@@ -979,7 +979,7 @@ namespace LayoutFarm.TextEditing
                 visualSelectionRange.SwapIfUnOrder();
                 if (visualSelectionRange.IsValid && !visualSelectionRange.IsOnTheSameLine)
                 {
-                    InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
+                    BubbleInvalidater.InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
                     //
                     _editSession.DoTabOverSelectedRange();
                     return; //finish here
