@@ -60,8 +60,8 @@ namespace LayoutFarm.CustomWidgets
         {
             if (_imgRenderBox == null)
             {
-                var renderBox = new CustomImageRenderBox(null, this.Width, this.Height);
-                SetCommonProperties(renderBox, this); 
+                var renderBox = new CustomImageRenderBox(this.Width, this.Height);
+                SetCommonProperties(renderBox, this);
                 renderBox.ImageBinder = _imageBinder;
 
                 SetPrimaryRenderElement(renderBox);

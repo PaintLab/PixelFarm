@@ -229,8 +229,8 @@ namespace YourImplementation
             //2. if we only update some part of texture
             //may can transfer only that part to the glBmp
             //-------------------------------------------------------------------------  
-
-            if (_rootgfx.HasRenderTreeInvalidateAccumRect)
+            
+            if (GlobalRootGraphic.CurrentRootGfx.HasRenderTreeInvalidateAccumRect)
             {
 
                 //update cpu surface part***  

@@ -18,7 +18,7 @@ namespace LayoutFarm.CustomWidgets
         {
             if (_canvasRenderElement == null)
             {
-                var canvas = new MiniAggCanvasRenderElement(null, this.Width, this.Height);
+                var canvas = new MiniAggCanvasRenderElement(this.Width, this.Height);
                 canvas.HasSpecificHeight = this.HasSpecificHeight;
                 canvas.HasSpecificWidth = this.HasSpecificWidth;
                 canvas.SetLocation(this.Left, this.Top);

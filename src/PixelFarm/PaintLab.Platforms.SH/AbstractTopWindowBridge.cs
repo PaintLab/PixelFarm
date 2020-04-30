@@ -21,7 +21,9 @@ namespace LayoutFarm.UI
 
         public AbstractTopWindowBridge(RootGraphic rootgfx, ITopWindowEventRoot topWinEventRoot)
         {
-            _topWinEventRoot = topWinEventRoot;
+            GlobalRootGraphic.CurrentRootGfx = rootgfx;//temp fix
+
+           _topWinEventRoot = topWinEventRoot;
             _rootgfx = rootgfx;
         }
         public abstract void BindWindowControl(IGpuOpenGLSurfaceView windowControl);
