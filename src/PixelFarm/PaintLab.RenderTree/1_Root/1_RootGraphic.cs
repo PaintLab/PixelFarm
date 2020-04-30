@@ -64,7 +64,7 @@ namespace LayoutFarm
 
         static readonly SimplePool<InvalidateGfxArgs> _invGfxPool = new SimplePool<InvalidateGfxArgs>(() => new InvalidateGfxArgs(), a => a.Reset());
 
-
+        public static bool IsInRenderPhase { get; set; }
         public static InvalidateGfxArgs GetInvalidateGfxArgs()
         {
 #if DEBUG
@@ -108,11 +108,11 @@ namespace LayoutFarm
         public static void InternalBubbleUpInvalidateGraphicArea(InvalidateGfxArgs args)//RenderElement fromElement, ref Rectangle elemClientRect, bool passSourceElem)
         {
             //total bounds = total bounds at level            
-            //if (this.IsInRenderPhase)
-            //{
-            //    ReleaseInvalidateGfxArgs(args);
-            //    return;
-            //}
+            if (IsInRenderPhase)
+            {
+                ReleaseInvalidateGfxArgs(args);
+                return;
+            }
             //--------------------------------------            
             bool hasviewportOffset = args.Reason == InvalidateReason.ViewportChanged;
             int viewport_diffLeft = args.LeftDiff;
@@ -406,9 +406,10 @@ namespace LayoutFarm
         public event EventHandler PreRenderEvent;
         protected void InvokePreRenderEvent() => PreRenderEvent?.Invoke(this, EventArgs.Empty);
 
-        public bool IsInRenderPhase { get; private set; }
-        public virtual void BeginRenderPhase() => IsInRenderPhase = true;
-        public virtual void EndRenderPhase() => IsInRenderPhase = false;
+
+        public virtual void BeginRenderPhase() => BubbleInvalidater.IsInRenderPhase = true;
+        public virtual void EndRenderPhase() => BubbleInvalidater.IsInRenderPhase = false;
+
 
         public bool HasAccumInvalidateRect => _hasAccumRect;
         public Rectangle AccumInvalidateRect => _accumulateInvalidRect;
@@ -425,7 +426,7 @@ namespace LayoutFarm
                 return;
             }
 
-            if (this.IsInRenderPhase) { return; }
+            if (BubbleInvalidater.IsInRenderPhase) { return; }
 
 #if DEBUG
             //if (_accumulateInvalidRect.Height > 30 && _accumulateInvalidRect.Height < 100)
@@ -470,7 +471,7 @@ namespace LayoutFarm
 
         public static List<InvalidateGfxArgs> GetAccumInvalidateGfxArgsQueue(RootGraphic r) => r._accumInvalidateQueue;
 
-
+        //---
         protected static InvalidateGfxArgs GetInvalidateGfxArgs() => BubbleInvalidater.GetInvalidateGfxArgs();
         protected static void ReleaseInvalidateGfxArgs(InvalidateGfxArgs args) => BubbleInvalidater.ReleaseInvalidateGfxArgs(args);
 
