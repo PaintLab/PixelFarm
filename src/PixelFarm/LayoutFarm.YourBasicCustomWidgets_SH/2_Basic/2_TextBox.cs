@@ -175,7 +175,7 @@ namespace LayoutFarm.CustomWidgets
             this.Focus();
             e.MouseCursorStyle = MouseCursorStyle.IBeam;
             e.CancelBubbling = true;
-            
+
             _textEditRenderElement.HandleMouseDown(e);
         }
         protected override void OnLostKeyboardFocus(UIFocusEventArgs e)
@@ -333,18 +333,18 @@ namespace LayoutFarm.CustomWidgets
 
             this.InvalidateGraphics();
         }
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        public override RenderElement GetPrimaryRenderElement()
         {
             if (_textEditRenderElement == null)
             {
-                var tbox = new TextEditRenderBox(rootgfx, this.Width, this.Height, _multiline, _isEditable);
+                var tbox = new TextEditRenderBox(this.Width, this.Height, _multiline, _isEditable);
                 tbox.SetLocation(this.Left, this.Top);
                 tbox.HasSpecificWidthAndHeight = true;//***
                 if (_defaultSpanStyle.IsEmpty())
                 {
                     _defaultSpanStyle = new TextSpanStyle();
                     _defaultSpanStyle.FontColor = Color.Black;
-                    _defaultSpanStyle.ReqFont = rootgfx.DefaultTextEditFontInfo;
+                    _defaultSpanStyle.ReqFont = GlobalRootGraphic.CurrentRootGfx.DefaultTextEditFontInfo;
                     tbox.CurrentTextSpanStyle = _defaultSpanStyle;
                 }
                 else
@@ -494,11 +494,11 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        public override RenderElement GetPrimaryRenderElement()
         {
             if (_textEditRenderElement == null)
             {
-                var tbox = new TextEditRenderBox(rootgfx, this.Width, this.Height, _multiline);
+                var tbox = new TextEditRenderBox(this.Width, this.Height, _multiline);
                 tbox.SetLocation(this.Left, this.Top);
                 tbox.HasSpecificWidthAndHeight = true;
 
@@ -506,7 +506,8 @@ namespace LayoutFarm.CustomWidgets
                 {
                     _defaultSpanStyle = new TextSpanStyle();
                     _defaultSpanStyle.FontColor = Color.Black;
-                    _defaultSpanStyle.ReqFont = rootgfx.DefaultTextEditFontInfo;
+
+                    _defaultSpanStyle.ReqFont = GlobalRootGraphic.CurrentRootGfx.DefaultTextEditFontInfo;
                     tbox.CurrentTextSpanStyle = _defaultSpanStyle;
                 }
                 else

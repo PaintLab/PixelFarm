@@ -25,14 +25,15 @@ namespace LayoutFarm.TextEditing
 
         internal bool _isDragBegin;
 
-        public TextFlowRenderBox(RootGraphic rootgfx, int width, int height, bool isMultiLine)
-            : base(rootgfx, width, height)
+        public TextFlowRenderBox(int width, int height, bool isMultiLine)
+            : base(width, height)
         {
             var defaultRunStyle = new RunStyle();
             defaultRunStyle.FontColor = Color.Black;//set default
-            defaultRunStyle.ReqFont = rootgfx.DefaultTextEditFontInfo;
 
-            _textLayer = new TextFlowLayer(this, this.Root.TextServices, defaultRunStyle); //presentation
+            defaultRunStyle.ReqFont = GlobalRootGraphic.CurrentRootGfx.DefaultTextEditFontInfo;//TODO: review here
+
+            _textLayer = new TextFlowLayer(this, GlobalRootGraphic.CurrentRootGfx.TextServices, defaultRunStyle); //presentation
             _textLayer.ContentSizeChanged += (s, e) => OnTextContentSizeChanged();
 
             //
@@ -137,13 +138,13 @@ namespace LayoutFarm.TextEditing
 
             //}
 #endif
-            InvalidateGraphicLocalArea(this, lineArea);
+            InvalidateGfxLocalArea(lineArea);
         }
         protected void InvalidateGraphicOfCurrentSelectionArea()
         {
             if (_editSession.SelectionRange != null)
             {
-                InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
+                InvalidateGfxLocalArea(GetSelectionUpdateArea());
             }
         }
 
@@ -192,7 +193,7 @@ namespace LayoutFarm.TextEditing
                     {
                         Rectangle r = GetSelectionUpdateArea();
                         _editSession.CancelSelect();
-                        InvalidateGraphicLocalArea(this, r);
+                        InvalidateGfxLocalArea(r);
                     }
                     else
                     {
@@ -338,7 +339,7 @@ namespace LayoutFarm.TextEditing
             if (_editSession.SelectionRange != null
                 && _editSession.SelectionRange.IsValid)
             {
-                InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
+                InvalidateGfxLocalArea(GetSelectionUpdateArea());
             }
             _editSession.UpdateSelectionRange();
             EnsureCaretVisible();

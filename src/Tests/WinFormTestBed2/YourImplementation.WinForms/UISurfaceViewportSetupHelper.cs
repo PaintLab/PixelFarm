@@ -60,7 +60,7 @@ namespace YourImplementation
             _cpuBlitUIElem.CreatePrimaryRenderElement(pcx, glPainter, rootGfx);
 
             //*****
-            LayoutFarm.RenderBoxBase renderE = (LayoutFarm.RenderBoxBase)_cpuBlitUIElem.GetPrimaryRenderElement(rootGfx);
+            LayoutFarm.RenderBoxBase renderE = (LayoutFarm.RenderBoxBase)_cpuBlitUIElem.GetPrimaryRenderElement();
             rootGfx.AddChild(renderE);
             rootGfx.SetPrimaryContainerElement(renderE);
             //***

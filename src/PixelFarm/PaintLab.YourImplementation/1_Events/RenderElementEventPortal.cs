@@ -93,18 +93,11 @@ namespace LayoutFarm.UI
         public RenderElementEventPortal(RenderElement topRenderElement)
         {
             _topRenderElement = topRenderElement;
-#if DEBUG
-            dbugRootGraphics = (MyRootGraphic)topRenderElement.Root;
-#endif
             _mousePressMonitor = new MousePressMonitorHelper(40);
-
-
         }
 
-        HitChain GetFreeHitChain()
-        {
-            return (_hitChainStack.Count > 0) ? _hitChainStack.Pop() : new HitChain();
-        }
+        HitChain GetFreeHitChain() => (_hitChainStack.Count > 0) ? _hitChainStack.Pop() : new HitChain();
+
         void SwapHitChain(HitChain hitChain)
         {
 
@@ -927,9 +920,9 @@ namespace LayoutFarm.UI
         static int dbugTotalId;
         public readonly int dbugId = dbugTotalId++;
         MyRootGraphic dbugRootGfx;
-        MyRootGraphic dbugRootGraphics
+        public MyRootGraphic dbugRootGraphics
         {
-            get { return dbugRootGfx; }
+            get => dbugRootGfx;
             set
             {
 

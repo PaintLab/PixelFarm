@@ -33,40 +33,30 @@ namespace LayoutFarm.UI
         }
         public void dbug_InvokeVisualRootDrawMsg()
         {
-            if (dbug_VisualRootDrawMsg != null)
-            {
-                dbug_VisualRootDrawMsg(this, EventArgs.Empty);
-            }
+            dbug_VisualRootDrawMsg?.Invoke(this, EventArgs.Empty);
         }
         public void dbug_InvokeHitChainMsg()
         {
-            if (dbug_VisualRootHitChainMsg != null)
-            {
-                dbug_VisualRootHitChainMsg(this, EventArgs.Empty);
-            }
+            dbug_VisualRootHitChainMsg?.Invoke(this, EventArgs.Empty);
         }
         public void dbug_BeginLayoutTraceSession(string beginMsg)
         {
-            this.dbugTopwin.dbugVisualRoot.dbug_BeginLayoutTraceSession(beginMsg);
+            this.dbugTopwin.dbugVisualRoot?.dbug_BeginLayoutTraceSession(beginMsg);
         }
         public void dbug_DisableAllDebugInfo()
         {
-            this.dbugTopwin.dbugVisualRoot.dbug_DisableAllDebugInfo();
+            this.dbugTopwin.dbugVisualRoot?.dbug_DisableAllDebugInfo();
         }
         public void dbug_EnableAllDebugInfo()
         {
-            this.dbugTopwin.dbugVisualRoot.dbug_EnableAllDebugInfo();
+            this.dbugTopwin.dbugVisualRoot?.dbug_EnableAllDebugInfo();
         }
         public void dbug_ReArrangeWithBreakOnSelectedNode()
         {
             vinv_dbugBreakOnSelectedVisuallElement = true;
             this.dbugTopwin.dbugTopDownReArrangeContentIfNeed();
         }
-        public bool vinv_dbugBreakOnSelectedVisuallElement
-        {
-            get;
-            set;
-        }
+        public bool vinv_dbugBreakOnSelectedVisuallElement { get; set; }
     }
 #endif
 }

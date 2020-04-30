@@ -56,7 +56,7 @@ namespace LayoutFarm.CustomWidgets
                             {
                                 Point globalLocation = LandPart.GetGlobalLocation();
                                 FloatPart.SetLocation(globalLocation.X, globalLocation.Y + LandPart.Height);
-                                _floatPartRenderElement = FloatPart.GetPrimaryRenderElement(topRenderBox.Root);
+                                _floatPartRenderElement = FloatPart.GetPrimaryRenderElement();
                                 topRenderBox.AddChild(_floatPartRenderElement);
                             }
                         }

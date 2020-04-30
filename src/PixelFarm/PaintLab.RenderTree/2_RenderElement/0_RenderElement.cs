@@ -14,25 +14,22 @@ namespace LayoutFarm
         //check if all rendering should occur on a single thread?
         //------
 
-        RootGraphic _rootGfx;
+
         IParentLink _parentLink;
         object _controller;
-        int _propFlags;
-        bool _needClipArea;
+        internal int _propFlags;
 
-        public RenderElement(RootGraphic rootGfx, int width, int height)
+        public RenderElement(int width, int height)
         {
             _b_width = width;
             _b_height = height;
-            _rootGfx = rootGfx;
-            _needClipArea = true;
+            NeedClipArea = true;
 #if DEBUG
             dbug_totalObjectId++;
             dbug_obj_id = dbug_totalObjectId;
 #endif
         }
 
-        internal InvalidateGfxArgs RootGetInvalidateGfxArgs() => _rootGfx.GetInvalidateGfxArgs();
 
 #if DEBUG
         /// <summary>
@@ -41,18 +38,21 @@ namespace LayoutFarm
         public bool dbugPreferSoftwareRenderer { get; set; }
 #endif
 
-        public bool NeedClipArea
-        {
-            get => _needClipArea;
-            set => _needClipArea = value;
-        }
+        public bool NeedClipArea { get; set; }
         //
-        public RootGraphic Root => _rootGfx;
+        protected virtual RootGraphic Root => null;
+        public RootGraphic GetRoot()
+        {
+            //recursive
+            RootGraphic root = Root;//local root
+            if (root != null) return root;
+            return _parentLink?.ParentRenderElement?.GetRoot();//recursive
+        }
         //
         public IContainerRenderElement GetTopWindowRenderBox()
         {
             if (_parentLink == null) { return null; }
-            return _rootGfx.TopWindowRenderBox as IContainerRenderElement;
+            return GetRoot()?.TopWindowRenderBox as IContainerRenderElement;
         }
 
         //==============================================================
@@ -363,7 +363,7 @@ namespace LayoutFarm
             else
             {
                 //not visual hit on this object..
-                if (_needClipArea)
+                if (NeedClipArea)
                 {
                     return false;
                 }
@@ -481,7 +481,7 @@ namespace LayoutFarm
                 renderE.PreRenderEvaluation(d);
             }
 
-            if (renderE._needClipArea)
+            if (renderE.NeedClipArea)
             {
                 //some elem may need clip for its child
                 //some may not need

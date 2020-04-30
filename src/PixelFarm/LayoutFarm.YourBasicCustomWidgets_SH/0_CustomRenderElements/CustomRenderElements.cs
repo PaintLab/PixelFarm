@@ -225,8 +225,8 @@ namespace LayoutFarm.CustomWidgets
         byte _borderRight;
         byte _borderBottom;
 
-        public CustomRenderBox(RootGraphic rootgfx, int width, int height)
-            : base(rootgfx, width, height)
+        public CustomRenderBox(int width, int height)
+            : base(width, height)
         {
             this.BackColor = KnownColors.LightGray;
         }
@@ -547,8 +547,8 @@ namespace LayoutFarm.CustomWidgets
         bool _hasAccumRect;
         Rectangle _invalidateRect;
 
-        public DoubleBufferCustomRenderBox(RootGraphic rootgfx, int width, int height)
-          : base(rootgfx, width, height)
+        public DoubleBufferCustomRenderBox(int width, int height)
+          : base(width, height)
         {
             NeedInvalidateRectEvent = true;
         }

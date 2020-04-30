@@ -93,7 +93,7 @@ namespace LayoutFarm
                 if (_b_left != left || _b_top != top)
                 {
                     //set location not affect its content size 
-                    if (!_needClipArea)
+                    if (!NeedClipArea)
                     {
 
                         //Size innerContentSize = InnerContentSize;

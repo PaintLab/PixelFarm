@@ -10,7 +10,7 @@ namespace LayoutFarm
     partial class RenderElement
     {
 
-        internal bool NoClipOrBgIsNotOpaque => !_needClipArea || (_propFlags & RenderElementConst.TRACKING_BG_IS_NOT_OPAQUE) != 0;
+        internal bool NoClipOrBgIsNotOpaque => !NeedClipArea || (_propFlags & RenderElementConst.TRACKING_BG_IS_NOT_OPAQUE) != 0;
 
         /// <summary>
         /// background is not 100% opaque
@@ -42,7 +42,8 @@ namespace LayoutFarm
                 //1.
                 _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
                 //2.  
-                _rootGfx.BubbleUpInvalidateGraphicArea(args);
+                BubbleInvalidater.InternalBubbleUpInvalidateGraphicArea(args);
+
             }
             else
             {
@@ -66,7 +67,7 @@ namespace LayoutFarm
 
             if (!GlobalRootGraphic.SuspendGraphicsUpdate)
             {
-                InvalidateGraphicLocalArea(this, rect);
+                BubbleInvalidater.InvalidateGraphicLocalArea(this, rect);
             }
             else
             {
@@ -90,7 +91,8 @@ namespace LayoutFarm
 
             if (!GlobalRootGraphic.SuspendGraphicsUpdate)
             {
-                InvalidateGraphicLocalArea(this, new Rectangle(0, 0, _b_width, _b_height));
+                BubbleInvalidater.InvalidateGraphicLocalArea(this, new Rectangle(0, 0, _b_width, _b_height));
+                //InvalidateGraphicLocalArea(this, new Rectangle(0, 0, _b_width, _b_height));
             }
             else
             {
@@ -123,16 +125,22 @@ namespace LayoutFarm
             {
                 if (!GlobalRootGraphic.SuspendGraphicsUpdate)
                 {
-                    InvalidateGfxArgs arg = _rootGfx.GetInvalidateGfxArgs();
-                    arg.SetReason_UpdateLocalArea(parent, totalBounds);
 
-                    _rootGfx.BubbleUpInvalidateGraphicArea(arg);//RELATIVE to its parent***
+                    InvalidateGfxArgs arg = BubbleInvalidater.GetInvalidateGfxArgs();
+                    arg.SetReason_UpdateLocalArea(parent, totalBounds);
+                    BubbleInvalidater.InternalBubbleUpInvalidateGraphicArea(arg);//RELATIVE to its parent***
+
                 }
                 else
                 {
 
                 }
             }
+        }
+
+        protected void InvalidateGfxLocalArea(Rectangle localArea)
+        {
+            BubbleInvalidater.InvalidateGraphicLocalArea(this, localArea);
         }
         internal static bool RequestInvalidateGraphicsNoti(RenderElement re)
         {
@@ -143,29 +151,7 @@ namespace LayoutFarm
             re.OnInvalidateGraphicsNoti(fromMe, ref totalBounds);
         }
 
-        public static void InvalidateGraphicLocalArea(RenderElement re, Rectangle localArea)
-        {
-            //RELATIVE to re ***
 
-            if (localArea.Height == 0 || localArea.Width == 0)
-            {
-                return;
-            }
-
-            re._propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
-            InvalidateGfxArgs inv = re._rootGfx.GetInvalidateGfxArgs();
-            inv.SetReason_UpdateLocalArea(re, localArea);
-
-//#if DEBUG
-//            if (localArea.Height == 31)
-//            {
-
-//            }
-
-//#endif
-
-            re._rootGfx.BubbleUpInvalidateGraphicArea(inv);
-        }
 
         public void SuspendGraphicsUpdate()
         {

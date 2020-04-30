@@ -56,7 +56,7 @@ namespace YourImplementation
                 var glBmp = new GLBitmap(_memBitmapBinder);
                 glBmp.IsYFlipped = false;
                 //
-                var glRenderElem = new CpuBlitGLCanvasRenderElement(rootgfx, _width, _height, glBmp);
+                var glRenderElem = new CpuBlitGLCanvasRenderElement(_width, _height, glBmp);
                 glRenderElem.SetController(this); //connect to event system
                 glRenderElem.SetOwnerDemoUI(this);
                 _canvasRenderE = glRenderElem;
@@ -70,7 +70,7 @@ namespace YourImplementation
         //
 
 
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        public override RenderElement GetPrimaryRenderElement()
         {
             //for this Elem  => please call CreatePrimaryRenderElement first 
             return _canvasRenderE;
@@ -207,12 +207,11 @@ namespace YourImplementation
 
         CpuBlitGLESUIElement _glesUIElem;
         GLBitmap _glBmp;
-        RootGraphic _rootgfx;
 
-        public CpuBlitGLCanvasRenderElement(RootGraphic rootgfx, int w, int h, GLBitmap glBmp)
-            : base(rootgfx, w, h)
+        public CpuBlitGLCanvasRenderElement(int w, int h, GLBitmap glBmp)
+            : base(w, h)
         {
-            _rootgfx = rootgfx;
+
             _glBmp = glBmp;
         }
         public void SetOwnerDemoUI(CpuBlitGLESUIElement glesUIElem)
@@ -230,7 +229,8 @@ namespace YourImplementation
             //2. if we only update some part of texture
             //may can transfer only that part to the glBmp
             //-------------------------------------------------------------------------  
-            if (_rootgfx.HasRenderTreeInvalidateAccumRect)
+            
+            if (GlobalRootGraphic.CurrentRootGfx.HasRenderTreeInvalidateAccumRect)
             {
 
                 //update cpu surface part***  
@@ -240,7 +240,7 @@ namespace YourImplementation
                     board.SetClipRect(updateArea.CurrentRect);
                     board.Clear(Color.White); //clear background, clear with white solid
 
-                 
+
 #if DEBUG
                     //_ui.dbugSaveAggBmp("a001.png");
 #endif
@@ -264,7 +264,7 @@ namespace YourImplementation
             //------------------------------------------------------------------------- 
         }
 
-         
+
         public void Dispose()
         {
 

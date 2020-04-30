@@ -17,7 +17,7 @@ namespace LayoutFarm.UI
         GraphicsTimerTaskManager _gfxTimerTaskMx;
         static object _normalUpdateTask = new object();
         readonly TopWindowEventRoot _topWindowEventRoot;
-        readonly RenderBoxBase _topWindowRenderBox;
+        readonly TopWindowRenderBox _topWindowRenderBox;
 
         RenderBoxBase _primaryContainerElement;
 
@@ -47,7 +47,7 @@ namespace LayoutFarm.UI
 
             //create default render box***
             _topWindowRenderBox = new TopWindowRenderBox(this, width, height);
-            _topWindowEventRoot = new TopWindowEventRoot(_topWindowRenderBox);
+            _topWindowEventRoot = new TopWindowEventRoot(this, _topWindowRenderBox);
             _gfxTimerTask = this.SubscribeGraphicsIntervalTask(_normalUpdateTask,
                 TaskIntervalPlan.Animation,
                 20,
@@ -170,9 +170,10 @@ namespace LayoutFarm.UI
                             break;
                         case RequestCommand.InvalidateArea:
                             {
-                                InvalidateGfxArgs args = GetInvalidateGfxArgs();
+                                InvalidateGfxArgs args = GetInvalidateGfxArgs(); 
                                 args.SetReason_UpdateLocalArea(req.renderElem, (Rectangle)req.parameters);
-                                this.BubbleUpInvalidateGraphicArea(args);
+                                InternalBubbleup(args);
+                                
                             }
                             break;
                     }
@@ -301,7 +302,7 @@ namespace LayoutFarm.UI
         {
             if (debugVisualLay != null)
             {
-                debugVisualLay.BeginNewContext(); 
+                debugVisualLay.BeginNewContext();
                 debugVisualLay.WriteInfo(msg.text, ve);
             }
         }

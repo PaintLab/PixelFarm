@@ -11,8 +11,8 @@ namespace LayoutFarm.TextEditing
         bool _hasAccumRect;
         Rectangle _invalidateRect;
 
-        public DoubleBufferCustomRenderBox(RootGraphic rootgfx, int width, int height)
-          : base(rootgfx, width, height)
+        public DoubleBufferCustomRenderBox( int width, int height)
+          : base( width, height)
         {
             NeedInvalidateRectEvent = true;
         }

@@ -306,14 +306,14 @@ namespace LayoutFarm.CustomWidgets
             IUICollection<UIElement> childIter = absRect.GetDefaultChildrenIter();
             if (childIter != null && childIter.Count > 0)
             {
-                RootGraphic rootgfx = renderE.Root;
+
                 foreach (UIElement child in childIter.GetIter())
                 {
-                    renderE.AddChild(child.GetPrimaryRenderElement(rootgfx));
+                    renderE.AddChild(child.GetPrimaryRenderElement());
                 }
             }
         }
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        public override RenderElement GetPrimaryRenderElement()
         {
             if (_primElement == null)
             {
@@ -321,8 +321,8 @@ namespace LayoutFarm.CustomWidgets
                 GlobalRootGraphic.BlockGraphicsUpdate();
 
                 var renderE = EnableDoubleBuffer ?
-                    new DoubleBufferCustomRenderBox(rootgfx, this.Width, this.Height) { EnableDoubleBuffer = true } :
-                    new CustomRenderBox(rootgfx, this.Width, this.Height);
+                    new DoubleBufferCustomRenderBox(this.Width, this.Height) { EnableDoubleBuffer = true } :
+                    new CustomRenderBox(this.Width, this.Height);
 
                 SetCommonProperties(renderE, this);
                 BuildChildren(renderE, this);
@@ -838,7 +838,7 @@ namespace LayoutFarm.CustomWidgets
                         {
                             _primElement.ContentHitTestHint = RenderBoxes.HitTestHint.Custom;
                         }
-                        
+
 
                         int maxBottom = 0;
                         //experiment
@@ -915,7 +915,7 @@ namespace LayoutFarm.CustomWidgets
                                         }
                                     }
 
-                                    linebox.Add(ui.GetPrimaryRenderElement(_primElement.Root));
+                                    linebox.Add(ui.GetPrimaryRenderElement());
                                 }
 
                                 left_to_right_max_x = xpos;

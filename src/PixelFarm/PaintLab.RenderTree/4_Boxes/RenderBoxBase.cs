@@ -31,7 +31,7 @@ namespace LayoutFarm
         void InsertBefore(RenderElement beforeElem, RenderElement renderE);
         void RemoveChild(RenderElement renderE);
         void ClearAllChildren();
-        RootGraphic Root { get; }
+
     }
 
     static class RenderElemHelper
@@ -189,8 +189,8 @@ namespace LayoutFarm
         protected int _viewportLeft;
         protected int _viewportTop;
 
-        public AbstractRectRenderElement(RootGraphic rootgfx, int width, int height)
-             : base(rootgfx, width, height)
+        public AbstractRectRenderElement(int width, int height)
+             : base(width, height)
         {
             this.MayHasViewport = true;
         }
@@ -207,12 +207,12 @@ namespace LayoutFarm
                 _viewportTop = viewportTop;
                 //
 
-                InvalidateGfxArgs args = RootGetInvalidateGfxArgs();
+                InvalidateGfxArgs args = BubbleInvalidater.GetInvalidateGfxArgs();
                 args.SetReason_ChangeViewport(this, diffLeft, diffTop);
                 this.InvalidateGraphics(args);
             }
         }
-        
+
     }
 
 
@@ -223,8 +223,8 @@ namespace LayoutFarm
     {
 
         RenderElementCollection _elements;
-        public RenderBoxBase(RootGraphic rootgfx, int width, int height)
-            : base(rootgfx, width, height)
+        public RenderBoxBase(int width, int height)
+            : base(width, height)
         {
             this.MayHasChild = true;
         }

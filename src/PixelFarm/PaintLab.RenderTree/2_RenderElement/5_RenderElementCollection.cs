@@ -82,7 +82,7 @@ namespace LayoutFarm.RenderBoxes
             }
             Rectangle bounds = re.RectBounds;
             RenderElement.SetParentLink(re, null);
-            RenderElement.InvalidateGraphicLocalArea(parent, bounds);
+            BubbleInvalidater.InvalidateGraphicLocalArea(parent, bounds);
         }
         public void Clear(RenderElement parent)
         {
