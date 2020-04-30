@@ -23,8 +23,8 @@ namespace LayoutFarm.UI
             int count = s_layoutQueue.Count;
 
 #if DEBUG
-    
-        //if (UIElement.s_dbugBreakOnSetBounds)
+
+            //if (UIElement.s_dbugBreakOnSetBounds)
             //{
             //    for (int i = count - 1; i >= 0; --i)
             //    {
@@ -117,16 +117,15 @@ namespace LayoutFarm.UI
             //make this keyboard focusable
             if (this.HasReadyRenderElement)
             {
-                //focus
-                this.CurrentPrimaryRenderElement.Root.SetCurrentKeyboardFocus(this.CurrentPrimaryRenderElement);
+                //focus 
+                this.CurrentPrimaryRenderElement.GetRoot()?.SetCurrentKeyboardFocus(this.CurrentPrimaryRenderElement);
             }
         }
         public virtual void Blur()
         {
             if (this.HasReadyRenderElement)
             {
-                //focus
-                this.CurrentPrimaryRenderElement.Root.SetCurrentKeyboardFocus(null);
+                this.CurrentPrimaryRenderElement.GetRoot()?.SetCurrentKeyboardFocus(null);
             }
         }
 

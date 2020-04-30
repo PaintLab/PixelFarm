@@ -306,7 +306,7 @@ namespace LayoutFarm.CustomWidgets
             IUICollection<UIElement> childIter = absRect.GetDefaultChildrenIter();
             if (childIter != null && childIter.Count > 0)
             {
-                RootGraphic rootgfx = renderE.Root;
+                
                 foreach (UIElement child in childIter.GetIter())
                 {
                     renderE.AddChild(child.GetPrimaryRenderElement());

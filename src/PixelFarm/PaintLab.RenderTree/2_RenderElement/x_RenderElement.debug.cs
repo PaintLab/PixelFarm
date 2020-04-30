@@ -331,7 +331,7 @@ namespace LayoutFarm
                 visualroot.dbug_RootUpdateCounter++;
             }
         }
-        public RootGraphic dbugVisualRoot => this.Root;
+        public RootGraphic dbugVisualRoot => null;
 
 #endif
     }

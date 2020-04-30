@@ -927,9 +927,9 @@ namespace LayoutFarm.UI
         static int dbugTotalId;
         public readonly int dbugId = dbugTotalId++;
         MyRootGraphic dbugRootGfx;
-        MyRootGraphic dbugRootGraphics
+        public MyRootGraphic dbugRootGraphics
         {
-            get { return dbugRootGfx; }
+            get => dbugRootGfx;
             set
             {
 

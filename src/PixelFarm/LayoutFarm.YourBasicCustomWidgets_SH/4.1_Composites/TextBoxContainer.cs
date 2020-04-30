@@ -230,12 +230,12 @@ namespace LayoutFarm.CustomWidgets
 
                     if (_isMaskTextBox)
                     {
-                        _myTextBox = _textboxSwitcher.BorrowMaskTextBox(_placeHolder.Root, this.Width - 4, this.Height - 4);
+                        _myTextBox = _textboxSwitcher.BorrowMaskTextBox(this.Width - 4, this.Height - 4);
 
                     }
                     else
                     {
-                        _myTextBox = _textboxSwitcher.BorrowTextBox(_placeHolder.Root, this.Width - 4, this.Height - 4);
+                        _myTextBox = _textboxSwitcher.BorrowTextBox(this.Width - 4, this.Height - 4);
                         _myTextBox.TextEventListener = _textSurfaceEventListener;
                     }
 
@@ -308,7 +308,7 @@ namespace LayoutFarm.CustomWidgets
         Stack<MaskTextBox> _maskTextBoxPool = new Stack<MaskTextBox>();
         TextBoxContainer _usedBy;
 
-        public MaskTextBox BorrowMaskTextBox(RootGraphic rootgfx, int w, int h)
+        public MaskTextBox BorrowMaskTextBox(int w, int h)
         {
             if (_maskTextBoxPool.Count == 0)
             {
@@ -322,7 +322,7 @@ namespace LayoutFarm.CustomWidgets
                 return maskTextBox;
             }
         }
-        public TextBox BorrowTextBox(RootGraphic rootgfx, int w, int h)
+        public TextBox BorrowTextBox(int w, int h)
         {
             if (_textBoxPool.Count == 0)
             {

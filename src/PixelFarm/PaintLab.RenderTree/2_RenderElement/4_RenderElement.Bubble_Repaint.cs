@@ -10,7 +10,7 @@ namespace LayoutFarm
     partial class RenderElement
     {
 
-        internal bool NoClipOrBgIsNotOpaque => !_needClipArea || (_propFlags & RenderElementConst.TRACKING_BG_IS_NOT_OPAQUE) != 0;
+        internal bool NoClipOrBgIsNotOpaque => !NeedClipArea || (_propFlags & RenderElementConst.TRACKING_BG_IS_NOT_OPAQUE) != 0;
 
         /// <summary>
         /// background is not 100% opaque

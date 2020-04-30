@@ -271,9 +271,9 @@ namespace LayoutFarm.UI
 
 #if DEBUG
             //System.Diagnostics.Debug.WriteLine("keydown" + (dbug_keydown_count++));
-            dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("======");
-            dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("KEYDOWN " + (LayoutFarm.UI.UIKeys)keyEventArgs.KeyCode);
-            dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("======");
+            dbugTopwin.dbugVisualRoot?.dbug_PushLayoutTraceMessage("======");
+            dbugTopwin.dbugVisualRoot?.dbug_PushLayoutTraceMessage("KEYDOWN " + (LayoutFarm.UI.UIKeys)keyEventArgs.KeyCode);
+            dbugTopwin.dbugVisualRoot?.dbug_PushLayoutTraceMessage("======");
 #endif
             _canvasViewport.FullMode = false;
             _topWinEventRoot.RootKeyDown(keyEventArgs);
@@ -297,9 +297,9 @@ namespace LayoutFarm.UI
                 return;
             }
 #if DEBUG
-            dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("======");
-            dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("KEYPRESS " + keyChar);
-            dbugTopwin.dbugVisualRoot.dbug_PushLayoutTraceMessage("======");
+            dbugTopwin.dbugVisualRoot?.dbug_PushLayoutTraceMessage("======");
+            dbugTopwin.dbugVisualRoot?.dbug_PushLayoutTraceMessage("KEYPRESS " + keyChar);
+            dbugTopwin.dbugVisualRoot?.dbug_PushLayoutTraceMessage("======");
 #endif
             _canvasViewport.FullMode = false;
 

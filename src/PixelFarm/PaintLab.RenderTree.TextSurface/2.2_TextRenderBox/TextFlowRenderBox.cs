@@ -32,7 +32,7 @@ namespace LayoutFarm.TextEditing
             defaultRunStyle.FontColor = Color.Black;//set default
             defaultRunStyle.ReqFont = rootgfx.DefaultTextEditFontInfo;
 
-            _textLayer = new TextFlowLayer(this, this.Root.TextServices, defaultRunStyle); //presentation
+            _textLayer = new TextFlowLayer(this, GlobalRootGraphic.CurrentRootGfx.TextServices, defaultRunStyle); //presentation
             _textLayer.ContentSizeChanged += (s, e) => OnTextContentSizeChanged();
 
             //
