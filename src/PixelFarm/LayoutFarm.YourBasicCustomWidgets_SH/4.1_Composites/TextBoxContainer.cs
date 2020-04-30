@@ -73,17 +73,17 @@ namespace LayoutFarm.CustomWidgets
             }
 
         }
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        public override RenderElement GetPrimaryRenderElement()
         {
             if (!this.HasReadyRenderElement)
             {
                 //first time
 
-                RenderElement renderE = base.GetPrimaryRenderElement(rootgfx);
+                RenderElement renderE = base.GetPrimaryRenderElement();
                 if (renderE is IContainerRenderElement baseRenderElement)
                 {
                     //1. add place holder first
-                    _placeHolder = new CustomTextRun(rootgfx, this.Width - 4, this.Height - 4);
+                    _placeHolder = new CustomTextRun(null, this.Width - 4, this.Height - 4);
                     _placeHolder.Text = _placeHolderText;
                     _placeHolder.SetLocation(1, 1);
                     _placeHolder.TextColor = Color.FromArgb(180, KnownColors.LightGray);
@@ -97,7 +97,7 @@ namespace LayoutFarm.CustomWidgets
                     {
                         //has textbox switcher
                         //use special 'light-weight' textbox
-                        _textBoxPlaceHolder = new CustomTextRun(rootgfx, this.Width - 4, this.Height - 4);
+                        _textBoxPlaceHolder = new CustomTextRun(null, this.Width - 4, this.Height - 4);
                         baseRenderElement.AddChild(_textBoxPlaceHolder);
 
                         if (_userText != null)
@@ -129,7 +129,7 @@ namespace LayoutFarm.CustomWidgets
             }
             else
             {
-                return base.GetPrimaryRenderElement(rootgfx);
+                return base.GetPrimaryRenderElement();
             }
         }
         void textEvListener_KeyDown(object sender, TextEditing.TextDomEventArgs e)
@@ -240,7 +240,7 @@ namespace LayoutFarm.CustomWidgets
                     }
 
 
-                    if (base.GetPrimaryRenderElement(_placeHolder.Root) is IContainerRenderElement baseRenderE)
+                    if (base.GetPrimaryRenderElement() is IContainerRenderElement baseRenderE)
                     {
                         baseRenderE.AddChild(_myTextBox);
                     }
@@ -280,7 +280,7 @@ namespace LayoutFarm.CustomWidgets
             _myTextBox.TextEventListener = null;
 
 
-            if (base.GetPrimaryRenderElement(_placeHolder.Root) is IContainerRenderElement baseRenderElement)
+            if (base.GetPrimaryRenderElement() is IContainerRenderElement baseRenderElement)
             {
                 baseRenderElement.RemoveChild(_myTextBox.CurrentPrimaryRenderElement);
             }

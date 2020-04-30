@@ -309,11 +309,11 @@ namespace LayoutFarm.CustomWidgets
                 RootGraphic rootgfx = renderE.Root;
                 foreach (UIElement child in childIter.GetIter())
                 {
-                    renderE.AddChild(child.GetPrimaryRenderElement(rootgfx));
+                    renderE.AddChild(child.GetPrimaryRenderElement());
                 }
             }
         }
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        public override RenderElement GetPrimaryRenderElement()
         {
             if (_primElement == null)
             {
@@ -321,8 +321,8 @@ namespace LayoutFarm.CustomWidgets
                 GlobalRootGraphic.BlockGraphicsUpdate();
 
                 var renderE = EnableDoubleBuffer ?
-                    new DoubleBufferCustomRenderBox(rootgfx, this.Width, this.Height) { EnableDoubleBuffer = true } :
-                    new CustomRenderBox(rootgfx, this.Width, this.Height);
+                    new DoubleBufferCustomRenderBox(null, this.Width, this.Height) { EnableDoubleBuffer = true } :
+                    new CustomRenderBox(null, this.Width, this.Height);
 
                 SetCommonProperties(renderE, this);
                 BuildChildren(renderE, this);
@@ -915,7 +915,7 @@ namespace LayoutFarm.CustomWidgets
                                         }
                                     }
 
-                                    linebox.Add(ui.GetPrimaryRenderElement(_primElement.Root));
+                                    linebox.Add(ui.GetPrimaryRenderElement());
                                 }
 
                                 left_to_right_max_x = xpos;

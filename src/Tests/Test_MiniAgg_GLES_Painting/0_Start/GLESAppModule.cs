@@ -70,7 +70,7 @@ namespace Mini
 
             DemoBase.InvokeGLPainterReady(demoBase, pcx, glPainter);
             //Add to RenderTree
-            _rootGfx.AddChild(_demoUI.GetPrimaryRenderElement(_gfxViewRoot.RootGfx));
+            _rootGfx.AddChild(_demoUI.GetPrimaryRenderElement());
         }
         public void Close()
         {
@@ -111,12 +111,12 @@ namespace Mini
             protected override bool HasReadyRenderElement => _canvasRenderE != null;
 
 
-            public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+            public override RenderElement GetPrimaryRenderElement()
             {
                 if (_canvasRenderE == null)
                 {
 
-                    var glRenderElem = new GLCanvasRenderElement(rootgfx, _width, _height);
+                    var glRenderElem = new GLCanvasRenderElement(null, _width, _height);
                     glRenderElem.SetPainter(_painter);
                     glRenderElem.SetController(this); //connect to event system
                     glRenderElem.LoadDemo(_demoBase);

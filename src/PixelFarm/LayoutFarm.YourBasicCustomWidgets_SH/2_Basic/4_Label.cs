@@ -36,11 +36,11 @@ namespace LayoutFarm.CustomWidgets
 #if DEBUG
         public bool dbugBreakOnRenderElement;
 #endif
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        public override RenderElement GetPrimaryRenderElement()
         {
             if (_myTextRun == null)
             {
-                var t_run = new CustomTextRun(rootgfx, this.Width, this.Height);
+                var t_run = new CustomTextRun(null, this.Width, this.Height);
                 t_run.DrawTextTechnique = _drawTextTechnique;
 
                 t_run.TextColor = _textColor;

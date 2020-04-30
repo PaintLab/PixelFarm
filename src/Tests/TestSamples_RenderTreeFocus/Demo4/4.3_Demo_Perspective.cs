@@ -177,7 +177,7 @@ namespace LayoutFarm
             _controlPoints.Clear();
             InvalidateGraphics();
         }
-      
+
 
         public override bool HasCustomHitTest => true; //set to true, CustomHitTest() will be called
         protected override bool CustomHitTest(HitChain hitChain)
@@ -363,16 +363,16 @@ namespace LayoutFarm
         }
         protected override bool HasReadyRenderElement => _quadRenderE != null;
         public override RenderElement CurrentPrimaryRenderElement => _quadRenderE;
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        public override RenderElement GetPrimaryRenderElement()
         {
             if (_quadRenderE == null)
             {
-                _quadRenderE = new QuadWidgetRenderElement(rootgfx);
+                _quadRenderE = new QuadWidgetRenderElement(null);
                 int j = _cornerBoxes.Count;
                 for (int i = 0; i < j; ++i)
                 {
                     Box b = _cornerBoxes[i];
-                    _quadRenderE.AddCustomControlBox((CustomRenderBox)b.GetPrimaryRenderElement(rootgfx));
+                    _quadRenderE.AddCustomControlBox((CustomRenderBox)b.GetPrimaryRenderElement());
                 }
 
                 _quadRenderE.SetController(this);

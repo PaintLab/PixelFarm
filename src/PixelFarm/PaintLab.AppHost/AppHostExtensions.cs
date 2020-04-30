@@ -13,7 +13,7 @@ namespace LayoutFarm
                 throw new System.NotSupportedException();
             }
 #endif
-            appHost.AddChild(ui.GetPrimaryRenderElement(appHost.RootGfx), ui);
+            appHost.AddChild(ui.GetPrimaryRenderElement(), ui);
         }
     }
 }

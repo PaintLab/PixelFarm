@@ -286,25 +286,26 @@ namespace LayoutFarm.CustomWidgets
         //
         public override RenderElement CurrentPrimaryRenderElement => _primElement;
 
-      
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+
+        public override RenderElement GetPrimaryRenderElement()
         {
             if (_primElement == null)
             {
                 //1.
-                var element = new CustomRenderBox(rootgfx, this.Width, this.Height);
+                var element = new CustomRenderBox(null, this.Width, this.Height);
                 element.SetLocation(this.Left, this.Top);
                 element.BackColor = _backColor;
                 element.SetController(this);
                 //
-                _listItemText = new CustomTextRun(rootgfx, 200, this.Height);
+                _listItemText = new CustomTextRun(null, 200, this.Height);
                 _listItemText.DrawTextTechnique = DrawTextTechnique.LcdSubPix;
 
                 if (_font != null)
                 {
                     _listItemText.RequestFont = _font;
                     //TODO: review how to find 
-                    int blankLineHeight = (int)rootgfx.TextServices.MeasureBlankLineHeight(_font);
+                    
+                    int blankLineHeight = (int)GlobalRootGraphic.CurrentRootGfx.TextServices.MeasureBlankLineHeight(_font);
                     _listItemText.SetHeight(blankLineHeight);
                     element.SetHeight(blankLineHeight);
                 }

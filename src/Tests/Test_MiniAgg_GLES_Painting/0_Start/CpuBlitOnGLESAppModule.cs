@@ -79,7 +79,7 @@ namespace Mini
             //-----------------------------------------------
             DemoBase.InvokeGLPainterReady(demoBase, pcx, glPainter);
             //Add to RenderTree
-            _rootGfx.AddChild(_bridgeUI.GetPrimaryRenderElement(_rootGfx));
+            _rootGfx.AddChild(_bridgeUI.GetPrimaryRenderElement());
             //-----------------------------------------------
             //***
             GeneralEventListener genEvListener = new GeneralEventListener();

@@ -85,7 +85,7 @@ namespace LayoutFarm.ColorBlenderSample
                 }
 
             }
-          
+
             public float X0;
             public float Y0;
             public float X1;
@@ -117,7 +117,7 @@ namespace LayoutFarm.ColorBlenderSample
             }
             protected override bool HasReadyRenderElement => _lineRendeE != null;
 
-            public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+            public override RenderElement GetPrimaryRenderElement()
             {
                 if (_lineRendeE == null)
                 {
@@ -131,7 +131,7 @@ namespace LayoutFarm.ColorBlenderSample
                         //---
                         //---
 
-                        _lineRendeE = new LineRenderElement(rootgfx, 10, 10);
+                        _lineRendeE = new LineRenderElement(null, 10, 10);
                         _lineRendeE._stroke = new VxsRenderVx(strokeVxs);
 
                         _lineRendeE.X0 = p0.Left;

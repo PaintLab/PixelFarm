@@ -70,7 +70,7 @@ namespace YourImplementation
         //
 
 
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        public override RenderElement GetPrimaryRenderElement()
         {
             //for this Elem  => please call CreatePrimaryRenderElement first 
             return _canvasRenderE;

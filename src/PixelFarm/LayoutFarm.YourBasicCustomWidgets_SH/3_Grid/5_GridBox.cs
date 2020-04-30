@@ -39,7 +39,7 @@ namespace LayoutFarm.CustomWidgets
         }
         public void SetContent(int r, int c, UIElement ui)
         {
-            _gridLayer.GetCell(r, c).ContentElement = ui.GetPrimaryRenderElement(this.Root);
+            _gridLayer.GetCell(r, c).ContentElement = ui.GetPrimaryRenderElement();
         }
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
@@ -905,7 +905,7 @@ namespace LayoutFarm.CustomWidgets
                 if (_gridViewRenderE != null)
                 {
 
-                    RenderElement re = ui.GetPrimaryRenderElement(_gridViewRenderE.Root);
+                    RenderElement re = ui.GetPrimaryRenderElement();
                     _gridViewRenderE.SetContent(rowIndex, colIndex, re);
 
                     GridCell gridCell = _gridViewRenderE.GetCellByMousePosition(rowIndex, colIndex);
@@ -1014,11 +1014,11 @@ namespace LayoutFarm.CustomWidgets
         //
         public override RenderElement CurrentPrimaryRenderElement => _gridViewRenderE;
         //
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        public override RenderElement GetPrimaryRenderElement()
         {
             if (_gridViewRenderE == null)
             {
-                var myGridBox = new GridViewRenderBox(rootgfx, this.Width, this.Height);
+                var myGridBox = new GridViewRenderBox(null, this.Width, this.Height);
                 myGridBox.HasSpecificWidthAndHeight = true;//***
                 myGridBox.NeedClipArea = this.NeedClipArea;
 
@@ -1045,7 +1045,7 @@ namespace LayoutFarm.CustomWidgets
                         if (gridCell.ContentElement is UIElement content)
                         {
                             myGridBox.SetContent(r, c, content);
-                            RenderElement uiRenderE = content.GetPrimaryRenderElement(rootgfx);
+                            RenderElement uiRenderE = content.GetPrimaryRenderElement();
                             GridCellParentLink parentLink = new GridCellParentLink(gridCell, _gridViewRenderE);
                             RenderElement.SetParentLink(uiRenderE, parentLink);
                         }
