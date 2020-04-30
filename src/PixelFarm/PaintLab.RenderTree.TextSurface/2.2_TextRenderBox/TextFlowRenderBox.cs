@@ -25,12 +25,13 @@ namespace LayoutFarm.TextEditing
 
         internal bool _isDragBegin;
 
-        public TextFlowRenderBox(RootGraphic rootgfx, int width, int height, bool isMultiLine)
-            : base(rootgfx, width, height)
+        public TextFlowRenderBox(int width, int height, bool isMultiLine)
+            : base(width, height)
         {
             var defaultRunStyle = new RunStyle();
             defaultRunStyle.FontColor = Color.Black;//set default
-            defaultRunStyle.ReqFont = rootgfx.DefaultTextEditFontInfo;
+
+            defaultRunStyle.ReqFont = GlobalRootGraphic.CurrentRootGfx.DefaultTextEditFontInfo;//TODO: review here
 
             _textLayer = new TextFlowLayer(this, GlobalRootGraphic.CurrentRootGfx.TextServices, defaultRunStyle); //presentation
             _textLayer.ContentSizeChanged += (s, e) => OnTextContentSizeChanged();

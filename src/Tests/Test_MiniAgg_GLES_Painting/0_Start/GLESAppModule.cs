@@ -116,7 +116,7 @@ namespace Mini
                 if (_canvasRenderE == null)
                 {
 
-                    var glRenderElem = new GLCanvasRenderElement(null, _width, _height);
+                    var glRenderElem = new GLCanvasRenderElement(_width, _height);
                     glRenderElem.SetPainter(_painter);
                     glRenderElem.SetController(this); //connect to event system
                     glRenderElem.LoadDemo(_demoBase);
@@ -158,8 +158,8 @@ namespace Mini
         {
             DemoBase _demo;
             GLPainter _painter;
-            public GLCanvasRenderElement(RootGraphic rootgfx, int w, int h)
-                : base(rootgfx, w, h)
+            public GLCanvasRenderElement(int w, int h)
+                : base(w, h)
             {
             }
             public void SetPainter(GLPainter canvasPainter)

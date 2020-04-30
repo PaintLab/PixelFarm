@@ -5,15 +5,14 @@ using LayoutFarm.UI;
 using LayoutFarm.UI.ForImplementator;
 using LayoutFarm.RenderBoxes;
 using System;
-using System.Reflection;
 
 namespace LayoutFarm.CustomWidgets
 {
     class GridViewRenderBox : CustomRenderBox
     {
         GridLayer _gridLayer;
-        public GridViewRenderBox(RootGraphic rootgfx, int w, int h)
-            : base(rootgfx, w, h)
+        public GridViewRenderBox(int w, int h)
+            : base(w, h)
         {
 
         }
@@ -1018,7 +1017,7 @@ namespace LayoutFarm.CustomWidgets
         {
             if (_gridViewRenderE == null)
             {
-                var myGridBox = new GridViewRenderBox(null, this.Width, this.Height);
+                var myGridBox = new GridViewRenderBox(this.Width, this.Height);
                 myGridBox.HasSpecificWidthAndHeight = true;//***
                 myGridBox.NeedClipArea = this.NeedClipArea;
 

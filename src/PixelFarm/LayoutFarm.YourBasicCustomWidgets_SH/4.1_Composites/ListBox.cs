@@ -292,19 +292,19 @@ namespace LayoutFarm.CustomWidgets
             if (_primElement == null)
             {
                 //1.
-                var element = new CustomRenderBox(null, this.Width, this.Height);
+                var element = new CustomRenderBox(this.Width, this.Height);
                 element.SetLocation(this.Left, this.Top);
                 element.BackColor = _backColor;
                 element.SetController(this);
                 //
-                _listItemText = new CustomTextRun(null, 200, this.Height);
+                _listItemText = new CustomTextRun(200, this.Height);
                 _listItemText.DrawTextTechnique = DrawTextTechnique.LcdSubPix;
 
                 if (_font != null)
                 {
                     _listItemText.RequestFont = _font;
                     //TODO: review how to find 
-                    
+
                     int blankLineHeight = (int)GlobalRootGraphic.CurrentRootGfx.TextServices.MeasureBlankLineHeight(_font);
                     _listItemText.SetHeight(blankLineHeight);
                     element.SetHeight(blankLineHeight);

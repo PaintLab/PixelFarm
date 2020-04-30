@@ -83,7 +83,7 @@ namespace LayoutFarm.CustomWidgets
                 if (renderE is IContainerRenderElement baseRenderElement)
                 {
                     //1. add place holder first
-                    _placeHolder = new CustomTextRun(null, this.Width - 4, this.Height - 4);
+                    _placeHolder = new CustomTextRun(this.Width - 4, this.Height - 4);
                     _placeHolder.Text = _placeHolderText;
                     _placeHolder.SetLocation(1, 1);
                     _placeHolder.TextColor = Color.FromArgb(180, KnownColors.LightGray);
@@ -97,7 +97,7 @@ namespace LayoutFarm.CustomWidgets
                     {
                         //has textbox switcher
                         //use special 'light-weight' textbox
-                        _textBoxPlaceHolder = new CustomTextRun(null, this.Width - 4, this.Height - 4);
+                        _textBoxPlaceHolder = new CustomTextRun(this.Width - 4, this.Height - 4);
                         baseRenderElement.AddChild(_textBoxPlaceHolder);
 
                         if (_userText != null)

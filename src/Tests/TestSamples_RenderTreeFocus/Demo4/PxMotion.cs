@@ -192,7 +192,7 @@ namespace LayoutFarm.UI
         Perspective _perspectiveTx; //temp
 
         public SpriteShape(VgVisualElement vgVisElem, RootGraphic root, int w, int h)
-             : base(root, w, h)
+             : base(w, h)
         {
             LoadFromSvg(vgVisElem);
         }

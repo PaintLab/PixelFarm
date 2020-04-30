@@ -70,7 +70,7 @@ namespace LayoutFarm.CustomWidgets
             if (_primElement == null)
             {
                 //first time
-                var element = new CustomRenderBox(null, this.Width, this.Height);
+                var element = new CustomRenderBox(this.Width, this.Height);
                 element.SetLocation(this.Left, this.Top);
                 element.BackColor = _backColor;
                 element.HasSpecificWidthAndHeight = true;
@@ -81,7 +81,7 @@ namespace LayoutFarm.CustomWidgets
                 SetupNodeIconBehaviour(_uiNodeIcon);
                 element.AddChild(_uiNodeIcon);
                 //-----------------------------
-                _myTextRun = new CustomTextRun(null, 10, 17);
+                _myTextRun = new CustomTextRun(10, 17);
                 _myTextRun.SetLocation(16, 0);
                 _myTextRun.Text = "Test01";
                 element.AddChild(_myTextRun);

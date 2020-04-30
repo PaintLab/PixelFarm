@@ -306,7 +306,7 @@ namespace LayoutFarm.CustomWidgets
             IUICollection<UIElement> childIter = absRect.GetDefaultChildrenIter();
             if (childIter != null && childIter.Count > 0)
             {
-                
+
                 foreach (UIElement child in childIter.GetIter())
                 {
                     renderE.AddChild(child.GetPrimaryRenderElement());
@@ -321,8 +321,8 @@ namespace LayoutFarm.CustomWidgets
                 GlobalRootGraphic.BlockGraphicsUpdate();
 
                 var renderE = EnableDoubleBuffer ?
-                    new DoubleBufferCustomRenderBox(null, this.Width, this.Height) { EnableDoubleBuffer = true } :
-                    new CustomRenderBox(null, this.Width, this.Height);
+                    new DoubleBufferCustomRenderBox(this.Width, this.Height) { EnableDoubleBuffer = true } :
+                    new CustomRenderBox(this.Width, this.Height);
 
                 SetCommonProperties(renderE, this);
                 BuildChildren(renderE, this);
@@ -838,7 +838,7 @@ namespace LayoutFarm.CustomWidgets
                         {
                             _primElement.ContentHitTestHint = RenderBoxes.HitTestHint.Custom;
                         }
-                        
+
 
                         int maxBottom = 0;
                         //experiment

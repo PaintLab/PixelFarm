@@ -23,13 +23,13 @@ namespace LayoutFarm.CustomWidgets
         byte _borderRight;
         byte _borderBottom;
 
-        public CustomTextRun(RootGraphic rootgfx, int width, int height)
-            : base(rootgfx, width, height)
+        public CustomTextRun(int width, int height)
+            : base(width, height)
         {
 #if DEBUG
             //dbugBreak = true;
 #endif
-            _font = rootgfx.DefaultTextEditFontInfo;
+            _font = GlobalRootGraphic.CurrentRootGfx.DefaultTextEditFontInfo;
             NeedPreRenderEval = true;
             DrawTextTechnique = DrawTextTechnique.Stencil;//default
         }

@@ -250,7 +250,7 @@ namespace LayoutFarm.CustomWidgets
         //--------------------------------------------------------------------------
         void CreateVSliderBarContent()
         {
-            CustomRenderBox bgBox = new CustomRenderBox(null, this.Width, this.Height);
+            CustomRenderBox bgBox = new CustomRenderBox(this.Width, this.Height);
             bgBox.HasSpecificWidthAndHeight = true;
             bgBox.SetController(this);
             bgBox.SetLocation(this.Left, this.Top);
@@ -262,7 +262,7 @@ namespace LayoutFarm.CustomWidgets
         }
         void CreateHSliderBarContent()
         {
-            CustomRenderBox bgBox = new CustomRenderBox(null, this.Width, this.Height);
+            CustomRenderBox bgBox = new CustomRenderBox(this.Width, this.Height);
 
             bgBox.HasSpecificWidthAndHeight = true;
             bgBox.SetController(this);
@@ -823,7 +823,7 @@ namespace LayoutFarm.CustomWidgets
         //--------------------------------------------------------------------------
         void CreateVScrollbarContent()
         {
-            CustomRenderBox bgBox = new CustomRenderBox(null, this.Width, this.Height);
+            CustomRenderBox bgBox = new CustomRenderBox(this.Width, this.Height);
 
             bgBox.HasSpecificWidthAndHeight = true;
             bgBox.SetController(this);
@@ -850,7 +850,7 @@ namespace LayoutFarm.CustomWidgets
         void CreateHScrollbarContent()
         {
 
-            CustomRenderBox bgBox = new CustomRenderBox(null, this.Width, this.Height);
+            CustomRenderBox bgBox = new CustomRenderBox(this.Width, this.Height);
             bgBox.SetVisible(this.Visible);
 
             bgBox.HasSpecificWidthAndHeight = true;

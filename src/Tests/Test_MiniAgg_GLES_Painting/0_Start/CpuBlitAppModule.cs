@@ -73,7 +73,7 @@ namespace Mini
             {
                 if (_canvasRenderE == null)
                 {
-                    _canvasRenderE = new CpuBlitAggCanvasRenderElement(null, _width, _height);
+                    _canvasRenderE = new CpuBlitAggCanvasRenderElement(_width, _height);
                     _canvasRenderE.SetController(this); //connect to event system
                     _canvasRenderE.LoadDemo(_exampleBase);
                 }
@@ -114,8 +114,8 @@ namespace Mini
             DemoBase _demo;
             MemBitmap _memBmp;
             Painter _painter;
-            public CpuBlitAggCanvasRenderElement(RootGraphic rootgfx, int w, int h)
-                : base(rootgfx, w, h)
+            public CpuBlitAggCanvasRenderElement(int w, int h)
+                : base(w, h)
             {
 
                 //TODO: check if we can access raw rootGraphics buffer or not

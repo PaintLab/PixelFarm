@@ -153,7 +153,7 @@ namespace LayoutFarm
     {
         List<CustomRenderBox> _controlPoints = new List<CustomRenderBox>();
         RectangleF _approxRectBounds;
-        public QuadWidgetRenderElement(RootGraphic root) : base(root, 300, 300)
+        public QuadWidgetRenderElement() : base(300, 300)
         {
             _approxRectBounds = new RectangleF(0, 0, 300, 300);
             this.NeedClipArea = false; //special for quad control
@@ -367,7 +367,7 @@ namespace LayoutFarm
         {
             if (_quadRenderE == null)
             {
-                _quadRenderE = new QuadWidgetRenderElement(null);
+                _quadRenderE = new QuadWidgetRenderElement();
                 int j = _cornerBoxes.Count;
                 for (int i = 0; i < j; ++i)
                 {

@@ -40,7 +40,7 @@ namespace LayoutFarm.CustomWidgets
         {
             if (_myTextRun == null)
             {
-                var t_run = new CustomTextRun(null, this.Width, this.Height);
+                var t_run = new CustomTextRun(this.Width, this.Height);
                 t_run.DrawTextTechnique = _drawTextTechnique;
 
                 t_run.TextColor = _textColor;
@@ -121,7 +121,7 @@ namespace LayoutFarm.CustomWidgets
                     _myTextRun.Text = value;
                     _myTextRun.InvalidateGraphics();
                 }
-                 
+
             }
         }
         public DrawTextTechnique DrawTextTechnique

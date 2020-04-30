@@ -61,7 +61,7 @@ namespace TestGlfw
     class dbugMySprite : RenderElement
     {
         VgVisualElement _renderVx;
-        public dbugMySprite(RootGraphic root, int w, int h) : base(root, w, h)
+        public dbugMySprite(int w, int h) : base(w, h)
         {
             _renderVx = VgVisualDocHelper.CreateVgVisualDocFromFile(@"lion.svg").VgRootElem;
         }
@@ -74,7 +74,7 @@ namespace TestGlfw
             }
             //d.FillRectangle(Color.Blue, 0, 0, 50, 50);
         }
-      
+
     }
 #endif
     static class MyApp3
@@ -223,7 +223,7 @@ namespace TestGlfw
             s_myRootGfx.AddChild(bgBox.GetPrimaryRenderElement());
 
             //----------------------
-            dbugMySprite sprite = new dbugMySprite(s_myRootGfx, 200, 300);
+            dbugMySprite sprite = new dbugMySprite( 200, 300);
             dbugMyBoxUI boxUI = new dbugMyBoxUI();
             boxUI.SetRenderElement(sprite);
             sprite.SetController(boxUI);

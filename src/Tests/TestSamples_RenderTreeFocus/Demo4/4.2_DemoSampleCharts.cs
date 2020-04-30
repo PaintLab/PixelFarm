@@ -51,8 +51,8 @@ namespace LayoutFarm.ColorBlenderSample
         {
             internal VxsRenderVx _stroke;
 
-            public LineRenderElement(RootGraphic rootGfx, int width, int height)
-                : base(rootGfx, width, height)
+            public LineRenderElement(int width, int height)
+                : base(width, height)
             {
 
             }
@@ -131,7 +131,7 @@ namespace LayoutFarm.ColorBlenderSample
                         //---
                         //---
 
-                        _lineRendeE = new LineRenderElement(null, 10, 10);
+                        _lineRendeE = new LineRenderElement(10, 10);
                         _lineRendeE._stroke = new VxsRenderVx(strokeVxs);
 
                         _lineRendeE.X0 = p0.Left;

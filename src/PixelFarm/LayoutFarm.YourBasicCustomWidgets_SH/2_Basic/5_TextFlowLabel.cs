@@ -79,7 +79,7 @@ namespace LayoutFarm.CustomWidgets
         {
             if (_textFlowRenderBox == null)
             {
-                var txtFlowRenderBox = new TextFlowRenderBox(null, this.Width, this.Height, true);
+                var txtFlowRenderBox = new TextFlowRenderBox(this.Width, this.Height, true);
                 txtFlowRenderBox.BackgroundColor = _backColor;
 
                 if (_textSpanStyle.ReqFont == null)

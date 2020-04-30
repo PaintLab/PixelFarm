@@ -16,17 +16,16 @@ namespace LayoutFarm.TextEditing
         bool _stateShowCaret = false;
 
         public TextEditRenderBox(
-            RootGraphic rootgfx,
             int width, int height,
             bool isMultiLine,
             bool isEditable = true)
-            : base(rootgfx, width, height, isMultiLine)
+            : base(width, height, isMultiLine)
         {
             _isEditable = isEditable;
 
             if (isEditable)
             {
-                GlobalCaretController.RegisterCaretBlink(rootgfx);
+                GlobalCaretController.RegisterCaretBlink(GlobalRootGraphic.CurrentRootGfx);
                 //
                 _myCaret = new EditorCaret(2, 17);
                 RenderCaret = true;
@@ -155,7 +154,7 @@ namespace LayoutFarm.TextEditing
             if (_editSession.SelectionRange != null
                 && _editSession.SelectionRange.IsValid)
             {
-                 BubbleInvalidater.InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
+                BubbleInvalidater.InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
             }
             bool preventDefault = false;
             if (_textSurfaceEventListener != null &&

@@ -337,7 +337,7 @@ namespace LayoutFarm.CustomWidgets
         {
             if (_textEditRenderElement == null)
             {
-                var tbox = new TextEditRenderBox(null, this.Width, this.Height, _multiline, _isEditable);
+                var tbox = new TextEditRenderBox(this.Width, this.Height, _multiline, _isEditable);
                 tbox.SetLocation(this.Left, this.Top);
                 tbox.HasSpecificWidthAndHeight = true;//***
                 if (_defaultSpanStyle.IsEmpty())
@@ -498,7 +498,7 @@ namespace LayoutFarm.CustomWidgets
         {
             if (_textEditRenderElement == null)
             {
-                var tbox = new TextEditRenderBox(null, this.Width, this.Height, _multiline);
+                var tbox = new TextEditRenderBox(this.Width, this.Height, _multiline);
                 tbox.SetLocation(this.Left, this.Top);
                 tbox.HasSpecificWidthAndHeight = true;
 

@@ -14,16 +14,15 @@ namespace LayoutFarm
         //check if all rendering should occur on a single thread?
         //------
 
-        RootGraphic _rootGfx;
+
         IParentLink _parentLink;
         object _controller;
         internal int _propFlags;
 
-        public RenderElement(RootGraphic rootGfx, int width, int height)
+        public RenderElement(int width, int height)
         {
             _b_width = width;
             _b_height = height;
-            _rootGfx = rootGfx;
             NeedClipArea = true;
 #if DEBUG
             dbug_totalObjectId++;
