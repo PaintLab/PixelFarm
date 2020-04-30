@@ -30,7 +30,7 @@ namespace LayoutFarm
 
     partial class RenderElement
     {
-        public bool dbugNeedContentArrangement => this.NeedContentArrangement;
+        //public bool dbugNeedContentArrangement => this.NeedContentArrangement;
         public bool dbugNeedReCalculateContentSize => this.NeedReCalculateContentSize;
         public Rectangle dbugGetGlobalRect() => new Rectangle(GetGlobalLocationStatic(this), Size);
 
@@ -118,22 +118,22 @@ namespace LayoutFarm
                 info += "[nc:" + dbug_ValidateRecalculateSizeEpisode + "]";
             }
 
-            if (this.dbugNeedContentArrangement)
-            {
-                info += "[A:" + dbug_InvalidateContentArrEpisode + "," + "na:" + dbug_ValidateContentArrEpisode + "]";
-                if (this.dbug_FinishArr != this.dbug_BeginArr)
-                {
-                    info += "!";
-                }
-            }
-            else
-            {
-                info += "[na:" + dbug_ValidateContentArrEpisode + ",A:" + dbug_ValidateContentArrEpisode + "]";
-                if (this.dbug_FinishArr != this.dbug_BeginArr)
-                {
-                    info += "!";
-                }
-            }
+            //if (this.dbugNeedContentArrangement)
+            //{
+            //    info += "[A:" + dbug_InvalidateContentArrEpisode + "," + "na:" + dbug_ValidateContentArrEpisode + "]";
+            //    if (this.dbug_FinishArr != this.dbug_BeginArr)
+            //    {
+            //        info += "!";
+            //    }
+            //}
+            //else
+            //{
+            //    info += "[na:" + dbug_ValidateContentArrEpisode + ",A:" + dbug_ValidateContentArrEpisode + "]";
+            //    if (this.dbug_FinishArr != this.dbug_BeginArr)
+            //    {
+            //        info += "!";
+            //    }
+            //}
 
 
             return info;

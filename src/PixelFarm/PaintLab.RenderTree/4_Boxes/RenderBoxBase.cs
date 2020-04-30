@@ -270,6 +270,8 @@ namespace LayoutFarm
             }
             switch (GetLayoutSpecificDimensionType(this))
             {
+                default:
+                    break;
                 case RenderElementConst.LY_HAS_SPC_HEIGHT:
                     {
                         finalHeight = cHeight;
@@ -331,7 +333,7 @@ namespace LayoutFarm
         public virtual void ClearAllChildren()
         {
             _elements?.Clear(this);
-            
+
         }
 
         public override RenderElement FindUnderlyingSiblingAtPoint(Point point)
@@ -404,50 +406,50 @@ namespace LayoutFarm
         //-----------------------------------------------------------------
         public void dbugForceTopDownReArrangeContent()
         {
-            dbug_EnterReArrangeContent(this);
-            dbug_topDownReArrContentPass++;
-            this.dbug_BeginArr++;
-            debug_PushTopDownElement(this);
-            this.MarkValidContentArrangement();
-            ////IsInTopDownReArrangePhase = true;
-            //if (_defaultLayer != null)
-            //{
-            //    _defaultLayer.TopDownReArrangeContent();
-            //}
+            //dbug_EnterReArrangeContent(this);
+            //dbug_topDownReArrContentPass++;
+            //this.dbug_BeginArr++;
+            //debug_PushTopDownElement(this);
+            //this.MarkValidContentArrangement();
+            //////IsInTopDownReArrangePhase = true;
+            ////if (_defaultLayer != null)
+            ////{
+            ////    _defaultLayer.TopDownReArrangeContent();
+            ////}
 
-            // BoxEvaluateScrollBar();
+            //// BoxEvaluateScrollBar();
 
 
-            this.dbug_FinishArr++;
-            debug_PopTopDownElement(this);
-            dbug_ExitReArrangeContent();
+            //this.dbug_FinishArr++;
+            //debug_PopTopDownElement(this);
+            //dbug_ExitReArrangeContent();
         }
         public void dbugTopDownReArrangeContentIfNeed()
         {
-            bool isIncr = false;
-            if (!this.NeedContentArrangement)
-            {
-                if (!this.dbugFirstArrangementPass)
-                {
-                    this.dbugFirstArrangementPass = true;
-                    dbug_WriteInfo(dbugVisitorMessage.PASS_FIRST_ARR);
-                }
-                else
-                {
-                    isIncr = true;
-                    this.dbugVRoot.dbugNotNeedArrCount++;
-                    this.dbugVRoot.dbugNotNeedArrCountEpisode++;
-                    dbug_WriteInfo(dbugVisitorMessage.NOT_NEED_ARR);
-                    this.dbugVRoot.dbugNotNeedArrCount--;
-                }
-                return;
-            }
+            //bool isIncr = false;
+            //if (!this.NeedContentArrangement)
+            //{
+            //    if (!this.dbugFirstArrangementPass)
+            //    {
+            //        this.dbugFirstArrangementPass = true;
+            //        dbug_WriteInfo(dbugVisitorMessage.PASS_FIRST_ARR);
+            //    }
+            //    else
+            //    {
+            //        isIncr = true;
+            //        this.dbugVRoot.dbugNotNeedArrCount++;
+            //        this.dbugVRoot.dbugNotNeedArrCountEpisode++;
+            //        dbug_WriteInfo(dbugVisitorMessage.NOT_NEED_ARR);
+            //        this.dbugVRoot.dbugNotNeedArrCount--;
+            //    }
+            //    return;
+            //}
 
-            dbugForceTopDownReArrangeContent();
-            if (isIncr)
-            {
-                this.dbugVRoot.dbugNotNeedArrCount--;
-            }
+            //dbugForceTopDownReArrangeContent();
+            //if (isIncr)
+            //{
+            //    this.dbugVRoot.dbugNotNeedArrCount--;
+            //}
         }
         public override void dbug_DumpVisualProps(dbugLayoutMsgWriter writer)
         {

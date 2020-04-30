@@ -904,8 +904,8 @@ namespace LayoutFarm.CustomWidgets
                                     }
 
                                     linebox.Add(ui.GetPrimaryRenderElement(_primElement.Root));
-
                                 }
+
                                 left_to_right_max_x = xpos;
 
                                 if (_boxContentVertAlignment != VerticalAlignment.Top)

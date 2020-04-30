@@ -494,8 +494,7 @@ namespace LayoutFarm.UI
         }
         static void ReCalculateContentSize(GridCell cell)
         {
-            var renderE = cell.ContentElement as RenderElement;
-            if (renderE != null && !renderE.HasCalculatedSize)
+            if (cell.ContentElement is RenderElement renderE && !renderE.HasCalculatedSize)
             {
                 renderE.TopDownReCalculateContentSize();
             }

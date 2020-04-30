@@ -61,16 +61,16 @@ namespace LayoutFarm
         //            this.dbug_InvalidateRecalculateSizeEpisode++;
         //#endif
         //        }
-        public void MarkValidContentArrangement()
-        {
-#if DEBUG
-            this.dbug_ValidateContentArrEpisode++;
-#endif
+//        public void MarkValidContentArrangement()
+//        {
+//#if DEBUG
+//            this.dbug_ValidateContentArrEpisode++;
+//#endif
 
-            _uiLayoutFlags |= RenderElementConst.LY_HAS_ARRANGED_CONTENT;
-        }
+//            _uiLayoutFlags |= RenderElementConst.LY_HAS_ARRANGED_CONTENT;
+//        }
 
-        public bool NeedContentArrangement => (_uiLayoutFlags & RenderElementConst.LY_HAS_ARRANGED_CONTENT) == 0;
+//        public bool NeedContentArrangement => (_uiLayoutFlags & RenderElementConst.LY_HAS_ARRANGED_CONTENT) == 0;
 
 #if DEBUG
         internal bool dbugFirstArrangementPass
