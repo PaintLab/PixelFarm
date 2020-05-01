@@ -36,7 +36,7 @@ namespace LayoutFarm
                 return;
             }
 
-            if (!GlobalRootGraphic.SuspendGraphicsUpdate)
+            if (!GlobalRootGraphic.s_SuspendGraphicsUpdate)
             {
                 //RELATIVE to this***
                 //1.
@@ -65,13 +65,9 @@ namespace LayoutFarm
                 return;
             }
 
-            if (!GlobalRootGraphic.SuspendGraphicsUpdate)
+            if (!GlobalRootGraphic.s_SuspendGraphicsUpdate)
             {
                 BubbleInvalidater.InvalidateGraphicLocalArea(this, rect);
-            }
-            else
-            {
-
             }
         }
         /// <summary>
@@ -89,14 +85,9 @@ namespace LayoutFarm
                 return;
             }
 
-            if (!GlobalRootGraphic.SuspendGraphicsUpdate)
+            if (!GlobalRootGraphic.s_SuspendGraphicsUpdate)
             {
                 BubbleInvalidater.InvalidateGraphicLocalArea(this, new Rectangle(0, 0, _b_width, _b_height));
-                //InvalidateGraphicLocalArea(this, new Rectangle(0, 0, _b_width, _b_height));
-            }
-            else
-            {
-
             }
         }
 
@@ -121,20 +112,11 @@ namespace LayoutFarm
                 OnInvalidateGraphicsNoti(true, ref totalBounds);
             }
             //
-            if (parent != null)
+            if (parent != null && !GlobalRootGraphic.s_SuspendGraphicsUpdate)
             {
-                if (!GlobalRootGraphic.SuspendGraphicsUpdate)
-                {
-
-                    InvalidateGfxArgs arg = BubbleInvalidater.GetInvalidateGfxArgs();
-                    arg.SetReason_UpdateLocalArea(parent, totalBounds);
-                    BubbleInvalidater.InternalBubbleUpInvalidateGraphicArea(arg);//RELATIVE to its parent***
-
-                }
-                else
-                {
-
-                }
+                InvalidateGfxArgs arg = BubbleInvalidater.GetInvalidateGfxArgs();
+                arg.SetReason_UpdateLocalArea(parent, totalBounds);
+                BubbleInvalidater.InternalBubbleUpInvalidateGraphicArea(arg);//RELATIVE to its parent***
             }
         }
 

@@ -22,6 +22,12 @@ namespace LayoutFarm
         Bottom,
         UserSpecific
     }
+    public enum RectUIAlignment : byte
+    {
+        Begin, //left, if host is horizontal stack ,or top if host is vertical stack
+        Middle,
+        End, //right, if host is horizontal stack ,or bottom if host is vertical stack
+    }
 
     public interface IContainerRenderElement
     {

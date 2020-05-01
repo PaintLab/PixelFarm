@@ -6,13 +6,7 @@ using PixelFarm.Drawing;
 
 namespace LayoutFarm.UI
 {
-    public enum RectUIAlignment : byte
-    {
-        Begin, //left, if host is horizontal stack ,or top if host is vertical stack
-        Middle,
-        End, //right, if host is horizontal stack ,or bottom if host is vertical stack
-    }
-
+   
 
     /// <summary>
     /// abstract Rect UI Element
@@ -81,9 +75,12 @@ namespace LayoutFarm.UI
             this.AutoStopMouseEventPropagation = true;
         }
 
-        public RectUIAlignment Alignment { get; set; }
 
-        public event EventHandler<ViewportChangedEventArgs> ViewportChanged;
+        public RectUIAlignment HorizontalAlignment { get; set; }
+        public VerticalAlignment VerticalAlignment { get; set; }
+
+
+        public event EventHandler<ViewportChangedEventArgs> ViewportChanged;//TODO: review this*** => use event queue?
 
         void InitViewportPool()
         {

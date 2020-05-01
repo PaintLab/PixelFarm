@@ -135,7 +135,7 @@ namespace LayoutFarm.CustomWidgets
             if (_primElement == null)
             {
                 //create primary render element
-                GlobalRootGraphic.BlockGraphicsUpdate();
+                GlobalRootGraphic.SuspendGraphicsUpdate();
 
                 var renderE = EnableDoubleBuffer ?
                     new DoubleBufferCustomRenderBox(this.Width, this.Height) { EnableDoubleBuffer = true } :
@@ -144,7 +144,7 @@ namespace LayoutFarm.CustomWidgets
                 SetCommonProperties(renderE, this);
                 BuildChildren(renderE, this);
 
-                GlobalRootGraphic.ReleaseGraphicsUpdate();
+                GlobalRootGraphic.ResumeGraphicsUpdate();
                 renderE.InvalidateGraphics();
 
                 _primElement = renderE;
@@ -407,15 +407,8 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
-        VerticalAlignment _boxContentVertAlignment = VerticalAlignment.Bottom;
-        public VerticalAlignment ContentVerticalAlignment
-        {
-            get => _boxContentVertAlignment;
-            set
-            {
-                _boxContentVertAlignment = value;
-            }
-        }
+
+
         protected override void OnContentLayout()
         {
             this.PerformContentLayout();
@@ -436,6 +429,7 @@ namespace LayoutFarm.CustomWidgets
             get => _preserveLineBoxes;
             set
             {
+
                 _preserveLineBoxes = value;
                 if (!value && _primElement != null)
                 {
@@ -452,6 +446,8 @@ namespace LayoutFarm.CustomWidgets
             public TempAbstractRectUI(RenderElement renderE)
             {
                 _renderE = renderE;
+                HorizontalAlignment = RectUIAlignment.Begin;
+                VerticalAlignment = VerticalAlignment.Top;
             }
 
             public ushort MarginLeft => 0;
@@ -470,9 +466,16 @@ namespace LayoutFarm.CustomWidgets
 
             public int Height => _renderE.Height;
 
+            public RectUIAlignment HorizontalAlignment { get; set; }
+            public VerticalAlignment VerticalAlignment { get; set; }
+
             public RenderElement GetPrimaryRenderElement() => _renderE;
 
             public void SetLocation(int left, int top) => _renderE.SetLocation(left, top);
+            public void SetSize(int w, int h) => _renderE.SetSize(w, h);
+            public void SetLocationAndSize(int left, int top, int width, int height) => _renderE.SetBounds(left, top, width, height);
+            public bool HasSpecificWidth => _renderE.HasSpecificWidth;
+            public bool HasSpecificHeight => _renderE.HasSpecificHeight;
         }
 
         public override void PerformContentLayout()
@@ -542,14 +545,14 @@ namespace LayoutFarm.CustomWidgets
                         this.SetInnerContentSize(maxRight, ypos);
                     }
                     break;
-
                 case BoxContentLayoutKind.HorizontalStack:
                     {
+
                         if (_primElement != null)
                         {
+                            //TODO: review here again
                             _primElement.ContentHitTestHint = RenderBoxes.HitTestHint.HorizontalRowNonOverlap;
                         }
-
 
                         int maxBottom = 0;
                         //experiment
@@ -559,126 +562,74 @@ namespace LayoutFarm.CustomWidgets
                         int xpos = this.PaddingLeft; //start X at paddingLeft
                         int ypos = this.PaddingTop; //start Y at padding top
                         IUICollection<UIElement> childrenIter = GetDefaultChildrenIter();
+
+                        //check if this abstract box want to preserver line box or not
+                        //if just layout, then we can use shared lineboxes 
+
+                        bool isMixAlignment = false;
+
                         if (childrenIter != null && childrenIter.Count > 0)
                         {
-                            List<AbstractRectUI> alignToEnds = null;
-                            var alignToEndsContext = MayBeEmptyTempContext<List<AbstractRectUI>>.Empty;
-
-                            List<AbstractRectUI> notHaveSpecificWidthElems = null;
-                            var notHaveSpecificWidthElemsContext = MayBeEmptyTempContext<List<AbstractRectUI>>.Empty;
-
-                            int left_to_right_max_x = 0;
-
-                            foreach (UIElement ui in childrenIter.GetIter())
+                            using (var lineboxContext = new LineBoxesContext(null))
                             {
-                                if (ui is AbstractRectUI rect)
+                                LineBox linebox = lineboxContext.AddNewLineBox();
+                                int left_to_right_max_x = 0;
+                                int limit_w = this.Width;
+                                int max_lineHeight = 0;
+                                foreach (UIElement ui in childrenIter.GetIter())
                                 {
-                                    rect.PerformContentLayout();
-
-                                    //TODO: review Middle again
-                                    if (rect.Alignment == RectUIAlignment.End)
+                                    IAbstractRect rect;
+                                    if (ui is AbstractRectUI rectUI) //TODO: review here again
                                     {
-                                        //skip this
-                                        if (alignToEnds == null)
-                                        {
-                                            alignToEndsContext = LayoutTools.BorrowList(out alignToEnds);
-                                        }
-                                        alignToEnds.Add(rect);
+                                        //1. measure content=> get 'default' size, minimum or specific size
+                                        //
+                                        rectUI.PerformContentLayout();
+                                        rect = rectUI;
                                     }
                                     else
                                     {
-                                        if (allowAutoContentExpand && !rect.HasSpecificWidth)
-                                        {
-                                            if (notHaveSpecificWidthElems == null)
-                                            {
-                                                notHaveSpecificWidthElemsContext = LayoutTools.BorrowList(out notHaveSpecificWidthElems);
-                                            }
-                                            notHaveSpecificWidthElems.Add(rect);
-                                        }
-
-                                        rect.SetLocationAndSize(xpos, ypos + rect.MarginTop, rect.Width, rect.Height); //
-                                        xpos += rect.Width + rect.MarginLeftRight;
-                                        int tmp_bottom = rect.Bottom;
-                                        if (tmp_bottom > maxBottom)
-                                        {
-                                            maxBottom = tmp_bottom;
-                                        }
+                                        rect = new TempAbstractRectUI(ui.GetPrimaryRenderElement());
                                     }
-                                }
-                            }
-                            left_to_right_max_x = xpos;
 
-                            //--------
-                            //arrange alignToEnd again
-                            if (alignToEnds != null)
-                            {
-                                //var node = alignToEnds.Last; //start from last node
-                                int n = alignToEnds.Count;
-                                xpos = this.Width - PaddingRight;
-                                while (n > 0)
-                                {
-                                    --n;
-                                    AbstractRectUI rectUI = alignToEnds[n];
-                                    xpos -= rectUI.Width + rectUI.MarginLeft;
-                                    rectUI.SetLocationAndSize(xpos, ypos + rectUI.MarginTop, rectUI.Width, rectUI.Height); //
+                                    int marginLeftRigth = rect.MarginLeft + rect.MarginRight;
+                                    int new_x = xpos + rect.Width + marginLeftRigth;
 
-                                    //
-                                    int tmp_bottom = rectUI.Bottom;
+                                    rect.SetLocation(xpos, ypos + rect.MarginTop); //
+                                    int tmp_bottom = rect.Top + rect.Height;
+
+                                    xpos = new_x;
+
+                                    if (max_lineHeight < rect.Height)
+                                    {
+                                        max_lineHeight = rect.Height;
+                                        linebox.LineHeight = max_lineHeight;
+                                    }
+
                                     if (tmp_bottom > maxBottom)
                                     {
+                                        //start 
                                         maxBottom = tmp_bottom;
                                     }
+                                    linebox.Add(rect);
                                 }
 
-                                //release back to pool
-                                alignToEndsContext.Dispose();
-                            }
-                            //--------
+                                left_to_right_max_x = xpos;
+                                linebox.AdjustHorizontalAlignment(this.Width);
+                                linebox.AdjustVerticalAlignment();
 
-                            if (notHaveSpecificWidthElems != null)
-                            {
-                                float avaliable_w = 0;
-
-                                if (xpos > left_to_right_max_x)
+                                if (!isMixAlignment)
                                 {
-
-                                    //this mean this allow content expand
-                                    avaliable_w = xpos - left_to_right_max_x;
+                                    isMixAlignment = linebox._mixedHorizontalAlignment;
                                 }
-                                else if (alignToEnds == null && xpos < this.Width)
-                                {
-                                    avaliable_w = this.Width - xpos;
-                                }
+                            }                          
 
-                                if (avaliable_w > 0)
-                                {
-                                    //distribute this 
-                                    float avg_w = avaliable_w / notHaveSpecificWidthElems.Count;
-
-                                    for (int m = notHaveSpecificWidthElems.Count - 1; m >= 0; --m)
-                                    {
-                                        AbstractRectUI ui = notHaveSpecificWidthElems[m];
-                                        ui.SetWidth((int)(ui.Width + avg_w));
-                                    }
-
-                                    //arrange location again
-                                    xpos = this.PaddingLeft; //start X at paddingLeft
-                                    foreach (UIElement ui in childrenIter.GetIter())
-                                    {
-                                        if (ui is AbstractRectUI element && element.Alignment != RectUIAlignment.End)
-                                        {
-                                            //TODO: review here again
-                                            element.SetLocation(xpos, ypos + element.MarginTop);
-                                            xpos += element.Width + element.MarginLeftRight;
-                                        }
-                                    }
-                                }
-
-                            }
-                            notHaveSpecificWidthElemsContext.Dispose();
-                            //--------
                         }
-
+                        if (_primElement != null && isMixAlignment)
+                        {
+                            //TODO: review here again
+                            _primElement.ContentHitTestHint = RenderBoxes.HitTestHint.Custom;
+                        }
+                        
                         this.SetInnerContentSize(xpos, maxBottom);
                     }
                     break;
@@ -710,78 +661,80 @@ namespace LayoutFarm.CustomWidgets
                                 int left_to_right_max_x = 0;
                                 int limit_w = this.Width;
                                 int max_lineHeight = 0;
+
                                 foreach (UIElement ui in childrenIter.GetIter())
                                 {
-                                    if (ui is AbstractRectUI rect) //TODO: review here again
+                                    IAbstractRect rect;
+
+                                    if (ui is AbstractRectUI rectUI) //TODO: review here again
                                     {
                                         //1. measure content=> get 'default' size, minimum or specific size
                                         //
-                                        rect.PerformContentLayout();
-
-                                        int new_x = xpos + rect.Width + rect.MarginLeftRight;
-                                        if (new_x > limit_w)
-                                        {
-                                            //start new line
-                                            xpos = PaddingLeft; //start
-                                            ypos += max_lineHeight + 1;
-                                            max_lineHeight = 0;//reset
-
-                                            //before we begin a new line
-                                            //adjust current line vertical aligment
-                                            if (_boxContentVertAlignment != VerticalAlignment.Top)
-                                            {
-                                                linebox.AdjustVerticalAlignment(_boxContentVertAlignment);
-                                            }
-
-                                            linebox = lineboxContext.AddNewLineBox();
-                                            linebox.LineTop = ypos;
-
-                                            new_x = xpos + rect.Width + rect.MarginLeftRight;
-                                        }
-
-                                        int tmp_bottom = 0;
-                                        if (_preserveLineBoxes)
-                                        {
-                                            //new top is relative to linetop
-                                            rect.SetLocationAndSize(xpos, rect.MarginTop, rect.Width, rect.Height); //
-                                            tmp_bottom = ypos + rect.Bottom;
-                                        }
-                                        else
-                                        {
-                                            rect.SetLocationAndSize(xpos, ypos + rect.MarginTop, rect.Width, rect.Height); //
-                                            tmp_bottom = rect.Bottom;
-                                        }
-
-                                        xpos = new_x;
-
-                                        if (max_lineHeight < rect.Height)
-                                        {
-                                            max_lineHeight = rect.Height;
-                                            linebox.LineHeight = max_lineHeight;
-                                        }
-
-                                        if (tmp_bottom > maxBottom)
-                                        {
-                                            //start 
-                                            maxBottom = tmp_bottom;
-                                        }
-
-                                        linebox.Add(rect);
+                                        rectUI.PerformContentLayout();
+                                        rect = rectUI;
                                     }
                                     else
                                     {
-                                        //this elem is not abstract rectUI
-                                        //so we create a temp proxy for it
-                                        linebox.Add(new TempAbstractRectUI(ui.GetPrimaryRenderElement()));
+                                        rect = new TempAbstractRectUI(ui.GetPrimaryRenderElement());
                                     }
+
+                                    int marginLeftRigth = rect.MarginLeft + rect.MarginRight;
+                                    int new_x = xpos + rect.Width + marginLeftRigth;
+
+                                    if (new_x > limit_w)
+                                    {
+                                        //before we begin a new line
+                                        //adjust current line vertical aligment
+
+                                        linebox.AdjustHorizontalAlignment(limit_w);
+                                        linebox.AdjustVerticalAlignment();
+
+                                        xpos = PaddingLeft; //start
+                                        ypos += max_lineHeight + 1;//**
+                                        max_lineHeight = 0;//reset
+
+                                        //start newline
+                                        linebox = lineboxContext.AddNewLineBox();
+                                        linebox.LineTop = ypos;
+
+                                        new_x = xpos + rect.Width + marginLeftRigth;
+                                    }
+
+                                    int tmp_bottom = 0;
+                                    if (_preserveLineBoxes)
+                                    {
+                                        //new top is relative to linetop
+                                        rect.SetLocation(xpos, rect.MarginTop); //
+                                        tmp_bottom = ypos + (rect.Top + rect.Height);
+                                    }
+                                    else
+                                    {
+                                        rect.SetLocation(xpos, ypos + rect.MarginTop); //
+                                        tmp_bottom = rect.Top + rect.Height;
+                                    }
+
+                                    xpos = new_x;
+
+                                    if (max_lineHeight < rect.Height)
+                                    {
+                                        max_lineHeight = rect.Height;
+                                        linebox.LineHeight = max_lineHeight;
+                                    }
+
+                                    if (tmp_bottom > maxBottom)
+                                    {
+                                        //start 
+                                        maxBottom = tmp_bottom;
+                                    }
+
+                                    linebox.Add(rect);
+
                                 }
 
                                 left_to_right_max_x = xpos;
 
-                                if (_boxContentVertAlignment != VerticalAlignment.Top)
-                                {
-                                    linebox.AdjustVerticalAlignment(_boxContentVertAlignment);
-                                }
+                                linebox.AdjustHorizontalAlignment(limit_w);
+                                linebox.AdjustVerticalAlignment();
                             }
                         }
                         this.SetInnerContentSize(xpos, maxBottom);
