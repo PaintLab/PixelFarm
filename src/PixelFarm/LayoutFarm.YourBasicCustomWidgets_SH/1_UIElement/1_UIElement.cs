@@ -45,7 +45,7 @@ namespace LayoutFarm.UI
             }
 #endif
 
-            PerformLayoutArgs layoutArgs = null;
+            LayoutUpdateArgs layoutArgs = null;
 
             for (int i = count - 1; i >= 0; --i)
             {
@@ -63,7 +63,7 @@ namespace LayoutFarm.UI
         }
     }
 
-    public class PerformLayoutArgs
+    public class LayoutUpdateArgs
     {
 
     }
@@ -384,12 +384,12 @@ namespace LayoutFarm.UI
         {
             //
         }
-        internal static void InvokeContentLayout(UIElement ui, PerformLayoutArgs args)
+        internal static void InvokeContentLayout(UIElement ui, LayoutUpdateArgs args)
         {
             //called by central layout queue
             ui.PerformContentLayout(args);
         }
-        public virtual void PerformContentLayout(PerformLayoutArgs args)
+        public virtual void PerformContentLayout(LayoutUpdateArgs args)
         {
 
         }

@@ -472,7 +472,7 @@ namespace LayoutFarm.CustomWidgets
             public bool HasSpecificHeight => _renderE.HasSpecificHeight;
         }
 
-        public override void PerformContentLayout(PerformLayoutArgs args)
+        public override void PerformContentLayout(LayoutUpdateArgs args)
         {
             PerformContentLayout();
         }
