@@ -151,7 +151,7 @@ namespace LayoutFarm.CustomWidgets
                         LineTop = linebox.LineTop,
                         LineHeight = linebox.LineHeight,
                         ParentRenderElement = _owner//*** 
-                        
+
                     };
 
                     lines.Add(newline);
@@ -349,46 +349,55 @@ namespace LayoutFarm.CustomWidgets
 
         public void AdjustVerticalAlignment()
         {
-            LinkedListNode<IAbstractRect> node = _linkList.First;
-            while (node != null)
+
+            using (LayoutTools.BorrowList(out List<IAbstractRect> expandables))
             {
-                IAbstractRect r = node.Value;
-                switch (r.VerticalAlignment)
+                LinkedListNode<IAbstractRect> node = _linkList.First;
+
+                while (node != null)
                 {
-                    case VerticalAlignment.Top:
-                        r.SetLocation(r.Left, r.MarginTop);
-                        break;
-                    case VerticalAlignment.Bottom:
+                    IAbstractRect r = node.Value;
+                    if (!r.HasSpecificHeight)
+                    {
+                        //expand to full fit                                   
+                        r.SetLocationAndSize(r.Left, r.MarginTop, r.Width, LineHeight - (r.MarginTop + r.MarginBottom));
+                    }
+                    else
+                    {
+                        //has specific height
+
+                        switch (r.VerticalAlignment)
                         {
-                            int diff = LineHeight - (r.Height + r.MarginTop);
-                            if (diff > 0)
-                            {
-                                //change location
-                                r.SetLocation(r.Left, r.Top + diff);
-                            }
-                            else
-                            {
-                                //
-                            }
+                            case VerticalAlignment.Top:
+
+                                r.SetLocation(r.Left, r.MarginTop);
+                                break;
+                            case VerticalAlignment.Bottom:
+                                {
+                                    int diff = LineHeight - (r.Height + r.MarginTop);
+                                    if (diff > 0)
+                                    {
+                                        r.SetLocation(r.Left, r.Top + diff);
+                                    }
+                                }
+                                break;
+                            case VerticalAlignment.Middle:
+                                {
+                                    int diff = LineHeight - (r.Height + r.MarginTop);
+                                    if (diff > 0)
+                                    {
+
+                                        r.SetLocation(r.Left, r.Top + (diff / 2));
+                                    }
+                                }
+                                break;
                         }
-                        break;
-                    case VerticalAlignment.Middle:
-                        {
-                            int diff = LineHeight - (r.Height + r.MarginTop);
-                            if (diff > 0)
-                            {
-                                //change location
-                                r.SetLocation(r.Left, r.Top + (diff / 2));
-                            }
-                            else
-                            {
-                                //
-                            }
-                        }
-                        break;
+                    }
+                    node = node.Next;//**
                 }
-                node = node.Next;//**
+
             }
+
         }
     }
 

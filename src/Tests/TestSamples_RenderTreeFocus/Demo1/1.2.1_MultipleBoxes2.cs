@@ -46,7 +46,12 @@ namespace LayoutFarm
                 box.VerticalAlignment = _vertAligns[i % _vertAligns.Length];
                 box.HorizontalAlignment = _horAligns[i % _horAligns.Length];
                 box.HasSpecificWidth = _hasSpecificWidths[i % _hasSpecificWidths.Length];
+                box.HasSpecificHeight = _hasSpecificHeights[i % _hasSpecificHeights.Length];
 
+                if (!box.HasSpecificHeight)
+                {
+                    box.BackColor = KnownColors.Black;
+                }
 
                 box.SetMargins(1);
                 box.SetLocation(boxX, boxY);
