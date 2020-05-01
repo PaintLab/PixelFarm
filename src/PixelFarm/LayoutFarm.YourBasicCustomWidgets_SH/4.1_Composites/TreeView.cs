@@ -176,15 +176,17 @@ namespace LayoutFarm.CustomWidgets
             if (_isOpen) return;
             _isOpen = true;
 
-            this.TreeView.PerformContentLayout();
+            TreeView.InvalidateLayout();
+            //this.TreeView.PerformContentLayout(null);
         }
         public void Collapse()
         {
             if (!_isOpen) return;
             _isOpen = false;
-            this.TreeView.PerformContentLayout();
+            TreeView.InvalidateLayout();
+            //this.TreeView.PerformContentLayout(null);
         }
-        public override void PerformContentLayout()
+        public override void PerformContentLayout(LayoutUpdateArgs args)
         {
             this.InvalidateGraphics();
             //if this has child
@@ -197,7 +199,7 @@ namespace LayoutFarm.CustomWidgets
                 for (int i = 0; i < j; ++i)
                 {
                     TreeNode childNode = _childNodes[i];
-                    childNode.PerformContentLayout();//manual
+                    childNode.PerformContentLayout(args);//manual
                                                      //set new size 
                     childNode.SetLocationAndSize(_indentWidth,
                         _newChildNodeY,

@@ -577,7 +577,7 @@ namespace LayoutFarm.CustomWidgets
             }
             _children.Add(this, ui);
         }
-        public override void PerformContentLayout()
+        public override void PerformContentLayout(LayoutUpdateArgs args)
         {
             //calculate grid width
             var cols = _gridTable.Columns;
@@ -596,7 +596,7 @@ namespace LayoutFarm.CustomWidgets
                 heightSum += rows[n].Height;
             }
 
-            base.PerformContentLayout();
+            base.PerformContentLayout(args);
 
             int finW = System.Math.Max(InnerWidth, widthSum);
             int finH = System.Math.Max(InnerHeight, heightSum);

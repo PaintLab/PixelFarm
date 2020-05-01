@@ -474,12 +474,6 @@ namespace LayoutFarm.CustomWidgets
 
         public override void PerformContentLayout(LayoutUpdateArgs args)
         {
-            PerformContentLayout();
-        }
- 
-
-        public override void PerformContentLayout()
-        {
             //TODO: move layout algo to another class
 
             //****
@@ -520,7 +514,7 @@ namespace LayoutFarm.CustomWidgets
                             {
                                 if (ui is AbstractRectUI rect)
                                 {
-                                    rect.PerformContentLayout();
+                                    rect.PerformContentLayout(args);
                                     if (!rect.HasSpecificWidth)
                                     {
                                         //expand full width 
@@ -583,7 +577,7 @@ namespace LayoutFarm.CustomWidgets
                                     {
                                         //1. measure content=> get 'default' size, minimum or specific size
                                         //
-                                        rectUI.PerformContentLayout();
+                                        rectUI.PerformContentLayout(args);
                                         rect = rectUI;
                                     }
                                     else
@@ -621,7 +615,7 @@ namespace LayoutFarm.CustomWidgets
                                 {
                                     isMixAlignment = linebox._mixedHorizontalAlignment;
                                 }
-                            }                          
+                            }
 
                         }
                         if (_primElement != null && isMixAlignment)
@@ -629,7 +623,7 @@ namespace LayoutFarm.CustomWidgets
                             //TODO: review here again
                             _primElement.ContentHitTestHint = RenderBoxes.HitTestHint.Custom;
                         }
-                        
+
                         this.SetInnerContentSize(xpos, maxBottom);
                     }
                     break;
@@ -670,7 +664,7 @@ namespace LayoutFarm.CustomWidgets
                                     {
                                         //1. measure content=> get 'default' size, minimum or specific size
                                         //
-                                        rectUI.PerformContentLayout();
+                                        rectUI.PerformContentLayout(args);
                                         rect = rectUI;
                                     }
                                     else
@@ -755,7 +749,7 @@ namespace LayoutFarm.CustomWidgets
                             {
                                 if (ui is AbstractRectUI rect)
                                 {
-                                    rect.PerformContentLayout();
+                                    rect.PerformContentLayout(args);
 
                                     int tmp_right = rect.Right;// element.InnerWidth + element.Left;
                                     if (tmp_right > maxRight)
@@ -800,6 +794,9 @@ namespace LayoutFarm.CustomWidgets
             }
 #endif
         }
+
+
+
         protected override void OnGuestMsg(UIGuestMsgEventArgs e)
         {
             //?

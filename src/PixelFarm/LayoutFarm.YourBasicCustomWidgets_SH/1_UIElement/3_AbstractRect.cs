@@ -423,13 +423,7 @@ namespace LayoutFarm.UI
             //if you want viewport you must overide this
             SetViewport(x, y, this);
         }
-
-        //------------------------------
-        public virtual void PerformContentLayout()
-        {
-            //AbstractRect dose not have content
-        }
-        //
+ 
         public virtual int InnerHeight => this.Height;
         //
         public virtual int InnerWidth => this.Width;

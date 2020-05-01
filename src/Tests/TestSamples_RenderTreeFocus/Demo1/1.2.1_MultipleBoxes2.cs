@@ -62,8 +62,13 @@ namespace LayoutFarm
                 boxX += 20;
             }
 
-            hostBox.PerformContentLayout();
+
+            //temp1
+            LayoutUpdateArgs updateArgs = new LayoutUpdateArgs();
+            hostBox.PerformContentLayout(updateArgs);
+
             GlobalRootGraphic.ResumeGraphicsUpdate();
+
             hostBox.InvalidateGraphics();
 
             host.AddChild(hostBox);

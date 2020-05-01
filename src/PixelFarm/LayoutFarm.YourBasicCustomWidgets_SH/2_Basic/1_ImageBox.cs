@@ -96,7 +96,7 @@ namespace LayoutFarm.CustomWidgets
                 this.InvalidateGraphics();
             }
         }
-        public override void PerformContentLayout()
+        public override void PerformContentLayout(LayoutUpdateArgs args)
         {
             if (_imageBinder != null && _imageBinder.State == BinderState.Loaded)
             {
