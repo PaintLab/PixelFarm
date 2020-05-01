@@ -4,192 +4,9 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
-using PixelFarm.CpuBlit;
 
 namespace LayoutFarm.CustomWidgets
 {
-    struct MayBeEmptyTempContext<T> : IDisposable
-    {
-        internal readonly T _tool;
-        internal MayBeEmptyTempContext(out T tool)
-        {
-            MayBeEmptyTempContext<T>.GetFreeItem(out _tool);
-            tool = _tool;
-        }
-        public void Dispose()
-        {
-            if (_tool != null)
-            {
-                MayBeEmptyTempContext<T>.Release(_tool);
-            }
-        }
-
-        public static readonly MayBeEmptyTempContext<T> Empty = new MayBeEmptyTempContext<T>();
-
-
-        public delegate T CreateNewItemDelegate();
-        public delegate void ReleaseItemDelegate(T item);
-
-
-        [System.ThreadStatic]
-        static Stack<T> s_pool;
-        [System.ThreadStatic]
-        static CreateNewItemDelegate s_newHandler;
-        [System.ThreadStatic]
-        static ReleaseItemDelegate s_releaseCleanUp;
-
-        public static MayBeEmptyTempContext<T> Borrow(out T freeItem)
-        {
-            return new MayBeEmptyTempContext<T>(out freeItem);
-        }
-
-        public static void SetNewHandler(CreateNewItemDelegate newHandler, ReleaseItemDelegate releaseCleanUp = null)
-        {
-            //set new instance here, must set this first***
-            if (s_pool == null)
-            {
-                s_pool = new Stack<T>();
-            }
-            s_newHandler = newHandler;
-            s_releaseCleanUp = releaseCleanUp;
-        }
-        internal static void GetFreeItem(out T freeItem)
-        {
-            if (s_pool.Count > 0)
-            {
-                freeItem = s_pool.Pop();
-            }
-            else
-            {
-                freeItem = s_newHandler();
-            }
-        }
-        internal static void Release(T item)
-        {
-            s_releaseCleanUp?.Invoke(item);
-            s_pool.Push(item);
-            //... 
-        }
-        public static bool IsInit()
-        {
-            return s_pool != null;
-        }
-    }
-
-    static class LayoutTools
-    {
-        public static MayBeEmptyTempContext<LinkedList<T>> BorrowLinkedList<T>(out LinkedList<T> linkedlist)
-        {
-            if (!MayBeEmptyTempContext<LinkedList<T>>.IsInit())
-            {
-                MayBeEmptyTempContext<LinkedList<T>>.SetNewHandler(
-                    () => new LinkedList<T>(),
-                    list => list.Clear());
-            }
-            return MayBeEmptyTempContext<LinkedList<T>>.Borrow(out linkedlist);
-        }
-        public static MayBeEmptyTempContext<List<T>> BorrowList<T>(out List<T> linkedlist)
-        {
-            if (!MayBeEmptyTempContext<List<T>>.IsInit())
-            {
-                MayBeEmptyTempContext<List<T>>.SetNewHandler(
-                    () => new List<T>(),
-                    list => list.Clear());
-            }
-            return MayBeEmptyTempContext<List<T>>.Borrow(out linkedlist);
-        }
-
-
-        public static MayBeEmptyTempContext<LineBox> BorrowLineBox(out LineBox linebox)
-        {
-            if (!MayBeEmptyTempContext<LineBox>.IsInit())
-            {
-                MayBeEmptyTempContext<LineBox>.SetNewHandler(
-                    () => new LineBox(),
-                    line => line.Clear());
-            }
-            return MayBeEmptyTempContext<LineBox>.Borrow(out linebox);
-        }
-    }
-
-    struct LineBoxesContext : IDisposable
-    {
-        RenderElement _owner;
-        MayBeEmptyTempContext<List<LineBox>> _context;
-        List<LineBox> _lineboxes;
-
-        List<MayBeEmptyTempContext<LineBox>> _sharedLineBoxContexts;
-        MayBeEmptyTempContext<List<MayBeEmptyTempContext<LineBox>>> _sharedLineBoxContextListContext;
-
-        public LineBoxesContext(CustomRenderBox owner)
-        {
-            //set owner element if we want to preserver linebox ***
-            _owner = owner;
-            if (_owner == null)
-            {
-                //don't preserve linebox
-                _context = LayoutTools.BorrowList(out _lineboxes);
-                _sharedLineBoxContextListContext = LayoutTools.BorrowList(out _sharedLineBoxContexts);
-            }
-            else
-            {
-                //preserver context
-                _context = MayBeEmptyTempContext<List<LineBox>>.Empty;
-                _lineboxes = owner.Lines;
-                if (_lineboxes == null)
-                {
-                    _lineboxes = owner.Lines = new List<LineBox>();
-                }
-                else
-                {
-                    _lineboxes.Clear();
-                }
-
-                _sharedLineBoxContexts = null;
-                _sharedLineBoxContextListContext = MayBeEmptyTempContext<List<MayBeEmptyTempContext<LineBox>>>.Empty;
-
-            }
-        }
-        public void Dispose()
-        {
-            //release if we use pool
-            _context.Dispose();
-            if (_sharedLineBoxContexts != null)
-            {
-                //release all lineboxes
-                int j = _sharedLineBoxContexts.Count;
-                for (int i = 0; i < j; ++i)
-                {
-                    _sharedLineBoxContexts[i].Dispose();
-                }
-                //
-                _sharedLineBoxContexts.Clear();
-                _sharedLineBoxContexts = null;
-                //
-                _sharedLineBoxContextListContext.Dispose();
-            }
-        }
-
-        public LineBox AddNewLineBox()
-        {
-            if (_owner != null)
-            {
-                LineBox newline = new LineBox();
-                newline.ParentRenderElement = _owner;//***
-                _lineboxes.Add(newline);
-                return newline;
-            }
-            else
-            {
-                //we can use it from pool
-                //and we will release this later
-                _sharedLineBoxContexts.Add(LayoutTools.BorrowLineBox(out LineBox sharedLinebox));
-                _lineboxes.Add(sharedLinebox);
-
-                return sharedLinebox;
-            }
-        }
-    }
 
 
     /// <summary>
@@ -620,15 +437,48 @@ namespace LayoutFarm.CustomWidgets
             set
             {
                 _preserveLineBoxes = value;
-                if (!value && _primElement != null && _primElement.Lines != null)
+                if (!value && _primElement != null)
                 {
                     _primElement.Lines = null;
                 }
             }
         }
 
+
+        struct TempAbstractRectUI : IAbstractRect
+        {
+
+            readonly RenderElement _renderE;
+            public TempAbstractRectUI(RenderElement renderE)
+            {
+                _renderE = renderE;
+            }
+
+            public ushort MarginLeft => 0;
+
+            public ushort MarginTop => 0;
+
+            public ushort MarginRight => 0;
+
+            public ushort MarginBottom => 0;
+
+            public int Left => _renderE.Left;
+
+            public int Top => _renderE.Top;
+
+            public int Width => _renderE.Width;
+
+            public int Height => _renderE.Height;
+
+            public RenderElement GetPrimaryRenderElement() => _renderE;
+
+            public void SetLocation(int left, int top) => _renderE.SetLocation(left, top);
+        }
+
         public override void PerformContentLayout()
         {
+            //TODO: move layout algo to another class
+
             //****
             //this.InvalidateGraphics();
             //temp : arrange as vertical stack***
@@ -862,8 +712,10 @@ namespace LayoutFarm.CustomWidgets
                                 int max_lineHeight = 0;
                                 foreach (UIElement ui in childrenIter.GetIter())
                                 {
-                                    if (ui is AbstractRectUI rect)
+                                    if (ui is AbstractRectUI rect) //TODO: review here again
                                     {
+                                        //1. measure content=> get 'default' size, minimum or specific size
+                                        //
                                         rect.PerformContentLayout();
 
                                         int new_x = xpos + rect.Width + rect.MarginLeftRight;
@@ -913,9 +765,15 @@ namespace LayoutFarm.CustomWidgets
                                             //start 
                                             maxBottom = tmp_bottom;
                                         }
-                                    }
 
-                                    linebox.Add(ui.GetPrimaryRenderElement());
+                                        linebox.Add(rect);
+                                    }
+                                    else
+                                    {
+                                        //this elem is not abstract rectUI
+                                        //so we create a temp proxy for it
+                                        linebox.Add(new TempAbstractRectUI(ui.GetPrimaryRenderElement()));
+                                    }
                                 }
 
                                 left_to_right_max_x = xpos;
@@ -1007,6 +865,8 @@ namespace LayoutFarm.CustomWidgets
         }
         protected override IUICollection<UIElement> GetDefaultChildrenIter() => _items;
     }
+
+
     public abstract class AbstractControlBox : AbstractBox<UIElement.UIList<UIElement>>
     {
         public AbstractControlBox(int w, int h) : base(w, h) { }
