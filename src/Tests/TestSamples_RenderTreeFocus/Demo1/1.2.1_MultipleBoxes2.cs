@@ -11,7 +11,11 @@ namespace LayoutFarm
     {
         readonly Color[] _colors = new Color[] { Color.Red, Color.Green, Color.Blue, Color.Magenta, Color.Aqua };
         readonly Size[] _sizes = new Size[] { new Size(20, 20), new Size(10, 10), new Size(30, 20), new Size(10, 25) };
-        readonly VerticalAlignment[] _vertAlign = new VerticalAlignment[] { VerticalAlignment.Top, VerticalAlignment.Middle, VerticalAlignment.Bottom };
+        readonly VerticalAlignment[] _vertAligns = new VerticalAlignment[] { VerticalAlignment.Top, VerticalAlignment.Middle, VerticalAlignment.Bottom };
+        readonly RectUIAlignment[] _horAligns = new RectUIAlignment[] { RectUIAlignment.Begin, RectUIAlignment.Middle, RectUIAlignment.End };
+        //readonly bool[] _hasSpecificWidths = new bool[] { true, false, true };
+        readonly bool[] _hasSpecificWidths = new bool[] { true, true, true };
+        readonly bool[] _hasSpecificHeights = new bool[] { true, false, true };
 
         protected override void OnStart(AppHost host)
         {
@@ -34,12 +38,15 @@ namespace LayoutFarm
             int boxY = 0;
 
 
-            for (int i = 0; i < 30; ++i)
+            for (int i = 0; i < 10; ++i)
             {
                 Size s = _sizes[i % _sizes.Length];
                 var box = new Box(s.Width, s.Height);
                 box.BackColor = _colors[i % _colors.Length];
-                box.VerticalAlignment = _vertAlign[i % _vertAlign.Length];
+                box.VerticalAlignment = _vertAligns[i % _vertAligns.Length];
+                box.HorizontalAlignment = _horAligns[i % _horAligns.Length];
+                box.HasSpecificWidth = _hasSpecificWidths[i % _hasSpecificWidths.Length];
+
 
                 box.SetMargins(1);
                 box.SetLocation(boxX, boxY);

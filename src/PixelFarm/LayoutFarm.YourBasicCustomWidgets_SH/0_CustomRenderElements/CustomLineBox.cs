@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
 using LayoutFarm.RenderBoxes;
-
+using PaintLab.ColorBlender.Algorithms;
 
 namespace LayoutFarm.CustomWidgets
 {
@@ -151,6 +151,7 @@ namespace LayoutFarm.CustomWidgets
                         LineTop = linebox.LineTop,
                         LineHeight = linebox.LineHeight,
                         ParentRenderElement = _owner//*** 
+                        
                     };
 
                     lines.Add(newline);
@@ -207,6 +208,8 @@ namespace LayoutFarm.CustomWidgets
     {
         internal LinkedList<IAbstractRect> _linkList = new LinkedList<IAbstractRect>();
 
+        int _maxRight;
+        internal bool _mixedHorizontalAlignment;
 #if DEBUG
         static int dbugTotalId;
         public readonly int dbugId;
@@ -223,23 +226,127 @@ namespace LayoutFarm.CustomWidgets
         public int LineBottom => LineTop + LineHeight;
         public void Reset()
         {
-            LineTop = LineHeight = 0;
+            _maxRight = LineTop = LineHeight = 0;
+            _mixedHorizontalAlignment = false;
             _linkList.Clear();
         }
 
         public void Add(IAbstractRect renderE)
         {
             _linkList.AddLast(renderE);
+            _maxRight = renderE.Width + renderE.Left + renderE.MarginRight;
         }
 
         public int Count => _linkList.Count;
 
-        public void AdjustHorizontalAlignment()
+
+        public void AdjustHorizontalAlignment(int limitW)
         {
             //line, and spread data inside this line
 
+            //expand...
+            using (LayoutTools.BorrowList(out List<IAbstractRect> expandables))
+            using (LayoutTools.BorrowList(out List<IAbstractRect> middleAlignments))
+            using (LayoutTools.BorrowList(out List<IAbstractRect> rigthAlignments))
+            {
 
+                LinkedListNode<IAbstractRect> node = _linkList.First;
+                if (_maxRight < limitW)
+                {
+                    while (node != null)
+                    {
+                        IAbstractRect r = node.Value;
+                        if (!r.HasSpecificWidth)
+                        {
+                            //expand candidate
+                            expandables.Add(r);
+                        }
+                        node = node.Next;//**
+                    }
+                    int count = expandables.Count;
+                    if (count > 0)
+                    {
+                        int availableLen = limitW - _maxRight;
+                        int avg = availableLen / count;
+
+                        for (int i = 0; i < count; ++i)
+                        {
+                            IAbstractRect exp = expandables[i];
+                            exp.SetSize(exp.Width + avg, exp.Height);
+                        }
+                    }
+                }
+                //-----------------------
+                //now distribute the remaining width to expandable elements
+
+                //do horizontal alignment again if we have some change
+                node = _linkList.First;
+
+                int x_pos = 0;
+                int total_right_align_w = 0;
+                int total_middle_align_w = 0;
+
+
+                int node_no = 0;
+                RectUIAlignment latestAlignment = RectUIAlignment.Begin;
+                while (node != null)
+                {
+                    IAbstractRect r = node.Value;
+                    switch (r.HorizontalAlignment)
+                    {
+                        case RectUIAlignment.Begin:
+                            {
+                                x_pos += r.MarginLeft;
+                                r.SetLocation(x_pos, r.Top); //same y pos
+                                x_pos += r.Width + r.MarginRight;
+                            }
+                            break;
+                        case RectUIAlignment.Middle:
+                            {
+                                middleAlignments.Add(r);
+                                total_middle_align_w += r.Width + r.MarginLeft + r.MarginRight;
+                            }
+                            break;
+                        case RectUIAlignment.End:
+                            {
+                                rigthAlignments.Add(r);
+                                total_right_align_w += r.Width + r.MarginLeft + r.MarginRight;
+                            }
+                            break;
+                    }
+
+                    if (node_no > 0 && latestAlignment != r.HorizontalAlignment)
+                    {
+                        _mixedHorizontalAlignment = true;
+                    }
+                    latestAlignment = r.HorizontalAlignment;
+
+                    node = node.Next;//**
+                    node_no++;
+                }
+                //-----------------------
+                if (rigthAlignments.Count > 0)
+                {
+                    AlignLeftToRight(rigthAlignments, limitW - total_right_align_w);
+                }
+                if (middleAlignments.Count > 0)
+                {
+                    AlignLeftToRight(middleAlignments, (limitW - total_middle_align_w) / 2);
+                }
+            }
         }
+        static void AlignLeftToRight(List<IAbstractRect> boxes, int x_pos)
+        {
+            int j = boxes.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                IAbstractRect r = boxes[i];
+                x_pos += r.MarginLeft;
+                r.SetLocation(x_pos, r.Top);
+                x_pos += r.Width + r.MarginRight;
+            }
+        }
+
         public void AdjustVerticalAlignment()
         {
             LinkedListNode<IAbstractRect> node = _linkList.First;
@@ -281,7 +388,7 @@ namespace LayoutFarm.CustomWidgets
                         break;
                 }
                 node = node.Next;//**
-            } 
+            }
         }
     }
 

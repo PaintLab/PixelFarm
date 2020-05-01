@@ -23,9 +23,12 @@ namespace LayoutFarm.UI
         int Height { get; }
         int Width { get; }
         void SetLocation(int left, int top);
+        void SetSize(int w, int h);         
         void SetLocationAndSize(int left, int top, int width, int height);
         RenderElement GetPrimaryRenderElement();
         RectUIAlignment HorizontalAlignment { get; }
         VerticalAlignment VerticalAlignment { get; }
+        bool HasSpecificWidth { get; }
+        bool HasSpecificHeight { get; }
     }
 }

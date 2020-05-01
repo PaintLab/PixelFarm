@@ -472,8 +472,10 @@ namespace LayoutFarm.CustomWidgets
             public RenderElement GetPrimaryRenderElement() => _renderE;
 
             public void SetLocation(int left, int top) => _renderE.SetLocation(left, top);
+            public void SetSize(int w, int h) => _renderE.SetSize(w, h);
             public void SetLocationAndSize(int left, int top, int width, int height) => _renderE.SetBounds(left, top, width, height);
-
+            public bool HasSpecificWidth => _renderE.HasSpecificWidth;
+            public bool HasSpecificHeight => _renderE.HasSpecificHeight;
         }
 
         public override void PerformContentLayout()
@@ -542,7 +544,7 @@ namespace LayoutFarm.CustomWidgets
 
                         this.SetInnerContentSize(maxRight, ypos);
                     }
-                    break; 
+                    break;
                 case BoxContentLayoutKind.HorizontalStack:
                     {
 
@@ -563,6 +565,8 @@ namespace LayoutFarm.CustomWidgets
 
                         //check if this abstract box want to preserver line box or not
                         //if just layout, then we can use shared lineboxes 
+
+                        bool isMixAlignment = false;
 
                         if (childrenIter != null && childrenIter.Count > 0)
                         {
@@ -590,10 +594,8 @@ namespace LayoutFarm.CustomWidgets
                                     int marginLeftRigth = rect.MarginLeft + rect.MarginRight;
                                     int new_x = xpos + rect.Width + marginLeftRigth;
 
-                                    int tmp_bottom = 0;
-
-                                    rect.SetLocationAndSize(xpos, ypos + rect.MarginTop, rect.Width, rect.Height); //
-                                    tmp_bottom = rect.Top + rect.Height; 
+                                    rect.SetLocation(xpos, ypos + rect.MarginTop); //
+                                    int tmp_bottom = rect.Top + rect.Height;
 
                                     xpos = new_x;
 
@@ -608,15 +610,26 @@ namespace LayoutFarm.CustomWidgets
                                         //start 
                                         maxBottom = tmp_bottom;
                                     }
-
                                     linebox.Add(rect);
-
                                 }
 
                                 left_to_right_max_x = xpos;
+                                linebox.AdjustHorizontalAlignment(this.Width);
                                 linebox.AdjustVerticalAlignment();
-                            }
+
+                                if (!isMixAlignment)
+                                {
+                                    isMixAlignment = linebox._mixedHorizontalAlignment;
+                                }
+                            }                          
+
                         }
+                        if (_primElement != null && isMixAlignment)
+                        {
+                            //TODO: review here again
+                            _primElement.ContentHitTestHint = RenderBoxes.HitTestHint.Custom;
+                        }
+                        
                         this.SetInnerContentSize(xpos, maxBottom);
                     }
                     break;
@@ -648,9 +661,11 @@ namespace LayoutFarm.CustomWidgets
                                 int left_to_right_max_x = 0;
                                 int limit_w = this.Width;
                                 int max_lineHeight = 0;
+
                                 foreach (UIElement ui in childrenIter.GetIter())
                                 {
                                     IAbstractRect rect;
+
                                     if (ui is AbstractRectUI rectUI) //TODO: review here again
                                     {
                                         //1. measure content=> get 'default' size, minimum or specific size
@@ -665,19 +680,20 @@ namespace LayoutFarm.CustomWidgets
 
                                     int marginLeftRigth = rect.MarginLeft + rect.MarginRight;
                                     int new_x = xpos + rect.Width + marginLeftRigth;
+
                                     if (new_x > limit_w)
                                     {
-                                        //start new line
-                                        xpos = PaddingLeft; //start
-                                        ypos += max_lineHeight + 1;
-                                        max_lineHeight = 0;//reset
-
                                         //before we begin a new line
                                         //adjust current line vertical aligment
 
+                                        linebox.AdjustHorizontalAlignment(limit_w);
                                         linebox.AdjustVerticalAlignment();
 
+                                        xpos = PaddingLeft; //start
+                                        ypos += max_lineHeight + 1;//**
+                                        max_lineHeight = 0;//reset
 
+                                        //start newline
                                         linebox = lineboxContext.AddNewLineBox();
                                         linebox.LineTop = ypos;
 
@@ -688,12 +704,12 @@ namespace LayoutFarm.CustomWidgets
                                     if (_preserveLineBoxes)
                                     {
                                         //new top is relative to linetop
-                                        rect.SetLocationAndSize(xpos, rect.MarginTop, rect.Width, rect.Height); //
+                                        rect.SetLocation(xpos, rect.MarginTop); //
                                         tmp_bottom = ypos + (rect.Top + rect.Height);
                                     }
                                     else
                                     {
-                                        rect.SetLocationAndSize(xpos, ypos + rect.MarginTop, rect.Width, rect.Height); //
+                                        rect.SetLocation(xpos, ypos + rect.MarginTop); //
                                         tmp_bottom = rect.Top + rect.Height;
                                     }
 
@@ -716,6 +732,8 @@ namespace LayoutFarm.CustomWidgets
                                 }
 
                                 left_to_right_max_x = xpos;
+
+                                linebox.AdjustHorizontalAlignment(limit_w);
                                 linebox.AdjustVerticalAlignment();
                             }
                         }

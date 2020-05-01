@@ -28,6 +28,7 @@ namespace LayoutFarm
         }
         public void SetSize2(int width, int height)
         {
+            //TODO: review here
             if (_parentLink == null)
             {
                 //direct set size
@@ -45,7 +46,9 @@ namespace LayoutFarm
                     //combine before and after rect 
                     //add to invalidate root invalidate queue 
                     Rectangle union = Rectangle.Union(prevBounds, this.RectBounds);
-                    AdjustClientBounds(ref union);
+
+                    AdjustClientBounds(ref union); //***
+
                     this.InvalidateParentGraphics(union);
                 }
             }
@@ -164,7 +167,7 @@ namespace LayoutFarm
         {
             //not invalidate graphics msg
             _b_width = width;
-            _b_height = height;                
+            _b_height = height;
         }
     }
 }
