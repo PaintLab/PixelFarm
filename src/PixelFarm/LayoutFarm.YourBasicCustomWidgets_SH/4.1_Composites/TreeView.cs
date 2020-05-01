@@ -191,22 +191,19 @@ namespace LayoutFarm.CustomWidgets
             //reset
             _desiredHeight = NODE_DEFAULT_HEIGHT;
             _newChildNodeY = NODE_DEFAULT_HEIGHT;
-            if (_isOpen)
+            if (_isOpen && _childNodes != null)
             {
-                if (_childNodes != null)
+                int j = _childNodes.Count;
+                for (int i = 0; i < j; ++i)
                 {
-                    int j = _childNodes.Count;
-                    for (int i = 0; i < j; ++i)
-                    {
-                        TreeNode childNode = _childNodes[i];
-                        childNode.PerformContentLayout();//manual
-                        //set new size 
-                        childNode.SetLocationAndSize(_indentWidth,
-                            _newChildNodeY,
-                            childNode.Width,
-                            childNode.InnerHeight);
-                        _newChildNodeY += childNode.InnerHeight;
-                    }
+                    TreeNode childNode = _childNodes[i];
+                    childNode.PerformContentLayout();//manual
+                                                     //set new size 
+                    childNode.SetLocationAndSize(_indentWidth,
+                        _newChildNodeY,
+                        childNode.Width,
+                        childNode.InnerHeight);
+                    _newChildNodeY += childNode.InnerHeight;
                 }
             }
             _desiredHeight = _newChildNodeY;

@@ -45,12 +45,13 @@ namespace LayoutFarm.UI
             }
 #endif
 
+            PerformLayoutArgs layoutArgs = null;
 
             for (int i = count - 1; i >= 0; --i)
             {
                 UIElement ui = s_layoutQueue.Dequeue();
                 ui.IsInLayoutQueue = false;
-                UIElement.InvokeContentLayout(ui);
+                UIElement.InvokeContentLayout(ui, layoutArgs);
 #if DEBUG
                 if (ui.IsInLayoutQueue)
                 {
@@ -62,6 +63,10 @@ namespace LayoutFarm.UI
         }
     }
 
+    public class PerformLayoutArgs
+    {
+
+    }
 
     public abstract class LayoutInstance
     {
@@ -379,18 +384,15 @@ namespace LayoutFarm.UI
         {
             //
         }
-        internal static void InvokeContentLayout(UIElement ui)
+        internal static void InvokeContentLayout(UIElement ui, PerformLayoutArgs args)
         {
-            ui.OnContentLayout();
+            //called by central layout queue
+            ui.PerformContentLayout(args);
         }
+        public virtual void PerformContentLayout(PerformLayoutArgs args)
+        {
 
-        protected virtual void OnContentLayout()
-        {
         }
-        protected virtual void OnContentUpdate()
-        {
-        }
-
         protected virtual void OnElementChanged()
         {
         }

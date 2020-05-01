@@ -406,13 +406,7 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-
-
-
-        protected override void OnContentLayout()
-        {
-            this.PerformContentLayout();
-        }
+         
 
         public bool AllowAutoContentExpand { get; set; }
 
@@ -477,6 +471,12 @@ namespace LayoutFarm.CustomWidgets
             public bool HasSpecificWidth => _renderE.HasSpecificWidth;
             public bool HasSpecificHeight => _renderE.HasSpecificHeight;
         }
+
+        public override void PerformContentLayout(PerformLayoutArgs args)
+        {
+            PerformContentLayout();
+        }
+ 
 
         public override void PerformContentLayout()
         {

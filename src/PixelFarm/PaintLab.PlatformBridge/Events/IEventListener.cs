@@ -38,8 +38,8 @@ namespace LayoutFarm.UI
     public interface IUIEventListener : IEventListener
     { 
 
-        void HandleContentLayout();
-        void HandleContentUpdate();
+        //void HandleContentLayout();
+        //void HandleContentUpdate();
         void HandleElementUpdate(); 
 
         bool BypassAllMouseEvents { get; }

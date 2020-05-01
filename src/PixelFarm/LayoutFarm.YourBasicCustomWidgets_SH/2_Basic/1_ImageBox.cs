@@ -85,7 +85,7 @@ namespace LayoutFarm.CustomWidgets
                 this.CurrentPrimaryRenderElement.SetSize(w, h);
             }
         }
-        protected override void OnContentUpdate()
+        void OnContentUpdate()
         {
             if (_imageBinder != null && _imageBinder.State == BinderState.Loaded)
             {
