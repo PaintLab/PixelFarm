@@ -23,7 +23,8 @@ namespace LayoutFarm.CustomWidgets
         bool _hasSomeBorderW;
 
 
-        ushort _contentLeft_offset; //border left + padding left
+        //...for rendering only, not for layout...
+        ushort _contentLeft_offset; //border left + padding left,
         ushort _contentTop_offset; //border top + pading top
         ushort _contentRight_offset; //border right + padding right
         ushort _contentBottom_offset; //botrder bottom + padding bottom
@@ -297,12 +298,6 @@ namespace LayoutFarm.CustomWidgets
             //canvas.dbug_DrawCrossRect(PixelFarm.Drawing.Color.Black,
             //   new Rectangle(updateArea.Left, updateArea.Top, updateArea.Width, updateArea.Height));
 #endif
-        }
-
-
-        protected override bool CustomHitTest(HitChain hitChain)
-        {
-            return base.CustomHitTest(hitChain);
         }
         public override void ChildrenHitTestCore(HitChain hitChain)
         {
