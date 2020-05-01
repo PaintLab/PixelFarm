@@ -24,9 +24,9 @@ namespace LayoutFarm
             Box hostBox = new Box(400, 600);
             hostBox.SetLocation(10, 10);
             hostBox.BackColor = Color.White;
-            //hostBox.ContentLayoutKind = BoxContentLayoutKind.HorizontalStack;
+            hostBox.ContentLayoutKind = BoxContentLayoutKind.HorizontalStack;
             //hostBox.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
-            hostBox.ContentLayoutKind = BoxContentLayoutKind.HorizontalFlow;
+            //hostBox.ContentLayoutKind = BoxContentLayoutKind.HorizontalFlow;
             host.AddChild(hostBox);
 
 
