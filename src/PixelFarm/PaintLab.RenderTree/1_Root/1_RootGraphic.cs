@@ -21,7 +21,7 @@ namespace LayoutFarm
         //TODO: merge this to RootGraphics?
 
         static int _suspendCount;
-        internal static bool SuspendGraphicsUpdate;
+        internal static bool s_SuspendGraphicsUpdate;
 
         public static RootGraphic CurrentRootGfx;
         public static RenderElement CurrentRenderElement;
@@ -42,20 +42,20 @@ namespace LayoutFarm
 
             }
         }
-        public static void BlockGraphicsUpdate()
+        public static void SuspendGraphicsUpdate()
         {
             _suspendCount++;
-            SuspendGraphicsUpdate = true;
+            s_SuspendGraphicsUpdate = true;
         }
-        public static void ReleaseGraphicsUpdate()
+        public static void ResumeGraphicsUpdate()
         {
             _suspendCount--;
-            SuspendGraphicsUpdate = _suspendCount > 0;
+            s_SuspendGraphicsUpdate = _suspendCount > 0;
         }
         public static void ForceResumeGraphicsUpdate()
         {
             _suspendCount = 0;
-            SuspendGraphicsUpdate = false;
+            s_SuspendGraphicsUpdate = false;
         }
     }
 

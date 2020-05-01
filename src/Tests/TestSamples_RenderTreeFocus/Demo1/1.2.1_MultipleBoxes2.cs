@@ -37,6 +37,7 @@ namespace LayoutFarm
             int boxX = 0;
             int boxY = 0;
 
+            GlobalRootGraphic.SuspendGraphicsUpdate();
 
             for (int i = 0; i < 10; ++i)
             {
@@ -62,6 +63,8 @@ namespace LayoutFarm
             }
 
             hostBox.PerformContentLayout();
+            GlobalRootGraphic.ResumeGraphicsUpdate();
+            hostBox.InvalidateGraphics();
 
             host.AddChild(hostBox);
 

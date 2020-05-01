@@ -135,7 +135,7 @@ namespace LayoutFarm.CustomWidgets
             if (_primElement == null)
             {
                 //create primary render element
-                GlobalRootGraphic.BlockGraphicsUpdate();
+                GlobalRootGraphic.SuspendGraphicsUpdate();
 
                 var renderE = EnableDoubleBuffer ?
                     new DoubleBufferCustomRenderBox(this.Width, this.Height) { EnableDoubleBuffer = true } :
@@ -144,7 +144,7 @@ namespace LayoutFarm.CustomWidgets
                 SetCommonProperties(renderE, this);
                 BuildChildren(renderE, this);
 
-                GlobalRootGraphic.ReleaseGraphicsUpdate();
+                GlobalRootGraphic.ResumeGraphicsUpdate();
                 renderE.InvalidateGraphics();
 
                 _primElement = renderE;
