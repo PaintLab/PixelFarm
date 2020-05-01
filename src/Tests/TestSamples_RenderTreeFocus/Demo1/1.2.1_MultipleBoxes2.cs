@@ -1,7 +1,6 @@
 ﻿
 //Apache2, 2014-present, WinterDev
 
-using System.Collections.Generic;
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
 using LayoutFarm.CustomWidgets;
@@ -12,6 +11,7 @@ namespace LayoutFarm
     {
         readonly Color[] _colors = new Color[] { Color.Red, Color.Green, Color.Blue, Color.Magenta, Color.Aqua };
         readonly Size[] _sizes = new Size[] { new Size(20, 20), new Size(10, 10), new Size(30, 20), new Size(10, 25) };
+        readonly VerticalAlignment[] _vertAlign = new VerticalAlignment[] { VerticalAlignment.Top, VerticalAlignment.Middle, VerticalAlignment.Bottom };
 
         protected override void OnStart(AppHost host)
         {
@@ -29,7 +29,7 @@ namespace LayoutFarm
             hostBox.ContentLayoutKind = BoxContentLayoutKind.HorizontalFlow;
             host.AddChild(hostBox);
 
-             
+
             int boxX = 0;
             int boxY = 0;
 
@@ -38,8 +38,8 @@ namespace LayoutFarm
             {
                 Size s = _sizes[i % _sizes.Length];
                 var box = new Box(s.Width, s.Height);
-
                 box.BackColor = _colors[i % _colors.Length];
+                box.VerticalAlignment = _vertAlign[i % _vertAlign.Length];
 
                 box.SetMargins(1);
                 box.SetLocation(boxX, boxY);

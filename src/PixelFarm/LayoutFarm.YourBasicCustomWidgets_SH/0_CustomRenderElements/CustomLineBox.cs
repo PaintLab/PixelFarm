@@ -234,43 +234,39 @@ namespace LayoutFarm.CustomWidgets
 
         public int Count => _linkList.Count;
 
-        public void AdjustHorizontalAlignment(RectUIAlignment alignment)
+        public void AdjustHorizontalAlignment()
         {
             //line, and spread data inside this line
 
 
         }
-        public void AdjustVerticalAlignment(VerticalAlignment vertAlignment)
+        public void AdjustVerticalAlignment()
         {
             LinkedListNode<IAbstractRect> node = _linkList.First;
-
-            switch (vertAlignment)
+            while (node != null)
             {
-                case VerticalAlignment.Bottom:
-                    while (node != null)
-                    {
-                        IAbstractRect r = node.Value;
-                        int diff = LineHeight - (r.Height + r.MarginTop);
-                        if (diff > 0)
+                IAbstractRect r = node.Value;
+                switch (r.VerticalAlignment)
+                {
+                    case VerticalAlignment.Top:
+                        r.SetLocation(r.Left, r.MarginTop);
+                        break;
+                    case VerticalAlignment.Bottom:
                         {
-                            //change location
-                            r.SetLocation(r.Left, r.Top + diff);
+                            int diff = LineHeight - (r.Height + r.MarginTop);
+                            if (diff > 0)
+                            {
+                                //change location
+                                r.SetLocation(r.Left, r.Top + diff);
+                            }
+                            else
+                            {
+                                //
+                            }
                         }
-                        else
+                        break;
+                    case VerticalAlignment.Middle:
                         {
-                            //
-                        }
-
-                        node = node.Next;//**
-                    }
-                    break;
-                case VerticalAlignment.Middle:
-                    {
-                        //middle height of this line                        
-
-                        while (node != null)
-                        {
-                            IAbstractRect r = node.Value;
                             int diff = LineHeight - (r.Height + r.MarginTop);
                             if (diff > 0)
                             {
@@ -281,22 +277,11 @@ namespace LayoutFarm.CustomWidgets
                             {
                                 //
                             }
-
-                            node = node.Next;//**
                         }
-                    }
-                    break;
-                case VerticalAlignment.Top:
-                    while (node != null)
-                    {
-                        IAbstractRect r = node.Value;
-                        r.SetLocation(r.Left, r.MarginTop);
-                        node = node.Next;//**
-                    }
-                    break;
-                case VerticalAlignment.UserSpecific://TODO
-                    break;
-            }
+                        break;
+                }
+                node = node.Next;//**
+            } 
         }
     }
 

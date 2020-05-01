@@ -407,15 +407,8 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
-        VerticalAlignment _boxContentVertAlignment = VerticalAlignment.Bottom;
-        public VerticalAlignment ContentVerticalAlignment
-        {
-            get => _boxContentVertAlignment;
-            set
-            {
-                _boxContentVertAlignment = value;
-            }
-        }
+
+
         protected override void OnContentLayout()
         {
             this.PerformContentLayout();
@@ -436,6 +429,7 @@ namespace LayoutFarm.CustomWidgets
             get => _preserveLineBoxes;
             set
             {
+
                 _preserveLineBoxes = value;
                 if (!value && _primElement != null)
                 {
@@ -452,6 +446,8 @@ namespace LayoutFarm.CustomWidgets
             public TempAbstractRectUI(RenderElement renderE)
             {
                 _renderE = renderE;
+                HorizontalAlignment = RectUIAlignment.Begin;
+                VerticalAlignment = VerticalAlignment.Top;
             }
 
             public ushort MarginLeft => 0;
@@ -469,6 +465,9 @@ namespace LayoutFarm.CustomWidgets
             public int Width => _renderE.Width;
 
             public int Height => _renderE.Height;
+
+            public RectUIAlignment HorizontalAlignment { get; set; }
+            public VerticalAlignment VerticalAlignment { get; set; }
 
             public RenderElement GetPrimaryRenderElement() => _renderE;
 
@@ -576,7 +575,7 @@ namespace LayoutFarm.CustomWidgets
                                     rect.PerformContentLayout();
 
                                     //TODO: review Middle again
-                                    if (rect.Alignment == RectUIAlignment.End)
+                                    if (rect.HorizontalAlignment == RectUIAlignment.End)
                                     {
                                         //skip this
                                         if (alignToEnds == null)
@@ -665,7 +664,7 @@ namespace LayoutFarm.CustomWidgets
                                     xpos = this.PaddingLeft; //start X at paddingLeft
                                     foreach (UIElement ui in childrenIter.GetIter())
                                     {
-                                        if (ui is AbstractRectUI element && element.Alignment != RectUIAlignment.End)
+                                        if (ui is AbstractRectUI element && element.HorizontalAlignment != RectUIAlignment.End)
                                         {
                                             //TODO: review here again
                                             element.SetLocation(xpos, ypos + element.MarginTop);
@@ -728,10 +727,9 @@ namespace LayoutFarm.CustomWidgets
 
                                             //before we begin a new line
                                             //adjust current line vertical aligment
-                                            if (_boxContentVertAlignment != VerticalAlignment.Top)
-                                            {
-                                                linebox.AdjustVerticalAlignment(_boxContentVertAlignment);
-                                            }
+
+                                            linebox.AdjustVerticalAlignment();
+
 
                                             linebox = lineboxContext.AddNewLineBox();
                                             linebox.LineTop = ypos;
@@ -777,11 +775,7 @@ namespace LayoutFarm.CustomWidgets
                                 }
 
                                 left_to_right_max_x = xpos;
-
-                                if (_boxContentVertAlignment != VerticalAlignment.Top)
-                                {
-                                    linebox.AdjustVerticalAlignment(_boxContentVertAlignment);
-                                }
+                                linebox.AdjustVerticalAlignment();
                             }
                         }
                         this.SetInnerContentSize(xpos, maxBottom);

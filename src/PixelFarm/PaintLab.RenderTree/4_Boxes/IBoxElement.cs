@@ -16,7 +16,7 @@ namespace LayoutFarm.UI
         ushort MarginLeft { get; }
         ushort MarginTop { get; }
         ushort MarginRight { get; }
-        ushort MarginBottom { get; } 
+        ushort MarginBottom { get; }
 
         int Left { get; }
         int Top { get; }
@@ -24,5 +24,7 @@ namespace LayoutFarm.UI
         int Width { get; }
         void SetLocation(int left, int top);
         RenderElement GetPrimaryRenderElement();
+        RectUIAlignment HorizontalAlignment { get; }
+        VerticalAlignment VerticalAlignment { get; }
     }
 }
