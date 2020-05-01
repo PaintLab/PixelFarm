@@ -91,7 +91,7 @@ namespace LayoutFarm.CustomWidgets
                     break;
             }
         }
-        protected override void InvalidateMargin(MarginName marginName, short newValue)
+        protected override void InvalidateMargin(MarginName marginName, ushort newValue)
         {
             //TODO:...
         }

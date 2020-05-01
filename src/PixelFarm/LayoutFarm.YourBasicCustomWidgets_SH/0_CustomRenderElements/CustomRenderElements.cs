@@ -39,10 +39,11 @@ namespace LayoutFarm.CustomWidgets
             : base(width, height)
         {
             this.BackColor = KnownColors.LightGray;
+            
         }
 
 
-        internal List<LineBox> Lines { get; set; }
+        internal List<RenderElemLineBox> Lines { get; set; }
 
         public ushort PaddingLeft
         {
@@ -247,7 +248,7 @@ namespace LayoutFarm.CustomWidgets
             if (Lines != null)
             {
 
-                List<LineBox> lineboxes = Lines;
+                List<RenderElemLineBox> lineboxes = Lines;
                 int j = lineboxes.Count;
                 int enter_canvas_x = d.OriginX;
                 int enter_canvas_y = d.OriginY;
@@ -257,7 +258,7 @@ namespace LayoutFarm.CustomWidgets
 
                 for (int i = 0; i < j; ++i)
                 {
-                    LineBox linebox = lineboxes[i];
+                    RenderElemLineBox linebox = lineboxes[i];
                     if (linebox.IsIntersect(update_a_top, update_a_bottom))
                     {
                         //offset to this client
@@ -307,11 +308,11 @@ namespace LayoutFarm.CustomWidgets
                 //check if it's overlap line or not
                 //find a properline 
                 //then offset and test at that line
-                List<LineBox> lineboxes = Lines;
+                List<RenderElemLineBox> lineboxes = Lines;
                 int j = lineboxes.Count;
                 for (int i = 0; i < j; ++i)
                 {
-                    LineBox linebox = lineboxes[i];
+                    RenderElemLineBox linebox = lineboxes[i];
                     if (linebox.HitTestCore(hitChain))
                     {
                         return;
@@ -333,7 +334,7 @@ namespace LayoutFarm.CustomWidgets
     }
 
     public class DoubleBufferCustomRenderBox : CustomRenderBox
-    {
+    { 
         DrawboardBuffer _builtInBackBuffer;
         bool _hasAccumRect;
         Rectangle _invalidateRect;

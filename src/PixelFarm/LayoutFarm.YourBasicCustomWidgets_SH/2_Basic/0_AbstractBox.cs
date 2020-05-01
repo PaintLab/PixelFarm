@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
 
-
 namespace LayoutFarm.CustomWidgets
 {
 
@@ -445,8 +444,41 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
+
+        struct TempAbstractRectUI : IAbstractRect
+        {
+
+            readonly RenderElement _renderE;
+            public TempAbstractRectUI(RenderElement renderE)
+            {
+                _renderE = renderE;
+            }
+
+            public ushort MarginLeft => 0;
+
+            public ushort MarginTop => 0;
+
+            public ushort MarginRight => 0;
+
+            public ushort MarginBottom => 0;
+
+            public int Left => _renderE.Left;
+
+            public int Top => _renderE.Top;
+
+            public int Width => _renderE.Width;
+
+            public int Height => _renderE.Height;
+
+            public RenderElement GetPrimaryRenderElement() => _renderE;
+
+            public void SetLocation(int left, int top) => _renderE.SetLocation(left, top);
+        }
+
         public override void PerformContentLayout()
         {
+            //TODO: move layout algo to another class
+
             //****
             //this.InvalidateGraphics();
             //temp : arrange as vertical stack***
@@ -680,7 +712,7 @@ namespace LayoutFarm.CustomWidgets
                                 int max_lineHeight = 0;
                                 foreach (UIElement ui in childrenIter.GetIter())
                                 {
-                                    if (ui is AbstractRectUI rect)
+                                    if (ui is AbstractRectUI rect) //TODO: review here again
                                     {
                                         //1. measure content=> get 'default' size, minimum or specific size
                                         //
@@ -733,13 +765,15 @@ namespace LayoutFarm.CustomWidgets
                                             //start 
                                             maxBottom = tmp_bottom;
                                         }
+
+                                        linebox.Add(rect);
                                     }
                                     else
                                     {
-
+                                        //this elem is not abstract rectUI
+                                        //so we create a temp proxy for it
+                                        linebox.Add(new TempAbstractRectUI(ui.GetPrimaryRenderElement()));
                                     }
-
-                                    linebox.Add(ui.GetPrimaryRenderElement());
                                 }
 
                                 left_to_right_max_x = xpos;

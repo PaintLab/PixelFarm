@@ -17,7 +17,7 @@ namespace LayoutFarm.UI
     /// <summary>
     /// abstract Rect UI Element
     /// </summary>
-    public abstract class AbstractRectUI : UIElement, IScrollable, IBoxElement, IAcceptBehviour
+    public abstract class AbstractRectUI : UIElement, IScrollable, IBoxElement, IAcceptBehviour, IAbstractRect
     {
         //dimension only
         //no color,
@@ -65,10 +65,10 @@ namespace LayoutFarm.UI
         byte _borderRight;
         byte _borderBottom;
         //
-        short _marginLeft;
-        short _marginTop;
-        short _marginRight;
-        short _marginBottom;
+        ushort _marginLeft;
+        ushort _marginTop;
+        ushort _marginRight;
+        ushort _marginBottom;
 
         public AbstractRectUI(int width, int height)
         {
@@ -296,25 +296,25 @@ namespace LayoutFarm.UI
             InvalidatePadding(PaddingName.AllSideSameValue, sameValue);
         }
         //---------------------------------------------------------------
-        protected virtual void InvalidateMargin(MarginName marginName, short newValue)
+        protected virtual void InvalidateMargin(MarginName marginName, ushort newValue)
         {
         }
-        public short MarginLeft
+        public ushort MarginLeft
         {
             get => _marginLeft;
             set => InvalidateMargin(MarginName.Left, _marginLeft = value);
         }
-        public short MarginTop
+        public ushort MarginTop
         {
             get => _marginTop;
             set => InvalidateMargin(MarginName.Top, _marginTop = value);
         }
-        public short MarginRight
+        public ushort MarginRight
         {
             get => _marginRight;
             set => InvalidateMargin(MarginName.Right, _marginRight = value);
         }
-        public short MarginBottom
+        public ushort MarginBottom
         {
             get => _marginBottom;
             set => InvalidateMargin(MarginName.Bottom, _marginBottom = value);
@@ -322,7 +322,7 @@ namespace LayoutFarm.UI
         public int MarginLeftRight => _marginLeft + _marginRight;
         public int MarginTopBottom => _marginTop + _marginBottom;
 
-        public void SetMargins(byte left, byte top, byte right, byte bottom)
+        public void SetMargins(ushort left, ushort top, ushort right, ushort bottom)
         {
             _marginLeft = left;
             _marginTop = top;
@@ -330,7 +330,7 @@ namespace LayoutFarm.UI
             _marginBottom = bottom;
             InvalidateMargin(MarginName.AllSide, 0);
         }
-        public void SetMargins(short sameValue)
+        public void SetMargins(ushort sameValue)
         {
             _marginLeft =
                 _marginTop =
@@ -607,6 +607,7 @@ namespace LayoutFarm.UI
         public LayoutInstance LayoutInstance { get; set; }
         public override void UpdateLayout()
         {
+            //update size and bounds from its layout instance
             if (LayoutInstance != null && LayoutInstance.GetResultBounds(out RectangleF bounds))
             {
                 SetLocationAndSize((int)bounds.Left, (int)bounds.Top, (int)bounds.Width, (int)bounds.Height);
@@ -631,5 +632,5 @@ namespace LayoutFarm.UI
     }
 
 
-    
+
 }

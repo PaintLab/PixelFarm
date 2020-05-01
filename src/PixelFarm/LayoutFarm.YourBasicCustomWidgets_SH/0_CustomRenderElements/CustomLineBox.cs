@@ -105,14 +105,16 @@ namespace LayoutFarm.CustomWidgets
             {
                 MayBeEmptyTempContext<LineBox>.SetNewHandler(
                     () => new LineBox(),
-                    line => line.Clear());
+                    line => line.Reset());
             }
             return MayBeEmptyTempContext<LineBox>.Borrow(out linebox);
         }
+
+
     }
     struct LineBoxesContext : IDisposable
     {
-        RenderElement _owner;
+        CustomRenderBox _owner;
         MayBeEmptyTempContext<List<LineBox>> _context;
         List<LineBox> _lineboxes;
 
@@ -123,33 +125,52 @@ namespace LayoutFarm.CustomWidgets
         {
             //set owner element if we want to preserver linebox ***
             _owner = owner;
-            if (_owner == null)
+            _context = LayoutTools.BorrowList(out _lineboxes);
+            _sharedLineBoxContextListContext = LayoutTools.BorrowList(out _sharedLineBoxContexts);
+        }
+
+        public void FlushOnce()
+        {
+            if (_owner != null)
             {
-                //don't preserve linebox
-                _context = LayoutTools.BorrowList(out _lineboxes);
-                _sharedLineBoxContextListContext = LayoutTools.BorrowList(out _sharedLineBoxContexts);
-            }
-            else
-            {
-                //preserver context
-                _context = MayBeEmptyTempContext<List<LineBox>>.Empty;
-                _lineboxes = owner.Lines;
-                if (_lineboxes == null)
+                //in the case that we want to preserve linebox output
+                List<RenderElemLineBox> lines = _owner.Lines;
+                int j = _lineboxes.Count;
+                if (lines == null)
                 {
-                    _lineboxes = owner.Lines = new List<LineBox>();
+                    _owner.Lines = lines = new List<RenderElemLineBox>(j);
                 }
-                else
+                //clear only line content
+                lines.Clear();
+                for (int i = 0; i < j; ++i)
                 {
-                    _lineboxes.Clear();
+                    LineBox linebox = _lineboxes[i];
+
+                    RenderElemLineBox newline = new RenderElemLineBox
+                    {
+                        LineTop = linebox.LineTop,
+                        LineHeight = linebox.LineHeight,
+                        ParentRenderElement = _owner//*** 
+                    };
+
+                    lines.Add(newline);
+                    LinkedListNode<IAbstractRect> node = linebox._linkList.First;
+                    while (node != null)
+                    {
+                        //content in the node
+                        newline.Add(node.Value.GetPrimaryRenderElement());
+                        node = node.Next;//**
+                    }
                 }
 
-                _sharedLineBoxContexts = null;
-                _sharedLineBoxContextListContext = MayBeEmptyTempContext<List<MayBeEmptyTempContext<LineBox>>>.Empty;
-
+                _owner = null;
             }
         }
+
         public void Dispose()
         {
+
+            FlushOnce();
             //release if we use pool
             _context.Dispose();
             if (_sharedLineBoxContexts != null)
@@ -170,26 +191,116 @@ namespace LayoutFarm.CustomWidgets
 
         public LineBox AddNewLineBox()
         {
-            if (_owner != null)
-            {
-                LineBox newline = new LineBox();
-                newline.ParentRenderElement = _owner;//***
-                _lineboxes.Add(newline);
-                return newline;
-            }
-            else
-            {
-                //we can use it from pool
-                //and we will release this later
-                _sharedLineBoxContexts.Add(LayoutTools.BorrowLineBox(out LineBox sharedLinebox));
-                _lineboxes.Add(sharedLinebox);
 
-                return sharedLinebox;
+            //we can use it from pool
+            //and we will release this later
+            _sharedLineBoxContexts.Add(LayoutTools.BorrowLineBox(out LineBox sharedLinebox));
+            _lineboxes.Add(sharedLinebox);
+
+            return sharedLinebox;
+
+        }
+    }
+
+
+    class LineBox
+    {
+        internal LinkedList<IAbstractRect> _linkList = new LinkedList<IAbstractRect>();
+
+#if DEBUG
+        static int dbugTotalId;
+        public readonly int dbugId;
+#endif
+        public LineBox()
+        {
+#if DEBUG
+            dbugId = dbugTotalId++;
+#endif
+
+        }
+        public int LineTop { get; set; }
+        public int LineHeight { get; set; }
+        public int LineBottom => LineTop + LineHeight;
+        public void Reset()
+        {
+            LineTop = LineHeight = 0;
+            _linkList.Clear();
+        }
+
+        public void Add(IAbstractRect renderE)
+        {
+            _linkList.AddLast(renderE);
+        }
+
+        public int Count => _linkList.Count;
+
+        public void AdjustHorizontalAlignment(RectUIAlignment alignment)
+        {
+            //line, and spread data inside this line
+
+
+        }
+        public void AdjustVerticalAlignment(VerticalAlignment vertAlignment)
+        {
+            LinkedListNode<IAbstractRect> node = _linkList.First;
+
+            switch (vertAlignment)
+            {
+                case VerticalAlignment.Bottom:
+                    while (node != null)
+                    {
+                        IAbstractRect r = node.Value;
+                        int diff = LineHeight - (r.Height + r.MarginTop);
+                        if (diff > 0)
+                        {
+                            //change location
+                            r.SetLocation(r.Left, r.Top + diff);
+                        }
+                        else
+                        {
+                            //
+                        }
+
+                        node = node.Next;//**
+                    }
+                    break;
+                case VerticalAlignment.Middle:
+                    {
+                        //middle height of this line                        
+
+                        while (node != null)
+                        {
+                            IAbstractRect r = node.Value;
+                            int diff = LineHeight - (r.Height + r.MarginTop);
+                            if (diff > 0)
+                            {
+                                //change location
+                                r.SetLocation(r.Left, r.Top + (diff / 2));
+                            }
+                            else
+                            {
+                                //
+                            }
+
+                            node = node.Next;//**
+                        }
+                    }
+                    break;
+                case VerticalAlignment.Top:
+                    while (node != null)
+                    {
+                        IAbstractRect r = node.Value;
+                        r.SetLocation(r.Left, r.MarginTop);
+                        node = node.Next;//**
+                    }
+                    break;
+                case VerticalAlignment.UserSpecific://TODO
+                    break;
             }
         }
     }
 
-    class LineBox : IParentLink
+    class RenderElemLineBox : IParentLink
     {
         LinkedList<RenderElement> _linkList = new LinkedList<RenderElement>();
 
@@ -197,7 +308,7 @@ namespace LayoutFarm.CustomWidgets
         static int dbugTotalId;
         public readonly int dbugId;
 #endif
-        public LineBox()
+        public RenderElemLineBox()
         {
 #if DEBUG
             dbugId = dbugTotalId++;
@@ -266,16 +377,16 @@ namespace LayoutFarm.CustomWidgets
         }
         public void Render(DrawBoard d, UpdateArea updateArea)
         {
-            LinkedListNode<RenderElement> renderNode = _linkList.First;
+            LinkedListNode<RenderElement> node = _linkList.First;
             Rectangle backup = updateArea.CurrentRect;
             int enter_canvas_x = d.OriginX;
             int enter_canvas_y = d.OriginY;
 
-            while (renderNode != null)
+            while (node != null)
             {
                 //---------------------------
                 //TODO: review here again
-                RenderElement renderE = renderNode.Value;
+                RenderElement renderE = node.Value;
                 if (renderE.IntersectsWith(updateArea))
                 {
                     int x = renderE.X;
@@ -287,98 +398,13 @@ namespace LayoutFarm.CustomWidgets
                     updateArea.Offset(x, y);
                 }
 
-                renderNode = renderNode.Next;
+                node = node.Next;
             }
             updateArea.CurrentRect = backup;//restore  
             d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y);//restore
         }
 
-        public void AdjustHorizontalAlignment(RectUIAlignment alignment)
-        {
-            //line, and spread data inside this line
 
-
-        }
-        public void AdjustVerticalAlignment(VerticalAlignment vertAlignment)
-        {
-            LinkedListNode<RenderElement> node = _linkList.First;
-
-            switch (vertAlignment)
-            {
-                case VerticalAlignment.Bottom:
-                    while (node != null)
-                    {
-                        RenderElement r = node.Value;
-                        if (r is CustomRenderBox box)
-                        {
-                            int diff = LineHeight - r.Height;
-                            if (diff > 0)
-                            {
-                                //change location
-                                r.SetLocation(r.Left, box.ContentTop + diff);
-                            }
-                            else
-                            {
-                                //
-                            }
-                        }
-                        else
-                        {
-                            r.SetLocation(r.Left, 0); //***
-                        }
-
-                        node = node.Next;//**
-                    }
-                    break;
-                case VerticalAlignment.Middle:
-                    {
-                        //middle height of this line                        
-
-                        while (node != null)
-                        {
-                            RenderElement r = node.Value;
-                            if (r is CustomRenderBox box)
-                            {
-                                int diff = LineHeight - r.Height;
-                                if (diff > 0)
-                                {
-                                    //change location
-                                    r.SetLocation(r.Left, box.ContentTop + (diff / 2));
-                                }
-                                else
-                                {
-                                    //
-                                }
-                            }
-                            else
-                            {
-                                r.SetLocation(r.Left, 0); //***
-                            }
-
-                            node = node.Next;//**
-                        }
-                    }
-                    break;
-                case VerticalAlignment.Top:
-                    while (node != null)
-                    {
-                        RenderElement r = node.Value;
-                        if (r is CustomRenderBox box)
-                        {
-                            r.SetLocation(r.Left, box.ContentTop);
-                        }
-                        else
-                        {
-                            r.SetLocation(r.Left, 0); //***
-                        }
-
-                        node = node.Next;//**
-                    }
-                    break;
-                case VerticalAlignment.UserSpecific://TODO
-                    break;
-            }
-        }
     }
 
 
