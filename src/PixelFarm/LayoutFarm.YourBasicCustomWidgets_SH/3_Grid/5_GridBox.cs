@@ -54,6 +54,9 @@ namespace LayoutFarm.CustomWidgets
             //if WaitForStartRenderElement == true,
             //then we skip rendering its content
             //else if this renderElement has more child, we need to walk down)
+            
+            
+            //base.RenderClientContent(d, updateArea);
 
             if (!WaitForStartRenderElement)
             {
@@ -63,7 +66,7 @@ namespace LayoutFarm.CustomWidgets
 
             _gridLayer.DrawChildContent(d, updateArea);
 
-            base.RenderClientContent(d, updateArea);
+
         }
 
         public GridCellInfo GetCellInfoByMousePosition(int x, int y)
