@@ -6,7 +6,7 @@ using PixelFarm.Drawing;
 
 namespace LayoutFarm.UI
 {
-   
+
 
     /// <summary>
     /// abstract Rect UI Element
@@ -79,6 +79,13 @@ namespace LayoutFarm.UI
         public RectUIAlignment HorizontalAlignment { get; set; }
         public VerticalAlignment VerticalAlignment { get; set; }
 
+
+        
+        public int CalculatedMinWidth { get; protected set; }
+        public int CalculatedMinHeight { get; protected set; }
+
+        public ushort UserSpecificMinWidth { get; set; }
+        public ushort UserSpecificMinHeight { get; set; }
 
         public event EventHandler<ViewportChangedEventArgs> ViewportChanged;//TODO: review this*** => use event queue?
 
@@ -423,7 +430,7 @@ namespace LayoutFarm.UI
             //if you want viewport you must overide this
             SetViewport(x, y, this);
         }
- 
+
         public virtual int InnerHeight => this.Height;
         //
         public virtual int InnerWidth => this.Width;
@@ -604,6 +611,7 @@ namespace LayoutFarm.UI
                 SetLocationAndSize((int)bounds.Left, (int)bounds.Top, (int)bounds.Width, (int)bounds.Height);
             }
         }
+
     }
 
     public static class UIElementExtensions

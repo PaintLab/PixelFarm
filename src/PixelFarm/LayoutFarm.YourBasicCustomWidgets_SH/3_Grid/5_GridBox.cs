@@ -555,10 +555,7 @@ namespace LayoutFarm.CustomWidgets
         GridSelectionSession _gridSelectionSession;
         Color _gridBorderColor;
 
-        UIList<UIElement> _children;
-
-
-
+        UIList<UIElement> _children; 
         public GridView(int width, int height)
             : base(width, height)
         {
@@ -731,6 +728,7 @@ namespace LayoutFarm.CustomWidgets
             base.OnMouseWheel(e);
             RaiseViewportChanged();
         }
+       
         protected override void OnMouseMove(UIMouseMoveEventArgs e)
         {
             //System.Console.WriteLine(e.X + "," + e.Y);

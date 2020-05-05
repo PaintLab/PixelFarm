@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
+using System.Runtime.Remoting.Messaging;
 
 namespace LayoutFarm.CustomWidgets
 {
@@ -164,6 +165,131 @@ namespace LayoutFarm.CustomWidgets
             _primElement?.ResumeGraphicsUpdate();
         }
 
+
+        public override SizeF CalculateMinimumSize(LayoutUpdateArgs args)
+        {
+            if (this.HasSpecificWidthAndHeight)
+            {
+                CalculatedMinWidth = this.Width;
+                CalculatedMinHeight = this.Height;
+                return new SizeF(CalculatedMinWidth, CalculatedMinHeight);
+            }
+
+
+            if (_hasMinSize)
+            {
+                return new SizeF(CalculatedMinWidth, CalculatedMinHeight);
+            }
+
+            _hasMinSize = true;
+            //minum size of present or children
+            //so its depends on layout kind 
+            IUICollection<UIElement> childIter = GetDefaultChildrenIter();
+            if (childIter == null || childIter.Count == 0)
+            {
+                CalculatedMinWidth = PaddingLeft + PaddingRight + BorderLeft + BorderRight;
+                CalculatedMinHeight = PaddingTop + PaddingBottom + BorderTop + BorderBottom;
+            }
+
+            switch (ContentLayoutKind)
+            {
+                default: throw new NotSupportedException();
+                case BoxContentLayoutKind.Absolute:
+                    {
+                        //skip this
+                        ////current position of all children
+                        RectangleF total = RectangleF.Empty;
+
+                        foreach (UIElement ui in childIter.GetIter())
+                        {
+                            SizeF minSize = ui.CalculateMinimumSize(args);
+                            Point location = ui.GetLocation();
+                            RectangleF elem_bounds = new RectangleF(location.X, location.Y, minSize.Width, minSize.Height);
+                            total = RectangleF.Union(total, elem_bounds);
+                        }
+
+                        CalculatedMinWidth = HasSpecificWidth ? Width : (int)total.Width + PaddingLeft + PaddingRight + BorderLeft + BorderRight;
+                        CalculatedMinHeight = HasSpecificHeight ? Height : (int)total.Height;
+                    }
+                    break;
+                case BoxContentLayoutKind.VerticalStack:
+                    {
+                        float maxWidth = 0;
+                        float totalH = 0;
+
+                        foreach (UIElement ui in childIter.GetIter())
+                        {
+                            SizeF minSize = ui.CalculateMinimumSize(args);
+                            if (maxWidth < minSize.Width)
+                            {
+                                maxWidth = minSize.Width;
+                            }
+                            totalH += minSize.Height;
+                        }
+
+                        CalculatedMinWidth = HasSpecificWidth ? Width : (int)maxWidth + PaddingLeft + PaddingRight + BorderLeft + BorderRight;
+                        CalculatedMinHeight = HasSpecificHeight ? Height : (int)totalH;
+                    }
+                    break;
+                case BoxContentLayoutKind.HorizontalStack:
+                    {
+                        float totalW = 0;
+                        float maxHeight = 0;
+
+                        foreach (UIElement ui in childIter.GetIter())
+                        {
+                            SizeF minSize = ui.CalculateMinimumSize(args);
+                            totalW += minSize.Width;
+                            if (minSize.Height > maxHeight)
+                            {
+                                maxHeight = minSize.Height;
+                            }
+                        }
+
+                        CalculatedMinWidth = HasSpecificWidth ? Width : (int)totalW + PaddingLeft + PaddingRight + BorderLeft + BorderRight;
+                        CalculatedMinHeight = HasSpecificHeight ? Height : (int)maxHeight;
+
+                    }
+                    break;
+                case BoxContentLayoutKind.HorizontalFlow:
+                    {
+                        //assume all elem are inline elem
+
+                        float totalW = 0;
+                        float y = 0;
+                        float maxHeight = 0;
+
+
+                        foreach (UIElement ui in childIter.GetIter())
+                        {
+                            SizeF minSize = ui.CalculateMinimumSize(args);
+
+                            if (totalW + minSize.Width > args.AvailableWidth)
+                            {
+                                //begin newline here
+                                y += maxHeight;
+                                maxHeight = 0;
+                                totalW = 0;
+                            }
+
+                            if (minSize.Height > maxHeight)
+                            {
+                                maxHeight = minSize.Height;
+                            }
+                            totalW += minSize.Width;
+                        }
+
+
+
+                        CalculatedMinWidth = HasSpecificWidth ? Width : (int)totalW + PaddingLeft + PaddingRight + BorderLeft + BorderRight;
+                        CalculatedMinHeight = HasSpecificHeight ? Height : (int)(y + maxHeight);
+                        //
+                    }
+                    break;
+            }
+
+            return new SizeF(CalculatedMinWidth, CalculatedMinHeight);
+        }
 
         public override void UpdateLayout()
         {
@@ -406,7 +532,7 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-         
+
 
         public bool AllowAutoContentExpand { get; set; }
 
@@ -471,6 +597,8 @@ namespace LayoutFarm.CustomWidgets
             public bool HasSpecificWidth => _renderE.HasSpecificWidth;
             public bool HasSpecificHeight => _renderE.HasSpecificHeight;
         }
+
+
 
         public override void PerformContentLayout(LayoutUpdateArgs args)
         {
@@ -577,6 +705,7 @@ namespace LayoutFarm.CustomWidgets
                                     {
                                         //1. measure content=> get 'default' size, minimum or specific size
                                         //
+
                                         rectUI.PerformContentLayout(args);
                                         rect = rectUI;
                                     }
@@ -732,6 +861,8 @@ namespace LayoutFarm.CustomWidgets
                             }
                         }
                         this.SetInnerContentSize(xpos, maxBottom);
+                        this.dbugBreakMe = true;
+
                     }
                     break;
                 default:
@@ -803,6 +934,7 @@ namespace LayoutFarm.CustomWidgets
             //this.DragOver?.Invoke(this, e);
             base.OnGuestMsg(e);
         }
+
     }
 
 

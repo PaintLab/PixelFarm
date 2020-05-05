@@ -1,5 +1,6 @@
 ﻿//Apache2, 2014-present, WinterDev
 
+
 using PixelFarm.Drawing;
 using System.Collections.Generic;
 namespace LayoutFarm.UI
@@ -65,6 +66,7 @@ namespace LayoutFarm.UI
 
     public class LayoutUpdateArgs
     {
+        public int AvailableWidth { get; set; }
 
     }
 
@@ -96,6 +98,7 @@ namespace LayoutFarm.UI
 
         bool _hide;
         protected bool _needContentLayout;
+        protected bool _hasMinSize;
         internal object _collectionLinkNode; //optional, eg for linked-list node, RB-tree-node
 
         public UIElement()
@@ -176,6 +179,7 @@ namespace LayoutFarm.UI
         {
             left = top = 0;
         }
+       
         public void GetElementBounds(
            out float left,
            out float top,
@@ -187,6 +191,7 @@ namespace LayoutFarm.UI
             right = _right;
             bottom = _bottom;
         }
+
         protected void SetElementBoundsWH(float width, float height)
         {
 #if DEBUG
@@ -392,6 +397,10 @@ namespace LayoutFarm.UI
         public virtual void PerformContentLayout(LayoutUpdateArgs args)
         {
 
+        }
+        public virtual SizeF CalculateMinimumSize(LayoutUpdateArgs args)
+        {
+            return new SizeF(_right - _left, _bottom - _top);
         }
         protected virtual void OnElementChanged()
         {

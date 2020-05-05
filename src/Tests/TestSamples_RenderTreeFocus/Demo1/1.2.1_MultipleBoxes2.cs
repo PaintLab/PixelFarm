@@ -19,6 +19,48 @@ namespace LayoutFarm
 
         protected override void OnStart(AppHost host)
         {
+            //Test1(host);
+            Test2(host);
+        }
+        void Test2(AppHost host)
+        {
+            Box hostBox = new Box(250, 600);
+
+            hostBox.HasSpecificWidthAndHeight = false;
+            //hostBox.HasSpecificHeight = true;
+            hostBox.SetLocation(10, 10);
+            hostBox.BackColor = Color.White;
+            host.AddChild(hostBox);
+            //hostBox.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
+            //hostBox.ContentLayoutKind = BoxContentLayoutKind.HorizontalStack;
+            hostBox.ContentLayoutKind = BoxContentLayoutKind.HorizontalFlow;
+            {
+                int y = 0;
+                for (int i = 0; i < 10; ++i)
+                {
+                    Box child1 = new Box(100, 100);
+                    child1.SetLocation(20, y);
+                    hostBox.Add(child1);
+                }
+            }
+
+            LayoutUpdateArgs args = new LayoutUpdateArgs();
+            args.AvailableWidth = hostBox.Width;
+            hostBox.CalculateMinimumSize(args);
+            hostBox.CalculateMinimumSize(args); //test
+
+            int calculatedW = hostBox.CalculatedMinWidth;
+            int calculatedH = hostBox.CalculatedMinHeight;
+
+            hostBox.SetSize(calculatedW, calculatedH);
+            hostBox.PerformContentLayout(args);
+
+            int w = hostBox.Width;
+            int h = hostBox.Height;
+        }
+        void Test1(AppHost host)
+        {
+
 
             ListBox listBox1 = new ListBox(100, 200);
             listBox1.SetLocation(500, 20);
@@ -72,9 +114,7 @@ namespace LayoutFarm
             hostBox.InvalidateGraphics();
 
             host.AddChild(hostBox);
-
         }
-
         private void Box_MouseDown(object sender, UIMouseDownEventArgs e)
         {
             if (sender is Box box)

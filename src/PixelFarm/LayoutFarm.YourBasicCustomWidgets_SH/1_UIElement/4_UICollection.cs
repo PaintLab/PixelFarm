@@ -271,6 +271,7 @@ namespace LayoutFarm.UI
                 //---
                 //presentation
                 parent._needContentLayout = true;
+                parent._hasMinSize = false;
 
                 if (parent.CurrentPrimaryRenderElement is IContainerRenderElement parentContainer)
                 {
@@ -287,6 +288,7 @@ namespace LayoutFarm.UI
                 //---
                 //presentation
                 parent._needContentLayout = true;
+                parent._hasMinSize = false;
                 if (parent.CurrentPrimaryRenderElement is IContainerRenderElement parentContainer)
                 {
                     parentContainer.AddFirst(ui.GetPrimaryRenderElement());
@@ -316,6 +318,7 @@ namespace LayoutFarm.UI
                 //---
                 //presentation
                 parent._needContentLayout = true;
+                parent._hasMinSize = false;
 
                 if (parent.CurrentPrimaryRenderElement is IContainerRenderElement parentContainer)
                 {
@@ -341,6 +344,7 @@ namespace LayoutFarm.UI
                 //---
                 //presentation
                 parent._needContentLayout = true;
+                parent._hasMinSize = false;
 
                 if (parent.CurrentPrimaryRenderElement is IContainerRenderElement parentContainer)
                 {
@@ -353,6 +357,7 @@ namespace LayoutFarm.UI
             public void Remove(UIElement parent, T ui)
             {
                 parent._needContentLayout = true;
+                parent._hasMinSize = false;
 
                 IContainerRenderElement parentContainer = parent.CurrentPrimaryRenderElement as IContainerRenderElement;
                 if (parentContainer != null)
