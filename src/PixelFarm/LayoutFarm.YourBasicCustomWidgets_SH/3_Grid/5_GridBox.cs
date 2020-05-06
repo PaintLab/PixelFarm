@@ -20,6 +20,7 @@ namespace LayoutFarm.CustomWidgets
         public override bool HasCustomHitTest => true;
         protected override bool CustomHitTest(HitChain hitChain)
         {
+            hitChain.AddHitObject(this);
             if (_gridLayer != null && _gridLayer.HitTestCore(hitChain))
             {
                 return true;
@@ -54,8 +55,8 @@ namespace LayoutFarm.CustomWidgets
             //if WaitForStartRenderElement == true,
             //then we skip rendering its content
             //else if this renderElement has more child, we need to walk down)
-            
-            
+
+
             //base.RenderClientContent(d, updateArea);
 
             if (!WaitForStartRenderElement)
@@ -555,7 +556,7 @@ namespace LayoutFarm.CustomWidgets
         GridSelectionSession _gridSelectionSession;
         Color _gridBorderColor;
 
-        UIList<UIElement> _children; 
+        UIList<UIElement> _children;
         public GridView(int width, int height)
             : base(width, height)
         {
@@ -728,7 +729,7 @@ namespace LayoutFarm.CustomWidgets
             base.OnMouseWheel(e);
             RaiseViewportChanged();
         }
-       
+
         protected override void OnMouseMove(UIMouseMoveEventArgs e)
         {
             //System.Console.WriteLine(e.X + "," + e.Y);
