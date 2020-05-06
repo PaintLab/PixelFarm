@@ -42,6 +42,8 @@ namespace LayoutFarm.CustomWidgets
         {
             _gridLayer.GetCell(r, c).ContentElement = ui.GetPrimaryRenderElement();
         }
+
+
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
 #if DEBUG
@@ -54,10 +56,7 @@ namespace LayoutFarm.CustomWidgets
             //this render element dose not have child node, so
             //if WaitForStartRenderElement == true,
             //then we skip rendering its content
-            //else if this renderElement has more child, we need to walk down)
-
-
-            //base.RenderClientContent(d, updateArea);
+            //else if this renderElement has more child, we need to walk down) 
 
             if (!WaitForStartRenderElement)
             {
@@ -67,7 +66,16 @@ namespace LayoutFarm.CustomWidgets
 
             _gridLayer.DrawChildContent(d, updateArea);
 
+            System.Collections.Generic.IEnumerable<RenderElement> drawingIter = GetDrawingIter();
+            if (drawingIter != null)
+            {
+                RenderElemHelper.DrawChildContent(
+                  HitTestHint.Custom,
+                  drawingIter,
+                  d, updateArea);
+            }
 
+            //selection layer
         }
 
         public GridCellInfo GetCellInfoByMousePosition(int x, int y)
@@ -577,7 +585,12 @@ namespace LayoutFarm.CustomWidgets
                 _children = new UIList<UIElement>();
             }
             _children.Add(this, ui);
+            if (_gridViewRenderE != null)
+            {
+                _gridViewRenderE.AddChild(ui.GetPrimaryRenderElement());
+            }
         }
+
         public override void PerformContentLayout(LayoutUpdateArgs args)
         {
             //calculate grid width
@@ -812,9 +825,6 @@ namespace LayoutFarm.CustomWidgets
             //check if cell content
             //find grid item 
 
-            //System.Console.WriteLine(e.X + "," + e.Y);
-
-
             GridCell hitCell = _gridViewRenderE.GetCellByMousePosition(e.X, e.Y);
             if (hitCell != null)
             {
@@ -1029,6 +1039,7 @@ namespace LayoutFarm.CustomWidgets
                 myGridBox.BackColor = KnownColors.FromKnownColor(KnownColor.LightGray);
                 this.SetPrimaryRenderElement(myGridBox);
                 _gridViewRenderE = myGridBox;
+                _primElement = _gridViewRenderE;
                 //create layers
                 int nrows = _gridTable.RowCount;
                 int ncols = _gridTable.ColumnCount;

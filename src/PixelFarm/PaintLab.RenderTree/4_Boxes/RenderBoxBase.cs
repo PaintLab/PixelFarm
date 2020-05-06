@@ -374,6 +374,7 @@ namespace LayoutFarm
         }
 
         internal RenderElementCollection GetElemCollection() => _elements;
+        protected IEnumerable<RenderElement> GetDrawingIter() => _elements?.GetDrawingIter();
 
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
