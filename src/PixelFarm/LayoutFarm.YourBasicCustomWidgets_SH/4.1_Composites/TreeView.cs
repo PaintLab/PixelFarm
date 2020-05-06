@@ -72,8 +72,7 @@ namespace LayoutFarm.CustomWidgets
                 //first time
                 var element = new CustomRenderBox(this.Width, this.Height);
                 element.SetLocation(this.Left, this.Top);
-                element.BackColor = _backColor;
-                element.HasSpecificWidthAndHeight = true;
+                element.BackColor = _backColor; 
                 //-----------------------------
                 // create default layer for node content  
                 //-----------------------------

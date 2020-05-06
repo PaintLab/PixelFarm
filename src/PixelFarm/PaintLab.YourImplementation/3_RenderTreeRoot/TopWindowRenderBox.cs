@@ -11,7 +11,6 @@ namespace LayoutFarm
         {
             _rootGfx = rootGfx;
             this.IsTopWindow = true;
-            this.HasSpecificWidthAndHeight = true;
         }
 
         protected override RootGraphic Root => _rootGfx; //***

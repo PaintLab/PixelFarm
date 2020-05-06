@@ -110,10 +110,7 @@ namespace LayoutFarm.CustomWidgets
 #if DEBUG
             renderE.dbugBreak = absRect.dbugBreakMe;
 #endif
-
-
-            renderE.HasSpecificHeight = absRect.HasSpecificHeight;
-            renderE.HasSpecificWidth = absRect.HasSpecificWidth;
+             
             renderE.SetController(absRect);
             renderE.TransparentForMouseEvents = absRect.TransparentForMouseEvents;
         }
@@ -592,8 +589,8 @@ namespace LayoutFarm.CustomWidgets
             public void SetLocation(int left, int top) => _renderE.SetLocation(left, top);
             public void SetSize(int w, int h) => _renderE.SetSize(w, h);
             public void SetLocationAndSize(int left, int top, int width, int height) => _renderE.SetBounds(left, top, width, height);
-            public bool HasSpecificWidth => _renderE.HasSpecificWidth;
-            public bool HasSpecificHeight => _renderE.HasSpecificHeight;
+            public bool HasSpecificWidth => true;
+            public bool HasSpecificHeight => true;
         }
 
 

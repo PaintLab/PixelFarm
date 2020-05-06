@@ -80,7 +80,7 @@ namespace LayoutFarm.UI
         public VerticalAlignment VerticalAlignment { get; set; }
 
 
-        
+
         public int CalculatedMinWidth { get; protected set; }
         public int CalculatedMinHeight { get; protected set; }
 
@@ -438,40 +438,17 @@ namespace LayoutFarm.UI
         public bool HasSpecificWidth
         {
             get => _specificWidth;
-            set
-            {
-                _specificWidth = value;
-                if (this.CurrentPrimaryRenderElement != null)
-                {
-                    CurrentPrimaryRenderElement.HasSpecificWidth = value;
-                }
-            }
+            set => _specificWidth = value;
         }
         public bool HasSpecificHeight
         {
             get => _specificHeight;
-            set
-            {
-                _specificHeight = value;
-                if (this.CurrentPrimaryRenderElement != null)
-                {
-                    CurrentPrimaryRenderElement.HasSpecificHeight = value;
-                }
-            }
+            set => _specificHeight = value;
         }
         public bool HasSpecificWidthAndHeight
         {
             get => _specificHeight && _specificWidth;
-            set
-            {
-                _specificHeight = _specificWidth = value;
-
-                if (this.CurrentPrimaryRenderElement != null)
-                {
-                    CurrentPrimaryRenderElement.HasSpecificHeight = value;
-                    CurrentPrimaryRenderElement.HasSpecificWidth = value;
-                }
-            }
+            set => _specificHeight = _specificWidth = value;
         }
 
         public Rectangle Bounds => new Rectangle(this.Left, this.Top, this.Width, this.Height);

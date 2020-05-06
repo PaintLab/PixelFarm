@@ -42,9 +42,9 @@ namespace LayoutFarm
 
         //===============================================
 
-        internal const int LY_HAS_SPC_WIDTH = 1 << (1 - 1); //TODO: review this again
-        internal const int LY_HAS_SPC_HEIGHT = 1 << (2 - 1);//TODO: review this again
-        internal const int LY_HAS_SPC_SIZE = LY_HAS_SPC_WIDTH | LY_HAS_SPC_HEIGHT;//TODO: review this again
+        //internal const int LY_HAS_SPC_WIDTH = 1 << (1 - 1); //TODO: review this again
+        //internal const int LY_HAS_SPC_HEIGHT = 1 << (2 - 1);//TODO: review this again
+        //internal const int LY_HAS_SPC_SIZE = LY_HAS_SPC_WIDTH | LY_HAS_SPC_HEIGHT;//TODO: review this again
 
         //internal const int LY_HAS_ARRANGED_CONTENT = 1 << (7 - 1); //TODO: review here
 

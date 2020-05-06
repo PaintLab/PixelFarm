@@ -32,6 +32,9 @@ namespace LayoutFarm.CustomWidgets
             _font = GlobalRootGraphic.CurrentRootGfx.DefaultTextEditFontInfo;
             NeedPreRenderEval = true;
             DrawTextTechnique = DrawTextTechnique.Stencil;//default
+
+            //HasSpecificHeight = true;
+            //HasSpecificWidth = true;
         }
 
         public DrawTextTechnique DrawTextTechnique { get; set; }
@@ -53,6 +56,9 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
+        public bool HasSpecificWidth { get; set; }
+        public bool HasSpecificHeight { get; set; }
+        public bool HasSpecificWidthAndHeight => HasSpecificWidth && HasSpecificHeight;
 
         public string Text
         {
