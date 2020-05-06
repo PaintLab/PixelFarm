@@ -4,16 +4,16 @@ namespace LayoutFarm
 {
     partial class RenderElement
     {
-        public virtual void TopDownReCalculateContentSize()
-        {
-            MarkHasValidCalculateSize();
-        }
-        protected static void SetCalculatedSize(RenderBoxBase v, int w, int h)
-        {
-            v._b_width = w;
-            v._b_height = h;
-            v.MarkHasValidCalculateSize();
-        }
+        //public virtual void TopDownReCalculateContentSize()
+        //{
+        //    MarkHasValidCalculateSize();
+        //}
+        //protected static void SetCalculatedSize(RenderBoxBase v, int w, int h)
+        //{
+        //    v._b_width = w;
+        //    v._b_height = h;
+        //    v.MarkHasValidCalculateSize();
+        //}
         internal static int GetLayoutSpecificDimensionType(RenderElement visualElement)
         {
             return visualElement._uiLayoutFlags & 0x3;
@@ -21,13 +21,13 @@ namespace LayoutFarm
 
         public bool HasCalculatedSize => ((_uiLayoutFlags & RenderElementConst.LY_HAS_CALCULATED_SIZE) != 0);
 
-        protected void MarkHasValidCalculateSize()
-        {
-            _uiLayoutFlags |= RenderElementConst.LY_HAS_CALCULATED_SIZE;
-#if DEBUG
-            this.dbug_ValidateRecalculateSizeEpisode++;
-#endif
-        }
+//        protected void MarkHasValidCalculateSize()
+//        {
+//            _uiLayoutFlags |= RenderElementConst.LY_HAS_CALCULATED_SIZE;
+//#if DEBUG
+//            this.dbug_ValidateRecalculateSizeEpisode++;
+//#endif
+//        }
         //public bool IsInLayoutQueue
         //{
         //    get

@@ -246,62 +246,62 @@ namespace LayoutFarm
             }
         }
 
-        public override sealed void TopDownReCalculateContentSize()
-        {
-            //if (!ForceReArrange && this.HasCalculatedSize)
-            //{
-            //    return;
-            //}
-#if DEBUG
-            dbug_EnterTopDownReCalculateContent(this);
-#endif
-            int cHeight = this.Height;
-            int cWidth = this.Width;
-            Size ground_contentSize = Size.Empty;
-            if (_elements != null)
-            {
-                _elements.TopDownReCalculateContentSize();
-                ground_contentSize = _elements.CalculatedContentSize;
-            }
-            int finalWidth = ground_contentSize.Width;
-            if (finalWidth == 0)
-            {
-                finalWidth = this.Width;
-            }
-            int finalHeight = ground_contentSize.Height;
-            if (finalHeight == 0)
-            {
-                finalHeight = this.Height;
-            }
-            switch (GetLayoutSpecificDimensionType(this))
-            {
-                default:
-                    break;
-                case RenderElementConst.LY_HAS_SPC_HEIGHT:
-                    {
-                        finalHeight = cHeight;
-                    }
-                    break;
-                case RenderElementConst.LY_HAS_SPC_WIDTH:
-                    {
-                        finalWidth = cWidth;
-                    }
-                    break;
-                case RenderElementConst.LY_HAS_SPC_SIZE:
-                    {
-                        finalWidth = cWidth;
-                        finalHeight = cHeight;
-                    }
-                    break;
-            }
+//        public override sealed void TopDownReCalculateContentSize()
+//        {
+//            //if (!ForceReArrange && this.HasCalculatedSize)
+//            //{
+//            //    return;
+//            //}
+//#if DEBUG
+//            dbug_EnterTopDownReCalculateContent(this);
+//#endif
+//            int cHeight = this.Height;
+//            int cWidth = this.Width;
+//            Size ground_contentSize = Size.Empty;
+//            if (_elements != null)
+//            {
+//                _elements.TopDownReCalculateContentSize();
+//                ground_contentSize = _elements.CalculatedContentSize;
+//            }
+//            int finalWidth = ground_contentSize.Width;
+//            if (finalWidth == 0)
+//            {
+//                finalWidth = this.Width;
+//            }
+//            int finalHeight = ground_contentSize.Height;
+//            if (finalHeight == 0)
+//            {
+//                finalHeight = this.Height;
+//            }
+//            switch (GetLayoutSpecificDimensionType(this))
+//            {
+//                default:
+//                    break;
+//                case RenderElementConst.LY_HAS_SPC_HEIGHT:
+//                    {
+//                        finalHeight = cHeight;
+//                    }
+//                    break;
+//                case RenderElementConst.LY_HAS_SPC_WIDTH:
+//                    {
+//                        finalWidth = cWidth;
+//                    }
+//                    break;
+//                case RenderElementConst.LY_HAS_SPC_SIZE:
+//                    {
+//                        finalWidth = cWidth;
+//                        finalHeight = cHeight;
+//                    }
+//                    break;
+//            }
 
 
-            SetCalculatedSize(this, finalWidth, finalHeight);
-#if DEBUG
-            dbug_ExitTopDownReCalculateContent(this);
-#endif
+//            SetCalculatedSize(this, finalWidth, finalHeight);
+//#if DEBUG
+//            dbug_ExitTopDownReCalculateContent(this);
+//#endif
 
-        }
+//        }
 
 
         public virtual void AddChild(RenderElement renderE)

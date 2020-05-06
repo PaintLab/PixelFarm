@@ -492,13 +492,13 @@ namespace LayoutFarm.UI
 
 
         }
-        static void ReCalculateContentSize(GridCell cell)
-        {
-            if (cell.ContentElement is RenderElement renderE && !renderE.HasCalculatedSize)
-            {
-                renderE.TopDownReCalculateContentSize();
-            }
-        }
+        //static void ReCalculateContentSize(GridCell cell)
+        //{
+        //    if (cell.ContentElement is RenderElement renderE && !renderE.HasCalculatedSize)
+        //    {
+        //        renderE.TopDownReCalculateContentSize();
+        //    }
+        //}
 
         static void ReCalculateColumnSize(GridColumn col)
         {
@@ -511,7 +511,7 @@ namespace LayoutFarm.UI
                 for (int i = 0; i < j; i++)
                 {
                     GridCell cell = col.GetCell(i);
-                    ReCalculateContentSize(cell);
+                    //ReCalculateContentSize(cell);
                     int cellDesiredWidth = col.Width;
                     int cellDesiredHeight = cell.Height;
                     var content = cell.ContentElement as RenderElement;
