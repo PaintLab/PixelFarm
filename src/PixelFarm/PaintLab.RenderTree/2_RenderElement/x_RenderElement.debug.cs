@@ -31,7 +31,7 @@ namespace LayoutFarm
     partial class RenderElement
     {
         //public bool dbugNeedContentArrangement => this.NeedContentArrangement;
-        public bool dbugNeedReCalculateContentSize => this.NeedReCalculateContentSize;
+        //public bool dbugNeedReCalculateContentSize => this.NeedReCalculateContentSize;
         public Rectangle dbugGetGlobalRect() => new Rectangle(GetGlobalLocationStatic(this), Size);
 
         public virtual void dbug_WriteOwnerLayerInfo(RootGraphic visualroot, int i)
@@ -109,14 +109,15 @@ namespace LayoutFarm
         public string dbug_GetLayoutInfo()
         {
             string info = string.Empty;
-            if (!this.HasCalculatedSize)
-            {
-                info += "[C:" + dbug_InvalidateRecalculateSizeEpisode + "]";
-            }
-            else
-            {
-                info += "[nc:" + dbug_ValidateRecalculateSizeEpisode + "]";
-            }
+            info += "[" + dbug_ValidateRecalculateSizeEpisode + "]";
+            //if (!this.HasCalculatedSize)
+            //{
+            //    info += "[C:" + dbug_InvalidateRecalculateSizeEpisode + "]";
+            //}
+            //else
+            //{
+            //    info += "[nc:" + dbug_ValidateRecalculateSizeEpisode + "]";
+            //}
 
             //if (this.dbugNeedContentArrangement)
             //{

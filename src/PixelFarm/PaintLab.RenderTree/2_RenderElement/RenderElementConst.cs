@@ -42,14 +42,14 @@ namespace LayoutFarm
 
         //===============================================
 
-        internal const int LY_HAS_SPC_WIDTH = 1 << (1 - 1);
-        internal const int LY_HAS_SPC_HEIGHT = 1 << (2 - 1);
-        internal const int LY_HAS_SPC_SIZE = LY_HAS_SPC_WIDTH | LY_HAS_SPC_HEIGHT;
+        internal const int LY_HAS_SPC_WIDTH = 1 << (1 - 1); //TODO: review this again
+        internal const int LY_HAS_SPC_HEIGHT = 1 << (2 - 1);//TODO: review this again
+        internal const int LY_HAS_SPC_SIZE = LY_HAS_SPC_WIDTH | LY_HAS_SPC_HEIGHT;//TODO: review this again
 
         //internal const int LY_HAS_ARRANGED_CONTENT = 1 << (7 - 1); //TODO: review here
 
-        internal const int LY_HAS_CALCULATED_SIZE = 1 << (8 - 1);
-        internal const int LY_SUSPEND = 1 << (9 - 1);
+        //internal const int LY_HAS_CALCULATED_SIZE = 1 << (8 - 1);
+        //internal const int LY_SUSPEND = 1 << (9 - 1);
         internal const int LY_SUSPEND_GRAPHIC = 1 << (12 - 1);
         //internal const int LY_IN_LAYOUT_QUEUE = 1 << (13 - 1);
         internal const int LY_REQ_INVALIDATE_RECT_EVENT = 1 << (14 - 1);
