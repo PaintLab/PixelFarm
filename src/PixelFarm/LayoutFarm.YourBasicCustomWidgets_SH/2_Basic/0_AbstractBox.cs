@@ -3,9 +3,7 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
-using LayoutFarm.UI;
-using System.Runtime.Remoting.Messaging;
-
+using LayoutFarm.UI; 
 namespace LayoutFarm.CustomWidgets
 {
 

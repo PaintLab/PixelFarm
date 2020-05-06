@@ -40,7 +40,7 @@ namespace LayoutFarm
 
     }
 
-    static class RenderElemHelper
+    public static class RenderElemHelper
     {
 
         public static void DrawChildContent(HitTestHint hitTestHint, IEnumerable<RenderElement> drawingIter, DrawBoard d, UpdateArea updateArea)
