@@ -14,7 +14,7 @@ namespace LayoutFarm
         int _b_height;
 
 
-        int _uiLayoutFlags;
+        
         //------------------------ 
 
         /// <summary>
@@ -91,39 +91,39 @@ namespace LayoutFarm
             }
         }
         //----------------------------------------------- 
-        public bool HasSpecificWidth
-        {
-            get => ((_uiLayoutFlags & RenderElementConst.LY_HAS_SPC_WIDTH) == RenderElementConst.LY_HAS_SPC_WIDTH);
+        //public bool HasSpecificWidth
+        //{
+        //    get => ((_uiLayoutFlags & RenderElementConst.LY_HAS_SPC_WIDTH) == RenderElementConst.LY_HAS_SPC_WIDTH);
 
-            set => _uiLayoutFlags = value ?
-                   _uiLayoutFlags | RenderElementConst.LY_HAS_SPC_WIDTH :
-                   _uiLayoutFlags & ~RenderElementConst.LY_HAS_SPC_WIDTH;
-        }
-        public bool HasSpecificHeight
-        {
-            get => ((_uiLayoutFlags & RenderElementConst.LY_HAS_SPC_HEIGHT) == RenderElementConst.LY_HAS_SPC_HEIGHT);
+        //    set => _uiLayoutFlags = value ?
+        //           _uiLayoutFlags | RenderElementConst.LY_HAS_SPC_WIDTH :
+        //           _uiLayoutFlags & ~RenderElementConst.LY_HAS_SPC_WIDTH;
+        //}
+        //public bool HasSpecificHeight
+        //{
+        //    get => ((_uiLayoutFlags & RenderElementConst.LY_HAS_SPC_HEIGHT) == RenderElementConst.LY_HAS_SPC_HEIGHT);
 
-            set => _uiLayoutFlags = value ?
-                   _uiLayoutFlags | RenderElementConst.LY_HAS_SPC_HEIGHT :
-                   _uiLayoutFlags & ~RenderElementConst.LY_HAS_SPC_HEIGHT;
-        }
+        //    set => _uiLayoutFlags = value ?
+        //           _uiLayoutFlags | RenderElementConst.LY_HAS_SPC_HEIGHT :
+        //           _uiLayoutFlags & ~RenderElementConst.LY_HAS_SPC_HEIGHT;
+        //}
 
-        public bool HasSpecificWidthAndHeight
-        {
-            get => ((_uiLayoutFlags & RenderElementConst.LY_HAS_SPC_SIZE) != 0);
+        //public bool HasSpecificWidthAndHeight
+        //{
+        //    get => ((_uiLayoutFlags & RenderElementConst.LY_HAS_SPC_SIZE) != 0);
 
-            set => _uiLayoutFlags = value ?
-                    _uiLayoutFlags | RenderElementConst.LY_HAS_SPC_SIZE :
-                    _uiLayoutFlags & ~RenderElementConst.LY_HAS_SPC_SIZE;
+        //    set => _uiLayoutFlags = value ?
+        //            _uiLayoutFlags | RenderElementConst.LY_HAS_SPC_SIZE :
+        //            _uiLayoutFlags & ~RenderElementConst.LY_HAS_SPC_SIZE;
 
-        }
+        //}
         protected bool NeedInvalidateRectEvent
         {
-            get => ((_uiLayoutFlags & RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT) != 0);
+            get => ((_propFlags & RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT) != 0);
 
-            set => _uiLayoutFlags = value ?
-                    _uiLayoutFlags | RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT :
-                    _uiLayoutFlags & ~RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT;
+            set => _propFlags = value ?
+                    _propFlags | RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT :
+                    _propFlags & ~RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT;
 
         }
 

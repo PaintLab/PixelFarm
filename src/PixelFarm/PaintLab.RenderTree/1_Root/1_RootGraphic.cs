@@ -338,7 +338,7 @@ namespace LayoutFarm
 
         //--------------------------------------------------------------------------
         public abstract void PrepareRender();
-        public abstract void TopDownRecalculateContent();
+    
         public event EventHandler PreRenderEvent;
         protected void InvokePreRenderEvent() => PreRenderEvent?.Invoke(this, EventArgs.Empty);
 

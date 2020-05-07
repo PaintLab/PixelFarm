@@ -33,8 +33,7 @@ namespace LayoutFarm.RenderBoxes
     sealed class RenderElementCollection
     {
         readonly LinkedList<RenderElement> _myElements = new LinkedList<RenderElement>();
-        int _contentW;
-        int _contentH;
+        
 
 #if DEBUG
         static int dbug_TotalId;
@@ -138,49 +137,49 @@ namespace LayoutFarm.RenderBoxes
             }
         }
 
-        static Size ReCalculateContentSizeNoLayout(LinkedList<RenderElement> velist)
-        {
-            int local_lineWidth = 0;
-            int local_lineHeight = 17;
-            LinkedListNode<RenderElement> curNode = velist.First;
-            while (curNode != null)
-            {
-                RenderElement visualElement = curNode.Value;
-                if (!visualElement.HasCalculatedSize)
-                {
-                    visualElement.TopDownReCalculateContentSize();
-                }
-                int e_desiredRight = visualElement.Right;
-                if (local_lineWidth < e_desiredRight)
-                {
-                    local_lineWidth = e_desiredRight;
-                }
-                int e_desiredBottom = visualElement.Bottom;
-                if (local_lineHeight < e_desiredBottom)
-                {
-                    local_lineHeight = e_desiredBottom;
-                }
-                curNode = curNode.Next;
-            }
+        //static Size ReCalculateContentSizeNoLayout(LinkedList<RenderElement> velist)
+        //{
+        //    int local_lineWidth = 0;
+        //    int local_lineHeight = 17;
+        //    LinkedListNode<RenderElement> curNode = velist.First;
+        //    while (curNode != null)
+        //    {
+        //        RenderElement visualElement = curNode.Value;
+        //        if (!visualElement.HasCalculatedSize)
+        //        {
+        //            visualElement.TopDownReCalculateContentSize();
+        //        }
+        //        int e_desiredRight = visualElement.Right;
+        //        if (local_lineWidth < e_desiredRight)
+        //        {
+        //            local_lineWidth = e_desiredRight;
+        //        }
+        //        int e_desiredBottom = visualElement.Bottom;
+        //        if (local_lineHeight < e_desiredBottom)
+        //        {
+        //            local_lineHeight = e_desiredBottom;
+        //        }
+        //        curNode = curNode.Next;
+        //    }
 
-            return new Size(local_lineWidth, local_lineHeight);
-        }
+        //    return new Size(local_lineWidth, local_lineHeight);
+        //}
 
-        public void TopDownReCalculateContentSize()
-        {
-            //#if DEBUG
+        //public void TopDownReCalculateContentSize()
+        //{
+        //    //#if DEBUG
 
-            //            vinv_dbug_EnterLayerReCalculateContent(this);
-            //#endif
-            Size s = ReCalculateContentSizeNoLayout(_myElements);
-            _contentW = s.Width;
-            _contentH = s.Height;
+        //    //            vinv_dbug_EnterLayerReCalculateContent(this);
+        //    //#endif
+        //    Size s = ReCalculateContentSizeNoLayout(_myElements);
+        //    _contentW = s.Width;
+        //    _contentH = s.Height;
 
-            //#if DEBUG
-            //            vinv_dbug_ExitLayerReCalculateContent();
-            //#endif
-        }
-        public Size CalculatedContentSize => new Size(_contentW, _contentH);
+        //    //#if DEBUG
+        //    //            vinv_dbug_ExitLayerReCalculateContent();
+        //    //#endif
+        //}
+        //public Size CalculatedContentSize => new Size(_contentW, _contentH);
 #if DEBUG
         public dbugLayoutInfo dbugGetLayerInfo() => new dbugLayoutInfo(this.dbug_id);
         public void dbug_DumpElementProps(dbugLayoutMsgWriter writer)
@@ -197,8 +196,7 @@ namespace LayoutFarm.RenderBoxes
         public int dbugChildCount => _myElements.Count;
         public override string ToString()
         {
-            return "elems " + "(L" + dbug_id + ") postcal:" +
-                new Size(_contentW, _contentH);
+            return "elems " + "(L" + dbug_id + ")";
         }
 #endif
     }

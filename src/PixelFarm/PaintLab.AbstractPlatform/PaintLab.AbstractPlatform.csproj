@@ -202,9 +202,6 @@
     <Compile Include="..\PaintLab.RenderTree\2_RenderElement\2_RenderElement.ElementPositioning_1_WithSizeChanged.cs">
       <Link>0_REF_PaintLab.RenderTree\2_RenderElement\2_RenderElement.ElementPositioning_1_WithSizeChanged.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree\2_RenderElement\3_RenderElement.Bubble_Layout.cs">
-      <Link>0_REF_PaintLab.RenderTree\2_RenderElement\3_RenderElement.Bubble_Layout.cs</Link>
-    </Compile>
     <Compile Include="..\PaintLab.RenderTree\2_RenderElement\4_RenderElement.Bubble_Repaint.cs">
       <Link>0_REF_PaintLab.RenderTree\2_RenderElement\4_RenderElement.Bubble_Repaint.cs</Link>
     </Compile>

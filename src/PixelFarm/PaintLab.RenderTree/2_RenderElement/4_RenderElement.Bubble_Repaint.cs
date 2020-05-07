@@ -28,7 +28,7 @@ namespace LayoutFarm
         {
             //RELATIVE to this ***
             _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
-            if ((_uiLayoutFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0)
+            if ((_propFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0)
             {
 #if DEBUG
                 dbugVRoot.dbug_PushInvalidateMsg(RootGraphic.dbugMsg_BLOCKED, this);
@@ -57,7 +57,7 @@ namespace LayoutFarm
         public void InvalidateGraphics(Rectangle rect)
         {
             _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
-            if ((_uiLayoutFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0)
+            if ((_propFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0)
             {
 #if DEBUG
                 dbugVRoot.dbug_PushInvalidateMsg(RootGraphic.dbugMsg_BLOCKED, this);
@@ -77,7 +77,7 @@ namespace LayoutFarm
         {
             //RELATIVE to this ***
             _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
-            if ((_uiLayoutFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0)
+            if ((_propFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0)
             {
 #if DEBUG
                 dbugVRoot.dbug_PushInvalidateMsg(RootGraphic.dbugMsg_BLOCKED, this);
@@ -107,7 +107,7 @@ namespace LayoutFarm
             RenderElement parent = this.ParentRenderElement; //start at parent ****
 
             //--------------------------------------- 
-            if ((_uiLayoutFlags & RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT) != 0)
+            if ((_propFlags & RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT) != 0)
             {
                 OnInvalidateGraphicsNoti(true, ref totalBounds);
             }
@@ -126,7 +126,7 @@ namespace LayoutFarm
         }
         internal static bool RequestInvalidateGraphicsNoti(RenderElement re)
         {
-            return (re._uiLayoutFlags & RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT) != 0;
+            return (re._propFlags & RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT) != 0;
         }
         internal static void InvokeInvalidateGraphicsNoti(RenderElement re, bool fromMe, Rectangle totalBounds)
         {
@@ -137,18 +137,18 @@ namespace LayoutFarm
 
         public void SuspendGraphicsUpdate()
         {
-            _uiLayoutFlags |= RenderElementConst.LY_SUSPEND_GRAPHIC;
+            _propFlags |= RenderElementConst.LY_SUSPEND_GRAPHIC;
         }
         public void ResumeGraphicsUpdate()
         {
-            _uiLayoutFlags &= ~RenderElementConst.LY_SUSPEND_GRAPHIC;
+            _propFlags &= ~RenderElementConst.LY_SUSPEND_GRAPHIC;
         }
         internal bool BlockGraphicUpdateBubble
         {
             get
             {
 #if DEBUG
-                return (_uiLayoutFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0;
+                return (_propFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0;
 #else
                 return (_uiLayoutFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0;
 #endif

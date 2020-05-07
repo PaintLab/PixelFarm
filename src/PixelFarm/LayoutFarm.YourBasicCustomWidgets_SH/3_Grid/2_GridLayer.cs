@@ -492,13 +492,13 @@ namespace LayoutFarm.UI
 
 
         }
-        static void ReCalculateContentSize(GridCell cell)
-        {
-            if (cell.ContentElement is RenderElement renderE && !renderE.HasCalculatedSize)
-            {
-                renderE.TopDownReCalculateContentSize();
-            }
-        }
+        //static void ReCalculateContentSize(GridCell cell)
+        //{
+        //    if (cell.ContentElement is RenderElement renderE && !renderE.HasCalculatedSize)
+        //    {
+        //        renderE.TopDownReCalculateContentSize();
+        //    }
+        //}
 
         static void ReCalculateColumnSize(GridColumn col)
         {
@@ -511,7 +511,7 @@ namespace LayoutFarm.UI
                 for (int i = 0; i < j; i++)
                 {
                     GridCell cell = col.GetCell(i);
-                    ReCalculateContentSize(cell);
+                    //ReCalculateContentSize(cell);
                     int cellDesiredWidth = col.Width;
                     int cellDesiredHeight = cell.Height;
                     var content = cell.ContentElement as RenderElement;
@@ -614,29 +614,32 @@ namespace LayoutFarm.UI
             {
                 for (int i = startRowId; i < stopRowId; i++)
                 {
-                    GridCell gridItem = currentColumn.GetCell(i);
-                    if (gridItem != null && gridItem.HasContent)
+                    GridCell cell = currentColumn.GetCell(i);
+                    if (cell != null && cell.HasContent)
                     {
 
-                        if (!(gridItem.ContentElement is RenderElement renderContent)) continue;
+                        if (!(cell.ContentElement is RenderElement renderContent)) continue;
                         //---------------------------
                         //TODO: review here again
-                        int x = gridItem.X;
-                        int y = gridItem.Y;
+                        int x = cell.X;
+                        int y = cell.Y;
 
                         updateArea.CurrentRect = backup;//reset (1)
+
                         d.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
-
-                        updateArea.CurrentRect = backup;//restore
-
-                        if (d.PushClipAreaRect(gridItem.Width, gridItem.Height, updateArea))
+                        updateArea.Offset(-x, -y);
+                        if (cell.NeedClipArea)
                         {
-                            updateArea.Offset(-x, -y);
-                            RenderElement.Render(renderContent, d, updateArea);
-                            updateArea.Offset(x, y);//not need to offset back -since we reset (1)
-                            d.PopClipAreaRect();
+                            if (d.PushClipAreaRect(cell.Width, cell.Height, updateArea))
+                            {
+                                RenderElement.Render(renderContent, d, updateArea);
+                                d.PopClipAreaRect();
+                            }
                         }
-
+                        else
+                        {
+                            RenderElement.Render(renderContent, d, updateArea);
+                        } 
                     }
 #if DEBUG
                     else

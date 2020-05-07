@@ -196,7 +196,7 @@ namespace YourImplementation
 
             appHost.StartApp(demo);
             //
-            viewroot.TopDownRecalculateContent();
+            //viewroot.TopDownRecalculateContent();
             //==================================================  
             viewroot.PaintToOutputWindow();
 

@@ -18,9 +18,7 @@ namespace LayoutFarm.CustomWidgets
         {
             if (_canvasRenderElement == null)
             {
-                var canvas = new MiniAggCanvasRenderElement(this.Width, this.Height);
-                canvas.HasSpecificHeight = this.HasSpecificHeight;
-                canvas.HasSpecificWidth = this.HasSpecificWidth;
+                var canvas = new MiniAggCanvasRenderElement(this.Width, this.Height); 
                 canvas.SetLocation(this.Left, this.Top);
                 canvas.Painter.StrokeWidth = 1;
                 canvas.Painter.StrokeColor = PixelFarm.Drawing.Color.Black;

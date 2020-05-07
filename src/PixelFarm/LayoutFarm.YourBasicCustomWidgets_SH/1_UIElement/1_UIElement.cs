@@ -1,5 +1,6 @@
 ﻿//Apache2, 2014-present, WinterDev
 
+
 using PixelFarm.Drawing;
 using System.Collections.Generic;
 namespace LayoutFarm.UI
@@ -45,12 +46,13 @@ namespace LayoutFarm.UI
             }
 #endif
 
+            LayoutUpdateArgs layoutArgs = null;
 
             for (int i = count - 1; i >= 0; --i)
             {
                 UIElement ui = s_layoutQueue.Dequeue();
                 ui.IsInLayoutQueue = false;
-                UIElement.InvokeContentLayout(ui);
+                UIElement.InvokeContentLayout(ui, layoutArgs);
 #if DEBUG
                 if (ui.IsInLayoutQueue)
                 {
@@ -62,6 +64,11 @@ namespace LayoutFarm.UI
         }
     }
 
+    public class LayoutUpdateArgs
+    {
+        public int AvailableWidth { get; set; }
+
+    }
 
     public abstract class LayoutInstance
     {
@@ -91,6 +98,7 @@ namespace LayoutFarm.UI
 
         bool _hide;
         protected bool _needContentLayout;
+        protected bool _hasMinSize;
         internal object _collectionLinkNode; //optional, eg for linked-list node, RB-tree-node
 
         public UIElement()
@@ -171,6 +179,7 @@ namespace LayoutFarm.UI
         {
             left = top = 0;
         }
+       
         public void GetElementBounds(
            out float left,
            out float top,
@@ -182,6 +191,7 @@ namespace LayoutFarm.UI
             right = _right;
             bottom = _bottom;
         }
+
         protected void SetElementBoundsWH(float width, float height)
         {
 #if DEBUG
@@ -379,18 +389,19 @@ namespace LayoutFarm.UI
         {
             //
         }
-        internal static void InvokeContentLayout(UIElement ui)
+        internal static void InvokeContentLayout(UIElement ui, LayoutUpdateArgs args)
         {
-            ui.OnContentLayout();
+            //called by central layout queue
+            ui.PerformContentLayout(args);
         }
+        public virtual void PerformContentLayout(LayoutUpdateArgs args)
+        {
 
-        protected virtual void OnContentLayout()
-        {
         }
-        protected virtual void OnContentUpdate()
+        public virtual SizeF CalculateMinimumSize(LayoutUpdateArgs args)
         {
+            return new SizeF(_right - _left, _bottom - _top);
         }
-
         protected virtual void OnElementChanged()
         {
         }

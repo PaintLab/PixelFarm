@@ -6,7 +6,7 @@ using PixelFarm.Drawing;
 
 namespace LayoutFarm.UI
 {
-   
+
 
     /// <summary>
     /// abstract Rect UI Element
@@ -79,6 +79,13 @@ namespace LayoutFarm.UI
         public RectUIAlignment HorizontalAlignment { get; set; }
         public VerticalAlignment VerticalAlignment { get; set; }
 
+
+
+        public int CalculatedMinWidth { get; protected set; }
+        public int CalculatedMinHeight { get; protected set; }
+
+        public ushort UserSpecificMinWidth { get; set; }
+        public ushort UserSpecificMinHeight { get; set; }
 
         public event EventHandler<ViewportChangedEventArgs> ViewportChanged;//TODO: review this*** => use event queue?
 
@@ -424,12 +431,6 @@ namespace LayoutFarm.UI
             SetViewport(x, y, this);
         }
 
-        //------------------------------
-        public virtual void PerformContentLayout()
-        {
-            //AbstractRect dose not have content
-        }
-        //
         public virtual int InnerHeight => this.Height;
         //
         public virtual int InnerWidth => this.Width;
@@ -437,40 +438,17 @@ namespace LayoutFarm.UI
         public bool HasSpecificWidth
         {
             get => _specificWidth;
-            set
-            {
-                _specificWidth = value;
-                if (this.CurrentPrimaryRenderElement != null)
-                {
-                    CurrentPrimaryRenderElement.HasSpecificWidth = value;
-                }
-            }
+            set => _specificWidth = value;
         }
         public bool HasSpecificHeight
         {
             get => _specificHeight;
-            set
-            {
-                _specificHeight = value;
-                if (this.CurrentPrimaryRenderElement != null)
-                {
-                    CurrentPrimaryRenderElement.HasSpecificHeight = value;
-                }
-            }
+            set => _specificHeight = value;
         }
         public bool HasSpecificWidthAndHeight
         {
             get => _specificHeight && _specificWidth;
-            set
-            {
-                _specificHeight = _specificWidth = value;
-
-                if (this.CurrentPrimaryRenderElement != null)
-                {
-                    CurrentPrimaryRenderElement.HasSpecificHeight = value;
-                    CurrentPrimaryRenderElement.HasSpecificWidth = value;
-                }
-            }
+            set => _specificHeight = _specificWidth = value;
         }
 
         public Rectangle Bounds => new Rectangle(this.Left, this.Top, this.Width, this.Height);
@@ -610,6 +588,7 @@ namespace LayoutFarm.UI
                 SetLocationAndSize((int)bounds.Left, (int)bounds.Top, (int)bounds.Width, (int)bounds.Height);
             }
         }
+
     }
 
     public static class UIElementExtensions
