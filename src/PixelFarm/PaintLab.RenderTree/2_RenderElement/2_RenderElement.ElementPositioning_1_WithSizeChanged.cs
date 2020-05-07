@@ -28,6 +28,7 @@ namespace LayoutFarm
         }
         public void SetSize2(int width, int height)
         {
+            //TODO: review here
             if (_parentLink == null)
             {
                 //direct set size
@@ -44,9 +45,13 @@ namespace LayoutFarm
                     _b_height = height;
                     //combine before and after rect 
                     //add to invalidate root invalidate queue 
-                    Rectangle union = Rectangle.Union(prevBounds, this.RectBounds);
-                    AdjustClientBounds(ref union);
-                    this.InvalidateParentGraphics(union);
+
+                    if (!GlobalRootGraphic.s_SuspendGraphicsUpdate)
+                    {
+                        Rectangle union = Rectangle.Union(prevBounds, this.RectBounds);
+                        AdjustClientBounds(ref union); //***
+                        this.InvalidateParentGraphics(union);
+                    }
                 }
             }
         }
@@ -75,7 +80,10 @@ namespace LayoutFarm
                     _b_height = height;
                     //combine before and after rect 
                     //add to invalidate root invalidate queue  
-                    this.InvalidateParentGraphics(Rectangle.Union(prevBounds, this.RectBounds));
+                    if (!GlobalRootGraphic.s_SuspendGraphicsUpdate)
+                    {
+                        this.InvalidateParentGraphics(Rectangle.Union(prevBounds, this.RectBounds));
+                    }
                 }
             }
         }
@@ -93,7 +101,7 @@ namespace LayoutFarm
                 if (_b_left != left || _b_top != top)
                 {
                     //set location not affect its content size 
-                    if (!_needClipArea)
+                    if (!NeedClipArea)
                     {
 
                         //Size innerContentSize = InnerContentSize;
@@ -109,10 +117,11 @@ namespace LayoutFarm
                         //----------------   
                         //combine before and after rect  
                         //add to invalidate root invalidate queue
-                        RenderElement clipParent = GetFirstClipParentRenderElement(this);
-                        clipParent?.InvalidateGraphics();
 
-                        //this.InvalidateParentGraphics(Rectangle.Union(prevBounds, newBounds));
+                        if (!GlobalRootGraphic.s_SuspendGraphicsUpdate)
+                        {
+                            GetFirstClipParentRenderElement(this)?.InvalidateGraphics();
+                        }
                     }
                     else
                     {
@@ -123,7 +132,10 @@ namespace LayoutFarm
                         //----------------   
                         //combine before and after rect  
                         //add to invalidate root invalidate queue
-                        this.InvalidateParentGraphics(Rectangle.Union(prevBounds, this.RectBounds));
+                        if (!GlobalRootGraphic.s_SuspendGraphicsUpdate)
+                        {
+                            this.InvalidateParentGraphics(Rectangle.Union(prevBounds, this.RectBounds));
+                        }
                     }
                 }
             }
@@ -156,7 +168,10 @@ namespace LayoutFarm
                     _b_width = width;
                     _b_height = height;
 
-                    this.InvalidateParentGraphics(Rectangle.Union(prevBounds, this.RectBounds));
+                    if (!GlobalRootGraphic.s_SuspendGraphicsUpdate)
+                    {
+                        this.InvalidateParentGraphics(Rectangle.Union(prevBounds, this.RectBounds));
+                    }
                 }
             }
         }
@@ -164,7 +179,7 @@ namespace LayoutFarm
         {
             //not invalidate graphics msg
             _b_width = width;
-            _b_height = height;                
+            _b_height = height;
         }
     }
 }

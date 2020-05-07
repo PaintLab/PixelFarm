@@ -75,16 +75,16 @@ namespace LayoutFarm.CustomWidgets
 
         public override RenderElement CurrentPrimaryRenderElement => _textFlowRenderBox;
 
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        public override RenderElement GetPrimaryRenderElement()
         {
             if (_textFlowRenderBox == null)
             {
-                var txtFlowRenderBox = new TextFlowRenderBox(rootgfx, this.Width, this.Height, true);
+                var txtFlowRenderBox = new TextFlowRenderBox(this.Width, this.Height, true);
                 txtFlowRenderBox.BackgroundColor = _backColor;
 
                 if (_textSpanStyle.ReqFont == null)
                 {
-                    _textSpanStyle.ReqFont = rootgfx.DefaultTextEditFontInfo;
+                    _textSpanStyle.ReqFont = GlobalRootGraphic.CurrentRootGfx.DefaultTextEditFontInfo;
                 }
 
                 txtFlowRenderBox.CurrentTextSpanStyle = _textSpanStyle;

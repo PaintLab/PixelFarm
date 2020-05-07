@@ -21,7 +21,7 @@ namespace LayoutFarm.CustomWidgets
         {
 
         }
-        
+
         public override void NotifyContentUpdate(UIElement childContent)
         {
             //set propersize
@@ -125,12 +125,9 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
-        protected override void OnAcceptVisitor(UIVisitor visitor)
-        {
-            if (_uiList != null)
-            {
-                _uiList.AcceptVisitor(visitor);
-            }
-        }
+        protected override void OnAcceptVisitor(UIVisitor visitor) => _uiList?.AcceptVisitor(visitor);
+
+       
+         
     }
 }

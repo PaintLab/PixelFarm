@@ -22,6 +22,12 @@ namespace LayoutFarm
         Bottom,
         UserSpecific
     }
+    public enum RectUIAlignment : byte
+    {
+        Begin, //left, if host is horizontal stack ,or top if host is vertical stack
+        Middle,
+        End, //right, if host is horizontal stack ,or bottom if host is vertical stack
+    }
 
     public interface IContainerRenderElement
     {
@@ -31,18 +37,18 @@ namespace LayoutFarm
         void InsertBefore(RenderElement beforeElem, RenderElement renderE);
         void RemoveChild(RenderElement renderE);
         void ClearAllChildren();
-        RootGraphic Root { get; }
+
     }
 
-    static class RenderElemHelper
+    public static class RenderElemHelper
     {
 
-        public static void DrawChildContent(HitTestHint layoutHint, IEnumerable<RenderElement> drawingIter, DrawBoard d, UpdateArea updateArea)
+        public static void DrawChildContent(HitTestHint hitTestHint, IEnumerable<RenderElement> drawingIter, DrawBoard d, UpdateArea updateArea)
         {
             int enter_canvas_x = d.OriginX;
             int enter_canvas_y = d.OriginY;
 
-            switch (layoutHint)
+            switch (hitTestHint)
             {
                 default:
                     {
@@ -124,7 +130,7 @@ namespace LayoutFarm
             }
         }
 
-        public static bool HitTestCore(HitChain hitChain, HitTestHint layoutHint, IEnumerable<RenderElement> hitTestIter)
+        public static bool HitTestCore(HitChain hitTestHint, HitTestHint layoutHint, IEnumerable<RenderElement> hitTestIter)
         {
             switch (layoutHint)
             {
@@ -132,7 +138,7 @@ namespace LayoutFarm
                     {
                         foreach (RenderElement renderE in hitTestIter)
                         {
-                            if (renderE.HitTestCore(hitChain))
+                            if (renderE.HitTestCore(hitTestHint))
                             {
                                 return true;
                             }
@@ -144,11 +150,11 @@ namespace LayoutFarm
                         foreach (RenderElement renderE in hitTestIter)
                         {
 
-                            if (renderE.HitTestCore(hitChain))
+                            if (renderE.HitTestCore(hitTestHint))
                             {
                                 return true;
                             }
-                            else if (renderE.Right < hitChain.TestPointX)
+                            else if (renderE.Right < hitTestHint.TestPointX)
                             {
                                 //hitTestIter iterates from right to left
                                 //so in this case (eg. we have whitespace between each elem)
@@ -166,11 +172,11 @@ namespace LayoutFarm
                         {
 
 
-                            if (renderE.HitTestCore(hitChain))
+                            if (renderE.HitTestCore(hitTestHint))
                             {
                                 return true;
                             }
-                            else if (renderE.Bottom < hitChain.TestPointY)
+                            else if (renderE.Bottom < hitTestHint.TestPointY)
                             {
                                 //hitTestIter iterates from bottom to top
                                 //so in this case (eg. we have whitespace between each elem)
@@ -189,10 +195,11 @@ namespace LayoutFarm
         protected int _viewportLeft;
         protected int _viewportTop;
 
-        public AbstractRectRenderElement(RootGraphic rootgfx, int width, int height)
-             : base(rootgfx, width, height)
+        public AbstractRectRenderElement(int width, int height)
+             : base(width, height)
         {
             this.MayHasViewport = true;
+
         }
         public override sealed int ViewportLeft => _viewportLeft;
         public override sealed int ViewportTop => _viewportTop;
@@ -207,12 +214,11 @@ namespace LayoutFarm
                 _viewportTop = viewportTop;
                 //
 
-                InvalidateGfxArgs args = RootGetInvalidateGfxArgs();
+                InvalidateGfxArgs args = BubbleInvalidater.GetInvalidateGfxArgs();
                 args.SetReason_ChangeViewport(this, diffLeft, diffTop);
                 this.InvalidateGraphics(args);
             }
         }
-
 
     }
 
@@ -224,8 +230,8 @@ namespace LayoutFarm
     {
 
         RenderElementCollection _elements;
-        public RenderBoxBase(RootGraphic rootgfx, int width, int height)
-            : base(rootgfx, width, height)
+        public RenderBoxBase(int width, int height)
+            : base(width, height)
         {
             this.MayHasChild = true;
         }
@@ -241,60 +247,62 @@ namespace LayoutFarm
             }
         }
 
-        public override sealed void TopDownReCalculateContentSize()
-        {
-            //if (!ForceReArrange && this.HasCalculatedSize)
-            //{
-            //    return;
-            //}
-#if DEBUG
-            dbug_EnterTopDownReCalculateContent(this);
-#endif
-            int cHeight = this.Height;
-            int cWidth = this.Width;
-            Size ground_contentSize = Size.Empty;
-            if (_elements != null)
-            {
-                _elements.TopDownReCalculateContentSize();
-                ground_contentSize = _elements.CalculatedContentSize;
-            }
-            int finalWidth = ground_contentSize.Width;
-            if (finalWidth == 0)
-            {
-                finalWidth = this.Width;
-            }
-            int finalHeight = ground_contentSize.Height;
-            if (finalHeight == 0)
-            {
-                finalHeight = this.Height;
-            }
-            switch (GetLayoutSpecificDimensionType(this))
-            {
-                case RenderElementConst.LY_HAS_SPC_HEIGHT:
-                    {
-                        finalHeight = cHeight;
-                    }
-                    break;
-                case RenderElementConst.LY_HAS_SPC_WIDTH:
-                    {
-                        finalWidth = cWidth;
-                    }
-                    break;
-                case RenderElementConst.LY_HAS_SPC_SIZE:
-                    {
-                        finalWidth = cWidth;
-                        finalHeight = cHeight;
-                    }
-                    break;
-            }
+        //        public override sealed void TopDownReCalculateContentSize()
+        //        {
+        //            //if (!ForceReArrange && this.HasCalculatedSize)
+        //            //{
+        //            //    return;
+        //            //}
+        //#if DEBUG
+        //            dbug_EnterTopDownReCalculateContent(this);
+        //#endif
+        //            int cHeight = this.Height;
+        //            int cWidth = this.Width;
+        //            Size ground_contentSize = Size.Empty;
+        //            if (_elements != null)
+        //            {
+        //                _elements.TopDownReCalculateContentSize();
+        //                ground_contentSize = _elements.CalculatedContentSize;
+        //            }
+        //            int finalWidth = ground_contentSize.Width;
+        //            if (finalWidth == 0)
+        //            {
+        //                finalWidth = this.Width;
+        //            }
+        //            int finalHeight = ground_contentSize.Height;
+        //            if (finalHeight == 0)
+        //            {
+        //                finalHeight = this.Height;
+        //            }
+        //            switch (GetLayoutSpecificDimensionType(this))
+        //            {
+        //                default:
+        //                    break;
+        //                case RenderElementConst.LY_HAS_SPC_HEIGHT:
+        //                    {
+        //                        finalHeight = cHeight;
+        //                    }
+        //                    break;
+        //                case RenderElementConst.LY_HAS_SPC_WIDTH:
+        //                    {
+        //                        finalWidth = cWidth;
+        //                    }
+        //                    break;
+        //                case RenderElementConst.LY_HAS_SPC_SIZE:
+        //                    {
+        //                        finalWidth = cWidth;
+        //                        finalHeight = cHeight;
+        //                    }
+        //                    break;
+        //            }
 
 
-            SetCalculatedSize(this, finalWidth, finalHeight);
-#if DEBUG
-            dbug_ExitTopDownReCalculateContent(this);
-#endif
+        //            SetCalculatedSize(this, finalWidth, finalHeight);
+        //#if DEBUG
+        //            dbug_ExitTopDownReCalculateContent(this);
+        //#endif
 
-        }
+        //        }
 
 
         public virtual void AddChild(RenderElement renderE)
@@ -331,7 +339,7 @@ namespace LayoutFarm
         public virtual void ClearAllChildren()
         {
             _elements?.Clear(this);
-            
+
         }
 
         public override RenderElement FindUnderlyingSiblingAtPoint(Point point)
@@ -339,34 +347,37 @@ namespace LayoutFarm
             return this.MyParentLink?.FindOverlapedChildElementAtPoint(this, point);
         }
 
-        public override Size InnerContentSize
-        {
-            get
-            {
-                if (_elements != null)
-                {
-                    Size s1 = _elements.CalculatedContentSize;
-                    int s1_w = s1.Width;
-                    int s1_h = s1.Height;
+        //TODO: review inner content size again
 
-                    if (s1_w < this.Width)
-                    {
-                        s1_w = this.Width;
-                    }
-                    if (s1_h < this.Height)
-                    {
-                        s1_h = this.Height;
-                    }
-                    return new Size(s1_w, s1_h);
-                }
-                else
-                {
-                    return this.Size;
-                }
-            }
-        }
+        public override Size InnerContentSize => this.Size;
+        //{
+        //    get
+        //    {
+        //        if (_elements != null)
+        //        {
+        //            Size s1 = _elements.CalculatedContentSize;
+        //            int s1_w = s1.Width;
+        //            int s1_h = s1.Height;
+
+        //            if (s1_w < this.Width)
+        //            {
+        //                s1_w = this.Width;
+        //            }
+        //            if (s1_h < this.Height)
+        //            {
+        //                s1_h = this.Height;
+        //            }
+        //            return new Size(s1_w, s1_h);
+        //        }
+        //        else
+        //        {
+        //            return this.Size;
+        //        }
+        //    }
+        //}
 
         internal RenderElementCollection GetElemCollection() => _elements;
+        protected IEnumerable<RenderElement> GetDrawingIter() => _elements?.GetDrawingIter();
 
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
@@ -404,50 +415,50 @@ namespace LayoutFarm
         //-----------------------------------------------------------------
         public void dbugForceTopDownReArrangeContent()
         {
-            dbug_EnterReArrangeContent(this);
-            dbug_topDownReArrContentPass++;
-            this.dbug_BeginArr++;
-            debug_PushTopDownElement(this);
-            this.MarkValidContentArrangement();
-            ////IsInTopDownReArrangePhase = true;
-            //if (_defaultLayer != null)
-            //{
-            //    _defaultLayer.TopDownReArrangeContent();
-            //}
+            //dbug_EnterReArrangeContent(this);
+            //dbug_topDownReArrContentPass++;
+            //this.dbug_BeginArr++;
+            //debug_PushTopDownElement(this);
+            //this.MarkValidContentArrangement();
+            //////IsInTopDownReArrangePhase = true;
+            ////if (_defaultLayer != null)
+            ////{
+            ////    _defaultLayer.TopDownReArrangeContent();
+            ////}
 
-            // BoxEvaluateScrollBar();
+            //// BoxEvaluateScrollBar();
 
 
-            this.dbug_FinishArr++;
-            debug_PopTopDownElement(this);
-            dbug_ExitReArrangeContent();
+            //this.dbug_FinishArr++;
+            //debug_PopTopDownElement(this);
+            //dbug_ExitReArrangeContent();
         }
         public void dbugTopDownReArrangeContentIfNeed()
         {
-            bool isIncr = false;
-            if (!this.NeedContentArrangement)
-            {
-                if (!this.dbugFirstArrangementPass)
-                {
-                    this.dbugFirstArrangementPass = true;
-                    dbug_WriteInfo(dbugVisitorMessage.PASS_FIRST_ARR);
-                }
-                else
-                {
-                    isIncr = true;
-                    this.dbugVRoot.dbugNotNeedArrCount++;
-                    this.dbugVRoot.dbugNotNeedArrCountEpisode++;
-                    dbug_WriteInfo(dbugVisitorMessage.NOT_NEED_ARR);
-                    this.dbugVRoot.dbugNotNeedArrCount--;
-                }
-                return;
-            }
+            //bool isIncr = false;
+            //if (!this.NeedContentArrangement)
+            //{
+            //    if (!this.dbugFirstArrangementPass)
+            //    {
+            //        this.dbugFirstArrangementPass = true;
+            //        dbug_WriteInfo(dbugVisitorMessage.PASS_FIRST_ARR);
+            //    }
+            //    else
+            //    {
+            //        isIncr = true;
+            //        this.dbugVRoot.dbugNotNeedArrCount++;
+            //        this.dbugVRoot.dbugNotNeedArrCountEpisode++;
+            //        dbug_WriteInfo(dbugVisitorMessage.NOT_NEED_ARR);
+            //        this.dbugVRoot.dbugNotNeedArrCount--;
+            //    }
+            //    return;
+            //}
 
-            dbugForceTopDownReArrangeContent();
-            if (isIncr)
-            {
-                this.dbugVRoot.dbugNotNeedArrCount--;
-            }
+            //dbugForceTopDownReArrangeContent();
+            //if (isIncr)
+            //{
+            //    this.dbugVRoot.dbugNotNeedArrCount--;
+            //}
         }
         public override void dbug_DumpVisualProps(dbugLayoutMsgWriter writer)
         {

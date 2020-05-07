@@ -191,7 +191,6 @@ namespace LayoutFarm.UI
         {
             _winBridge.CopyOutputPixelBuffer(0, 0, _width, _height, outputPixelBuffer);
         }
-
 #if DEBUG
         public void dbugPaintMeFullMode()
         {
@@ -200,9 +199,6 @@ namespace LayoutFarm.UI
         public IdbugOutputWindow IdebugOutputWin => _winBridge;
 
 #endif
-        public void TopDownRecalculateContent()
-        {
-            _rootgfx.TopDownRecalculateContent();
-        }
+       
     }
 }

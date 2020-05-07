@@ -21,7 +21,7 @@ namespace LayoutFarm
         //TODO: merge this to RootGraphics?
 
         static int _suspendCount;
-        internal static bool SuspendGraphicsUpdate;
+        internal static bool s_SuspendGraphicsUpdate;
 
         public static RootGraphic CurrentRootGfx;
         public static RenderElement CurrentRenderElement;
@@ -42,150 +42,30 @@ namespace LayoutFarm
 
             }
         }
-        public static void BlockGraphicsUpdate()
+        public static void SuspendGraphicsUpdate()
         {
             _suspendCount++;
-            SuspendGraphicsUpdate = true;
+            s_SuspendGraphicsUpdate = true;
         }
-        public static void ReleaseGraphicsUpdate()
+        public static void ResumeGraphicsUpdate()
         {
             _suspendCount--;
-            SuspendGraphicsUpdate = _suspendCount > 0;
+            s_SuspendGraphicsUpdate = _suspendCount > 0;
         }
         public static void ForceResumeGraphicsUpdate()
         {
             _suspendCount = 0;
-            SuspendGraphicsUpdate = false;
+            s_SuspendGraphicsUpdate = false;
         }
     }
 
-
-
-    public abstract partial class RootGraphic
+    static class BubbleInvalidater
     {
-        public delegate void PaintToOutputWindowDelegate();
-        protected PaintToOutputWindowDelegate _paintToOutputWindowHandler; 
-        Action<Rectangle> _canvasInvalidateDelegate;
-        Rectangle _accumulateInvalidRect;
-        bool _hasAccumRect;
-        bool _hasRenderTreeInvalidateAccumRect;
 
-#if DEBUG
-        static int dbugTotalId;
-        public readonly int dbugId = dbugTotalId++;
-#endif
-        public RootGraphic(int width, int heigth)
-        {
-            this.Width = width;
-            this.Height = heigth;
-        }
-        public abstract ITextService TextServices { get; }
-        public abstract RequestFont DefaultTextEditFontInfo { get; }
-        public abstract IRenderElement TopWindowRenderBox { get; }
-        public abstract void AddChild(RenderElement renderE);
-        public abstract void SetCurrentKeyboardFocus(RenderElement renderElement);
-        public abstract void SetPrimaryContainerElement(RenderBoxBase renderBox);
-        public int Width { get; internal set; }
-        public int Height { get; internal set; }
-        public int ViewportDiffLeft { get; private set; }
-        public int ViewportDiffTop { get; private set; }
-        public bool HasViewportOffset { get; private set; }
-        //---------------------------------------------      
+        static readonly SimplePool<InvalidateGfxArgs> _invGfxPool = new SimplePool<InvalidateGfxArgs>(() => new InvalidateGfxArgs(), a => a.Reset());
 
-        /// <summary>
-        /// close window box root
-        /// </summary>
-        public abstract void CloseWinRoot();
-        //--------------------------------------------- 
-        //carets ...
-        public abstract void CaretStartBlink();
-        public abstract void CaretStopBlink();
-        public bool CaretHandleRegistered { get; set; }
-        //------- -------------------------------------- 
-
-        //timers
-        public abstract bool GfxTimerEnabled { get; set; }
-        public abstract GraphicsTimerTask SubscribeGraphicsIntervalTask(
-            object uniqueName,
-            TaskIntervalPlan planName,
-            int intervalMs,
-            EventHandler<GraphicsTimerTaskEventArgs> tickhandler);
-        public abstract void RemoveIntervalTask(object uniqueName);
-
-
-        //--------------------------------------------------------------------------
-        public abstract void PrepareRender();
-        public abstract void TopDownRecalculateContent();
-        public event EventHandler PreRenderEvent;
-        protected void InvokePreRenderEvent() => PreRenderEvent?.Invoke(this, EventArgs.Empty);
-
-        public bool IsInRenderPhase { get; private set; }
-        public virtual void BeginRenderPhase() { IsInRenderPhase = true; }
-        public virtual void EndRenderPhase() { IsInRenderPhase = false; }
-
-        public bool HasAccumInvalidateRect => _hasAccumRect;
-        public Rectangle AccumInvalidateRect => _accumulateInvalidRect;
-        public bool HasRenderTreeInvalidateAccumRect => _hasRenderTreeInvalidateAccumRect;
-
-        public abstract void ManageRenderElementRequests();
-        public virtual void EnqueueRenderRequest(RenderElementRequest renderReq) { }
-
-
-        public void FlushAccumGraphics()
-        {
-            if (!_hasAccumRect)
-            {
-                return;
-            }
-
-            if (this.IsInRenderPhase) { return; }
-
-#if DEBUG
-            //if (_accumulateInvalidRect.Height > 30 && _accumulateInvalidRect.Height < 100)
-            //{
-            //}
-
-            //System.Diagnostics.Debug.WriteLine("flush1:" + _accumulateInvalidRect.ToString());
-#endif
-
-
-            //TODO review this 
-            _canvasInvalidateDelegate?.Invoke(_accumulateInvalidRect);
-
-            _paintToOutputWindowHandler();
-            _hasAccumRect = false;
-            _hasRenderTreeInvalidateAccumRect = false;
-        }
-        public void SetPaintDelegates(Action<Rectangle> canvasInvalidateDelegate, PaintToOutputWindowDelegate paintToOutputHandler)
-        {
-            _canvasInvalidateDelegate = canvasInvalidateDelegate;
-            _paintToOutputWindowHandler = paintToOutputHandler;
-        }
-        public static void InvalidateRectArea(RootGraphic rootgfx, Rectangle invalidateRect)
-        {
-#if DEBUG
-            Rectangle preview = Rectangle.Union(rootgfx._accumulateInvalidRect, invalidateRect);
-            if (preview.Height > 30 && preview.Height < 100)
-            {
-
-            }
-            //System.Diagnostics.Debug.WriteLine("flush1:" + rootgfx._accumulateInvalidRect.ToString());
-#endif
-            //invalidate rect come from external UI (not from interal render tree)
-            rootgfx._accumulateInvalidRect = Rectangle.Union(rootgfx._accumulateInvalidRect, invalidateRect);
-#if DEBUG
-            if (rootgfx._accumulateInvalidRect.Height > 30)
-            {
-
-            }
-#endif
-
-            rootgfx._hasAccumRect = true;
-        }
-
-        readonly List<InvalidateGfxArgs> _accumInvalidateQueue = new List<InvalidateGfxArgs>();
-        readonly SimplePool<InvalidateGfxArgs> _invGfxPool = new SimplePool<InvalidateGfxArgs>(() => new InvalidateGfxArgs(), a => a.Reset());
-        public InvalidateGfxArgs GetInvalidateGfxArgs()
+        public static bool IsInRenderPhase { get; set; }
+        public static InvalidateGfxArgs GetInvalidateGfxArgs()
         {
 #if DEBUG
             InvalidateGfxArgs invGfx = _invGfxPool.Borrow();
@@ -196,7 +76,7 @@ namespace LayoutFarm
             return _invGfxPool.Borrow();
 #endif
         }
-        internal void ReleaseInvalidateGfxArgs(InvalidateGfxArgs args)
+        public static void ReleaseInvalidateGfxArgs(InvalidateGfxArgs args)
         {
 #if DEBUG
             if (args.dbugWaitingInPool)
@@ -209,39 +89,45 @@ namespace LayoutFarm
             _invGfxPool.ReleaseBack(args);
         }
 
-        public void BubbleUpInvalidateGraphicArea(InvalidateGfxArgs args)
+        public static void InvalidateGraphicLocalArea(RenderElement re, Rectangle localArea)
         {
-            bool hasviewportOffset = false;
-            if (args.Reason == InvalidateReason.ViewportChanged)
+            //RELATIVE to re ***
+
+            if (localArea.Height == 0 || localArea.Width == 0)
             {
-                ViewportDiffLeft = args.LeftDiff;
-                ViewportDiffTop = args.TopDiff;
-                hasviewportOffset = true;
+                return;
             }
-            //-------------- 
-            InternalBubbleUpInvalidateGraphicArea(args);//.SrcRenderElement, ref args.Rect, args.PassSrcElement); 
-            HasViewportOffset = hasviewportOffset;
+
+            re._propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
+            InvalidateGfxArgs inv = GetInvalidateGfxArgs();
+            inv.SetReason_UpdateLocalArea(re, localArea);
+            InternalBubbleUpInvalidateGraphicArea(inv);
         }
 
-        void InternalBubbleUpInvalidateGraphicArea(InvalidateGfxArgs args)//RenderElement fromElement, ref Rectangle elemClientRect, bool passSourceElem)
+
+        public static void InternalBubbleUpInvalidateGraphicArea(InvalidateGfxArgs args)//RenderElement fromElement, ref Rectangle elemClientRect, bool passSourceElem)
         {
             //total bounds = total bounds at level            
-            if (this.IsInRenderPhase)
+            if (IsInRenderPhase)
             {
                 ReleaseInvalidateGfxArgs(args);
                 return;
             }
             //--------------------------------------            
+            bool hasviewportOffset = args.Reason == InvalidateReason.ViewportChanged;
+            int viewport_diffLeft = args.LeftDiff;
+            int viewport_diffTop = args.TopDiff;
+
+
+
             //bubble up ,find global rect coord
             //and then merge to accumulate rect        
-
-
             RenderElement fromElement = args.SrcRenderElement;
             Rectangle elemClientRect = args.Rect;
             bool passSourceElem = args.PassSrcElement;
 
-            HasViewportOffset = false;
-            _hasRenderTreeInvalidateAccumRect = true;//***
+            //HasViewportOffset = false;
+
 
             int globalPoint_X = 0;
             int globalPoint_Y = 0;
@@ -251,7 +137,7 @@ namespace LayoutFarm
 
             //}
             int dbug_ncount = 0;
-            dbugWriteStopGfxBubbleUp(fromElement, ref dbug_ncount, dbug_ncount, ">> :" + elemClientRect.ToString());
+            //dbugWriteStopGfxBubbleUp(fromElement, ref dbug_ncount, dbug_ncount, ">> :" + elemClientRect.ToString());
 #endif
 
             for (; ; )
@@ -259,7 +145,7 @@ namespace LayoutFarm
                 if (!fromElement.Visible)
                 {
 #if DEBUG
-                    dbugWriteStopGfxBubbleUp(fromElement, ref dbug_ncount, 0, "EARLY-RET: ");
+                    //dbugWriteStopGfxBubbleUp(fromElement, ref dbug_ncount, 0, "EARLY-RET: ");
 #endif
                     ReleaseInvalidateGfxArgs(args);
                     return;
@@ -267,13 +153,13 @@ namespace LayoutFarm
                 else if (fromElement.BlockGraphicUpdateBubble)
                 {
 #if DEBUG
-                    dbugWriteStopGfxBubbleUp(fromElement, ref dbug_ncount, 0, "BLOCKED2: ");
+                    //dbugWriteStopGfxBubbleUp(fromElement, ref dbug_ncount, 0, "BLOCKED2: ");
 #endif
                     ReleaseInvalidateGfxArgs(args);
                     return;
                 }
 #if DEBUG
-                dbugWriteStopGfxBubbleUp(fromElement, ref dbug_ncount, dbug_ncount, ">> ");
+                //dbugWriteStopGfxBubbleUp(fromElement, ref dbug_ncount, dbug_ncount, ">> ");
 #endif
 
 
@@ -317,7 +203,7 @@ namespace LayoutFarm
 #if DEBUG
                     if (fromElement.dbugParentVisualElement == null)
                     {
-                        dbugWriteStopGfxBubbleUp(fromElement, ref dbug_ncount, 0, "BLOCKED3: ");
+                        //dbugWriteStopGfxBubbleUp(fromElement, ref dbug_ncount, 0, "BLOCKED3: ");
                     }
 #endif
 
@@ -347,8 +233,12 @@ namespace LayoutFarm
 
                 passSourceElem = true;
             }
+            //----------
+            //now we are on the top of root
+            RootGraphic root = fromElement.GetRoot();
+
 #if DEBUG
-            var dbugMyroot = this;
+            RootGraphic dbugMyroot = root;
             if (dbugMyroot.dbugEnableGraphicInvalidateTrace
              && dbugMyroot.dbugGraphicInvalidateTracer != null)
             {
@@ -360,18 +250,15 @@ namespace LayoutFarm
             }
 #endif
 
-            //----------------------------------------
-
+            //---------------------------------------- 
             elemClientRect.Offset(globalPoint_X, globalPoint_Y);
-
-
-            if (elemClientRect.Top > this.Height
-                || elemClientRect.Left > this.Width
+            if (elemClientRect.Top > root.Height
+                || elemClientRect.Left > root.Width
                 || elemClientRect.Bottom < 0
                 || elemClientRect.Right < 0)
             {
 
-                //outof view
+
 #if DEBUG
                 if (dbugMyroot.dbugEnableGraphicInvalidateTrace &&
                     dbugMyroot.dbugGraphicInvalidateTracer != null)
@@ -379,6 +266,7 @@ namespace LayoutFarm
                     dbugMyroot.dbugGraphicInvalidateTracer.WriteInfo("ZERO-EEX");
                     dbugMyroot.dbugGraphicInvalidateTracer.WriteInfo("\r\n");
                 }
+
 #endif
                 ReleaseInvalidateGfxArgs(args);
                 return;
@@ -386,17 +274,149 @@ namespace LayoutFarm
             //--------------------------------------------------------------------------------------------------
 
 
+            args.GlobalRect = elemClientRect;
+            //if (root.HasViewportOffset = hasviewportOffset)
+            //{
+            //    root.ViewportDiffLeft = viewport_diffLeft;
+            //    root.ViewportDiffTop = viewport_diffTop;
+            //}
+
+            root.AddAccumRect(args);
+
+
+        }
+    }
+
+
+    public abstract partial class RootGraphic
+    {
+        public delegate void PaintToOutputWindowDelegate();
+        protected PaintToOutputWindowDelegate _paintToOutputWindowHandler;
+        Action<Rectangle> _canvasInvalidateDelegate;
+        Rectangle _accumulateInvalidRect;
+        bool _hasAccumRect;
+        bool _hasRenderTreeInvalidateAccumRect;
+
+#if DEBUG
+        static int dbugTotalId;
+        public readonly int dbugId = dbugTotalId++;
+#endif
+        public RootGraphic(int width, int heigth)
+        {
+            this.Width = width;
+            this.Height = heigth;
+        }
+        public abstract ITextService TextServices { get; }
+        public abstract RequestFont DefaultTextEditFontInfo { get; }
+        public abstract IRenderElement TopWindowRenderBox { get; }
+        public abstract void AddChild(RenderElement renderE);
+        public abstract void SetCurrentKeyboardFocus(RenderElement renderElement);
+        public abstract void SetPrimaryContainerElement(RenderBoxBase renderBox);
+        public int Width { get; internal set; }
+        public int Height { get; internal set; }
+
+        /// <summary>
+        /// close window box root
+        /// </summary>
+        public abstract void CloseWinRoot();
+        //--------------------------------------------- 
+        //carets ...
+        public abstract void CaretStartBlink();
+        public abstract void CaretStopBlink();
+        public bool CaretHandleRegistered { get; set; }
+        //------- -------------------------------------- 
+
+        //timers
+        public abstract bool GfxTimerEnabled { get; set; }
+        public abstract GraphicsTimerTask SubscribeGraphicsIntervalTask(
+            object uniqueName,
+            TaskIntervalPlan planName,
+            int intervalMs,
+            EventHandler<GraphicsTimerTaskEventArgs> tickhandler);
+        public abstract void RemoveIntervalTask(object uniqueName);
+
+
+        //--------------------------------------------------------------------------
+        public abstract void PrepareRender();
+    
+        public event EventHandler PreRenderEvent;
+        protected void InvokePreRenderEvent() => PreRenderEvent?.Invoke(this, EventArgs.Empty);
+
+
+        public virtual void BeginRenderPhase() => BubbleInvalidater.IsInRenderPhase = true;
+        public virtual void EndRenderPhase() => BubbleInvalidater.IsInRenderPhase = false;
+
+
+        public bool HasAccumInvalidateRect => _hasAccumRect;
+        public Rectangle AccumInvalidateRect => _accumulateInvalidRect;
+        public bool HasRenderTreeInvalidateAccumRect => _hasRenderTreeInvalidateAccumRect;
+
+        public abstract void ManageRenderElementRequests();
+        public virtual void EnqueueRenderRequest(RenderElementRequest renderReq) { }
+
+
+        public void FlushAccumGraphics()
+        {
+            if (!_hasAccumRect)
+            {
+                return;
+            }
+
+            if (BubbleInvalidater.IsInRenderPhase) { return; }
+
+#if DEBUG
+            //if (_accumulateInvalidRect.Height > 30 && _accumulateInvalidRect.Height < 100)
+            //{
+            //}
+
+            //System.Diagnostics.Debug.WriteLine("flush1:" + _accumulateInvalidRect.ToString());
+#endif
+
+
+            //TODO review this 
+            _canvasInvalidateDelegate?.Invoke(_accumulateInvalidRect);
+
+            _paintToOutputWindowHandler();
+            _hasAccumRect = false;
+            _hasRenderTreeInvalidateAccumRect = false;
+        }
+        public void SetPaintDelegates(Action<Rectangle> canvasInvalidateDelegate, PaintToOutputWindowDelegate paintToOutputHandler)
+        {
+            _canvasInvalidateDelegate = canvasInvalidateDelegate;
+            _paintToOutputWindowHandler = paintToOutputHandler;
+        }
+        public static void InvalidateRectArea(RootGraphic rootgfx, Rectangle invalidateRect)
+        {
+#if DEBUG
+            Rectangle preview = Rectangle.Union(rootgfx._accumulateInvalidRect, invalidateRect);
+            //System.Diagnostics.Debug.WriteLine("flush1:" + rootgfx._accumulateInvalidRect.ToString());
+#endif
+            //invalidate rect come from external UI (not from interal render tree)
+            rootgfx._accumulateInvalidRect = Rectangle.Union(rootgfx._accumulateInvalidRect, invalidateRect);
+#if DEBUG
+            if (rootgfx._accumulateInvalidRect.Height > 30)
+            {
+
+            }
+#endif
+
+            rootgfx._hasAccumRect = true;
+        }
+
+
+        internal void AddAccumRect(InvalidateGfxArgs args)
+        {
 #if DEBUG
 
             Rectangle previewAccum = _accumulateInvalidRect;
             if (!_hasAccumRect)
             {
-                previewAccum = elemClientRect;
+                previewAccum = args.GlobalRect;
             }
             else
             {
 
-                previewAccum = Rectangle.Union(previewAccum, elemClientRect);
+                previewAccum = Rectangle.Union(previewAccum, args.GlobalRect);
             }
             //if (previewAccum.Height > 30 && previewAccum.Height < 100)
             //{
@@ -404,13 +424,12 @@ namespace LayoutFarm
             //}
 #endif 
 
-            args.GlobalRect = elemClientRect;
             _accumInvalidateQueue.Add(args);
+            _hasRenderTreeInvalidateAccumRect = true;//***
 
             if (!_hasAccumRect)
             {
-
-                _accumulateInvalidRect = elemClientRect;
+                _accumulateInvalidRect = args.GlobalRect;
                 _hasAccumRect = true;
             }
             else
@@ -423,36 +442,43 @@ namespace LayoutFarm
 #endif
 
                 //TODO: check if we should do union or separate this into another group 
-                if (!_accumulateInvalidRect.IntersectsWith(elemClientRect))
+                if (!_accumulateInvalidRect.IntersectsWith(args.GlobalRect))
                 {
 
-                    _accumulateInvalidRect = Rectangle.Union(_accumulateInvalidRect, elemClientRect);
+                    _accumulateInvalidRect = Rectangle.Union(_accumulateInvalidRect, args.GlobalRect);
                 }
                 else
                 {
-                    _accumulateInvalidRect = Rectangle.Union(_accumulateInvalidRect, elemClientRect);
+                    _accumulateInvalidRect = Rectangle.Union(_accumulateInvalidRect, args.GlobalRect);
                 }
             }
 
-
 #if DEBUG
-            if (dbugMyroot.dbugEnableGraphicInvalidateTrace &&
-                dbugMyroot.dbugGraphicInvalidateTracer != null)
+            if (dbugEnableGraphicInvalidateTrace &&
+                dbugGraphicInvalidateTracer != null)
             {
                 string state_str = "ACC: ";
-                if (this.dbugNeedContentArrangement || this.dbugNeedReCalculateContentSize)
+                if (dbugNeedContentArrangement || dbugNeedReCalculateContentSize)
                 {
                     state_str = "!!" + state_str;
                 }
-                dbugMyroot.dbugGraphicInvalidateTracer.WriteInfo("ACC: " + _accumulateInvalidRect.ToString());
-                dbugMyroot.dbugGraphicInvalidateTracer.WriteInfo("\r\n");
+                dbugGraphicInvalidateTracer.WriteInfo("ACC: " + _accumulateInvalidRect.ToString());
+                dbugGraphicInvalidateTracer.WriteInfo("\r\n");
             }
 #endif
+
+
         }
 
+        readonly List<InvalidateGfxArgs> _accumInvalidateQueue = new List<InvalidateGfxArgs>();
 
         public static List<InvalidateGfxArgs> GetAccumInvalidateGfxArgsQueue(RootGraphic r) => r._accumInvalidateQueue;
 
+        //---
+        protected static InvalidateGfxArgs GetInvalidateGfxArgs() => BubbleInvalidater.GetInvalidateGfxArgs();
+        protected static void ReleaseInvalidateGfxArgs(InvalidateGfxArgs args) => BubbleInvalidater.ReleaseInvalidateGfxArgs(args);
+
+        protected static void InternalBubbleup(InvalidateGfxArgs args) => BubbleInvalidater.InternalBubbleUpInvalidateGraphicArea(args);
     }
 
 

@@ -175,7 +175,7 @@ namespace LayoutFarm.CustomWidgets
             this.Focus();
             e.MouseCursorStyle = MouseCursorStyle.IBeam;
             e.CancelBubbling = true;
-            
+
             _textEditRenderElement.HandleMouseDown(e);
         }
         protected override void OnLostKeyboardFocus(UIFocusEventArgs e)
@@ -268,24 +268,27 @@ namespace LayoutFarm.CustomWidgets
                 if (_textEditRenderElement != null)
                 {
                     //TODO, use string builder pool
+                    using (StringBuilderPool<TextBox>.GetFreeStringBuilder(out StringBuilder sb))
+                    {
+                        CopyContentTo(sb);
+                        return sb.ToString();
+                    }
 
-                    StringBuilder stBuilder = new StringBuilder();
-                    CopyContentTo(stBuilder);
-                    return stBuilder.ToString();
                 }
                 else
                 {
                     //TODO, use string builder pool
-                    StringBuilder stBuilder = new StringBuilder();
-                    bool passFirstLine = false;
-                    foreach (PlainTextLine line in _doc)
+                    using (StringBuilderPool<TextBox>.GetFreeStringBuilder(out StringBuilder sb))
                     {
-                        if (passFirstLine) stBuilder.AppendLine();
-                        line.CopyText(stBuilder);
-                        passFirstLine = true;
+                        bool passFirstLine = false;
+                        foreach (PlainTextLine line in _doc)
+                        {
+                            if (passFirstLine) { sb.AppendLine(); }
+                            line.CopyText(sb);
+                            passFirstLine = true;
+                        }
+                        return sb.ToString();
                     }
-
-                    return stBuilder.ToString();
                 }
             }
             set
@@ -316,9 +319,7 @@ namespace LayoutFarm.CustomWidgets
             _textEditRenderElement.ClearAllChildren();
             int lineCount = 0;
 
-
-
-            RunStyle runstyle = GetDefaultRunStyle();
+            //RunStyle runstyle = GetDefaultRunStyle();
             foreach (PlainTextLine line in _doc)
             {
                 if (lineCount > 0)
@@ -333,18 +334,18 @@ namespace LayoutFarm.CustomWidgets
 
             this.InvalidateGraphics();
         }
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        public override RenderElement GetPrimaryRenderElement()
         {
             if (_textEditRenderElement == null)
             {
-                var tbox = new TextEditRenderBox(rootgfx, this.Width, this.Height, _multiline, _isEditable);
+                var tbox = new TextEditRenderBox(this.Width, this.Height, _multiline, _isEditable);
                 tbox.SetLocation(this.Left, this.Top);
-                tbox.HasSpecificWidthAndHeight = true;//***
+                
                 if (_defaultSpanStyle.IsEmpty())
                 {
                     _defaultSpanStyle = new TextSpanStyle();
                     _defaultSpanStyle.FontColor = Color.Black;
-                    _defaultSpanStyle.ReqFont = rootgfx.DefaultTextEditFontInfo;
+                    _defaultSpanStyle.ReqFont = GlobalRootGraphic.CurrentRootGfx.DefaultTextEditFontInfo;
                     tbox.CurrentTextSpanStyle = _defaultSpanStyle;
                 }
                 else
@@ -494,19 +495,18 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        public override RenderElement GetPrimaryRenderElement()
         {
             if (_textEditRenderElement == null)
             {
-                var tbox = new TextEditRenderBox(rootgfx, this.Width, this.Height, _multiline);
-                tbox.SetLocation(this.Left, this.Top);
-                tbox.HasSpecificWidthAndHeight = true;
-
+                var tbox = new TextEditRenderBox(this.Width, this.Height, _multiline);
+                tbox.SetLocation(this.Left, this.Top); 
                 if (_defaultSpanStyle.IsEmpty())
                 {
                     _defaultSpanStyle = new TextSpanStyle();
                     _defaultSpanStyle.FontColor = Color.Black;
-                    _defaultSpanStyle.ReqFont = rootgfx.DefaultTextEditFontInfo;
+
+                    _defaultSpanStyle.ReqFont = GlobalRootGraphic.CurrentRootGfx.DefaultTextEditFontInfo;
                     tbox.CurrentTextSpanStyle = _defaultSpanStyle;
                 }
                 else

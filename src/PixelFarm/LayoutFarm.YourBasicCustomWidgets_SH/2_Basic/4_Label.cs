@@ -36,11 +36,11 @@ namespace LayoutFarm.CustomWidgets
 #if DEBUG
         public bool dbugBreakOnRenderElement;
 #endif
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        public override RenderElement GetPrimaryRenderElement()
         {
             if (_myTextRun == null)
             {
-                var t_run = new CustomTextRun(rootgfx, this.Width, this.Height);
+                var t_run = new CustomTextRun(this.Width, this.Height);
                 t_run.DrawTextTechnique = _drawTextTechnique;
 
                 t_run.TextColor = _textColor;
@@ -91,7 +91,7 @@ namespace LayoutFarm.CustomWidgets
                     break;
             }
         }
-        protected override void InvalidateMargin(MarginName marginName, short newValue)
+        protected override void InvalidateMargin(MarginName marginName, ushort newValue)
         {
             //TODO:...
         }
@@ -118,10 +118,8 @@ namespace LayoutFarm.CustomWidgets
                 _text = value;
                 if (_myTextRun != null)
                 {
-                    _myTextRun.Text = value;
-                    _myTextRun.InvalidateGraphics();
+                    _myTextRun.Text = value;                   
                 }
-                 
             }
         }
         public DrawTextTechnique DrawTextTechnique

@@ -10,7 +10,7 @@ namespace LayoutFarm
     partial class RenderElement
     {
 
-        internal bool NoClipOrBgIsNotOpaque => !_needClipArea || (_propFlags & RenderElementConst.TRACKING_BG_IS_NOT_OPAQUE) != 0;
+        internal bool NoClipOrBgIsNotOpaque => !NeedClipArea || (_propFlags & RenderElementConst.TRACKING_BG_IS_NOT_OPAQUE) != 0;
 
         /// <summary>
         /// background is not 100% opaque
@@ -28,7 +28,7 @@ namespace LayoutFarm
         {
             //RELATIVE to this ***
             _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
-            if ((_uiLayoutFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0)
+            if ((_propFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0)
             {
 #if DEBUG
                 dbugVRoot.dbug_PushInvalidateMsg(RootGraphic.dbugMsg_BLOCKED, this);
@@ -36,13 +36,14 @@ namespace LayoutFarm
                 return;
             }
 
-            if (!GlobalRootGraphic.SuspendGraphicsUpdate)
+            if (!GlobalRootGraphic.s_SuspendGraphicsUpdate)
             {
                 //RELATIVE to this***
                 //1.
                 _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
                 //2.  
-                _rootGfx.BubbleUpInvalidateGraphicArea(args);
+                BubbleInvalidater.InternalBubbleUpInvalidateGraphicArea(args);
+
             }
             else
             {
@@ -56,7 +57,7 @@ namespace LayoutFarm
         public void InvalidateGraphics(Rectangle rect)
         {
             _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
-            if ((_uiLayoutFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0)
+            if ((_propFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0)
             {
 #if DEBUG
                 dbugVRoot.dbug_PushInvalidateMsg(RootGraphic.dbugMsg_BLOCKED, this);
@@ -64,13 +65,9 @@ namespace LayoutFarm
                 return;
             }
 
-            if (!GlobalRootGraphic.SuspendGraphicsUpdate)
+            if (!GlobalRootGraphic.s_SuspendGraphicsUpdate)
             {
-                InvalidateGraphicLocalArea(this, rect);
-            }
-            else
-            {
-
+                BubbleInvalidater.InvalidateGraphicLocalArea(this, rect);
             }
         }
         /// <summary>
@@ -80,7 +77,7 @@ namespace LayoutFarm
         {
             //RELATIVE to this ***
             _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
-            if ((_uiLayoutFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0)
+            if ((_propFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0)
             {
 #if DEBUG
                 dbugVRoot.dbug_PushInvalidateMsg(RootGraphic.dbugMsg_BLOCKED, this);
@@ -88,13 +85,9 @@ namespace LayoutFarm
                 return;
             }
 
-            if (!GlobalRootGraphic.SuspendGraphicsUpdate)
+            if (!GlobalRootGraphic.s_SuspendGraphicsUpdate)
             {
-                InvalidateGraphicLocalArea(this, new Rectangle(0, 0, _b_width, _b_height));
-            }
-            else
-            {
-
+                BubbleInvalidater.InvalidateGraphicLocalArea(this, new Rectangle(0, 0, _b_width, _b_height));
             }
         }
 
@@ -114,73 +107,48 @@ namespace LayoutFarm
             RenderElement parent = this.ParentRenderElement; //start at parent ****
 
             //--------------------------------------- 
-            if ((_uiLayoutFlags & RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT) != 0)
+            if ((_propFlags & RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT) != 0)
             {
                 OnInvalidateGraphicsNoti(true, ref totalBounds);
             }
             //
-            if (parent != null)
+            if (parent != null && !GlobalRootGraphic.s_SuspendGraphicsUpdate)
             {
-                if (!GlobalRootGraphic.SuspendGraphicsUpdate)
-                {
-                    InvalidateGfxArgs arg = _rootGfx.GetInvalidateGfxArgs();
-                    arg.SetReason_UpdateLocalArea(parent, totalBounds);
-
-                    _rootGfx.BubbleUpInvalidateGraphicArea(arg);//RELATIVE to its parent***
-                }
-                else
-                {
-
-                }
+                InvalidateGfxArgs arg = BubbleInvalidater.GetInvalidateGfxArgs();
+                arg.SetReason_UpdateLocalArea(parent, totalBounds);
+                BubbleInvalidater.InternalBubbleUpInvalidateGraphicArea(arg);//RELATIVE to its parent***
             }
+        }
+
+        protected void InvalidateGfxLocalArea(Rectangle localArea)
+        {
+            BubbleInvalidater.InvalidateGraphicLocalArea(this, localArea);
         }
         internal static bool RequestInvalidateGraphicsNoti(RenderElement re)
         {
-            return (re._uiLayoutFlags & RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT) != 0;
+            return (re._propFlags & RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT) != 0;
         }
         internal static void InvokeInvalidateGraphicsNoti(RenderElement re, bool fromMe, Rectangle totalBounds)
         {
             re.OnInvalidateGraphicsNoti(fromMe, ref totalBounds);
         }
 
-        public static void InvalidateGraphicLocalArea(RenderElement re, Rectangle localArea)
-        {
-            //RELATIVE to re ***
 
-            if (localArea.Height == 0 || localArea.Width == 0)
-            {
-                return;
-            }
-
-            re._propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
-            InvalidateGfxArgs inv = re._rootGfx.GetInvalidateGfxArgs();
-            inv.SetReason_UpdateLocalArea(re, localArea);
-
-//#if DEBUG
-//            if (localArea.Height == 31)
-//            {
-
-//            }
-
-//#endif
-
-            re._rootGfx.BubbleUpInvalidateGraphicArea(inv);
-        }
 
         public void SuspendGraphicsUpdate()
         {
-            _uiLayoutFlags |= RenderElementConst.LY_SUSPEND_GRAPHIC;
+            _propFlags |= RenderElementConst.LY_SUSPEND_GRAPHIC;
         }
         public void ResumeGraphicsUpdate()
         {
-            _uiLayoutFlags &= ~RenderElementConst.LY_SUSPEND_GRAPHIC;
+            _propFlags &= ~RenderElementConst.LY_SUSPEND_GRAPHIC;
         }
         internal bool BlockGraphicUpdateBubble
         {
             get
             {
 #if DEBUG
-                return (_uiLayoutFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0;
+                return (_propFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0;
 #else
                 return (_uiLayoutFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0;
 #endif

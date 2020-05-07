@@ -7,7 +7,7 @@ namespace LayoutFarm
     {
         public static void AddChild(this IContainerRenderElement renderBox, UIElement ui)
         {
-            renderBox.AddChild(ui.GetPrimaryRenderElement(renderBox.Root));
+            renderBox.AddChild(ui.GetPrimaryRenderElement());
         }
     }
 }

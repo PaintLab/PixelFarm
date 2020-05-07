@@ -13,8 +13,8 @@ namespace LayoutFarm.CustomWidgets
         MemBitmap _memBmp;
         Image _bmp;
 
-        public MiniAggCanvasRenderElement(RootGraphic rootgfx, int width, int height)
-            : base(rootgfx, width, height)
+        public MiniAggCanvasRenderElement(int width, int height)
+            : base(width, height)
         {
 
             _memBmp = new MemBitmap(width, height);

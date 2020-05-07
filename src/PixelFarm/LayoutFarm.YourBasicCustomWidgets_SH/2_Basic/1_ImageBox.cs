@@ -56,12 +56,12 @@ namespace LayoutFarm.CustomWidgets
         }
 
 
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        public override RenderElement GetPrimaryRenderElement()
         {
             if (_imgRenderBox == null)
             {
-                var renderBox = new CustomImageRenderBox(rootgfx, this.Width, this.Height);
-                SetCommonProperties(renderBox, this); 
+                var renderBox = new CustomImageRenderBox(this.Width, this.Height);
+                SetCommonProperties(renderBox, this);
                 renderBox.ImageBinder = _imageBinder;
 
                 SetPrimaryRenderElement(renderBox);
@@ -85,7 +85,7 @@ namespace LayoutFarm.CustomWidgets
                 this.CurrentPrimaryRenderElement.SetSize(w, h);
             }
         }
-        protected override void OnContentUpdate()
+        void OnContentUpdate()
         {
             if (_imageBinder != null && _imageBinder.State == BinderState.Loaded)
             {
@@ -96,7 +96,7 @@ namespace LayoutFarm.CustomWidgets
                 this.InvalidateGraphics();
             }
         }
-        public override void PerformContentLayout()
+        public override void PerformContentLayout(LayoutUpdateArgs args)
         {
             if (_imageBinder != null && _imageBinder.State == BinderState.Loaded)
             {

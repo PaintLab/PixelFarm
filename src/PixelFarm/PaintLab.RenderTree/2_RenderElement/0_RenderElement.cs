@@ -14,25 +14,22 @@ namespace LayoutFarm
         //check if all rendering should occur on a single thread?
         //------
 
-        RootGraphic _rootGfx;
+
         IParentLink _parentLink;
         object _controller;
-        int _propFlags;
-        bool _needClipArea;
+        internal int _propFlags;
 
-        public RenderElement(RootGraphic rootGfx, int width, int height)
+        public RenderElement(int width, int height)
         {
             _b_width = width;
             _b_height = height;
-            _rootGfx = rootGfx;
-            _needClipArea = true;
+            NeedClipArea = true;
 #if DEBUG
             dbug_totalObjectId++;
             dbug_obj_id = dbug_totalObjectId;
 #endif
         }
 
-        internal InvalidateGfxArgs RootGetInvalidateGfxArgs() => _rootGfx.GetInvalidateGfxArgs();
 
 #if DEBUG
         /// <summary>
@@ -40,26 +37,22 @@ namespace LayoutFarm
         /// </summary>
         public bool dbugPreferSoftwareRenderer { get; set; }
 #endif
-        //// 
-        //public abstract void ResetRootGraphics(RootGraphic rootgfx);
-        ////
-        //protected static void DirectSetRootGraphics(RenderElement r, RootGraphic rootgfx)
-        //{
-        //    r._rootGfx = rootgfx;
-        //}
+
+        public bool NeedClipArea { get; set; }
         //
-        public bool NeedClipArea
+        protected virtual RootGraphic Root => null;
+        public RootGraphic GetRoot()
         {
-            get => _needClipArea;
-            set => _needClipArea = value;
+            //recursive
+            RootGraphic root = Root;//local root
+            if (root != null) return root;
+            return _parentLink?.ParentRenderElement?.GetRoot();//recursive
         }
-        //
-        public RootGraphic Root => _rootGfx;
         //
         public IContainerRenderElement GetTopWindowRenderBox()
         {
             if (_parentLink == null) { return null; }
-            return _rootGfx.TopWindowRenderBox as IContainerRenderElement;
+            return GetRoot()?.TopWindowRenderBox as IContainerRenderElement;
         }
 
         //==============================================================
@@ -205,10 +198,8 @@ namespace LayoutFarm
                       _propFlags & ~RenderElementConst.NEED_PRE_RENDER_EVAL;
             }
         }
-        public virtual RenderElement FindUnderlyingSiblingAtPoint(Point point)
-        {
-            return null;
-        }
+
+        public virtual RenderElement FindUnderlyingSiblingAtPoint(Point point) => null;
 
         public virtual void ChildrenHitTestCore(HitChain hitChain)
         {
@@ -261,15 +252,15 @@ namespace LayoutFarm
             }
             return re;
         }
-        public bool IsBlockElement
-        {
-            get => ((_propFlags & RenderElementConst.IS_BLOCK_ELEMENT) == RenderElementConst.IS_BLOCK_ELEMENT);
+        //public bool IsBlockElement
+        //{
+        //    get => ((_propFlags & RenderElementConst.IS_BLOCK_ELEMENT) == RenderElementConst.IS_BLOCK_ELEMENT);
 
-            set =>
-                _propFlags = value ?
-                     _propFlags | RenderElementConst.IS_BLOCK_ELEMENT :
-                     _propFlags & ~RenderElementConst.IS_BLOCK_ELEMENT;
-        }
+        //    set =>
+        //        _propFlags = value ?
+        //             _propFlags | RenderElementConst.IS_BLOCK_ELEMENT :
+        //             _propFlags & ~RenderElementConst.IS_BLOCK_ELEMENT;
+        //}
 
         public bool IsTopWindow
         {
@@ -372,7 +363,7 @@ namespace LayoutFarm
             else
             {
                 //not visual hit on this object..
-                if (_needClipArea)
+                if (NeedClipArea)
                 {
                     return false;
                 }
@@ -490,7 +481,7 @@ namespace LayoutFarm
                 renderE.PreRenderEvaluation(d);
             }
 
-            if (renderE._needClipArea)
+            if (renderE.NeedClipArea)
             {
                 //some elem may need clip for its child
                 //some may not need

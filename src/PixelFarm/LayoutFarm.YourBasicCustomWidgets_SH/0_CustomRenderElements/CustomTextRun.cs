@@ -23,21 +23,22 @@ namespace LayoutFarm.CustomWidgets
         byte _borderRight;
         byte _borderBottom;
 
-        public CustomTextRun(RootGraphic rootgfx, int width, int height)
-            : base(rootgfx, width, height)
+        public CustomTextRun(int width, int height)
+            : base(width, height)
         {
 #if DEBUG
             //dbugBreak = true;
 #endif
-            _font = rootgfx.DefaultTextEditFontInfo;
+            _font = GlobalRootGraphic.CurrentRootGfx.DefaultTextEditFontInfo;
             NeedPreRenderEval = true;
             DrawTextTechnique = DrawTextTechnique.Stencil;//default
+
         }
 
         public DrawTextTechnique DrawTextTechnique { get; set; }
         public bool DelayFormattedString { get; set; }
 
-        
+
         public Color TextColor
         {
             get => _textColor;
@@ -53,6 +54,9 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
+        public bool HasSpecificWidth { get; set; }
+        public bool HasSpecificHeight { get; set; }
+        public bool HasSpecificWidthAndHeight => HasSpecificWidth && HasSpecificHeight;
 
         public string Text
         {
@@ -75,7 +79,7 @@ namespace LayoutFarm.CustomWidgets
                     //for gfx-invalidation, we need a size before change and after change 
 
                     var textBufferSpan = new TextBufferSpan(_textBuffer);
-                    Size newSize = Root.TextServices.MeasureString(textBufferSpan, _font);//just measure
+                    Size newSize = GlobalRootGraphic.CurrentRootGfx.TextServices.MeasureString(textBufferSpan, _font);//just measure
                     int newW = Width;
                     int newH = Height;
                     if (!this.HasSpecificWidth)
@@ -249,7 +253,7 @@ namespace LayoutFarm.CustomWidgets
                         int newW = this.Width;
                         int newH = this.Height;
                         var buff = new TextBufferSpan(_textBuffer);
-                        Size size = Root.TextServices.MeasureString(buff, _font);
+                        Size size = GlobalRootGraphic.CurrentRootGfx.TextServices.MeasureString(buff, _font);
                         if (!this.HasSpecificWidth)
                         {
                             newW = _contentLeft + size.Width + _contentRight;
@@ -354,12 +358,15 @@ namespace LayoutFarm.CustomWidgets
                             }
                             break;
                         case RenderVxFormattedString.VxState.NoStrip:
-                            //put this to the update queue system
-                            //(TODO: add extension method for this)
-                            Root.EnqueueRenderRequest(new RenderBoxes.RenderElementRequest(
-                                  this,
-                                  RenderBoxes.RequestCommand.ProcessFormattedString,
-                                  _renderVxFormattedString));
+                            {
+                                //put this to the update queue system
+                                //(TODO: add extension method for this)
+
+                                GlobalRootGraphic.CurrentRootGfx.EnqueueRenderRequest(new RenderBoxes.RenderElementRequest(
+                                      this,
+                                      RenderBoxes.RequestCommand.ProcessFormattedString,
+                                      _renderVxFormattedString));
+                            }
                             break;
                     }
                 }

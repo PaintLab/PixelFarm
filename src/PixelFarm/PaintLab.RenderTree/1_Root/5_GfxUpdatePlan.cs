@@ -100,7 +100,7 @@ namespace LayoutFarm
                 for (int i = invList.Count - 1; i >= 0; --i)
                 {
                     //release back to pool
-                    rootgfx.ReleaseInvalidateGfxArgs(invList[i]);
+                    BubbleInvalidater.ReleaseInvalidateGfxArgs(invList[i]);
                 }
                 invList.Clear();
                 AccumRect = Rectangle.Empty;
@@ -237,8 +237,7 @@ namespace LayoutFarm
 
                 for (int i = 0; i < j; ++i)
                 {
-                    InvalidateGfxArgs a = accumQueue[i];
-                    _rootgfx.ReleaseInvalidateGfxArgs(a);
+                    BubbleInvalidater.ReleaseInvalidateGfxArgs(accumQueue[i]);
                 }
             }
             else
