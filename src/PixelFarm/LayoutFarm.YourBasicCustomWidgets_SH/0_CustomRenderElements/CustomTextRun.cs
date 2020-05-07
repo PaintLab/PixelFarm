@@ -33,8 +33,6 @@ namespace LayoutFarm.CustomWidgets
             NeedPreRenderEval = true;
             DrawTextTechnique = DrawTextTechnique.Stencil;//default
 
-            //HasSpecificHeight = true;
-            //HasSpecificWidth = true;
         }
 
         public DrawTextTechnique DrawTextTechnique { get; set; }
