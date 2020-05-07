@@ -639,18 +639,7 @@ namespace LayoutFarm.UI
                         else
                         {
                             RenderElement.Render(renderContent, d, updateArea);
-
-                        }
-                      
-                        //updateArea.Offset(x, y); 
-                        ////if (d.PushClipAreaRect(gridItem.Width, gridItem.Height, updateArea))
-                        ////{
-                        ////    updateArea.Offset(-x, -y);
-                        ////    RenderElement.Render(renderContent, d, updateArea);
-                        ////    updateArea.Offset(x, y);//not need to offset back -since we reset (1)
-                        ////    d.PopClipAreaRect();
-                        ////} 
-                        //updateArea.CurrentRect = backup;//restore
+                        } 
                     }
 #if DEBUG
                     else
