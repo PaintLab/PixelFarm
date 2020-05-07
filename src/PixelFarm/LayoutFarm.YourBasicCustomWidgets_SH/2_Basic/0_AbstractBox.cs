@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
-using LayoutFarm.UI; 
+using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
 
@@ -110,7 +110,7 @@ namespace LayoutFarm.CustomWidgets
 #if DEBUG
             renderE.dbugBreak = absRect.dbugBreakMe;
 #endif
-             
+
             renderE.SetController(absRect);
             renderE.TransparentForMouseEvents = absRect.TransparentForMouseEvents;
         }
@@ -855,8 +855,14 @@ namespace LayoutFarm.CustomWidgets
                                 linebox.AdjustVerticalAlignment();
                             }
                         }
+                        else
+                        {
+                            _primElement.Lines.Clear();
+
+                        }
                         this.SetInnerContentSize(xpos, maxBottom);
-                        this.dbugBreakMe = true;
+
+                        //this.dbugBreakMe = true;
 
                     }
                     break;

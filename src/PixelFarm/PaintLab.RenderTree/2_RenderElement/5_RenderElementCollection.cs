@@ -33,7 +33,7 @@ namespace LayoutFarm.RenderBoxes
     sealed class RenderElementCollection
     {
         readonly LinkedList<RenderElement> _myElements = new LinkedList<RenderElement>();
-        
+
 
 #if DEBUG
         static int dbug_TotalId;
@@ -79,9 +79,14 @@ namespace LayoutFarm.RenderBoxes
                 _myElements.Remove(re._internalLinkedNode);
                 re._internalLinkedNode = null;
             }
-            Rectangle bounds = re.RectBounds;
             RenderElement.SetParentLink(re, null);
-            BubbleInvalidater.InvalidateGraphicLocalArea(parent, bounds);
+
+            if (!parent.BlockGraphicUpdateBubble)
+            {
+                Rectangle bounds = re.RectBounds;
+                BubbleInvalidater.InvalidateGraphicLocalArea(parent, bounds);
+            }
+
         }
         public void Clear(RenderElement parent)
         {
@@ -90,6 +95,7 @@ namespace LayoutFarm.RenderBoxes
             while (curNode != null)
             {
                 RenderElement v = curNode.Value;
+
                 v._internalLinkedNode = null;
                 RenderElement.SetParentLink(v, null);
 

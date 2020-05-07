@@ -578,7 +578,7 @@ namespace LayoutFarm.CustomWidgets
         }
         protected override IUICollection<UIElement> GetDefaultChildrenIter() => _children;
 
-        internal void Add(UIElement ui)
+        public void Add(UIElement ui)
         {
             if (_children == null)
             {
@@ -1030,7 +1030,7 @@ namespace LayoutFarm.CustomWidgets
         {
             if (_gridViewRenderE == null)
             {
-                var myGridBox = new GridViewRenderBox(this.Width, this.Height); 
+                var myGridBox = new GridViewRenderBox(this.Width, this.Height);
                 myGridBox.NeedClipArea = this.NeedClipArea;
 
                 myGridBox.SetLocation(this.Left, this.Top);
