@@ -71,29 +71,17 @@ namespace LayoutFarm
                 element_iden += " " + dbug_ObjectNote;
             }
 
-            if (IsBlockElement)
+
+            if (user_elem_id != null)
             {
-                if (user_elem_id != null)
-                {
-                    return element_iden + dbug_GetBoundInfo() + "b " + " i" + dbug_obj_id + "a ,(ID=" + user_elem_id + ") " + dbug_GetLayoutInfo();
-                }
-                else
-                {
-                    return element_iden + dbug_GetBoundInfo() + "b " + " i" + dbug_obj_id + "a " + dbug_GetLayoutInfo();
-                }
+                return element_iden + dbug_GetBoundInfo() + " "
+                     + " i" + dbug_obj_id + "a (ID= " + user_elem_id + ") " + dbug_GetLayoutInfo();
             }
             else
             {
-                if (user_elem_id != null)
-                {
-                    return element_iden + dbug_GetBoundInfo() + " "
-                         + " i" + dbug_obj_id + "a (ID= " + user_elem_id + ") " + dbug_GetLayoutInfo();
-                }
-                else
-                {
-                    return element_iden + dbug_GetBoundInfo() + " " + " i" + dbug_obj_id + "a " + dbug_GetLayoutInfo();
-                }
+                return element_iden + dbug_GetBoundInfo() + " " + " i" + dbug_obj_id + "a " + dbug_GetLayoutInfo();
             }
+
         }
 
         public RenderElement dbugParentVisualElement => this.ParentRenderElement;

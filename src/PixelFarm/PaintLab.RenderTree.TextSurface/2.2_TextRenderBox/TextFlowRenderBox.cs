@@ -40,7 +40,7 @@ namespace LayoutFarm.TextEditing
             _editSession = new TextFlowEditSession(_textLayer);//controller
             _isMultiLine = isMultiLine;
 
-            IsBlockElement = false;
+            
             RenderBackground = RenderSelectionRange = RenderMarkers = true;
             //
             MayHasViewport = true;

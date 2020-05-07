@@ -33,8 +33,7 @@ namespace LayoutFarm.RenderBoxes
     sealed class RenderElementCollection
     {
         readonly LinkedList<RenderElement> _myElements = new LinkedList<RenderElement>();
-        int _contentW;
-        int _contentH;
+        
 
 #if DEBUG
         static int dbug_TotalId;
@@ -180,7 +179,7 @@ namespace LayoutFarm.RenderBoxes
         //    //            vinv_dbug_ExitLayerReCalculateContent();
         //    //#endif
         //}
-        public Size CalculatedContentSize => new Size(_contentW, _contentH);
+        //public Size CalculatedContentSize => new Size(_contentW, _contentH);
 #if DEBUG
         public dbugLayoutInfo dbugGetLayerInfo() => new dbugLayoutInfo(this.dbug_id);
         public void dbug_DumpElementProps(dbugLayoutMsgWriter writer)
@@ -197,8 +196,7 @@ namespace LayoutFarm.RenderBoxes
         public int dbugChildCount => _myElements.Count;
         public override string ToString()
         {
-            return "elems " + "(L" + dbug_id + ") postcal:" +
-                new Size(_contentW, _contentH);
+            return "elems " + "(L" + dbug_id + ")";
         }
 #endif
     }

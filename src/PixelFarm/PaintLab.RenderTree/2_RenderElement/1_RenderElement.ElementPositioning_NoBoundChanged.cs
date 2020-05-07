@@ -14,7 +14,7 @@ namespace LayoutFarm
         int _b_height;
 
 
-        int _uiLayoutFlags;
+        
         //------------------------ 
 
         /// <summary>
@@ -119,11 +119,11 @@ namespace LayoutFarm
         //}
         protected bool NeedInvalidateRectEvent
         {
-            get => ((_uiLayoutFlags & RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT) != 0);
+            get => ((_propFlags & RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT) != 0);
 
-            set => _uiLayoutFlags = value ?
-                    _uiLayoutFlags | RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT :
-                    _uiLayoutFlags & ~RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT;
+            set => _propFlags = value ?
+                    _propFlags | RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT :
+                    _propFlags & ~RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT;
 
         }
 
