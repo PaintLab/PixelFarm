@@ -16,17 +16,16 @@ namespace LayoutFarm.TextEditing
         bool _stateShowCaret = false;
 
         public TextEditRenderBox(
-            RootGraphic rootgfx,
             int width, int height,
             bool isMultiLine,
             bool isEditable = true)
-            : base(rootgfx, width, height, isMultiLine)
+            : base(width, height, isMultiLine)
         {
             _isEditable = isEditable;
 
             if (isEditable)
             {
-                GlobalCaretController.RegisterCaretBlink(rootgfx);
+                GlobalCaretController.RegisterCaretBlink(GlobalRootGraphic.CurrentRootGfx);
                 //
                 _myCaret = new EditorCaret(2, 17);
                 RenderCaret = true;
@@ -91,11 +90,8 @@ namespace LayoutFarm.TextEditing
             _textLayer.DrawChildContent(d, updateArea);
             GlobalRootGraphic.CurrentRenderElement = null; //temp fix
 
-            if (this.HasDefaultLayer)
-            {
-                this.DrawDefaultLayer(d, updateArea);
-            }
 
+            base.RenderClientContent(d, updateArea);
 #if DEBUG
             //for debug
             //canvas.FillRectangle(Color.Red, 0, 0, 5, 5);
@@ -153,13 +149,11 @@ namespace LayoutFarm.TextEditing
             }
 
 
-            char c = e.KeyChar;
+           
             e.CancelBubbling = true;
-            if (_editSession.SelectionRange != null
-                && _editSession.SelectionRange.IsValid)
-            {
-                InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
-            }
+
+            InvalidateGraphicOfCurrentSelectionArea();
+
             bool preventDefault = false;
             if (_textSurfaceEventListener != null &&
                 !(preventDefault = TextSurfaceEventListener.NotifyPreviewKeyPress(_textSurfaceEventListener, e)))
@@ -175,7 +169,7 @@ namespace LayoutFarm.TextEditing
             {
                 int insertAt = _editSession.CurrentLineCharIndex;
 
-                _editSession.AddCharToCurrentLine(c);
+                _editSession.AddCharToCurrentLine(e.KeyChar);
 
                 if (_textSurfaceEventListener != null)
                 {
@@ -269,7 +263,7 @@ namespace LayoutFarm.TextEditing
                         {
                             if (_editSession.SelectionRange != null)
                             {
-                                InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
+                                InvalidateGraphicOfCurrentSelectionArea();                                 
                             }
                             else
                             {
@@ -298,7 +292,7 @@ namespace LayoutFarm.TextEditing
                         {
                             if (_editSession.SelectionRange != null)
                             {
-                                InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
+                                InvalidateGraphicOfCurrentSelectionArea();
                             }
                             else
                             {
@@ -326,7 +320,7 @@ namespace LayoutFarm.TextEditing
                             UIKeys keycode = e.KeyCode;
                             if (keycode >= UIKeys.F1 && keycode <= UIKeys.F12)
                             {
-                                InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
+                                InvalidateGraphicOfCurrentSelectionArea();
                                 TextSurfaceEventListener.NotifyFunctionKeyDown(_textSurfaceEventListener, keycode);
                                 EnsureCaretVisible();
                             }
@@ -388,10 +382,7 @@ namespace LayoutFarm.TextEditing
                         {
                             if (_isEditable && _editSession.SelectionRange != null)
                             {
-                                if (_editSession.SelectionRange != null)
-                                {
-                                    InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
-                                }
+                                InvalidateGraphicOfCurrentSelectionArea();
 
                                 using (StringBuilderPool<TempTextLineCopyContext>.GetFreeStringBuilder(out StringBuilder stBuilder))
                                 {
@@ -483,7 +474,8 @@ namespace LayoutFarm.TextEditing
                             {
                                 if (_editSession.SelectionRange != null)
                                 {
-                                    InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
+                                    InvalidateGraphicOfCurrentSelectionArea();
+                                     
                                 }
 
                                 if (_editSession.SelectionRange != null)
@@ -982,14 +974,12 @@ namespace LayoutFarm.TextEditing
                 visualSelectionRange.SwapIfUnOrder();
                 if (visualSelectionRange.IsValid && !visualSelectionRange.IsOnTheSameLine)
                 {
-                    InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
+                    InvalidateGraphicOfCurrentSelectionArea();
                     //
                     _editSession.DoTabOverSelectedRange();
                     return; //finish here
                 }
             }
-
-
             //------------
             //do tab as usuall
             int insertAt = _editSession.CurrentLineCharIndex;

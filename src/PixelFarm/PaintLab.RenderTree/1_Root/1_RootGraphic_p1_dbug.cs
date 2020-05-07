@@ -134,10 +134,10 @@ namespace LayoutFarm
             }
         }
 
-        public void dbug_AddDrawLayer(RenderElementLayer layer)
+        public void dbug_AddDrawLayer(dbugLayoutInfo layerInfo)
         {
-            dbug_rootDrawingMsg.AddLast(new dbugLayoutMsg(layer,
-                new string('.', dbug_drawLevel) + "[F" + dbug_drawLevel + "] " + layer.ToString()));
+            dbug_rootDrawingMsg.AddLast(new dbugLayoutMsg(layerInfo,
+                new string('.', dbug_drawLevel) + "[F" + dbug_drawLevel + "] " + layerInfo.ToString()));
         }
         public void dbug_AddMessage(dbugLayoutMsg msg)
         {
@@ -278,7 +278,7 @@ namespace LayoutFarm
         }
         public int dbugNotNeedArrCount = 0;
         public int dbugNotNeedArrCountEpisode = 0;
-        public void dbug_PushLayoutTraceMessage(dbugVisualRootMsg msg, RenderElementLayer layer)
+        public void dbug_PushLayoutTraceMessage(dbugVisualRootMsg msg, dbugLayoutInfo layer)
         {
             if (dbugLastestDebugVisualLay != null)
             {
@@ -328,10 +328,10 @@ namespace LayoutFarm
 
 
         //--------------------------------------------------------------------------
- 
 
-        bool dbugNeedContentArrangement { get; set; }
-        bool dbugNeedReCalculateContentSize { get; set; }
+
+        internal bool dbugNeedContentArrangement { get; set; }
+        internal bool dbugNeedReCalculateContentSize { get; set; }
         public static void dbugResetAccumRect(RootGraphic rootgfx)
         {
             rootgfx._hasAccumRect = false;

@@ -56,7 +56,7 @@ namespace YourImplementation
                 var glBmp = new GLBitmap(_memBitmapBinder);
                 glBmp.IsYFlipped = false;
                 //
-                var glRenderElem = new CpuBlitGLCanvasRenderElement(rootgfx, _width, _height, glBmp);
+                var glRenderElem = new CpuBlitGLCanvasRenderElement(_width, _height, glBmp);
                 glRenderElem.SetController(this); //connect to event system
                 glRenderElem.SetOwnerDemoUI(this);
                 _canvasRenderE = glRenderElem;
@@ -70,7 +70,7 @@ namespace YourImplementation
         //
 
 
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        public override RenderElement GetPrimaryRenderElement()
         {
             //for this Elem  => please call CreatePrimaryRenderElement first 
             return _canvasRenderE;
@@ -202,24 +202,22 @@ namespace YourImplementation
         }
     }
 
-    class CpuBlitGLCanvasRenderElement : RenderBoxBase, IDisposable
+    class CpuBlitGLCanvasRenderElement : AbstractRectRenderElement, IDisposable
     {
 
-        CpuBlitGLESUIElement _ui;
+        CpuBlitGLESUIElement _glesUIElem;
         GLBitmap _glBmp;
-        RootGraphic _rootgfx;
 
-        public CpuBlitGLCanvasRenderElement(RootGraphic rootgfx, int w, int h, GLBitmap glBmp)
-            : base(rootgfx, w, h)
+        public CpuBlitGLCanvasRenderElement(int w, int h, GLBitmap glBmp)
+            : base(w, h)
         {
-            _rootgfx = rootgfx;
+
             _glBmp = glBmp;
         }
-        public void SetOwnerDemoUI(CpuBlitGLESUIElement ui)
+        public void SetOwnerDemoUI(CpuBlitGLESUIElement glesUIElem)
         {
-            _ui = ui;
+            _glesUIElem = glesUIElem;
         }
-        protected override PlainLayer CreateDefaultLayer() => new PlainLayer(this);
 
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
@@ -231,25 +229,26 @@ namespace YourImplementation
             //2. if we only update some part of texture
             //may can transfer only that part to the glBmp
             //-------------------------------------------------------------------------  
-            if (_rootgfx.HasRenderTreeInvalidateAccumRect)
+            
+            if (GlobalRootGraphic.CurrentRootGfx.HasRenderTreeInvalidateAccumRect)
             {
 
                 //update cpu surface part***  
-                DrawBoard board = _ui.GetDrawBoard();
+                DrawBoard board = _glesUIElem.GetDrawBoard();
                 if (board != null)
                 {
                     board.SetClipRect(updateArea.CurrentRect);
                     board.Clear(Color.White); //clear background, clear with white solid
 
-                    DrawDefaultLayer(board, updateArea);
+
 #if DEBUG
                     //_ui.dbugSaveAggBmp("a001.png");
 #endif
                 }
 
-                if (_ui.HasCpuBlitUpdateSurfaceDel)
+                if (_glesUIElem.HasCpuBlitUpdateSurfaceDel)
                 {
-                    _ui.UpdateCpuBlitSurface(updateArea.CurrentRect);
+                    _glesUIElem.UpdateCpuBlitSurface(updateArea.CurrentRect);
                 }
             }
 
@@ -266,10 +265,6 @@ namespace YourImplementation
         }
 
 
-        public override void ResetRootGraphics(RootGraphic rootgfx)
-        {
-
-        }
         public void Dispose()
         {
 

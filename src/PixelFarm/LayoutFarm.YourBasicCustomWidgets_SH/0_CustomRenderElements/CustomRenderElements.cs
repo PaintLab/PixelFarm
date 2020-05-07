@@ -1,97 +1,99 @@
 ﻿//Apache2, 2014-present, WinterDev
 
-using LayoutFarm.RenderBoxes;
+using System.Collections.Generic;
+
 using PixelFarm.Drawing;
+using LayoutFarm.RenderBoxes;
+
+
 namespace LayoutFarm.CustomWidgets
 {
+
     public class CustomRenderBox : RenderBoxBase
     {
+        //LIMITATION:
+        //these are NOT CSS borders/margins/paddings***
+        //we use pixel unit for our RenderBox
+
+        //if we want a sophisticate render element
+        //we can create it in another render element class
+
         Color _backColor;
         Color _borderColor;
         bool _hasSomeBorderW;
 
-        //these are NOT CSS borders/margins/paddings***
-        //we use pixel unit for our RenderBox
-        //with limitation of int8 number
 
-        byte _contentLeft;
-        byte _contentTop;
-        byte _contentRight;
-        byte _contentBottom;
+        //...for rendering only, not for layout...
+        ushort _contentLeft_offset; //border left + padding left,
+        ushort _contentTop_offset; //border top + pading top
+        ushort _contentRight_offset; //border right + padding right
+        ushort _contentBottom_offset; //botrder bottom + padding bottom
 
-        byte _borderLeft;
-        byte _borderTop;
-        byte _borderRight;
-        byte _borderBottom;
-        BoxContentLayoutKind _layoutHint;
+        byte _borderLeft; //only border left,
+        byte _borderTop; //only border top
+        byte _borderRight; //only border right
+        byte _borderBottom; //only border bottom 
 
-        public CustomRenderBox(RootGraphic rootgfx, int width, int height)
-            : base(rootgfx, width, height)
+
+        public CustomRenderBox(int width, int height)
+            : base(width, height)
         {
             this.BackColor = KnownColors.LightGray;
+            
         }
-        protected override PlainLayer CreateDefaultLayer()
-        {
-#if DEBUG
-            if (dbugBreak)
-            {
 
-            }
-#endif
-            PlainLayer layer = new PlainLayer(this);
-            layer.LayoutHint = _layoutHint;
-            return layer;
-        }
-        public BoxContentLayoutKind LayoutHint
+
+        internal List<RenderElemLineBox> Lines { get; set; }
+
+        public ushort PaddingLeft
         {
-            get => _layoutHint;
+            get => (ushort)(_contentLeft_offset - _borderLeft);
             set
             {
-                _layoutHint = value;
-                if (_defaultLayer != null)
-                {
-                    _defaultLayer.LayoutHint = value;
-                }
+                _contentLeft_offset = (ushort)(value + _borderLeft);
             }
         }
-        public int PaddingLeft
+        public ushort PaddingTop
         {
-            get => _contentLeft - _borderLeft;
-            set => _contentLeft = (byte)(value + _borderLeft);
+            get => (ushort)(_contentTop_offset - _borderTop);
+            set
+            {
+                _contentTop_offset = (ushort)(value + _borderTop);
+            }
         }
+        public ushort PaddingRight
+        {
+            get => (ushort)(_contentRight_offset - _borderRight);
+            set
+            {
+                _contentRight_offset = (ushort)(value + _borderRight);
+            }
+        }
+        public ushort PaddingBottom
 
-        public int PaddingTop
         {
-            get => _contentTop - _borderTop;
-            set => _contentTop = (byte)(value + _borderTop);
+            get => (ushort)(_contentBottom_offset - _borderBottom);
+            set
+            {
+                _contentBottom_offset = (ushort)(value + _borderBottom);
+            }
         }
-        public int PaddingRight
+        public void SetPadding(ushort left, ushort top, ushort right, ushort bottom)
         {
-            get => _contentRight - _borderRight;
-            set => _contentRight = (byte)(value + _borderRight);
-
+            _contentLeft_offset = (ushort)(left + _borderLeft);
+            _contentTop_offset = (ushort)(top + _borderTop);
+            _contentRight_offset = (ushort)(right + _borderRight);
+            _contentBottom_offset = (ushort)(bottom + _borderBottom);
         }
-        public int PaddingBottom
+        public void SetPadding(ushort sameValue)
         {
-            get => _contentBottom - _borderBottom;
-            set => _contentBottom = (byte)(value + _borderBottom);
-        }
-        public void SetPadding(byte left, byte top, byte right, byte bottom)
-        {
-            _contentLeft = (byte)(left + _borderLeft);
-            _contentTop = (byte)(top + _borderTop);
-            _contentRight = (byte)(right + _borderRight);
-            _contentBottom = (byte)(bottom + _borderBottom);
-        }
-        public void SetPadding(byte sameValue)
-        {
-            _contentLeft = (byte)(sameValue + _borderLeft);
-            _contentTop = (byte)(sameValue + _borderTop);
-            _contentRight = (byte)(sameValue + _borderRight);
-            _contentBottom = (byte)(sameValue + _borderBottom);
+            _contentLeft_offset = (ushort)(sameValue + _borderLeft);
+            _contentTop_offset = (ushort)(sameValue + _borderTop);
+            _contentRight_offset = (ushort)(sameValue + _borderRight);
+            _contentBottom_offset = (ushort)(sameValue + _borderBottom);
         }
         //------------------ 
-        public int BorderTop
+        public byte BorderTop
         {
             get => _borderTop;
             set
@@ -100,7 +102,7 @@ namespace LayoutFarm.CustomWidgets
                 if (!_hasSomeBorderW) _hasSomeBorderW = value > 0;
             }
         }
-        public int BorderBottom
+        public byte BorderBottom
         {
             get => _borderBottom;
             set
@@ -109,7 +111,7 @@ namespace LayoutFarm.CustomWidgets
                 if (!_hasSomeBorderW) _hasSomeBorderW = value > 0;
             }
         }
-        public int BorderRight
+        public byte BorderRight
         {
             get => _borderRight;
             set
@@ -118,7 +120,7 @@ namespace LayoutFarm.CustomWidgets
                 if (!_hasSomeBorderW) _hasSomeBorderW = value > 0;
             }
         }
-        public int BorderLeft
+        public byte BorderLeft
         {
             get => _borderLeft;
             set
@@ -149,43 +151,30 @@ namespace LayoutFarm.CustomWidgets
         }
         //-------------
 
-        public int ContentWidth => Width - (_contentLeft + _contentRight);
-        public int ContentHeight => Height - (_contentTop + _contentBottom);
+        public int ContentWidth => Width - (_contentLeft_offset + _contentRight_offset);
+        public int ContentHeight => Height - (_contentTop_offset + _contentBottom_offset);
 
-        public int ContentLeft
+        public ushort ContentLeft
         {
-            get => _contentLeft;
-            set => _contentLeft = (byte)value;
+            get => _contentLeft_offset;
+            set => _contentLeft_offset = (byte)value;
         }
-        public int ContentTop
+        public ushort ContentTop
         {
-            get => _contentTop;
-            set => _contentTop = (byte)value;
+            get => _contentTop_offset;
+            set => _contentTop_offset = (ushort)value;
         }
-        public int ContentRight
+        public ushort ContentRight
         {
-            get => _contentRight;
-            set => _contentRight = (byte)value;
+            get => _contentRight_offset;
+            set => _contentRight_offset = (ushort)value;
         }
-        public int ContentBottom
+        public ushort ContentBottom
         {
-            get => _contentBottom;
-            set => _contentBottom = (byte)value;
+            get => _contentBottom_offset;
+            set => _contentBottom_offset = (ushort)value;
         }
-        public void SetContentOffsets(byte contentLeft, byte contentTop, byte contentRight, byte contentBottom)
-        {
-            _contentLeft = contentLeft;
-            _contentTop = contentTop;
-            _contentRight = contentRight;
-            _contentBottom = contentBottom;
-        }
-        public void SetContentOffsets(byte allside)
-        {
-            _contentLeft = allside;
-            _contentTop = allside;
-            _contentRight = allside;
-            _contentBottom = allside;
-        }
+
 
         public Color BackColor
         {
@@ -195,6 +184,7 @@ namespace LayoutFarm.CustomWidgets
                 if (_backColor == value) return;
 
                 _backColor = value;
+
                 BgIsNotOpaque = value.A < 255;
 
                 if (this.HasParentLink)
@@ -226,13 +216,20 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
+
+
+
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
 #if DEBUG
-            //if (this.dbugBreak)
-            //{
-            //}
+            if (this.dbugBreak)
+            {
+            }
 #endif
+            //if (this.Width < 30 && this.BackColor == Color.White)
+            //{
+
+            //}
 
             //this render element dose not have child node, so
             //if WaitForStartRenderElement == true,
@@ -247,7 +244,44 @@ namespace LayoutFarm.CustomWidgets
             }
 
             //default content layer
-            this.DrawDefaultLayer(d, updateArea);
+            //check if we use multiline or not
+            if (Lines != null)
+            {
+
+                List<RenderElemLineBox> lineboxes = Lines;
+                int j = lineboxes.Count;
+                int enter_canvas_x = d.OriginX;
+                int enter_canvas_y = d.OriginY;
+
+                int update_a_top = updateArea.Top;
+                int update_a_bottom = updateArea.Bottom;
+
+                for (int i = 0; i < j; ++i)
+                {
+                    RenderElemLineBox linebox = lineboxes[i];
+                    if (linebox.IsIntersect(update_a_top, update_a_bottom))
+                    {
+                        //offset to this client
+
+                        //if the child not need clip
+                        //its children (if exist) may intersect 
+                        int x = 0;
+                        int y = linebox.LineTop;
+
+                        d.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
+                        updateArea.Offset(-x, -y);
+
+                        linebox.Render(d, updateArea);
+
+                        updateArea.Offset(x, y);
+                    }
+                }
+                d.SetCanvasOrigin(enter_canvas_x, enter_canvas_y); //restore                
+            }
+            else
+            {
+                base.RenderClientContent(d, updateArea);
+            }
             //
 
             if (!WaitForStartRenderElement &&
@@ -266,28 +300,51 @@ namespace LayoutFarm.CustomWidgets
             //   new Rectangle(updateArea.Left, updateArea.Top, updateArea.Width, updateArea.Height));
 #endif
         }
+        public override void ChildrenHitTestCore(HitChain hitChain)
+        {
+
+            if (Lines != null)
+            {
+                //check if it's overlap line or not
+                //find a properline 
+                //then offset and test at that line
+                List<RenderElemLineBox> lineboxes = Lines;
+                int j = lineboxes.Count;
+                for (int i = 0; i < j; ++i)
+                {
+                    RenderElemLineBox linebox = lineboxes[i];
+                    if (linebox.HitTestCore(hitChain))
+                    {
+                        return;
+                    }
+                    else if (linebox.LineTop > hitChain.TestPointY)
+                    {
+                        //we iterate from top to bottom
+                        //we should stop and return
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                //use default machanism
+                base.ChildrenHitTestCore(hitChain);
+            }
+        }
     }
 
     public class DoubleBufferCustomRenderBox : CustomRenderBox
-    {
+    { 
         DrawboardBuffer _builtInBackBuffer;
         bool _hasAccumRect;
         Rectangle _invalidateRect;
-        bool _enableDoubleBuffer;
-        public DoubleBufferCustomRenderBox(RootGraphic rootgfx, int width, int height)
-          : base(rootgfx, width, height)
+
+        public DoubleBufferCustomRenderBox(int width, int height)
+          : base(width, height)
         {
             NeedInvalidateRectEvent = true;
         }
-        public bool EnableDoubleBuffer
-        {
-            get => _enableDoubleBuffer;
-            set
-            {
-                _enableDoubleBuffer = value;
-            }
-        }
-
+        public bool EnableDoubleBuffer { get; set; }
 
         protected override void OnInvalidateGraphicsNoti(bool fromMe, ref Rectangle totalBounds)
         {
@@ -328,7 +385,7 @@ namespace LayoutFarm.CustomWidgets
         }
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
-            if (_enableDoubleBuffer)
+            if (EnableDoubleBuffer)
             {
                 var painter = new PixelFarm.Drawing.Internal.MicroPainter(d);
                 if (_builtInBackBuffer == null)

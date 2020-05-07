@@ -21,6 +21,8 @@ namespace LayoutFarm.UI.OpenGL
         public MyTopWindowBridgeOpenGL(RootGraphic root, ITopWindowEventRoot topWinEventRoot)
             : base(root, topWinEventRoot)
         {
+            GlobalRootGraphic.CurrentRootGfx = root;
+
             _rootgfx = root;
 
             _defaultCur = UIPlatform.CreateCursor(new CursorRequest("system:Default"));

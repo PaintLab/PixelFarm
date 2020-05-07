@@ -259,7 +259,7 @@ namespace Mini
 
                 outputFile.AppendLine("public partial class RawAtlasData{");
 
-                outputFile.AppendLine("public const string NAME=\"" + onlyFilename + "\";");
+                outputFile.AppendLine("public static readonly string NAME=\"" + onlyFilename + "\";");
 
                 outputFile.AppendLine("//img_links:");
                 foreach (string url in imgUrlDic.Keys)
@@ -326,6 +326,22 @@ namespace Mini
 
                     outputFile.AppendLine("public readonly AtlasImageBinder " + url2 + "=new AtlasImageBinder(RawAtlasData.NAME, \"" + url + "\");");
                 }
+
+                outputFile.AppendLine(@"
+
+                    static bool s_registered;
+                    public Binders(){
+                            if(!s_registered){        
+                                    try{
+                                         PixelFarm.Platforms.InMemStorage.AddData(RawAtlasData.NAME + "".info"", RawAtlasData.info);
+                                         PixelFarm.Platforms.InMemStorage.AddData(RawAtlasData.NAME + "".png"", RawAtlasData.img);
+                                    }catch(System.Exception ex){
+                                    }
+                            s_registered= true;
+                            }
+                    }
+                ");
+
                 outputFile.AppendLine("}"); //class
                 outputFile.AppendLine("}"); //namespace
 

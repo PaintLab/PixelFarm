@@ -22,7 +22,7 @@ namespace LayoutFarm
             {
 
                 List<PennerAnimationInfo> pennerAnimationList = LoadAllPennerAnimationList();
-                ListView easingFuncs_List = new ListView(200, 850);
+                ListBox easingFuncs_List = new ListBox(200, 850);
                 easingFuncs_List.SetLocation(600, 20);
                 host.AddChild(easingFuncs_List);
                 easingFuncs_List.ListItemMouseEvent += (s, e) =>

@@ -1,39 +1,26 @@
 ﻿//MIT, 2019-present, WinterDev
 
-using System.Collections.Generic;
-using System.Text;
-
-using LayoutFarm.RenderBoxes;
+ 
 using PixelFarm.Drawing;
 
 namespace LayoutFarm.TextEditing
 {
-    public class DoubleBufferCustomRenderBox : RenderBoxBase
+    public class DoubleBufferCustomRenderBox : AbstractRectRenderElement
     {
         DrawboardBuffer _builtInBackBuffer;
         bool _hasAccumRect;
         Rectangle _invalidateRect;
-        bool _enableDoubleBuffer;
-        public DoubleBufferCustomRenderBox(RootGraphic rootgfx, int width, int height)
-          : base(rootgfx, width, height)
+
+        public DoubleBufferCustomRenderBox( int width, int height)
+          : base( width, height)
         {
             NeedInvalidateRectEvent = true;
         }
 
-        public RenderBoxBase ContentBox { get; set; }
+        public RenderElement ContentBox { get; set; }
 
-        public bool EnableDoubleBuffer
-        {
-            get => _enableDoubleBuffer;
-            set
-            {
-                _enableDoubleBuffer = value;
-            }
-        }
-        protected override PlainLayer CreateDefaultLayer()
-        {
-            return new PlainLayer(this);
-        }
+        public bool EnableDoubleBuffer { get; set; }
+ 
 
         protected override void OnInvalidateGraphicsNoti(bool fromMe, ref Rectangle totalBounds)
         {
@@ -77,7 +64,7 @@ namespace LayoutFarm.TextEditing
         {
             if (ContentBox == null) return;
             //
-            if (_enableDoubleBuffer)
+            if (EnableDoubleBuffer)
             {
                 var painter = new PixelFarm.Drawing.Internal.MicroPainter(d);
                 if (_builtInBackBuffer == null)

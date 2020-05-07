@@ -1,6 +1,7 @@
 ﻿//Apache2, 2014-present, WinterDev
 
 using System;
+using LayoutFarm.UI;
 using PixelFarm.Drawing;
 namespace LayoutFarm.CustomWidgets
 {
@@ -17,6 +18,9 @@ namespace LayoutFarm.CustomWidgets
             //(this feature  found in label, image box, and text-flow-label)
             HasSpecificWidthAndHeight = false;
         }
+
+        protected override IUICollection<UIElement> GetDefaultChildrenIter() => null;
+
         public ImageBox(int width, int height)
             : base(width, height)
         {
@@ -28,7 +32,7 @@ namespace LayoutFarm.CustomWidgets
             get => _imageBinder;
             set
             {
-                
+
                 if (_imageBinder != null)
                 {
                     //remove prev sub
@@ -52,22 +56,13 @@ namespace LayoutFarm.CustomWidgets
         }
 
 
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        public override RenderElement GetPrimaryRenderElement()
         {
             if (_imgRenderBox == null)
             {
-                var renderBox = new CustomImageRenderBox(rootgfx, this.Width, this.Height);
-                renderBox.SetLocation(this.Left, this.Top);
+                var renderBox = new CustomImageRenderBox(this.Width, this.Height);
+                SetCommonProperties(renderBox, this);
                 renderBox.ImageBinder = _imageBinder;
-                renderBox.SetController(this);
-                renderBox.BackColor = this.BackColor;
-                renderBox.NeedClipArea = this.NeedClipArea;
-                renderBox.PaddingLeft = PaddingLeft;
-                renderBox.PaddingRight = PaddingRight;
-                renderBox.PaddingTop = PaddingTop;
-                renderBox.PaddingBottom = PaddingBottom;
-                renderBox.SetVisible(this.Visible);
-                renderBox.TransparentForMouseEvents = this.TransparentForMouseEvents;
 
                 SetPrimaryRenderElement(renderBox);
                 _imgRenderBox = renderBox;
@@ -90,7 +85,7 @@ namespace LayoutFarm.CustomWidgets
                 this.CurrentPrimaryRenderElement.SetSize(w, h);
             }
         }
-        protected override void OnContentUpdate()
+        void OnContentUpdate()
         {
             if (_imageBinder != null && _imageBinder.State == BinderState.Loaded)
             {
@@ -101,7 +96,7 @@ namespace LayoutFarm.CustomWidgets
                 this.InvalidateGraphics();
             }
         }
-        public override void PerformContentLayout()
+        public override void PerformContentLayout(LayoutUpdateArgs args)
         {
             if (_imageBinder != null && _imageBinder.State == BinderState.Loaded)
             {

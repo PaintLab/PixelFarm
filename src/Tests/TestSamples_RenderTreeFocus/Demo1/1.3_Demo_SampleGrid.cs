@@ -2,6 +2,8 @@
 
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
+using LayoutFarm.CustomWidgets;
+
 namespace LayoutFarm
 {
     [DemoNote("1.3 Grid")]
@@ -130,6 +132,32 @@ namespace LayoutFarm
                 //perform content layout again***
                 //gridView.PerformContentLayout();
             }
+        }
+    }
+
+
+    [DemoNote("1.3.1 Grid")]
+    public class Demo_Grid3_1 : App
+    {
+        protected override void OnStart(AppHost host)
+        {
+            //grid0
+            {
+                var gridView = new LayoutFarm.CustomWidgets.GridView(100, 100);
+                gridView.SetLocation(50, 50);
+                gridView.BuildGrid(2, 4, CellSizeStyle.UniformCell);
+                host.AddChild(gridView);
+                gridView.MouseDown += (s1, e1) =>
+                {
+                };
+
+                var box1 = new Box(30, 30);
+                box1.BackColor = Color.Blue;
+                gridView.SetCellContent(box1, 1, 1);
+
+
+            }
+
         }
     }
 }
