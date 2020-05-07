@@ -578,7 +578,7 @@ namespace LayoutFarm.CustomWidgets
         }
         protected override IUICollection<UIElement> GetDefaultChildrenIter() => _children;
 
-        public void Add(UIElement ui)
+        internal void Add(UIElement ui)
         {
             if (_children == null)
             {
