@@ -46,7 +46,8 @@
     <Compile Include="Demo1.2\1.13_ColorBlender.cs" />
     <Compile Include="Demo1.2\MyCustomColorSet.cs" />
     <Compile Include="Demo1\1.1_Demo_SingleButton.cs" />
-    <Compile Include="Demo1\1.2_Demo_MultipleBoxes.cs" />
+    <Compile Include="Demo1\1.2.1_MultipleBoxes2.cs" />
+    <Compile Include="Demo1\1.2.0_Demo_MultipleBoxes.cs" />
     <Compile Include="Demo1\1.3_Demo_SampleGrid.cs" />
     <Compile Include="Demo1\1.4_Demo_Drag.cs" />
     <Compile Include="Demo1\1.5_Demo_ScrollBar.cs" />

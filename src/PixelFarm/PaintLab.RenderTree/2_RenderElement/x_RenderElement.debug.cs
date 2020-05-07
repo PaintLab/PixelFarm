@@ -30,8 +30,8 @@ namespace LayoutFarm
 
     partial class RenderElement
     {
-        public bool dbugNeedContentArrangement => this.NeedContentArrangement;
-        public bool dbugNeedReCalculateContentSize => this.NeedReCalculateContentSize;
+        //public bool dbugNeedContentArrangement => this.NeedContentArrangement;
+        //public bool dbugNeedReCalculateContentSize => this.NeedReCalculateContentSize;
         public Rectangle dbugGetGlobalRect() => new Rectangle(GetGlobalLocationStatic(this), Size);
 
         public virtual void dbug_WriteOwnerLayerInfo(RootGraphic visualroot, int i)
@@ -71,29 +71,17 @@ namespace LayoutFarm
                 element_iden += " " + dbug_ObjectNote;
             }
 
-            if (IsBlockElement)
+
+            if (user_elem_id != null)
             {
-                if (user_elem_id != null)
-                {
-                    return element_iden + dbug_GetBoundInfo() + "b " + " i" + dbug_obj_id + "a ,(ID=" + user_elem_id + ") " + dbug_GetLayoutInfo();
-                }
-                else
-                {
-                    return element_iden + dbug_GetBoundInfo() + "b " + " i" + dbug_obj_id + "a " + dbug_GetLayoutInfo();
-                }
+                return element_iden + dbug_GetBoundInfo() + " "
+                     + " i" + dbug_obj_id + "a (ID= " + user_elem_id + ") " + dbug_GetLayoutInfo();
             }
             else
             {
-                if (user_elem_id != null)
-                {
-                    return element_iden + dbug_GetBoundInfo() + " "
-                         + " i" + dbug_obj_id + "a (ID= " + user_elem_id + ") " + dbug_GetLayoutInfo();
-                }
-                else
-                {
-                    return element_iden + dbug_GetBoundInfo() + " " + " i" + dbug_obj_id + "a " + dbug_GetLayoutInfo();
-                }
+                return element_iden + dbug_GetBoundInfo() + " " + " i" + dbug_obj_id + "a " + dbug_GetLayoutInfo();
             }
+
         }
 
         public RenderElement dbugParentVisualElement => this.ParentRenderElement;
@@ -109,31 +97,32 @@ namespace LayoutFarm
         public string dbug_GetLayoutInfo()
         {
             string info = string.Empty;
-            if (!this.HasCalculatedSize)
-            {
-                info += "[C:" + dbug_InvalidateRecalculateSizeEpisode + "]";
-            }
-            else
-            {
-                info += "[nc:" + dbug_ValidateRecalculateSizeEpisode + "]";
-            }
+            info += "[" + dbug_ValidateRecalculateSizeEpisode + "]";
+            //if (!this.HasCalculatedSize)
+            //{
+            //    info += "[C:" + dbug_InvalidateRecalculateSizeEpisode + "]";
+            //}
+            //else
+            //{
+            //    info += "[nc:" + dbug_ValidateRecalculateSizeEpisode + "]";
+            //}
 
-            if (this.dbugNeedContentArrangement)
-            {
-                info += "[A:" + dbug_InvalidateContentArrEpisode + "," + "na:" + dbug_ValidateContentArrEpisode + "]";
-                if (this.dbug_FinishArr != this.dbug_BeginArr)
-                {
-                    info += "!";
-                }
-            }
-            else
-            {
-                info += "[na:" + dbug_ValidateContentArrEpisode + ",A:" + dbug_ValidateContentArrEpisode + "]";
-                if (this.dbug_FinishArr != this.dbug_BeginArr)
-                {
-                    info += "!";
-                }
-            }
+            //if (this.dbugNeedContentArrangement)
+            //{
+            //    info += "[A:" + dbug_InvalidateContentArrEpisode + "," + "na:" + dbug_ValidateContentArrEpisode + "]";
+            //    if (this.dbug_FinishArr != this.dbug_BeginArr)
+            //    {
+            //        info += "!";
+            //    }
+            //}
+            //else
+            //{
+            //    info += "[na:" + dbug_ValidateContentArrEpisode + ",A:" + dbug_ValidateContentArrEpisode + "]";
+            //    if (this.dbug_FinishArr != this.dbug_BeginArr)
+            //    {
+            //        info += "!";
+            //    }
+            //}
 
 
             return info;
@@ -331,7 +320,7 @@ namespace LayoutFarm
                 visualroot.dbug_RootUpdateCounter++;
             }
         }
-        public RootGraphic dbugVisualRoot => this.Root;
+        public RootGraphic dbugVisualRoot => null;
 
 #endif
     }

@@ -6,18 +6,18 @@ using PixelFarm.Drawing;
 
 namespace LayoutFarm.UI
 {
-    public enum RectUIAlignment : byte
-    {
-        Begin, //left, if host is horizontal stack ,or top if host is vertical stack
-        Middle,
-        End, //right, if host is horizontal stack ,or bottom if host is vertical stack
-    }
+
+
     /// <summary>
     /// abstract Rect UI Element
     /// </summary>
-    public abstract class AbstractRectUI : UIElement, IScrollable, IBoxElement, IAcceptBehviour
+    public abstract class AbstractRectUI : UIElement, IScrollable, IBoxElement, IAcceptBehviour, IAbstractRect
     {
-        protected enum PaddingName
+        //dimension only
+        //no color,
+        //no children
+
+        protected enum PaddingName : byte
         {
             Left,
             Top,
@@ -26,7 +26,7 @@ namespace LayoutFarm.UI
             AllSideSameValue,
             AllSide
         }
-        protected enum MarginName
+        protected enum MarginName : byte
         {
             Left,
             Top,
@@ -35,7 +35,7 @@ namespace LayoutFarm.UI
             AllSideSameValue,
             AllSide
         }
-        protected enum BorderName
+        protected enum BorderName : byte
         {
             Left,
             Top,
@@ -44,26 +44,26 @@ namespace LayoutFarm.UI
             AllSideSameValue,
             AllSide
         }
+
+        //some properties about our rect
         bool _specificWidth;
         bool _specificHeight;
 
-
-        byte _paddingLeft;
-        byte _paddingTop;
-        byte _paddingRight;
-        byte _paddingBottom;
+        ushort _paddingLeft;
+        ushort _paddingTop;
+        ushort _paddingRight;
+        ushort _paddingBottom;
         //
         byte _borderLeft;
         byte _borderTop;
         byte _borderRight;
         byte _borderBottom;
         //
-        short _marginLeft;
-        short _marginTop;
-        short _marginRight;
-        short _marginBottom;
-        // 
-        LayoutInstance _layoutInstance;
+        ushort _marginLeft;
+        ushort _marginTop;
+        ushort _marginRight;
+        ushort _marginBottom;
+
         public AbstractRectUI(int width, int height)
         {
             //default,           
@@ -74,24 +74,20 @@ namespace LayoutFarm.UI
             //default for box
             this.AutoStopMouseEventPropagation = true;
         }
-        public LayoutInstance LayoutInstance
-        {
-            get => _layoutInstance;
-            set
-            {
-                _layoutInstance = value;
-            }
-        }
-        public override void UpdateLayout()
-        {
-            if (_layoutInstance != null && _layoutInstance.GetResultBounds(out RectangleF bounds))
-            {
-                SetLocationAndSize((int)bounds.Left, (int)bounds.Top, (int)bounds.Width, (int)bounds.Height);
-            }
-        }
-        public RectUIAlignment Alignment { get; set; }
 
-        public event EventHandler<ViewportChangedEventArgs> ViewportChanged;
+
+        public RectUIAlignment HorizontalAlignment { get; set; }
+        public VerticalAlignment VerticalAlignment { get; set; }
+
+
+
+        public int CalculatedMinWidth { get; protected set; }
+        public int CalculatedMinHeight { get; protected set; }
+
+        public ushort UserSpecificMinWidth { get; set; }
+        public ushort UserSpecificMinHeight { get; set; }
+
+        public event EventHandler<ViewportChangedEventArgs> ViewportChanged;//TODO: review this*** => use event queue?
 
         void InitViewportPool()
         {
@@ -151,9 +147,6 @@ namespace LayoutFarm.UI
                 this.CurrentPrimaryRenderElement.SetLocation(left, top);
             }
         }
-
-
-
 
         /// <summary>
         /// set visual size (or viewport size) of this rect
@@ -267,25 +260,25 @@ namespace LayoutFarm.UI
         }
 
         //---------------------------------------------------------------
-        protected virtual void InvalidatePadding(PaddingName paddingName, byte newValue)
+        protected virtual void InvalidatePadding(PaddingName paddingName, ushort newValue)
         {
         }
-        public byte PaddingLeft
+        public ushort PaddingLeft
         {
             get => _paddingLeft;
             set => InvalidatePadding(PaddingName.Left, _paddingLeft = value);
         }
-        public byte PaddingTop
+        public ushort PaddingTop
         {
             get => _paddingTop;
             set => InvalidatePadding(PaddingName.Top, _paddingTop = value);
         }
-        public byte PaddingRight
+        public ushort PaddingRight
         {
             get => _paddingRight;
             set => InvalidatePadding(PaddingName.Right, _paddingRight = value);
         }
-        public byte PaddingBottom
+        public ushort PaddingBottom
         {
             get => _paddingBottom;
             set => InvalidatePadding(PaddingName.Bottom, _paddingBottom = value);
@@ -307,25 +300,25 @@ namespace LayoutFarm.UI
             InvalidatePadding(PaddingName.AllSideSameValue, sameValue);
         }
         //---------------------------------------------------------------
-        protected virtual void InvalidateMargin(MarginName marginName, short newValue)
+        protected virtual void InvalidateMargin(MarginName marginName, ushort newValue)
         {
         }
-        public short MarginLeft
+        public ushort MarginLeft
         {
             get => _marginLeft;
             set => InvalidateMargin(MarginName.Left, _marginLeft = value);
         }
-        public short MarginTop
+        public ushort MarginTop
         {
             get => _marginTop;
             set => InvalidateMargin(MarginName.Top, _marginTop = value);
         }
-        public short MarginRight
+        public ushort MarginRight
         {
             get => _marginRight;
             set => InvalidateMargin(MarginName.Right, _marginRight = value);
         }
-        public short MarginBottom
+        public ushort MarginBottom
         {
             get => _marginBottom;
             set => InvalidateMargin(MarginName.Bottom, _marginBottom = value);
@@ -333,7 +326,7 @@ namespace LayoutFarm.UI
         public int MarginLeftRight => _marginLeft + _marginRight;
         public int MarginTopBottom => _marginTop + _marginBottom;
 
-        public void SetMargins(byte left, byte top, byte right, byte bottom)
+        public void SetMargins(ushort left, ushort top, ushort right, ushort bottom)
         {
             _marginLeft = left;
             _marginTop = top;
@@ -341,7 +334,7 @@ namespace LayoutFarm.UI
             _marginBottom = bottom;
             InvalidateMargin(MarginName.AllSide, 0);
         }
-        public void SetMargins(short sameValue)
+        public void SetMargins(ushort sameValue)
         {
             _marginLeft =
                 _marginTop =
@@ -438,12 +431,6 @@ namespace LayoutFarm.UI
             SetViewport(x, y, this);
         }
 
-        //------------------------------
-        public virtual void PerformContentLayout()
-        {
-            //AbstractRect dose not have content
-        }
-        //
         public virtual int InnerHeight => this.Height;
         //
         public virtual int InnerWidth => this.Width;
@@ -451,40 +438,17 @@ namespace LayoutFarm.UI
         public bool HasSpecificWidth
         {
             get => _specificWidth;
-            set
-            {
-                _specificWidth = value;
-                if (this.CurrentPrimaryRenderElement != null)
-                {
-                    CurrentPrimaryRenderElement.HasSpecificWidth = value;
-                }
-            }
+            set => _specificWidth = value;
         }
         public bool HasSpecificHeight
         {
             get => _specificHeight;
-            set
-            {
-                _specificHeight = value;
-                if (this.CurrentPrimaryRenderElement != null)
-                {
-                    CurrentPrimaryRenderElement.HasSpecificHeight = value;
-                }
-            }
+            set => _specificHeight = value;
         }
         public bool HasSpecificWidthAndHeight
         {
             get => _specificHeight && _specificWidth;
-            set
-            {
-                _specificHeight = _specificWidth = value;
-
-                if (this.CurrentPrimaryRenderElement != null)
-                {
-                    CurrentPrimaryRenderElement.HasSpecificHeight = value;
-                    CurrentPrimaryRenderElement.HasSpecificWidth = value;
-                }
-            }
+            set => _specificHeight = _specificWidth = value;
         }
 
         public Rectangle Bounds => new Rectangle(this.Left, this.Top, this.Width, this.Height);
@@ -608,13 +572,23 @@ namespace LayoutFarm.UI
         {
             if (!DisableAutoBehRaising) RaiseBehLostMouseFocus(e);
         }
-
-
         protected static void AssignProperties(LayoutFarm.CustomWidgets.CustomRenderBox customRenderE, AbstractRectUI ui)
         {
             customRenderE.SetLocation(ui.Left, ui.Top);
-            
         }
+
+        //--------------
+        //layout instance feature
+        public LayoutInstance LayoutInstance { get; set; }
+        public override void UpdateLayout()
+        {
+            //update size and bounds from its layout instance
+            if (LayoutInstance != null && LayoutInstance.GetResultBounds(out RectangleF bounds))
+            {
+                SetLocationAndSize((int)bounds.Left, (int)bounds.Top, (int)bounds.Width, (int)bounds.Height);
+            }
+        }
+
     }
 
     public static class UIElementExtensions
@@ -632,5 +606,7 @@ namespace LayoutFarm.UI
             ui.SetSize(ui.Width, newH);
         }
     }
+
+
 
 }

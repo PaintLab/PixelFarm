@@ -5,8 +5,8 @@ using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm
 {
-    [DemoNote("1.2 MultpleBox")]
-    public class Demo_MultipleBox : App
+    [DemoNote("1.2.0 MultipleBoxes")]
+    public class Demo_MultipleBoxes : App
     {
         LayoutFarm.CustomWidgets.CheckBox _currentSingleCheckedBox;
         protected override void OnStart(AppHost host)
@@ -116,7 +116,9 @@ namespace LayoutFarm
             protected override void OnMouseUp(UIMouseUpEventArgs e)
             {
             }
-        } 
+        }
     }
+
+
 
 }

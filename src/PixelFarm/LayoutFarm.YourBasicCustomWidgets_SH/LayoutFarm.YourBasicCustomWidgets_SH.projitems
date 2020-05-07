@@ -10,8 +10,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)0_CustomRenderElements\CustomImageRenderBox.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)0_CustomRenderElements\CustomRenderBoxSpec.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)0_CustomRenderElements\CustomRenderElements.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)0_CustomRenderElements\CustomTextRun.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)0_CustomRenderElements\CustomLineBox.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)0_CustomRenderElements\RenderElementExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)1_UIElement\1_UIElement.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)1_UIElement\2_UIElement_EventListener.cs" />

@@ -1,10 +1,9 @@
 ﻿//Apache2, 2014-present, WinterDev
 
-using System;
-using System.Collections.Generic;
-using PixelFarm.Drawing;
 using LayoutFarm.UI;
 using PixelFarm.CpuBlit;
+using PixelFarm.Drawing;
+
 namespace LayoutFarm.CustomWidgets
 {
     public class ListBox : AbstractControlBox
@@ -79,26 +78,6 @@ namespace LayoutFarm.CustomWidgets
         }
 
 
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
-        {
-            if (!HasReadyRenderElement)
-            {
-                CustomRenderBox newone = base.GetPrimaryRenderElement(rootgfx) as CustomRenderBox;
-                newone.LayoutHint = this.ContentLayoutKind;
-                newone.HasSpecificWidthAndHeight = true;
-
-                foreach (UIElement child in _items.GetIter())
-                {
-                    newone.AddChild(child.GetPrimaryRenderElement(rootgfx));
-                }
-
-                return newone;
-            }
-            else
-            {
-                return base.GetPrimaryRenderElement(rootgfx);
-            }
-        }
         public int ItemCount => _items.Count;
         public void AddItem(ListItem item)
         {
@@ -306,25 +285,27 @@ namespace LayoutFarm.CustomWidgets
         }
         //
         public override RenderElement CurrentPrimaryRenderElement => _primElement;
-        //
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+
+
+        public override RenderElement GetPrimaryRenderElement()
         {
             if (_primElement == null)
             {
                 //1.
-                var element = new CustomRenderBox(rootgfx, this.Width, this.Height);
+                var element = new CustomRenderBox(this.Width, this.Height);
                 element.SetLocation(this.Left, this.Top);
                 element.BackColor = _backColor;
                 element.SetController(this);
                 //
-                _listItemText = new CustomTextRun(rootgfx, 200, this.Height);
+                _listItemText = new CustomTextRun(200, this.Height);
                 _listItemText.DrawTextTechnique = DrawTextTechnique.LcdSubPix;
 
                 if (_font != null)
                 {
                     _listItemText.RequestFont = _font;
                     //TODO: review how to find 
-                    int blankLineHeight = (int)rootgfx.TextServices.MeasureBlankLineHeight(_font);
+
+                    int blankLineHeight = (int)GlobalRootGraphic.CurrentRootGfx.TextServices.MeasureBlankLineHeight(_font);
                     _listItemText.SetHeight(blankLineHeight);
                     element.SetHeight(blankLineHeight);
                 }

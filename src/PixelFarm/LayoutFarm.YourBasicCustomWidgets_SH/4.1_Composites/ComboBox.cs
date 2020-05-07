@@ -4,17 +4,15 @@
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public class ComboBox : AbstractBox
+    public class ComboBox : AbstractControlBox
     {
         HingeRelation _hingeRel = new HingeRelation();
-        UIList<UIElement> _children;
+
         public ComboBox(int width, int height)
             : base(width, height)
         {
             _hingeRel.LandPart = this;
-            _children = new UIList<UIElement>();
         }
-        protected override IUICollection<UIElement> GetDefaultChildrenIter() => _children;
 
         protected override void OnLostMouseFocus(UIMouseLostFocusEventArgs e)
         {
@@ -38,31 +36,9 @@ namespace LayoutFarm.CustomWidgets
         {
             get => _hingeRel.FloatPartStyle;
             set => _hingeRel.FloatPartStyle = value;
-        }
-
-        public void AddLandPartContent(UIElement ui)
-        {
-            _children.Add(this, ui);
-            if (_primElement != null)
-            {
-                _primElement.AddChild(ui);
-            }
-        }
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
-        {
-            if (!HasReadyRenderElement)
-            {
-                RenderElement renderE = base.GetPrimaryRenderElement(rootgfx);
-                foreach (UIElement ui in _children.GetIter())
-                {
-                    _primElement.AddChild(ui);
-                }
-                //???
-
-                return renderE;
-            }
-            return base.GetPrimaryRenderElement(rootgfx);
-        }
+        } 
+        public void AddLandPartContent(UIElement ui) => AddChild(ui); 
+       
     }
 
 }

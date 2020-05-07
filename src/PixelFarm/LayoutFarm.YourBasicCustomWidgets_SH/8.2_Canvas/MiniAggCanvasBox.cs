@@ -14,13 +14,11 @@ namespace LayoutFarm.CustomWidgets
         public PixelFarm.Drawing.Painter Painter => _canvasRenderElement.Painter;
         public override RenderElement CurrentPrimaryRenderElement => _canvasRenderElement;
 
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        public override RenderElement GetPrimaryRenderElement()
         {
             if (_canvasRenderElement == null)
             {
-                var canvas = new MiniAggCanvasRenderElement(rootgfx, this.Width, this.Height);
-                canvas.HasSpecificHeight = this.HasSpecificHeight;
-                canvas.HasSpecificWidth = this.HasSpecificWidth;
+                var canvas = new MiniAggCanvasRenderElement(this.Width, this.Height); 
                 canvas.SetLocation(this.Left, this.Top);
                 canvas.Painter.StrokeWidth = 1;
                 canvas.Painter.StrokeColor = PixelFarm.Drawing.Color.Black;
@@ -32,6 +30,6 @@ namespace LayoutFarm.CustomWidgets
         protected void InvalidateCanvasContent()
         {
             _canvasRenderElement.InvalidateCanvasContent();
-        } 
+        }
     }
 }

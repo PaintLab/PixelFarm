@@ -29,8 +29,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Diagnostics;
-using System.Runtime.Remoting.Channels;
+using System.Diagnostics; 
 
 //from namespace Mono.TextEditor.Utils
 namespace LayoutFarm.TreeCollection

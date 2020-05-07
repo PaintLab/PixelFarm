@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-
-
-    public enum ContentStretch
+    public enum ContentStretch : byte
     {
         None,
         Horizontal,
@@ -127,12 +125,9 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
-        protected override void OnAcceptVisitor(UIVisitor visitor)
-        {
-            if (_uiList != null)
-            {
-                _uiList.AcceptVisitor(visitor);
-            }
-        }
+        protected override void OnAcceptVisitor(UIVisitor visitor) => _uiList?.AcceptVisitor(visitor);
+
+       
+         
     }
 }

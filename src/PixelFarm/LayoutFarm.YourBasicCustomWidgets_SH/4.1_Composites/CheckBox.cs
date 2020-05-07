@@ -1,6 +1,5 @@
 ﻿//Apache2, 2014-present, WinterDev
 
-using LayoutFarm.UI;
 using System;
 namespace LayoutFarm.CustomWidgets
 {
@@ -18,6 +17,13 @@ namespace LayoutFarm.CustomWidgets
         {
 
             _imageBox = new ImageBox();
+            _imageBox.ImageBinder = _isChecked ? s_checkedImg : s_uncheckedImg;
+            _imageBox.MouseDown += (s, e) =>
+            {
+                //toggle checked/unchecked
+                this.Checked = !this.Checked;
+            };
+            
             AddChild(_imageBox);
         }
         void EnsureImgBinders()
@@ -31,33 +37,7 @@ namespace LayoutFarm.CustomWidgets
             //    s_uncheckedImg = ResImageList.GetImageBinder(ImageName.CheckBoxUnChecked);
             //}
         }
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
-        {
-            if (!this.HasReadyRenderElement)
-            {
-                //first time
-                EnsureImgBinders();
-
-                RenderElement baseRenderElement = base.GetPrimaryRenderElement(rootgfx);
-                if (baseRenderElement is CustomRenderBox customRenderBox)
-                {
-                    _imageBox = new ImageBox();
-                    _imageBox.ImageBinder = _isChecked ? s_checkedImg : s_uncheckedImg;
-                    _imageBox.MouseDown += (s, e) =>
-                    {
-                        //toggle checked/unchecked
-                        this.Checked = !this.Checked;
-                    };
-                    customRenderBox.AddChild(_imageBox);
-                }
-
-                return baseRenderElement;
-            }
-            else
-            {
-                return base.GetPrimaryRenderElement(rootgfx);
-            }
-        }
+ 
         public bool Checked
         {
             get => _isChecked;

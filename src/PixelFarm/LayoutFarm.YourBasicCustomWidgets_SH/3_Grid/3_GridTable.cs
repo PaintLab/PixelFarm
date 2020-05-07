@@ -230,8 +230,8 @@ namespace LayoutFarm.UI
 
         public int RowIndex
         {
-            get { return _row_Index; }
-            internal set { _row_Index = value; }
+            get => _row_Index;
+            internal set => _row_Index = value;
         }
         internal void SetOwnerParentRowCollection(GridTable.GridRowCollection parentRowCollection)
         {
@@ -415,7 +415,9 @@ namespace LayoutFarm.UI
         {
             _row = row;
             _column = column;
+            NeedClipArea = true;
         }
+        public bool NeedClipArea { get; set; }
         //
         public bool ControlChildPosition => true;
         //
@@ -566,20 +568,16 @@ namespace LayoutFarm.UI
     {
         public class GridColumnCollection
         {
-            GridTable _table;
-            List<GridColumn> _cols = new List<GridColumn>();
+            readonly GridTable _table;
+            readonly List<GridColumn> _cols = new List<GridColumn>();
             internal GridColumnCollection(GridTable table)
             {
                 _table = table;
             }
-            public void Clear()
-            {
-                _cols.Clear();
-            }
-            public GridColumn GetColumn(int index)
-            {
-                return _cols[index];
-            }
+            public void Clear() => _cols.Clear();
+
+            public GridColumn GetColumn(int index) => _cols[index];
+
             public void Add(GridColumn newColumnDef)
             {
                 int j = _cols.Count;
@@ -599,16 +597,16 @@ namespace LayoutFarm.UI
                 //contArrVisitor.dbug_StartLayoutTrace("GridCollection::Add(GridColumn)");
 #endif
 
-                InvalidateGraphicAndStartBubbleUp();
+                //InvalidateGraphicAndStartBubbleUp();
 #if DEBUG
                 //contArrVisitor.dbug_EndLayoutTrace();
 #endif
 
                 //--------------------------------------------
             }
-            void InvalidateGraphicAndStartBubbleUp()
-            {
-            }
+            //void InvalidateGraphicAndStartBubbleUp()
+            //{
+            //}
             public void Insert(int index, GridColumn coldef)
             {
                 _cols.Insert(index, coldef);
@@ -630,7 +628,7 @@ namespace LayoutFarm.UI
                 //                contArrVisitor.dbug_StartLayoutTrace(dbugVisualElementLayoutMsg.GridColumnCollection_Insert);
                 //#endif
 
-                InvalidateGraphicAndStartBubbleUp();
+                //InvalidateGraphicAndStartBubbleUp();
                 //OwnerGridLayer.OwnerInvalidateGraphicAndStartBubbleUp();
 
 

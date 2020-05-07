@@ -65,15 +65,14 @@ namespace LayoutFarm.CustomWidgets
         //
         public override RenderElement CurrentPrimaryRenderElement => _primElement;
         //
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        public override RenderElement GetPrimaryRenderElement()
         {
             if (_primElement == null)
             {
                 //first time
-                var element = new CustomRenderBox(rootgfx, this.Width, this.Height);
+                var element = new CustomRenderBox(this.Width, this.Height);
                 element.SetLocation(this.Left, this.Top);
-                element.BackColor = _backColor;
-                element.HasSpecificWidthAndHeight = true;
+                element.BackColor = _backColor; 
                 //-----------------------------
                 // create default layer for node content  
                 //-----------------------------
@@ -81,7 +80,7 @@ namespace LayoutFarm.CustomWidgets
                 SetupNodeIconBehaviour(_uiNodeIcon);
                 element.AddChild(_uiNodeIcon);
                 //-----------------------------
-                _myTextRun = new CustomTextRun(rootgfx, 10, 17);
+                _myTextRun = new CustomTextRun(10, 17);
                 _myTextRun.SetLocation(16, 0);
                 _myTextRun.Text = "Test01";
                 element.AddChild(_myTextRun);
@@ -162,7 +161,7 @@ namespace LayoutFarm.CustomWidgets
                     //below here
                     //create layers      
                     //add to layer 
-                    RenderElement tnRenderElement = treeNode.GetPrimaryRenderElement(_primElement.Root);
+                    RenderElement tnRenderElement = treeNode.GetPrimaryRenderElement();
                     tnRenderElement.SetLocation(_indentWidth, _newChildNodeY);
                     _primElement.AddChild(tnRenderElement);
                     _newChildNodeY += tnRenderElement.Height;
@@ -176,37 +175,36 @@ namespace LayoutFarm.CustomWidgets
             if (_isOpen) return;
             _isOpen = true;
 
-            this.TreeView.PerformContentLayout();
+            TreeView.InvalidateLayout();
+            //this.TreeView.PerformContentLayout(null);
         }
         public void Collapse()
         {
             if (!_isOpen) return;
             _isOpen = false;
-            this.TreeView.PerformContentLayout();
+            TreeView.InvalidateLayout();
+            //this.TreeView.PerformContentLayout(null);
         }
-        public override void PerformContentLayout()
+        public override void PerformContentLayout(LayoutUpdateArgs args)
         {
             this.InvalidateGraphics();
             //if this has child
             //reset
             _desiredHeight = NODE_DEFAULT_HEIGHT;
             _newChildNodeY = NODE_DEFAULT_HEIGHT;
-            if (_isOpen)
+            if (_isOpen && _childNodes != null)
             {
-                if (_childNodes != null)
+                int j = _childNodes.Count;
+                for (int i = 0; i < j; ++i)
                 {
-                    int j = _childNodes.Count;
-                    for (int i = 0; i < j; ++i)
-                    {
-                        TreeNode childNode = _childNodes[i];
-                        childNode.PerformContentLayout();//manual
-                        //set new size 
-                        childNode.SetLocationAndSize(_indentWidth,
-                            _newChildNodeY,
-                            childNode.Width,
-                            childNode.InnerHeight);
-                        _newChildNodeY += childNode.InnerHeight;
-                    }
+                    TreeNode childNode = _childNodes[i];
+                    childNode.PerformContentLayout(args);//manual
+                                                     //set new size 
+                    childNode.SetLocationAndSize(_indentWidth,
+                        _newChildNodeY,
+                        childNode.Width,
+                        childNode.InnerHeight);
+                    _newChildNodeY += childNode.InnerHeight;
                 }
             }
             _desiredHeight = _newChildNodeY;

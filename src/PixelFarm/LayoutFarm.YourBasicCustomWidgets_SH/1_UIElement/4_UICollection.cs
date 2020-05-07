@@ -5,8 +5,6 @@ using System.Collections.Generic;
 
 namespace LayoutFarm.UI
 {
-
-
     public interface IUICollectionNodeLocator<T>
         where T : UIElement
     {
@@ -25,7 +23,7 @@ namespace LayoutFarm.UI
             public static void CheckUI<T>(UIElement parent, T ui)
                 where T : UIElement
             {
-                if (ui._parent != null)
+                if (ui.ParentUI != null)
                 {
                     throw new Exception("has some parent");
                 }
@@ -98,10 +96,10 @@ namespace LayoutFarm.UI
                 //---
                 //presentation 
                 parent._needContentLayout = true;
-                RenderElement parentRenderE = parent.CurrentPrimaryRenderElement;
-                if (parentRenderE != null)
+
+                if (parent.CurrentPrimaryRenderElement is IContainerRenderElement parentBox)
                 {
-                    parentRenderE.AddChild(ui.GetPrimaryRenderElement(parentRenderE.Root));
+                    parentBox.AddChild(ui.GetPrimaryRenderElement());
                     parent?.InvalidateLayout();
                 }
                 //---
@@ -117,10 +115,9 @@ namespace LayoutFarm.UI
                 //---
                 //presentation 
                 parent._needContentLayout = true;
-                RenderElement parentRenderE = parent.CurrentPrimaryRenderElement;
-                if (parentRenderE != null)
+                if (parent.CurrentPrimaryRenderElement is IContainerRenderElement parentBox)
                 {
-                    parentRenderE.AddFirst(ui.GetPrimaryRenderElement(parentRenderE.Root));
+                    parentBox.AddFirst(ui.GetPrimaryRenderElement());
                     parent?.InvalidateLayout();
                 }
             }
@@ -128,19 +125,25 @@ namespace LayoutFarm.UI
             {
                 //ui must not have parent before!
                 CollectionHelper.CheckUI(parent, ui);
-                LinkedListNode<UIElement> linkedNode = afterUI._collectionLinkNode;
-                ui._collectionLinkNode = (LinkedListNode<UIElement>)(object)_linkedList.AddAfter((LinkedListNode<T>)(object)linkedNode, ui);
-                ui.ParentUI = parent;
+
+                if (afterUI._collectionLinkNode is LinkedListNode<UIElement> linkedNode)
+                {
+                    ui._collectionLinkNode = (LinkedListNode<UIElement>)(object)_linkedList.AddAfter((LinkedListNode<T>)(object)linkedNode, ui);
+                    ui.ParentUI = parent;
+                }
+                else
+                {
+                    throw new NotSupportedException();
+                }
 
                 //---
                 //presentation 
                 parent._needContentLayout = true;
-                RenderElement parentRenderE = parent.CurrentPrimaryRenderElement;
-                if (parentRenderE != null)
+                if (parent.CurrentPrimaryRenderElement is IContainerRenderElement parentBox)
                 {
-                    parentRenderE.InsertAfter(
-                        afterUI.GetPrimaryRenderElement(parentRenderE.Root),
-                        ui.GetPrimaryRenderElement(parentRenderE.Root));
+                    parentBox.InsertAfter(
+                        afterUI.GetPrimaryRenderElement(),
+                        ui.GetPrimaryRenderElement());
                     parent?.InvalidateLayout();
                 }
 
@@ -148,20 +151,26 @@ namespace LayoutFarm.UI
             public void AddBefore(UIElement parent, T beforeUI, T ui)
             {
                 CollectionHelper.CheckUI(parent, ui);
-                LinkedListNode<UIElement> linkedNode = beforeUI._collectionLinkNode;
-                ui._collectionLinkNode = (LinkedListNode<UIElement>)(object)_linkedList.AddBefore((LinkedListNode<T>)(object)linkedNode, ui);
-                ui.ParentUI = parent;
+
+                if (beforeUI._collectionLinkNode is LinkedListNode<UIElement> linkedNode)
+                {
+                    ui._collectionLinkNode = (LinkedListNode<UIElement>)(object)_linkedList.AddBefore((LinkedListNode<T>)(object)linkedNode, ui);
+                    ui.ParentUI = parent;
+                }
+                else
+                {
+                    throw new NotSupportedException();
+                }
 
 
                 //---
                 //presentation 
                 parent._needContentLayout = true;
-                RenderElement parentRenderE = parent.CurrentPrimaryRenderElement;
-                if (parentRenderE != null)
+                if (parent.CurrentPrimaryRenderElement is IContainerRenderElement parentBox)
                 {
-                    parentRenderE.InsertBefore(
-                        beforeUI.GetPrimaryRenderElement(parentRenderE.Root),
-                        ui.GetPrimaryRenderElement(parentRenderE.Root));
+                    parentBox.InsertBefore(
+                        beforeUI.GetPrimaryRenderElement(),
+                        ui.GetPrimaryRenderElement());
                     parent?.InvalidateLayout();
                 }
             }
@@ -182,19 +191,20 @@ namespace LayoutFarm.UI
                 //--------
                 //need to remove presentation 
                 parent._needContentLayout = true;
-                RenderElement parentRenderE = parent.CurrentPrimaryRenderElement;
 
-                parentRenderE?.ClearAllChildren();
+                if (parent.CurrentPrimaryRenderElement is IContainerRenderElement parentBox)
+                {
+                    parentBox.ClearAllChildren();
+                }
             }
 
             public void Remove(UIElement parent, T ui)
             {
                 //--------
                 //need to remove presentation 
-                RenderElement parentRenderE = parent.CurrentPrimaryRenderElement;
-                if (parentRenderE != null)
+                if (parent.CurrentPrimaryRenderElement is IContainerRenderElement parentRenderE)
                 {
-                    parentRenderE.RemoveChild(ui.GetPrimaryRenderElement(parentRenderE.Root));
+                    parentRenderE.RemoveChild(ui.GetPrimaryRenderElement());
                 }
 
                 //--------
@@ -202,8 +212,15 @@ namespace LayoutFarm.UI
 
                 //we must ensure linked node is valid
                 parent._needContentLayout = true;
-                LinkedListNode<UIElement> linkedNode = ui._collectionLinkNode;
-                _linkedList.Remove((LinkedListNode<T>)(object)linkedNode);
+                if (ui._collectionLinkNode is LinkedListNode<UIElement> linkedNode)
+                {
+                    _linkedList.Remove((LinkedListNode<T>)(object)linkedNode);
+                }
+                else
+                {
+                    throw new NotSupportedException();
+                }
+
 
                 parent?.InvalidateLayout();
             }
@@ -249,15 +266,16 @@ namespace LayoutFarm.UI
             {
                 CollectionHelper.CheckUI(parent, ui);
                 _list.Add(ui);
-                ui._parent = parent;
+                ui.ParentUI = parent;
 
                 //---
                 //presentation
                 parent._needContentLayout = true;
-                RenderElement parentRenderE = parent.CurrentPrimaryRenderElement;
-                if (parentRenderE != null)
+                parent._hasMinSize = false;
+
+                if (parent.CurrentPrimaryRenderElement is IContainerRenderElement parentContainer)
                 {
-                    parentRenderE.AddChild(ui.GetPrimaryRenderElement(parentRenderE.Root));
+                    parentContainer.AddChild(ui.GetPrimaryRenderElement());
                     CollectionHelper.UpdateLayout(parent, ui);
                 }
             }
@@ -265,15 +283,15 @@ namespace LayoutFarm.UI
             {
                 CollectionHelper.CheckUI(parent, ui);
                 _list.Insert(0, ui);
-                ui._parent = parent;
+                ui.ParentUI = parent;
 
                 //---
                 //presentation
                 parent._needContentLayout = true;
-                RenderElement parentRenderE = parent.CurrentPrimaryRenderElement;
-                if (parentRenderE != null)
+                parent._hasMinSize = false;
+                if (parent.CurrentPrimaryRenderElement is IContainerRenderElement parentContainer)
                 {
-                    parentRenderE.AddFirst(ui.GetPrimaryRenderElement(parentRenderE.Root));
+                    parentContainer.AddFirst(ui.GetPrimaryRenderElement());
                     CollectionHelper.UpdateLayout(parent, ui);
                 }
             }
@@ -300,12 +318,13 @@ namespace LayoutFarm.UI
                 //---
                 //presentation
                 parent._needContentLayout = true;
-                RenderElement parentRenderE = parent.CurrentPrimaryRenderElement;
-                if (parentRenderE != null)
+                parent._hasMinSize = false;
+
+                if (parent.CurrentPrimaryRenderElement is IContainerRenderElement parentContainer)
                 {
-                    parentRenderE.InsertAfter(
-                        afterUI.GetPrimaryRenderElement(parentRenderE.Root),
-                        ui.GetPrimaryRenderElement(parentRenderE.Root));
+                    parentContainer.InsertAfter(
+                        afterUI.GetPrimaryRenderElement(),
+                        ui.GetPrimaryRenderElement());
 
                     CollectionHelper.UpdateLayout(parent, ui);
                 }
@@ -325,29 +344,31 @@ namespace LayoutFarm.UI
                 //---
                 //presentation
                 parent._needContentLayout = true;
-                RenderElement parentRenderE = parent.CurrentPrimaryRenderElement;
-                if (parentRenderE != null)
+                parent._hasMinSize = false;
+
+                if (parent.CurrentPrimaryRenderElement is IContainerRenderElement parentContainer)
                 {
-                    parentRenderE.InsertBefore(
-                        beforeUI.GetPrimaryRenderElement(parentRenderE.Root),
-                        ui.GetPrimaryRenderElement(parentRenderE.Root));
+                    parentContainer.InsertBefore(
+                        beforeUI.GetPrimaryRenderElement(),
+                        ui.GetPrimaryRenderElement());
                     CollectionHelper.UpdateLayout(parent, ui);
                 }
             }
             public void Remove(UIElement parent, T ui)
             {
                 parent._needContentLayout = true;
-                RenderElement parentRenderE = parent.CurrentPrimaryRenderElement;
-                if (parentRenderE != null)
-                {
-                    parentRenderE.RemoveChild(ui.GetPrimaryRenderElement(parentRenderE.Root));
+                parent._hasMinSize = false;
 
+                IContainerRenderElement parentContainer = parent.CurrentPrimaryRenderElement as IContainerRenderElement;
+                if (parentContainer != null)
+                {
+                    parentContainer.RemoveChild(ui.GetPrimaryRenderElement());
                 }
 
                 _list.Remove(ui);//***
                 //---
                 //presentation
-                if (parentRenderE != null)
+                if (parentContainer != null)
                 {
                     CollectionHelper.UpdateLayout(parent, ui);
                 }

@@ -38,7 +38,7 @@
   <ItemGroup>
     <Compile Include="1_Root\5_GfxUpdatePlan.cs" />
     <Compile Include="1_Root\4_InvalidateGfxArgs.cs" />
-    <Compile Include="2_RenderElement\3_RenderElement.Bubble_Layout.cs" />
+    <Compile Include="2_RenderElement\5_RenderElementCollection.cs" />
     <Compile Include="2_RenderElement\RenderElementConst.cs" />
     <Compile Include="2_RenderElement\RenderElement_IParentLink.cs" />
     <Compile Include="2_RenderElement\x_RenderElement_LocationHelper.cs" />
@@ -58,11 +58,8 @@
     <Compile Include="2_RenderElement\2_RenderElement.ElementPositioning_1_WithSizeChanged.cs" />
     <Compile Include="2_RenderElement\1_RenderElement.ElementPositioning_NoBoundChanged.cs" />
     <Compile Include="2_RenderElement\4_RenderElement.Bubble_Repaint.cs" />
-    <Compile Include="3_Layers\0_IParentLink.cs" />
     <Compile Include="2_RenderElement\x_RenderElement.debug.cs" />
     <Compile Include="4_Boxes\RenderBoxBase.cs" />
-    <Compile Include="3_Layers\1_RenderElementLayer.cs" />
-    <Compile Include="3_Layers\2_PlainLayer.cs" />
     <Compile Include="5_HitTest\HitChain.cs" />
     <Compile Include="6_debug\dbugHitTracker.cs" />
     <Compile Include="6_debug\IdbugOutputWindow.cs" />

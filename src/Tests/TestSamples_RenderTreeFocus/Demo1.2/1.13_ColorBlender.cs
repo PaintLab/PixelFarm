@@ -141,7 +141,10 @@ namespace LayoutFarm.ColorBlenderSample
                     colorBox.BackColor = new PixelFarm.Drawing.Color(c.R, c.G, c.B);
                     colorBoxPanel.Add(colorBox);
                 }
-                colorBoxPanel.PerformContentLayout();
+
+                UI.LayoutUpdateArgs updateArgs = new UI.LayoutUpdateArgs();
+
+                colorBoxPanel.PerformContentLayout(updateArgs);
             }
 
             Box colorPanel = new Box(200, 40);
