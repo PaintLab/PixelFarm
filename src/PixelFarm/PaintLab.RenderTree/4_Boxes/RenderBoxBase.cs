@@ -199,6 +199,7 @@ namespace LayoutFarm
              : base(width, height)
         {
             this.MayHasViewport = true;
+
         }
         public override sealed int ViewportLeft => _viewportLeft;
         public override sealed int ViewportTop => _viewportTop;
@@ -246,62 +247,62 @@ namespace LayoutFarm
             }
         }
 
-        public override sealed void TopDownReCalculateContentSize()
-        {
-            //if (!ForceReArrange && this.HasCalculatedSize)
-            //{
-            //    return;
-            //}
-#if DEBUG
-            dbug_EnterTopDownReCalculateContent(this);
-#endif
-            int cHeight = this.Height;
-            int cWidth = this.Width;
-            Size ground_contentSize = Size.Empty;
-            if (_elements != null)
-            {
-                _elements.TopDownReCalculateContentSize();
-                ground_contentSize = _elements.CalculatedContentSize;
-            }
-            int finalWidth = ground_contentSize.Width;
-            if (finalWidth == 0)
-            {
-                finalWidth = this.Width;
-            }
-            int finalHeight = ground_contentSize.Height;
-            if (finalHeight == 0)
-            {
-                finalHeight = this.Height;
-            }
-            switch (GetLayoutSpecificDimensionType(this))
-            {
-                default:
-                    break;
-                case RenderElementConst.LY_HAS_SPC_HEIGHT:
-                    {
-                        finalHeight = cHeight;
-                    }
-                    break;
-                case RenderElementConst.LY_HAS_SPC_WIDTH:
-                    {
-                        finalWidth = cWidth;
-                    }
-                    break;
-                case RenderElementConst.LY_HAS_SPC_SIZE:
-                    {
-                        finalWidth = cWidth;
-                        finalHeight = cHeight;
-                    }
-                    break;
-            }
+        //        public override sealed void TopDownReCalculateContentSize()
+        //        {
+        //            //if (!ForceReArrange && this.HasCalculatedSize)
+        //            //{
+        //            //    return;
+        //            //}
+        //#if DEBUG
+        //            dbug_EnterTopDownReCalculateContent(this);
+        //#endif
+        //            int cHeight = this.Height;
+        //            int cWidth = this.Width;
+        //            Size ground_contentSize = Size.Empty;
+        //            if (_elements != null)
+        //            {
+        //                _elements.TopDownReCalculateContentSize();
+        //                ground_contentSize = _elements.CalculatedContentSize;
+        //            }
+        //            int finalWidth = ground_contentSize.Width;
+        //            if (finalWidth == 0)
+        //            {
+        //                finalWidth = this.Width;
+        //            }
+        //            int finalHeight = ground_contentSize.Height;
+        //            if (finalHeight == 0)
+        //            {
+        //                finalHeight = this.Height;
+        //            }
+        //            switch (GetLayoutSpecificDimensionType(this))
+        //            {
+        //                default:
+        //                    break;
+        //                case RenderElementConst.LY_HAS_SPC_HEIGHT:
+        //                    {
+        //                        finalHeight = cHeight;
+        //                    }
+        //                    break;
+        //                case RenderElementConst.LY_HAS_SPC_WIDTH:
+        //                    {
+        //                        finalWidth = cWidth;
+        //                    }
+        //                    break;
+        //                case RenderElementConst.LY_HAS_SPC_SIZE:
+        //                    {
+        //                        finalWidth = cWidth;
+        //                        finalHeight = cHeight;
+        //                    }
+        //                    break;
+        //            }
 
 
-            SetCalculatedSize(this, finalWidth, finalHeight);
-#if DEBUG
-            dbug_ExitTopDownReCalculateContent(this);
-#endif
+        //            SetCalculatedSize(this, finalWidth, finalHeight);
+        //#if DEBUG
+        //            dbug_ExitTopDownReCalculateContent(this);
+        //#endif
 
-        }
+        //        }
 
 
         public virtual void AddChild(RenderElement renderE)
@@ -346,32 +347,34 @@ namespace LayoutFarm
             return this.MyParentLink?.FindOverlapedChildElementAtPoint(this, point);
         }
 
-        public override Size InnerContentSize
-        {
-            get
-            {
-                if (_elements != null)
-                {
-                    Size s1 = _elements.CalculatedContentSize;
-                    int s1_w = s1.Width;
-                    int s1_h = s1.Height;
+        //TODO: review inner content size again
 
-                    if (s1_w < this.Width)
-                    {
-                        s1_w = this.Width;
-                    }
-                    if (s1_h < this.Height)
-                    {
-                        s1_h = this.Height;
-                    }
-                    return new Size(s1_w, s1_h);
-                }
-                else
-                {
-                    return this.Size;
-                }
-            }
-        }
+        public override Size InnerContentSize => this.Size;
+        //{
+        //    get
+        //    {
+        //        if (_elements != null)
+        //        {
+        //            Size s1 = _elements.CalculatedContentSize;
+        //            int s1_w = s1.Width;
+        //            int s1_h = s1.Height;
+
+        //            if (s1_w < this.Width)
+        //            {
+        //                s1_w = this.Width;
+        //            }
+        //            if (s1_h < this.Height)
+        //            {
+        //                s1_h = this.Height;
+        //            }
+        //            return new Size(s1_w, s1_h);
+        //        }
+        //        else
+        //        {
+        //            return this.Size;
+        //        }
+        //    }
+        //}
 
         internal RenderElementCollection GetElemCollection() => _elements;
         protected IEnumerable<RenderElement> GetDrawingIter() => _elements?.GetDrawingIter();

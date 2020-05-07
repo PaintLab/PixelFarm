@@ -118,10 +118,8 @@ namespace LayoutFarm.CustomWidgets
                 _text = value;
                 if (_myTextRun != null)
                 {
-                    _myTextRun.Text = value;
-                    _myTextRun.InvalidateGraphics();
+                    _myTextRun.Text = value;                   
                 }
-
             }
         }
         public DrawTextTechnique DrawTextTechnique

@@ -252,15 +252,15 @@ namespace LayoutFarm
             }
             return re;
         }
-        public bool IsBlockElement
-        {
-            get => ((_propFlags & RenderElementConst.IS_BLOCK_ELEMENT) == RenderElementConst.IS_BLOCK_ELEMENT);
+        //public bool IsBlockElement
+        //{
+        //    get => ((_propFlags & RenderElementConst.IS_BLOCK_ELEMENT) == RenderElementConst.IS_BLOCK_ELEMENT);
 
-            set =>
-                _propFlags = value ?
-                     _propFlags | RenderElementConst.IS_BLOCK_ELEMENT :
-                     _propFlags & ~RenderElementConst.IS_BLOCK_ELEMENT;
-        }
+        //    set =>
+        //        _propFlags = value ?
+        //             _propFlags | RenderElementConst.IS_BLOCK_ELEMENT :
+        //             _propFlags & ~RenderElementConst.IS_BLOCK_ELEMENT;
+        //}
 
         public bool IsTopWindow
         {
