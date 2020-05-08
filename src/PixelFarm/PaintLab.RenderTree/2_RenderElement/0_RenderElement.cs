@@ -519,8 +519,7 @@ namespace LayoutFarm
                         //------------------------------------------
                     }
 
-
-                    renderE._propFlags |= RenderElementConst.IS_GRAPHIC_VALID;
+ 
 #if DEBUG
                     renderE.debug_RecordPostDrawInfo(d);
 #endif
@@ -575,7 +574,7 @@ namespace LayoutFarm
                     //------------------------------------------
                 }
                 //------------------------------------------
-                renderE._propFlags |= RenderElementConst.IS_GRAPHIC_VALID;
+                 
 #if DEBUG
                 renderE.debug_RecordPostDrawInfo(d);
 #endif

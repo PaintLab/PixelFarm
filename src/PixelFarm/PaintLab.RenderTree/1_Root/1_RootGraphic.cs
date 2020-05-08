@@ -79,7 +79,6 @@ namespace LayoutFarm
                 return;
             }
 
-            re._propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
             InvalidateGfxArgs inv = GetInvalidateGfxArgs();
             inv.SetReason_UpdateLocalArea(re, localArea);
             InternalBubbleUpInvalidateGraphicArea(inv);
@@ -99,8 +98,6 @@ namespace LayoutFarm
             int viewport_diffLeft = args.LeftDiff;
             int viewport_diffTop = args.TopDiff;
 
-
-
             //bubble up ,find global rect coord
             //and then merge to accumulate rect        
             RenderElement fromElement = args.SrcRenderElement;
@@ -108,7 +105,6 @@ namespace LayoutFarm
             bool passSourceElem = args.PassSrcElement;
 
             //HasViewportOffset = false;
-
 
             int globalPoint_X = 0;
             int globalPoint_Y = 0;
