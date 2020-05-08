@@ -236,7 +236,10 @@ namespace LayoutFarm.CustomWidgets
                                     newH = _contentTop + (int)System.Math.Ceiling(_renderVxFormattedString.SpanHeight) + _contentBottom;
                                 }
 
-                                PreRenderSetSize(newW, newH);
+                                SuspendGraphicsUpdate();
+                                SetSize(newW, newH);
+                                ResumeGraphicsUpdate();
+
                                 //after set this 
                                 NeedPreRenderEval = false;
                             }
@@ -262,7 +265,11 @@ namespace LayoutFarm.CustomWidgets
                         {
                             newH = _contentTop + size.Height + _contentBottom;
                         }
-                        PreRenderSetSize(newW, newH);
+
+                        SuspendGraphicsUpdate();
+                        SetSize(newW, newH);
+                        ResumeGraphicsUpdate();
+
                         //after set this 
                         NeedPreRenderEval = false;
                     }

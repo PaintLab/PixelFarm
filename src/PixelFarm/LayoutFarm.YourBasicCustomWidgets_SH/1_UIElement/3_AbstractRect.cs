@@ -141,11 +141,10 @@ namespace LayoutFarm.UI
             }
 #endif
             SetElementBoundsLT(left, top);
-            if (this.HasReadyRenderElement)
-            {
-                //TODO: review here
-                this.CurrentPrimaryRenderElement.SetLocation(left, top);
-            }
+
+            //TODO: review here
+            this.CurrentPrimaryRenderElement?.SetLocation(left, top);
+
         }
 
         /// <summary>
@@ -156,10 +155,7 @@ namespace LayoutFarm.UI
         public virtual void SetSize(int width, int height)
         {
             SetElementBoundsWH(width, height);
-            if (this.HasReadyRenderElement)
-            {
-                this.CurrentPrimaryRenderElement.SetSize(width, height);
-            }
+            this.CurrentPrimaryRenderElement?.SetSize(width, height);
         }
         /// <summary>
         /// set location and visual size of this rect
@@ -386,12 +382,11 @@ namespace LayoutFarm.UI
 
         public override void InvalidateGraphics()
         {
-            if (this.HasReadyRenderElement)
-            {
-                //invalidate 'bubble' rect 
-                //is (0,0,w,h) start invalidate from current primary render element
-                this.CurrentPrimaryRenderElement.InvalidateGraphics();
-            }
+
+            //invalidate 'bubble' rect 
+            //is (0,0,w,h) start invalidate from current primary render element
+            this.CurrentPrimaryRenderElement?.InvalidateGraphics();
+
         }
 
         public override void GetViewport(out int left, out int top)

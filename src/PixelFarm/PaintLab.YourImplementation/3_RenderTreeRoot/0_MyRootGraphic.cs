@@ -115,7 +115,7 @@ namespace LayoutFarm.UI
         public override ITextService TextServices => _textService;
 
         public ITopWindowEventRoot TopWinEventPortal => _topWindowEventRoot;
-        
+
         public override bool GfxTimerEnabled
         {
             get => _gfxTimerTaskMx.Enabled;
@@ -164,10 +164,11 @@ namespace LayoutFarm.UI
                             break;
                         case RequestCommand.InvalidateArea:
                             {
-                                InvalidateGfxArgs args = GetInvalidateGfxArgs();
-                                args.SetReason_UpdateLocalArea(req.renderElem, (Rectangle)req.parameters);
-                                InternalBubbleup(args);
+                                //InvalidateGfxArgs args = GetInvalidateGfxArgs();
+                                //args.SetReason_UpdateLocalArea(req.renderElem, (Rectangle)req.parameters);
+                                //InternalBubbleup(args);
 
+                                req.renderElem.InvalidateGraphics((Rectangle)req.parameters);
                             }
                             break;
                     }

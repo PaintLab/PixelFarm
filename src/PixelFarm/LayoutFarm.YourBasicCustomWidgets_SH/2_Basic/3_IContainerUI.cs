@@ -12,6 +12,10 @@ namespace LayoutFarm.UI
             {
                 parentUI.RemoveChild(ui);
             }
+            else
+            {
+
+            }
         }
         public static void BringToTopMost(this UIElement ui)
         {

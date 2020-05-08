@@ -100,15 +100,29 @@ namespace LayoutFarm.UI
         protected bool _needContentLayout;
         protected bool _hasMinSize;
         internal object _collectionLinkNode; //optional, eg for linked-list node, RB-tree-node
+        UIElement _parent;
 
         public UIElement()
         {
-            //if (dbugId == 114)
-            //{ 
-            //}
         }
+#if DEBUG
+        protected virtual void dbugOnSettingParent(UIElement parent)
+        {
 
-        public UIElement ParentUI { get; set; }
+        }
+#endif
+
+        public UIElement ParentUI
+        {
+            get => _parent;
+            set
+            {
+#if DEBUG
+                dbugOnSettingParent(value);
+#endif
+                _parent = value;
+            }
+        }
         /// <summary>
         /// update layout data from layout instance
         /// </summary>
@@ -123,23 +137,11 @@ namespace LayoutFarm.UI
         public virtual void Focus()
         {
             //make this keyboard focusable
-            if (this.HasReadyRenderElement)
-            {
-                //focus 
-                this.CurrentPrimaryRenderElement.GetRoot()?.SetCurrentKeyboardFocus(this.CurrentPrimaryRenderElement);
-            }
+            CurrentPrimaryRenderElement?.GetRoot()?.SetCurrentKeyboardFocus(this.CurrentPrimaryRenderElement);
         }
         public virtual void Blur()
         {
-            if (this.HasReadyRenderElement)
-            {
-                this.CurrentPrimaryRenderElement.GetRoot()?.SetCurrentKeyboardFocus(null);
-            }
-        }
-
-        public virtual void InvalidateOuterGraphics()
-        {
-
+            CurrentPrimaryRenderElement?.GetRoot()?.SetCurrentKeyboardFocus(null);
         }
         public virtual bool Visible
         {
@@ -157,29 +159,30 @@ namespace LayoutFarm.UI
             set
             {
                 _hide = !value;
-                if (this.HasReadyRenderElement)
-                {
-                    this.CurrentPrimaryRenderElement.SetVisible(value);
-                }
+                this.CurrentPrimaryRenderElement?.SetVisible(value);
             }
         }
+
         public PixelFarm.Drawing.Point GetGlobalLocation()
         {
-            if (this.CurrentPrimaryRenderElement != null)
+            RenderElement currentRenderE = this.CurrentPrimaryRenderElement;
+            if (currentRenderE != null)
             {
-                return this.CurrentPrimaryRenderElement.GetGlobalLocation();
+                return currentRenderE.GetGlobalLocation();
             }
-            return new PixelFarm.Drawing.Point((int)_left, (int)_top);
+            else
+            {
+                return new PixelFarm.Drawing.Point((int)_left, (int)_top);
+            }
         }
-        public PixelFarm.Drawing.Point GetLocation()
-        {
-            return new PixelFarm.Drawing.Point((int)_left, (int)_top);
-        }
+
+        public PixelFarm.Drawing.Point GetLocation() => new PixelFarm.Drawing.Point((int)_left, (int)_top);
+
         public virtual void GetViewport(out int left, out int top)
         {
             left = top = 0;
         }
-       
+
         public void GetElementBounds(
            out float left,
            out float top,
@@ -384,6 +387,15 @@ namespace LayoutFarm.UI
         {
             //temp
             UILayoutQueue.AddToLayoutQueue(this);
+        }
+        //------------------------------------------------------------
+        public void SuspendGraphicsUpdate()
+        {
+            CurrentPrimaryRenderElement?.SuspendGraphicsUpdate();
+        }
+        public void ResumeGraphicsUpdate()
+        {
+            CurrentPrimaryRenderElement?.ResumeGraphicsUpdate();
         }
         public virtual void NotifyContentUpdate(UIElement childContent)
         {

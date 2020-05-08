@@ -136,7 +136,7 @@ namespace LayoutFarm.TextEditing
 
             //}
 #endif
-            InvalidateGfxLocalArea(lineArea);
+            InvalidateGraphics(lineArea);
         }
         protected void InvalidateGraphicOfCurrentSelectionArea()
         {
@@ -144,7 +144,7 @@ namespace LayoutFarm.TextEditing
             VisualSelectionRange selectionRange;
             if ((selectionRange = _editSession.SelectionRange) != null && selectionRange.IsValid)
             {
-                InvalidateGfxLocalArea(selectionRange.GetSelectionUpdateArea());
+                InvalidateGraphics(selectionRange.GetSelectionUpdateArea());
             }
         }
 
@@ -185,7 +185,7 @@ namespace LayoutFarm.TextEditing
                     {
                         Rectangle r = GetSelectionUpdateArea();
                         _editSession.CancelSelect();
-                        InvalidateGfxLocalArea(r);
+                        InvalidateGraphics(r);
                     }
                     else
                     {

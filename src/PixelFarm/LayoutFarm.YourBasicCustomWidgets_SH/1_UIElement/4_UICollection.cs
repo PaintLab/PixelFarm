@@ -1,5 +1,6 @@
 ﻿//Apache2, 2014-present, WinterDev
 
+
 using System;
 using System.Collections.Generic;
 
@@ -34,12 +35,9 @@ namespace LayoutFarm.UI
             }
             public static void UpdateLayout<T>(UIElement parent, T ui) where T : UIElement
             {
-                if (ui.NeedContentLayout)
+                if (ui.NeedContentLayout && !ui.IsInLayoutQueue)
                 {
-                    if (!ui.IsInLayoutQueue)
-                    {
-                        ui.InvalidateLayout();
-                    }
+                    ui.InvalidateLayout();
                 }
                 parent.InvalidateLayout();
             }
@@ -366,6 +364,7 @@ namespace LayoutFarm.UI
                 }
 
                 _list.Remove(ui);//***
+                ui.ParentUI = null;
                 //---
                 //presentation
                 if (parentContainer != null)
@@ -377,7 +376,7 @@ namespace LayoutFarm.UI
             public void Clear(UIElement parent)
             {
                 //clear all child
-                //and remove parent linkage
+                //and remove parent linkage 
                 for (int i = _list.Count - 1; i >= 0; --i)
                 {
                     UIElement ui = _list[i];
@@ -386,8 +385,12 @@ namespace LayoutFarm.UI
                 }
                 _list.Clear();
 
+                if (parent.CurrentPrimaryRenderElement is IContainerRenderElement container)
+                {
+                    container.ClearAllChildren();
+                    parent.CurrentPrimaryRenderElement.InvalidateGraphics();
+                }
                 parent.InvalidateLayout();
-
             }
             public void AcceptVisitor(UIVisitor visitor)
             {

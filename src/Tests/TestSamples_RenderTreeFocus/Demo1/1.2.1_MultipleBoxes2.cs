@@ -4,6 +4,8 @@
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
 using LayoutFarm.CustomWidgets;
+using System.Collections.Generic;
+
 namespace LayoutFarm
 {
     [DemoNote("1.2.1 MultipleBoxes")]
@@ -20,7 +22,40 @@ namespace LayoutFarm
         protected override void OnStart(AppHost host)
         {
             //Test1(host);
-            Test2(host);
+            //Test2(host);
+            Test3(host);
+        }
+        void Test3(AppHost host)
+        {
+            Box hostBox = new Box(250, 600);
+
+            hostBox.HasSpecificWidthAndHeight = false;
+            //hostBox.HasSpecificHeight = true;
+            hostBox.SetLocation(10, 10);
+            hostBox.BackColor = Color.White;
+            host.AddChild(hostBox);
+            //hostBox.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
+            //hostBox.ContentLayoutKind = BoxContentLayoutKind.HorizontalStack;
+
+            List<Box> temp1 = new List<Box>();
+            hostBox.ContentLayoutKind = BoxContentLayoutKind.HorizontalFlow;
+            {
+                int y = 0;
+                hostBox.SuspendLayout();
+                hostBox.SuspendGraphicsUpdate();
+                for (int i = 0; i < 4; ++i)
+                {
+                    Box child1 = new Box(20, 20);
+                    hostBox.Add(child1);
+                    child1.BackColor = _colors[i % _colors.Length];
+                    child1.SetLocation(20, y);
+                    temp1.Add(child1);
+                }
+                hostBox.ResumeLayout();
+                hostBox.ResumeGraphicsUpdate();
+            }
+
+            hostBox.RemoveChild(temp1[0]);
         }
         void Test2(AppHost host)
         {
@@ -53,10 +88,10 @@ namespace LayoutFarm
             int calculatedH = hostBox.CalculatedMinHeight;
 
             hostBox.SetSize(calculatedW, calculatedH);
-            hostBox.PerformContentLayout(args);
+            //hostBox.PerformContentLayout(args);
 
-            int w = hostBox.Width;
-            int h = hostBox.Height;
+            //int w = hostBox.Width;
+            //int h = hostBox.Height;
         }
         void Test1(AppHost host)
         {
@@ -79,8 +114,7 @@ namespace LayoutFarm
             int boxX = 0;
             int boxY = 0;
 
-            GlobalRootGraphic.SuspendGraphicsUpdate();
-
+            hostBox.SuspendGraphicsUpdate();
             for (int i = 0; i < 10; ++i)
             {
                 Size s = _sizes[i % _sizes.Length];
@@ -102,15 +136,11 @@ namespace LayoutFarm
                 hostBox.Add(box);
                 boxY += 30;
                 boxX += 20;
-            }
-
-
+            } 
             //temp1
             LayoutUpdateArgs updateArgs = new LayoutUpdateArgs();
             hostBox.PerformContentLayout(updateArgs);
-
-            GlobalRootGraphic.ResumeGraphicsUpdate();
-
+            hostBox.ResumeGraphicsUpdate();
             hostBox.InvalidateGraphics();
 
             host.AddChild(hostBox);

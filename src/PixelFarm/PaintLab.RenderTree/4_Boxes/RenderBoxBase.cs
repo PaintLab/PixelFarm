@@ -213,10 +213,12 @@ namespace LayoutFarm
                 _viewportLeft = viewportLeft;
                 _viewportTop = viewportTop;
                 //
-
-                InvalidateGfxArgs args = BubbleInvalidater.GetInvalidateGfxArgs();
-                args.SetReason_ChangeViewport(this, diffLeft, diffTop);
-                this.InvalidateGraphics(args);
+                if (!this.BlockGraphicUpdateBubble)
+                {
+                    InvalidateGfxArgs args = BubbleInvalidater.GetInvalidateGfxArgs();
+                    args.SetReason_ChangeViewport(this, diffLeft, diffTop);
+                    this.InvalidateGraphics(args);
+                }
             }
         }
 
@@ -340,11 +342,6 @@ namespace LayoutFarm
         {
             _elements?.Clear(this);
 
-        }
-
-        public override RenderElement FindUnderlyingSiblingAtPoint(Point point)
-        {
-            return this.MyParentLink?.FindOverlapedChildElementAtPoint(this, point);
         }
 
         //TODO: review inner content size again

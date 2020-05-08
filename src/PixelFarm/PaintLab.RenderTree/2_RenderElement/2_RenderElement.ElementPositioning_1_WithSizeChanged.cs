@@ -5,6 +5,7 @@ namespace LayoutFarm
 {
     partial class RenderElement
     {
+
         public void SetWidth(int width)
         {
 #if DEBUG
@@ -25,35 +26,6 @@ namespace LayoutFarm
             //}
 #endif
             this.SetSize(_b_width, height);
-        }
-        public void SetSize2(int width, int height)
-        {
-            //TODO: review here
-            if (_parentLink == null)
-            {
-                //direct set size
-                _b_width = width;
-                _b_height = height;
-            }
-            else
-            {
-                if (_b_width != width ||
-                    _b_height != height)
-                {
-                    Rectangle prevBounds = this.RectBounds;
-                    _b_width = width;
-                    _b_height = height;
-                    //combine before and after rect 
-                    //add to invalidate root invalidate queue 
-
-                    if (!GlobalRootGraphic.s_SuspendGraphicsUpdate)
-                    {
-                        Rectangle union = Rectangle.Union(prevBounds, this.RectBounds);
-                        AdjustClientBounds(ref union); //***
-                        this.InvalidateParentGraphics(union);
-                    }
-                }
-            }
         }
 
         public void SetSize(int width, int height)
@@ -78,9 +50,10 @@ namespace LayoutFarm
                     Rectangle prevBounds = this.RectBounds;
                     _b_width = width;
                     _b_height = height;
+
                     //combine before and after rect 
                     //add to invalidate root invalidate queue  
-                    if (!GlobalRootGraphic.s_SuspendGraphicsUpdate)
+                    if (!BlockGraphicUpdateBubble)
                     {
                         this.InvalidateParentGraphics(Rectangle.Union(prevBounds, this.RectBounds));
                     }
@@ -118,7 +91,7 @@ namespace LayoutFarm
                         //combine before and after rect  
                         //add to invalidate root invalidate queue
 
-                        if (!GlobalRootGraphic.s_SuspendGraphicsUpdate)
+                        if (!BlockGraphicUpdateBubble)
                         {
                             GetFirstClipParentRenderElement(this)?.InvalidateGraphics();
                         }
@@ -132,7 +105,7 @@ namespace LayoutFarm
                         //----------------   
                         //combine before and after rect  
                         //add to invalidate root invalidate queue
-                        if (!GlobalRootGraphic.s_SuspendGraphicsUpdate)
+                        if (!BlockGraphicUpdateBubble)
                         {
                             this.InvalidateParentGraphics(Rectangle.Union(prevBounds, this.RectBounds));
                         }
@@ -140,10 +113,7 @@ namespace LayoutFarm
                 }
             }
         }
-        protected virtual void AdjustClientBounds(ref Rectangle bounds)
-        {
 
-        }
         public void SetBounds(int left, int top, int width, int height)
         {
             if (_parentLink == null)
@@ -168,18 +138,12 @@ namespace LayoutFarm
                     _b_width = width;
                     _b_height = height;
 
-                    if (!GlobalRootGraphic.s_SuspendGraphicsUpdate)
+                    if (!BlockGraphicUpdateBubble)
                     {
                         this.InvalidateParentGraphics(Rectangle.Union(prevBounds, this.RectBounds));
                     }
                 }
             }
-        }
-        protected void PreRenderSetSize(int width, int height)
-        {
-            //not invalidate graphics msg
-            _b_width = width;
-            _b_height = height;
         }
     }
 }

@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
-using LayoutFarm.UI; 
+using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
 
@@ -110,7 +110,7 @@ namespace LayoutFarm.CustomWidgets
 #if DEBUG
             renderE.dbugBreak = absRect.dbugBreakMe;
 #endif
-             
+
             renderE.SetController(absRect);
             renderE.TransparentForMouseEvents = absRect.TransparentForMouseEvents;
         }
@@ -130,8 +130,6 @@ namespace LayoutFarm.CustomWidgets
         {
             if (_primElement == null)
             {
-                //create primary render element
-                GlobalRootGraphic.SuspendGraphicsUpdate();
 
                 var renderE = EnableDoubleBuffer ?
                     new DoubleBufferCustomRenderBox(this.Width, this.Height) { EnableDoubleBuffer = true } :
@@ -140,24 +138,14 @@ namespace LayoutFarm.CustomWidgets
                 SetCommonProperties(renderE, this);
                 BuildChildren(renderE, this);
 
-                GlobalRootGraphic.ResumeGraphicsUpdate();
-                renderE.InvalidateGraphics();
 
-                _primElement = renderE;
+                return _primElement = renderE;
             }
             return _primElement;
         }
         protected void SetPrimaryRenderElement(CustomRenderBox primElement)
         {
             _primElement = primElement;
-        }
-        protected void SuspendGraphicsUpdate()
-        {
-            _primElement?.SuspendGraphicsUpdate();
-        }
-        protected void ResumeGraphicsUpdate()
-        {
-            _primElement?.ResumeGraphicsUpdate();
         }
 
 
@@ -352,7 +340,7 @@ namespace LayoutFarm.CustomWidgets
             set
             {
                 _backColor = value;
-                if (HasReadyRenderElement)
+                if (_primElement != null)
                 {
                     _primElement.BackColor = value;
                 }
@@ -364,7 +352,7 @@ namespace LayoutFarm.CustomWidgets
             set
             {
                 _borderColor = value;
-                if (HasReadyRenderElement)
+                if (_primElement != null)
                 {
                     _primElement.BorderColor = value;
                 }
@@ -771,6 +759,8 @@ namespace LayoutFarm.CustomWidgets
                         //check if this abstract box want to preserver line box or not
                         //if just layout, then we can use shared lineboxes 
 
+                        _primElement?.Lines?.Clear();
+
                         if (childrenIter != null && childrenIter.Count > 0)
                         {
                             using (var lineboxContext = new LineBoxesContext(_preserveLineBoxes ? _primElement : null))
@@ -855,8 +845,10 @@ namespace LayoutFarm.CustomWidgets
                                 linebox.AdjustVerticalAlignment();
                             }
                         }
+
                         this.SetInnerContentSize(xpos, maxBottom);
-                        this.dbugBreakMe = true;
+
+                        //this.dbugBreakMe = true;
 
                     }
                     break;
@@ -955,6 +947,10 @@ namespace LayoutFarm.CustomWidgets
                 _items = new UIList<UIElement>();
             }
             _items.Add(this, ui);
+        }
+        protected void RemoveChild(UIElement ui)
+        {
+            _items.Remove(this, ui);
         }
         protected virtual void Clear() => _items?.Clear(this);
     }

@@ -39,7 +39,7 @@ namespace LayoutFarm.CustomWidgets
             : base(width, height)
         {
             this.BackColor = KnownColors.LightGray;
-            
+
         }
 
 
@@ -187,7 +187,8 @@ namespace LayoutFarm.CustomWidgets
 
                 BgIsNotOpaque = value.A < 255;
 
-                if (this.HasParentLink)
+                
+                if (this.HasParentLink && this.BlockGraphicUpdateBubble)
                 {
                     this.InvalidateGraphics();
                 }
@@ -216,8 +217,6 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-
-
 
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
@@ -300,6 +299,7 @@ namespace LayoutFarm.CustomWidgets
             //   new Rectangle(updateArea.Left, updateArea.Top, updateArea.Width, updateArea.Height));
 #endif
         }
+
         public override void ChildrenHitTestCore(HitChain hitChain)
         {
 
@@ -334,7 +334,7 @@ namespace LayoutFarm.CustomWidgets
     }
 
     public class DoubleBufferCustomRenderBox : CustomRenderBox
-    { 
+    {
         DrawboardBuffer _builtInBackBuffer;
         bool _hasAccumRect;
         Rectangle _invalidateRect;

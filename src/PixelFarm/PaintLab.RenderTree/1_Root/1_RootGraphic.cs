@@ -18,10 +18,6 @@ namespace LayoutFarm
 
     public static class GlobalRootGraphic
     {
-        //TODO: merge this to RootGraphics?
-
-        static int _suspendCount;
-        internal static bool s_SuspendGraphicsUpdate;
 
         public static RootGraphic CurrentRootGfx;
         public static RenderElement CurrentRenderElement;
@@ -42,29 +38,15 @@ namespace LayoutFarm
 
             }
         }
-        public static void SuspendGraphicsUpdate()
-        {
-            _suspendCount++;
-            s_SuspendGraphicsUpdate = true;
-        }
-        public static void ResumeGraphicsUpdate()
-        {
-            _suspendCount--;
-            s_SuspendGraphicsUpdate = _suspendCount > 0;
-        }
-        public static void ForceResumeGraphicsUpdate()
-        {
-            _suspendCount = 0;
-            s_SuspendGraphicsUpdate = false;
-        }
     }
 
     static class BubbleInvalidater
     {
 
-        static readonly SimplePool<InvalidateGfxArgs> _invGfxPool = new SimplePool<InvalidateGfxArgs>(() => new InvalidateGfxArgs(), a => a.Reset());
+        static readonly SimplePool<InvalidateGfxArgs> _invGfxPool = new SimplePool<InvalidateGfxArgs>(() => new InvalidateGfxArgs() { FromMainPool = true }, a => a.Reset());
 
         public static bool IsInRenderPhase { get; set; }
+
         public static InvalidateGfxArgs GetInvalidateGfxArgs()
         {
 #if DEBUG
@@ -86,7 +68,16 @@ namespace LayoutFarm
             }
             args.dbugWaitingInPool = true;
 #endif
-            _invGfxPool.ReleaseBack(args);
+            if (args.FromMainPool)
+            {
+                _invGfxPool.ReleaseBack(args);
+            }
+            else
+            {
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine("InvalidateGfxArgs=>not from pool:");
+#endif
+            }
         }
 
         public static void InvalidateGraphicLocalArea(RenderElement re, Rectangle localArea)
@@ -98,14 +89,13 @@ namespace LayoutFarm
                 return;
             }
 
-            re._propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
             InvalidateGfxArgs inv = GetInvalidateGfxArgs();
             inv.SetReason_UpdateLocalArea(re, localArea);
             InternalBubbleUpInvalidateGraphicArea(inv);
         }
 
 
-        public static void InternalBubbleUpInvalidateGraphicArea(InvalidateGfxArgs args)//RenderElement fromElement, ref Rectangle elemClientRect, bool passSourceElem)
+        internal static void InternalBubbleUpInvalidateGraphicArea(InvalidateGfxArgs args)//RenderElement fromElement, ref Rectangle elemClientRect, bool passSourceElem)
         {
             //total bounds = total bounds at level            
             if (IsInRenderPhase)
@@ -118,8 +108,6 @@ namespace LayoutFarm
             int viewport_diffLeft = args.LeftDiff;
             int viewport_diffTop = args.TopDiff;
 
-
-
             //bubble up ,find global rect coord
             //and then merge to accumulate rect        
             RenderElement fromElement = args.SrcRenderElement;
@@ -127,7 +115,6 @@ namespace LayoutFarm
             bool passSourceElem = args.PassSrcElement;
 
             //HasViewportOffset = false;
-
 
             int globalPoint_X = 0;
             int globalPoint_Y = 0;
@@ -338,7 +325,7 @@ namespace LayoutFarm
 
         //--------------------------------------------------------------------------
         public abstract void PrepareRender();
-    
+
         public event EventHandler PreRenderEvent;
         protected void InvokePreRenderEvent() => PreRenderEvent?.Invoke(this, EventArgs.Empty);
 
