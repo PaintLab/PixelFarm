@@ -194,8 +194,7 @@ namespace LayoutFarm
             }
         }
 
-        public virtual RenderElement FindUnderlyingSiblingAtPoint(Point point) => null;
-
+   
         public virtual void ChildrenHitTestCore(HitChain hitChain)
         {
         }
@@ -569,9 +568,8 @@ namespace LayoutFarm
                 }
                 else
                 {
-                    //------------------------------------------
+
                     renderE.RenderClientContent(d, updateArea);
-                    //------------------------------------------
                 }
                 //------------------------------------------
 

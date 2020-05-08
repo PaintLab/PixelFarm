@@ -114,8 +114,7 @@ namespace LayoutFarm
             int boxX = 0;
             int boxY = 0;
 
-            GlobalRootGraphic.SuspendGraphicsUpdate();
-
+            hostBox.SuspendGraphicsUpdate();
             for (int i = 0; i < 10; ++i)
             {
                 Size s = _sizes[i % _sizes.Length];
@@ -137,15 +136,11 @@ namespace LayoutFarm
                 hostBox.Add(box);
                 boxY += 30;
                 boxX += 20;
-            }
-
-
+            } 
             //temp1
             LayoutUpdateArgs updateArgs = new LayoutUpdateArgs();
             hostBox.PerformContentLayout(updateArgs);
-
-            GlobalRootGraphic.ResumeGraphicsUpdate();
-
+            hostBox.ResumeGraphicsUpdate();
             hostBox.InvalidateGraphics();
 
             host.AddChild(hostBox);

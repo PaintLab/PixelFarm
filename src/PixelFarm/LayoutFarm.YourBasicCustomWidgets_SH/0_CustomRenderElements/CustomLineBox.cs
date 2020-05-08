@@ -432,10 +432,6 @@ namespace LayoutFarm.CustomWidgets
             return "linkbox";
         }
 #endif
-        public RenderElement FindOverlapedChildElementAtPoint(RenderElement afterThisChild, Point point)
-        {
-            return null;
-        }
 
         public bool IsIntersect(int minY, int maxY) => !((maxY < LineTop) || (minY > (LineTop + LineHeight)));
 

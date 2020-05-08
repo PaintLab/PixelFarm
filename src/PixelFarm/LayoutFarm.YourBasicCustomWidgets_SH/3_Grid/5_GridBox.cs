@@ -941,7 +941,7 @@ namespace LayoutFarm.CustomWidgets
                 _gridCell = gridCell;
             }
             public RenderElement ParentRenderElement => _parentRenderE;
-             
+
             public void AdjustLocation(ref int px, ref int py)
             {
                 px += _gridCell.X;
@@ -953,15 +953,8 @@ namespace LayoutFarm.CustomWidgets
             {
                 return "";
             }
-#endif
-
-            public RenderElement FindOverlapedChildElementAtPoint(RenderElement afterThisChild, Point point)
-            {
-                return null;
-            }
+#endif            
         }
-
-
         protected override void OnLostMouseFocus(UIMouseLostFocusEventArgs e)
         {
             //check if 

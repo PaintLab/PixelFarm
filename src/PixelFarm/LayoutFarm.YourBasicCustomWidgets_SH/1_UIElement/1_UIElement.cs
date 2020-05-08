@@ -379,10 +379,10 @@ namespace LayoutFarm.UI
             //temp
             UILayoutQueue.AddToLayoutQueue(this);
         }
+        //------------------------------------------------------------
         public void SuspendGraphicsUpdate()
         {
             CurrentPrimaryRenderElement?.SuspendGraphicsUpdate();
-
         }
         public void ResumeGraphicsUpdate()
         {

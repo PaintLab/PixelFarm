@@ -341,12 +341,7 @@ namespace LayoutFarm
             _elements?.Clear(this);
 
         }
-
-        public override RenderElement FindUnderlyingSiblingAtPoint(Point point)
-        {
-            return this.MyParentLink?.FindOverlapedChildElementAtPoint(this, point);
-        }
-
+ 
         //TODO: review inner content size again
 
         public override Size InnerContentSize => this.Size;

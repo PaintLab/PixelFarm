@@ -15,7 +15,6 @@ namespace LayoutFarm.RenderBoxes
     {
         RenderElement ParentRenderElement { get; }
         void AdjustLocation(ref int px, ref int py);
-        RenderElement FindOverlapedChildElementAtPoint(RenderElement afterThisChild, Point point);
         
 #if DEBUG
         string dbugGetLinkInfo();
