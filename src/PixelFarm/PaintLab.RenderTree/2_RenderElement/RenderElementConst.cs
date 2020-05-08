@@ -30,8 +30,8 @@ namespace LayoutFarm
         public const int NEED_PRE_RENDER_EVAL = 1 << (18 - 1);
         public const int IS_TOP_RENDERBOX = 1 << (19 - 1);
 
-        public const int LY_SUSPEND_GRAPHIC = 1 << (20 - 1);
-        public const int LY_REQ_INVALIDATE_RECT_EVENT = 1 << (21 - 1);
+        public const int SUSPEND_GRAPHICS = 1 << (20 - 1);
+        public const int REQ_INVALIDATE_RECT_EVENT = 1 << (21 - 1);
 
 #if DEBUG
         public const int dbugFIRST_ARR_PASS = 1 << (24 - 1);//TODO: review this again,

@@ -213,10 +213,12 @@ namespace LayoutFarm
                 _viewportLeft = viewportLeft;
                 _viewportTop = viewportTop;
                 //
-
-                InvalidateGfxArgs args = BubbleInvalidater.GetInvalidateGfxArgs();
-                args.SetReason_ChangeViewport(this, diffLeft, diffTop);
-                this.InvalidateGraphics(args);
+                if (!this.BlockGraphicUpdateBubble)
+                {
+                    InvalidateGfxArgs args = BubbleInvalidater.GetInvalidateGfxArgs();
+                    args.SetReason_ChangeViewport(this, diffLeft, diffTop);
+                    this.InvalidateGraphics(args);
+                }
             }
         }
 
@@ -341,7 +343,7 @@ namespace LayoutFarm
             _elements?.Clear(this);
 
         }
- 
+
         //TODO: review inner content size again
 
         public override Size InnerContentSize => this.Size;

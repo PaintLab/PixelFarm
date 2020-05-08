@@ -25,15 +25,18 @@ namespace LayoutFarm
         internal void InvalidateGraphics(InvalidateGfxArgs args)
         {
             //RELATIVE to this ***
-            
-            if ((_propFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0)
+
+            if ((_propFlags & RenderElementConst.SUSPEND_GRAPHICS) != 0)
             {
 #if DEBUG
                 dbugVRoot.dbug_PushInvalidateMsg(RootGraphic.dbugMsg_BLOCKED, this);
 #endif
+
+                //early exit
+                //don't use
+                BubbleInvalidater.ReleaseInvalidateGfxArgs(args);
                 return;
             }
-
 
             BubbleInvalidater.InternalBubbleUpInvalidateGraphicArea(args);
         }
@@ -44,9 +47,8 @@ namespace LayoutFarm
         public void InvalidateGraphics()
         {
             //RELATIVE to this ***
-            
             //
-            if ((_propFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0)
+            if ((_propFlags & RenderElementConst.SUSPEND_GRAPHICS) != 0)
             {
 #if DEBUG
                 dbugVRoot.dbug_PushInvalidateMsg(RootGraphic.dbugMsg_BLOCKED, this);
@@ -60,18 +62,31 @@ namespace LayoutFarm
                 BubbleInvalidater.InvalidateGraphicLocalArea(this, new Rectangle(0, 0, _b_width, _b_height));
             }
         }
-
-        public void InvalidateGraphics(Rectangle rect)
+        protected void InvalidateGfxLocalArea(Rectangle localArea)
         {
-
             //
-            if ((_propFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0)
+            if ((_propFlags & RenderElementConst.SUSPEND_GRAPHICS) != 0)
             {
 #if DEBUG
                 dbugVRoot.dbug_PushInvalidateMsg(RootGraphic.dbugMsg_BLOCKED, this);
 #endif
                 return;
             }
+
+            BubbleInvalidater.InvalidateGraphicLocalArea(this, localArea);
+        }
+        public void InvalidateGraphics(Rectangle rect)
+        {
+
+            //
+            if ((_propFlags & RenderElementConst.SUSPEND_GRAPHICS) != 0)
+            {
+#if DEBUG
+                dbugVRoot.dbug_PushInvalidateMsg(RootGraphic.dbugMsg_BLOCKED, this);
+#endif
+                return;
+            }
+
             RenderElement parent = this.ParentRenderElement;
             if (parent != null && !parent.BlockGraphicUpdateBubble)
             {
@@ -88,7 +103,7 @@ namespace LayoutFarm
             //RELATIVE to its parent***
 
 
-            if ((_propFlags & RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT) != 0)
+            if ((_propFlags & RenderElementConst.REQ_INVALIDATE_RECT_EVENT) != 0)
             {
                 OnInvalidateGraphicsNoti(true, ref totalBounds);
             }
@@ -102,22 +117,16 @@ namespace LayoutFarm
             }
         }
 
-        protected void InvalidateGfxLocalArea(Rectangle localArea)
-        {
-            if (!this.BlockGraphicUpdateBubble)
-            {
-                BubbleInvalidater.InvalidateGraphicLocalArea(this, localArea);
-            }
-        }
-        internal static bool RequestInvalidateGraphicsNoti(RenderElement re) => (re._propFlags & RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT) != 0;
+
+        internal static bool RequestInvalidateGraphicsNoti(RenderElement re) => (re._propFlags & RenderElementConst.REQ_INVALIDATE_RECT_EVENT) != 0;
 
         internal static void InvokeInvalidateGraphicsNoti(RenderElement re, bool fromMe, Rectangle totalBounds) => re.OnInvalidateGraphicsNoti(fromMe, ref totalBounds);
 
-        public void SuspendGraphicsUpdate() => _propFlags |= RenderElementConst.LY_SUSPEND_GRAPHIC;
+        public void SuspendGraphicsUpdate() => _propFlags |= RenderElementConst.SUSPEND_GRAPHICS;
 
-        public void ResumeGraphicsUpdate() => _propFlags &= ~RenderElementConst.LY_SUSPEND_GRAPHIC;
+        public void ResumeGraphicsUpdate() => _propFlags &= ~RenderElementConst.SUSPEND_GRAPHICS;
 
-        public bool BlockGraphicUpdateBubble => (_propFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0;
+        public bool BlockGraphicUpdateBubble => (_propFlags & RenderElementConst.SUSPEND_GRAPHICS) != 0;
 
         public static bool WaitForStartRenderElement { get; internal set; }
 

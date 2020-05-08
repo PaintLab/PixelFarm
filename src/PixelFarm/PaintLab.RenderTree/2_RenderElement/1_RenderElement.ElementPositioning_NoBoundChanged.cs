@@ -90,11 +90,11 @@ namespace LayoutFarm
        
         protected bool NeedInvalidateRectEvent
         {
-            get => ((_propFlags & RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT) != 0);
+            get => ((_propFlags & RenderElementConst.REQ_INVALIDATE_RECT_EVENT) != 0);
 
             set => _propFlags = value ?
-                    _propFlags | RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT :
-                    _propFlags & ~RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT;
+                    _propFlags | RenderElementConst.REQ_INVALIDATE_RECT_EVENT :
+                    _propFlags & ~RenderElementConst.REQ_INVALIDATE_RECT_EVENT;
 
         }
 
