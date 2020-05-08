@@ -28,11 +28,6 @@ namespace LayoutFarm
             this.SetSize(_b_width, height);
         }
 
-        protected void PreRenderSetSize(int width, int height)
-        {
-            _b_width = width;
-            _b_height = height;
-        }
         public void SetSize(int width, int height)
         {
 #if DEBUG
@@ -61,7 +56,7 @@ namespace LayoutFarm
                     if (!BlockGraphicUpdateBubble)
                     {
                         this.InvalidateParentGraphics(Rectangle.Union(prevBounds, this.RectBounds));
-                    } 
+                    }
                 }
             }
         }
@@ -96,7 +91,7 @@ namespace LayoutFarm
                         //combine before and after rect  
                         //add to invalidate root invalidate queue
 
-                        if(!BlockGraphicUpdateBubble)                         
+                        if (!BlockGraphicUpdateBubble)
                         {
                             GetFirstClipParentRenderElement(this)?.InvalidateGraphics();
                         }
@@ -135,7 +130,7 @@ namespace LayoutFarm
                    _b_width != width ||
                    _b_height != height)
                 {
-                     
+
                     Rectangle prevBounds = this.RectBounds;
                     //bound changed
                     _b_left = left;
