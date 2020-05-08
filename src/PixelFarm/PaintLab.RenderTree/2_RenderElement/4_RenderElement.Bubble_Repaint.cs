@@ -86,7 +86,7 @@ namespace LayoutFarm
 #if DEBUG
             if (this.IsTopWindow)
             {
-                System.Diagnostics.Debugger.Break();
+                //System.Diagnostics.Debugger.Break();
             }
 #endif
             //
