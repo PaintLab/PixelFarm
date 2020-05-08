@@ -56,6 +56,7 @@ namespace LayoutFarm
         {
             //RELATIVE to this ***
             _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
+            //
             if ((_propFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0)
             {
 #if DEBUG
@@ -74,6 +75,7 @@ namespace LayoutFarm
         public void InvalidateGraphics(Rectangle rect)
         {
             _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
+            //
             if ((_propFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0)
             {
 #if DEBUG
@@ -126,19 +128,10 @@ namespace LayoutFarm
 
         public void ResumeGraphicsUpdate() => _propFlags &= ~RenderElementConst.LY_SUSPEND_GRAPHIC;
 
-        public bool BlockGraphicUpdateBubble
-        {
-            get
-            {
-#if DEBUG
-                return (_propFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0;
-#else
-                return (_uiLayoutFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0;
-#endif
-            }
-        }
+        public bool BlockGraphicUpdateBubble => (_propFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0;
 
         public static bool WaitForStartRenderElement { get; internal set; }
+
         static bool UnlockForStartRenderElement(RenderElement re)
         {
             if ((re._propFlags & RenderElementConst.TRACKING_GFX_TIP) != 0)
