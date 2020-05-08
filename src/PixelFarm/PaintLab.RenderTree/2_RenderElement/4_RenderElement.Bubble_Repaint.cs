@@ -48,7 +48,7 @@ namespace LayoutFarm
 
             }
         }
-        
+
         /// <summary>
         /// invalidate entire area
         /// </summary>
@@ -70,10 +70,27 @@ namespace LayoutFarm
                 BubbleInvalidater.InvalidateGraphicLocalArea(this, new Rectangle(0, 0, _b_width, _b_height));
             }
         }
+
+        public void InvalidateGraphics(Rectangle rect)
+        {
+            _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
+            if ((_propFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0)
+            {
+#if DEBUG
+                dbugVRoot.dbug_PushInvalidateMsg(RootGraphic.dbugMsg_BLOCKED, this);
+#endif
+                return;
+            }
+            RenderElement parent = this.ParentRenderElement;
+            if (parent != null && !parent.BlockGraphicUpdateBubble && !GlobalRootGraphic.s_SuspendGraphicsUpdate)
+            {
+                BubbleInvalidater.InvalidateGraphicLocalArea(this, rect);
+            }
+        }
         protected virtual void OnInvalidateGraphicsNoti(bool fromMe, ref Rectangle totalBounds) { }
 
         //RELATIVE to its parent
-        public void InvalidateParentGraphics() => this.InvalidateParentGraphics(this.RectBounds);      
+        public void InvalidateParentGraphics() => this.InvalidateParentGraphics(this.RectBounds);
 
         public void InvalidateParentGraphics(Rectangle totalBounds)
         {
