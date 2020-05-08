@@ -43,9 +43,10 @@ namespace LayoutFarm
     static class BubbleInvalidater
     {
 
-        static readonly SimplePool<InvalidateGfxArgs> _invGfxPool = new SimplePool<InvalidateGfxArgs>(() => new InvalidateGfxArgs(), a => a.Reset());
+        static readonly SimplePool<InvalidateGfxArgs> _invGfxPool = new SimplePool<InvalidateGfxArgs>(() => new InvalidateGfxArgs() { FromMainPool = true }, a => a.Reset());
 
         public static bool IsInRenderPhase { get; set; }
+
         public static InvalidateGfxArgs GetInvalidateGfxArgs()
         {
 #if DEBUG
@@ -67,7 +68,16 @@ namespace LayoutFarm
             }
             args.dbugWaitingInPool = true;
 #endif
-            _invGfxPool.ReleaseBack(args);
+            if (args.FromMainPool)
+            {
+                _invGfxPool.ReleaseBack(args);
+            }
+            else
+            {
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine("InvalidateGfxArgs=>not from pool:");
+#endif
+            }
         }
 
         public static void InvalidateGraphicLocalArea(RenderElement re, Rectangle localArea)
@@ -85,7 +95,7 @@ namespace LayoutFarm
         }
 
 
-        public static void InternalBubbleUpInvalidateGraphicArea(InvalidateGfxArgs args)//RenderElement fromElement, ref Rectangle elemClientRect, bool passSourceElem)
+        internal static void InternalBubbleUpInvalidateGraphicArea(InvalidateGfxArgs args)//RenderElement fromElement, ref Rectangle elemClientRect, bool passSourceElem)
         {
             //total bounds = total bounds at level            
             if (IsInRenderPhase)
