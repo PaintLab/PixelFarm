@@ -80,11 +80,8 @@ namespace LayoutFarm.RenderBoxes
                 re._internalLinkedNode = null;
             }
             RenderElement.SetParentLink(re, null);
+            parent.InvalidateGraphics(re.RectBounds);
 
-            if (!parent.BlockGraphicUpdateBubble)
-            { 
-                BubbleInvalidater.InvalidateGraphicLocalArea(parent, re.RectBounds);
-            }
 
         }
         public void Clear(RenderElement parent)

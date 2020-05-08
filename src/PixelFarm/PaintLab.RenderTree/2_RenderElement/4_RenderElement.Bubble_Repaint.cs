@@ -21,11 +21,9 @@ namespace LayoutFarm
                  _propFlags | RenderElementConst.TRACKING_BG_IS_NOT_OPAQUE :
                  _propFlags & ~RenderElementConst.TRACKING_BG_IS_NOT_OPAQUE;
         }
-
         internal void InvalidateGraphics(InvalidateGfxArgs args)
         {
             //RELATIVE to this ***
-
             if ((_propFlags & RenderElementConst.SUSPEND_GRAPHICS) != 0)
             {
 #if DEBUG
@@ -38,7 +36,19 @@ namespace LayoutFarm
                 return;
             }
 
-            BubbleInvalidater.InternalBubbleUpInvalidateGraphicArea(args);
+            if (this.IsTopWindow)
+            {
+                //top window does not have parent
+                BubbleInvalidater.InternalBubbleUpInvalidateGraphicArea(args);
+            }
+            else
+            {
+                RenderElement parent = this.ParentRenderElement;
+                if (parent != null && !parent.BlockGraphicUpdateBubble)
+                {
+                    BubbleInvalidater.InternalBubbleUpInvalidateGraphicArea(args);
+                }
+            }
         }
 
         /// <summary>
@@ -56,14 +66,29 @@ namespace LayoutFarm
                 return;
             }
 
-            RenderElement parent = this.ParentRenderElement;
-            if (parent != null && !parent.BlockGraphicUpdateBubble)
+            if (this.IsTopWindow)
             {
+                //top window does not have parent
                 BubbleInvalidater.InvalidateGraphicLocalArea(this, new Rectangle(0, 0, _b_width, _b_height));
             }
+            else
+            {
+                RenderElement parent = this.ParentRenderElement;
+                if (parent != null && !parent.BlockGraphicUpdateBubble)
+                {
+                    BubbleInvalidater.InvalidateGraphicLocalArea(this, new Rectangle(0, 0, _b_width, _b_height));
+                }
+            }
+
         }
-        protected void InvalidateGfxLocalArea(Rectangle localArea)
+        public void InvalidateGraphics(Rectangle localArea)
         {
+#if DEBUG
+            if (this.IsTopWindow)
+            {
+                System.Diagnostics.Debugger.Break();
+            }
+#endif
             //
             if ((_propFlags & RenderElementConst.SUSPEND_GRAPHICS) != 0)
             {
@@ -72,27 +97,20 @@ namespace LayoutFarm
 #endif
                 return;
             }
-
-            BubbleInvalidater.InvalidateGraphicLocalArea(this, localArea);
-        }
-        public void InvalidateGraphics(Rectangle rect)
-        {
-
-            //
-            if ((_propFlags & RenderElementConst.SUSPEND_GRAPHICS) != 0)
+            if (this.IsTopWindow)
             {
-#if DEBUG
-                dbugVRoot.dbug_PushInvalidateMsg(RootGraphic.dbugMsg_BLOCKED, this);
-#endif
-                return;
+                BubbleInvalidater.InvalidateGraphicLocalArea(this, localArea);
             }
-
-            RenderElement parent = this.ParentRenderElement;
-            if (parent != null && !parent.BlockGraphicUpdateBubble)
+            else
             {
-                BubbleInvalidater.InvalidateGraphicLocalArea(this, rect);
+                RenderElement parent = this.ParentRenderElement;
+                if (parent != null && !parent.BlockGraphicUpdateBubble)
+                {
+                    BubbleInvalidater.InvalidateGraphicLocalArea(this, localArea);
+                }
             }
         }
+
         protected virtual void OnInvalidateGraphicsNoti(bool fromMe, ref Rectangle totalBounds) { }
 
         //RELATIVE to its parent
@@ -101,7 +119,12 @@ namespace LayoutFarm
         public void InvalidateParentGraphics(Rectangle totalBounds)
         {
             //RELATIVE to its parent***
-
+#if DEBUG
+            if (this.IsTopWindow)
+            {
+                System.Diagnostics.Debugger.Break();
+            }
+#endif
 
             if ((_propFlags & RenderElementConst.REQ_INVALIDATE_RECT_EVENT) != 0)
             {
@@ -111,9 +134,7 @@ namespace LayoutFarm
             RenderElement parent = this.ParentRenderElement; //start at parent ****
             if (parent != null && !parent.BlockGraphicUpdateBubble)
             {
-                InvalidateGfxArgs arg = BubbleInvalidater.GetInvalidateGfxArgs();
-                arg.SetReason_UpdateLocalArea(parent, totalBounds);
-                BubbleInvalidater.InternalBubbleUpInvalidateGraphicArea(arg);//RELATIVE to its parent***
+                parent.InvalidateGraphics(totalBounds);
             }
         }
 
