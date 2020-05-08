@@ -187,7 +187,8 @@ namespace LayoutFarm.CustomWidgets
 
                 BgIsNotOpaque = value.A < 255;
 
-                if (this.HasParentLink)
+                
+                if (this.HasParentLink && this.BlockGraphicUpdateBubble)
                 {
                     this.InvalidateGraphics();
                 }
@@ -216,7 +217,7 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-         
+
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
 #if DEBUG
@@ -298,7 +299,7 @@ namespace LayoutFarm.CustomWidgets
             //   new Rectangle(updateArea.Left, updateArea.Top, updateArea.Width, updateArea.Height));
 #endif
         }
-        
+
         public override void ChildrenHitTestCore(HitChain hitChain)
         {
 

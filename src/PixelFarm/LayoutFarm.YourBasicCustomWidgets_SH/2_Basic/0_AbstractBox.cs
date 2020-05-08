@@ -130,8 +130,6 @@ namespace LayoutFarm.CustomWidgets
         {
             if (_primElement == null)
             {
-                //create primary render element
-                GlobalRootGraphic.SuspendGraphicsUpdate();
 
                 var renderE = EnableDoubleBuffer ?
                     new DoubleBufferCustomRenderBox(this.Width, this.Height) { EnableDoubleBuffer = true } :
@@ -140,24 +138,14 @@ namespace LayoutFarm.CustomWidgets
                 SetCommonProperties(renderE, this);
                 BuildChildren(renderE, this);
 
-                GlobalRootGraphic.ResumeGraphicsUpdate();
-                renderE.InvalidateGraphics();
 
-                _primElement = renderE;
+                return _primElement = renderE;
             }
             return _primElement;
         }
         protected void SetPrimaryRenderElement(CustomRenderBox primElement)
         {
             _primElement = primElement;
-        }
-        protected void SuspendGraphicsUpdate()
-        {
-            _primElement?.SuspendGraphicsUpdate();
-        }
-        protected void ResumeGraphicsUpdate()
-        {
-            _primElement?.ResumeGraphicsUpdate();
         }
 
 
@@ -352,7 +340,7 @@ namespace LayoutFarm.CustomWidgets
             set
             {
                 _backColor = value;
-                if (HasReadyRenderElement)
+                if (_primElement != null)
                 {
                     _primElement.BackColor = value;
                 }
@@ -364,7 +352,7 @@ namespace LayoutFarm.CustomWidgets
             set
             {
                 _borderColor = value;
-                if (HasReadyRenderElement)
+                if (_primElement != null)
                 {
                     _primElement.BorderColor = value;
                 }
@@ -857,7 +845,7 @@ namespace LayoutFarm.CustomWidgets
                                 linebox.AdjustVerticalAlignment();
                             }
                         }
-                     
+
                         this.SetInnerContentSize(xpos, maxBottom);
 
                         //this.dbugBreakMe = true;

@@ -57,14 +57,10 @@ namespace LayoutFarm
 
         //==============================================================
         //controller-listener
-        public object GetController()
-        {
-            //TODO: move to extension method ***
-            return _controller;
-        }
+        public object GetController() => _controller;
+
         public void SetController(object controller)
         {
-            //TODO: move to extension method ***
             _controller = controller;
         }
 
@@ -130,9 +126,8 @@ namespace LayoutFarm
         //==============================================================
         //parent/child ...
         public bool HasParent => _parentLink != null;
-
-        protected bool HasParentLink => _parentLink != null;
-
+        protected bool HasParentLink => _parentLink != null; 
+        
         public RenderElement ParentRenderElement
         {
             get

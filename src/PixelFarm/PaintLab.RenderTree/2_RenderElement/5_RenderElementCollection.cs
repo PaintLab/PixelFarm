@@ -16,6 +16,7 @@ namespace LayoutFarm.RenderBoxes
         RenderElement ParentRenderElement { get; }
         void AdjustLocation(ref int px, ref int py);
         RenderElement FindOverlapedChildElementAtPoint(RenderElement afterThisChild, Point point);
+        
 #if DEBUG
         string dbugGetLinkInfo();
 #endif
@@ -82,9 +83,8 @@ namespace LayoutFarm.RenderBoxes
             RenderElement.SetParentLink(re, null);
 
             if (!parent.BlockGraphicUpdateBubble)
-            {
-                Rectangle bounds = re.RectBounds;
-                BubbleInvalidater.InvalidateGraphicLocalArea(parent, bounds);
+            { 
+                BubbleInvalidater.InvalidateGraphicLocalArea(parent, re.RectBounds);
             }
 
         }
