@@ -25,7 +25,7 @@ namespace LayoutFarm
         internal void InvalidateGraphics(InvalidateGfxArgs args)
         {
             //RELATIVE to this ***
-            _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
+            
             if ((_propFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0)
             {
 #if DEBUG
@@ -34,11 +34,8 @@ namespace LayoutFarm
                 return;
             }
 
-            //RELATIVE to this***
-            //1.
-            _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
-            //2.  
-            BubbleInvalidater.InternalBubbleUpInvalidateGraphicArea(args); 
+
+            BubbleInvalidater.InternalBubbleUpInvalidateGraphicArea(args);
         }
 
         /// <summary>
@@ -47,7 +44,7 @@ namespace LayoutFarm
         public void InvalidateGraphics()
         {
             //RELATIVE to this ***
-            _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
+            
             //
             if ((_propFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0)
             {
@@ -66,7 +63,7 @@ namespace LayoutFarm
 
         public void InvalidateGraphics(Rectangle rect)
         {
-            _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
+
             //
             if ((_propFlags & RenderElementConst.LY_SUSPEND_GRAPHIC) != 0)
             {
@@ -90,7 +87,7 @@ namespace LayoutFarm
         {
             //RELATIVE to its parent***
 
-            _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
+
             if ((_propFlags & RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT) != 0)
             {
                 OnInvalidateGraphicsNoti(true, ref totalBounds);

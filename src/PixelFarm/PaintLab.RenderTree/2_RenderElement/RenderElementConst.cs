@@ -22,8 +22,7 @@ namespace LayoutFarm
         /// transparent for scroll input
         /// </summary>
         public const int TRANSPARENT_FOR_SCORLL_INPUT = 1 << (8 - 1);
-        public const int IS_GRAPHIC_VALID = 1 << (10 - 1); //TODO: review this again
-       
+
         public const int HAS_DOUBLE_SCROLL_SURFACE = 1 << (14 - 1); //TODO: review here
 
         public const int MAY_HAS_CHILD = 1 << (16 - 1);
