@@ -100,12 +100,29 @@ namespace LayoutFarm.UI
         protected bool _needContentLayout;
         protected bool _hasMinSize;
         internal object _collectionLinkNode; //optional, eg for linked-list node, RB-tree-node
+        UIElement _parent;
 
         public UIElement()
-        { 
+        {
         }
+#if DEBUG
+        protected virtual void dbugOnSettingParent(UIElement parent)
+        {
 
-        public UIElement ParentUI { get; set; }
+        }
+#endif
+
+        public UIElement ParentUI
+        {
+            get => _parent;
+            set
+            {
+#if DEBUG
+                dbugOnSettingParent(value);
+#endif
+                _parent = value;
+            }
+        }
         /// <summary>
         /// update layout data from layout instance
         /// </summary>
@@ -126,8 +143,6 @@ namespace LayoutFarm.UI
         {
             CurrentPrimaryRenderElement?.GetRoot()?.SetCurrentKeyboardFocus(null);
         }
-
-       
         public virtual bool Visible
         {
             get
@@ -158,7 +173,7 @@ namespace LayoutFarm.UI
             else
             {
                 return new PixelFarm.Drawing.Point((int)_left, (int)_top);
-            }             
+            }
         }
 
         public PixelFarm.Drawing.Point GetLocation() => new PixelFarm.Drawing.Point((int)_left, (int)_top);
