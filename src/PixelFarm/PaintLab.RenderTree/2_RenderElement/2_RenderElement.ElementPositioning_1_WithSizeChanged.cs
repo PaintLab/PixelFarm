@@ -5,6 +5,7 @@ namespace LayoutFarm
 {
     partial class RenderElement
     {
+
         public void SetWidth(int width)
         {
 #if DEBUG
@@ -26,7 +27,12 @@ namespace LayoutFarm
 #endif
             this.SetSize(_b_width, height);
         }
-     
+
+        protected void PreRenderSetSize(int width, int height)
+        {
+            _b_width = width;
+            _b_height = height;
+        }
         public void SetSize(int width, int height)
         {
 #if DEBUG
@@ -49,12 +55,13 @@ namespace LayoutFarm
                     Rectangle prevBounds = this.RectBounds;
                     _b_width = width;
                     _b_height = height;
+
                     //combine before and after rect 
                     //add to invalidate root invalidate queue  
-                    if (!GlobalRootGraphic.s_SuspendGraphicsUpdate)
+                    if (!BlockGraphicUpdateBubble)
                     {
                         this.InvalidateParentGraphics(Rectangle.Union(prevBounds, this.RectBounds));
-                    }
+                    } 
                 }
             }
         }
@@ -89,7 +96,7 @@ namespace LayoutFarm
                         //combine before and after rect  
                         //add to invalidate root invalidate queue
 
-                        if (!GlobalRootGraphic.s_SuspendGraphicsUpdate)
+                        if(!BlockGraphicUpdateBubble)                         
                         {
                             GetFirstClipParentRenderElement(this)?.InvalidateGraphics();
                         }
@@ -103,7 +110,7 @@ namespace LayoutFarm
                         //----------------   
                         //combine before and after rect  
                         //add to invalidate root invalidate queue
-                        if (!GlobalRootGraphic.s_SuspendGraphicsUpdate)
+                        if (!BlockGraphicUpdateBubble)
                         {
                             this.InvalidateParentGraphics(Rectangle.Union(prevBounds, this.RectBounds));
                         }
@@ -111,7 +118,7 @@ namespace LayoutFarm
                 }
             }
         }
-        
+
         public void SetBounds(int left, int top, int width, int height)
         {
             if (_parentLink == null)
@@ -128,7 +135,7 @@ namespace LayoutFarm
                    _b_width != width ||
                    _b_height != height)
                 {
-
+                     
                     Rectangle prevBounds = this.RectBounds;
                     //bound changed
                     _b_left = left;
@@ -136,18 +143,12 @@ namespace LayoutFarm
                     _b_width = width;
                     _b_height = height;
 
-                    if (!GlobalRootGraphic.s_SuspendGraphicsUpdate)
+                    if (!BlockGraphicUpdateBubble)
                     {
                         this.InvalidateParentGraphics(Rectangle.Union(prevBounds, this.RectBounds));
                     }
                 }
             }
-        }
-        protected void PreRenderSetSize(int width, int height)
-        {
-            //not invalidate graphics msg
-            _b_width = width;
-            _b_height = height;
         }
     }
 }

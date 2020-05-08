@@ -41,6 +41,7 @@ namespace LayoutFarm
         public bool NeedClipArea { get; set; }
         //
         protected virtual RootGraphic Root => null;
+
         public RootGraphic GetRoot()
         {
             //recursive
@@ -124,10 +125,9 @@ namespace LayoutFarm
         internal static bool IsBubbleGfxUpdateTrackedTip(RenderElement re) => (re._propFlags & RenderElementConst.TRACKING_GFX_TIP) != 0;
         internal static bool IsInUpdateRgnQueue(RenderElement re) => (re._propFlags & RenderElementConst.TRACKING_GFX_In_UPDATE_RGN_QUEUE) != 0;
         //==============================================================
-        //parent/child ...
-        public bool HasParent => _parentLink != null;
-        protected bool HasParentLink => _parentLink != null; 
-        
+
+        protected bool HasParentLink => _parentLink != null;
+
         public RenderElement ParentRenderElement
         {
             get
@@ -201,7 +201,7 @@ namespace LayoutFarm
         }
         //==============================================================
         //
-        public bool Visible => ((_propFlags & RenderElementConst.HIDDEN) == 0);
+        public bool Visible => (_propFlags & RenderElementConst.HIDDEN) == 0;
         //
         public void SetVisible(bool value)
         {
@@ -247,15 +247,7 @@ namespace LayoutFarm
             }
             return re;
         }
-        //public bool IsBlockElement
-        //{
-        //    get => ((_propFlags & RenderElementConst.IS_BLOCK_ELEMENT) == RenderElementConst.IS_BLOCK_ELEMENT);
-
-        //    set =>
-        //        _propFlags = value ?
-        //             _propFlags | RenderElementConst.IS_BLOCK_ELEMENT :
-        //             _propFlags & ~RenderElementConst.IS_BLOCK_ELEMENT;
-        //}
+        
 
         public bool IsTopWindow
         {
@@ -275,9 +267,7 @@ namespace LayoutFarm
                       _propFlags | RenderElementConst.HAS_DOUBLE_SCROLL_SURFACE :
                       _propFlags & ~RenderElementConst.HAS_DOUBLE_SCROLL_SURFACE;
         }
-        //
-        public bool VisibleAndHasParent => ((_propFlags & RenderElementConst.HIDDEN) == 0) && (_parentLink != null);
-        //
+        
         //==============================================================
         //hit test
         public virtual bool HasCustomHitTest => false;
@@ -596,18 +586,6 @@ namespace LayoutFarm
 #endif
         }
 
-        //==============================================================
-        //set location and size , not bubble***
-
-        public static void DirectSetSize(RenderElement visualElement, int width, int height)
-        {
-            visualElement._b_width = width;
-            visualElement._b_height = height;
-        }
-        public static void DirectSetLocation(RenderElement visualElement, int x, int y)
-        {
-            visualElement._b_left = x;
-            visualElement._b_top = y;
-        }
+      
     }
 }

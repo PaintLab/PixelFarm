@@ -235,7 +235,7 @@ namespace LayoutFarm.CustomWidgets
                                 {
                                     newH = _contentTop + (int)System.Math.Ceiling(_renderVxFormattedString.SpanHeight) + _contentBottom;
                                 }
-
+                                
                                 PreRenderSetSize(newW, newH);
                                 //after set this 
                                 NeedPreRenderEval = false;

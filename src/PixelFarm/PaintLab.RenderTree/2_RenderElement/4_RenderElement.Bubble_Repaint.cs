@@ -34,19 +34,11 @@ namespace LayoutFarm
                 return;
             }
 
-            if (!GlobalRootGraphic.s_SuspendGraphicsUpdate)
-            {
-                //RELATIVE to this***
-                //1.
-                _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
-                //2.  
-                BubbleInvalidater.InternalBubbleUpInvalidateGraphicArea(args);
-
-            }
-            else
-            {
-
-            }
+            //RELATIVE to this***
+            //1.
+            _propFlags &= ~RenderElementConst.IS_GRAPHIC_VALID;
+            //2.  
+            BubbleInvalidater.InternalBubbleUpInvalidateGraphicArea(args); 
         }
 
         /// <summary>
@@ -66,7 +58,7 @@ namespace LayoutFarm
             }
 
             RenderElement parent = this.ParentRenderElement;
-            if (parent != null && !parent.BlockGraphicUpdateBubble && !GlobalRootGraphic.s_SuspendGraphicsUpdate)
+            if (parent != null && !parent.BlockGraphicUpdateBubble)
             {
                 BubbleInvalidater.InvalidateGraphicLocalArea(this, new Rectangle(0, 0, _b_width, _b_height));
             }
@@ -84,7 +76,7 @@ namespace LayoutFarm
                 return;
             }
             RenderElement parent = this.ParentRenderElement;
-            if (parent != null && !parent.BlockGraphicUpdateBubble && !GlobalRootGraphic.s_SuspendGraphicsUpdate)
+            if (parent != null && !parent.BlockGraphicUpdateBubble)
             {
                 BubbleInvalidater.InvalidateGraphicLocalArea(this, rect);
             }
@@ -105,7 +97,7 @@ namespace LayoutFarm
             }
 
             RenderElement parent = this.ParentRenderElement; //start at parent ****
-            if (parent != null && !parent.BlockGraphicUpdateBubble && !GlobalRootGraphic.s_SuspendGraphicsUpdate)
+            if (parent != null && !parent.BlockGraphicUpdateBubble)
             {
                 InvalidateGfxArgs arg = BubbleInvalidater.GetInvalidateGfxArgs();
                 arg.SetReason_UpdateLocalArea(parent, totalBounds);

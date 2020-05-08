@@ -18,10 +18,6 @@ namespace LayoutFarm
 
     public static class GlobalRootGraphic
     {
-        //TODO: merge this to RootGraphics?
-
-        static int _suspendCount;
-        internal static bool s_SuspendGraphicsUpdate;
 
         public static RootGraphic CurrentRootGfx;
         public static RenderElement CurrentRenderElement;
@@ -41,21 +37,6 @@ namespace LayoutFarm
                 _textServices = value;
 
             }
-        }
-        public static void SuspendGraphicsUpdate()
-        {
-            _suspendCount++;
-            s_SuspendGraphicsUpdate = true;
-        }
-        public static void ResumeGraphicsUpdate()
-        {
-            _suspendCount--;
-            s_SuspendGraphicsUpdate = _suspendCount > 0;
-        }
-        public static void ForceResumeGraphicsUpdate()
-        {
-            _suspendCount = 0;
-            s_SuspendGraphicsUpdate = false;
         }
     }
 
@@ -338,7 +319,7 @@ namespace LayoutFarm
 
         //--------------------------------------------------------------------------
         public abstract void PrepareRender();
-    
+
         public event EventHandler PreRenderEvent;
         protected void InvokePreRenderEvent() => PreRenderEvent?.Invoke(this, EventArgs.Empty);
 
