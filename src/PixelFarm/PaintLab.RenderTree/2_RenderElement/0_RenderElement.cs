@@ -247,15 +247,15 @@ namespace LayoutFarm
             }
             return re;
         }
-        
+
 
         public bool IsTopWindow
         {
             get => (_propFlags & RenderElementConst.IS_TOP_RENDERBOX) != 0;
 
-            set => _propFlags = value ?
-                      _propFlags | RenderElementConst.IS_TOP_RENDERBOX :
-                      _propFlags & ~RenderElementConst.IS_TOP_RENDERBOX;
+            protected set => _propFlags = value ?
+                        _propFlags | RenderElementConst.IS_TOP_RENDERBOX :
+                        _propFlags & ~RenderElementConst.IS_TOP_RENDERBOX;
         }
 
 
@@ -267,7 +267,7 @@ namespace LayoutFarm
                       _propFlags | RenderElementConst.HAS_DOUBLE_SCROLL_SURFACE :
                       _propFlags & ~RenderElementConst.HAS_DOUBLE_SCROLL_SURFACE;
         }
-        
+
         //==============================================================
         //hit test
         public virtual bool HasCustomHitTest => false;
@@ -519,7 +519,7 @@ namespace LayoutFarm
                         //------------------------------------------
                     }
 
- 
+
 #if DEBUG
                     renderE.debug_RecordPostDrawInfo(d);
 #endif
@@ -574,7 +574,7 @@ namespace LayoutFarm
                     //------------------------------------------
                 }
                 //------------------------------------------
-                 
+
 #if DEBUG
                 renderE.debug_RecordPostDrawInfo(d);
 #endif
@@ -585,6 +585,6 @@ namespace LayoutFarm
 #endif
         }
 
-      
+
     }
 }
