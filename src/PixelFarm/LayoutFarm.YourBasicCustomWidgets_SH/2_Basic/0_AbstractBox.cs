@@ -771,6 +771,8 @@ namespace LayoutFarm.CustomWidgets
                         //check if this abstract box want to preserver line box or not
                         //if just layout, then we can use shared lineboxes 
 
+                        _primElement?.Lines?.Clear();
+
                         if (childrenIter != null && childrenIter.Count > 0)
                         {
                             using (var lineboxContext = new LineBoxesContext(_preserveLineBoxes ? _primElement : null))
@@ -855,11 +857,7 @@ namespace LayoutFarm.CustomWidgets
                                 linebox.AdjustVerticalAlignment();
                             }
                         }
-                        else
-                        {
-                            _primElement.Lines.Clear();
-
-                        }
+                     
                         this.SetInnerContentSize(xpos, maxBottom);
 
                         //this.dbugBreakMe = true;
