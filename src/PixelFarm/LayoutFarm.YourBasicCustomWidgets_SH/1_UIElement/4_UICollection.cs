@@ -364,6 +364,7 @@ namespace LayoutFarm.UI
                 }
 
                 _list.Remove(ui);//***
+                ui.ParentUI = null;
                 //---
                 //presentation
                 if (parentContainer != null)
