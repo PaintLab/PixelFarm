@@ -102,10 +102,7 @@ namespace LayoutFarm.UI
         internal object _collectionLinkNode; //optional, eg for linked-list node, RB-tree-node
 
         public UIElement()
-        {
-            //if (dbugId == 114)
-            //{ 
-            //}
+        { 
         }
 
         public UIElement ParentUI { get; set; }
@@ -130,10 +127,7 @@ namespace LayoutFarm.UI
             CurrentPrimaryRenderElement?.GetRoot()?.SetCurrentKeyboardFocus(null);
         }
 
-        public virtual void InvalidateOuterGraphics()
-        {
-
-        }
+       
         public virtual bool Visible
         {
             get

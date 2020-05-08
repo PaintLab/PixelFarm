@@ -354,7 +354,7 @@ namespace LayoutFarm.CustomWidgets
                 _scrollButton.SetSize(
                    _scrollButton.Width,
                    scrollBoxLength);
-                this.InvalidateOuterGraphics();
+                this.InvalidateGraphics();
             }
 
             //---------------------------------
