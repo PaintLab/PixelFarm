@@ -948,6 +948,10 @@ namespace LayoutFarm.CustomWidgets
             }
             _items.Add(this, ui);
         }
+        protected void RemoveChild(UIElement ui)
+        {
+            _items.Remove(this, ui);
+        }
         protected virtual void Clear() => _items?.Clear(this);
     }
 }
