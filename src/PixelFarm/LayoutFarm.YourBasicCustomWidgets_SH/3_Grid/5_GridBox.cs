@@ -92,7 +92,7 @@ namespace LayoutFarm.CustomWidgets
             }
         }
         public GridCell GetCellByMousePosition(int x, int y) => _gridLayer.GetCellByPosition(x, y);
-
+        public GridCell GetCell(int row, int column) => _gridLayer.GetCell(row, column);
         public Color GridBorderColor
         {
             get => _gridLayer.GridBorderColor;
@@ -556,6 +556,8 @@ namespace LayoutFarm.CustomWidgets
 #endif
     }
 
+
+
     public class GridView : AbstractBox
     {
         GridViewRenderBox _gridViewRenderE;
@@ -631,6 +633,7 @@ namespace LayoutFarm.CustomWidgets
 
             RaiseLayoutFinished();
         }
+
         public void BuildGrid(int ncols, int eachColumnWidth, int nrows, int eachRowHeight)
         {
             _cellSizeStyle = CellSizeStyle.ColumnAndRow;
@@ -671,6 +674,7 @@ namespace LayoutFarm.CustomWidgets
                 rows.Add(new GridRow(1));
             }
         }
+
         //
         public int RowCount => _gridTable.RowCount;
         public int ColumnCount => _gridTable.ColumnCount;
@@ -916,19 +920,16 @@ namespace LayoutFarm.CustomWidgets
                 _gridTable.GetCell(rowIndex, colIndex).ContentElement = ui;
                 if (_gridViewRenderE != null)
                 {
-
                     RenderElement re = ui.GetPrimaryRenderElement();
                     _gridViewRenderE.SetContent(rowIndex, colIndex, re);
 
-                    GridCell gridCell = _gridViewRenderE.GetCellByMousePosition(rowIndex, colIndex);
+                    GridCell gridCell = _gridViewRenderE.GetCell(rowIndex, colIndex);
 
                     GridCellParentLink parentLink = new GridCellParentLink(gridCell, _gridViewRenderE);
                     RenderElement.SetParentLink(re, parentLink);
                 }
             }
         }
-
-
 
 
         class GridCellParentLink : RenderBoxes.IParentLink

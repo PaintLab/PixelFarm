@@ -21,6 +21,8 @@ namespace LayoutFarm.UI
         Down
     }
 
+
+
     class GridColumn
     {
 
@@ -72,10 +74,7 @@ namespace LayoutFarm.UI
         }
         public bool HasCustomSize
         {
-            get
-            {
-                return (_columnFlags & COLUMN_HAS_CUSTOM_SIZE) != 0;
-            }
+            get => (_columnFlags & COLUMN_HAS_CUSTOM_SIZE) != 0;
             set
             {
                 if (value)
@@ -406,6 +405,9 @@ namespace LayoutFarm.UI
 
     }
 
+
+
+
     class GridCell
     {
         internal GridRow _row;
@@ -424,26 +426,18 @@ namespace LayoutFarm.UI
         public int RowIndex => _row.RowIndex;
         //
         public int ColumnIndex => _column.ColumnIndex;
-        // 
-#if DEBUG
-        public string dbugGetLinkInfo()
-        {
-            return "grid-link";
-        }
-#endif
-        //
+ 
         public GridRow Row => _row;
         public GridColumn Column => _column;
         //
         public Rectangle Rect => new Rectangle(_column.Left, _row.Top, _column.Width, _row.Height);
-        //
+       
         public bool HasContent => _content != null;
         //
         public object ContentElement
         {
             get => _content;
             set => _content = value;
-            //set content to that cell
         }
         //
         public int X => _column.Left;
@@ -524,6 +518,10 @@ namespace LayoutFarm.UI
         }
 
 #if DEBUG
+        public string dbugGetLinkInfo()
+        {
+            return "grid-link";
+        }
         public override string ToString()
         {
             return _row.RowIndex.ToString() + "," + _column.ColumnIndex.ToString() + " " + base.ToString();
