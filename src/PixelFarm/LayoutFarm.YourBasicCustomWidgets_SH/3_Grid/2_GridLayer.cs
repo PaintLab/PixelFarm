@@ -108,14 +108,10 @@ namespace LayoutFarm.UI
         {
             hitChain.GetTestPoint(out int testX, out int testY);
             GridCell cell = GetCellByPosition(testX, testY);
-            if (cell != null && cell.HasContent)
+            if (cell != null && cell.ContentElement is RenderElement renderE)
             {
-                hitChain.OffsetTestPoint(-cell.X, -cell.Y);
-                if (cell.ContentElement is RenderElement renderE)
-                {
-                    renderE.HitTestCore(hitChain);
-                }
-
+                hitChain.OffsetTestPoint(-cell.X, -cell.Y); 
+                renderE.HitTestCore(hitChain); 
                 hitChain.OffsetTestPoint(cell.X, cell.Y);
                 return true;
             }
@@ -123,6 +119,7 @@ namespace LayoutFarm.UI
         }
 
         public int RowCount => _gridRows.Count;
+
         //        //
         //        public void TopDownReArrangeContent()
         //        {
@@ -566,6 +563,9 @@ namespace LayoutFarm.UI
             set => _gridBorderColor = value;
             //invalidate?
         }
+
+        public bool ClipOnEachCell { get; set; }
+
         public void DrawChildContent(DrawBoard d, UpdateArea updateArea)
         {
 
@@ -609,10 +609,9 @@ namespace LayoutFarm.UI
                 for (int i = startRowId; i < stopRowId; i++)
                 {
                     GridCell cell = currentColumn.GetCell(i);
-                    if (cell != null && cell.HasContent)
+                    if (cell != null && cell.ContentElement is RenderElement renderContent)
                     {
 
-                        if (!(cell.ContentElement is RenderElement renderContent)) continue;
                         //---------------------------
                         //TODO: review here again
                         int x = cell.X;
@@ -622,7 +621,8 @@ namespace LayoutFarm.UI
 
                         d.SetCanvasOrigin(enter_canvas_x + x, enter_canvas_y + y);
                         updateArea.Offset(-x, -y);
-                        if (cell.NeedClipArea)
+
+                        if (ClipOnEachCell)
                         {
                             if (d.PushClipAreaRect(cell.Width, cell.Height, updateArea))
                             {

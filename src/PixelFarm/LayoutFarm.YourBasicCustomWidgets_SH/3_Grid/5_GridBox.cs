@@ -117,13 +117,13 @@ namespace LayoutFarm.CustomWidgets
         bool _moreThan1Cell;
 
 
-        GridView _targetGridView;
+        GridBox _targetGridView;
         public GridSelectionSession()
         {
 
             _gridSelectionStyle = GridSelectionStyle.RectBox;
         }
-        public void SetTargetGridView(GridView targetGridView)
+        public void SetTargetGridView(GridBox targetGridView)
         {
             _targetGridView = targetGridView;
 
@@ -558,16 +558,18 @@ namespace LayoutFarm.CustomWidgets
 
 
 
-    public class GridView : AbstractBox
+    public class GridBox : AbstractBox
     {
         GridViewRenderBox _gridViewRenderE;
         CellSizeStyle _cellSizeStyle;
+        
         GridTable _gridTable;
+
         GridSelectionSession _gridSelectionSession;
         Color _gridBorderColor;
 
         UIList<UIElement> _children;
-        public GridView(int width, int height)
+        public GridBox(int width, int height)
             : base(width, height)
         {
             //has special grid layer

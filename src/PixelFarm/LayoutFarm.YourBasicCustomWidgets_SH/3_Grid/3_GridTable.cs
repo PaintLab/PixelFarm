@@ -410,29 +410,23 @@ namespace LayoutFarm.UI
 
     class GridCell
     {
-        internal GridRow _row;
-        internal GridColumn _column;
+        internal readonly GridRow _row;
+        internal readonly GridColumn _column;
         object _content;
         internal GridCell(GridColumn column, GridRow row)
         {
             _row = row;
             _column = column;
-            NeedClipArea = true;
         }
-        public bool NeedClipArea { get; set; }
-        //
-        public bool ControlChildPosition => true;
-        //
+
         public int RowIndex => _row.RowIndex;
         //
         public int ColumnIndex => _column.ColumnIndex;
- 
+
         public GridRow Row => _row;
         public GridColumn Column => _column;
         //
         public Rectangle Rect => new Rectangle(_column.Left, _row.Top, _column.Width, _row.Height);
-       
-        public bool HasContent => _content != null;
         //
         public object ContentElement
         {
@@ -533,8 +527,8 @@ namespace LayoutFarm.UI
 
     partial class GridTable
     {
-        GridColumnCollection _cols;
-        GridRowCollection _rows;
+        readonly GridColumnCollection _cols;
+        readonly GridRowCollection _rows;
         public GridTable()
         {
             _cols = new GridColumnCollection(this);

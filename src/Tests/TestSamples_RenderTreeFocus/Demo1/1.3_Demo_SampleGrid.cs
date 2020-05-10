@@ -13,7 +13,7 @@ namespace LayoutFarm
         {
             //grid0
             {
-                var gridView = new LayoutFarm.CustomWidgets.GridView(100, 100);
+                var gridView = new LayoutFarm.CustomWidgets.GridBox(100, 100);
                 gridView.SetLocation(50, 50);
                 gridView.BuildGrid(2, 4, CellSizeStyle.UniformCell);
                 host.AddChild(gridView);
@@ -23,7 +23,7 @@ namespace LayoutFarm
             }
             //grid1
             {
-                var gridView = new LayoutFarm.CustomWidgets.GridView(100, 100);
+                var gridView = new LayoutFarm.CustomWidgets.GridBox(100, 100);
                 gridView.SetLocation(200, 50);
                 gridView.BuildGrid(2, 4, CellSizeStyle.UniformCell);
                 host.AddChild(gridView);
@@ -46,7 +46,7 @@ namespace LayoutFarm
             ////-----
             //grid2
             {
-                var gridView = new LayoutFarm.CustomWidgets.GridView(200, 100);
+                var gridView = new LayoutFarm.CustomWidgets.GridBox(200, 100);
                 gridView.SetLocation(350, 50);
                 gridView.BuildGrid(10, 8, CellSizeStyle.UniformCell);
                 host.AddChild(gridView);
@@ -55,7 +55,7 @@ namespace LayoutFarm
             ////-----
             //grid3
             {
-                var gridView = new LayoutFarm.CustomWidgets.GridView(200, 100);
+                var gridView = new LayoutFarm.CustomWidgets.GridBox(200, 100);
                 gridView.SetLocation(50, 250);
                 gridView.BuildGrid(10, 8, CellSizeStyle.UniformCell);
                 host.AddChild(gridView);
@@ -84,7 +84,7 @@ namespace LayoutFarm
             //grid5
             {
 
-                var gridView = new LayoutFarm.CustomWidgets.GridView(200, 100);
+                var gridView = new LayoutFarm.CustomWidgets.GridBox(200, 100);
                 gridView.SetLocation(50, 500);
                 gridView.BuildGrid(10, 8, CellSizeStyle.UniformCell);
                 host.AddChild(gridView);
@@ -93,7 +93,7 @@ namespace LayoutFarm
             {
 
                 //grid 6
-                var gridView = new LayoutFarm.CustomWidgets.GridView(200, 100);
+                var gridView = new LayoutFarm.CustomWidgets.GridBox(200, 100);
                 //gridView.HasSpecificHeight = true; //if not set ,scroll bar will not show scroll button
                 //gridView.HasSpecificWidth = true;//if not set ,scroll bar will not show scroll button
 
@@ -143,7 +143,7 @@ namespace LayoutFarm
         {
             //grid0
             {
-                var gridView = new LayoutFarm.CustomWidgets.GridView(100, 100);
+                var gridView = new LayoutFarm.CustomWidgets.GridBox(100, 100);
                 gridView.SetLocation(50, 50);
                 gridView.BuildGrid(2, 4, CellSizeStyle.UniformCell);
                 host.AddChild(gridView);
