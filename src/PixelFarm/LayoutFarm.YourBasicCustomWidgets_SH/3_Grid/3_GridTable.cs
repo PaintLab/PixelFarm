@@ -68,10 +68,8 @@ namespace LayoutFarm.UI
             set => _left = value;
             //int leftdiff = _left - value;
         }
-        public int Right
-        {
-            get => _columnWidth + _left;
-        }
+        public int Right => _columnWidth + _left;
+
         public bool HasCustomSize
         {
             get => (_columnFlags & COLUMN_HAS_CUSTOM_SIZE) != 0;
@@ -410,9 +408,10 @@ namespace LayoutFarm.UI
 
     class GridCell
     {
-        internal readonly GridRow _row;
-        internal readonly GridColumn _column;
-        object _content;
+        readonly GridRow _row;
+        readonly GridColumn _column;
+        RenderElement _content;
+
         internal GridCell(GridColumn column, GridRow row)
         {
             _row = row;
@@ -428,11 +427,12 @@ namespace LayoutFarm.UI
         //
         public Rectangle Rect => new Rectangle(_column.Left, _row.Top, _column.Width, _row.Height);
         //
-        public object ContentElement
+        public RenderElement ContentElement
         {
             get => _content;
             set => _content = value;
         }
+
         //
         public int X => _column.Left;
         //

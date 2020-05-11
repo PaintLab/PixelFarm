@@ -583,11 +583,11 @@ namespace LayoutFarm.UI
                 return;
             }
 
-            GridColumn startColumn = leftTopGridItem._column;
+            GridColumn startColumn = leftTopGridItem.Column;
             GridColumn currentColumn = startColumn;
-            GridRow startRow = leftTopGridItem._row;
-            GridColumn stopColumn = rightBottomGridItem._column.NextColumn;
-            GridRow stopRow = rightBottomGridItem._row.NextRow;
+            GridRow startRow = leftTopGridItem.Row;
+            GridColumn stopColumn = rightBottomGridItem.Column.NextColumn;
+            GridRow stopRow = rightBottomGridItem.Row.NextRow;
             int startRowId = startRow.RowIndex;
             int stopRowId = 0;
             if (stopRow == null)

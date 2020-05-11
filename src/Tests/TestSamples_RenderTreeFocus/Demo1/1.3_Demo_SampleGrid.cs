@@ -151,11 +151,23 @@ namespace LayoutFarm
                 {
                 };
 
+                //--------
                 var box1 = new Box(30, 30);
                 box1.BackColor = Color.Blue;
                 gridView.SetCellContent(box1, 1, 1);
-
-
+                gridView.CellSizeStyle = CellSizeStyle.ColumnAndRow;
+                //gridView.CellSizeStyle = CellSizeStyle.UniformWidth;
+                gridView.SuspendLayout();
+                GridColumn col = gridView.GetColumn(0);
+                col.Width = 10;
+                GridRow row = gridView.GetRow(0);
+                row.Height = 50;
+                gridView.ResumeLayout();
+                //--------
+                gridView.ClearAllCellContent();
+                //--------
+                gridView.BuildGrid(5, 3, CellSizeStyle.UniformCell);
+                //gridView.InvalidateLayout();
             }
 
         }

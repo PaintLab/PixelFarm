@@ -31,8 +31,8 @@ namespace LayoutFarm.CustomWidgets
         {
             _gridLayer = new GridLayer(this.Width, this.Height, cellSizeStyle, gridTable);
         }
-        public GridColumn GetColumn(int col) => _gridLayer.GetColumn(col);
-        public GridRow GetRow(int row) => _gridLayer.GetRow(row);
+        public UI.GridColumn GetColumn(int col) => _gridLayer.GetColumn(col);
+        public UI.GridRow GetRow(int row) => _gridLayer.GetRow(row);
 
         public void SetContent(int r, int c, RenderElement re)
         {
@@ -78,21 +78,21 @@ namespace LayoutFarm.CustomWidgets
             //selection layer
         }
 
-        public GridCellInfo GetCellInfoByMousePosition(int x, int y)
+        public GridCell GetCellInfoByMousePosition(int x, int y)
         {
 
-            GridCell hitCell = _gridLayer.GetCellByPosition(x, y);
+            UI.GridCell hitCell = _gridLayer.GetCellByPosition(x, y);
             if (hitCell != null)
             {
-                return new GridCellInfo(hitCell.ColumnIndex, hitCell.RowIndex);
+                return new GridCell(hitCell.ColumnIndex, hitCell.RowIndex);
             }
             else
             {
-                return new GridCellInfo(-1, -1);
+                return new GridCell(-1, -1);
             }
         }
-        public GridCell GetCellByMousePosition(int x, int y) => _gridLayer.GetCellByPosition(x, y);
-        public GridCell GetCell(int row, int column) => _gridLayer.GetCell(row, column);
+        public UI.GridCell GetCellByMousePosition(int x, int y) => _gridLayer.GetCellByPosition(x, y);
+        public UI.GridCell GetCell(int row, int column) => _gridLayer.GetCell(row, column);
         public Color GridBorderColor
         {
             get => _gridLayer.GridBorderColor;
@@ -108,8 +108,8 @@ namespace LayoutFarm.CustomWidgets
 
     class GridSelectionSession
     {
-        public GridCell _latestHitCell;
-        public GridCell _beginSelectedCell;
+        public UI.GridCell _latestHitCell;
+        public UI.GridCell _beginSelectedCell;
         public Box _bodyBox; //used in RectBox mode and FlowBox mode
         public Box _headBox;
         public Box _tailBox;
@@ -158,7 +158,7 @@ namespace LayoutFarm.CustomWidgets
             get => _gridSelectionStyle;
             set => _gridSelectionStyle = value;
         }
-        public void StartAt(GridCell hitCell)
+        public void StartAt(UI.GridCell hitCell)
         {
 
             _moreThan1Cell = false;
@@ -171,7 +171,7 @@ namespace LayoutFarm.CustomWidgets
         }
 
         public bool Started { get; private set; }
-        void SetLatestHit_RectBoxModel(GridCell hitCell)
+        void SetLatestHit_RectBoxModel(UI.GridCell hitCell)
         {
 
             if (hitCell != _beginSelectedCell)
@@ -268,7 +268,7 @@ namespace LayoutFarm.CustomWidgets
             }
             _latestHitCell = hitCell;
         }
-        void SetLatestHit_FlowBoxModel(GridCell hitCell)
+        void SetLatestHit_FlowBoxModel(UI.GridCell hitCell)
         {
 
             if (hitCell != _beginSelectedCell)
@@ -297,13 +297,13 @@ namespace LayoutFarm.CustomWidgets
                             int colCount = _targetGridView.ColumnCount;
                             {
                                 //
-                                GridCell lastCellOfHeadRow = _targetGridView.GetCell(hitCell.RowIndex, _targetGridView.ColumnCount - 1);
+                                UI.GridCell lastCellOfHeadRow = _targetGridView.GetCell(hitCell.RowIndex, _targetGridView.ColumnCount - 1);
                                 _headBox.SetLocation(hitCell.X, hitCell.Y);
                                 _headBox.SetSize(lastCellOfHeadRow.Right - hitCell.X, lastCellOfHeadRow.Height);
                             }
                             //-----
                             {
-                                GridCell lastCellOfTailRow = _targetGridView.GetCell(_beginSelectedCell.RowIndex, 0);
+                                UI.GridCell lastCellOfTailRow = _targetGridView.GetCell(_beginSelectedCell.RowIndex, 0);
                                 _tailBox.SetLocation(0, _beginSelectedCell.Y);
                                 _tailBox.SetSize(hitCell.Right, lastCellOfTailRow.Height);
                             }
@@ -320,7 +320,7 @@ namespace LayoutFarm.CustomWidgets
                             int colCount = _targetGridView.ColumnCount;
                             {
                                 //
-                                GridCell lastCellOfHeadRow = _targetGridView.GetCell(hitCell.RowIndex, _targetGridView.ColumnCount - 1);
+                                UI.GridCell lastCellOfHeadRow = _targetGridView.GetCell(hitCell.RowIndex, _targetGridView.ColumnCount - 1);
                                 _headBox.SetLocation(hitCell.X, hitCell.Y);
                                 _headBox.SetSize(lastCellOfHeadRow.Right - _headBox.Left, lastCellOfHeadRow.Height);
                             }
@@ -330,7 +330,7 @@ namespace LayoutFarm.CustomWidgets
 
                             //-----
                             {
-                                GridCell lastCellOfTailRow = _targetGridView.GetCell(_beginSelectedCell.RowIndex, 0);
+                                UI.GridCell lastCellOfTailRow = _targetGridView.GetCell(_beginSelectedCell.RowIndex, 0);
                                 _headBox.SetLocation(0, _beginSelectedCell.Y);
                                 _headBox.SetSize(_beginSelectedCell.X, lastCellOfTailRow.Height);
                             }
@@ -412,7 +412,7 @@ namespace LayoutFarm.CustomWidgets
             _latestHitCell = hitCell;
 
         }
-        public void SetLatestHit(GridCell hitCell)
+        public void SetLatestHit(UI.GridCell hitCell)
         {
             switch (_gridSelectionStyle)
             {
@@ -535,11 +535,59 @@ namespace LayoutFarm.CustomWidgets
         }
     }
 
-    public struct GridCellInfo
+    public struct GridColumn
+    {
+        readonly UI.GridColumn _col;
+        readonly GridBox _gridbox;
+        internal GridColumn(GridBox gridbox, UI.GridColumn col)
+        {
+            _gridbox = gridbox;
+            _col = col;
+        }
+        public int Width
+        {
+            get => _col.Width;
+            set
+            {
+                //check style of gridbox
+                if (_gridbox.CellSizeStyle != CellSizeStyle.UniformWidth)
+                {
+                    _col.Width = value;
+                    _gridbox.InvalidateLayout();
+                }
+            }
+        }
+    }
+
+    public struct GridRow
+    {
+        readonly UI.GridRow _row;
+        readonly GridBox _gridbox;
+        internal GridRow(GridBox gridbox, UI.GridRow row)
+        {
+            _gridbox = gridbox;
+            _row = row;
+        }
+        public int Height
+        {
+            get => _row.Height;
+            set
+            {
+                //check style of gridbox
+                if (_gridbox.CellSizeStyle != CellSizeStyle.UniformWidth)
+                {
+                    _row.Height = value;
+                    _gridbox.InvalidateLayout();
+                }
+            }
+        }
+
+    }
+    public struct GridCell
     {
         public readonly int Row;
         public readonly int Column;
-        public GridCellInfo(int column, int row)
+        public GridCell(int column, int row)
         {
             Column = column;
             Row = row;
@@ -556,13 +604,29 @@ namespace LayoutFarm.CustomWidgets
 #endif
     }
 
+    public static class BoxExtensions
+    {
 
+        static BoxExtensions()
+        {
+            Temp<LayoutUpdateArgs>.SetNewHandler(
+                () => new LayoutUpdateArgs(),
+                null);
+        }
+        public static void PerformContentLayout(this AbstractBox box)
+        {
+            using (Temp<LayoutUpdateArgs>.Borrow(out LayoutUpdateArgs args))
+            {
+                box.PerformContentLayout(args);
+            }
+        }
+    }
 
     public class GridBox : AbstractBox
     {
         GridViewRenderBox _gridViewRenderE;
         CellSizeStyle _cellSizeStyle;
-        
+
         GridTable _gridTable;
 
         GridSelectionSession _gridSelectionSession;
@@ -573,7 +637,7 @@ namespace LayoutFarm.CustomWidgets
             : base(width, height)
         {
             //has special grid layer
-            _gridTable = new GridTable();
+
             EnableGridCellSelection = true;
             ClearSelectionWhenLostFocus = true;
             AcceptKeyboardFocus = true;
@@ -600,20 +664,29 @@ namespace LayoutFarm.CustomWidgets
             //calculate grid width
             var cols = _gridTable.Columns;
             int ncols = cols.Count;
-            int widthSum = 0;
+
+            int left = 0;
             for (int n = 0; n < ncols; ++n)
             {
-                widthSum += cols[n].Width;
+                UI.GridColumn col = cols[n];
+                col.Left = left;
+                left += col.Width;
             }
-            //2. create rows
+            int widthSum = left;
             var rows = _gridTable.Rows;
-            int heightSum = 0;
             int nrows = rows.Count;
+
+            int top = 0;
             for (int n = 0; n < nrows; ++n)
             {
-                heightSum += rows[n].Height;
+                UI.GridRow row = rows[n];
+                row.Top = top;
+                top += row.Height;
             }
 
+            int heightSum = top;
+
+            //other layer
             base.PerformContentLayout(args);
 
             int finW = System.Math.Max(InnerWidth, widthSum);
@@ -639,22 +712,25 @@ namespace LayoutFarm.CustomWidgets
         public void BuildGrid(int ncols, int eachColumnWidth, int nrows, int eachRowHeight)
         {
             _cellSizeStyle = CellSizeStyle.ColumnAndRow;
-
+            _gridTable = new GridTable();
             //1. create cols
             var cols = _gridTable.Columns;
             for (int n = 0; n < ncols; ++n)
             {
                 //create with defatul width 
-                cols.Add(new GridColumn(eachColumnWidth));
+                cols.Add(new UI.GridColumn(eachColumnWidth));
             }
             //2. create rows
             var rows = _gridTable.Rows;
             for (int n = 0; n < nrows; ++n)
             {
-                rows.Add(new GridRow(eachRowHeight));
+                rows.Add(new UI.GridRow(eachRowHeight));
             }
 
-            //***
+            if (_gridViewRenderE != null)
+            {
+                _gridViewRenderE.BuildGrid(_gridTable, _cellSizeStyle);
+            }
             this.InvalidateLayout();
         }
 
@@ -662,28 +738,39 @@ namespace LayoutFarm.CustomWidgets
         {
             _cellSizeStyle = cellSizeStyle;
             //1. create cols
+            _gridTable = new GridTable();
             var cols = _gridTable.Columns;
             for (int n = 0; n < ncols; ++n)
             {
                 //create with defatul width
-                GridColumn col = new GridColumn(1);
+                UI.GridColumn col = new UI.GridColumn(1);
                 cols.Add(col);
             }
             //2. create rows
             var rows = _gridTable.Rows;
             for (int n = 0; n < nrows; ++n)
             {
-                rows.Add(new GridRow(1));
+                rows.Add(new UI.GridRow(1));
             }
+            //***
+             
+            if (_gridViewRenderE != null)
+            {
+                _gridViewRenderE.BuildGrid(_gridTable, _cellSizeStyle);
+            }
+
         }
 
         //
         public int RowCount => _gridTable.RowCount;
         public int ColumnCount => _gridTable.ColumnCount;
         //
-        internal GridCell GetCell(int row, int col) => _gridTable.GetCell(row, col);
+        internal UI.GridCell GetCell(int row, int col) => _gridTable.GetCell(row, col);
 
-        public GridCellInfo GetCellInfoByMousePosition(int x, int y) => _gridViewRenderE.GetCellInfoByMousePosition(x, y);
+        public GridCell GetCellInfoByMousePosition(int x, int y) => _gridViewRenderE.GetCellInfoByMousePosition(x, y);
+
+        public GridRow GetRow(int row) => new GridRow(this, _gridTable.Rows[row]);
+        public GridColumn GetColumn(int col) => new GridColumn(this, _gridTable.Columns[col]);
 
         public Color GridBorderColor
         {
@@ -696,7 +783,6 @@ namespace LayoutFarm.CustomWidgets
                     _gridViewRenderE.GridBorderColor = value;
                 }
             }
-
         }
         /// <summary>
         /// clear ui content in each cell
@@ -712,18 +798,27 @@ namespace LayoutFarm.CustomWidgets
             {
                 for (int c = 0; c < colCount; ++c)
                 {
-                    GridCell cell = _gridTable.GetCell(r, c);
-                    throw new NotSupportedException();
-                    //TODO: review here
-                    //if (cell.ContentElement is RenderElement cellContent)
-                    //{
-                    //    if (cellContent.HasParent)
-                    //    {
-                    //        cellContent.RemoveSelf();
-                    //    }
-                    //    //
-                    //    cell.ContentElement = null;
-                    //}
+                    UI.GridCell cell = _gridTable.GetCell(r, c);
+                    RenderElement content = cell.ContentElement;
+                    if (content != null)
+                    {
+                        if (content.GetController() is UIElement ui)
+                        {
+                            if (ui.ParentUI != null)
+                            {
+                                ui.ParentUI = null;
+                                UIElement.UnsafeRemoveLinkedNode(ui);
+                            }
+                            else
+                            {
+                                //??
+                            }
+
+                        }
+                        RenderElement.RemoveParentLink(content);
+                        cell.ContentElement = null;
+                    }
+
                 }
             }
 
@@ -757,7 +852,7 @@ namespace LayoutFarm.CustomWidgets
                 if (this.EnableGridCellSelection)
                 {
 
-                    GridCell hitCell = _gridViewRenderE.GetCellByMousePosition(e.X, e.Y);
+                    UI.GridCell hitCell = _gridViewRenderE.GetCellByMousePosition(e.X, e.Y);
                     if (_gridSelectionSession != null)
                     {
                         _gridSelectionSession.SetLatestHit(hitCell);
@@ -807,7 +902,7 @@ namespace LayoutFarm.CustomWidgets
         protected override void OnMouseUp(UIMouseUpEventArgs e)
         {
 
-            GridCell hitCell = _gridViewRenderE.GetCellByMousePosition(e.X, e.Y);
+            UI.GridCell hitCell = _gridViewRenderE.GetCellByMousePosition(e.X, e.Y);
 
             if (hitCell != null &&
                 hitCell.ContentElement is RenderElement box &&
@@ -831,7 +926,7 @@ namespace LayoutFarm.CustomWidgets
             //check if cell content
             //find grid item 
 
-            GridCell hitCell = _gridViewRenderE.GetCellByMousePosition(e.X, e.Y);
+            UI.GridCell hitCell = _gridViewRenderE.GetCellByMousePosition(e.X, e.Y);
             if (hitCell != null)
             {
                 if (hitCell.ContentElement is RenderElement box &&
@@ -901,7 +996,7 @@ namespace LayoutFarm.CustomWidgets
             colLeft = 0;
             for (int n = 0; n < ncols; ++n)
             {
-                GridColumn col = _gridViewRenderE.GetColumn(n);
+                UI.GridColumn col = _gridViewRenderE.GetColumn(n);
                 col.Width = eachColWidth;
                 col.Left = colLeft;
                 colLeft += eachColWidth;
@@ -909,7 +1004,7 @@ namespace LayoutFarm.CustomWidgets
             rowTop = 0;
             for (int n = 0; n < nrows; ++n)
             {
-                GridRow row = _gridViewRenderE.GetRow(n);
+                UI.GridRow row = _gridViewRenderE.GetRow(n);
                 row.Height = eachRowHeight;
                 row.Top = rowTop; ;
                 rowTop += eachRowHeight;
@@ -919,16 +1014,25 @@ namespace LayoutFarm.CustomWidgets
         {
             if (rowIndex < _gridTable.RowCount && colIndex < _gridTable.ColumnCount)
             {
-                _gridTable.GetCell(rowIndex, colIndex).ContentElement = ui;
+                if (ui.ParentUI != null)
+                {
+                    throw new NotSupportedException();
+                }
+                ui.ParentUI = this;
+
                 if (_gridViewRenderE != null)
                 {
                     RenderElement re = ui.GetPrimaryRenderElement();
                     _gridViewRenderE.SetContent(rowIndex, colIndex, re);
 
-                    GridCell gridCell = _gridViewRenderE.GetCell(rowIndex, colIndex);
+                    UI.GridCell gridCell = _gridViewRenderE.GetCell(rowIndex, colIndex);
 
                     GridCellParentLink parentLink = new GridCellParentLink(gridCell, _gridViewRenderE);
                     RenderElement.SetParentLink(re, parentLink);
+                }
+                else
+                {
+                    throw new NotSupportedException();
                 }
             }
         }
@@ -937,8 +1041,8 @@ namespace LayoutFarm.CustomWidgets
         class GridCellParentLink : RenderBoxes.IParentLink
         {
             RenderElement _parentRenderE;
-            GridCell _gridCell;
-            public GridCellParentLink(GridCell gridCell, RenderElement parentRenderE)
+            UI.GridCell _gridCell;
+            public GridCellParentLink(UI.GridCell gridCell, RenderElement parentRenderE)
             {
                 _parentRenderE = parentRenderE;
                 _gridCell = gridCell;
@@ -1045,20 +1149,6 @@ namespace LayoutFarm.CustomWidgets
                 //add grid content
 
 
-                for (int c = 0; c < ncols; ++c)
-                {
-                    for (int r = 0; r < nrows; ++r)
-                    {
-                        GridCell gridCell = _gridTable.GetCell(r, c);
-                        if (gridCell.ContentElement is UIElement content)
-                        {
-                            myGridBox.SetContent(r, c, content);
-                            RenderElement uiRenderE = content.GetPrimaryRenderElement();
-                            GridCellParentLink parentLink = new GridCellParentLink(gridCell, _gridViewRenderE);
-                            RenderElement.SetParentLink(uiRenderE, parentLink);
-                        }
-                    }
-                }
 
                 if (_children != null && _children.Count > 0)
                 {
