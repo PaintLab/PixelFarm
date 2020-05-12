@@ -4,14 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using LayoutFarm.RenderBoxes;
 using LayoutFarm.UI;
-
 using PixelFarm.Drawing;
 
 namespace LayoutFarm.TextEditing
 {
-    public class TextFlowRenderBox : RenderBoxBase, ITextFlowLayerOwner
+    public class TextFlowRenderBox : AbstractRectRenderElement, ITextFlowLayerOwner
     {
         internal TextMarkerLayer _markerLayer;
         internal TextFlowLayer _textLayer; //this is a special layer that render text
@@ -26,26 +24,28 @@ namespace LayoutFarm.TextEditing
 
         internal bool _isDragBegin;
 
-        public TextFlowRenderBox(RootGraphic rootgfx, int width, int height, bool isMultiLine)
-            : base(rootgfx, width, height)
+        public TextFlowRenderBox(int width, int height, bool isMultiLine)
+            : base(width, height)
         {
             var defaultRunStyle = new RunStyle();
             defaultRunStyle.FontColor = Color.Black;//set default
-            defaultRunStyle.ReqFont = rootgfx.DefaultTextEditFontInfo;
 
-            _textLayer = new TextFlowLayer(this, this.Root.TextServices, defaultRunStyle); //presentation
+            defaultRunStyle.ReqFont = GlobalRootGraphic.CurrentRootGfx.DefaultTextEditFontInfo;//TODO: review here
+
+            _textLayer = new TextFlowLayer(this, GlobalRootGraphic.CurrentRootGfx.TextServices, defaultRunStyle); //presentation
             _textLayer.ContentSizeChanged += (s, e) => OnTextContentSizeChanged();
 
             //
             _editSession = new TextFlowEditSession(_textLayer);//controller
             _isMultiLine = isMultiLine;
 
-            IsBlockElement = false;
+
             RenderBackground = RenderSelectionRange = RenderMarkers = true;
             //
             MayHasViewport = true;
             BackgroundColor = Color.White;// Color.Transparent; 
         }
+        internal TextFlowLayer TextFlowLayer => _textLayer;
 
         void ITextFlowLayerOwner.ClientLayerBubbleUpInvalidateArea(Rectangle clientInvalidatedArea)
         {
@@ -60,12 +60,8 @@ namespace LayoutFarm.TextEditing
         //in our editor we replace user tab with space
         //TODO: we may use a single 'solid-run' for a Tab
         public byte NumOfWhitespaceForSingleTab { get; set; }
-        public static TextFlowEditSession GetCurrentEditSession(TextFlowRenderBox textEditRenderBox)
-        {
-            return textEditRenderBox._editSession;
-        }
 
-        protected override PlainLayer CreateDefaultLayer() => new PlainLayer(this);
+        public static TextFlowEditSession GetCurrentEditSession(TextFlowRenderBox textEditRenderBox) => textEditRenderBox._editSession;
 
         public TextSpanStyle CurrentTextSpanStyle
         {
@@ -140,47 +136,30 @@ namespace LayoutFarm.TextEditing
 
             //}
 #endif
-            InvalidateGraphicLocalArea(this, lineArea);
+            InvalidateGraphics(lineArea);
         }
         protected void InvalidateGraphicOfCurrentSelectionArea()
         {
-            if (_editSession.SelectionRange != null)
+
+            VisualSelectionRange selectionRange;
+            if ((selectionRange = _editSession.SelectionRange) != null && selectionRange.IsValid)
             {
-                InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
+                InvalidateGraphics(selectionRange.GetSelectionUpdateArea());
             }
         }
 
         public bool HasSomeText => (_textLayer.LineCount > 0) && _textLayer.GetTextLine(0).RunCount > 0;
 
-        public virtual void Focus()
-        {
-            _isFocus = true;
-        }
-        public virtual void Blur()
-        {
-            _isFocus = false;
-        }
+        public virtual void Focus() => _isFocus = true;
 
-        public void CancelSelection()
-        {
-            _editSession.CancelSelect();
-        }
-        //
+        public virtual void Blur() => _isFocus = false;
+
+        public void CancelSelection() => _editSession.CancelSelect();
+
         public bool IsFocused => _isFocus;
-        //
-        public override Size InnerContentSize
-        {
-            get
-            {
-                if (IsMultiLine)
-                {
-                    return new Size(
-                          this.Width,//TODO: fix this
-                          _textLayer.Bottom);
-                }
-                return _editSession.CurrentLineArea.Size;
-            }
-        }
+
+        public int InnerContentWidth => IsMultiLine ? this.Width : _editSession.CurrentLineArea.Width;
+        public int InnerContentHeight => IsMultiLine ? _textLayer.Bottom : _editSession.CurrentLineArea.Height;
 
         public virtual void HandleMouseDown(UIMouseDownEventArgs e)
         {
@@ -195,24 +174,18 @@ namespace LayoutFarm.TextEditing
                     {
                         Rectangle r = GetSelectionUpdateArea();
                         _editSession.CancelSelect();
-                        InvalidateGraphicLocalArea(this, r);
+                        InvalidateGraphics(r);
                     }
                     else
                     {
                         InvalidateGraphicOfCurrentLineArea();
                     }
 
-                    if (_editSession.LatestHitRun is SolidRun latestHitSolidTextRun)
+                    if (_editSession.LatestHitRun is SolidRun latestHitSolidTextRun &&
+                        latestHitSolidTextRun.ExternalRenderElement?.GetController() is LayoutFarm.UI.IUIEventListener listener)
                     {
                         //we mousedown on the solid text run
-                        RenderElement extRenderElement = latestHitSolidTextRun.ExternalRenderElement;
-                        if (extRenderElement != null)
-                        {
-                            if (extRenderElement.GetController() is LayoutFarm.UI.IUIEventListener listener)
-                            {
-                                listener.ListenMouseDown(e);
-                            }
-                        }
+                        listener.ListenMouseDown(e);
                     }
                 }
                 else
@@ -251,10 +224,12 @@ namespace LayoutFarm.TextEditing
             Run textRun = this.CurrentTextRun;
             if (textRun != null)
             {
-
+#if DEBUG
                 VisualPointInfo pointInfo = _editSession.GetCurrentPointInfo();
                 int lineCharacterIndex = pointInfo.LineCharIndex;
                 int local_sel_Index = pointInfo.RunLocalSelectedIndex;
+#endif
+
                 //default behaviour is select only a hit word under the caret
                 //so ask the text layer to find a hit word
                 _editSession.FindUnderlyingWord(out int startAt, out int len);
@@ -281,10 +256,11 @@ namespace LayoutFarm.TextEditing
             Run textRun = this.CurrentTextRun;
             if (textRun != null)
             {
-
+#if DEBUG
                 VisualPointInfo pointInfo = _editSession.GetCurrentPointInfo();
                 int lineCharacterIndex = pointInfo.LineCharIndex;
                 int local_sel_Index = pointInfo.RunLocalSelectedIndex;
+#endif
                 //default behaviour is select only a hit word under the caret
                 //so ask the text layer to find a hit word                 
                 _editSession.FindUnderlyingWord(out startAt, out len);
@@ -301,39 +277,30 @@ namespace LayoutFarm.TextEditing
                 //dbugMouseDragBegin++;
                 //first time
                 _isDragBegin = true;
-                if (e.Buttons == UIMouseButtons.Left)
-                {
-                    _editSession.SetCaretPos(e.X, e.Y);
-                    _editSession.StartSelect();
-                    _editSession.EndSelect();
-
-                    InvalidateGraphicOfCurrentSelectionArea();
-                }
+                _editSession.SetCaretPos(e.X, e.Y);
+                _editSession.StartSelect();
+                _editSession.EndSelect();
             }
             else
             {
                 //dbugMouseDragging++;
-                if (e.Buttons == UIMouseButtons.Left)
-                {
-                    _editSession.StartSelectIfNoSelection();
-                    _editSession.SetCaretPos(e.X, e.Y);
-                    _editSession.EndSelect();
 
-                    InvalidateGraphicOfCurrentSelectionArea();
-                }
+                _editSession.StartSelectIfNoSelection();
+                _editSession.SetCaretPos(e.X, e.Y);
+                _editSession.EndSelect();
             }
+
+            InvalidateGraphicOfCurrentSelectionArea();
         }
         public virtual void HandleDragEnd(UIMouseUpEventArgs e)
         {
             _isDragBegin = false;
-            if (e.Buttons == UIMouseButtons.Left)
-            {
-                _editSession.StartSelectIfNoSelection();
-                _editSession.SetCaretPos(e.X, e.Y);
-                _editSession.EndSelect();
-                //this.InvalidateGraphics();
-                InvalidateGraphicOfCurrentSelectionArea();
-            }
+
+            _editSession.StartSelectIfNoSelection();
+            _editSession.SetCaretPos(e.X, e.Y);
+            _editSession.EndSelect();
+            //this.InvalidateGraphics();
+            InvalidateGraphicOfCurrentSelectionArea();
         }
 
         public virtual void HandleKeyPress(UIKeyEventArgs e)
@@ -345,13 +312,13 @@ namespace LayoutFarm.TextEditing
                 HandleKeyDown(e);
                 return;
             }
+
+#if DEBUG
             char c = e.KeyChar;
+#endif
             e.CancelBubbling = true;
-            if (_editSession.SelectionRange != null
-                && _editSession.SelectionRange.IsValid)
-            {
-                InvalidateGraphicLocalArea(this, GetSelectionUpdateArea());
-            }
+            InvalidateGraphicOfCurrentSelectionArea();
+
             _editSession.UpdateSelectionRange();
             EnsureCaretVisible();
         }
@@ -359,8 +326,6 @@ namespace LayoutFarm.TextEditing
         public virtual void HandleKeyUp(UIKeyEventArgs e) { }
         public virtual void HandleKeyDown(UIKeyEventArgs e)
         {
-
-
 
         }
         public virtual void DoHome(bool pressShitKey)
@@ -472,10 +437,11 @@ namespace LayoutFarm.TextEditing
                 ScrollOffset(textManCaretPosX - this.X, 0);
             }
 
-            Size innerContentSize = this.InnerContentSize;
-            if (ViewportLeft > 0 && innerContentSize.Width - ViewportLeft < this.Width)
+
+            int innerContentWidth = this.InnerContentWidth;
+            if (ViewportLeft > 0 && innerContentWidth - ViewportLeft < this.Width)
             {
-                ScrollToLocation(this.InnerContentSize.Width - ViewportLeft, 0);
+                ScrollToLocation(innerContentWidth - ViewportLeft, 0);
             }
             //----------------------  
             //vertical ??
@@ -512,16 +478,6 @@ namespace LayoutFarm.TextEditing
         public bool RenderMarkers { get; set; }
         public bool RenderSelectionRange { get; set; }
 
-        public Size InnerBackgroundSize
-        {
-            get
-            {
-                Size innerSize = this.InnerContentSize;
-                return new Size(
-                    (innerSize.Width < this.Width) ? this.Width : innerSize.Width,
-                    (innerSize.Height < this.Height) ? this.Height : innerSize.Height);
-            }
-        }
         public void RunVisitor(RunVisitor visitor)
         {
             //1. bg, no nothing
@@ -551,12 +507,8 @@ namespace LayoutFarm.TextEditing
             //5. others? 
         }
 
-        //
-        public override void ClearAllChildren()
-        {
-            _editSession.Clear();
-            base.ClearAllChildren();
-        }
+        public void ClearAllChildren() => _editSession.Clear();
+
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
             RequestFont enterFont = d.CurrentFont;
@@ -567,13 +519,12 @@ namespace LayoutFarm.TextEditing
             //1. bg 
             if (RenderBackground && BackgroundColor.A > 0)
             {
-                Size innerBgSize = InnerBackgroundSize;
 
 #if DEBUG
-                d.FillRectangle(BackgroundColor, 0, 0, innerBgSize.Width, innerBgSize.Height);
+                d.FillRectangle(BackgroundColor, 0, 0, Width, Height);
                 //d.FillRectangle(ColorEx.dbugGetRandomColor(), 0, 0, innerBgSize.Width, innerBgSize.Height);
 #else
-                d.FillRectangle(BackgroundColor, 0, 0, innerBgSize.Width, innerBgSize.Height);
+                d.FillRectangle(BackgroundColor, 0, 0,  Width, Height);
 #endif
                 d.SetLatestFillAsTextBackgroundColorHint();
             }
@@ -598,10 +549,6 @@ namespace LayoutFarm.TextEditing
 
             //3.2 actual editable layer
             _textLayer.DrawChildContent(d, updateArea);
-            if (this.HasDefaultLayer)
-            {
-                this.DrawDefaultLayer(d, updateArea);
-            }
             //----------------------------------------------
 
 #if DEBUG
@@ -647,10 +594,10 @@ namespace LayoutFarm.TextEditing
 
             hScrollEventArgs = null;
             vScrollEventArgs = null;
-            Size innerContentSize = this.InnerContentSize;
-            if (x > innerContentSize.Width - Width)
+            int innerContentW = this.InnerContentWidth;
+            if (x > innerContentW - Width)
             {
-                x = innerContentSize.Width - Width;
+                x = innerContentW - Width;
                 //inner content_size.Width may shorter than this.Width
                 //so we check if (x<0) later
             }
@@ -691,16 +638,16 @@ namespace LayoutFarm.TextEditing
         }
 
         void ScrollOffset_NotRaiseEvent(int dx, int dy,
-            out UIScrollEventArgs hScrollEventArgs, out UIScrollEventArgs vScrollEventArgs)
+            out UIScrollEventArgs hScrollEventArgs,
+            out UIScrollEventArgs vScrollEventArgs)
         {
             vScrollEventArgs = null;
-
-            Size contentSize = this.InnerContentSize;
-            Size innerContentSize = new Size(this.Width, _textLayer.Bottom);
-
+            int innerContentH = this.InnerContentHeight;
             if (dy < 0)
             {
+#if DEBUG
                 int old_y = this.ViewportTop;
+#endif
                 if (ViewportTop + dy < 0)
                 {
                     //? limit                     
@@ -715,9 +662,9 @@ namespace LayoutFarm.TextEditing
             {
                 int old_y = ViewportTop;
                 int viewportButtom = ViewportTop + Height;
-                if (viewportButtom + dy > innerContentSize.Height)
+                if (viewportButtom + dy > innerContentH)
                 {
-                    int vwY = innerContentSize.Height - Height;
+                    int vwY = innerContentH - Height;
                     //limit                     
                     this.SetViewport(this.ViewportLeft, vwY > 0 ? vwY : 0);
                 }
@@ -746,17 +693,13 @@ namespace LayoutFarm.TextEditing
             {
                 int old_x = this.ViewportLeft;
                 int viewportRight = ViewportLeft + Width;
-                if (viewportRight + dx > innerContentSize.Width)
+                if (viewportRight + dx > InnerContentWidth)
                 {
-                    this.SetViewport(this.ViewportLeft + dx, this.ViewportTop);
-                    //if (viewportRight < innerContentSize.Width)
-                    //{
-                    //    this.SetViewport(innerContentSize.Width - Width, this.ViewportTop);
-                    //}
+                    this.SetViewport(this.ViewportLeft + dx, this.ViewportTop); 
                 }
                 else
                 {
-                    //this.SetViewport(this.ViewportLeft + dx, this.ViewportTop);
+                    
                 }
             }
         }

@@ -51,7 +51,7 @@ namespace PixelFarm.CpuBlit
                 throw new NotSupportedException();
             }
         }
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        public override RenderElement GetPrimaryRenderElement()
         {
             throw new NotImplementedException();
         }
@@ -91,8 +91,6 @@ namespace PixelFarm.CpuBlit
             return true;
         }
 
-        public override object Tag { get; set; }
-
-
+        
     }
 }

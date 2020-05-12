@@ -36,16 +36,20 @@ namespace LayoutFarm
         int _localMouseDownY;
         UIMouseButtons _mouseDownButton = UIMouseButtons.None;
 
-
-        public TopWindowEventRoot(RenderElement topRenderElement)
+        public TopWindowEventRoot(RootGraphic rootgfx, TopWindowRenderBox topRenderElement)
         {
             _mouseDownEventArgs = new UIMouseDownEventArgs();
             _mouseMoveEventArgs = new UIMouseMoveEventArgs();
             _mouseUpEventArgs = new UIMouseUpEventArgs();
             _wheelEventArgs = new UIMouseWheelEventArgs();
 
-            _iTopBoxEventPortal = _topWinBoxEventPortal = new RenderElementEventPortal(topRenderElement);
-            _rootgfx = topRenderElement.Root;
+
+            _topWinBoxEventPortal = new RenderElementEventPortal(topRenderElement);
+#if DEBUG
+            _topWinBoxEventPortal.dbugRootGraphics = (MyRootGraphic)rootgfx;
+#endif
+            _iTopBoxEventPortal = _topWinBoxEventPortal;
+            _rootgfx = rootgfx;
 
             _hoverMonitoringTask = new UIHoverMonitorTask();
             _hoverMonitoringTask.IntervalInMillisec = 100;//ms
@@ -210,7 +214,7 @@ namespace LayoutFarm
 
             //-------------------------------------------------------
             _mouseMoveEventArgs.SetIsDragging(_isMouseDown);
-            
+
             if (_isDragging = _isMouseDown)
             {
 

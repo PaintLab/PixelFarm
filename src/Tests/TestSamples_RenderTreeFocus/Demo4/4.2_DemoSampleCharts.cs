@@ -37,7 +37,7 @@ namespace LayoutFarm.ColorBlenderSample
     {
 
         //sample chart! 
-        class PlotBox : LayoutFarm.CustomWidgets.AbstractBox
+        class PlotBox : LayoutFarm.CustomWidgets.AbstractControlBox
         {
             public PlotBox(int w, int h)
                 : base(w, h)
@@ -51,8 +51,8 @@ namespace LayoutFarm.ColorBlenderSample
         {
             internal VxsRenderVx _stroke;
 
-            public LineRenderElement(RootGraphic rootGfx, int width, int height)
-                : base(rootGfx, width, height)
+            public LineRenderElement(int width, int height)
+                : base(width, height)
             {
 
             }
@@ -85,10 +85,7 @@ namespace LayoutFarm.ColorBlenderSample
                 }
 
             }
-            public override void ResetRootGraphics(RootGraphic rootgfx)
-            {
 
-            }
             public float X0;
             public float Y0;
             public float X1;
@@ -120,7 +117,7 @@ namespace LayoutFarm.ColorBlenderSample
             }
             protected override bool HasReadyRenderElement => _lineRendeE != null;
 
-            public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+            public override RenderElement GetPrimaryRenderElement()
             {
                 if (_lineRendeE == null)
                 {
@@ -134,7 +131,7 @@ namespace LayoutFarm.ColorBlenderSample
                         //---
                         //---
 
-                        _lineRendeE = new LineRenderElement(rootgfx, 10, 10);
+                        _lineRendeE = new LineRenderElement(10, 10);
                         _lineRendeE._stroke = new VxsRenderVx(strokeVxs);
 
                         _lineRendeE.X0 = p0.Left;

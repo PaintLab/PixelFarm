@@ -18,7 +18,7 @@ namespace LayoutFarm.UI
 
         public int Width { get; set; }
         public int Height { get; set; }
-        public override object Tag { get; set; }
+
     }
 
 
@@ -61,13 +61,13 @@ namespace LayoutFarm.UI
         }
         protected override bool HasReadyRenderElement => _spriteShape != null;
 
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        public override RenderElement GetPrimaryRenderElement()
         {
             if (_spriteShape == null)
             {
                 //TODO: review bounds again
                 Q1RectD bounds = _vgVisElem.GetRectBounds();
-                _spriteShape = new SpriteShape(_vgVisElem, rootgfx, (int)bounds.Width, (int)bounds.Height);
+                _spriteShape = new SpriteShape(_vgVisElem, null, (int)bounds.Width, (int)bounds.Height);
                 _spriteShape.SetController(this);//listen event 
                 _spriteShape.SetLocation((int)_left, (int)_top);
             }
@@ -192,7 +192,7 @@ namespace LayoutFarm.UI
         Perspective _perspectiveTx; //temp
 
         public SpriteShape(VgVisualElement vgVisElem, RootGraphic root, int w, int h)
-             : base(root, w, h)
+             : base(w, h)
         {
             LoadFromSvg(vgVisElem);
         }
@@ -362,10 +362,7 @@ namespace LayoutFarm.UI
             _vgVisElem.HitTest(hitChain);
         }
 
-        public override void ResetRootGraphics(RootGraphic rootgfx)
-        {
-            DirectSetRootGraphics(this, rootgfx);
-        }
+
         public override void ChildrenHitTestCore(HitChain hitChain)
         {
             base.ChildrenHitTestCore(hitChain);

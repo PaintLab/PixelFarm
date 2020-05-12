@@ -6,115 +6,27 @@ using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public class TreeView : AbstractRectUI
+    public class TreeView : AbstractControlBox
     {
-        //composite          
-        CustomRenderBox _primElement;//background
-        Color _backColor = KnownColors.LightGray;
-        int _viewportLeft, _viewportTop;
-        UICollection _uiList;
+        //composite           
         int _latestItemY;
-        Box _panel; //panel 
-
         public TreeView(int width, int height)
             : base(width, height)
         {
             //panel for listview items
-            _panel = new Box(width, height);
-            _panel.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
-            _panel.BackColor = KnownColors.LightGray;
-            _panel.NeedClipArea = true;
-            _uiList = new UICollection(this);
-            _uiList.AddUI(_panel);
+            NeedClipArea = true;
+            this.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
+            _items = new UIList<UIElement>();
         }
-
-        protected override void OnAcceptVisitor(UIVisitor visitor)
-        {
-            if (_uiList != null)
-            {
-                UICollection.AcceptVisitor(_uiList, visitor);
-            }
-        }
-        //
         public override RenderElement CurrentPrimaryRenderElement => _primElement;
-        //
-        public Color BackColor
-        {
-            get => _backColor;
-            set
-            {
-                _backColor = value;
-                if (HasReadyRenderElement)
-                {
-                    _primElement.BackColor = value;
-                }
-            }
-        }
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
-        {
-            if (_primElement == null)
-            {
-                var renderE = new CustomRenderBox(rootgfx, this.Width, this.Height);
-                renderE.SetLocation(this.Left, this.Top);
-                renderE.BackColor = _backColor;
-                renderE.SetController(this);
-                renderE.HasSpecificWidthAndHeight = true;
-                //------------------------------------------------
-                //create visual layer                  
-                foreach (UIElement ui in _uiList.GetIter())
-                {
-                    renderE.AddChild(ui);
-                }
-                //---------------------------------
-                _primElement = renderE;
-            }
-            return _primElement;
-        }
+
         public void AddItem(TreeNode treeNode)
         {
             treeNode.SetLocation(0, _latestItemY);
             _latestItemY += treeNode.Height;
             treeNode.SetOwnerTreeView(this);
-            _panel.Add(treeNode);
+            _items.Add(this, treeNode);
         }
-        //----------------------------------------------------
-        protected override void OnMouseDown(UIMouseDownEventArgs e)
-        {
-
-            MouseDown?.Invoke(this, e);
-        }
-
-        protected override void OnMouseUp(UIMouseUpEventArgs e)
-        {
-
-            MouseUp?.Invoke(this, e);
-            base.OnMouseUp(e);
-        }
-        //
-        public override int ViewportLeft => _viewportLeft;
-        public override int ViewportTop => _viewportTop;
-        //
-        public override void SetViewport(int left, int top, object reqBy)
-        {
-            _viewportLeft = left;
-            _viewportTop = top;
-            if (this.HasReadyRenderElement)
-            {
-                _panel.SetViewport(left, top, this);
-            }
-        }
-        //----------------------------------------------------
-
-        public event EventHandler<UIMouseEventArgs> MouseDown;
-        public event EventHandler<UIMouseEventArgs> MouseUp;
-        //----------------------------------------------------  
-        public override void PerformContentLayout()
-        {
-            //manually perform layout of its content 
-            //here: arrange item in panel
-            _panel.PerformContentLayout();
-        }
-
     }
 
     public class TreeNode : AbstractRectUI
@@ -153,15 +65,14 @@ namespace LayoutFarm.CustomWidgets
         //
         public override RenderElement CurrentPrimaryRenderElement => _primElement;
         //
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        public override RenderElement GetPrimaryRenderElement()
         {
             if (_primElement == null)
             {
                 //first time
-                var element = new CustomRenderBox(rootgfx, this.Width, this.Height);
+                var element = new CustomRenderBox(this.Width, this.Height);
                 element.SetLocation(this.Left, this.Top);
-                element.BackColor = _backColor;
-                element.HasSpecificWidthAndHeight = true;
+                element.BackColor = _backColor; 
                 //-----------------------------
                 // create default layer for node content  
                 //-----------------------------
@@ -169,7 +80,7 @@ namespace LayoutFarm.CustomWidgets
                 SetupNodeIconBehaviour(_uiNodeIcon);
                 element.AddChild(_uiNodeIcon);
                 //-----------------------------
-                _myTextRun = new CustomTextRun(rootgfx, 10, 17);
+                _myTextRun = new CustomTextRun(10, 17);
                 _myTextRun.SetLocation(16, 0);
                 _myTextRun.Text = "Test01";
                 element.AddChild(_myTextRun);
@@ -250,7 +161,7 @@ namespace LayoutFarm.CustomWidgets
                     //below here
                     //create layers      
                     //add to layer 
-                    RenderElement tnRenderElement = treeNode.GetPrimaryRenderElement(_primElement.Root);
+                    RenderElement tnRenderElement = treeNode.GetPrimaryRenderElement();
                     tnRenderElement.SetLocation(_indentWidth, _newChildNodeY);
                     _primElement.AddChild(tnRenderElement);
                     _newChildNodeY += tnRenderElement.Height;
@@ -264,37 +175,36 @@ namespace LayoutFarm.CustomWidgets
             if (_isOpen) return;
             _isOpen = true;
 
-            this.TreeView.PerformContentLayout();
+            TreeView.InvalidateLayout();
+            //this.TreeView.PerformContentLayout(null);
         }
         public void Collapse()
         {
             if (!_isOpen) return;
             _isOpen = false;
-            this.TreeView.PerformContentLayout();
+            TreeView.InvalidateLayout();
+            //this.TreeView.PerformContentLayout(null);
         }
-        public override void PerformContentLayout()
+        public override void PerformContentLayout(LayoutUpdateArgs args)
         {
             this.InvalidateGraphics();
             //if this has child
             //reset
             _desiredHeight = NODE_DEFAULT_HEIGHT;
             _newChildNodeY = NODE_DEFAULT_HEIGHT;
-            if (_isOpen)
+            if (_isOpen && _childNodes != null)
             {
-                if (_childNodes != null)
+                int j = _childNodes.Count;
+                for (int i = 0; i < j; ++i)
                 {
-                    int j = _childNodes.Count;
-                    for (int i = 0; i < j; ++i)
-                    {
-                        TreeNode childNode = _childNodes[i];
-                        childNode.PerformContentLayout();//manual
-                        //set new size 
-                        childNode.SetLocationAndSize(_indentWidth,
-                            _newChildNodeY,
-                            childNode.Width,
-                            childNode.InnerHeight);
-                        _newChildNodeY += childNode.InnerHeight;
-                    }
+                    TreeNode childNode = _childNodes[i];
+                    childNode.PerformContentLayout(args);//manual
+                                                     //set new size 
+                    childNode.SetLocationAndSize(_indentWidth,
+                        _newChildNodeY,
+                        childNode.Width,
+                        childNode.InnerHeight);
+                    _newChildNodeY += childNode.InnerHeight;
                 }
             }
             _desiredHeight = _newChildNodeY;

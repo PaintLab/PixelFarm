@@ -1,15 +1,15 @@
 ﻿//Apache2, 2014-present, WinterDev
 
+
 using PixelFarm.Drawing;
 using System.Collections.Generic;
 namespace LayoutFarm.UI
 {
-    static class UISystem
+    static class UILayoutQueue
     {
-        static Queue<UIElement> s_layoutQueue = new Queue<UIElement>();
+        static readonly Queue<UIElement> s_layoutQueue = new Queue<UIElement>();
 
-
-        static UISystem()
+        static UILayoutQueue()
         {
             LayoutFarm.EventQueueSystem.CentralEventQueue.RegisterEventQueue(ClearLayoutQueue);
         }
@@ -24,6 +24,7 @@ namespace LayoutFarm.UI
             int count = s_layoutQueue.Count;
 
 #if DEBUG
+
             //if (UIElement.s_dbugBreakOnSetBounds)
             //{
             //    for (int i = count - 1; i >= 0; --i)
@@ -45,12 +46,13 @@ namespace LayoutFarm.UI
             }
 #endif
 
+            LayoutUpdateArgs layoutArgs = null;
 
             for (int i = count - 1; i >= 0; --i)
             {
                 UIElement ui = s_layoutQueue.Dequeue();
                 ui.IsInLayoutQueue = false;
-                UIElement.InvokeContentLayout(ui);
+                UIElement.InvokeContentLayout(ui, layoutArgs);
 #if DEBUG
                 if (ui.IsInLayoutQueue)
                 {
@@ -62,12 +64,20 @@ namespace LayoutFarm.UI
         }
     }
 
+    public class LayoutUpdateArgs
+    {
+        public int AvailableWidth { get; set; }
+        public LayoutUpdateArgs() { }
+    }
 
     public abstract class LayoutInstance
     {
-         
+
         public abstract bool GetResultBounds(out RectangleF rects);
     }
+
+
+
 
     public abstract partial class UIElement : IUIEventListener
     {
@@ -78,25 +88,41 @@ namespace LayoutFarm.UI
         public readonly int dbugId = s_dbugTotalId++;
 
 #endif
-        bool _hide;
+
 
         //bounds
         float _left;
         float _top;
         float _right;
         float _bottom;
-        //object _tag;
+
+        bool _hide;
+        protected bool _needContentLayout;
+        protected bool _hasMinSize;
+        internal object _collectionLinkNode; //optional, eg for linked-list node, RB-tree-node
         UIElement _parent;
-        internal LinkedListNode<UIElement> _collectionLinkNode;
 
         public UIElement()
         {
-            //if (dbugId == 114)
-            //{ 
-            //}
         }
+#if DEBUG
+        protected virtual void dbugOnSettingParent(UIElement parent)
+        {
 
+        }
+#endif
 
+        public UIElement ParentUI
+        {
+            get => _parent;
+            set
+            {
+#if DEBUG
+                dbugOnSettingParent(value);
+#endif
+                _parent = value;
+            }
+        }
         /// <summary>
         /// update layout data from layout instance
         /// </summary>
@@ -104,199 +130,18 @@ namespace LayoutFarm.UI
         {
 
         }
-        public bool DisableAutoMouseCapture { get; set; }
-        public abstract RenderElement GetPrimaryRenderElement(RootGraphic rootgfx);
+        public abstract RenderElement GetPrimaryRenderElement();
         public abstract RenderElement CurrentPrimaryRenderElement { get; }
         protected virtual bool HasReadyRenderElement => CurrentPrimaryRenderElement != null;
         public abstract void InvalidateGraphics();
-
-        public bool AcceptKeyboardFocus { get; set; }
-
-        public virtual object Tag
-        {
-            get => null;
-            set
-            {
-                throw new System.NotSupportedException("user must override this");
-            }
-        }
-
         public virtual void Focus()
         {
             //make this keyboard focusable
-            if (this.HasReadyRenderElement)
-            {
-                //focus
-                this.CurrentPrimaryRenderElement.Root.SetCurrentKeyboardFocus(this.CurrentPrimaryRenderElement);
-            }
+            CurrentPrimaryRenderElement?.GetRoot()?.SetCurrentKeyboardFocus(this.CurrentPrimaryRenderElement);
         }
         public virtual void Blur()
         {
-            if (this.HasReadyRenderElement)
-            {
-                //focus
-                this.CurrentPrimaryRenderElement.Root.SetCurrentKeyboardFocus(null);
-            }
-        }
-        public UIElement ParentUI
-        {
-            get => _parent;
-            set
-            {
-
-                //if (value == null)
-                //{
-
-                //}
-
-                _parent = value;
-            }
-        }
-
-        public UIElement NextUIElement
-        {
-            get
-            {
-                if (_collectionLinkNode != null)
-                {
-                    LinkedListNode<UIElement> nextNode = _collectionLinkNode.Next;
-                    return (nextNode != null) ? nextNode.Value : null;
-                }
-                return null;
-            }
-        }
-        public UIElement PrevUIElement
-        {
-            get
-            {
-                if (_collectionLinkNode != null)
-                {
-                    LinkedListNode<UIElement> prevNode = _collectionLinkNode.Previous;
-                    return (prevNode != null) ? prevNode.Value : null;
-                }
-                return null;
-            }
-        }
-        //------------------------------
-        public virtual void RemoveChild(UIElement ui)
-        {
-#if DEBUG
-            throw new System.NotSupportedException("user must impl this");
-#endif
-        }
-        public virtual void ClearChildren()
-        {
-#if DEBUG
-            throw new System.NotSupportedException("user must impl this");
-#endif
-        }
-        public virtual void RemoveSelf()
-        {
-
-
-            RenderElement currentRenderE = this.CurrentPrimaryRenderElement;
-            if (currentRenderE != null &&
-                currentRenderE.HasParent)
-            {
-                currentRenderE.RemoveSelf();
-            }
-            if (_parent != null)
-            {
-                _parent.RemoveChild(this);
-            }
-            this.InvalidateOuterGraphics();
-#if DEBUG
-            if (_collectionLinkNode != null || _parent != null)
-            {
-                throw new System.Exception("");
-            }
-#endif
-        }
-
-        public virtual void AddFirst(UIElement ui)
-        {
-#if DEBUG
-            throw new System.Exception("empty!");
-#endif
-
-        }
-        public virtual void AddAfter(UIElement afterUI, UIElement ui)
-        {
-#if DEBUG
-            throw new System.Exception("empty!");
-#endif
-        }
-        public virtual void AddBefore(UIElement beforeUI, UIElement ui)
-        {
-#if DEBUG
-            throw new System.Exception("empty!");
-#endif
-        }
-        public virtual void Add(UIElement ui)
-        {
-#if DEBUG
-            throw new System.Exception("empty!");
-#endif
-        }
-        public virtual void BringToTopMost()
-        {
-            if (_parent != null)
-            {
-                //after RemoveSelf_parent is set to null
-                //so we backup it before RemoveSelf
-                UIElement parentUI = _parent;
-                parentUI.RemoveChild(this);
-                parentUI.Add(this);
-                this.InvalidateGraphics();
-            }
-        }
-        public virtual void BringToTopOneStep()
-        {
-            if (_parent != null)
-            {
-                //find next element
-                UIElement next = this.NextUIElement;
-                if (next != null)
-                {
-                    UIElement parentUI = _parent;
-                    parentUI.RemoveChild(this);
-                    parentUI.AddAfter(next, this);
-                    this.InvalidateGraphics();
-                }
-            }
-        }
-        public virtual void SendToBackMost()
-        {
-            if (_parent != null)
-            {
-                //after RemoveSelf_parent is set to null
-                //so we backup it before RemoveSelf
-
-                UIElement parentUI = _parent;
-                parentUI.RemoveChild(this);
-                parentUI.AddFirst(this);
-                this.InvalidateGraphics();
-            }
-        }
-        public virtual void SendOneStepToBack()
-        {
-            if (_parent != null)
-            {
-                //find next element
-                UIElement prev = this.PrevUIElement;
-                if (prev != null)
-                {
-                    UIElement parentUI = _parent;
-                    parentUI.RemoveChild(this);
-                    parentUI.AddBefore(prev, this);
-                }
-            }
-        }
-
-        //------------------------------
-        public virtual void InvalidateOuterGraphics()
-        {
-
+            CurrentPrimaryRenderElement?.GetRoot()?.SetCurrentKeyboardFocus(null);
         }
         public virtual bool Visible
         {
@@ -314,28 +159,30 @@ namespace LayoutFarm.UI
             set
             {
                 _hide = !value;
-                if (this.HasReadyRenderElement)
-                {
-                    this.CurrentPrimaryRenderElement.SetVisible(value);
-                }
+                this.CurrentPrimaryRenderElement?.SetVisible(value);
             }
         }
+
         public PixelFarm.Drawing.Point GetGlobalLocation()
         {
-            if (this.CurrentPrimaryRenderElement != null)
+            RenderElement currentRenderE = this.CurrentPrimaryRenderElement;
+            if (currentRenderE != null)
             {
-                return this.CurrentPrimaryRenderElement.GetGlobalLocation();
+                return currentRenderE.GetGlobalLocation();
             }
-            return new PixelFarm.Drawing.Point((int)_left, (int)_top);
+            else
+            {
+                return new PixelFarm.Drawing.Point((int)_left, (int)_top);
+            }
         }
-        public PixelFarm.Drawing.Point GetLocation()
-        {
-            return new PixelFarm.Drawing.Point((int)_left, (int)_top);
-        }
+
+        public PixelFarm.Drawing.Point GetLocation() => new PixelFarm.Drawing.Point((int)_left, (int)_top);
+
         public virtual void GetViewport(out int left, out int top)
         {
             left = top = 0;
         }
+
         public void GetElementBounds(
            out float left,
            out float top,
@@ -347,6 +194,7 @@ namespace LayoutFarm.UI
             right = _right;
             bottom = _bottom;
         }
+
         protected void SetElementBoundsWH(float width, float height)
         {
 #if DEBUG
@@ -461,8 +309,9 @@ namespace LayoutFarm.UI
                 }
             }
         }
-        //
-        public bool AutoStopMouseEventPropagation { get; set; }
+        public bool AcceptKeyboardFocus { get; set; }
+        public bool DisableAutoMouseCapture { get; set; }
+        public bool AutoStopMouseEventPropagation { get; set; } //TODO: review this
         //
         protected virtual void OnShown()
         {
@@ -527,34 +376,44 @@ namespace LayoutFarm.UI
         public void InvalidateLayout()
         {
             //add to layout queue
-            UISystem.AddToLayoutQueue(this);
+            UILayoutQueue.AddToLayoutQueue(this);
         }
         public void SuspendLayout()
         {
             //temp
-            UISystem.AddToLayoutQueue(this);
+            UILayoutQueue.AddToLayoutQueue(this);
         }
         public void ResumeLayout()
         {
             //temp
-            UISystem.AddToLayoutQueue(this);
+            UILayoutQueue.AddToLayoutQueue(this);
+        }
+        //------------------------------------------------------------
+        public void SuspendGraphicsUpdate()
+        {
+            CurrentPrimaryRenderElement?.SuspendGraphicsUpdate();
+        }
+        public void ResumeGraphicsUpdate()
+        {
+            CurrentPrimaryRenderElement?.ResumeGraphicsUpdate();
         }
         public virtual void NotifyContentUpdate(UIElement childContent)
         {
             //
         }
-        internal static void InvokeContentLayout(UIElement ui)
+        internal static void InvokeContentLayout(UIElement ui, LayoutUpdateArgs args)
         {
-            ui.OnContentLayout();
+            //called by central layout queue
+            ui.PerformContentLayout(args);
         }
+        public virtual void PerformContentLayout(LayoutUpdateArgs args)
+        {
 
-        protected virtual void OnContentLayout()
-        {
         }
-        protected virtual void OnContentUpdate()
+        public virtual SizeF CalculateMinimumSize(LayoutUpdateArgs args)
         {
+            return new SizeF(_right - _left, _bottom - _top);
         }
-
         protected virtual void OnElementChanged()
         {
         }

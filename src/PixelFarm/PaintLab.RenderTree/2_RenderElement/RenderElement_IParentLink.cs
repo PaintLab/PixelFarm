@@ -21,35 +21,12 @@ namespace LayoutFarm
         //yes, because when this renderElement act as parentlink
         //it return itself as parent
         //
-
+        
         void IParentLink.AdjustLocation(ref int px, ref int py)
         {
             //nothing
         }
-        RenderElement IParentLink.FindOverlapedChildElementAtPoint(RenderElement afterThisChild, Point point)
-        {
-            //called from child node
-            if (_MayHasOverlapChild())
-            {
-                var child_internalLinkedNode = afterThisChild._internalLinkedNode;
-                if (child_internalLinkedNode == null)
-                {
-                    return null;
-                }
-                var curnode = child_internalLinkedNode.Previous;
-                while (curnode != null)
-                {
-                    var element = curnode.Value;
-                    if (element.Contains(point))
-                    {
-                        return element;
-                    }
-                    curnode = curnode.Previous;
-                }
-            }
-            return null;
-        }
-
+       
 #if DEBUG
         string IParentLink.dbugGetLinkInfo()
         {

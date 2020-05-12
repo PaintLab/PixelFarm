@@ -202,11 +202,11 @@
     <Compile Include="..\PaintLab.RenderTree\2_RenderElement\2_RenderElement.ElementPositioning_1_WithSizeChanged.cs">
       <Link>0_REF_PaintLab.RenderTree\2_RenderElement\2_RenderElement.ElementPositioning_1_WithSizeChanged.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree\2_RenderElement\3_RenderElement.Bubble_Layout.cs">
-      <Link>0_REF_PaintLab.RenderTree\2_RenderElement\3_RenderElement.Bubble_Layout.cs</Link>
-    </Compile>
     <Compile Include="..\PaintLab.RenderTree\2_RenderElement\4_RenderElement.Bubble_Repaint.cs">
       <Link>0_REF_PaintLab.RenderTree\2_RenderElement\4_RenderElement.Bubble_Repaint.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree\2_RenderElement\5_RenderElementCollection.cs">
+      <Link>0_REF_PaintLab.RenderTree\2_RenderElement\5_RenderElementCollection.cs</Link>
     </Compile>
     <Compile Include="..\PaintLab.RenderTree\2_RenderElement\RenderElementConst.cs">
       <Link>0_REF_PaintLab.RenderTree\2_RenderElement\RenderElementConst.cs</Link>
@@ -219,15 +219,6 @@
     </Compile>
     <Compile Include="..\PaintLab.RenderTree\2_RenderElement\x_RenderElement_LocationHelper.cs">
       <Link>0_REF_PaintLab.RenderTree\2_RenderElement\x_RenderElement_LocationHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\PaintLab.RenderTree\3_Layers\0_IParentLink.cs">
-      <Link>0_REF_PaintLab.RenderTree\3_Layer\0_IParentLink.cs</Link>
-    </Compile>
-    <Compile Include="..\PaintLab.RenderTree\3_Layers\1_RenderElementLayer.cs">
-      <Link>0_REF_PaintLab.RenderTree\3_Layer\1_RenderElementLayer.cs</Link>
-    </Compile>
-    <Compile Include="..\PaintLab.RenderTree\3_Layers\2_PlainLayer.cs">
-      <Link>0_REF_PaintLab.RenderTree\3_Layer\2_PlainLayer.cs</Link>
     </Compile>
     <Compile Include="..\PaintLab.RenderTree\4_Boxes\IBoxElement.cs">
       <Link>0_REF_PaintLab.RenderTree\4_Boxes\IBoxElement.cs</Link>

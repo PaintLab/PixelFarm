@@ -112,28 +112,25 @@ namespace LayoutFarm
         //-----------------------------------------------------------------
         class UIControllerBox : LayoutFarm.CustomWidgets.AbstractBox
         {
-            LayoutFarm.CustomWidgets.GridView gridBox;
+            LayoutFarm.CustomWidgets.GridBox gridBox;
             public UIControllerBox(int w, int h)
                 : base(w, h)
             {
             }
-            public LayoutFarm.UI.AbstractRectUI TargetBox
-            {
-                get;
-                set;
-            }
+            protected override IUICollection<UIElement> GetDefaultChildrenIter() => null;
+            public LayoutFarm.UI.AbstractRectUI TargetBox { get; set; }
             //get primary render element
-            public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+            public override RenderElement GetPrimaryRenderElement()
             {
                 if (!this.HasReadyRenderElement)
                 {
-                    gridBox = new LayoutFarm.CustomWidgets.GridView(30, 30);
+                    gridBox = new LayoutFarm.CustomWidgets.GridBox(30, 30);
                     gridBox.SetLocation(5, 5);
                     gridBox.BuildGrid(3, 3, CellSizeStyle.UniformCell);
-                    var myRenderElement = base.GetPrimaryRenderElement(rootgfx) as LayoutFarm.CustomWidgets.CustomRenderBox;
+                    var myRenderElement = base.GetPrimaryRenderElement() as LayoutFarm.CustomWidgets.CustomRenderBox;
                     myRenderElement.AddChild(gridBox);
                 }
-                return base.GetPrimaryRenderElement(rootgfx);
+                return base.GetPrimaryRenderElement();
             }
 
             public override void SetSize(int width, int height)

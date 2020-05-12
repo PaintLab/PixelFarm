@@ -53,7 +53,7 @@ namespace LayoutFarm
             Reason = InvalidateReason.UpdateLocalArea;
         }
 
-
+        internal bool FromMainPool { get; set; }
 #if DEBUG
         public bool dbugWaitingInPool { get; set; }
         public override string ToString() => Reason.ToString() + " " + SrcRenderElement.dbug_obj_id.ToString();

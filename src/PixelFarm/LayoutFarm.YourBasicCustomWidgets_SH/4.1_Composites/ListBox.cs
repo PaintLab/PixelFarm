@@ -1,34 +1,29 @@
 ﻿//Apache2, 2014-present, WinterDev
 
-using System;
-using System.Collections.Generic;
-using PixelFarm.Drawing;
 using LayoutFarm.UI;
 using PixelFarm.CpuBlit;
+using PixelFarm.Drawing;
+
 namespace LayoutFarm.CustomWidgets
 {
-
-
-    public class ListView : AbstractBox
+    public class ListBox : AbstractControlBox
     {
         public delegate void ListItemMouseHandler(object sender, UIMouseEventArgs e);
         public delegate void ListItemKeyboardHandler(object sender, UIKeyEventArgs e);
-        //composite          
-
-        List<ListItem> _items = new List<ListItem>();
+        //composite           
         int _selectedIndex = -1;//default = no selection
         ListItem _selectedItem = null;
-
         public event ListItemMouseHandler ListItemMouseEvent;
         public event ListItemKeyboardHandler ListItemKeyboardEvent;
 
-        public ListView(int width, int height)
+        public ListBox(int width, int height)
             : base(width, height)
         {
 
 #if DEBUG
             //dbugBreakMe = true;
 #endif
+            _items = new UIList<UIElement>();
             this.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
             this.BackColor = KnownColors.LightGray;
             this.AcceptKeyboardFocus = true;
@@ -83,33 +78,35 @@ namespace LayoutFarm.CustomWidgets
         }
 
 
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
-        {
-            if (!HasReadyRenderElement)
-            {
-                CustomRenderBox newone = base.GetPrimaryRenderElement(rootgfx) as CustomRenderBox;
-                newone.LayoutHint = this.ContentLayoutKind;
-                newone.HasSpecificWidthAndHeight = true;
-                return newone;
-            }
-            else
-            {
-                return base.GetPrimaryRenderElement(rootgfx);
-            }
-        }
-        public void AddItem(ListItem ui)
-        {
-            _items.Add(ui);
-            Add(ui);
-        }
-        //
         public int ItemCount => _items.Count;
-        //
+        public void AddItem(ListItem item)
+        {
+            _items.Add(this, item); //logical collection
+
+            //if (CurrentPrimaryRenderElement is CustomRenderBox customPrim)
+            //{
+            //    customPrim.AddChild(item);
+            //    item.InvalidateGraphics();
+            //}
+        }
+        public void InsertItem(int index, ListItem item)
+        {
+            _items.Insert(this, index, item);
+
+            //if (CurrentPrimaryRenderElement is CustomRenderBox customPrim)
+            //{
+            //    customPrim.InsertBefore(existing.CurrentPrimaryRenderElement, item.GetPrimaryRenderElement(customPrim.Root));
+            //}
+        }
         public void RemoveAt(int index)
         {
-            var item = _items[index];
-            RemoveChild(item);
-            _items.RemoveAt(index);
+            _items.RemoveAt(this, index);
+            //ListItem item = _items[index];
+            //if (CurrentPrimaryRenderElement is CustomRenderBox customPrim)
+            //{
+            //    customPrim.RemoveChild(item.GetPrimaryRenderElement(customPrim.Root));
+            //}
+            //_items.RemoveAt(index);
         }
         public ListItem GetItem(int index)
         {
@@ -119,19 +116,28 @@ namespace LayoutFarm.CustomWidgets
             }
             else
             {
-                return _items[index];
+                return (ListItem)_items[index];
             }
         }
         public void Remove(ListItem item)
         {
-            _items.Remove(item);
-            RemoveChild(item);
+            _items.Remove(this, item);
+            //if (CurrentPrimaryRenderElement is CustomRenderBox customPrim)
+            //{
+            //    customPrim.RemoveChild(item.GetPrimaryRenderElement(customPrim.Root));
+            //    customPrim.InvalidateGraphics();
+            //}
         }
         public void ClearItems()
         {
             _selectedIndex = -1;
-            _items.Clear();
-            ClearChildren();
+            _items.Clear(this);
+            //if (CurrentPrimaryRenderElement is CustomRenderBox customPrim)
+            //{
+            //    customPrim.ClearAllChildren();
+            //    customPrim.InvalidateGraphics();
+            //}
+
         }
         //----------------------------------------------------
 
@@ -185,7 +191,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 if (_items.Count > 0)
                 {
-                    ListItem lastOne = _items[_items.Count - 1];
+                    ListItem lastOne = (ListItem)_items[_items.Count - 1];
                     return lastOne.Bottom;
                 }
                 return this.Height;
@@ -261,16 +267,15 @@ namespace LayoutFarm.CustomWidgets
             //TODO: add theme
             _normalStateColor = BackColor = KnownColors.LightGray;
         }
+        public object Tag { get; set; }
         protected override void OnMouseEnter(UIMouseMoveEventArgs e)
         {
             _normalStateColor = BackColor;
 
             using (Tools.More.BorrowChromaTool(out var chroma))
             {
-                BackColor = chroma.SetColor(_normalStateColor).Brighten(0.5); 
+                BackColor = chroma.SetColor(_normalStateColor).Brighten(0.5);
             }
-
-          
             base.OnMouseEnter(e);
         }
         protected override void OnMouseLeave(UIMouseLeaveEventArgs e)
@@ -280,25 +285,27 @@ namespace LayoutFarm.CustomWidgets
         }
         //
         public override RenderElement CurrentPrimaryRenderElement => _primElement;
-        //
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+
+
+        public override RenderElement GetPrimaryRenderElement()
         {
             if (_primElement == null)
             {
                 //1.
-                var element = new CustomRenderBox(rootgfx, this.Width, this.Height);
+                var element = new CustomRenderBox(this.Width, this.Height);
                 element.SetLocation(this.Left, this.Top);
                 element.BackColor = _backColor;
                 element.SetController(this);
                 //
-                _listItemText = new CustomTextRun(rootgfx, 200, this.Height);
+                _listItemText = new CustomTextRun(200, this.Height);
                 _listItemText.DrawTextTechnique = DrawTextTechnique.LcdSubPix;
 
                 if (_font != null)
                 {
                     _listItemText.RequestFont = _font;
                     //TODO: review how to find 
-                    int blankLineHeight = (int)rootgfx.TextServices.MeasureBlankLineHeight(_font);
+
+                    int blankLineHeight = (int)GlobalRootGraphic.CurrentRootGfx.TextServices.MeasureBlankLineHeight(_font);
                     _listItemText.SetHeight(blankLineHeight);
                     element.SetHeight(blankLineHeight);
                 }

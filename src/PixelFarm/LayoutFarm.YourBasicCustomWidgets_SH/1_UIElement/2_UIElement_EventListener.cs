@@ -34,7 +34,7 @@ namespace LayoutFarm.UI
                 return false;
             }
         }
-        
+
         void IEventListener.ListenKeyPress(UIKeyEventArgs e)
         {
             OnKeyPress(e);
@@ -101,19 +101,19 @@ namespace LayoutFarm.UI
         void IEventListener.ListenMouseEnter(UIMouseMoveEventArgs e)
         {
             OnMouseEnter(e);
-            _externalEventListener?.ListenMouseEnter(e); 
+            _externalEventListener?.ListenMouseEnter(e);
         }
         void IEventListener.ListenMouseHover(UIMouseHoverEventArgs e)
         {
             OnMouseHover(e);
             _externalEventListener?.ListenMouseHover(e);
-           
+
         }
         void IEventListener.ListenMouseLeave(UIMouseLeaveEventArgs e)
         {
             OnMouseLeave(e);
             _externalEventListener?.ListenMouseLeave(e);
-            
+
         }
         void IEventListener.ListenGotKeyboardFocus(UIFocusEventArgs e)
         {
@@ -125,18 +125,16 @@ namespace LayoutFarm.UI
             OnLostKeyboardFocus(e);
             _externalEventListener?.ListenLostKeyboardFocus(e);
         }
-        void IUIEventListener.HandleContentLayout()
-        {
-            OnContentLayout();
-        }
-        void IUIEventListener.HandleContentUpdate()
-        {
-            OnContentUpdate();
-        }
-        void IUIEventListener.HandleElementUpdate()
-        {
-            OnElementChanged();
-        }
+        //void IUIEventListener.HandleContentLayout()
+        //{
+        //    OnContentLayout();
+        //}
+        //void IUIEventListener.HandleContentUpdate()
+        //{
+        //    OnContentUpdate();
+        //}
+
+        void IUIEventListener.HandleElementUpdate() => OnElementChanged();
 
         bool IUIEventListener.BypassAllMouseEvents => this.TransparentForMouseEvents;
 

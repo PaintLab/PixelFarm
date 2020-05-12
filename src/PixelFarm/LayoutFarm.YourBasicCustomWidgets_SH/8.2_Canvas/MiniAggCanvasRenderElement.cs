@@ -1,12 +1,11 @@
 ﻿//Apache2, 2014-present, WinterDev
 
 using System;
-using LayoutFarm.RenderBoxes;
 using PixelFarm.CpuBlit;
 using PixelFarm.Drawing;
 namespace LayoutFarm.CustomWidgets
 {
-    public class MiniAggCanvasRenderElement : RenderBoxBase, IDisposable
+    public class MiniAggCanvasRenderElement : AbstractRectRenderElement, IDisposable
     {
 
         Painter _painter;
@@ -14,8 +13,8 @@ namespace LayoutFarm.CustomWidgets
         MemBitmap _memBmp;
         Image _bmp;
 
-        public MiniAggCanvasRenderElement(RootGraphic rootgfx, int width, int height)
-            : base(rootgfx, width, height)
+        public MiniAggCanvasRenderElement(int width, int height)
+            : base(width, height)
         {
 
             _memBmp = new MemBitmap(width, height);
@@ -26,14 +25,12 @@ namespace LayoutFarm.CustomWidgets
             _needUpdate = true;
             this.BackColor = Color.White;
         }
-        protected override PlainLayer CreateDefaultLayer() => new PlainLayer(this);
-        public override void ClearAllChildren()
-        {
-        }
+
+
         public Color BackColor { get; set; }
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
-            
+
             if (_needUpdate)
             {
                 //default bg => transparent !, 

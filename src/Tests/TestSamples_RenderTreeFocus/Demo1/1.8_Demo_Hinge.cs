@@ -66,7 +66,7 @@ namespace LayoutFarm
                     comboBox.CloseHinge();
                 }
             };
-            comboBox.Add(imgBox);
+            comboBox.AddLandPartContent(imgBox);
             return comboBox;
         }
 
@@ -87,7 +87,7 @@ namespace LayoutFarm
             }
             LayoutFarm.CustomWidgets.ImageBox imgBox = new CustomWidgets.ImageBox(_arrowBmp.Width, _arrowBmp.Height);
             imgBox.ImageBinder = _arrowBmp;
-            mnuItem.Add(imgBox);
+            mnuItem.AddLandPart(imgBox);
             //--------------------------------------
             //if click on this image then
             imgBox.MouseDown += (s, e) =>

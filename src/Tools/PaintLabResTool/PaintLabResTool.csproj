@@ -69,9 +69,6 @@
     <Compile Include="..\..\x_resource_projects\GeneralResources\x_GeneralResources_Resource_AUTOGEN.cs">
       <Link>x_GeneralResources_Resource_AUTOGEN.cs</Link>
     </Compile>
-    <Compile Include="..\..\x_resource_projects\TestAtlas1\x_TestAtlas1_Atlas_AUTOGEN.cs">
-      <Link>x_TestAtlas1_Atlas_AUTOGEN.cs</Link>
-    </Compile>
     <Compile Include="Builders.cs" />
     <Compile Include="AtlasProject.cs" />
     <Compile Include="FontBuilderConfig.cs" />

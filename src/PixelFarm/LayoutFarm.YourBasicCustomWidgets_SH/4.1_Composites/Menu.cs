@@ -1,25 +1,43 @@
 ﻿//Apache2, 2014-present, WinterDev
 
+using LayoutFarm.UI;
 using System;
 using System.Collections.Generic;
-using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public class MenuItem : Box
+    public class MenuItem : AbstractControlBox
     {
         HingeRelation _hingeRelation;
         List<MenuItem> _childItems;
+        Box _floatPart;
+
+
         public MenuItem(int width, int height)
             : base(width, height)
         {
             _hingeRelation = new HingeRelation();
             _hingeRelation.LandPart = this;
-        }
 
-        public AbstractRectUI FloatPart
+        }
+        public void AddLandPart(UIElement ui)
         {
-            get => _hingeRelation.FloatPart;
-            set => _hingeRelation.FloatPart = value;
+            //add to its             
+
+            AddChild(ui);
+
+            if (_primElement != null)
+            {
+                _primElement.AddChild(ui);
+            }
+        }
+        public Box FloatPart
+        {
+            get => _floatPart;
+            set
+            {
+                _floatPart = value;
+                _hingeRelation.FloatPart = value;
+            }
         }
         public bool IsOpened => _hingeRelation.IsOpen;
         public void Open() => _hingeRelation.OpenHinge();

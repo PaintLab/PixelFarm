@@ -25,7 +25,7 @@ namespace LayoutFarm.ColorBlenderSample
         Box _pure_rgbBox;
 
         ScrollBar _r_sc, _g_sc, _b_sc;
-        ListView _lstvw_blendAlgo;
+        ListBox _lstbox_blendAlgo;
         IAlgorithm _blenderAlgo;
         protected override void OnStart(AppHost host)
         {
@@ -37,14 +37,14 @@ namespace LayoutFarm.ColorBlenderSample
             //
 
             {
-                _lstvw_blendAlgo = new ListView(200, 400);
-                _lstvw_blendAlgo.SetLocation(500, 20);
-                host.AddChild(_lstvw_blendAlgo);
-                _lstvw_blendAlgo.ListItemMouseEvent += (s, e) =>
+                _lstbox_blendAlgo = new ListBox(200, 400);
+                _lstbox_blendAlgo.SetLocation(500, 20);
+                host.AddChild(_lstbox_blendAlgo);
+                _lstbox_blendAlgo.ListItemMouseEvent += (s, e) =>
                 {
-                    if (_lstvw_blendAlgo.SelectedIndex > -1)
+                    if (_lstbox_blendAlgo.SelectedIndex > -1)
                     {
-                        _blenderAlgo = _colorMatch.Algorithms[_lstvw_blendAlgo.SelectedIndex];
+                        _blenderAlgo = _colorMatch.Algorithms[_lstbox_blendAlgo.SelectedIndex];
                         UpdateAllComponents();
                     }
                 };
@@ -55,7 +55,7 @@ namespace LayoutFarm.ColorBlenderSample
                     ListItem listItem = new ListItem(200, 20);
                     listItem.Text = algo.GetType().Name;
                     listItem.Tag = algo;
-                    _lstvw_blendAlgo.AddItem(listItem);
+                    _lstbox_blendAlgo.AddItem(listItem);
                 }
             }
 
@@ -141,7 +141,10 @@ namespace LayoutFarm.ColorBlenderSample
                     colorBox.BackColor = new PixelFarm.Drawing.Color(c.R, c.G, c.B);
                     colorBoxPanel.Add(colorBox);
                 }
-                colorBoxPanel.PerformContentLayout();
+
+                UI.LayoutUpdateArgs updateArgs = new UI.LayoutUpdateArgs();
+
+                colorBoxPanel.PerformContentLayout(updateArgs);
             }
 
             Box colorPanel = new Box(200, 40);
@@ -347,11 +350,11 @@ namespace LayoutFarm.ColorBlenderSample
 
     static class ListViewItemExtensions
     {
-        public static void AddItem(this ListView lstView, string text)
+        public static void AddItem(this ListBox listbox, string text)
         {
-            ListItem listItem = new ListItem(lstView.Width, 20);
+            ListItem listItem = new ListItem(listbox.Width, 20);
             listItem.Text = text;
-            lstView.AddItem(listItem);
+            listbox.AddItem(listItem);
         }
     }
 

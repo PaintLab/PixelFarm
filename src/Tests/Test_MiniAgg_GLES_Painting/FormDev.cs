@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using LayoutFarm.CustomWidgets;
+using LayoutFarm.TreeCollection;
+using LayoutFarm.UI;
 using PixelFarm.CpuBlit;
 
 
@@ -375,7 +378,108 @@ namespace Mini
             formImgResampling.Show();
         }
 
-        
+        private void cmdRBTreeTest_Click(object sender, EventArgs e)
+        {
+            GC.Collect();
+            System.Diagnostics.Stopwatch st1 = new System.Diagnostics.Stopwatch();
+            {
+                List<UIElement> list1 = new List<UIElement>();
+                st1.Start();
+                for (int i = 0; i < 10000; ++i)
+                {
+                    Box box1 = new Box(30, 30);
+                    list1.Add(box1);
+                }
+                st1.Stop();
+                System.Diagnostics.Debug.WriteLine("list:" + st1.ElapsedMilliseconds);
+                st1.Reset();
+                list1.TrimExcess();
+                list1.Clear();
+                GC.Collect();
+            }
+            //---------------
+            {
+                LinkedList<UIElement> linkedList = new LinkedList<UIElement>();
+                st1.Start();
+                for (int i = 0; i < 10000; ++i)
+                {
+                    Box box1 = new Box(30, 30);
+                    linkedList.AddLast(box1);
+                }
+                st1.Stop();
+                System.Diagnostics.Debug.WriteLine("linked-list:" + st1.ElapsedMilliseconds);
+                st1.Reset();
+                linkedList.Clear();
+                GC.Collect();
+            }
+            //---------------
+            {
+                var elemTree = new UITree();
+                st1.Start();
+                for (int i = 0; i < 10000; ++i)
+                {
+                    Box box1 = new Box(30, 30);
+                    elemTree.Add(box1);
+                }
+                st1.Stop();
+                System.Diagnostics.Debug.WriteLine("tree1:" + st1.ElapsedMilliseconds);
+                st1.Reset();
+                elemTree.Clear();
+                GC.Collect();
+                //--------------- 
+            }
+            {
+                var elemTree = new RedBlackTree<RBNode<int>>();
+                for (int i = 0; i < 10000; ++i)
+                {
+                    elemTree.Add(new RBNode<int>(i));
+                }
+
+                //find element at specfic position 
+                st1.Start();
+                var node = elemTree.GetNodeAt(500);
+                var node2 = elemTree.GetNodeAt(10000 - 20);
+                st1.Stop();
+                //---------------
+                st1.Reset();
+                System.Diagnostics.Debug.WriteLine("tree1:" + st1.ElapsedMilliseconds);
+            }
+
+        }
+
+        class UITree : RedBlackTree<RBNode<UIElement>>
+        {
+            public void Add(UIElement ui)
+            {
+                RBNode<UIElement> node = new RBNode<UIElement>(ui);
+                Add(node);
+            }
+        }
+        class RBNode<T> : IRedBlackTreeNode<RBNode<T>>
+        {
+            T _value;
+
+            public RBNode(T value)
+            {
+                _value = value;
+            }
+
+            public RBNode<T> Parent { get; set; }
+            public RBNode<T> Left { get; set; }
+            public RBNode<T> Right { get; set; }
+            public RedBlackColor Color { get; set; }
+            public int CompareTo(object obj)
+            {
+                return 0;
+            }
+            public int TreeNodeCompareTo(RBNode<T> another)
+            {
+                return 0;
+            }
+            public void UpdateAugmentedData()
+            {
+            }
+        }
     }
 }
 

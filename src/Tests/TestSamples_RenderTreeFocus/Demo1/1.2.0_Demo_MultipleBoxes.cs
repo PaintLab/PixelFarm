@@ -5,13 +5,13 @@ using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm
 {
-    [DemoNote("1.2 MultpleBox")]
-    public class Demo_MultipleBox : App
+    [DemoNote("1.2.0 MultipleBoxes")]
+    public class Demo_MultipleBoxes : App
     {
         LayoutFarm.CustomWidgets.CheckBox _currentSingleCheckedBox;
         protected override void OnStart(AppHost host)
         {
-            SetupImageList(host);
+            //SetupImageList(host);
             for (int i = 1; i < 5; ++i)
             {
                 var textbox = new LayoutFarm.CustomWidgets.Box(30, 30);
@@ -117,33 +117,8 @@ namespace LayoutFarm
             {
             }
         }
-
-        static void SetupImageList(AppHost host)
-        {
-            if (!LayoutFarm.CustomWidgets.ResImageList.HasImages)
-            {
-                //set imagelists
-                var imgdic = new Dictionary<CustomWidgets.ImageName, Image>();
-                imgdic[CustomWidgets.ImageName.CheckBoxUnChecked] = host.LoadImage("../Data/imgs/arrow_close.png");
-                imgdic[CustomWidgets.ImageName.CheckBoxChecked] = host.LoadImage("../Data/imgs/arrow_open.png");
-                LayoutFarm.CustomWidgets.ResImageList.SetImageList(imgdic);
-            }
-        }
-        //static Bitmap LoadBitmap(string filename)
-        //{
-        //    System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(filename);
-        //    Bitmap bmp = new Bitmap(gdiBmp.Width, gdiBmp.Height, gdiBmp);
-        //    return bmp;
-        //}
-        //static ImageBinder LoadImage(string filename)
-        //{
-        //    System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(filename);
-        //    Bitmap bmp = new Bitmap(gdiBmp.Width, gdiBmp.Height, gdiBmp);
-        //    ImageBinder binder = new ClientImageBinder(null);
-        //    binder.SetImage(bmp);
-        //    binder.State = ImageBinderState.Loaded;
-        //    return binder;
-        //}
     }
+
+
 
 }

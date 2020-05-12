@@ -36,11 +36,11 @@ namespace LayoutFarm.CustomWidgets
 #if DEBUG
         public bool dbugBreakOnRenderElement;
 #endif
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        public override RenderElement GetPrimaryRenderElement()
         {
             if (_myTextRun == null)
             {
-                var t_run = new CustomTextRun(rootgfx, this.Width, this.Height);
+                var t_run = new CustomTextRun(this.Width, this.Height);
                 t_run.DrawTextTechnique = _drawTextTechnique;
 
                 t_run.TextColor = _textColor;
@@ -63,7 +63,7 @@ namespace LayoutFarm.CustomWidgets
             //-----------
             return _myTextRun;
         }
-        protected override void InvalidatePadding(PaddingName paddingName, byte newValue)
+        protected override void InvalidatePadding(PaddingName paddingName, ushort newValue)
         {
             if (_myTextRun == null) return;
             //
@@ -82,14 +82,16 @@ namespace LayoutFarm.CustomWidgets
                     _myTextRun.PaddingBottom = newValue;
                     break;
                 case PaddingName.AllSide:
-                    _myTextRun.SetPaddings(this.PaddingLeft, this.PaddingTop, this.PaddingRight, this.PaddingBottom);
+                    //for Label, padding is limit to 0-255
+                    _myTextRun.SetPaddings((byte)this.PaddingLeft, (byte)this.PaddingTop, (byte)this.PaddingRight, (byte)this.PaddingBottom);
                     break;
                 case PaddingName.AllSideSameValue:
-                    _myTextRun.SetPaddings(newValue);
+                    //for Label, padding is limit to 0-255
+                    _myTextRun.SetPaddings((byte)newValue);
                     break;
             }
         }
-        protected override void InvalidateMargin(MarginName marginName, short newValue)
+        protected override void InvalidateMargin(MarginName marginName, ushort newValue)
         {
             //TODO:...
         }
@@ -116,10 +118,8 @@ namespace LayoutFarm.CustomWidgets
                 _text = value;
                 if (_myTextRun != null)
                 {
-                    _myTextRun.Text = value;
-                    _myTextRun.InvalidateGraphics();
+                    _myTextRun.Text = value;                   
                 }
-                 
             }
         }
         public DrawTextTechnique DrawTextTechnique

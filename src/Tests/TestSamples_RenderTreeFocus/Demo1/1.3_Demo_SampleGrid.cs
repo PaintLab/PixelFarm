@@ -2,6 +2,8 @@
 
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
+using LayoutFarm.CustomWidgets;
+
 namespace LayoutFarm
 {
     [DemoNote("1.3 Grid")]
@@ -11,7 +13,7 @@ namespace LayoutFarm
         {
             //grid0
             {
-                var gridView = new LayoutFarm.CustomWidgets.GridView(100, 100);
+                var gridView = new LayoutFarm.CustomWidgets.GridBox(100, 100);
                 gridView.SetLocation(50, 50);
                 gridView.BuildGrid(2, 4, CellSizeStyle.UniformCell);
                 host.AddChild(gridView);
@@ -21,7 +23,7 @@ namespace LayoutFarm
             }
             //grid1
             {
-                var gridView = new LayoutFarm.CustomWidgets.GridView(100, 100);
+                var gridView = new LayoutFarm.CustomWidgets.GridBox(100, 100);
                 gridView.SetLocation(200, 50);
                 gridView.BuildGrid(2, 4, CellSizeStyle.UniformCell);
                 host.AddChild(gridView);
@@ -44,7 +46,7 @@ namespace LayoutFarm
             ////-----
             //grid2
             {
-                var gridView = new LayoutFarm.CustomWidgets.GridView(200, 100);
+                var gridView = new LayoutFarm.CustomWidgets.GridBox(200, 100);
                 gridView.SetLocation(350, 50);
                 gridView.BuildGrid(10, 8, CellSizeStyle.UniformCell);
                 host.AddChild(gridView);
@@ -53,7 +55,7 @@ namespace LayoutFarm
             ////-----
             //grid3
             {
-                var gridView = new LayoutFarm.CustomWidgets.GridView(200, 100);
+                var gridView = new LayoutFarm.CustomWidgets.GridBox(200, 100);
                 gridView.SetLocation(50, 250);
                 gridView.BuildGrid(10, 8, CellSizeStyle.UniformCell);
                 host.AddChild(gridView);
@@ -82,7 +84,7 @@ namespace LayoutFarm
             //grid5
             {
 
-                var gridView = new LayoutFarm.CustomWidgets.GridView(200, 100);
+                var gridView = new LayoutFarm.CustomWidgets.GridBox(200, 100);
                 gridView.SetLocation(50, 500);
                 gridView.BuildGrid(10, 8, CellSizeStyle.UniformCell);
                 host.AddChild(gridView);
@@ -91,7 +93,7 @@ namespace LayoutFarm
             {
 
                 //grid 6
-                var gridView = new LayoutFarm.CustomWidgets.GridView(200, 100);
+                var gridView = new LayoutFarm.CustomWidgets.GridBox(200, 100);
                 //gridView.HasSpecificHeight = true; //if not set ,scroll bar will not show scroll button
                 //gridView.HasSpecificWidth = true;//if not set ,scroll bar will not show scroll button
 
@@ -130,6 +132,44 @@ namespace LayoutFarm
                 //perform content layout again***
                 //gridView.PerformContentLayout();
             }
+        }
+    }
+
+
+    [DemoNote("1.3.1 Grid")]
+    public class Demo_Grid3_1 : App
+    {
+        protected override void OnStart(AppHost host)
+        {
+            //grid0
+            {
+                var gridView = new LayoutFarm.CustomWidgets.GridBox(100, 100);
+                gridView.SetLocation(50, 50);
+                gridView.BuildGrid(2, 4, CellSizeStyle.UniformCell);
+                host.AddChild(gridView);
+                gridView.MouseDown += (s1, e1) =>
+                {
+                };
+
+                //--------
+                var box1 = new Box(30, 30);
+                box1.BackColor = Color.Blue;
+                gridView.SetCellContent(box1, 1, 1);
+                gridView.CellSizeStyle = CellSizeStyle.ColumnAndRow;
+                //gridView.CellSizeStyle = CellSizeStyle.UniformWidth;
+                gridView.SuspendLayout();
+                GridColumn col = gridView.GetColumn(0);
+                col.Width = 10;
+                GridRow row = gridView.GetRow(0);
+                row.Height = 50;
+                gridView.ResumeLayout();
+                //--------
+                gridView.ClearAllCellContent();
+                //--------
+                gridView.BuildGrid(5, 3, CellSizeStyle.UniformCell);
+                //gridView.InvalidateLayout();
+            }
+
         }
     }
 }

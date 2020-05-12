@@ -12,10 +12,6 @@ namespace LayoutFarm
         int _b_left;
         int _b_width;
         int _b_height;
-        protected int _viewportLeft;
-        protected int _viewportTop;
-
-        int _uiLayoutFlags;
         //------------------------ 
 
         /// <summary>
@@ -39,44 +35,20 @@ namespace LayoutFarm
         public int Height => _b_height;
 
         //-----------------------------------------------
-        public int ViewportLeft => _viewportLeft;
-        public int ViewportTop => _viewportTop;
-
+        public virtual int ViewportLeft => 0;
+        public virtual int ViewportTop => 0;
         //
         public int ViewportBottom => this.ViewportTop + this.Height;
         public int ViewportRight => this.ViewportLeft + this.Width;
+
         //
-        public void SetViewport(int viewportLeft, int viewportTop)
+        public virtual void SetViewport(int viewportLeft, int viewportTop)
         {
-            int diffLeft = viewportLeft - _viewportLeft;
-            int diffTop = viewportTop - _viewportTop;
-
-            if (diffLeft != 0 || diffTop != 0)
-            {
-                _viewportLeft = viewportLeft;
-                _viewportTop = viewportTop;
-                //
-
-                InvalidateGfxArgs args = RootGetInvalidateGfxArgs();
-                args.SetReason_ChangeViewport(this, diffLeft, diffTop);
-                this.InvalidateGraphics(args);
-            }
+           
         }
+         
+        public Point GetGlobalLocation() => GetGlobalLocationStatic(this);
 
-        public virtual Size InnerContentSize => this.Size;
-        public virtual Rectangle InnerContentBounds
-        {
-            get
-            {
-                Size s = InnerContentSize;
-                return new Rectangle(_b_left, _b_top, s.Width, s.Height);
-            }
-        }
-        //-----------------------------------------------
-        public Point GetGlobalLocation()
-        {
-            return GetGlobalLocationStatic(this);
-        }
         static Point GetGlobalLocationStatic(RenderElement re)
         {
             RenderElement parentVisualElement = re.ParentRenderElement;
@@ -105,71 +77,23 @@ namespace LayoutFarm
                 return re.Location;
             }
         }
-        //----------------------------------------------- 
-        public bool HasSpecificWidth
-        {
-            get
-            {
-                return ((_uiLayoutFlags & RenderElementConst.LY_HAS_SPC_WIDTH) == RenderElementConst.LY_HAS_SPC_WIDTH);
-            }
-            set
-            {
-                _uiLayoutFlags = value ?
-                   _uiLayoutFlags | RenderElementConst.LY_HAS_SPC_WIDTH :
-                   _uiLayoutFlags & ~RenderElementConst.LY_HAS_SPC_WIDTH;
-            }
-        }
-        public bool HasSpecificHeight
-        {
-            get
-            {
-                return ((_uiLayoutFlags & RenderElementConst.LY_HAS_SPC_HEIGHT) == RenderElementConst.LY_HAS_SPC_HEIGHT);
-            }
-            set
-            {
-                _uiLayoutFlags = value ?
-                    _uiLayoutFlags | RenderElementConst.LY_HAS_SPC_HEIGHT :
-                    _uiLayoutFlags & ~RenderElementConst.LY_HAS_SPC_HEIGHT;
-            }
-        }
-
-        public bool HasSpecificWidthAndHeight
-        {
-            get
-            {
-                return ((_uiLayoutFlags & RenderElementConst.LY_HAS_SPC_SIZE) != 0);
-            }
-            set
-            {
-                _uiLayoutFlags = value ?
-                    _uiLayoutFlags | RenderElementConst.LY_HAS_SPC_SIZE :
-                    _uiLayoutFlags & ~RenderElementConst.LY_HAS_SPC_SIZE;
-            }
-        }
+       
         protected bool NeedInvalidateRectEvent
         {
-            get
-            {
-                return ((_uiLayoutFlags & RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT) != 0);
-            }
-            set
-            {
-                _uiLayoutFlags = value ?
-                    _uiLayoutFlags | RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT :
-                    _uiLayoutFlags & ~RenderElementConst.LY_REQ_INVALIDATE_RECT_EVENT;
-            }
+            get => ((_propFlags & RenderElementConst.REQ_INVALIDATE_RECT_EVENT) != 0);
+
+            set => _propFlags = value ?
+                    _propFlags | RenderElementConst.REQ_INVALIDATE_RECT_EVENT :
+                    _propFlags & ~RenderElementConst.REQ_INVALIDATE_RECT_EVENT;
+
         }
 
-        public bool Contains(Point testPoint)
-        {
-            return ((_propFlags & RenderElementConst.HIDDEN) != 0) ?
-                        false :
-                        ContainPoint(testPoint.X, testPoint.Y);
-        }
-        public bool ContainPoint(int x, int y)
-        {
-            return ((x >= _b_left && x < Right) && (y >= _b_top && y < Bottom));
-        }
+        public bool Contains(Point testPoint) => ((_propFlags & RenderElementConst.HIDDEN) != 0) ?
+                                                    false :
+                                                    ContainPoint(testPoint.X, testPoint.Y);
+
+        public bool ContainPoint(int x, int y) => ((x >= _b_left && x < Right) && (y >= _b_top && y < Bottom));
+
         public bool ContainRect(Rectangle r)
         {
             return r.Left >= _b_left &&
