@@ -67,7 +67,7 @@ namespace LayoutFarm.UI
     public class LayoutUpdateArgs
     {
         public int AvailableWidth { get; set; }
-
+        public LayoutUpdateArgs() { }
     }
 
     public abstract class LayoutInstance

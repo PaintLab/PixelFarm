@@ -56,13 +56,13 @@ namespace LayoutFarm.TextEditing
             //1. bg 
             if (RenderBackground && BackgroundColor.A > 0)
             {
-                Size innerBgSize = InnerBackgroundSize;
+
 
 #if DEBUG
-                d.FillRectangle(BackgroundColor, 0, 0, innerBgSize.Width, innerBgSize.Height);
+                d.FillRectangle(BackgroundColor, 0, 0, Width, Height);
                 //canvas.FillRectangle(ColorEx.dbugGetRandomColor(), 0, 0, innerBgSize.Width, innerBgSize.Height);
 #else
-                d.FillRectangle(BackgroundColor, 0, 0, innerBgSize.Width, innerBgSize.Height);
+                d.FillRectangle(BackgroundColor, 0, 0, Width, Height);
 #endif
                 d.SetLatestFillAsTextBackgroundColorHint();
             }
@@ -149,7 +149,7 @@ namespace LayoutFarm.TextEditing
             }
 
 
-           
+
             e.CancelBubbling = true;
 
             InvalidateGraphicOfCurrentSelectionArea();
@@ -263,7 +263,7 @@ namespace LayoutFarm.TextEditing
                         {
                             if (_editSession.SelectionRange != null)
                             {
-                                InvalidateGraphicOfCurrentSelectionArea();                                 
+                                InvalidateGraphicOfCurrentSelectionArea();
                             }
                             else
                             {
@@ -475,7 +475,7 @@ namespace LayoutFarm.TextEditing
                                 if (_editSession.SelectionRange != null)
                                 {
                                     InvalidateGraphicOfCurrentSelectionArea();
-                                     
+
                                 }
 
                                 if (_editSession.SelectionRange != null)

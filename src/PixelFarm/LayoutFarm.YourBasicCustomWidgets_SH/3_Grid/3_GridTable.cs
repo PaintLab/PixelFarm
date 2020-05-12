@@ -21,6 +21,8 @@ namespace LayoutFarm.UI
         Down
     }
 
+
+
     class GridColumn
     {
 
@@ -66,16 +68,11 @@ namespace LayoutFarm.UI
             set => _left = value;
             //int leftdiff = _left - value;
         }
-        public int Right
-        {
-            get => _columnWidth + _left;
-        }
+        public int Right => _columnWidth + _left;
+
         public bool HasCustomSize
         {
-            get
-            {
-                return (_columnFlags & COLUMN_HAS_CUSTOM_SIZE) != 0;
-            }
+            get => (_columnFlags & COLUMN_HAS_CUSTOM_SIZE) != 0;
             set
             {
                 if (value)
@@ -406,45 +403,36 @@ namespace LayoutFarm.UI
 
     }
 
+
+
+
     class GridCell
     {
-        internal GridRow _row;
-        internal GridColumn _column;
-        object _content;
+        readonly GridRow _row;
+        readonly GridColumn _column;
+        RenderElement _content;
+
         internal GridCell(GridColumn column, GridRow row)
         {
             _row = row;
             _column = column;
-            NeedClipArea = true;
         }
-        public bool NeedClipArea { get; set; }
-        //
-        public bool ControlChildPosition => true;
-        //
+
         public int RowIndex => _row.RowIndex;
         //
         public int ColumnIndex => _column.ColumnIndex;
-        // 
-#if DEBUG
-        public string dbugGetLinkInfo()
-        {
-            return "grid-link";
-        }
-#endif
-        //
+
         public GridRow Row => _row;
         public GridColumn Column => _column;
         //
         public Rectangle Rect => new Rectangle(_column.Left, _row.Top, _column.Width, _row.Height);
         //
-        public bool HasContent => _content != null;
-        //
-        public object ContentElement
+        public RenderElement ContentElement
         {
             get => _content;
             set => _content = value;
-            //set content to that cell
         }
+
         //
         public int X => _column.Left;
         //
@@ -524,6 +512,10 @@ namespace LayoutFarm.UI
         }
 
 #if DEBUG
+        public string dbugGetLinkInfo()
+        {
+            return "grid-link";
+        }
         public override string ToString()
         {
             return _row.RowIndex.ToString() + "," + _column.ColumnIndex.ToString() + " " + base.ToString();
@@ -535,8 +527,8 @@ namespace LayoutFarm.UI
 
     partial class GridTable
     {
-        GridColumnCollection _cols;
-        GridRowCollection _rows;
+        readonly GridColumnCollection _cols;
+        readonly GridRowCollection _rows;
         public GridTable()
         {
             _cols = new GridColumnCollection(this);

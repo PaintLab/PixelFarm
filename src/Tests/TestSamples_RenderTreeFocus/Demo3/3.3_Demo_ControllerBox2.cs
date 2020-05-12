@@ -112,7 +112,7 @@ namespace LayoutFarm
         //-----------------------------------------------------------------
         class UIControllerBox : LayoutFarm.CustomWidgets.AbstractBox
         {
-            LayoutFarm.CustomWidgets.GridView gridBox;
+            LayoutFarm.CustomWidgets.GridBox gridBox;
             public UIControllerBox(int w, int h)
                 : base(w, h)
             {
@@ -124,7 +124,7 @@ namespace LayoutFarm
             {
                 if (!this.HasReadyRenderElement)
                 {
-                    gridBox = new LayoutFarm.CustomWidgets.GridView(30, 30);
+                    gridBox = new LayoutFarm.CustomWidgets.GridBox(30, 30);
                     gridBox.SetLocation(5, 5);
                     gridBox.BuildGrid(3, 3, CellSizeStyle.UniformCell);
                     var myRenderElement = base.GetPrimaryRenderElement() as LayoutFarm.CustomWidgets.CustomRenderBox;

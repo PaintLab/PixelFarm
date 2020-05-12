@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Text;
 
 using LayoutFarm.UI;
-
 using PixelFarm.Drawing;
 
 namespace LayoutFarm.TextEditing
@@ -40,12 +39,13 @@ namespace LayoutFarm.TextEditing
             _editSession = new TextFlowEditSession(_textLayer);//controller
             _isMultiLine = isMultiLine;
 
-            
+
             RenderBackground = RenderSelectionRange = RenderMarkers = true;
             //
             MayHasViewport = true;
             BackgroundColor = Color.White;// Color.Transparent; 
         }
+        internal TextFlowLayer TextFlowLayer => _textLayer;
 
         void ITextFlowLayerOwner.ClientLayerBubbleUpInvalidateArea(Rectangle clientInvalidatedArea)
         {
@@ -158,19 +158,8 @@ namespace LayoutFarm.TextEditing
 
         public bool IsFocused => _isFocus;
 
-        public override Size InnerContentSize
-        {
-            get
-            {
-                if (IsMultiLine)
-                {
-                    return new Size(
-                          this.Width,//TODO: fix this
-                          _textLayer.Bottom);
-                }
-                return _editSession.CurrentLineArea.Size;
-            }
-        }
+        public int InnerContentWidth => IsMultiLine ? this.Width : _editSession.CurrentLineArea.Width;
+        public int InnerContentHeight => IsMultiLine ? _textLayer.Bottom : _editSession.CurrentLineArea.Height;
 
         public virtual void HandleMouseDown(UIMouseDownEventArgs e)
         {
@@ -448,10 +437,11 @@ namespace LayoutFarm.TextEditing
                 ScrollOffset(textManCaretPosX - this.X, 0);
             }
 
-            Size innerContentSize = this.InnerContentSize;
-            if (ViewportLeft > 0 && innerContentSize.Width - ViewportLeft < this.Width)
+
+            int innerContentWidth = this.InnerContentWidth;
+            if (ViewportLeft > 0 && innerContentWidth - ViewportLeft < this.Width)
             {
-                ScrollToLocation(this.InnerContentSize.Width - ViewportLeft, 0);
+                ScrollToLocation(innerContentWidth - ViewportLeft, 0);
             }
             //----------------------  
             //vertical ??
@@ -488,16 +478,6 @@ namespace LayoutFarm.TextEditing
         public bool RenderMarkers { get; set; }
         public bool RenderSelectionRange { get; set; }
 
-        public Size InnerBackgroundSize
-        {
-            get
-            {
-                Size innerSize = this.InnerContentSize;
-                return new Size(
-                    (innerSize.Width < this.Width) ? this.Width : innerSize.Width,
-                    (innerSize.Height < this.Height) ? this.Height : innerSize.Height);
-            }
-        }
         public void RunVisitor(RunVisitor visitor)
         {
             //1. bg, no nothing
@@ -539,13 +519,12 @@ namespace LayoutFarm.TextEditing
             //1. bg 
             if (RenderBackground && BackgroundColor.A > 0)
             {
-                Size innerBgSize = InnerBackgroundSize;
 
 #if DEBUG
-                d.FillRectangle(BackgroundColor, 0, 0, innerBgSize.Width, innerBgSize.Height);
+                d.FillRectangle(BackgroundColor, 0, 0, Width, Height);
                 //d.FillRectangle(ColorEx.dbugGetRandomColor(), 0, 0, innerBgSize.Width, innerBgSize.Height);
 #else
-                d.FillRectangle(BackgroundColor, 0, 0, innerBgSize.Width, innerBgSize.Height);
+                d.FillRectangle(BackgroundColor, 0, 0,  Width, Height);
 #endif
                 d.SetLatestFillAsTextBackgroundColorHint();
             }
@@ -615,10 +594,10 @@ namespace LayoutFarm.TextEditing
 
             hScrollEventArgs = null;
             vScrollEventArgs = null;
-            Size innerContentSize = this.InnerContentSize;
-            if (x > innerContentSize.Width - Width)
+            int innerContentW = this.InnerContentWidth;
+            if (x > innerContentW - Width)
             {
-                x = innerContentSize.Width - Width;
+                x = innerContentW - Width;
                 //inner content_size.Width may shorter than this.Width
                 //so we check if (x<0) later
             }
@@ -659,20 +638,16 @@ namespace LayoutFarm.TextEditing
         }
 
         void ScrollOffset_NotRaiseEvent(int dx, int dy,
-            out UIScrollEventArgs hScrollEventArgs, 
+            out UIScrollEventArgs hScrollEventArgs,
             out UIScrollEventArgs vScrollEventArgs)
         {
             vScrollEventArgs = null;
-
-#if DEBUG
-            Size contentSize = this.InnerContentSize;
-#endif
-
-            Size innerContentSize = new Size(this.Width, _textLayer.Bottom);
-
+            int innerContentH = this.InnerContentHeight;
             if (dy < 0)
             {
+#if DEBUG
                 int old_y = this.ViewportTop;
+#endif
                 if (ViewportTop + dy < 0)
                 {
                     //? limit                     
@@ -687,9 +662,9 @@ namespace LayoutFarm.TextEditing
             {
                 int old_y = ViewportTop;
                 int viewportButtom = ViewportTop + Height;
-                if (viewportButtom + dy > innerContentSize.Height)
+                if (viewportButtom + dy > innerContentH)
                 {
-                    int vwY = innerContentSize.Height - Height;
+                    int vwY = innerContentH - Height;
                     //limit                     
                     this.SetViewport(this.ViewportLeft, vwY > 0 ? vwY : 0);
                 }
@@ -718,17 +693,13 @@ namespace LayoutFarm.TextEditing
             {
                 int old_x = this.ViewportLeft;
                 int viewportRight = ViewportLeft + Width;
-                if (viewportRight + dx > innerContentSize.Width)
+                if (viewportRight + dx > InnerContentWidth)
                 {
-                    this.SetViewport(this.ViewportLeft + dx, this.ViewportTop);
-                    //if (viewportRight < innerContentSize.Width)
-                    //{
-                    //    this.SetViewport(innerContentSize.Width - Width, this.ViewportTop);
-                    //}
+                    this.SetViewport(this.ViewportLeft + dx, this.ViewportTop); 
                 }
                 else
                 {
-                    //this.SetViewport(this.ViewportLeft + dx, this.ViewportTop);
+                    
                 }
             }
         }
