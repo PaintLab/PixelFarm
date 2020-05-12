@@ -103,9 +103,9 @@ namespace LayoutFarm.CustomWidgets
 
         public override void SetViewport(int x, int y, object reqBy) => _textEditRenderElement?.SetViewport(x, y);
 
-        public Size InnerBackgroundSize => (_textEditRenderElement != null) ? _textEditRenderElement.InnerBackgroundSize : new Size(this.Width, this.Height);
-        public override int InnerWidth => (_textEditRenderElement != null) ? _textEditRenderElement.InnerContentSize.Width : base.InnerWidth;
-        public override int InnerHeight => (_textEditRenderElement != null) ? _textEditRenderElement.InnerContentSize.Height : base.InnerHeight;
+
+        public override int InnerWidth => (_textEditRenderElement != null) ? _textEditRenderElement.InnerContentWidth : base.InnerWidth;
+        public override int InnerHeight => (_textEditRenderElement != null) ? _textEditRenderElement.InnerContentHeight : base.InnerHeight;
 
         public abstract string Text { get; set; }
         public abstract void SetText(IEnumerable<string> lines);
@@ -340,7 +340,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 var tbox = new TextEditRenderBox(this.Width, this.Height, _multiline, _isEditable);
                 tbox.SetLocation(this.Left, this.Top);
-                
+
                 if (_defaultSpanStyle.IsEmpty())
                 {
                     _defaultSpanStyle = new TextSpanStyle();
@@ -362,9 +362,9 @@ namespace LayoutFarm.CustomWidgets
 
                 tbox.ContentSizeChanged += (s, e) =>
                 {
-                    if (Height < tbox.InnerContentSize.Height)
+                    if (Height < tbox.InnerContentHeight)
                     {
-                        this.SetHeight(tbox.InnerContentSize.Height + 2);
+                        this.SetHeight(tbox.InnerContentHeight + 2);
                     }
 
                     RaiseLayoutFinished();
@@ -382,6 +382,7 @@ namespace LayoutFarm.CustomWidgets
             }
             return _textEditRenderElement;
         }
+
 
         public static TextEditRenderBox GetTextEditRenderBox(TextBox txtbox)
         {
@@ -500,7 +501,7 @@ namespace LayoutFarm.CustomWidgets
             if (_textEditRenderElement == null)
             {
                 var tbox = new TextEditRenderBox(this.Width, this.Height, _multiline);
-                tbox.SetLocation(this.Left, this.Top); 
+                tbox.SetLocation(this.Left, this.Top);
                 if (_defaultSpanStyle.IsEmpty())
                 {
                     _defaultSpanStyle = new TextSpanStyle();

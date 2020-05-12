@@ -285,11 +285,7 @@ namespace LayoutFarm
             _elements?.Clear(this);
 
         }
-
-        //TODO: review inner content size again
-
-        public override Size InnerContentSize => this.Size; 
-
+ 
         internal RenderElementCollection GetElemCollection() => _elements;
         protected IEnumerable<RenderElement> GetDrawingIter() => _elements?.GetDrawingIter();
 

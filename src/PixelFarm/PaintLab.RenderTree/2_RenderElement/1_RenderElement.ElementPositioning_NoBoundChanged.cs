@@ -44,19 +44,9 @@ namespace LayoutFarm
         //
         public virtual void SetViewport(int viewportLeft, int viewportTop)
         {
+           
         }
-
-        public virtual Size InnerContentSize => this.Size;
-        public virtual Rectangle InnerContentBounds
-        {
-            get
-            {
-                Size s = InnerContentSize;
-                return new Rectangle(_b_left, _b_top, s.Width, s.Height);
-            }
-        }
-        //-----------------------------------------------
-
+         
         public Point GetGlobalLocation() => GetGlobalLocationStatic(this);
 
         static Point GetGlobalLocationStatic(RenderElement re)
