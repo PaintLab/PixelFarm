@@ -493,7 +493,7 @@ namespace LayoutFarm.CustomWidgets
 
         public override int InnerWidth => _innerWidth;
         public override int InnerHeight => _innerHeight;
-        protected virtual void SetInnerContentSize(int w, int h)
+        public virtual void SetInnerContentSize(int w, int h)
         {
             _innerWidth = w;
             _innerHeight = h;
