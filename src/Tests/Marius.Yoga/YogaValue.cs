@@ -57,6 +57,7 @@ namespace LayoutFarm.MariusYoga
 
         public static YogaValue Point(float pointValue)
         {
+            //about pixel?
             return new YogaValue() { Unit = YogaUnit.Point, Value = pointValue };
         }
 

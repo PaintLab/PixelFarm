@@ -54,7 +54,7 @@ namespace PixelFarm.Drawing.WinGdi
         bool _disposed;
         GdiPlusRenderSurface _gdigsx;
         Painter _painter;
-        BitmapBufferProvider _memBmpBinder;
+        MemBitmapBinder _memBmpBinder;
         DrawTextTechnique _textDrawingTechnique;
         Color _textBackgroundColorHint;
 
@@ -107,7 +107,7 @@ namespace PixelFarm.Drawing.WinGdi
         public override bool IsGpuDrawBoard => false;
         public override DrawBoard GetCpuBlitDrawBoard() => this;
         //
-        public override BitmapBufferProvider GetInternalBitmapProvider() => _memBmpBinder;
+        public override ImageBinder GetInternalBitmapProvider() => _memBmpBinder;
 
 #if DEBUG
         public override string ToString()

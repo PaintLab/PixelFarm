@@ -10,6 +10,7 @@ namespace TestGraphicPackage2
         static void Main(string[] args)
         {
 
+
             PixelFarm.Platforms.StorageService.RegisterProvider(new YourImplementation.LocalFileStorageProvider(""));
 
             //2.2 Icu Text Break info

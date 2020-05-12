@@ -30,9 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="ExtensionAttribute.cs" />
     <Compile Include="General\ISegment.cs" />
     <Compile Include="PlainDocument\PlainTextDocument.cs" />
@@ -40,6 +37,8 @@
     <Compile Include="General\RedBlackTree.cs" />
     <Compile Include="General\SegmentTree.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

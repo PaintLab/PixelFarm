@@ -132,7 +132,7 @@ namespace LayoutFarm.UI.GdiPlus
         public MyTopWindowBridgeAgg(RootGraphic root, ITopWindowEventRoot topWinEventRoot)
             : base(root, topWinEventRoot)
         {
-
+           
         }
 
         public override void BindWindowControl(IGpuOpenGLSurfaceView windowControl)

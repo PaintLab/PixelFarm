@@ -1,17 +1,19 @@
 ﻿//Apache2, 2014-present, WinterDev
 
-using System;
+
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public class ComboBox : Box
+    public class ComboBox : AbstractControlBox
     {
         HingeRelation _hingeRel = new HingeRelation();
+
         public ComboBox(int width, int height)
             : base(width, height)
         {
             _hingeRel.LandPart = this;
         }
+
         protected override void OnLostMouseFocus(UIMouseLostFocusEventArgs e)
         {
             _hingeRel.CloseHinge();
@@ -34,7 +36,9 @@ namespace LayoutFarm.CustomWidgets
         {
             get => _hingeRel.FloatPartStyle;
             set => _hingeRel.FloatPartStyle = value;
-        }
+        } 
+        public void AddLandPartContent(UIElement ui) => AddChild(ui); 
+       
     }
 
 }

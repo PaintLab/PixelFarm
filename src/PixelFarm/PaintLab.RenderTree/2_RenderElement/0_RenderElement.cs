@@ -14,25 +14,22 @@ namespace LayoutFarm
         //check if all rendering should occur on a single thread?
         //------
 
-        RootGraphic _rootGfx;
+
         IParentLink _parentLink;
         object _controller;
-        int _propFlags;
-        bool _needClipArea;
+        internal int _propFlags;
 
-        public RenderElement(RootGraphic rootGfx, int width, int height)
+        public RenderElement(int width, int height)
         {
             _b_width = width;
             _b_height = height;
-            _rootGfx = rootGfx;
-            _needClipArea = true;
+            NeedClipArea = true;
 #if DEBUG
             dbug_totalObjectId++;
             dbug_obj_id = dbug_totalObjectId;
 #endif
         }
 
-        internal InvalidateGfxArgs RootGetInvalidateGfxArgs() => _rootGfx.GetInvalidateGfxArgs();
 
 #if DEBUG
         /// <summary>
@@ -40,38 +37,31 @@ namespace LayoutFarm
         /// </summary>
         public bool dbugPreferSoftwareRenderer { get; set; }
 #endif
-        // 
-        public abstract void ResetRootGraphics(RootGraphic rootgfx);
+
+        public bool NeedClipArea { get; set; }
         //
-        protected static void DirectSetRootGraphics(RenderElement r, RootGraphic rootgfx)
+        protected virtual RootGraphic Root => null;
+
+        public RootGraphic GetRoot()
         {
-            r._rootGfx = rootgfx;
+            //recursive
+            RootGraphic root = Root;//local root
+            if (root != null) return root;
+            return _parentLink?.ParentRenderElement?.GetRoot();//recursive
         }
         //
-        public bool NeedClipArea
-        {
-            get => _needClipArea;
-            set => _needClipArea = value;
-        }
-        //
-        public RootGraphic Root => _rootGfx;
-        //
-        public RenderElement GetTopWindowRenderBox()
+        public IContainerRenderElement GetTopWindowRenderBox()
         {
             if (_parentLink == null) { return null; }
-            return _rootGfx.TopWindowRenderBox as RenderElement;
+            return GetRoot()?.TopWindowRenderBox as IContainerRenderElement;
         }
 
         //==============================================================
         //controller-listener
-        public object GetController()
-        {
-            //TODO: move to extension method ***
-            return _controller;
-        }
+        public object GetController() => _controller;
+
         public void SetController(object controller)
         {
-            //TODO: move to extension method ***
             _controller = controller;
         }
 
@@ -135,58 +125,7 @@ namespace LayoutFarm
         internal static bool IsBubbleGfxUpdateTrackedTip(RenderElement re) => (re._propFlags & RenderElementConst.TRACKING_GFX_TIP) != 0;
         internal static bool IsInUpdateRgnQueue(RenderElement re) => (re._propFlags & RenderElementConst.TRACKING_GFX_In_UPDATE_RGN_QUEUE) != 0;
         //==============================================================
-        //parent/child ...
-        public bool HasParent => _parentLink != null;
-        public virtual void ClearAllChildren()
-        {
-#if DEBUG
-            System.Diagnostics.Debug.WriteLine(nameof(ClearAllChildren) + " no IMPL");
-#endif
 
-        }
-        public virtual void AddFirst(RenderElement renderE)
-        {
-#if DEBUG
-            System.Diagnostics.Debug.WriteLine(nameof(AddChild) + " no IMPL");
-#endif
-        }
-        public virtual void AddChild(RenderElement renderE)
-        {
-#if DEBUG
-            System.Diagnostics.Debug.WriteLine(nameof(AddChild) + " no IMPL");
-#endif
-        }
-        public virtual void InsertAfter(RenderElement afterElem, RenderElement renderE)
-        {
-#if DEBUG
-            System.Diagnostics.Debug.WriteLine(nameof(InsertAfter) + " no IMPL");
-#endif
-        }
-        public virtual void InsertBefore(RenderElement beforeElem, RenderElement renderE)
-        {
-#if DEBUG
-            System.Diagnostics.Debug.WriteLine(nameof(InsertBefore) + " no IMPL");
-#endif
-        }
-        public virtual void RemoveChild(RenderElement renderE)
-        {
-#if DEBUG
-            System.Diagnostics.Debug.WriteLine(nameof(RemoveChild) + " no IMPL");
-#endif
-        }
-        public virtual void RemoveSelf()
-        {
-            RenderElement parentLinkRenderE = ParentRenderElement;
-            if (parentLinkRenderE != null)
-            {
-                parentLinkRenderE.RemoveChild(this);
-            }
-            else if (_parentLink == null)
-            {
-                _parentLink = null;
-            }
-
-        }
         protected bool HasParentLink => _parentLink != null;
 
         public RenderElement ParentRenderElement
@@ -254,17 +193,14 @@ namespace LayoutFarm
                       _propFlags & ~RenderElementConst.NEED_PRE_RENDER_EVAL;
             }
         }
-        public virtual RenderElement FindUnderlyingSiblingAtPoint(Point point)
-        {
-            return null;
-        }
 
+   
         public virtual void ChildrenHitTestCore(HitChain hitChain)
         {
         }
         //==============================================================
         //
-        public bool Visible => ((_propFlags & RenderElementConst.HIDDEN) == 0);
+        public bool Visible => (_propFlags & RenderElementConst.HIDDEN) == 0;
         //
         public void SetVisible(bool value)
         {
@@ -310,23 +246,15 @@ namespace LayoutFarm
             }
             return re;
         }
-        public bool IsBlockElement
-        {
-            get => ((_propFlags & RenderElementConst.IS_BLOCK_ELEMENT) == RenderElementConst.IS_BLOCK_ELEMENT);
 
-            set =>
-                _propFlags = value ?
-                     _propFlags | RenderElementConst.IS_BLOCK_ELEMENT :
-                     _propFlags & ~RenderElementConst.IS_BLOCK_ELEMENT;
-        }
 
         public bool IsTopWindow
         {
             get => (_propFlags & RenderElementConst.IS_TOP_RENDERBOX) != 0;
 
-            set => _propFlags = value ?
-                      _propFlags | RenderElementConst.IS_TOP_RENDERBOX :
-                      _propFlags & ~RenderElementConst.IS_TOP_RENDERBOX;
+            protected set => _propFlags = value ?
+                        _propFlags | RenderElementConst.IS_TOP_RENDERBOX :
+                        _propFlags & ~RenderElementConst.IS_TOP_RENDERBOX;
         }
 
 
@@ -338,9 +266,7 @@ namespace LayoutFarm
                       _propFlags | RenderElementConst.HAS_DOUBLE_SCROLL_SURFACE :
                       _propFlags & ~RenderElementConst.HAS_DOUBLE_SCROLL_SURFACE;
         }
-        //
-        public bool VisibleAndHasParent => ((_propFlags & RenderElementConst.HIDDEN) == 0) && (_parentLink != null);
-        //
+
         //==============================================================
         //hit test
         public virtual bool HasCustomHitTest => false;
@@ -421,7 +347,7 @@ namespace LayoutFarm
             else
             {
                 //not visual hit on this object..
-                if (_needClipArea)
+                if (NeedClipArea)
                 {
                     return false;
                 }
@@ -497,6 +423,12 @@ namespace LayoutFarm
         public static void Render(RenderElement renderE, DrawBoard d, UpdateArea updateArea)
         {
             //TODO: rename Canvas to Drawboard ?
+#if DEBUG
+            if (renderE.dbugBreak)
+            {
+
+            }
+#endif
             if ((renderE._propFlags & RenderElementConst.HIDDEN) == RenderElementConst.HIDDEN)
             {
                 return;
@@ -533,7 +465,7 @@ namespace LayoutFarm
                 renderE.PreRenderEvaluation(d);
             }
 
-            if (renderE._needClipArea)
+            if (renderE.NeedClipArea)
             {
                 //some elem may need clip for its child
                 //some may not need
@@ -552,7 +484,10 @@ namespace LayoutFarm
 
                     if ((renderE._propFlags & RenderElementConst.MAY_HAS_VIEWPORT) != 0)
                     {
-                        if (renderE._viewportLeft == 0 && renderE._viewportTop == 0)
+                        int viewportLeft = renderE.ViewportLeft;
+                        int viewportTop = renderE.ViewportTop;
+
+                        if (viewportLeft == 0 && viewportTop == 0)
                         {
                             renderE.RenderClientContent(d, updateArea);
                         }
@@ -561,8 +496,8 @@ namespace LayoutFarm
                             int enterCanvasX = d.OriginX;
                             int enterCanvasY = d.OriginY;
 
-                            d.SetCanvasOrigin(enterCanvasX - renderE._viewportLeft, enterCanvasY - renderE._viewportTop);
-                            updateArea.Offset(renderE._viewportLeft, renderE._viewportTop);
+                            d.SetCanvasOrigin(enterCanvasX - viewportLeft, enterCanvasY - viewportTop);
+                            updateArea.Offset(viewportLeft, viewportTop);
 
                             //---------------
                             renderE.RenderClientContent(d, updateArea);
@@ -572,7 +507,7 @@ namespace LayoutFarm
                             // canvas.dbug_DrawCrossRect(Color.Red,updateArea);
 #endif
                             d.SetCanvasOrigin(enterCanvasX, enterCanvasY); //restore 
-                            updateArea.Offset(-renderE._viewportLeft, -renderE._viewportTop);
+                            updateArea.Offset(-viewportLeft, -viewportTop);
 
                         }
                     }
@@ -584,7 +519,6 @@ namespace LayoutFarm
                     }
 
 
-                    renderE._propFlags |= RenderElementConst.IS_GRAPHIC_VALID;
 #if DEBUG
                     renderE.debug_RecordPostDrawInfo(d);
 #endif
@@ -604,7 +538,11 @@ namespace LayoutFarm
 
                 if ((renderE._propFlags & RenderElementConst.MAY_HAS_VIEWPORT) != 0)
                 {
-                    if (renderE._viewportLeft == 0 && renderE._viewportTop == 0)
+                    int viewportLeft = renderE.ViewportLeft;
+                    int viewportTop = renderE.ViewportTop;
+
+
+                    if (viewportLeft == 0 && viewportTop == 0)
                     {
                         renderE.RenderClientContent(d, updateArea);
                     }
@@ -613,8 +551,8 @@ namespace LayoutFarm
                         int enterCanvasX = d.OriginX;
                         int enterCanvasY = d.OriginY;
 
-                        d.SetCanvasOrigin(enterCanvasX - renderE._viewportLeft, enterCanvasY - renderE._viewportTop);
-                        updateArea.Offset(renderE._viewportLeft, renderE._viewportTop);
+                        d.SetCanvasOrigin(enterCanvasX - viewportLeft, enterCanvasY - viewportTop);
+                        updateArea.Offset(viewportLeft, viewportTop);
 
                         //---------------
                         renderE.RenderClientContent(d, updateArea);
@@ -624,18 +562,17 @@ namespace LayoutFarm
                         // canvas.dbug_DrawCrossRect(Color.Red,updateArea);
 #endif
                         d.SetCanvasOrigin(enterCanvasX, enterCanvasY); //restore 
-                        updateArea.Offset(-renderE._viewportLeft, -renderE._viewportTop);
+                        updateArea.Offset(-viewportLeft, -viewportTop);
 
                     }
                 }
                 else
                 {
-                    //------------------------------------------
+
                     renderE.RenderClientContent(d, updateArea);
-                    //------------------------------------------
                 }
                 //------------------------------------------
-                renderE._propFlags |= RenderElementConst.IS_GRAPHIC_VALID;
+
 #if DEBUG
                 renderE.debug_RecordPostDrawInfo(d);
 #endif
@@ -646,18 +583,6 @@ namespace LayoutFarm
 #endif
         }
 
-        //==============================================================
-        //set location and size , not bubble***
 
-        public static void DirectSetSize(RenderElement visualElement, int width, int height)
-        {
-            visualElement._b_width = width;
-            visualElement._b_height = height;
-        }
-        public static void DirectSetLocation(RenderElement visualElement, int x, int y)
-        {
-            visualElement._b_left = x;
-            visualElement._b_top = y;
-        }
     }
 }

@@ -501,19 +501,19 @@ Zimbabwe");
 
     class SuggestionWindowMx
     {
-        LayoutFarm.CustomWidgets.ListView listView;
-        LayoutFarm.CustomWidgets.UIFloatWindow floatWindow;
+        LayoutFarm.CustomWidgets.ListBox _listbox;
+        LayoutFarm.CustomWidgets.UIFloatWindow _floatWindow;
 
         public event EventHandler UserConfirmSelectedItem;
         public event EventHandler<UIKeyEventArgs> ListItemKeyboardEvent;
 
         public SuggestionWindowMx(int w, int h)
         {
-            floatWindow = new CustomWidgets.UIFloatWindow(w, h);
-            listView = new CustomWidgets.ListView(w, h);
-            floatWindow.Add(listView);
-            listView.ListItemMouseEvent += new CustomWidgets.ListView.ListItemMouseHandler(listView_ListItemMouseEvent);
-            listView.ListItemKeyboardEvent += new CustomWidgets.ListView.ListItemKeyboardHandler(listView_ListItemKeyboardEvent);
+            _floatWindow = new CustomWidgets.UIFloatWindow(w, h);
+            _listbox = new CustomWidgets.ListBox(w, h);
+            _floatWindow.AddContent(_listbox);
+            _listbox.ListItemMouseEvent += new CustomWidgets.ListBox.ListItemMouseHandler(listView_ListItemMouseEvent);
+            _listbox.ListItemKeyboardEvent += new CustomWidgets.ListBox.ListItemKeyboardHandler(listView_ListItemKeyboardEvent);
         }
 
         void listView_ListItemKeyboardEvent(object sender, UIKeyEventArgs e)
@@ -538,59 +538,59 @@ Zimbabwe");
 
         public void ClearItems()
         {
-            this.listView.ClearItems();
+            this._listbox.ClearItems();
         }
 
         public void SetLocation(int x, int y)
         {
-            floatWindow.SetLocation(x, y);
+            _floatWindow.SetLocation(x, y);
         }
         public UIElement GetPrimaryUI()
         {
-            return this.floatWindow;
+            return this._floatWindow;
         }
         public int ItemCount
         {
-            get { return this.listView.ItemCount; }
+            get { return this._listbox.ItemCount; }
         }
         public int SelectedIndex
         {
-            get { return this.listView.SelectedIndex; }
+            get { return this._listbox.SelectedIndex; }
             set
             {
-                this.listView.SelectedIndex = value;
+                this._listbox.SelectedIndex = value;
             }
         }
         public void EnsureSelectedItemVisible()
         {
-            listView.EnsureSelectedItemVisible();
+            _listbox.EnsureSelectedItemVisible();
         }
         public bool Visible
         {
             get
             {
-                return this.floatWindow.Visible;
+                return this._floatWindow.Visible;
             }
         }
         public void Hide()
         {
-            this.floatWindow.Visible = false;
+            this._floatWindow.Visible = false;
         }
         public void Show()
         {
-            floatWindow.Visible = true;
+            _floatWindow.Visible = true;
         }
         public CustomWidgets.ListItem GetItem(int index)
         {
-            return this.listView.GetItem(index);
+            return this._listbox.GetItem(index);
         }
         public void AddItem(CustomWidgets.ListItem item)
         {
-            this.listView.AddItem(item);
+            this._listbox.AddItem(item);
         }
         public int Width
         {
-            get { return this.listView.Width; }
+            get { return this._listbox.Width; }
         }
     }
 }

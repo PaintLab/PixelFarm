@@ -21,6 +21,8 @@ namespace LayoutFarm.UI
         Down
     }
 
+
+
     class GridColumn
     {
 
@@ -66,16 +68,11 @@ namespace LayoutFarm.UI
             set => _left = value;
             //int leftdiff = _left - value;
         }
-        public int Right
-        {
-            get => _columnWidth + _left;
-        }
+        public int Right => _columnWidth + _left;
+
         public bool HasCustomSize
         {
-            get
-            {
-                return (_columnFlags & COLUMN_HAS_CUSTOM_SIZE) != 0;
-            }
+            get => (_columnFlags & COLUMN_HAS_CUSTOM_SIZE) != 0;
             set
             {
                 if (value)
@@ -230,8 +227,8 @@ namespace LayoutFarm.UI
 
         public int RowIndex
         {
-            get { return _row_Index; }
-            internal set { _row_Index = value; }
+            get => _row_Index;
+            internal set => _row_Index = value;
         }
         internal void SetOwnerParentRowCollection(GridTable.GridRowCollection parentRowCollection)
         {
@@ -406,43 +403,36 @@ namespace LayoutFarm.UI
 
     }
 
+
+
+
     class GridCell
     {
-        internal GridRow _row;
-        internal GridColumn _column;
-        object _content;
+        readonly GridRow _row;
+        readonly GridColumn _column;
+        RenderElement _content;
+
         internal GridCell(GridColumn column, GridRow row)
         {
             _row = row;
             _column = column;
         }
-        //
-        public bool ControlChildPosition => true;
-        //
+
         public int RowIndex => _row.RowIndex;
         //
         public int ColumnIndex => _column.ColumnIndex;
-        // 
-#if DEBUG
-        public string dbugGetLinkInfo()
-        {
-            return "grid-link";
-        }
-#endif
-        //
+
         public GridRow Row => _row;
         public GridColumn Column => _column;
         //
         public Rectangle Rect => new Rectangle(_column.Left, _row.Top, _column.Width, _row.Height);
         //
-        public bool HasContent => _content != null;
-        //
-        public object ContentElement
+        public RenderElement ContentElement
         {
             get => _content;
             set => _content = value;
-            //set content to that cell
         }
+
         //
         public int X => _column.Left;
         //
@@ -522,6 +512,10 @@ namespace LayoutFarm.UI
         }
 
 #if DEBUG
+        public string dbugGetLinkInfo()
+        {
+            return "grid-link";
+        }
         public override string ToString()
         {
             return _row.RowIndex.ToString() + "," + _column.ColumnIndex.ToString() + " " + base.ToString();
@@ -533,8 +527,8 @@ namespace LayoutFarm.UI
 
     partial class GridTable
     {
-        GridColumnCollection _cols;
-        GridRowCollection _rows;
+        readonly GridColumnCollection _cols;
+        readonly GridRowCollection _rows;
         public GridTable()
         {
             _cols = new GridColumnCollection(this);
@@ -566,20 +560,16 @@ namespace LayoutFarm.UI
     {
         public class GridColumnCollection
         {
-            GridTable _table;
-            List<GridColumn> _cols = new List<GridColumn>();
+            readonly GridTable _table;
+            readonly List<GridColumn> _cols = new List<GridColumn>();
             internal GridColumnCollection(GridTable table)
             {
                 _table = table;
             }
-            public void Clear()
-            {
-                _cols.Clear();
-            }
-            public GridColumn GetColumn(int index)
-            {
-                return _cols[index];
-            }
+            public void Clear() => _cols.Clear();
+
+            public GridColumn GetColumn(int index) => _cols[index];
+
             public void Add(GridColumn newColumnDef)
             {
                 int j = _cols.Count;
@@ -599,16 +589,16 @@ namespace LayoutFarm.UI
                 //contArrVisitor.dbug_StartLayoutTrace("GridCollection::Add(GridColumn)");
 #endif
 
-                InvalidateGraphicAndStartBubbleUp();
+                //InvalidateGraphicAndStartBubbleUp();
 #if DEBUG
                 //contArrVisitor.dbug_EndLayoutTrace();
 #endif
 
                 //--------------------------------------------
             }
-            void InvalidateGraphicAndStartBubbleUp()
-            {
-            }
+            //void InvalidateGraphicAndStartBubbleUp()
+            //{
+            //}
             public void Insert(int index, GridColumn coldef)
             {
                 _cols.Insert(index, coldef);
@@ -630,7 +620,7 @@ namespace LayoutFarm.UI
                 //                contArrVisitor.dbug_StartLayoutTrace(dbugVisualElementLayoutMsg.GridColumnCollection_Insert);
                 //#endif
 
-                InvalidateGraphicAndStartBubbleUp();
+                //InvalidateGraphicAndStartBubbleUp();
                 //OwnerGridLayer.OwnerInvalidateGraphicAndStartBubbleUp();
 
 

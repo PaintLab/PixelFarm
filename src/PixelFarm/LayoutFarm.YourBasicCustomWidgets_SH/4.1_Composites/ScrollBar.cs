@@ -149,7 +149,7 @@ namespace LayoutFarm.CustomWidgets
         //
         public override RenderElement CurrentPrimaryRenderElement => _mainBox;
         //
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        public override RenderElement GetPrimaryRenderElement()
         {
             if (_mainBox == null)
             {
@@ -157,12 +157,12 @@ namespace LayoutFarm.CustomWidgets
                 {
                     case ScrollBarType.Horizontal:
                         {
-                            CreateHSliderBarContent(rootgfx);
+                            CreateHSliderBarContent();
                         }
                         break;
                     default:
                         {
-                            CreateVSliderBarContent(rootgfx);
+                            CreateVSliderBarContent();
                         }
                         break;
                 }
@@ -248,10 +248,10 @@ namespace LayoutFarm.CustomWidgets
 
 
         //--------------------------------------------------------------------------
-        void CreateVSliderBarContent(RootGraphic rootgfx)
+        void CreateVSliderBarContent()
         {
-            CustomRenderBox bgBox = new CustomRenderBox(rootgfx, this.Width, this.Height);
-            bgBox.HasSpecificWidthAndHeight = true;
+            CustomRenderBox bgBox = new CustomRenderBox(this.Width, this.Height);
+             
             bgBox.SetController(this);
             bgBox.SetLocation(this.Left, this.Top);
             bgBox.BackColor = _bgColor;
@@ -260,11 +260,9 @@ namespace LayoutFarm.CustomWidgets
             _mainBox = bgBox;
 
         }
-        void CreateHSliderBarContent(RootGraphic rootgfx)
+        void CreateHSliderBarContent()
         {
-            CustomRenderBox bgBox = new CustomRenderBox(rootgfx, this.Width, this.Height);
-
-            bgBox.HasSpecificWidthAndHeight = true;
+            CustomRenderBox bgBox = new CustomRenderBox(this.Width, this.Height); 
             bgBox.SetController(this);
             bgBox.SetLocation(this.Left, this.Top);
             bgBox.BackColor = _bgColor;
@@ -356,7 +354,7 @@ namespace LayoutFarm.CustomWidgets
                 _scrollButton.SetSize(
                    _scrollButton.Width,
                    scrollBoxLength);
-                this.InvalidateOuterGraphics();
+                this.InvalidateGraphics();
             }
 
             //---------------------------------
@@ -378,7 +376,7 @@ namespace LayoutFarm.CustomWidgets
 
             base.OnMouseDown(e);
         }
-        void SetupVerticalScrollButtonProperties(RenderElement container)
+        void SetupVerticalScrollButtonProperties(RenderBoxBase container)
         {
             //var scroll_button = new ScrollBarButton(this.Width+10, SCROLL_BOX_SIZE_LIMIT, this); //for test
             var scroll_button = new ScrollBarButton(this.Width, SCROLL_BOX_SIZE_LIMIT, this); //create with default value
@@ -502,7 +500,7 @@ namespace LayoutFarm.CustomWidgets
             EvalNeedScrollBox();
         }
 
-        void SetupHorizontalScrollButtonProperties(RenderElement container)
+        void SetupHorizontalScrollButtonProperties(RenderBoxBase container)
         {
             //TODO: use 'theme-concept' eg. css
 
@@ -729,7 +727,7 @@ namespace LayoutFarm.CustomWidgets
         //
         public override RenderElement CurrentPrimaryRenderElement => _mainBox;
         //
-        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        public override RenderElement GetPrimaryRenderElement()
         {
             if (_mainBox == null)
             {
@@ -737,12 +735,12 @@ namespace LayoutFarm.CustomWidgets
                 {
                     case ScrollBarType.Horizontal:
                         {
-                            CreateHScrollbarContent(rootgfx);
+                            CreateHScrollbarContent();
                         }
                         break;
                     default:
                         {
-                            CreateVScrollbarContent(rootgfx);
+                            CreateVScrollbarContent();
                         }
                         break;
                 }
@@ -821,11 +819,9 @@ namespace LayoutFarm.CustomWidgets
             }
         }
         //--------------------------------------------------------------------------
-        void CreateVScrollbarContent(RootGraphic rootgfx)
+        void CreateVScrollbarContent()
         {
-            CustomRenderBox bgBox = new CustomRenderBox(rootgfx, this.Width, this.Height);
-
-            bgBox.HasSpecificWidthAndHeight = true;
+            CustomRenderBox bgBox = new CustomRenderBox(this.Width, this.Height); 
             bgBox.SetController(this);
             bgBox.SetLocation(this.Left, this.Top);
             //---------------------------------------------------------
@@ -833,7 +829,7 @@ namespace LayoutFarm.CustomWidgets
             _slideBox.SetLocation(0, _minmax_boxHeight);
             _slideBox.SetSize(this.Width, this.Height - _minmax_boxHeight * 2);
 
-            RenderElement sliderRenderE = _slideBox.GetPrimaryRenderElement(rootgfx);
+            RenderElement sliderRenderE = _slideBox.GetPrimaryRenderElement();
             bgBox.AddChild(sliderRenderE);
 
             //MinButton
@@ -847,21 +843,19 @@ namespace LayoutFarm.CustomWidgets
 
             SetScrollBarDetail(_scrollBarSettings);
         }
-        void CreateHScrollbarContent(RootGraphic rootgfx)
+        void CreateHScrollbarContent()
         {
 
-
-            CustomRenderBox bgBox = new CustomRenderBox(rootgfx, this.Width, this.Height);
+            CustomRenderBox bgBox = new CustomRenderBox(this.Width, this.Height);
             bgBox.SetVisible(this.Visible);
-
-            bgBox.HasSpecificWidthAndHeight = true;
+             
             bgBox.SetController(this);
             bgBox.SetLocation(this.Left, this.Top);
             //---------------------------------------------------------
             _slideBox.ScrollBarType = ScrollBarType.Horizontal;
             _slideBox.SetLocation(_minmax_boxHeight, 0);
             _slideBox.SetSize(this.Width - _minmax_boxHeight * 2, this.Height);
-            RenderElement sliderRenderE = _slideBox.GetPrimaryRenderElement(rootgfx);
+            RenderElement sliderRenderE = _slideBox.GetPrimaryRenderElement();
 
             bgBox.AddChild(sliderRenderE);
 
@@ -876,7 +870,7 @@ namespace LayoutFarm.CustomWidgets
             SetScrollBarDetail(_scrollBarSettings);
         }
 
-        void SetupMinButtonProperties(RenderElement container)
+        void SetupMinButtonProperties(RenderBoxBase container)
         {
             ScrollBarButton min_button;
             if (this.ScrollBarType == ScrollBarType.Horizontal)
@@ -892,7 +886,7 @@ namespace LayoutFarm.CustomWidgets
             container.AddChild(min_button);
             _minButton = min_button;
         }
-        void SetupMaxButtonProperties(RenderElement container)
+        void SetupMaxButtonProperties(RenderBoxBase container)
         {
             ScrollBarButton max_button;
             if (this.ScrollBarType == ScrollBarType.Horizontal)
@@ -998,7 +992,7 @@ namespace LayoutFarm.CustomWidgets
         Horizontal
     }
 
-    class ScrollBarButton : AbstractBox
+    class ScrollBarButton : AbstractControlBox
     {
         public ScrollBarButton(int w, int h, IUIEventListener owner)
             : base(w, h)
