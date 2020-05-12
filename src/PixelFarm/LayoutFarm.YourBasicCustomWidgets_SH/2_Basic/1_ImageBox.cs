@@ -75,7 +75,7 @@ namespace LayoutFarm.CustomWidgets
             SetElementBoundsWH(width, height);
             this.CurrentPrimaryRenderElement?.SetSize(width, height);
         }
-        public override void SetInnerContentSize(int w, int h)
+        protected override void SetInnerContentSize(int w, int h)
         { 
             this.CurrentPrimaryRenderElement?.SetSize(w, h); 
         }
