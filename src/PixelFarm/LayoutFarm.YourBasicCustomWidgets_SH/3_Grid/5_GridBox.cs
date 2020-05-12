@@ -25,7 +25,9 @@ namespace LayoutFarm.CustomWidgets
             {
                 return true;
             }
-            return base.CustomHitTest(hitChain);
+            int before = hitChain.Count;
+            ChildrenHitTestCore(hitChain);
+            return before < hitChain.Count;
         }
         public void BuildGrid(GridTable gridTable, CellSizeStyle cellSizeStyle)
         {
@@ -753,7 +755,7 @@ namespace LayoutFarm.CustomWidgets
                 rows.Add(new UI.GridRow(1));
             }
             //***
-             
+
             if (_gridViewRenderE != null)
             {
                 _gridViewRenderE.BuildGrid(_gridTable, _cellSizeStyle);
@@ -955,7 +957,10 @@ namespace LayoutFarm.CustomWidgets
                     _gridSelectionSession.StartAt(hitCell);
                 }
             }
+            else
+            {
 
+            }
             base.OnMouseDown(e);
         }
         public override void SetSize(int width, int height)
