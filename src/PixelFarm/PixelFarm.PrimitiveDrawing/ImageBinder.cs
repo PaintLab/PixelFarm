@@ -1,7 +1,6 @@
 ﻿//BSD, 2014-present, WinterDev
 //MIT, 2018-present, WinterDev
 using System;
-using System.Collections.Generic;
 namespace PixelFarm.Drawing
 {
     public delegate void LoadImageFunc(ImageBinder binder);
