@@ -8,8 +8,8 @@ namespace LayoutFarm
     public abstract class SmartApp : App
     {
         Box _primaryContainer;
-        AppHost _appHost;       
-        
+        AppHost _appHost;
+
         protected AppHost AppHost => _appHost;
         protected sealed override void OnStart(AppHost host)
         {
@@ -21,6 +21,18 @@ namespace LayoutFarm
         {
             _primaryContainer = primaryContainer;
         }
+        public bool Visible
+        {
+            get => (_primaryContainer != null) ? _primaryContainer.Visible : true;
+            set
+            {
+                if (_primaryContainer != null)
+                {
+                    _primaryContainer.Visible = value;
+                }                
+            }
+        }
+
         protected void AddToPrimaryContainer(UIElement ui)
         {
             if (_primaryContainer != null)

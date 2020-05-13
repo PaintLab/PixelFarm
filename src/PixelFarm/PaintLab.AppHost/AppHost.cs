@@ -25,12 +25,7 @@ namespace LayoutFarm
                 app.StartApp(this);
             }
         }
-        protected virtual bool PreviewApp(App app)
-        {
-            return true;
-        }
-
-
+        protected virtual bool PreviewApp(App app) => true;
 
         public virtual Image LoadImage(byte[] rawImgFile, string imgTypeHint)
         {
