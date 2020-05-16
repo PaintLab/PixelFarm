@@ -56,8 +56,6 @@ namespace LayoutFarm.TextEditing
             //1. bg 
             if (RenderBackground && BackgroundColor.A > 0)
             {
-
-
 #if DEBUG
                 d.FillRectangle(BackgroundColor, 0, 0, Width, Height);
                 //canvas.FillRectangle(ColorEx.dbugGetRandomColor(), 0, 0, innerBgSize.Width, innerBgSize.Height);
@@ -80,10 +78,13 @@ namespace LayoutFarm.TextEditing
 
             //----------------------------------------------
             //2.2 selection
+            Color prev_hintColor = d.TextBackgroundColorHint;
             if (RenderSelectionRange && _editSession.SelectionRange != null)
             {
                 _editSession.SelectionRange.Draw(d, updateArea);
+                d.TextBackgroundColorHint = Color.Transparent;
             }
+            
             //3 actual editable layer
 
             GlobalRootGraphic.CurrentRenderElement = this; //temp fix
@@ -105,6 +106,7 @@ namespace LayoutFarm.TextEditing
             }
 
             d.CurrentFont = enterFont;
+            d.TextBackgroundColorHint = prev_hintColor;
         }
 
         public override void DoHome(bool pressShitKey)

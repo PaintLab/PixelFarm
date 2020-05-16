@@ -25,6 +25,7 @@ namespace LayoutFarm.CustomWidgets
 
         public int LineCount => _textEditRenderElement.LineCount;
 
+
         public Color BackgroundColor
         {
             get => _backgroundColor;
@@ -61,11 +62,7 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-        public ContentTextSplitter TextSplitter
-        {
-            get;
-            set;
-        }
+        public ContentTextSplitter TextSplitter { get; set; }
 
         public bool IsMultilineTextBox => _multiline;
         //
@@ -208,6 +205,11 @@ namespace LayoutFarm.CustomWidgets
 
         internal bool IsSharedTextBox { get; set; }
         internal bool IsInTextBoxPool { get; set; }
+
+        public void SelectAll()
+        {
+            _textEditRenderElement?._editSession.SelectAll();
+        }
     }
 
     public class TextBox : TextBoxBase
@@ -340,7 +342,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 var tbox = new TextEditRenderBox(this.Width, this.Height, _multiline, _isEditable);
                 tbox.SetLocation(this.Left, this.Top);
-
+               
                 if (_defaultSpanStyle.IsEmpty())
                 {
                     _defaultSpanStyle = new TextSpanStyle();
@@ -352,7 +354,9 @@ namespace LayoutFarm.CustomWidgets
                 {
                     tbox.CurrentTextSpanStyle = _defaultSpanStyle;
                 }
-                tbox.BackgroundColor = _backgroundColor;
+                
+                //tbox.BackgroundColor = _backgroundColor;
+                tbox.BackgroundColor = Color.Transparent;
                 tbox.SetController(this);
 
                 tbox.ViewportChanged += (s, e) =>
