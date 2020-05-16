@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
 using LayoutFarm.UI.ForImplementator;
+
 namespace LayoutFarm.UI
 {
     public class RenderElementEventPortal : IEventPortal
@@ -200,34 +201,23 @@ namespace LayoutFarm.UI
             //temp fix
             //TODO: fix bug on HitTestOnPreviousChain()
             RenderElement commonElement = _topRenderElement;
-            ////use root 
-            //if (isDragging)
-            //{
-            //    if (commonElement != this.topRenderElement)
-            //    {
-
-            //    }
-            //}
-
-
-            //if (lastCommonElement != null && commonElement != null &&
-            //    lastCommonElement != commonElement && isDragging)
-            //{
-            //    Console.WriteLine(commonElement.dbug_GetBoundInfo());
-            //}
-            //if (commonElement == null)
-            //{
-            //    commonElement = this.topRenderElement;
-            //}
-
-            //if (commonElement != this.topRenderElement)
-            //{
-
-            //}
-
-            //lastCommonElement = commonElement;
             commonElement.HitTestCore(hitPointChain);
-            //this.topRenderElement.HitTestCore(hitPointChain);
+
+            //remove disable elements
+            //if (hitPointChain.dbugHitPhase == dbugHitChainPhase.MouseDown)
+            //{
+            int j = hitPointChain.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                HitInfo info = hitPointChain.GetHitInfo(i);
+                RenderElement renderE = info.HitElemAsRenderElement;
+                if (renderE != null && renderE.GetController() is UIElement ui && !ui.Enabled)
+                {
+                    hitPointChain.Clear();
+                    break;//stop looop and exit
+                }
+            }
+            //}
         }
 
         IUIEventListener _currentMouseWheel = null;
@@ -325,8 +315,10 @@ namespace LayoutFarm.UI
             _dbugHitChainPhase = dbugHitChainPhase.MouseDown;
 #endif
             HitTestCoreWithPrevChainHint(hitPointChain, _previousChain, e.X, e.Y);
+
             if (hitPointChain.Count > 0)
             {
+
                 //------------------------------
                 //1. origin object 
                 SetEventOrigin(e, hitPointChain);

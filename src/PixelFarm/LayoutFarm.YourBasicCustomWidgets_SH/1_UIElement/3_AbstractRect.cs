@@ -80,7 +80,7 @@ namespace LayoutFarm.UI
         public VerticalAlignment VerticalAlignment { get; set; }
 
 
-
+       
         public int CalculatedMinWidth { get; protected set; }
         public int CalculatedMinHeight { get; protected set; }
 
