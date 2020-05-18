@@ -127,6 +127,7 @@ namespace LayoutFarm.CustomWidgets
 
         protected override void OnAcceptVisitor(UIVisitor visitor) => _uiList?.AcceptVisitor(visitor);
 
+        public object Tag { get; set; }
        
          
     }
