@@ -588,9 +588,10 @@ namespace LayoutFarm.CustomWidgets
                 {
                     //hide scroll box
                     _scrollButton.Visible = false;
-                    //only raise event when visibility change
-                    NeedScollBoxEvent?.Invoke(this, false);
+                 
                 }
+                //only raise event when visibility change
+                NeedScollBoxEvent?.Invoke(this, false);
             }
             else
             {
@@ -598,8 +599,9 @@ namespace LayoutFarm.CustomWidgets
                 {
                     //only raise event when visibility change
                     _scrollButton.Visible = true;
-                    NeedScollBoxEvent?.Invoke(this, true);
+                   
                 }
+                NeedScollBoxEvent?.Invoke(this, true);
             }
 
         }
@@ -727,6 +729,7 @@ namespace LayoutFarm.CustomWidgets
 
             };
         }
+        
         public bool HideScrollBarIfNotNeeded { get; set; }
         //
         public override RenderElement CurrentPrimaryRenderElement => _mainBox;
@@ -1081,7 +1084,7 @@ namespace LayoutFarm.CustomWidgets
                 sc.MaxValue = (contentLength > _scrollableSurface.ViewportHeight) ?
                    contentLength - _scrollableSurface.ViewportHeight :
                    0;
-
+                
 
             });
             //--------------------------------------------------------------------------------------
