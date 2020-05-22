@@ -453,7 +453,9 @@ namespace LayoutFarm.CustomWidgets
             if (_innerHeight > this.Height)
             {
                 int new_top = _viewportTop;
-                int diff = Height / 4;
+
+                int diff = Height / 4; //TODO: check this value again 
+
                 if (diff < 20)
                 {
                     diff = 20;
@@ -477,7 +479,7 @@ namespace LayoutFarm.CustomWidgets
                     {
                         new_top = 0;
                     }
-                }                 
+                }
                 SetViewport(_viewportLeft, new_top);
                 //this.InvalidateGraphics();
             }
