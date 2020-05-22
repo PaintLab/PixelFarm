@@ -452,26 +452,34 @@ namespace LayoutFarm.CustomWidgets
 
             if (_innerHeight > this.Height)
             {
+                int new_top = _viewportTop;
+                int diff = Height / 4;
+                if (diff < 20)
+                {
+                    diff = 20;
+                }
+
                 if (e.Delta < 0)
                 {
                     //down
-                    _viewportTop += 20;
-                    if (_viewportTop > _innerHeight - this.Height)
+                    //TODO:
+                    new_top += diff;
+                    if (new_top > _innerHeight - this.Height)
                     {
-                        _viewportTop = _innerHeight - this.Height;
+                        new_top = _innerHeight - this.Height;
                     }
                 }
                 else
                 {
                     //up
-                    _viewportTop -= 20;
-                    if (_viewportTop < 0)
+                    new_top -= diff;
+                    if (new_top < 0)
                     {
-                        _viewportTop = 0;
+                        new_top = 0;
                     }
-                }
-                _primElement.SetViewport(_viewportLeft, _viewportTop);
-                this.InvalidateGraphics();
+                }                 
+                SetViewport(_viewportLeft, new_top);
+                //this.InvalidateGraphics();
             }
             MouseWheel?.Invoke(this, e);
         }
