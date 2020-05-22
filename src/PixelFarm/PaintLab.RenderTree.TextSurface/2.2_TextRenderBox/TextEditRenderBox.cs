@@ -29,19 +29,7 @@ namespace LayoutFarm.TextEditing
                 //
                 _myCaret = new EditorCaret(2, 17);
                 RenderCaret = true;
-            }
-
-            ////----------- 
-            ///
-            //
-            //if (isMultiLine)
-            //{
-            //    _textLayer.SetUseDoubleCanvas(false, true);
-            //}
-            //else
-            //{
-            //    _textLayer.SetUseDoubleCanvas(true, false);
-            //} 
+            }            
 
             NumOfWhitespaceForSingleTab = 4;//default?, configurable?
         }
@@ -81,10 +69,13 @@ namespace LayoutFarm.TextEditing
             Color prev_hintColor = d.TextBackgroundColorHint;
             if (RenderSelectionRange && _editSession.SelectionRange != null)
             {
+                //create a clip area only edit session
+                //and draw again
+                _editSession.SelectionRange.BackgroundColor = Color.Yellow;
                 _editSession.SelectionRange.Draw(d, updateArea);
                 d.TextBackgroundColorHint = Color.Transparent;
             }
-            
+
             //3 actual editable layer
 
             GlobalRootGraphic.CurrentRenderElement = this; //temp fix
@@ -98,6 +89,9 @@ namespace LayoutFarm.TextEditing
             //canvas.FillRectangle(Color.Red, 0, 0, 5, 5);
 
 #endif
+
+            
+
             //4. caret 
             if (RenderCaret && _stateShowCaret && _isEditable)
             {
