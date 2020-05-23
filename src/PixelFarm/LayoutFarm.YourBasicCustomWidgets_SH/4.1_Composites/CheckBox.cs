@@ -26,17 +26,7 @@ namespace LayoutFarm.CustomWidgets
             
             AddChild(_imageBox);
         }
-        //void EnsureImgBinders()
-        //{
-        //    //if (s_checkedImg == null)
-        //    //{
-        //    //    s_checkedImg = ResImageList.GetImageBinder(ImageName.CheckBoxChecked);
-        //    //}
-        //    //if (s_uncheckedImg == null)
-        //    //{
-        //    //    s_uncheckedImg = ResImageList.GetImageBinder(ImageName.CheckBoxUnChecked);
-        //    //}
-        //}
+        
  
         public bool Checked
         {
@@ -45,7 +35,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 if (value != _isChecked)
                 {
-                    //EnsureImgBinders();
+                   
 
                     _isChecked = value;
                     //check check image too!

@@ -52,7 +52,7 @@ namespace LayoutFarm
             _rootgfx = rootgfx;
 
             _hoverMonitoringTask = new UIHoverMonitorTask();
-            _hoverMonitoringTask.IntervalInMillisec = 100;//ms
+            _hoverMonitoringTask.Interval = 100;//ms
             _hoverMonitoringTask.Enabled = true;
             UIPlatform.RegisterTimerTask(_hoverMonitoringTask);
         }

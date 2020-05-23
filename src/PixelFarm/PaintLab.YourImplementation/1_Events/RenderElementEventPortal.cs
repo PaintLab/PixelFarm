@@ -46,7 +46,7 @@ namespace LayoutFarm.UI
                     }
                 });
                 _mousePressMonitor.Enabled = true;
-                _mousePressMonitor.IntervalInMillisec = intervalMs; //interval for mouse press monitor
+                _mousePressMonitor.Interval = intervalMs; //interval for mouse press monitor
                 UIPlatform.RegisterTimerTask(_mousePressMonitor);
             }
             public void Reset()
