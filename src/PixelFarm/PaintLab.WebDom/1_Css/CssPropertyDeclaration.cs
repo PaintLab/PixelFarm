@@ -17,17 +17,24 @@ namespace LayoutFarm.WebDom
 #endif
         public CssPropertyDeclaration(string unknownName)
         {
+            //if (dbugId == 122)
+            //{
+            //}
+
             //convert from name to wellknown property name; 
             this.UnknownRawName = unknownName;
         }
         public CssPropertyDeclaration(WellknownCssPropertyName wellNamePropertyName)
         {
+            //if (dbugId == 122)
+            //{
+            //}
             //convert from name to wellknown property name; 
             this.WellknownPropertyName = wellNamePropertyName;
         }
         public CssPropertyDeclaration(WellknownCssPropertyName wellNamePropertyName, CssCodeValueExpression value)
         {
-            //if (this.dbugId == 221)
+            //if (dbugId == 122)
             //{
             //}
 
