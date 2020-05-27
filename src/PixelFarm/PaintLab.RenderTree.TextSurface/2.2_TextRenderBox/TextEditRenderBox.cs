@@ -36,6 +36,9 @@ namespace LayoutFarm.TextEditing
 
         public bool RenderCaret { get; set; }
 
+        public Color SelectionFontColor { get; set; } = Color.Black;
+        public Color SelectionBackgroundColor { get; set; } = Color.Yellow;
+
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
             RequestFont enterFont = d.CurrentFont;
@@ -63,32 +66,27 @@ namespace LayoutFarm.TextEditing
                 }
             }
 
-            GlobalRootGraphic.CurrentRenderElement = this; //temp fix
-            _textLayer.DrawChildContent(d, updateArea);
-            GlobalRootGraphic.CurrentRenderElement = null; //temp fix
+
             //----------------------------------------------
-            //2.2 selection
+
             Color prev_hintColor = d.TextBackgroundColorHint;
             if (RenderSelectionRange && _editSession.SelectionRange != null)
             {
-                //create a clip area only edit session
-                //and draw again
-                _editSession.SelectionRange.BackgroundColor = Color.Yellow;
+                //with selection
+                _editSession.SelectionRange.FontColor = SelectionFontColor;
+                _editSession.SelectionRange.BackgroundColor = SelectionBackgroundColor;
                 //_editSession.SelectionRange.Draw(d, updateArea);
-
                 GlobalRootGraphic.CurrentRenderElement = this; //temp fix
                 _textLayer.DrawChildContent(d, updateArea, _editSession.SelectionRange);
-                GlobalRootGraphic.CurrentRenderElement = null; //temp fix
-
-                //d.TextBackgroundColorHint = Color.Transparent;
+                GlobalRootGraphic.CurrentRenderElement = null; //temp fix                 
             }
-
-            //3 actual editable layer
-
-
-
-
-            //base.RenderClientContent(d, updateArea);
+            else
+            {
+                //no selection 
+                GlobalRootGraphic.CurrentRenderElement = this; //temp fix
+                _textLayer.DrawChildContent(d, updateArea);
+                GlobalRootGraphic.CurrentRenderElement = null; //temp fix 
+            }
 #if DEBUG
             //for debug
             //canvas.FillRectangle(Color.Red, 0, 0, 5, 5);

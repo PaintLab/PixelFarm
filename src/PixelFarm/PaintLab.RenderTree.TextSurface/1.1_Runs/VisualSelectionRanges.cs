@@ -72,6 +72,7 @@ namespace LayoutFarm.TextEditing
         }
         //
         public Color BackgroundColor { get; set; }
+        public Color FontColor { get; set; } = Color.Black; //color for selection font
         //
         public bool IsOnTheSameLine => _startPoint.LineId == _endPoint.LineId;
         //
