@@ -20,7 +20,7 @@ namespace LayoutFarm
     {
 
         public static RootGraphic CurrentRootGfx;
-       
+
 
         static ITextService _textServices;
         public static ITextService TextService
@@ -209,9 +209,7 @@ namespace LayoutFarm
                     parentLink.AdjustLocation(ref globalPoint_X, ref globalPoint_Y);
 
                     //move up
-                    fromElement = parentLink.ParentRenderElement;
-
-                    if (fromElement == null)
+                    if ((fromElement = parentLink.ParentRenderElement) == null)
                     {
                         ReleaseInvalidateGfxArgs(args);
                         return;
