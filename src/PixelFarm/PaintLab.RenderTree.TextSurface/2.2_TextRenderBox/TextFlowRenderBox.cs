@@ -46,7 +46,8 @@ namespace LayoutFarm.TextEditing
             BackgroundColor = Color.White;// Color.Transparent; 
         }
         internal TextFlowLayer TextFlowLayer => _textLayer;
-
+        public Color SelectionFontColor { get; set; } = Color.Black;
+        public Color SelectionBackgroundColor { get; set; } = Color.Yellow;
         void ITextFlowLayerOwner.ClientLayerBubbleUpInvalidateArea(Rectangle clientInvalidatedArea)
         {
             ////client line send up 
@@ -515,21 +516,17 @@ namespace LayoutFarm.TextEditing
             RequestFont enterFont = d.CurrentFont;
 
             d.CurrentFont = this.CurrentTextSpanStyle.ReqFont;
-
-
             //1. bg 
             if (RenderBackground && BackgroundColor.A > 0)
             {
-
 #if DEBUG
                 d.FillRectangle(BackgroundColor, 0, 0, Width, Height);
-                //d.FillRectangle(ColorEx.dbugGetRandomColor(), 0, 0, innerBgSize.Width, innerBgSize.Height);
+                //canvas.FillRectangle(ColorEx.dbugGetRandomColor(), 0, 0, innerBgSize.Width, innerBgSize.Height);
 #else
-                d.FillRectangle(BackgroundColor, 0, 0,  Width, Height);
+                d.FillRectangle(BackgroundColor, 0, 0, Width, Height);
 #endif
                 d.SetLatestFillAsTextBackgroundColorHint();
             }
-
 
             //2.1 markers 
             if (RenderMarkers && _markerLayer != null &&
@@ -540,25 +537,34 @@ namespace LayoutFarm.TextEditing
                     marker.Draw(d, updateArea);
                 }
             }
-
-
-            //2.2 selection
+             
+            Color prev_hintColor = d.TextBackgroundColorHint;
             if (RenderSelectionRange && _editSession.SelectionRange != null)
             {
-                _editSession.SelectionRange.Draw(d, updateArea);
+                //with selection
+                _editSession.SelectionRange.FontColor = SelectionFontColor;
+                _editSession.SelectionRange.BackgroundColor = SelectionBackgroundColor;
+                //_editSession.SelectionRange.Draw(d, updateArea);
+                GlobalRootGraphic.CurrentRenderElement = this; //temp fix
+                _textLayer.DrawChildContent(d, updateArea, _editSession.SelectionRange);
+                GlobalRootGraphic.CurrentRenderElement = null; //temp fix                 
             }
-
-            //3.2 actual editable layer
-            _textLayer.DrawChildContent(d, updateArea);
-            //----------------------------------------------
-
+            else
+            {
+                //no selection 
+                GlobalRootGraphic.CurrentRenderElement = this; //temp fix
+                _textLayer.DrawChildContent(d, updateArea);
+                GlobalRootGraphic.CurrentRenderElement = null; //temp fix 
+            }
 #if DEBUG
             //for debug
             //canvas.FillRectangle(Color.Red, 0, 0, 5, 5);
 
 #endif
 
+
             d.CurrentFont = enterFont;
+            d.TextBackgroundColorHint = prev_hintColor; 
         }
 
         internal void OnTextContentSizeChanged()

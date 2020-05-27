@@ -36,65 +36,12 @@ namespace LayoutFarm.TextEditing
 
         public bool RenderCaret { get; set; }
 
-        public Color SelectionFontColor { get; set; } = Color.Black;
-        public Color SelectionBackgroundColor { get; set; } = Color.Yellow;
+       
 
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
-            RequestFont enterFont = d.CurrentFont;
 
-            d.CurrentFont = this.CurrentTextSpanStyle.ReqFont;
-            //1. bg 
-            if (RenderBackground && BackgroundColor.A > 0)
-            {
-#if DEBUG
-                d.FillRectangle(BackgroundColor, 0, 0, Width, Height);
-                //canvas.FillRectangle(ColorEx.dbugGetRandomColor(), 0, 0, innerBgSize.Width, innerBgSize.Height);
-#else
-                d.FillRectangle(BackgroundColor, 0, 0, Width, Height);
-#endif
-                d.SetLatestFillAsTextBackgroundColorHint();
-            }
-
-            //2.1 markers 
-            if (RenderMarkers && _markerLayer != null &&
-                _markerLayer.VisualMarkerCount > 0)
-            {
-                foreach (VisualMarkerSelectionRange marker in _markerLayer.VisualMarkers)
-                {
-                    marker.Draw(d, updateArea);
-                }
-            }
-
-
-            //----------------------------------------------
-
-            Color prev_hintColor = d.TextBackgroundColorHint;
-            if (RenderSelectionRange && _editSession.SelectionRange != null)
-            {
-                //with selection
-                _editSession.SelectionRange.FontColor = SelectionFontColor;
-                _editSession.SelectionRange.BackgroundColor = SelectionBackgroundColor;
-                //_editSession.SelectionRange.Draw(d, updateArea);
-                GlobalRootGraphic.CurrentRenderElement = this; //temp fix
-                _textLayer.DrawChildContent(d, updateArea, _editSession.SelectionRange);
-                GlobalRootGraphic.CurrentRenderElement = null; //temp fix                 
-            }
-            else
-            {
-                //no selection 
-                GlobalRootGraphic.CurrentRenderElement = this; //temp fix
-                _textLayer.DrawChildContent(d, updateArea);
-                GlobalRootGraphic.CurrentRenderElement = null; //temp fix 
-            }
-#if DEBUG
-            //for debug
-            //canvas.FillRectangle(Color.Red, 0, 0, 5, 5);
-
-#endif
-
-
-
+            base.RenderClientContent(d, updateArea);
             //4. caret 
             if (RenderCaret && _stateShowCaret && _isEditable)
             {
@@ -102,8 +49,6 @@ namespace LayoutFarm.TextEditing
                 _myCaret.DrawCaret(d, textManCaretPos.X, textManCaretPos.Y);
             }
 
-            d.CurrentFont = enterFont;
-            d.TextBackgroundColorHint = prev_hintColor;
         }
 
         public override void DoHome(bool pressShitKey)
