@@ -270,6 +270,8 @@ namespace LayoutFarm.TextEditing
                 startAt = len = 0;
             }
         }
+         
+
         public virtual void HandleDrag(UIMouseMoveEventArgs e)
         {
             if (!_isDragBegin)
@@ -282,9 +284,7 @@ namespace LayoutFarm.TextEditing
                 _editSession.EndSelect();
             }
             else
-            {
-                //dbugMouseDragging++;
-
+            { 
                 _editSession.StartSelectIfNoSelection();
                 _editSession.SetCaretPos(e.X, e.Y);
                 _editSession.EndSelect();
@@ -292,6 +292,7 @@ namespace LayoutFarm.TextEditing
 
             InvalidateGraphicOfCurrentSelectionArea();
         }
+
         public virtual void HandleDragEnd(UIMouseUpEventArgs e)
         {
             _isDragBegin = false;
@@ -695,11 +696,11 @@ namespace LayoutFarm.TextEditing
                 int viewportRight = ViewportLeft + Width;
                 if (viewportRight + dx > InnerContentWidth)
                 {
-                    this.SetViewport(this.ViewportLeft + dx, this.ViewportTop); 
+                    this.SetViewport(this.ViewportLeft + dx, this.ViewportTop);
                 }
                 else
                 {
-                    
+
                 }
             }
         }
