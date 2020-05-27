@@ -60,7 +60,7 @@ namespace LayoutFarm
                     tim.Enabled = false;
                 }
             });
-            animateTimer.IntervalInMillisec = 10;
+            animateTimer.Interval = 10;
             UIPlatform.RegisterTimerTask(animateTimer);
 
 

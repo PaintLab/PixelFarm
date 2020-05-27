@@ -34,7 +34,7 @@ namespace LayoutFarm
         int _prevLogicalMouseY;
         int _localMouseDownX;
         int _localMouseDownY;
-        UIMouseButtons _mouseDownButton = UIMouseButtons.None;
+
 
         public TopWindowEventRoot(RootGraphic rootgfx, TopWindowRenderBox topRenderElement)
         {
@@ -89,8 +89,9 @@ namespace LayoutFarm
             _prevLogicalMouseY = primaryMouseEventArgs.Top;
             _isMouseDown = true;
             _isDragging = false;
-            _mouseDownButton = primaryMouseEventArgs.Button;
+
             //-------------- 
+
 
             UIMouseEventArgs e = _mouseDownEventArgs;
             AddMouseEventArgsDetail(e, primaryMouseEventArgs);
@@ -132,6 +133,7 @@ namespace LayoutFarm
         }
         void ITopWindowEventRoot.RootMouseUp(PrimaryMouseEventArgs primaryMouseEventArgs)
         {
+
             int xdiff = primaryMouseEventArgs.Left - _prevLogicalMouseX;
             int ydiff = primaryMouseEventArgs.Top - _prevLogicalMouseY;
             _prevLogicalMouseX = primaryMouseEventArgs.Left;
@@ -175,6 +177,8 @@ namespace LayoutFarm
                         _draggingElement.ListenMouseUp(_mouseUpEventArgs);
                     }
                 }
+
+                StartCaretBlink();
             }
             else
             {
@@ -217,7 +221,6 @@ namespace LayoutFarm
 
             if (_isDragging = _isMouseDown)
             {
-
                 if (_draggingElement != null)
                 {
                     if (_draggingElement.DisableAutoMouseCapture)
@@ -244,6 +247,10 @@ namespace LayoutFarm
                         }
                         else
                         {
+                            if (_draggingElement.AcceptKeyboardFocus)
+                            {
+                                StopCaretBlink();
+                            }
                             _draggingElement.ListenMouseMove(_mouseMoveEventArgs);
                         }
                     }
@@ -275,9 +282,7 @@ namespace LayoutFarm
         }
         void ITopWindowEventRoot.RootLostFocus(UIFocusEventArgs e)
         {
-
             _iTopBoxEventPortal.PortalLostFocus(e);
-
         }
         void ITopWindowEventRoot.RootKeyPress(UIKeyEventArgs e)
         {

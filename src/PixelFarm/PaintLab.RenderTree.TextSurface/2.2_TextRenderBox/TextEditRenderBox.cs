@@ -1,6 +1,5 @@
 ﻿//Apache2, 2014-present, WinterDev
 
-using System.Collections.Generic;
 using System.Text;
 
 using LayoutFarm.UI;
@@ -36,19 +35,31 @@ namespace LayoutFarm.TextEditing
 
         public bool RenderCaret { get; set; }
 
-       
 
+        public override void HandleDrag(UIMouseMoveEventArgs e)
+        {
+            SetCaretVisible(true);
+            GetRoot().CaretStopBlink();
+            base.HandleDrag(e);
+        }
+        public override void HandleDragEnd(UIMouseUpEventArgs e)
+        {
+            SetCaretVisible(true);
+            GetRoot().CaretStopBlink();
+            base.HandleDragEnd(e);
+        }
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
 
             base.RenderClientContent(d, updateArea);
-            //4. caret 
+            //4. caret            
+
             if (RenderCaret && _stateShowCaret && _isEditable)
             {
+                d.SetClipRect(new Rectangle(0, 0, this.Width, this.Height));
                 Point textManCaretPos = _editSession.CaretPos;
                 _myCaret.DrawCaret(d, textManCaretPos.X, textManCaretPos.Y);
             }
-
         }
 
         public override void DoHome(bool pressShitKey)
@@ -149,7 +160,7 @@ namespace LayoutFarm.TextEditing
                 //_internalTextLayerController.CurrentLineArea;
                 this.InvalidateGraphicOfCurrentLineArea();
             }
-             
+
         }
         internal void SetCaretVisible(bool visible)
         {
