@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using LayoutFarm.UI;
+using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.Drawing;
 
 namespace LayoutFarm.TextEditing
@@ -44,6 +45,10 @@ namespace LayoutFarm.TextEditing
             //
             MayHasViewport = true;
             BackgroundColor = Color.White;// Color.Transparent; 
+        }
+        public void SelectAll()
+        {
+            _editSession.SelectAll();
         }
         internal TextFlowLayer TextFlowLayer => _textLayer;
         public Color SelectionFontColor { get; set; } = Color.Black;

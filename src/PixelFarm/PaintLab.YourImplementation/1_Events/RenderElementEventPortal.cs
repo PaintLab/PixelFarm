@@ -182,14 +182,14 @@ namespace LayoutFarm.UI
         //        }
 
 
-        void HitTestCoreWithPrevChainHint(HitChain hitPointChain, HitChain previousChain, int x, int y)
+        void HitTestCoreWithPrevChainHint(HitChain hitChain, HitChain previousChain, int x, int y)
         {
             //---------------------------------
             //test on previous chain first , find common element 
-            hitPointChain.Reset();
-            hitPointChain.SetStartTestPoint(x, y);
+            hitChain.Reset();
+            hitChain.SetStartTestPoint(x, y);
 #if DEBUG
-            hitPointChain.dbugHitPhase = _dbugHitChainPhase;
+            hitChain.dbugHitPhase = _dbugHitChainPhase;
 #endif
             //if (this.dbugId > 0 && isDragging && previousChain.Count > 1)
             //{
@@ -201,20 +201,20 @@ namespace LayoutFarm.UI
             //temp fix
             //TODO: fix bug on HitTestOnPreviousChain()
             RenderElement commonElement = _topRenderElement;
-            commonElement.HitTestCore(hitPointChain);
+            commonElement.HitTestCore(hitChain);
 
             //remove disable elements
             //if (hitPointChain.dbugHitPhase == dbugHitChainPhase.MouseDown)
             //{
-            int j = hitPointChain.Count;
+            int j = hitChain.Count;
             for (int i = 0; i < j; ++i)
             {
-                HitInfo info = hitPointChain.GetHitInfo(i);
+                HitInfo info = hitChain.GetHitInfo(i);
                 RenderElement renderE = info.HitElemAsRenderElement;
-                if (renderE != null && renderE.GetController() is UIElement ui && !ui.Enabled)
+                if (renderE != null && renderE.GetController() is IUIEventListener ui && !ui.Enabled)
                 {
-                    hitPointChain.Clear();
-                    break;//stop looop and exit
+                    HitChain.UnsafeClear(hitChain);
+                    break;//stop loop and exit
                 }
             }
             //}

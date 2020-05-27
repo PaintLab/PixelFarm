@@ -206,10 +206,7 @@ namespace LayoutFarm.CustomWidgets
         internal bool IsSharedTextBox { get; set; }
         internal bool IsInTextBoxPool { get; set; }
 
-        public void SelectAll()
-        {
-            _textEditRenderElement?._editSession.SelectAll();
-        }
+        public void SelectAll() => _textEditRenderElement?.SelectAll();
     }
 
     public class TextBox : TextBoxBase
@@ -355,8 +352,8 @@ namespace LayoutFarm.CustomWidgets
                     tbox.CurrentTextSpanStyle = _defaultSpanStyle;
                 }
 
-                tbox.BackgroundColor = _backgroundColor; 
-                tbox.SetController(this); 
+                tbox.BackgroundColor = _backgroundColor;
+                tbox.SetController(this);
                 tbox.ViewportChanged += (s, e) =>
                 {
                     RaiseViewportChanged();
