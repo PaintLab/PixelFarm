@@ -183,20 +183,17 @@ namespace LayoutFarm.TextEditing
             if (IsOnTheSameLine)
             {
                 if (lineNo == _startPoint.LineId)
-                {
-                    VisualPointInfo topEndPoint = TopEnd;
-                    VisualPointInfo bottomEndPoint = BottomEnd;
-
-                    clipLeft = topEndPoint.X;
-                    clipWidth = bottomEndPoint.X - topEndPoint.X;
+                { 
+                    clipLeft = TopEnd.X;
+                    clipWidth = BottomEnd.X - clipLeft;
 
                     return ClipRectKind.SameLine;
                 }
                 else
                 {
                     clipLeft = clipWidth = 0;
-                }
-                return ClipRectKind.No;
+                    return ClipRectKind.No;
+                }               
             }
             else
             {
