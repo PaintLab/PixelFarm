@@ -29,7 +29,7 @@ namespace LayoutFarm.TextEditing
                 //
                 _myCaret = new EditorCaret(2, 17);
                 RenderCaret = true;
-            }            
+            }
 
             NumOfWhitespaceForSingleTab = 4;//default?, configurable?
         }
@@ -63,7 +63,9 @@ namespace LayoutFarm.TextEditing
                 }
             }
 
-
+            GlobalRootGraphic.CurrentRenderElement = this; //temp fix
+            _textLayer.DrawChildContent(d, updateArea);
+            GlobalRootGraphic.CurrentRenderElement = null; //temp fix
             //----------------------------------------------
             //2.2 selection
             Color prev_hintColor = d.TextBackgroundColorHint;
@@ -72,25 +74,28 @@ namespace LayoutFarm.TextEditing
                 //create a clip area only edit session
                 //and draw again
                 _editSession.SelectionRange.BackgroundColor = Color.Yellow;
-                _editSession.SelectionRange.Draw(d, updateArea);
-                d.TextBackgroundColorHint = Color.Transparent;
+                //_editSession.SelectionRange.Draw(d, updateArea);
+
+                GlobalRootGraphic.CurrentRenderElement = this; //temp fix
+                _textLayer.DrawChildContent(d, updateArea, _editSession.SelectionRange);
+                GlobalRootGraphic.CurrentRenderElement = null; //temp fix
+
+                //d.TextBackgroundColorHint = Color.Transparent;
             }
 
             //3 actual editable layer
 
-            GlobalRootGraphic.CurrentRenderElement = this; //temp fix
-            _textLayer.DrawChildContent(d, updateArea);
-            GlobalRootGraphic.CurrentRenderElement = null; //temp fix
 
 
-            base.RenderClientContent(d, updateArea);
+
+            //base.RenderClientContent(d, updateArea);
 #if DEBUG
             //for debug
             //canvas.FillRectangle(Color.Red, 0, 0, 5, 5);
 
 #endif
 
-            
+
 
             //4. caret 
             if (RenderCaret && _stateShowCaret && _isEditable)
