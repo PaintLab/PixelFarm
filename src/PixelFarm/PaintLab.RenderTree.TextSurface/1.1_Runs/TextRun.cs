@@ -246,6 +246,8 @@ namespace LayoutFarm.TextEditing
             }
         }
 
+        internal static RenderElement s_currentRenderE;
+
         public override void Draw(DrawBoard d, UpdateArea updateArea)
         {
             int bWidth = this.Width;
@@ -285,16 +287,16 @@ namespace LayoutFarm.TextEditing
                         d.CurrentTextColor = prevColor;
                     }
                     break;
-                case SAME_FONT_DIFF_TEXT_COLOR:
-                    {
-                        Color prevColor = d.CurrentTextColor;
-                        d.CurrentTextColor = style.FontColor;
-                        d.DrawText(_mybuffer,
-                            new Rectangle(0, 0, bWidth, bHeight),
-                            style.ContentHAlign);
-                        d.CurrentTextColor = prevColor;
-                    }
-                    break;
+                //case SAME_FONT_DIFF_TEXT_COLOR:
+                //    {
+                //        Color prevColor = d.CurrentTextColor;
+                //        d.CurrentTextColor = style.FontColor;
+                //        d.DrawText(_mybuffer,
+                //            new Rectangle(0, 0, bWidth, bHeight),
+                //            style.ContentHAlign);
+                //        d.CurrentTextColor = prevColor;
+                //    }
+                //    break;
                 default:
                     {
                         if (_renderVxFormattedString == null)
@@ -314,7 +316,7 @@ namespace LayoutFarm.TextEditing
                                     //(TODO: add extension method for this)
                                     GlobalRootGraphic.CurrentRootGfx.EnqueueRenderRequest(
                                         new RenderBoxes.RenderElementRequest(
-                                            GlobalRootGraphic.CurrentRenderElement,
+                                            s_currentRenderE,
                                             RenderBoxes.RequestCommand.ProcessFormattedString,
                                             _renderVxFormattedString));
                                 }

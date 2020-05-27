@@ -182,8 +182,13 @@ namespace LayoutFarm.RenderBoxes
             }
         }
 
+         
         public bool Exclude_TransparentMouse_Element { get; set; } = true;
 
+        public static void UnsafeClear(HitChain hitchain)
+        {
+            hitchain._hitList.Clear();
+        }
 #if DEBUG
         public bool dbugBreak;
 #endif

@@ -17,6 +17,8 @@ namespace LayoutFarm.CustomWidgets
         protected TextSpanStyle _defaultSpanStyle;
         protected Color _backgroundColor = Color.White;
 
+        Color _selectionBgColor = Color.Yellow;//?
+        Color _selectionTextColor = Color.Black;
 
         internal TextBoxBase(int width, int height)
             : base(width, height)
@@ -25,6 +27,30 @@ namespace LayoutFarm.CustomWidgets
 
         public int LineCount => _textEditRenderElement.LineCount;
 
+        public Color SelectionFontColor
+        {
+            get => _selectionBgColor;
+            set
+            {
+                _selectionBgColor = value;
+                if (_textEditRenderElement != null)
+                {
+                    _textEditRenderElement.SelectionTextColor = value;
+                }
+            }
+        }
+        public Color SelectionBackgroundColor
+        {
+            get => _selectionBgColor;
+            set
+            {
+                _selectionBgColor = value;
+                if (_textEditRenderElement != null)
+                {
+                    _textEditRenderElement.SelectionBackgroundColor = value;
+                }
+            }
+        }
         public Color BackgroundColor
         {
             get => _backgroundColor;
@@ -61,11 +87,7 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-        public ContentTextSplitter TextSplitter
-        {
-            get;
-            set;
-        }
+        public ContentTextSplitter TextSplitter { get; set; }
 
         public bool IsMultilineTextBox => _multiline;
         //
@@ -208,6 +230,8 @@ namespace LayoutFarm.CustomWidgets
 
         internal bool IsSharedTextBox { get; set; }
         internal bool IsInTextBoxPool { get; set; }
+
+        public void SelectAll() => _textEditRenderElement?.SelectAll();
     }
 
     public class TextBox : TextBoxBase
@@ -352,9 +376,9 @@ namespace LayoutFarm.CustomWidgets
                 {
                     tbox.CurrentTextSpanStyle = _defaultSpanStyle;
                 }
+
                 tbox.BackgroundColor = _backgroundColor;
                 tbox.SetController(this);
-
                 tbox.ViewportChanged += (s, e) =>
                 {
                     RaiseViewportChanged();

@@ -1698,9 +1698,9 @@ namespace PixelFarm.DrawingGL
         public void SetClipRect(int left, int top, int width, int height)
         {
 
-#if DEBUG
-            //System.Diagnostics.Debug.WriteLine("clip:" + left + "," + top + "," + width + "," + height);
-#endif
+//#if DEBUG
+//            System.Diagnostics.Debug.WriteLine("clip:" + left + "," + top + "," + width + "," + height);
+//#endif
 
             int new_left = left + _canvasOriginX;
             int bottom = _canvasOriginY + top + height;
@@ -1708,6 +1708,10 @@ namespace PixelFarm.DrawingGL
 
             if (_scss_left != new_left || _scss_bottom != new_bottom || _scss_width != width || _scss_height != height)
             {
+
+//#if DEBUG
+//                System.Diagnostics.Debug.WriteLine("clip_scissor:" + new_left + "," + new_bottom + "," + width + "," + height);
+//#endif
                 GL.Scissor(
                     _scss_left = new_left,
                     _scss_bottom = new_bottom,

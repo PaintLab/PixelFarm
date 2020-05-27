@@ -515,6 +515,7 @@ namespace LayoutFarm.TextEditing
             return false;
         }
 
+
         public void MoveToLine(int lineNumber)
         {
             _currentLine = _textFlowLayer.GetTextLine(lineNumber);
@@ -1021,15 +1022,9 @@ namespace LayoutFarm.TextEditing
         //
         public bool IsOnEndOfLine => caret_char_index == _currentLine.CharCount;
         //
-        internal TextLineBox GetTextLine(int lineId)
-        {
-            return TextLayer.GetTextLine(lineId);
-        }
+        internal TextLineBox GetTextLine(int lineId) => TextLayer.GetTextLine(lineId);
         //
-        internal TextLineBox GetTextLineAtPos(int y)
-        {
-            return this.TextLayer.GetTextLineAtPos(y);
-        }
+        internal TextLineBox GetTextLineAtPos(int y) => TextLayer.GetTextLineAtPos(y);
         //
         public int LineCount => TextLayer.LineCount;
         //
