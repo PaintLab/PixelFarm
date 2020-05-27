@@ -168,7 +168,64 @@ namespace LayoutFarm.TextEditing
             }
         }
 
+        internal enum ClipRectKind : byte
+        {
+            No,
+            SameLine,
+            StartLine,
+            InBetween,
+            EndLine,
+        }
 
+        internal ClipRectKind GetLineClip(int lineNo, out int clipLeft, out int clipWidth)
+        {
+            if (IsOnTheSameLine)
+            {
+                if (lineNo == _startPoint.LineId)
+                {
+                    VisualPointInfo topEndPoint = TopEnd;
+                    VisualPointInfo bottomEndPoint = BottomEnd;
+
+                    clipLeft = topEndPoint.X;
+                    clipWidth = bottomEndPoint.X - topEndPoint.X;
+
+                    return ClipRectKind.SameLine;
+                }
+                else
+                {
+                    clipLeft = clipWidth = 0;
+                }
+                return ClipRectKind.No;
+            }
+            else
+            {
+                EditableVisualPointInfo top_point = TopEnd;
+                EditableVisualPointInfo bottom_point = BottomEnd;
+
+                if (lineNo == top_point.LineId)
+                {
+                    clipLeft = top_point.X;
+                    clipWidth = top_point.CurrentWidth;
+                    return ClipRectKind.StartLine;
+                }
+                else if (lineNo == bottom_point.LineId)
+                {
+                    clipLeft = 0;
+                    clipWidth = bottom_point.X;
+                    return ClipRectKind.EndLine;
+                }
+                else if (lineNo > top_point.LineId && lineNo < bottom_point.LineId)
+                {
+                    clipLeft = clipWidth = 0;
+                    return ClipRectKind.InBetween;
+                }
+                else
+                {
+                    clipLeft = clipWidth = 0;
+                    return ClipRectKind.No;
+                }
+            }
+        }
         public void Draw(DrawBoard destPage, UpdateArea updateArea)
         {
             if (IsOnTheSameLine)
