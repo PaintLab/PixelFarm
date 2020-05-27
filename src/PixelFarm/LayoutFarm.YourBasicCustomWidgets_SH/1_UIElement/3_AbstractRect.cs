@@ -64,6 +64,16 @@ namespace LayoutFarm.UI
         ushort _marginRight;
         ushort _marginBottom;
 
+        static AbstractRectUI()
+        {
+            if (!Temp<ViewportChangedEventArgs>.IsInit())
+            {
+                Temp<ViewportChangedEventArgs>.SetNewHandler(
+                    () => new ViewportChangedEventArgs(),
+                    null
+                );
+            }
+        }
         public AbstractRectUI(int width, int height)
         {
             //default,           
@@ -80,7 +90,7 @@ namespace LayoutFarm.UI
         public VerticalAlignment VerticalAlignment { get; set; }
 
 
-
+       
         public int CalculatedMinWidth { get; protected set; }
         public int CalculatedMinHeight { get; protected set; }
 
@@ -89,21 +99,12 @@ namespace LayoutFarm.UI
 
         public event EventHandler<ViewportChangedEventArgs> ViewportChanged;//TODO: review this*** => use event queue?
 
-        void InitViewportPool()
-        {
-            if (!Temp<ViewportChangedEventArgs>.IsInit())
-            {
-                Temp<ViewportChangedEventArgs>.SetNewHandler(
-                    () => new ViewportChangedEventArgs(),
-                    null
-                );
-            }
-        }
+        
         protected void RaiseViewportChanged()
         {
             if (ViewportChanged != null)
             {
-                InitViewportPool();
+              
                 using (Temp<ViewportChangedEventArgs>.Borrow(out ViewportChangedEventArgs changedEventArgs))
                 {
                     changedEventArgs.Kind = ViewportChangedEventArgs.ChangeKind.Location;
@@ -116,7 +117,7 @@ namespace LayoutFarm.UI
         {
             if (ViewportChanged != null)
             {
-                InitViewportPool();
+              
                 using (Temp<ViewportChangedEventArgs>.Borrow(out ViewportChangedEventArgs changedEventArgs))
                 {
                     changedEventArgs.Kind = ViewportChangedEventArgs.ChangeKind.LayoutDone;

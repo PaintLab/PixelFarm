@@ -46,7 +46,8 @@ namespace LayoutFarm.TextEditing
             BackgroundColor = Color.White;// Color.Transparent; 
         }
         internal TextFlowLayer TextFlowLayer => _textLayer;
-
+        public Color SelectionFontColor { get; set; } = Color.Black;
+        public Color SelectionBackgroundColor { get; set; } = Color.Yellow;
         void ITextFlowLayerOwner.ClientLayerBubbleUpInvalidateArea(Rectangle clientInvalidatedArea)
         {
             ////client line send up 
@@ -67,7 +68,6 @@ namespace LayoutFarm.TextEditing
         {
             get
             {
-
                 RunStyle defaultRunStyle = _textLayer.DefaultRunStyle;
                 return new TextSpanStyle()
                 {
@@ -270,6 +270,8 @@ namespace LayoutFarm.TextEditing
                 startAt = len = 0;
             }
         }
+
+
         public virtual void HandleDrag(UIMouseMoveEventArgs e)
         {
             if (!_isDragBegin)
@@ -283,8 +285,6 @@ namespace LayoutFarm.TextEditing
             }
             else
             {
-                //dbugMouseDragging++;
-
                 _editSession.StartSelectIfNoSelection();
                 _editSession.SetCaretPos(e.X, e.Y);
                 _editSession.EndSelect();
@@ -292,6 +292,7 @@ namespace LayoutFarm.TextEditing
 
             InvalidateGraphicOfCurrentSelectionArea();
         }
+
         public virtual void HandleDragEnd(UIMouseUpEventArgs e)
         {
             _isDragBegin = false;
@@ -514,21 +515,17 @@ namespace LayoutFarm.TextEditing
             RequestFont enterFont = d.CurrentFont;
 
             d.CurrentFont = this.CurrentTextSpanStyle.ReqFont;
-
-
             //1. bg 
             if (RenderBackground && BackgroundColor.A > 0)
             {
-
 #if DEBUG
                 d.FillRectangle(BackgroundColor, 0, 0, Width, Height);
-                //d.FillRectangle(ColorEx.dbugGetRandomColor(), 0, 0, innerBgSize.Width, innerBgSize.Height);
+                //canvas.FillRectangle(ColorEx.dbugGetRandomColor(), 0, 0, innerBgSize.Width, innerBgSize.Height);
 #else
-                d.FillRectangle(BackgroundColor, 0, 0,  Width, Height);
+                d.FillRectangle(BackgroundColor, 0, 0, Width, Height);
 #endif
                 d.SetLatestFillAsTextBackgroundColorHint();
             }
-
 
             //2.1 markers 
             if (RenderMarkers && _markerLayer != null &&
@@ -540,24 +537,34 @@ namespace LayoutFarm.TextEditing
                 }
             }
 
-
-            //2.2 selection
+            Color prev_hintColor = d.TextBackgroundColorHint;
             if (RenderSelectionRange && _editSession.SelectionRange != null)
             {
-                _editSession.SelectionRange.Draw(d, updateArea);
+                //with selection
+                _editSession.SelectionRange.FontColor = SelectionFontColor;
+                _editSession.SelectionRange.BackgroundColor = SelectionBackgroundColor;
+                //_editSession.SelectionRange.Draw(d, updateArea);
+
+                TextRun.s_currentRenderE = this;
+                _textLayer.DrawChildContent(d, updateArea, _editSession.SelectionRange);
+                TextRun.s_currentRenderE = null; //temp fix                 
             }
-
-            //3.2 actual editable layer
-            _textLayer.DrawChildContent(d, updateArea);
-            //----------------------------------------------
-
+            else
+            {
+                //no selection 
+                TextRun.s_currentRenderE = this;//temp fix
+                _textLayer.DrawChildContent(d, updateArea);
+                TextRun.s_currentRenderE = null;//temp fix 
+            }
 #if DEBUG
             //for debug
             //canvas.FillRectangle(Color.Red, 0, 0, 5, 5);
 
 #endif
 
+
             d.CurrentFont = enterFont;
+            d.TextBackgroundColorHint = prev_hintColor;
         }
 
         internal void OnTextContentSizeChanged()
@@ -695,11 +702,11 @@ namespace LayoutFarm.TextEditing
                 int viewportRight = ViewportLeft + Width;
                 if (viewportRight + dx > InnerContentWidth)
                 {
-                    this.SetViewport(this.ViewportLeft + dx, this.ViewportTop); 
+                    this.SetViewport(this.ViewportLeft + dx, this.ViewportTop);
                 }
                 else
                 {
-                    
+
                 }
             }
         }

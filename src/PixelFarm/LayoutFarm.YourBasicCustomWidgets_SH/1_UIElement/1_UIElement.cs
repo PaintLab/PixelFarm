@@ -88,8 +88,6 @@ namespace LayoutFarm.UI
         public readonly int dbugId = s_dbugTotalId++;
 
 #endif
-
-
         //bounds
         float _left;
         float _top;
@@ -102,8 +100,10 @@ namespace LayoutFarm.UI
         internal object _collectionLinkNode; //optional, eg for linked-list node, RB-tree-node
         UIElement _parent;
 
+        bool _disable;
         public UIElement()
         {
+
         }
 #if DEBUG
         protected virtual void dbugOnSettingParent(UIElement parent)
@@ -111,6 +111,12 @@ namespace LayoutFarm.UI
 
         }
 #endif
+
+        public virtual bool Enabled
+        {
+            get => !_disable;
+            set => _disable = !value;
+        }
 
         public UIElement ParentUI
         {

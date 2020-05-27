@@ -32,9 +32,9 @@ namespace LayoutFarm.TextEditing
         static void caret_TickHandler(object sender, GraphicsTimerTaskEventArgs e)
         {
 
-//#if DEBUG
-//            return;
-//#endif
+            //#if DEBUG
+            //            return;
+            //#endif
             if (_currentTextBox != null)
             {
                 _currentTextBox.SwapCaretState();
@@ -61,15 +61,16 @@ namespace LayoutFarm.TextEditing
                     if (_currentTextBox != null)
                     {
                         //stop caret on prev element
-                        _currentTextBox.SetCaretState(false);
-                        var evlistener = _currentTextBox.GetController() as IUIEventListener;
+                        _currentTextBox.SetCaretVisible(false);
                         _currentTextBox = null;
-                        if (evlistener != null)
+
+                        if (_currentTextBox.GetController() is IUIEventListener evlistener)
                         {
                             evlistener.ListenLostKeyboardFocus(null);
                         }
                     }
                 }
+
                 _currentTextBox = value;
             }
         }

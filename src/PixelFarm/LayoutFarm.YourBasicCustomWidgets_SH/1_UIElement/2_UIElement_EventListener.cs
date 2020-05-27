@@ -53,7 +53,9 @@ namespace LayoutFarm.UI
         bool IEventListener.ListenProcessDialogKey(UIKeyEventArgs e)
         {
             //TODO: review this, no external event or beh for this?
-            return OnProcessDialogKey(e);
+            bool result = OnProcessDialogKey(e);
+            _externalEventListener?.ListenProcessDialogKey(e);
+            return result;
         }
         void IEventListener.ListenMouseDown(UIMouseDownEventArgs e)
         {

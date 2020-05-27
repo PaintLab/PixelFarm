@@ -251,7 +251,7 @@ namespace LayoutFarm.CustomWidgets
         void CreateVSliderBarContent()
         {
             CustomRenderBox bgBox = new CustomRenderBox(this.Width, this.Height);
-             
+
             bgBox.SetController(this);
             bgBox.SetLocation(this.Left, this.Top);
             bgBox.BackColor = _bgColor;
@@ -262,7 +262,7 @@ namespace LayoutFarm.CustomWidgets
         }
         void CreateHSliderBarContent()
         {
-            CustomRenderBox bgBox = new CustomRenderBox(this.Width, this.Height); 
+            CustomRenderBox bgBox = new CustomRenderBox(this.Width, this.Height);
             bgBox.SetController(this);
             bgBox.SetLocation(this.Left, this.Top);
             bgBox.BackColor = _bgColor;
@@ -588,9 +588,10 @@ namespace LayoutFarm.CustomWidgets
                 {
                     //hide scroll box
                     _scrollButton.Visible = false;
-                    //only raise event when visibility change
-                    NeedScollBoxEvent?.Invoke(this, false);
+                 
                 }
+                //only raise event when visibility change
+                NeedScollBoxEvent?.Invoke(this, false);
             }
             else
             {
@@ -598,10 +599,11 @@ namespace LayoutFarm.CustomWidgets
                 {
                     //only raise event when visibility change
                     _scrollButton.Visible = true;
-                    NeedScollBoxEvent?.Invoke(this, true);
-
+                   
                 }
+                NeedScollBoxEvent?.Invoke(this, true);
             }
+
         }
         public void SetupScrollBar(ScrollBarCreationParameters creationParameters)
         {
@@ -697,7 +699,6 @@ namespace LayoutFarm.CustomWidgets
         SliderBox _slideBox;
         CustomRenderBox _mainBox;
         ScrollBarSettings _scrollBarSettings;
-
         int _minmax_boxHeight = 15;
 
         public ScrollBar(int w, int h)
@@ -708,22 +709,28 @@ namespace LayoutFarm.CustomWidgets
             _slideBox = new SliderBox(_minmax_boxHeight, _minmax_boxHeight);
             _slideBox.NeedScollBoxEvent += (s, need) =>
             {
-                if (need)
+                if (HideScrollBarIfNotNeeded)
                 {
-                    //if (!this.Visible)
-                    //{
-                    //    this.Visible = true;
-                    //}
+                    if (need)
+                    {
+                        if (!this.Visible)
+                        {
+                            this.Visible = true;
+                        }
+                    }
+                    else
+                    {
+                        if (this.Visible)
+                        {
+                            this.Visible = false;
+                        }
+                    }
                 }
-                else
-                {
-                    //if (this.Visible)
-                    //{
-                    //    this.Visible = false;
-                    //} 
-                }
+
             };
         }
+        
+        public bool HideScrollBarIfNotNeeded { get; set; }
         //
         public override RenderElement CurrentPrimaryRenderElement => _mainBox;
         //
@@ -821,7 +828,7 @@ namespace LayoutFarm.CustomWidgets
         //--------------------------------------------------------------------------
         void CreateVScrollbarContent()
         {
-            CustomRenderBox bgBox = new CustomRenderBox(this.Width, this.Height); 
+            CustomRenderBox bgBox = new CustomRenderBox(this.Width, this.Height);
             bgBox.SetController(this);
             bgBox.SetLocation(this.Left, this.Top);
             //---------------------------------------------------------
@@ -848,7 +855,7 @@ namespace LayoutFarm.CustomWidgets
 
             CustomRenderBox bgBox = new CustomRenderBox(this.Width, this.Height);
             bgBox.SetVisible(this.Visible);
-             
+
             bgBox.SetController(this);
             bgBox.SetLocation(this.Left, this.Top);
             //---------------------------------------------------------
@@ -1077,6 +1084,7 @@ namespace LayoutFarm.CustomWidgets
                 sc.MaxValue = (contentLength > _scrollableSurface.ViewportHeight) ?
                    contentLength - _scrollableSurface.ViewportHeight :
                    0;
+                
 
             });
             //--------------------------------------------------------------------------------------

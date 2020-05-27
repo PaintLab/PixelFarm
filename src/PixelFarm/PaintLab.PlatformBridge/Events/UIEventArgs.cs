@@ -92,13 +92,14 @@ namespace LayoutFarm.UI
             base.OnClearData();
             KeyChar = '\0';
             KeyData = 0;
+            Handled = false;
         }
         public bool IsControlCharacter => Char.IsControl(KeyChar);
         public UIKeys KeyCode => (UIKeys)this.KeyData & UIKeys.KeyCode;
-        
 
         internal UIEventName _eventName;
         public override UIEventName UIEventName => _eventName;
+        internal bool Handled;
     }
 
 

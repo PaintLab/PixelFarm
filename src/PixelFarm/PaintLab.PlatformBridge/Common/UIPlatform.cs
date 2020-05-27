@@ -66,7 +66,7 @@ namespace LayoutFarm
         public static void RegisterTimerTask(int intervalMillisec, Action<UITimerTask> timerTick)
         {
             UITimerTask timerTask = new UITimerTask(timerTick);
-            timerTask.IntervalInMillisec = intervalMillisec;
+            timerTask.Interval = intervalMillisec;
             UIMsgQueueSystem.InternalMsgPumpRegister(timerTask);
             timerTask.Enabled = true;
         }

@@ -21,7 +21,7 @@ namespace LayoutFarm.UI
         /// <summary>
         /// interval of this timer in ms
         /// </summary>
-        public int IntervalInMillisec
+        public int Interval
         {
             get => _intervalInMillisec;
             set
@@ -105,7 +105,7 @@ namespace LayoutFarm.UI
             }
             //....
 
-            if (timerTask.IsRegistered || timerTask.IntervalInMillisec <= 0)
+            if (timerTask.IsRegistered || timerTask.Interval <= 0)
             {
 #if DEBUG
                 System.Diagnostics.Debugger.Break();

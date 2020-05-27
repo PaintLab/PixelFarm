@@ -188,7 +188,7 @@ namespace LayoutFarm.CustomWidgets
                 BgIsNotOpaque = value.A < 255;
 
                 
-                if (this.HasParentLink && this.BlockGraphicUpdateBubble)
+                if (this.HasParentLink && !this.BlockGraphicUpdateBubble)
                 {
                     this.InvalidateGraphics();
                 }

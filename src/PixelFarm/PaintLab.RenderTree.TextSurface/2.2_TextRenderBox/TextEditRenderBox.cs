@@ -31,72 +31,17 @@ namespace LayoutFarm.TextEditing
                 RenderCaret = true;
             }
 
-            ////----------- 
-            ///
-            //
-            //if (isMultiLine)
-            //{
-            //    _textLayer.SetUseDoubleCanvas(false, true);
-            //}
-            //else
-            //{
-            //    _textLayer.SetUseDoubleCanvas(true, false);
-            //} 
-
             NumOfWhitespaceForSingleTab = 4;//default?, configurable?
         }
 
         public bool RenderCaret { get; set; }
 
+       
+
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
-            RequestFont enterFont = d.CurrentFont;
-
-            d.CurrentFont = this.CurrentTextSpanStyle.ReqFont;
-            //1. bg 
-            if (RenderBackground && BackgroundColor.A > 0)
-            {
-
-
-#if DEBUG
-                d.FillRectangle(BackgroundColor, 0, 0, Width, Height);
-                //canvas.FillRectangle(ColorEx.dbugGetRandomColor(), 0, 0, innerBgSize.Width, innerBgSize.Height);
-#else
-                d.FillRectangle(BackgroundColor, 0, 0, Width, Height);
-#endif
-                d.SetLatestFillAsTextBackgroundColorHint();
-            }
-
-            //2.1 markers 
-            if (RenderMarkers && _markerLayer != null &&
-                _markerLayer.VisualMarkerCount > 0)
-            {
-                foreach (VisualMarkerSelectionRange marker in _markerLayer.VisualMarkers)
-                {
-                    marker.Draw(d, updateArea);
-                }
-            }
-
-
-            //----------------------------------------------
-            //2.2 selection
-            if (RenderSelectionRange && _editSession.SelectionRange != null)
-            {
-                _editSession.SelectionRange.Draw(d, updateArea);
-            }
-            //3 actual editable layer
-
-            GlobalRootGraphic.CurrentRenderElement = this; //temp fix
-            _textLayer.DrawChildContent(d, updateArea);
-            GlobalRootGraphic.CurrentRenderElement = null; //temp fix
-
 
             base.RenderClientContent(d, updateArea);
-#if DEBUG
-            //for debug
-            //canvas.FillRectangle(Color.Red, 0, 0, 5, 5);
-
-#endif
             //4. caret 
             if (RenderCaret && _stateShowCaret && _isEditable)
             {
@@ -104,7 +49,6 @@ namespace LayoutFarm.TextEditing
                 _myCaret.DrawCaret(d, textManCaretPos.X, textManCaretPos.Y);
             }
 
-            d.CurrentFont = enterFont;
         }
 
         public override void DoHome(bool pressShitKey)
@@ -123,7 +67,7 @@ namespace LayoutFarm.TextEditing
             if (_isEditable)
             {
                 GlobalCaretController.CurrentTextEditBox = this;
-                this.SetCaretState(true);
+                this.SetCaretVisible(true);
                 _isFocus = true;
             }
         }
@@ -132,7 +76,7 @@ namespace LayoutFarm.TextEditing
             if (_isEditable)
             {
                 GlobalCaretController.CurrentTextEditBox = null;
-                this.SetCaretState(false);
+                this.SetCaretVisible(false);
                 _isFocus = false;
             }
         }
@@ -140,7 +84,7 @@ namespace LayoutFarm.TextEditing
 
         public override void HandleKeyPress(UIKeyEventArgs e)
         {
-            this.SetCaretState(true);
+            this.SetCaretVisible(true);
             //------------------------
             if (e.IsControlCharacter)
             {
@@ -205,22 +149,9 @@ namespace LayoutFarm.TextEditing
                 //_internalTextLayerController.CurrentLineArea;
                 this.InvalidateGraphicOfCurrentLineArea();
             }
-
-            //int swapcount = dbugCaretSwapCount++;
-            //if (stateShowCaret)
-            //{
-            //    Console.WriteLine(">>on " + swapcount);
-            //    this.InvalidateGraphics();
-            //    Console.WriteLine("<<on " + swapcount);
-            //}
-            //else
-            //{
-            //    Console.WriteLine(">>off " + swapcount);
-            //    this.InvalidateGraphics();
-            //    Console.WriteLine("<<off " + swapcount);
-            //} 
+             
         }
-        internal void SetCaretState(bool visible)
+        internal void SetCaretVisible(bool visible)
         {
             if (_isEditable)
             {
@@ -231,7 +162,7 @@ namespace LayoutFarm.TextEditing
 
         public override void HandleKeyUp(UIKeyEventArgs e)
         {
-            this.SetCaretState(true);
+            this.SetCaretVisible(true);
             if (_textSurfaceEventListener != null)
             {
                 TextSurfaceEventListener.NotifyKeyDown(_textSurfaceEventListener, e); ;
@@ -239,7 +170,7 @@ namespace LayoutFarm.TextEditing
         }
         public override void HandleKeyDown(UIKeyEventArgs e)
         {
-            this.SetCaretState(true);
+            this.SetCaretVisible(true);
             if (!e.HasKeyData)
             {
                 return;
@@ -430,7 +361,7 @@ namespace LayoutFarm.TextEditing
         public override bool HandleProcessDialogKey(UIKeyEventArgs e)
         {
             UIKeys keyData = (UIKeys)e.KeyData;
-            SetCaretState(true);
+            SetCaretVisible(true);
             if (_isInVerticalPhase && (keyData != UIKeys.Up || keyData != UIKeys.Down))
             {
                 _isInVerticalPhase = false;

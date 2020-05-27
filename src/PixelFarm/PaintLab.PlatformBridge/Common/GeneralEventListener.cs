@@ -18,6 +18,7 @@ namespace LayoutFarm.UI
         public event EventHandler<UIKeyEventArgs> KeyDown;
         public event EventHandler<UIKeyEventArgs> KeyPress;
         public event EventHandler<UIKeyEventArgs> KeyUp;
+
         public event EventHandler<UIMousePressEventArgs> MousePress;
         public event EventHandler<UIMouseWheelEventArgs> MouseWheel;
 
@@ -29,6 +30,11 @@ namespace LayoutFarm.UI
 
         }
 
+        bool IEventListener.ListenProcessDialogKey(UIKeyEventArgs e)
+        {
+            KeyDown?.Invoke(this, e);
+            return e.Handled;
+        }
         void IEventListener.ListenKeyDown(UIKeyEventArgs e)
         {
             KeyDown?.Invoke(this, e);
@@ -97,10 +103,6 @@ namespace LayoutFarm.UI
         }
         void IEventListener.ListenMouseWheel(UIMouseWheelEventArgs e) => MouseWheel?.Invoke(this, e);
 
-        bool IEventListener.ListenProcessDialogKey(UIKeyEventArgs args)
-        {
-            return false;
-        }
         void IEventListener.ListenMousePress(UIMousePressEventArgs e)
         {
             MousePress?.Invoke(this, e);
