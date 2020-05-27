@@ -61,7 +61,7 @@ namespace LayoutFarm.TextEditing
                     if (_currentTextBox != null)
                     {
                         //stop caret on prev element
-                        _currentTextBox.SetCaretState(false);
+                        _currentTextBox.SetCaretVisible(false);
                         _currentTextBox = null;
 
                         if (_currentTextBox.GetController() is IUIEventListener evlistener)

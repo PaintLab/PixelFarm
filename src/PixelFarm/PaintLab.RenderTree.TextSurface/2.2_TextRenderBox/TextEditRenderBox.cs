@@ -67,7 +67,7 @@ namespace LayoutFarm.TextEditing
             if (_isEditable)
             {
                 GlobalCaretController.CurrentTextEditBox = this;
-                this.SetCaretState(true);
+                this.SetCaretVisible(true);
                 _isFocus = true;
             }
         }
@@ -76,7 +76,7 @@ namespace LayoutFarm.TextEditing
             if (_isEditable)
             {
                 GlobalCaretController.CurrentTextEditBox = null;
-                this.SetCaretState(false);
+                this.SetCaretVisible(false);
                 _isFocus = false;
             }
         }
@@ -84,7 +84,7 @@ namespace LayoutFarm.TextEditing
 
         public override void HandleKeyPress(UIKeyEventArgs e)
         {
-            this.SetCaretState(true);
+            this.SetCaretVisible(true);
             //------------------------
             if (e.IsControlCharacter)
             {
@@ -149,22 +149,9 @@ namespace LayoutFarm.TextEditing
                 //_internalTextLayerController.CurrentLineArea;
                 this.InvalidateGraphicOfCurrentLineArea();
             }
-
-            //int swapcount = dbugCaretSwapCount++;
-            //if (stateShowCaret)
-            //{
-            //    Console.WriteLine(">>on " + swapcount);
-            //    this.InvalidateGraphics();
-            //    Console.WriteLine("<<on " + swapcount);
-            //}
-            //else
-            //{
-            //    Console.WriteLine(">>off " + swapcount);
-            //    this.InvalidateGraphics();
-            //    Console.WriteLine("<<off " + swapcount);
-            //} 
+             
         }
-        internal void SetCaretState(bool visible)
+        internal void SetCaretVisible(bool visible)
         {
             if (_isEditable)
             {
@@ -175,7 +162,7 @@ namespace LayoutFarm.TextEditing
 
         public override void HandleKeyUp(UIKeyEventArgs e)
         {
-            this.SetCaretState(true);
+            this.SetCaretVisible(true);
             if (_textSurfaceEventListener != null)
             {
                 TextSurfaceEventListener.NotifyKeyDown(_textSurfaceEventListener, e); ;
@@ -183,7 +170,7 @@ namespace LayoutFarm.TextEditing
         }
         public override void HandleKeyDown(UIKeyEventArgs e)
         {
-            this.SetCaretState(true);
+            this.SetCaretVisible(true);
             if (!e.HasKeyData)
             {
                 return;
@@ -374,7 +361,7 @@ namespace LayoutFarm.TextEditing
         public override bool HandleProcessDialogKey(UIKeyEventArgs e)
         {
             UIKeys keyData = (UIKeys)e.KeyData;
-            SetCaretState(true);
+            SetCaretVisible(true);
             if (_isInVerticalPhase && (keyData != UIKeys.Up || keyData != UIKeys.Down))
             {
                 _isInVerticalPhase = false;

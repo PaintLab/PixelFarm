@@ -68,7 +68,6 @@ namespace LayoutFarm.TextEditing
         {
             get
             {
-
                 RunStyle defaultRunStyle = _textLayer.DefaultRunStyle;
                 return new TextSpanStyle()
                 {
