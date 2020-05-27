@@ -17,6 +17,8 @@ namespace LayoutFarm.CustomWidgets
         protected TextSpanStyle _defaultSpanStyle;
         protected Color _backgroundColor = Color.White;
 
+        Color _selectionBgColor = Color.Yellow;//?
+        Color _selectionTextColor = Color.Black;
 
         internal TextBoxBase(int width, int height)
             : base(width, height)
@@ -25,7 +27,30 @@ namespace LayoutFarm.CustomWidgets
 
         public int LineCount => _textEditRenderElement.LineCount;
 
-
+        public Color SelectionFontColor
+        {
+            get => _selectionBgColor;
+            set
+            {
+                _selectionBgColor = value;
+                if (_textEditRenderElement != null)
+                {
+                    _textEditRenderElement.SelectionTextColor = value;
+                }
+            }
+        }
+        public Color SelectionBackgroundColor
+        {
+            get => _selectionBgColor;
+            set
+            {
+                _selectionBgColor = value;
+                if (_textEditRenderElement != null)
+                {
+                    _textEditRenderElement.SelectionBackgroundColor = value;
+                }
+            }
+        }
         public Color BackgroundColor
         {
             get => _backgroundColor;

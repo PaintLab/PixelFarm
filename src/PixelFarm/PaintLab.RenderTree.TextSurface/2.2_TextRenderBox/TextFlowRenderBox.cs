@@ -51,7 +51,7 @@ namespace LayoutFarm.TextEditing
             _editSession.SelectAll();
         }
         internal TextFlowLayer TextFlowLayer => _textLayer;
-        public Color SelectionFontColor { get; set; } = Color.Black;
+        public Color SelectionTextColor { get; set; } = Color.Black;
         public Color SelectionBackgroundColor { get; set; } = Color.Yellow;
         void ITextFlowLayerOwner.ClientLayerBubbleUpInvalidateArea(Rectangle clientInvalidatedArea)
         {
@@ -546,7 +546,7 @@ namespace LayoutFarm.TextEditing
             if (RenderSelectionRange && _editSession.SelectionRange != null)
             {
                 //with selection
-                _editSession.SelectionRange.FontColor = SelectionFontColor;
+                _editSession.SelectionRange.FontColor = SelectionTextColor;
                 _editSession.SelectionRange.BackgroundColor = SelectionBackgroundColor;
                 //_editSession.SelectionRange.Draw(d, updateArea);
 
