@@ -271,7 +271,7 @@ namespace LayoutFarm.TextEditing
                 startAt = len = 0;
             }
         }
-         
+
 
         public virtual void HandleDrag(UIMouseMoveEventArgs e)
         {
@@ -285,7 +285,7 @@ namespace LayoutFarm.TextEditing
                 _editSession.EndSelect();
             }
             else
-            { 
+            {
                 _editSession.StartSelectIfNoSelection();
                 _editSession.SetCaretPos(e.X, e.Y);
                 _editSession.EndSelect();
@@ -537,7 +537,7 @@ namespace LayoutFarm.TextEditing
                     marker.Draw(d, updateArea);
                 }
             }
-             
+
             Color prev_hintColor = d.TextBackgroundColorHint;
             if (RenderSelectionRange && _editSession.SelectionRange != null)
             {
@@ -545,16 +545,17 @@ namespace LayoutFarm.TextEditing
                 _editSession.SelectionRange.FontColor = SelectionFontColor;
                 _editSession.SelectionRange.BackgroundColor = SelectionBackgroundColor;
                 //_editSession.SelectionRange.Draw(d, updateArea);
-                GlobalRootGraphic.CurrentRenderElement = this; //temp fix
+
+                TextRun.s_currentRenderE = this;
                 _textLayer.DrawChildContent(d, updateArea, _editSession.SelectionRange);
-                GlobalRootGraphic.CurrentRenderElement = null; //temp fix                 
+                TextRun.s_currentRenderE = null; //temp fix                 
             }
             else
             {
                 //no selection 
-                GlobalRootGraphic.CurrentRenderElement = this; //temp fix
+                TextRun.s_currentRenderE = this;//temp fix
                 _textLayer.DrawChildContent(d, updateArea);
-                GlobalRootGraphic.CurrentRenderElement = null; //temp fix 
+                TextRun.s_currentRenderE = null;//temp fix 
             }
 #if DEBUG
             //for debug
@@ -564,7 +565,7 @@ namespace LayoutFarm.TextEditing
 
 
             d.CurrentFont = enterFont;
-            d.TextBackgroundColorHint = prev_hintColor; 
+            d.TextBackgroundColorHint = prev_hintColor;
         }
 
         internal void OnTextContentSizeChanged()
