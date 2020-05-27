@@ -355,10 +355,8 @@ namespace LayoutFarm.CustomWidgets
                     tbox.CurrentTextSpanStyle = _defaultSpanStyle;
                 }
 
-                tbox.BackgroundColor = _backgroundColor;
-                //tbox.BackgroundColor = Color.Transparent;
-                tbox.SetController(this);
-
+                tbox.BackgroundColor = _backgroundColor; 
+                tbox.SetController(this); 
                 tbox.ViewportChanged += (s, e) =>
                 {
                     RaiseViewportChanged();
