@@ -62,15 +62,15 @@ namespace LayoutFarm.TextEditing
                     {
                         //stop caret on prev element
                         _currentTextBox.SetCaretState(false);
-                        var evlistener = _currentTextBox.GetController() as IUIEventListener;
                         _currentTextBox = null;
-                        if (evlistener != null)
+
+                        if (_currentTextBox.GetController() is IUIEventListener evlistener)
                         {
                             evlistener.ListenLostKeyboardFocus(null);
                         }
                     }
                 }
-              
+
                 _currentTextBox = value;
             }
         }
