@@ -287,16 +287,16 @@ namespace LayoutFarm.TextEditing
                         d.CurrentTextColor = prevColor;
                     }
                     break;
-                //case SAME_FONT_DIFF_TEXT_COLOR:
-                //    {
-                //        Color prevColor = d.CurrentTextColor;
-                //        d.CurrentTextColor = style.FontColor;
-                //        d.DrawText(_mybuffer,
-                //            new Rectangle(0, 0, bWidth, bHeight),
-                //            style.ContentHAlign);
-                //        d.CurrentTextColor = prevColor;
-                //    }
-                //    break;
+                case SAME_FONT_DIFF_TEXT_COLOR:
+                    {
+                        Color prevColor = d.CurrentTextColor;
+                        d.CurrentTextColor = style.FontColor;
+                        d.DrawText(_mybuffer,
+                            new Rectangle(0, 0, bWidth, bHeight),
+                            style.ContentHAlign);
+                        d.CurrentTextColor = prevColor;
+                    }
+                    break;
                 default:
                     {
                         if (_renderVxFormattedString == null)

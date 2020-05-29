@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Text;
 
 using LayoutFarm.UI;
-using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.Drawing;
 
 namespace LayoutFarm.TextEditing
