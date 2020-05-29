@@ -112,8 +112,10 @@ namespace LayoutFarm.TextEditing
         {
             return new string(_mybuffer);
         }
-
-
+        public override void WriteTo(StringBuilder stbuilder)
+        {
+            stbuilder.Append(_mybuffer);
+        }
 
         public override void UpdateRunWidth()
         {

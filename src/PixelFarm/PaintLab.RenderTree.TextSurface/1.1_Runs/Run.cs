@@ -134,10 +134,12 @@ namespace LayoutFarm.TextEditing
                 _ownerTextLine.ClientRunInvalidateGraphics(this);
             }
         }
-        public abstract char GetChar(int index);
+
         internal abstract bool IsInsertable { get; }
-        public abstract string GetText();
         public abstract int CharacterCount { get; }
+        public abstract char GetChar(int index);        
+        public abstract string GetText();        
+        public abstract void WriteTo(StringBuilder stbuilder);
         //--------------------
         //model
         public abstract CharLocation GetCharacterFromPixelOffset(int pixelOffset);

@@ -56,13 +56,21 @@ namespace LayoutFarm.TextEditing
 #else
             _mybuffer = newbuffer;
 #endif
+
             _content_unparsed = true;
+
+            _renderVxFormattedString?.Dispose(); //clear old _renderVxFormattedString
+            _renderVxFormattedString = null;
         }
-
-
         public override CopyRun CreateCopy()
         {
-            return new CopyRun(this.GetText());
+            char[] copyBuffer = new char[_mybuffer.Length];
+            Array.Copy(_mybuffer, copyBuffer, copyBuffer.Length);
+            return new CopyRun(copyBuffer);
+        }
+        public override void WriteTo(StringBuilder stbuilder)
+        {
+            stbuilder.Append(_mybuffer);
         }
         public override CopyRun Copy(int startIndex)
         {
@@ -83,12 +91,7 @@ namespace LayoutFarm.TextEditing
                 //CopyRun newTextRun = null;
                 char[] newContent = new char[length];
                 Array.Copy(_mybuffer, sourceIndex, newContent, 0, length);
-
                 return new CopyRun(newContent);
-                //newTextRun = new EditableTextRun(this.Root, newContent, this.SpanStyle);
-                //newTextRun.IsLineBreak = this.IsLineBreak;
-                //newTextRun.UpdateRunWidth();
-                //return newTextRun;
             }
             else
             {
@@ -318,6 +321,7 @@ namespace LayoutFarm.TextEditing
                         d.CurrentFont = prevFont;
                     }
                     break;
+
                 case SAME_FONT_DIFF_TEXT_COLOR:
                     {
                         Color prevColor = d.CurrentTextColor;
