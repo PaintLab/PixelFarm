@@ -27,10 +27,12 @@ namespace LayoutFarm.TextEditing
         public TextRun(RunStyle runstyle, char[] copyBuffer)
             : base(runstyle)
         {
+#if DEBUG
             if (copyBuffer.Length == 0)
             {
 
             }
+#endif
             //we need font info (in style) for evaluating the size fo this span
             //without font info we can't measure the size of this span 
             SetNewContent(copyBuffer);
