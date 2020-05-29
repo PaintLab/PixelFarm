@@ -18,10 +18,10 @@ namespace LayoutFarm.TextEditing
         }
     }
 
-    class TextFlowEditor : TextFlowWalkerBase
+    class TextFlowEditWalker : TextFlowWalkerBase
     {
         //TODO: review this class again 
-        public TextFlowEditor(TextFlowLayer textLayer) : base(textLayer)
+        public TextFlowEditWalker(TextFlowLayer textLayer) : base(textLayer)
         {
 
         }

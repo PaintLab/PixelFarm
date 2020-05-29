@@ -309,7 +309,6 @@ namespace LayoutFarm.TextEditing
 
             _lineEditor.AddTextSpan(textbuffer);
 
-
             CopyRun copyRun = new CopyRun(textbuffer);
             EnableUndoHistoryRecording = isRecordingHx;
 
