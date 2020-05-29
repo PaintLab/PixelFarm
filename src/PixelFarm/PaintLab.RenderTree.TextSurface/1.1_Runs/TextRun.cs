@@ -250,6 +250,36 @@ namespace LayoutFarm.TextEditing
 
         internal static RenderElement s_currentRenderE;
 
+        void DrawText(DrawBoard d)
+        {
+
+            //d.DrawText(_mybuffer,
+            //     new Rectangle(0, 0, bWidth, bHeight),
+            //     style.ContentHAlign);
+
+            if (_renderVxFormattedString == null)
+            {
+                _renderVxFormattedString = d.CreateFormattedString(_mybuffer, 0, _mybuffer.Length, DelayFormattedString);
+            }
+
+            switch (_renderVxFormattedString.State)
+            {
+                case RenderVxFormattedString.VxState.Ready:
+                    d.DrawRenderVx(_renderVxFormattedString, 0, 0);
+                    break;
+                case RenderVxFormattedString.VxState.NoStrip:
+                    {
+                        //put this to the update queue system
+                        //(TODO: add extension method for this)
+                        GlobalRootGraphic.CurrentRootGfx.EnqueueRenderRequest(
+                            new RenderBoxes.RenderElementRequest(
+                                s_currentRenderE,
+                                RenderBoxes.RequestCommand.ProcessFormattedString,
+                                _renderVxFormattedString));
+                    }
+                    break;
+            }
+        }
         public override void Draw(DrawBoard d, UpdateArea updateArea)
         {
             int bWidth = this.Width;
@@ -262,72 +292,43 @@ namespace LayoutFarm.TextEditing
 
             RunStyle style = this.RunStyle;//must 
 
-            //set style to the canvas
-
+            //set style to the canvas  
             switch (EvaluateFontAndTextColor(d, style))
             {
-                case DIFF_FONT_SAME_TEXT_COLOR:
-                    {
-                        //TODO: review here
-                        //change font here...
-
-                        d.DrawText(_mybuffer,
-                            new Rectangle(0, 0, bWidth, bHeight),
-                            style.ContentHAlign);
-                    }
-                    break;
                 case DIFF_FONT_DIFF_TEXT_COLOR:
                     {
                         RequestFont prevFont = d.CurrentFont;
                         Color prevColor = d.CurrentTextColor;
                         d.CurrentFont = style.ReqFont;
                         d.CurrentTextColor = style.FontColor;
-                        d.DrawText(_mybuffer,
-                             new Rectangle(0, 0, bWidth, bHeight),
-                             style.ContentHAlign);
+
+                        DrawText(d);
+
                         d.CurrentFont = prevFont;
                         d.CurrentTextColor = prevColor;
+                    }
+                    break;
+                case DIFF_FONT_SAME_TEXT_COLOR:
+                    {
+                        RequestFont prevFont = d.CurrentFont;
+                        d.CurrentFont = style.ReqFont;
+
+                        DrawText(d);
+
+                        d.CurrentFont = prevFont;
                     }
                     break;
                 case SAME_FONT_DIFF_TEXT_COLOR:
                     {
                         Color prevColor = d.CurrentTextColor;
                         d.CurrentTextColor = style.FontColor;
-                        d.DrawText(_mybuffer,
-                            new Rectangle(0, 0, bWidth, bHeight),
-                            style.ContentHAlign);
+                        DrawText(d);
                         d.CurrentTextColor = prevColor;
                     }
                     break;
                 default:
                     {
-                        if (_renderVxFormattedString == null)
-                        {
-                            _renderVxFormattedString = d.CreateFormattedString(_mybuffer, 0, _mybuffer.Length, DelayFormattedString);
-                        }
-
-
-                        switch (_renderVxFormattedString.State)
-                        {
-                            case RenderVxFormattedString.VxState.Ready:
-                                d.DrawRenderVx(_renderVxFormattedString, 0, 0);
-                                break;
-                            case RenderVxFormattedString.VxState.NoStrip:
-                                {
-                                    //put this to the update queue system
-                                    //(TODO: add extension method for this)
-                                    GlobalRootGraphic.CurrentRootGfx.EnqueueRenderRequest(
-                                        new RenderBoxes.RenderElementRequest(
-                                            s_currentRenderE,
-                                            RenderBoxes.RequestCommand.ProcessFormattedString,
-                                            _renderVxFormattedString));
-                                }
-                                break;
-                        }
-
-                        //canvas.DrawText(_mybuffer,
-                        //   new Rectangle(0, 0, bWidth, bHeight),
-                        //   style.ContentHAlign);
+                        DrawText(d);
                     }
                     break;
             }
