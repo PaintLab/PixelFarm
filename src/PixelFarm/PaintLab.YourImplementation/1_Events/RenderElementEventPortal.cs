@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
 using LayoutFarm.UI.ForImplementator;
+
 namespace LayoutFarm.UI
 {
     public class RenderElementEventPortal : IEventPortal
@@ -45,7 +46,7 @@ namespace LayoutFarm.UI
                     }
                 });
                 _mousePressMonitor.Enabled = true;
-                _mousePressMonitor.IntervalInMillisec = intervalMs; //interval for mouse press monitor
+                _mousePressMonitor.Interval = intervalMs; //interval for mouse press monitor
                 UIPlatform.RegisterTimerTask(_mousePressMonitor);
             }
             public void Reset()
@@ -181,14 +182,14 @@ namespace LayoutFarm.UI
         //        }
 
 
-        void HitTestCoreWithPrevChainHint(HitChain hitPointChain, HitChain previousChain, int x, int y)
+        void HitTestCoreWithPrevChainHint(HitChain hitChain, HitChain previousChain, int x, int y)
         {
             //---------------------------------
             //test on previous chain first , find common element 
-            hitPointChain.Reset();
-            hitPointChain.SetStartTestPoint(x, y);
+            hitChain.Reset();
+            hitChain.SetStartTestPoint(x, y);
 #if DEBUG
-            hitPointChain.dbugHitPhase = _dbugHitChainPhase;
+            hitChain.dbugHitPhase = _dbugHitChainPhase;
 #endif
             //if (this.dbugId > 0 && isDragging && previousChain.Count > 1)
             //{
@@ -200,34 +201,23 @@ namespace LayoutFarm.UI
             //temp fix
             //TODO: fix bug on HitTestOnPreviousChain()
             RenderElement commonElement = _topRenderElement;
-            ////use root 
-            //if (isDragging)
+            commonElement.HitTestCore(hitChain);
+
+            //remove disable elements
+            //if (hitPointChain.dbugHitPhase == dbugHitChainPhase.MouseDown)
             //{
-            //    if (commonElement != this.topRenderElement)
-            //    {
-
-            //    }
+            int j = hitChain.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                HitInfo info = hitChain.GetHitInfo(i);
+                RenderElement renderE = info.HitElemAsRenderElement;
+                if (renderE != null && renderE.GetController() is IUIEventListener ui && !ui.Enabled)
+                {
+                    HitChain.UnsafeClear(hitChain);
+                    break;//stop loop and exit
+                }
+            }
             //}
-
-
-            //if (lastCommonElement != null && commonElement != null &&
-            //    lastCommonElement != commonElement && isDragging)
-            //{
-            //    Console.WriteLine(commonElement.dbug_GetBoundInfo());
-            //}
-            //if (commonElement == null)
-            //{
-            //    commonElement = this.topRenderElement;
-            //}
-
-            //if (commonElement != this.topRenderElement)
-            //{
-
-            //}
-
-            //lastCommonElement = commonElement;
-            commonElement.HitTestCore(hitPointChain);
-            //this.topRenderElement.HitTestCore(hitPointChain);
         }
 
         IUIEventListener _currentMouseWheel = null;
@@ -325,8 +315,10 @@ namespace LayoutFarm.UI
             _dbugHitChainPhase = dbugHitChainPhase.MouseDown;
 #endif
             HitTestCoreWithPrevChainHint(hitPointChain, _previousChain, e.X, e.Y);
+
             if (hitPointChain.Count > 0)
             {
+
                 //------------------------------
                 //1. origin object 
                 SetEventOrigin(e, hitPointChain);

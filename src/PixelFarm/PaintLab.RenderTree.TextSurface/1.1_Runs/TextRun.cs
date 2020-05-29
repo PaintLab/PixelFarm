@@ -246,6 +246,8 @@ namespace LayoutFarm.TextEditing
             }
         }
 
+        internal static RenderElement s_currentRenderE;
+
         public override void Draw(DrawBoard d, UpdateArea updateArea)
         {
             int bWidth = this.Width;
@@ -314,7 +316,7 @@ namespace LayoutFarm.TextEditing
                                     //(TODO: add extension method for this)
                                     GlobalRootGraphic.CurrentRootGfx.EnqueueRenderRequest(
                                         new RenderBoxes.RenderElementRequest(
-                                            GlobalRootGraphic.CurrentRenderElement,
+                                            s_currentRenderE,
                                             RenderBoxes.RequestCommand.ProcessFormattedString,
                                             _renderVxFormattedString));
                                 }
