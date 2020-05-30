@@ -37,9 +37,9 @@ namespace LayoutFarm.TextEditing
             int cx = 0;
             while (curNode != null)
             {
-                Run ve = curNode.Value;
-                Run.DirectSetLocation(ve, cx, 0);
-                cx += ve.Width;
+                Run r = curNode.Value;
+                Run.DirectSetLocation(r, cx, 0);
+                cx += r.Width;
                 curNode = curNode.Next;
             }
         }

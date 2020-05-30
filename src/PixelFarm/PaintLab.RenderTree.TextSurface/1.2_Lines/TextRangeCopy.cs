@@ -17,15 +17,12 @@ namespace LayoutFarm.TextEditing
     {
         public RunKind RunKind { get; set; }
         public char[] RawContent { get; set; }
-        public CopyRun(string rawContent)
-        {
-            RawContent = rawContent.ToCharArray();
-        }
+
         public CopyRun(char[] rawContent)
         {
             RawContent = rawContent;
         }
-        
+
         public int CharacterCount
         {
             get
@@ -39,18 +36,6 @@ namespace LayoutFarm.TextEditing
                     default: throw new NotSupportedException();
                 }
             }
-        }
-        public void CopyContentToStringBuilder(StringBuilder stbuilder)
-        {
-            throw new NotSupportedException();
-            //if (IsLineBreak)
-            //{
-            //    stBuilder.Append("\r\n");
-            //}
-            //else
-            //{
-            //    stBuilder.Append(_mybuffer);
-            //}
         }
     }
 
@@ -81,7 +66,9 @@ namespace LayoutFarm.TextEditing
         }
         public void CopyContentToStringBuilder(StringBuilder stbuilder)
         {
-            stbuilder.Append(_stbuilder.ToString());
+            char[] buff = new char[_stbuilder.Length];
+            _stbuilder.CopyTo(0, buff, 0, buff.Length);
+            stbuilder.Append(buff);
         }
 
         public bool HasSomeRuns => _stbuilder.Length > 0;
@@ -92,7 +79,7 @@ namespace LayoutFarm.TextEditing
         /// <param name="run"></param>
         public void AppendRun(Run run)
         {
-            run.WriteTo(_stbuilder);             
+            run.WriteTo(_stbuilder);
         }
         public void AppendRun(CopyRun run)
         {

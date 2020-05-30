@@ -66,10 +66,9 @@ namespace LayoutFarm.TextEditing
 
             }
         }
-        public void EnsureCurrentTextRun()
-        {
-            EnsureCurrentTextRun(CharIndex);
-        }
+
+        public void EnsureCurrentTextRun() => EnsureCurrentTextRun(CharIndex);
+
         public void RemoveSelectedTextRuns(VisualSelectionRange selectionRange)
         {
 #if DEBUG   
@@ -140,17 +139,8 @@ namespace LayoutFarm.TextEditing
                 return toBeRemovedChar;
             }
         }
-        public Run GetCurrentTextRun()
-        {
-            if (CurrentLine.IsBlankLine)
-            {
-                return null;
-            }
-            else
-            {
-                return CurrentTextRun;
-            }
-        }
+
+        public Run GetCurrentTextRun() => CurrentLine.IsBlankLine ? null : CurrentTextRun;
 
         public bool CanAcceptThisChar(char c)
         {
@@ -212,6 +202,7 @@ namespace LayoutFarm.TextEditing
         }
         public void AddTextSpan(char[] textspan)
         {
+
             AddTextSpan(new TextRun(CurrentSpanStyle, textspan));
         }
         public void AddTextSpan(Run textRun)
@@ -276,11 +267,8 @@ namespace LayoutFarm.TextEditing
             EnsureCurrentTextRun(charIndex);
         }
 
-        public char DoBackspaceOneChar()
-        {
-            //simulate backspace keystroke
-            return BackSpaceOneChar();
-        }
+        public char DoBackspaceOneChar() => BackSpaceOneChar();
+
         public char DoDeleteOneChar()
         {
             if (CharIndex < CurrentLine.CharCount())
@@ -401,7 +389,7 @@ namespace LayoutFarm.TextEditing
                 _currentTextRun = _currentLine.FirstRun;
             }
         }
-        internal ITextService TextService => _textFlowLayer.TextServices;
+
 #if DEBUG
         int _i_charIndex;
         int caret_char_index
@@ -429,10 +417,8 @@ namespace LayoutFarm.TextEditing
         //
         protected Run CurrentTextRun => _currentTextRun;
         //
-        protected void SetCurrentTextRun(Run r)
-        {
-            _currentTextRun = r;
-        }
+        protected void SetCurrentTextRun(Run r) => _currentTextRun = r;
+
         protected bool _needUpdateCurrentRun;
         public void InvalidateCurrentRun()
         {
@@ -449,7 +435,7 @@ namespace LayoutFarm.TextEditing
             }
 
             using (var copyContext = new TempTextLineCopyContext(_currentLine, out TextBufferSpan textBufferSpan))
-            using (ILineSegmentList segmentList = this.TextService.BreakToLineSegments(textBufferSpan))
+            using (ILineSegmentList segmentList = GlobalRootGraphic.TextService.BreakToLineSegments(textBufferSpan))
             {
                 if (segmentList == null)
                 {
