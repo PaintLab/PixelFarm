@@ -13,8 +13,8 @@ namespace LayoutFarm.TextEditing
     /// </summary>
     public abstract class Run
     {
-        bool _validCalSize;
-        bool _validContentArr;
+        //bool _validCalSize;
+        //bool _validContentArr;
 
         TextLineBox _ownerTextLine;
         RunStyle _runStyle;
@@ -101,11 +101,7 @@ namespace LayoutFarm.TextEditing
             _height = h;
         }
 
-        public static void RemoveParentLink(Run run) => run._linkNode = null;
-
-        public void MarkHasValidCalculateSize() => _validCalSize = true;
-
-        public void MarkValidContentArrangement() => _validContentArr = true;
+        public static void RemoveParentLink(Run run) => run._linkNode = null;         
 
         protected void InvalidateGraphics() => _ownerTextLine?.ClientRunInvalidateGraphics(this);
 
@@ -158,35 +154,18 @@ namespace LayoutFarm.TextEditing
         /// prev run
         /// </summary>
         public Run PrevRun => _linkNode?.Previous?.Value;
-        //
+
         internal TextLineBox OwnerLine => _ownerTextLine;
-        //
+
         internal LinkedListNode<Run> LinkNode => _linkNode;
-        //
+
         internal void SetLinkNode(LinkedListNode<Run> linkNode, TextLineBox owner)
         {
             _linkNode = linkNode;
             _ownerTextLine = owner;
         }
-        //----------------------------------------------------------------------
-        public void TopDownReCalculateContentSize()
-        {
-            InnerTextRunTopDownReCalculateContentSize(this);
-        }
 
-        public static void InnerTextRunTopDownReCalculateContentSize(Run ve)
-        {
-#if DEBUG
-            //dbug_EnterTopDownReCalculateContent(ve);
-#endif
-
-            ve.UpdateRunWidth();
-#if DEBUG
-            //dbug_ExitTopDownReCalculateContent(ve);
-#endif
-        }
-        //--------------------
-
+        public void TopDownReCalculateContentSize() => this.UpdateRunWidth();
 
 #if DEBUG
         //public override string dbug_FullElementDescription()
