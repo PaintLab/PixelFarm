@@ -315,6 +315,9 @@ namespace LayoutFarm.TextEditing
                    _actualLineWidth + ",H:" + _actualLineHeight + "}";
             }
         }
+ 
+        internal bool dbugHasOwner => _textFlowLayer != null;
+ 
 #endif
         //internal bool IsLocalSuspendLineRearrange => (_lineFlags & LOCAL_SUSPEND_LINE_REARRANGE) != 0;
         //internal void InvalidateLineLayout()

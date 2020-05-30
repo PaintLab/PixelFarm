@@ -206,8 +206,6 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        internal bool HasOwner => _textFlowLayer != null;
-
         internal void Remove(VisualSelectionRange selectionRange)
         {
             EditableVisualPointInfo startPoint = selectionRange.StartPoint;
