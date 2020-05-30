@@ -4,9 +4,98 @@ using System;
 using System.Collections.Generic;
 namespace LayoutFarm.TextEditing
 {
+    static class Temp<Owner, T>
+    {
+        public struct TempContext : IDisposable
+        {
+            internal readonly T _tool;
+            internal TempContext(out T tool)
+            {
+                Temp<Owner, T>.GetFreeItem(out _tool);
+                tool = _tool;
+            }
+            public void Dispose()
+            {
+                Temp<Owner, T>.Release(_tool);
+            }
+        }
+
+        public delegate T CreateNewItemDelegate();
+        public delegate void ReleaseItemDelegate(T item);
+
+
+        [System.ThreadStatic]
+        static Stack<T> s_pool;
+        [System.ThreadStatic]
+        static CreateNewItemDelegate s_newHandler;
+        [System.ThreadStatic]
+        static ReleaseItemDelegate s_releaseCleanUp;
+
+        public static TempContext Borrow(out T freeItem)
+        {
+            return new TempContext(out freeItem);
+        }
+
+        public static void SetNewHandler(CreateNewItemDelegate newHandler, ReleaseItemDelegate releaseCleanUp = null)
+        {
+            //set new instance here, must set this first***
+            if (s_pool == null)
+            {
+                s_pool = new Stack<T>();
+            }
+            s_newHandler = newHandler;
+            s_releaseCleanUp = releaseCleanUp;
+        }
+        internal static void GetFreeItem(out T freeItem)
+        {
+            if (s_pool.Count > 0)
+            {
+                freeItem = s_pool.Pop();
+            }
+            else
+            {
+                freeItem = s_newHandler();
+            }
+        }
+        internal static void Release(T item)
+        {
+            s_releaseCleanUp?.Invoke(item);
+            s_pool.Push(item);
+            //... 
+        }
+        public static bool IsInit()
+        {
+            return s_pool != null;
+        }
+    }
+
+
+    static class RunListPool
+    {
+        public static Temp<TextLineBox, List<Run>>.TempContext Borrow(out List<Run> runList)
+        {
+            if (!Temp<TextLineBox, List<Run>>.IsInit())
+            {
+                Temp<TextLineBox, List<Run>>.SetNewHandler(() => new List<Run>(),
+                s => s.Clear()
+                );
+            }
+            return Temp<TextLineBox, List<Run>>.Borrow(out runList);
+        }
+        public static Temp<TextLineBox, LinkedList<Run>>.TempContext Borrow(out LinkedList<Run> runList)
+        {
+            if (!Temp<TextLineBox, LinkedList<Run>>.IsInit())
+            {
+                Temp<TextLineBox, LinkedList<Run>>.SetNewHandler(() => new LinkedList<Run>(),
+                s => s.Clear()
+                );
+            }
+            return Temp<TextLineBox, LinkedList<Run>>.Borrow(out runList);
+        }
+    }
+
     partial class TextLineBox
     {
-
         public void AddLineBreakAfter(Run afterTextRun)
         {
             if (afterTextRun == null)
@@ -31,36 +120,42 @@ namespace LayoutFarm.TextEditing
             }
             else
             {
-                
-                //TODO: use pool
-                List<Run> tempTextRuns = new List<Run>(this.RunCount);
-                if (afterTextRun != null)
+
+                using (RunListPool.Borrow(out List<Run> tempTextRuns))
                 {
-                    foreach (Run t in GetRunIterForward(afterTextRun.NextRun))
+                    if (afterTextRun != null)
                     {
-                        tempTextRuns.Add(t);
+                        foreach (Run t in GetRunIterForward(afterTextRun.NextRun))
+                        {
+                            tempTextRuns.Add(t);
+                        }
                     }
+
+                    bool thisEndWithLineBreak = this.EndWithLineBreak;
+
+                    this.EndWithLineBreak = true;
+                    this.LocalSuspendLineReArrange();
+
+                    TextLineBox newTextline = _textFlowLayer.InsertNewLine(_currentLineNumber + 1);
+                    newTextline.EndWithLineBreak = thisEndWithLineBreak;
+
+                    //
+                    int j = tempTextRuns.Count;
+                    newTextline.LocalSuspendLineReArrange();
+                    int cx = 0;
+                    for (int i = 0; i < j; ++i)
+                    {
+                        Run t = tempTextRuns[i];
+                        this.Remove(t);
+                        newTextline.AddLast(t);
+                        Run.DirectSetLocation(t, cx, 0);
+                        cx += t.Width;
+                    }
+
+                    newTextline.LocalResumeLineReArrange();
+                    this.LocalResumeLineReArrange();
                 }
 
-                this.EndWithLineBreak = true;
-                this.LocalSuspendLineReArrange();
-
-                TextLineBox newTextline = _textFlowLayer.InsertNewLine(_currentLineNumber + 1);
-                //
-                int j = tempTextRuns.Count;
-                newTextline.LocalSuspendLineReArrange();
-                int cx = 0;
-                for (int i = 0; i < j; ++i)
-                {
-                    Run t = tempTextRuns[i];
-                    this.Remove(t);
-                    newTextline.AddLast(t);
-                    Run.DirectSetLocation(t, cx, 0);
-                    cx += t.Width;
-                }
-
-                newTextline.LocalResumeLineReArrange();
-                this.LocalResumeLineReArrange();
             }
         }
         void AddLineBreakBefore(Run beforeTextRun)
@@ -73,80 +168,84 @@ namespace LayoutFarm.TextEditing
             else
             {
                 //TODO: use pool
-                List<Run> tempTextRuns = new List<Run>();
-                if (beforeTextRun != null)
+                using (RunListPool.Borrow(out List<Run> tempTextRuns))
                 {
-                    foreach (Run t in GetRunIterForward(beforeTextRun))
+                    if (beforeTextRun != null)
                     {
-                        tempTextRuns.Add(t);
+                        foreach (Run t in GetRunIterForward(beforeTextRun))
+                        {
+                            tempTextRuns.Add(t);
+                        }
                     }
+                    this.EndWithLineBreak = true;
+                    TextLineBox newTextline = _textFlowLayer.InsertNewLine(_currentLineNumber + 1);
+                    //
+                    this.LocalSuspendLineReArrange();
+                    newTextline.LocalSuspendLineReArrange();
+                    int j = tempTextRuns.Count;
+                    for (int i = 0; i < j; ++i)
+                    {
+                        Run t = tempTextRuns[i];
+                        this.Remove(t);
+                        newTextline.AddLast(t);
+                    }
+                    this.LocalResumeLineReArrange();
+                    newTextline.LocalResumeLineReArrange();
                 }
-                this.EndWithLineBreak = true;
-                TextLineBox newTextline = _textFlowLayer.InsertNewLine(_currentLineNumber + 1);
-                //
-                this.LocalSuspendLineReArrange();
-                newTextline.LocalSuspendLineReArrange();
-                int j = tempTextRuns.Count;
-                for (int i = 0; i < j; ++i)
-                {
-                    Run t = tempTextRuns[i];
-                    this.Remove(t);
-                    newTextline.AddLast(t);
-                }
-                this.LocalResumeLineReArrange();
-                newTextline.LocalResumeLineReArrange();
             }
         }
 
         void RemoveLeft(Run t)
         {
-            if (t != null)
-            {
+            if (t == null) return;
 
-                LinkedList<Run> tobeRemoveTextRuns = CollectLeftRuns(t);
+            LocalSuspendLineReArrange();
+            using (RunListPool.Borrow(out LinkedList<Run> tobeRemoveTextRuns))
+            {
+                CollectLeftRuns(t, tobeRemoveTextRuns);
                 LinkedListNode<Run> curNode = tobeRemoveTextRuns.First;
-                LocalSuspendLineReArrange();
+
                 while (curNode != null)
                 {
                     Remove(curNode.Value);
                     curNode = curNode.Next;
                 }
-                LocalResumeLineReArrange();
-            }
-        }
-        void RemoveRight(Run t)
-        {
-
-            LinkedList<Run> tobeRemoveTextRuns = CollectRightRuns(t);
-            LinkedListNode<Run> curNode = tobeRemoveTextRuns.First;
-            LocalSuspendLineReArrange();
-            while (curNode != null)
-            {
-                Remove(curNode.Value);
-                curNode = curNode.Next;
             }
             LocalResumeLineReArrange();
         }
-
-        LinkedList<Run> CollectLeftRuns(Run t)
+        void RemoveRight(Run t)
         {
+            LocalSuspendLineReArrange();
 
-            LinkedList<Run> colllectRun = new LinkedList<Run>();
+            using (RunListPool.Borrow(out LinkedList<Run> tobeRemoveTextRuns))
+            {
+                CollectRightRuns(t, tobeRemoveTextRuns);
+
+                LinkedListNode<Run> curNode = tobeRemoveTextRuns.First;
+
+                while (curNode != null)
+                {
+                    Remove(curNode.Value);
+                    curNode = curNode.Next;
+                }
+            }
+
+            LocalResumeLineReArrange();
+        }
+
+        void CollectLeftRuns(Run t, LinkedList<Run> output)
+        {
             foreach (Run r in GetRunIterForward(this.FirstRun, t))
             {
-                colllectRun.AddLast(r);
+                output.AddLast(r);
             }
-            return colllectRun;
         }
-        LinkedList<Run> CollectRightRuns(Run t)
+        void CollectRightRuns(Run t, LinkedList<Run> output)
         {
-
-            LinkedList<Run> colllectRun = new LinkedList<Run>();
             foreach (Run r in _textFlowLayer.TextRunForward(t, this.LastRun))
             {
-                colllectRun.AddLast(r);
+                output.AddLast(r);
             }
-            return colllectRun;
         }
         public void ReplaceAll(IEnumerable<Run> textRuns)
         {

@@ -351,7 +351,7 @@ namespace LayoutFarm.CustomWidgets
                     _textEditRenderElement.SplitCurrentLineToNewLine();
                 }
 
-                //we create an unparse text run***
+                 
                 _textEditRenderElement.AddTextLine(line);
                 lineCount++;
             }

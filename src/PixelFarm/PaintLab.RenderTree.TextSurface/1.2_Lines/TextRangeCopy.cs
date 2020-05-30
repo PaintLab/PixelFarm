@@ -25,6 +25,7 @@ namespace LayoutFarm.TextEditing
         {
             RawContent = rawContent;
         }
+        
         public int CharacterCount
         {
             get
@@ -91,7 +92,7 @@ namespace LayoutFarm.TextEditing
         /// <param name="run"></param>
         public void AppendRun(Run run)
         {
-            _stbuilder.Append(run.GetText());
+            run.WriteTo(_stbuilder);             
         }
         public void AppendRun(CopyRun run)
         {

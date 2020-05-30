@@ -11,7 +11,6 @@ namespace LayoutFarm.TextEditing
         //TODO: review here=> who should store/handle this handle? , owner TextBox or this run?
         Action<SolidRun, DrawBoard, UpdateArea> _externalCustomDraw;
         char[] _mybuffer;
-        RenderElement _externalRenderE;
 
         public SolidRun(char[] copyBuffer, RunStyle style)
             : base(style)
@@ -41,25 +40,13 @@ namespace LayoutFarm.TextEditing
                 throw new Exception("string must be null or zero length");
             }
         }
-        public void SetCustomExternalDraw(Action<SolidRun, DrawBoard, UpdateArea> externalCustomDraw)
-        {
-            _externalCustomDraw = externalCustomDraw;
-        }
-        public RenderElement ExternalRenderElement
-        {
-            get => _externalRenderE;
-            set => _externalRenderE = value;
-        }
+        public void SetCustomExternalDraw(Action<SolidRun, DrawBoard, UpdateArea> externalCustomDraw) => _externalCustomDraw = externalCustomDraw;
+        public RenderElement ExternalRenderElement { get; set; }
 
         public string RawText { get; set; }
 
-        public override CopyRun CreateCopy()
-        {
-            return new CopyRun(GetText())
-            {
-                RunKind = RunKind.Solid,
-            };
-        }
+        public override CopyRun CreateCopy() => new CopyRun(GetText()) { RunKind = RunKind.Solid };
+
         public override CopyRun Copy(int startIndex)
         {
             if (startIndex == 0)
@@ -69,15 +56,8 @@ namespace LayoutFarm.TextEditing
                 {
                     return MakeTextRun(startIndex, length);
                 }
-                else
-                {
-                    return null;
-                }
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
         CopyRun MakeTextRun(int sourceIndex, int length)
         {
@@ -104,80 +84,32 @@ namespace LayoutFarm.TextEditing
                 throw new Exception("string must be null or zero length");
             }
         }
-        public override int GetRunWidth(int charOffset)
-        {
-            return CalculateDrawingStringSize(_mybuffer, charOffset).Width;
-        }
-        public override string GetText()
-        {
-            return new string(_mybuffer);
-        }
 
+        public override int GetRunWidth(int charOffset) => CalculateDrawingStringSize(_mybuffer, charOffset).Width;
+        public override string GetText() => new string(_mybuffer);
 
+        public override void WriteTo(StringBuilder stbuilder) => stbuilder.Append(_mybuffer);
 
         public override void UpdateRunWidth()
         {
-            Size size;
-            //if (IsLineBreak)
-            //{
-            //    size = new Size(0, (int)Math.Round(Root.TextServices.MeasureBlankLineHeight(GetFont())));
-            //}
-            //else
-            //{
-            size = CalculateDrawingStringSize(_mybuffer, _mybuffer.Length);
-            //}
-            //this.SetSize(size.Width, size.Height);
-            DirectSetSize(this, size.Width, size.Height);
-            MarkHasValidCalculateSize();
+            Size size = CalculateDrawingStringSize(_mybuffer, _mybuffer.Length);
+            SetSize(size.Width, size.Height);
         }
-        public override char GetChar(int index)
-        {
-            return _mybuffer[index];
-        }
-        public override void CopyContentToStringBuilder(StringBuilder stBuilder)
-        {
-            //if (IsLineBreak)
-            //{
-            //    stBuilder.Append("\r\n");
-            //}
-            //else
-            //{
-            stBuilder.Append(RawText);
-            //}
-        }
-        public override int CharacterCount
-        {
-            get
-            {
-                switch (_mybuffer.Length)
-                {
-                    case 0: return 0;
-                    default: return 1;
-                }
-            }
-        }
+        public override char GetChar(int index) => _mybuffer[index];
 
-        Size CalculateDrawingStringSize(char[] buffer, int length)
-        {
-            var textBufferSpan = new TextBufferSpan(buffer, 0, length);
-            return MeasureString(textBufferSpan);
-        }
+        public override void CopyContentToStringBuilder(StringBuilder stBuilder) => stBuilder.Append(RawText);
 
-        public override CopyRun Copy(int startIndex, int length)
-        {
-            if (startIndex > -1 && length > 0)
-            {
-                return MakeTextRun(startIndex, length);
-            }
-            else
-            {
-                return null;
-            }
-        }
+        public override int CharacterCount => (_mybuffer.Length == 0) ? 0 : 1;
+
+        Size CalculateDrawingStringSize(char[] buffer, int length) => MeasureString(new TextBufferSpan(buffer, 0, length));
+
+        public override CopyRun Copy(int startIndex, int length) => (startIndex > -1 && length > 0) ? MakeTextRun(startIndex, length) : null;
+
         const int SAME_FONT_SAME_TEXT_COLOR = 0;
         const int SAME_FONT_DIFF_TEXT_COLOR = 1;
         const int DIFF_FONT_SAME_TEXT_COLOR = 2;
         const int DIFF_FONT_DIFF_TEXT_COLOR = 3;
+
         static int EvaluateFontAndTextColor(DrawBoard d, RunStyle spanStyle)
         {
             RequestFont font = spanStyle.ReqFont;
@@ -215,9 +147,9 @@ namespace LayoutFarm.TextEditing
                 _externalCustomDraw(this, d, updateArea);
                 return;
             }
-            else if (_externalRenderE != null)
+            else if (ExternalRenderElement != null)
             {
-                RenderElement.Render(_externalRenderE, d, updateArea);
+                RenderElement.Render(ExternalRenderElement, d, updateArea);
                 return;
             }
 
@@ -341,6 +273,7 @@ namespace LayoutFarm.TextEditing
                 throw new NotSupportedException();
             }
             _mybuffer = newBuff;
+            InvalidateOwnerLineCharCount();
             UpdateRunWidth();
         }
 
@@ -371,17 +304,11 @@ namespace LayoutFarm.TextEditing
 
                 Array.Copy(_mybuffer, startIndex + length, newBuff, startIndex, oldLexLength - startIndex - length);
                 _mybuffer = newBuff;
+                InvalidateOwnerLineCharCount();
                 UpdateRunWidth();
             }
 
-            if (withFreeRun)
-            {
-                return freeRun;
-            }
-            else
-            {
-                return null;
-            }
+            return withFreeRun ? freeRun : null;
         }
     }
 }

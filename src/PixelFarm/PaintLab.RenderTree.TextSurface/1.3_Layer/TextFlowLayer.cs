@@ -619,14 +619,9 @@ namespace LayoutFarm.TextEditing
                 return (lastLine != null) ? lastLine.Top + lastLine.ActualLineHeight : DefaultLineHeight;
             }
         }
-        internal TextLineBox GetTextLine(int lineId)
-        {
-            if (lineId < _lines.Count)
-            {
-                return _lines[lineId];
-            }
-            return null;
-        }
+
+        internal TextLineBox GetTextLine(int lineId) => (lineId < _lines.Count) ? _lines[lineId] : null;
+         
         internal TextLineBox GetTextLineAtPos(int y)
         {
             List<TextLineBox> lines = _lines;
