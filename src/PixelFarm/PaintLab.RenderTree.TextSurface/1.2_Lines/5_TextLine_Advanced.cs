@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using PixelFarm.Drawing;
 
 namespace LayoutFarm.TextEditing
@@ -17,27 +16,28 @@ namespace LayoutFarm.TextEditing
         }
         void JoinWithNextLine()
         {
-            if (!IsLastLine)
-            {
-                TextLineBox lowerLine = _textFlowLayer.GetTextLine(_currentLineNumber + 1);
-                this.LocalSuspendLineReArrange();
-                int cx = 0;
-                Run lastTextRun = (Run)this.LastRun;
-                if (lastTextRun != null)
-                {
-                    cx = lastTextRun.Right;
-                }
+            if (IsLastLine) { return; }
+            //
 
-                foreach (Run r in lowerLine._runs)
-                {
-                    this.AddLast(r);
-                    Run.DirectSetLocation(r, cx, 0);
-                    cx += r.Width;
-                }
-                this.LocalResumeLineReArrange();
-                this.EndWithLineBreak = lowerLine.EndWithLineBreak;
-                _textFlowLayer.Remove(lowerLine._currentLineNumber);
+            TextLineBox lowerLine = _textFlowLayer.GetTextLine(_currentLineNumber + 1);
+            this.LocalSuspendLineReArrange();
+            int cx = 0;
+            Run lastTextRun = (Run)this.LastRun;
+            if (lastTextRun != null)
+            {
+                cx = lastTextRun.Right;
             }
+
+            foreach (Run r in lowerLine._runs)
+            {
+                this.AddLast(r);
+                Run.DirectSetLocation(r, cx, 0);
+                cx += r.Width;
+            }
+            this.LocalResumeLineReArrange();
+            this.EndWithLineBreak = lowerLine.EndWithLineBreak;
+            _textFlowLayer.Remove(lowerLine._currentLineNumber);
+
         }
 
         public void Copy(TextRangeCopy output)
@@ -206,7 +206,7 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-
+        internal bool HasOwner => _textFlowLayer != null;
 
         internal void Remove(VisualSelectionRange selectionRange)
         {
