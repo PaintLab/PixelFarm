@@ -2,6 +2,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text;
+
 using PixelFarm.Drawing;
 using LayoutFarm.TextEditing.Commands;
 
@@ -300,14 +302,12 @@ namespace LayoutFarm.TextEditing
             bool isRecordingHx = EnableUndoHistoryRecording;
             EnableUndoHistoryRecording = false;
 
-            //---------------------
-            //TODO: review here again, use pool
-            System.Text.StringBuilder stbuilder = new System.Text.StringBuilder();
-            textline.CopyText(stbuilder);
-            char[] textbuffer = stbuilder.ToString().ToCharArray();
-            _lineEditor.AddTextSpan(textbuffer);
-            //---------------------
+            //--------------------- 
 
+            char[] textbuffer = new char[textline.CharCount];
+            textline.CopyText(textbuffer, 0, textbuffer.Length, 0);
+
+            _lineEditor.AddTextSpan(textbuffer);
 
             CopyRun copyRun = new CopyRun(textbuffer);
             EnableUndoHistoryRecording = isRecordingHx;
@@ -320,28 +320,29 @@ namespace LayoutFarm.TextEditing
             _updateJustCurrentLine = false;
             //
             NotifyContentSizeChanged();
+
         }
-        public TextSpanStyle GetFirstTextStyleInSelectedRange()
-        {
-            //TODO: review here again
-            throw new NotSupportedException();
-            //VisualSelectionRange selRange = SelectionRange;
-            //if (selRange != null)
-            //{
-            //    if (_selectionRange.StartPoint.Run != null)
-            //    {
-            //        return _selectionRange.StartPoint.Run.SpanStyle;
-            //    }
-            //    else
-            //    {
-            //        return TextSpanStyle.Empty;
-            //    }
-            //}
-            //else
-            //{
-            //    return TextSpanStyle.Empty;
-            //}
-        }
+        //public TextSpanStyle GetFirstTextStyleInSelectedRange()
+        //{
+        //    //TODO: review here again
+        //    throw new NotSupportedException();
+        //    //VisualSelectionRange selRange = SelectionRange;
+        //    //if (selRange != null)
+        //    //{
+        //    //    if (_selectionRange.StartPoint.Run != null)
+        //    //    {
+        //    //        return _selectionRange.StartPoint.Run.SpanStyle;
+        //    //    }
+        //    //    else
+        //    //    {
+        //    //        return TextSpanStyle.Empty;
+        //    //    }
+        //    //}
+        //    //else
+        //    //{
+        //    //    return TextSpanStyle.Empty;
+        //    //}
+        //}
         public void DoFormatSelection(TextSpanStyle textStyle)
         {
             //int startLineNum = _textLineWriter.LineNumber;

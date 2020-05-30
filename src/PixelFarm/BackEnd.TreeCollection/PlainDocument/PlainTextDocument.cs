@@ -1,5 +1,6 @@
 ﻿//MIT, 2019-present, WinterDev
 using System;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace LayoutFarm.TextEditing
@@ -23,7 +24,7 @@ namespace LayoutFarm.TextEditing
     /// </summary>
     public class PlainTextLine
     {
-        char[] _text;//***
+        readonly char[] _text;//***
 
         public PlainTextLine(string text)
         {
@@ -42,6 +43,11 @@ namespace LayoutFarm.TextEditing
         {
             stbuilder.Append(_text);
         }
+        public void CopyText(char[] destBuffer, int srcIndex, int srcLen, int dstIndex)
+        {
+            Array.Copy(_text, srcIndex, destBuffer, dstIndex, srcLen);
+        }
+        public int CharCount => _text.Length;
 #if DEBUG
         public override string ToString()
         {

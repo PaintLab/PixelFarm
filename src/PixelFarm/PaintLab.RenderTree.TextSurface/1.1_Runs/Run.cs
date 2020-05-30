@@ -13,8 +13,9 @@ namespace LayoutFarm.TextEditing
     /// </summary>
     public abstract class Run
     {
-        bool _validCalSize;
-        bool _validContentArr;
+        //bool _validCalSize;
+        //bool _validContentArr;
+
         TextLineBox _ownerTextLine;
         RunStyle _runStyle;
         LinkedListNode<Run> _linkNode;
@@ -33,23 +34,15 @@ namespace LayoutFarm.TextEditing
 
         protected RequestFont GetFont() => _runStyle.ReqFont;
 
-        protected int MeasureLineHeightInt32()
-        {
-            return (int)Math.Round(_runStyle.MeasureBlankLineHeight());
-        }
-        protected float MeasureLineHeight()
-        {
-            return _runStyle.MeasureBlankLineHeight();
-        }
+        protected int MeasureLineHeightInt32() => (int)Math.Round(_runStyle.MeasureBlankLineHeight());
+
+        protected float MeasureLineHeight() => _runStyle.MeasureBlankLineHeight();
 
         protected Size MeasureString(in TextBufferSpan textBufferSpan) => _runStyle.MeasureString(textBufferSpan);
 
         protected bool SupportWordBreak => _runStyle.SupportsWordBreak;
 
-        protected ILineSegmentList BreakToLineSegs(in TextBufferSpan textBufferSpan)
-        {
-            return _runStyle.BreakToLineSegments(textBufferSpan);
-        }
+        protected ILineSegmentList BreakToLineSegs(in TextBufferSpan textBufferSpan) => _runStyle.BreakToLineSegments(textBufferSpan);
 
         protected void MeasureString2(in TextBufferSpan textBufferSpan,
             ILineSegmentList lineSeg,
@@ -69,22 +62,14 @@ namespace LayoutFarm.TextEditing
 
         public RunStyle RunStyle => _runStyle;
         //
-        public virtual void SetStyle(RunStyle runStyle)
-        {
-            _runStyle = runStyle;
-        }
-        public bool HitTest(Rectangle r)
-        {
-            return Bounds.IntersectsWith(r);
-        }
-        public bool HitTest(UpdateArea r)
-        {
-            return Bounds.IntersectsWith(r.CurrentRect);
-        }
-        public bool HitTest(int x, int y)
-        {
-            return Bounds.Contains(x, y);
-        }
+        public virtual void SetStyle(RunStyle runStyle) => _runStyle = runStyle;
+
+        public bool HitTest(Rectangle r) => Bounds.IntersectsWith(r);
+
+        public bool HitTest(UpdateArea r) => Bounds.IntersectsWith(r.CurrentRect);
+
+        public bool HitTest(int x, int y) => Bounds.Contains(x, y);
+
         public bool IsBlockElement { get; set; }
 
         public abstract void Draw(DrawBoard d, UpdateArea updateArea);
@@ -100,44 +85,31 @@ namespace LayoutFarm.TextEditing
         //
         public Rectangle Bounds => new Rectangle(_left, _top, _width, _height);
 
-        public static void DirectSetSize(Run run, int w, int h)
-        {
-            run._width = w;
-            run._height = h;
-        }
-        public static void DirectSetLocation(Run run, int x, int y)
+        internal static void DirectSetLocation(Run run, int x, int y)
         {
             run._left = x;
             run._top = y;
         }
-        public static void RemoveParentLink(Run run)
-        {
-            run._linkNode = null;
-        }
-        protected void SetSize2(int w, int h)
+        protected void SetSize(int w, int h)
         {
             _width = w;
             _height = h;
         }
-        public void MarkHasValidCalculateSize()
+
+        public static void RemoveParentLink(Run run)
         {
-            _validCalSize = true;
+            run._ownerTextLine?.InvalidateCharCount();
+            run._ownerTextLine = null;
+            run._linkNode = null;
         }
-        public void MarkValidContentArrangement()
-        {
-            _validContentArr = true;
-        }
-        protected void InvalidateGraphics()
-        {
-            if (_ownerTextLine != null)
-            {
-                _ownerTextLine.ClientRunInvalidateGraphics(this);
-            }
-        }
-        public abstract char GetChar(int index);
+
+        protected void InvalidateGraphics() => _ownerTextLine?.ClientRunInvalidateGraphics(this);
+
         internal abstract bool IsInsertable { get; }
-        public abstract string GetText();
         public abstract int CharacterCount { get; }
+        public abstract char GetChar(int index);
+        public abstract string GetText();
+        public abstract void WriteTo(StringBuilder stbuilder);
         //--------------------
         //model
         public abstract CharLocation GetCharacterFromPixelOffset(int pixelOffset);
@@ -152,6 +124,7 @@ namespace LayoutFarm.TextEditing
         //edit funcs
         internal abstract void InsertAfter(int index, char c);
         internal abstract CopyRun Remove(int startIndex, int length, bool withFreeRun);
+
         internal static CopyRun InnerRemove(Run tt, int startIndex, int length, bool withFreeRun)
         {
             return tt.Remove(startIndex, length, withFreeRun);
@@ -176,67 +149,26 @@ namespace LayoutFarm.TextEditing
         /// <summary>
         /// next run
         /// </summary>
-        public Run NextRun
-        {
-            get
-            {
-                if (_linkNode != null)
-                {
-                    if (_linkNode.Next != null)
-                    {
-                        return _linkNode.Next.Value;
-                    }
-                }
-                return null;
-            }
-        }
+        public Run NextRun => _linkNode?.Next?.Value;
+
         /// <summary>
         /// prev run
         /// </summary>
-        public Run PrevRun
-        {
-            get
-            {
-                if (_linkNode != null)
-                {
-                    if (_linkNode.Previous != null)
-                    {
-                        return _linkNode.Previous.Value;
-                    }
-                }
-                return null;
-            }
-        }
-        //
+        public Run PrevRun => _linkNode?.Previous?.Value;
+
         internal TextLineBox OwnerLine => _ownerTextLine;
-        //
+
         internal LinkedListNode<Run> LinkNode => _linkNode;
-        //
+
         internal void SetLinkNode(LinkedListNode<Run> linkNode, TextLineBox owner)
         {
             _linkNode = linkNode;
             _ownerTextLine = owner;
-        }
-        //----------------------------------------------------------------------
-        public void TopDownReCalculateContentSize()
-        {
-            InnerTextRunTopDownReCalculateContentSize(this);
+            owner.InvalidateCharCount();
         }
 
-        public static void InnerTextRunTopDownReCalculateContentSize(Run ve)
-        {
-#if DEBUG
-            //dbug_EnterTopDownReCalculateContent(ve);
-#endif
-
-            ve.UpdateRunWidth();
-#if DEBUG
-            //dbug_ExitTopDownReCalculateContent(ve);
-#endif
-        }
-        //--------------------
-
-
+        public void TopDownReCalculateContentSize() => this.UpdateRunWidth();
+        protected internal void InvalidateOwnerLineCharCount() => _ownerTextLine?.InvalidateCharCount();
 #if DEBUG
         //public override string dbug_FullElementDescription()
         //{

@@ -27,10 +27,12 @@ namespace LayoutFarm.TextEditing
         public TextRun(RunStyle runstyle, char[] copyBuffer)
             : base(runstyle)
         {
+#if DEBUG
             if (copyBuffer.Length == 0)
             {
 
             }
+#endif
             //we need font info (in style) for evaluating the size fo this span
             //without font info we can't measure the size of this span 
             SetNewContent(copyBuffer);
@@ -54,14 +56,20 @@ namespace LayoutFarm.TextEditing
 #else
             _mybuffer = newbuffer;
 #endif
+
             _content_unparsed = true;
+
+            _renderVxFormattedString?.Dispose(); //clear old _renderVxFormattedString
+            _renderVxFormattedString = null;
         }
-
-
         public override CopyRun CreateCopy()
         {
-            return new CopyRun(this.GetText());
+            char[] copyBuffer = new char[_mybuffer.Length];
+            Array.Copy(_mybuffer, copyBuffer, copyBuffer.Length);
+            return new CopyRun(copyBuffer);
         }
+        public override void WriteTo(StringBuilder stbuilder) => stbuilder.Append(_mybuffer);
+
         public override CopyRun Copy(int startIndex)
         {
             int length = _mybuffer.Length - startIndex;
@@ -81,12 +89,7 @@ namespace LayoutFarm.TextEditing
                 //CopyRun newTextRun = null;
                 char[] newContent = new char[length];
                 Array.Copy(_mybuffer, sourceIndex, newContent, 0, length);
-
                 return new CopyRun(newContent);
-                //newTextRun = new EditableTextRun(this.Root, newContent, this.SpanStyle);
-                //newTextRun.IsLineBreak = this.IsLineBreak;
-                //newTextRun.UpdateRunWidth();
-                //return newTextRun;
             }
             else
             {
@@ -94,16 +97,13 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        public override int GetRunWidth(int charOffset)
-        {
-            return CalculateDrawingStringSize(charOffset).Width;
-        }
-        public override string GetText()
-        {
-            return new string(_mybuffer);
-        }
+        public override int GetRunWidth(int charOffset) => CalculateDrawingStringSize(charOffset).Width;
+
+        public override string GetText() => new string(_mybuffer);
+
         public override void UpdateRunWidth()
         {
+
             var textBufferSpan = new TextBufferSpan(_mybuffer);
 
             //TODO: review here, 
@@ -134,8 +134,9 @@ namespace LayoutFarm.TextEditing
             {
                 MeasureString2(textBufferSpan, null, ref measureResult);
             }
+             
 
-            SetSize2(measureResult.outputTotalW, measureResult.lineHeight);
+            SetSize(measureResult.outputTotalW, measureResult.lineHeight);
 
             InvalidateGraphics();
         }
@@ -146,18 +147,12 @@ namespace LayoutFarm.TextEditing
                 bounds.Offset(0, this.OwnerLine.Top);
             }
         }
-        public override char GetChar(int index)
-        {
-            return _mybuffer[index];
-        }
-        public override void CopyContentToStringBuilder(StringBuilder stBuilder)
-        {
-            stBuilder.Append(_mybuffer);
-        }
-        //
+        public override char GetChar(int index) => _mybuffer[index];
+
+        public override void CopyContentToStringBuilder(StringBuilder stBuilder) => stBuilder.Append(_mybuffer);
+
         public override int CharacterCount => _mybuffer.Length;
-        //
-        //
+
         public override void SetStyle(RunStyle runstyle)
         {
             //TODO: review this again
@@ -199,17 +194,7 @@ namespace LayoutFarm.TextEditing
             return MeasureString(textBufferSpan);
         }
 
-        public override CopyRun Copy(int startIndex, int length)
-        {
-            if (startIndex > -1 && length > 0)
-            {
-                return MakeCopy(startIndex, length);
-            }
-            else
-            {
-                return null;
-            }
-        }
+        public override CopyRun Copy(int startIndex, int length) => (startIndex > -1 && length > 0) ? MakeCopy(startIndex, length) : null;
 
         const int SAME_FONT_SAME_TEXT_COLOR = 0;
         const int SAME_FONT_DIFF_TEXT_COLOR = 1;
@@ -248,6 +233,36 @@ namespace LayoutFarm.TextEditing
 
         internal static RenderElement s_currentRenderE;
 
+        void DrawText(DrawBoard d)
+        {
+
+            //d.DrawText(_mybuffer,
+            //     new Rectangle(0, 0, bWidth, bHeight),
+            //     style.ContentHAlign);
+
+            if (_renderVxFormattedString == null)
+            {
+                _renderVxFormattedString = d.CreateFormattedString(_mybuffer, 0, _mybuffer.Length, DelayFormattedString);
+            }
+
+            switch (_renderVxFormattedString.State)
+            {
+                case RenderVxFormattedString.VxState.Ready:
+                    d.DrawRenderVx(_renderVxFormattedString, 0, 0);
+                    break;
+                case RenderVxFormattedString.VxState.NoStrip:
+                    {
+                        //put this to the update queue system
+                        //(TODO: add extension method for this)
+                        GlobalRootGraphic.CurrentRootGfx.EnqueueRenderRequest(
+                            new RenderBoxes.RenderElementRequest(
+                                s_currentRenderE,
+                                RenderBoxes.RequestCommand.ProcessFormattedString,
+                                _renderVxFormattedString));
+                    }
+                    break;
+            }
+        }
         public override void Draw(DrawBoard d, UpdateArea updateArea)
         {
             int bWidth = this.Width;
@@ -260,72 +275,44 @@ namespace LayoutFarm.TextEditing
 
             RunStyle style = this.RunStyle;//must 
 
-            //set style to the canvas
-
+            //set style to the canvas  
             switch (EvaluateFontAndTextColor(d, style))
             {
-                case DIFF_FONT_SAME_TEXT_COLOR:
-                    {
-                        //TODO: review here
-                        //change font here...
-
-                        d.DrawText(_mybuffer,
-                            new Rectangle(0, 0, bWidth, bHeight),
-                            style.ContentHAlign);
-                    }
-                    break;
                 case DIFF_FONT_DIFF_TEXT_COLOR:
                     {
                         RequestFont prevFont = d.CurrentFont;
                         Color prevColor = d.CurrentTextColor;
                         d.CurrentFont = style.ReqFont;
                         d.CurrentTextColor = style.FontColor;
-                        d.DrawText(_mybuffer,
-                             new Rectangle(0, 0, bWidth, bHeight),
-                             style.ContentHAlign);
+
+                        DrawText(d);
+
                         d.CurrentFont = prevFont;
                         d.CurrentTextColor = prevColor;
                     }
                     break;
+                case DIFF_FONT_SAME_TEXT_COLOR:
+                    {
+                        RequestFont prevFont = d.CurrentFont;
+                        d.CurrentFont = style.ReqFont;
+
+                        DrawText(d);
+
+                        d.CurrentFont = prevFont;
+                    }
+                    break;
+
                 case SAME_FONT_DIFF_TEXT_COLOR:
                     {
                         Color prevColor = d.CurrentTextColor;
                         d.CurrentTextColor = style.FontColor;
-                        d.DrawText(_mybuffer,
-                            new Rectangle(0, 0, bWidth, bHeight),
-                            style.ContentHAlign);
+                        DrawText(d);
                         d.CurrentTextColor = prevColor;
                     }
                     break;
                 default:
                     {
-                        if (_renderVxFormattedString == null)
-                        {
-                            _renderVxFormattedString = d.CreateFormattedString(_mybuffer, 0, _mybuffer.Length, DelayFormattedString);
-                        }
-
-
-                        switch (_renderVxFormattedString.State)
-                        {
-                            case RenderVxFormattedString.VxState.Ready:
-                                d.DrawRenderVx(_renderVxFormattedString, 0, 0);
-                                break;
-                            case RenderVxFormattedString.VxState.NoStrip:
-                                {
-                                    //put this to the update queue system
-                                    //(TODO: add extension method for this)
-                                    GlobalRootGraphic.CurrentRootGfx.EnqueueRenderRequest(
-                                        new RenderBoxes.RenderElementRequest(
-                                            s_currentRenderE,
-                                            RenderBoxes.RequestCommand.ProcessFormattedString,
-                                            _renderVxFormattedString));
-                                }
-                                break;
-                        }
-
-                        //canvas.DrawText(_mybuffer,
-                        //   new Rectangle(0, 0, bWidth, bHeight),
-                        //   style.ContentHAlign);
+                        DrawText(d);
                     }
                     break;
             }
@@ -380,17 +367,8 @@ namespace LayoutFarm.TextEditing
         //
         internal override bool IsInsertable => true;
         //
-        public override CopyRun LeftCopy(int index)
-        {
-            if (index > 0)
-            {
-                return MakeCopy(0, index);
-            }
-            else
-            {
-                return null;
-            }
-        }
+        public override CopyRun LeftCopy(int index) => (index > 0) ? MakeCopy(0, index) : null;
+
         internal override void InsertAfter(int index, char c)
         {
             int oldLexLength = _mybuffer.Length;
@@ -415,7 +393,9 @@ namespace LayoutFarm.TextEditing
             {
                 throw new NotSupportedException();
             }
+
             SetNewContent(newBuff);
+            InvalidateOwnerLineCharCount();
             UpdateRunWidth();
         }
         internal override CopyRun Remove(int startIndex, int length, bool withFreeRun)
@@ -436,18 +416,10 @@ namespace LayoutFarm.TextEditing
 
                 Array.Copy(_mybuffer, startIndex + length, newBuff, startIndex, oldLexLength - startIndex - length);
                 SetNewContent(newBuff);
+                InvalidateOwnerLineCharCount();
                 UpdateRunWidth();
             }
-
-
-            if (withFreeRun)
-            {
-                return freeRun;
-            }
-            else
-            {
-                return null;
-            }
+            return withFreeRun ? freeRun : null;
         }
 
 #if DEBUG
