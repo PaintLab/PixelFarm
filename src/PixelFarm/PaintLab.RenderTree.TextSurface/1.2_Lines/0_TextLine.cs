@@ -33,8 +33,7 @@ namespace LayoutFarm.TextEditing
         int _cacheCharCount;
 
         // 
-        const int LINE_CONTENT_ARRANGED = 1 << (1 - 1);
-        const int LINE_SIZE_VALID = 1 << (2 - 1);
+        const int LINE_CONTENT_ARRANGED = 1 << (1 - 1); 
         const int LOCAL_SUSPEND_LINE_REARRANGE = 1 << (3 - 1);
         const int END_WITH_LINE_BREAK = 1 << (4 - 1);
 
