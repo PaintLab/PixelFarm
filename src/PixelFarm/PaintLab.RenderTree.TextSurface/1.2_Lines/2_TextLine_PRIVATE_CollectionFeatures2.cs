@@ -212,7 +212,6 @@ namespace LayoutFarm.TextEditing
                 }
             }
             LocalResumeLineReArrange();
-
         }
         void RemoveRight(Run t)
         {

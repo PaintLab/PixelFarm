@@ -18,7 +18,7 @@ namespace LayoutFarm.TextEditing
         //this class dose not have Painting function
         //we paint each run at text-layer object
         //current line runs
-        LinkedList<Run> _runs = new LinkedList<Run>();
+        readonly LinkedList<Run> _runs = new LinkedList<Run>();
         /// <summary>
         /// owner layer
         /// </summary>
@@ -46,13 +46,14 @@ namespace LayoutFarm.TextEditing
 #if DEBUG
             this.dbugLineId = dbugLineTotalCount;
             dbugLineTotalCount++;
+           
 #endif
 
             OverlappedTop = 3; //test only
             OverlappedBottom = 3; //test only
         }
 
-        public ITextService TextService => _textFlowLayer.TextServices;
+        public ITextService TextService => _textFlowLayer.TextServices; //TODO: review this again***
 
         internal void ClientRunInvalidateGraphics(Run clientRun)
         {
@@ -80,27 +81,8 @@ namespace LayoutFarm.TextEditing
         /// </summary>
         public LinkedListNode<Run> Last => _runs.Last;
         //  
-        public IEnumerable<Run> GetRunIter()
-        {
-            foreach (Run r in _runs)
-            {
-                yield return r;
-            }
-        }
-        internal Run LastRun
-        {
-            get
-            {
-                if (this.RunCount > 0)
-                {
-                    return this.Last.Value;
-                }
-                else
-                {
-                    return null;
-                }
-            }
-        }
+        internal Run LastRun => _runs.Last?.Value;
+
         public float GetXOffsetAtCharIndex(int charIndex)
         {
             float xoffset = 0;
@@ -155,7 +137,6 @@ namespace LayoutFarm.TextEditing
         }
         internal bool HitTestCore(HitChain hitChain)
         {
-
             hitChain.GetTestPoint(out int testX, out int testY);
             if (this.RunCount == 0)
             {
@@ -188,7 +169,6 @@ namespace LayoutFarm.TextEditing
 
             set
             {
-
                 if (value)
                 {
                     _lineFlags |= END_WITH_LINE_BREAK;
@@ -200,12 +180,8 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        public bool IntersectsWith(int y)
-        {
-            return y >= _lineTop && y < (_lineTop + _actualLineHeight);
-        }
+        public bool IntersectsWith(int y) => y >= _lineTop && y < (_lineTop + _actualLineHeight);
         //
-
         public int Top => _lineTop;
         public int LineTop => _lineTop;
         //
@@ -213,14 +189,7 @@ namespace LayoutFarm.TextEditing
         //
         public int ActualLineHeight => _actualLineHeight;
         //
-        public Rectangle ActualLineArea
-        {
-            get
-            {
-                return new Rectangle(0, _lineTop - OverlappedTop, _actualLineWidth, _actualLineHeight + OverlappedTop + OverlappedBottom);
-            }
-
-        }
+        public Rectangle ActualLineArea => new Rectangle(0, _lineTop - OverlappedTop, _actualLineWidth, _actualLineHeight + OverlappedTop + OverlappedBottom);
 
         internal IEnumerable<Run> GetRunIterForward(Run startVisualElement)
         {
@@ -264,6 +233,13 @@ namespace LayoutFarm.TextEditing
                 return charCount;
             }
         }
+        public IEnumerable<Run> GetRunIter()
+        {
+            foreach (Run r in _runs)
+            {
+                yield return r;
+            }
+        }
 
         //
         public int LineBottom => _lineTop + _actualLineHeight;
@@ -272,44 +248,15 @@ namespace LayoutFarm.TextEditing
         {
             get
             {
-                var lastRun = this.LastRun;
-                if (lastRun == null)
-                {
-                    return 0;
-                }
-                else
-                {
-                    return lastRun.Right;
-                }
+                Run lastRun = this.LastRun;
+                return (lastRun != null) ? lastRun.Right : 0;
             }
-        }
-
-        public void SetTop(int linetop)
-        {
-            _lineTop = linetop;
-        }
-
-#if DEBUG
-        public override string ToString()
-        {
-            return this.dbugShortLineInfo;
-        }
-        public string dbugShortLineInfo
-        {
-            get
-            {
-                return "LINE[" + dbugLineId + "]:" + _currentLineNumber + "{T:" + _lineTop.ToString() + ",W:" +
-                   _actualLineWidth + ",H:" + _actualLineHeight + "}";
-            }
-        }
-#endif
+        } 
+        public void SetTop(int linetop) => _lineTop = linetop; 
         //
         public int LineNumber => _currentLineNumber;
         //
-        internal void SetLineNumber(int value)
-        {
-            _currentLineNumber = value;
-        }
+        internal void SetLineNumber(int value) => _currentLineNumber = value;
         //
         bool IsFirstLine => _currentLineNumber == 0;
         //
@@ -319,56 +266,16 @@ namespace LayoutFarm.TextEditing
         //
         public bool IsBlankLine => RunCount == 0;
         //
-        public TextLineBox Next
-        {
-            get
-            {
-                if (_currentLineNumber < _textFlowLayer.LineCount - 1)
-                {
-                    return _textFlowLayer.GetTextLine(_currentLineNumber + 1);
-                }
-                else
-                {
-                    return null;
-                }
-            }
-        }
-        public TextLineBox Prev
-        {
-            get
-            {
-                if (_currentLineNumber > 0)
-                {
-                    return _textFlowLayer.GetTextLine(_currentLineNumber - 1);
-                }
-                else
-                {
-                    return null;
-                }
-            }
-        }
+        public TextLineBox Next => (_currentLineNumber < _textFlowLayer.LineCount - 1) ? _textFlowLayer.GetTextLine(_currentLineNumber + 1) : null;
 
-        public Run FirstRun
-        {
-            get
-            {
-                if (this.RunCount > 0)
-                {
-                    return this.First.Value;
-                }
-                else
-                {
-                    return null;
-                }
-            }
-        }
-        //
+        public TextLineBox Prev => (_currentLineNumber > 0) ? _textFlowLayer.GetTextLine(_currentLineNumber - 1) : null;
+
+        public Run FirstRun => _runs.First?.Value;
+
         public bool NeedArrange => (_lineFlags & LINE_CONTENT_ARRANGED) == 0;
 
-        internal void ValidateContentArrangement()
-        {
-            _lineFlags |= LINE_CONTENT_ARRANGED;
-        }
+        internal void ValidateContentArrangement() => _lineFlags |= LINE_CONTENT_ARRANGED;
+
         public static void InnerCopyLineContent(TextLineBox line, StringBuilder stBuilder)
         {
             line.CopyLineContent(stBuilder);
@@ -384,7 +291,20 @@ namespace LayoutFarm.TextEditing
             }
             //not include line-end char?
         }
-
+#if DEBUG
+        public override string ToString()
+        {
+            return this.dbugShortLineInfo;
+        }
+        public string dbugShortLineInfo
+        {
+            get
+            {
+                return "LINE[" + dbugLineId + "]:" + _currentLineNumber + "{T:" + _lineTop.ToString() + ",W:" +
+                   _actualLineWidth + ",H:" + _actualLineHeight + "}";
+            }
+        }
+#endif
         //internal bool IsLocalSuspendLineRearrange => (_lineFlags & LOCAL_SUSPEND_LINE_REARRANGE) != 0;
         //internal void InvalidateLineLayout()
         //{

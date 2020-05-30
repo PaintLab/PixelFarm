@@ -15,6 +15,7 @@ namespace LayoutFarm.TextEditing
     {
         bool _validCalSize;
         bool _validContentArr;
+
         TextLineBox _ownerTextLine;
         RunStyle _runStyle;
         LinkedListNode<Run> _linkNode;
