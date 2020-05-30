@@ -84,12 +84,7 @@ namespace LayoutFarm.TextEditing
         public int Bottom => _top + _height;
         //
         public Rectangle Bounds => new Rectangle(_left, _top, _width, _height);
-
-        public static void DirectSetSize(Run run, int w, int h)
-        {
-            run._width = w;
-            run._height = h;
-        }
+ 
         public static void DirectSetLocation(Run run, int x, int y)
         {
             run._left = x;
