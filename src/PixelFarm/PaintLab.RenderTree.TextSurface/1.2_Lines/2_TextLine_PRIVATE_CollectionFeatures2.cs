@@ -72,25 +72,25 @@ namespace LayoutFarm.TextEditing
 
     static class RunListPool
     {
-        public static TempContext<List<Run>> Borrow(out List<Run> runList)
+        public static Temp<TextLineBox, List<Run>>.TempContext Borrow(out List<Run> runList)
         {
-            if (!Temp<List<Run>>.IsInit())
+            if (!Temp<TextLineBox, List<Run>>.IsInit())
             {
-                Temp<List<Run>>.SetNewHandler(() => new List<Run>(),
+                Temp<TextLineBox, List<Run>>.SetNewHandler(() => new List<Run>(),
                 s => s.Clear()
                 );
             }
-            return Temp<List<Run>>.Borrow(out runList);
+            return Temp<TextLineBox, List<Run>>.Borrow(out runList);
         }
-        public static TempContext<LinkedList<Run>> Borrow(out LinkedList<Run> runList)
+        public static Temp<TextLineBox, LinkedList<Run>>.TempContext Borrow(out LinkedList<Run> runList)
         {
-            if (!Temp<LinkedList<Run>>.IsInit())
+            if (!Temp<TextLineBox, LinkedList<Run>>.IsInit())
             {
-                Temp<LinkedList<Run>>.SetNewHandler(() => new LinkedList<Run>(),
+                Temp<TextLineBox, LinkedList<Run>>.SetNewHandler(() => new LinkedList<Run>(),
                 s => s.Clear()
                 );
             }
-            return Temp<LinkedList<Run>>.Borrow(out runList);
+            return Temp<TextLineBox, LinkedList<Run>>.Borrow(out runList);
         }
     }
 
@@ -197,7 +197,7 @@ namespace LayoutFarm.TextEditing
 
         void RemoveLeft(Run t)
         {
-            if (t == null) return; 
+            if (t == null) return;
 
             LocalSuspendLineReArrange();
             using (RunListPool.Borrow(out LinkedList<Run> tobeRemoveTextRuns))
