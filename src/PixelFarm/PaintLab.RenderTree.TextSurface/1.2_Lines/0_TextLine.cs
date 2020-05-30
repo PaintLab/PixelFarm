@@ -184,12 +184,11 @@ namespace LayoutFarm.TextEditing
         //
         public bool EndWithLineBreak
         {
-            get
-            {
-                return (_lineFlags & END_WITH_LINE_BREAK) != 0;
-            }
+            get => (_lineFlags & END_WITH_LINE_BREAK) != 0;
+
             set
             {
+
                 if (value)
                 {
                     _lineFlags |= END_WITH_LINE_BREAK;
