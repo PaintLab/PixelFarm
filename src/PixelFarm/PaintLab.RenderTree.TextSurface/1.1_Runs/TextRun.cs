@@ -134,7 +134,7 @@ namespace LayoutFarm.TextEditing
             {
                 MeasureString2(textBufferSpan, null, ref measureResult);
             }
-             
+
 
             SetSize(measureResult.outputTotalW, measureResult.lineHeight);
 
@@ -190,8 +190,8 @@ namespace LayoutFarm.TextEditing
                     return new Size(total, MeasureLineHeightInt32());
                 }
             }
-            var textBufferSpan = new TextBufferSpan(_mybuffer, 0, length);
-            return MeasureString(textBufferSpan);
+
+            return MeasureString(new TextBufferSpan(_mybuffer, 0, length));
         }
 
         public override CopyRun Copy(int startIndex, int length) => (startIndex > -1 && length > 0) ? MakeCopy(startIndex, length) : null;
