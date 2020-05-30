@@ -7,7 +7,7 @@ using PixelFarm.Drawing;
 namespace LayoutFarm.TextEditing
 {
 
-    class TextRun : Run, IDisposable
+    public class TextRun : Run, IDisposable
     {
         //text run is a collection of words that has the same presentation format (font, style, color, etc).
         //a run may contain multiple words
