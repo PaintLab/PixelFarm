@@ -66,10 +66,9 @@ namespace LayoutFarm.TextEditing
 
             }
         }
-        public void EnsureCurrentTextRun()
-        {
-            EnsureCurrentTextRun(CharIndex);
-        }
+
+        public void EnsureCurrentTextRun() => EnsureCurrentTextRun(CharIndex);
+
         public void RemoveSelectedTextRuns(VisualSelectionRange selectionRange)
         {
 #if DEBUG   
@@ -140,17 +139,8 @@ namespace LayoutFarm.TextEditing
                 return toBeRemovedChar;
             }
         }
-        public Run GetCurrentTextRun()
-        {
-            if (CurrentLine.IsBlankLine)
-            {
-                return null;
-            }
-            else
-            {
-                return CurrentTextRun;
-            }
-        }
+
+        public Run GetCurrentTextRun() => CurrentLine.IsBlankLine ? null : CurrentTextRun;
 
         public bool CanAcceptThisChar(char c)
         {
@@ -277,11 +267,8 @@ namespace LayoutFarm.TextEditing
             EnsureCurrentTextRun(charIndex);
         }
 
-        public char DoBackspaceOneChar()
-        {
-            //simulate backspace keystroke
-            return BackSpaceOneChar();
-        }
+        public char DoBackspaceOneChar() => BackSpaceOneChar();
+
         public char DoDeleteOneChar()
         {
             if (CharIndex < CurrentLine.CharCount())
@@ -430,10 +417,8 @@ namespace LayoutFarm.TextEditing
         //
         protected Run CurrentTextRun => _currentTextRun;
         //
-        protected void SetCurrentTextRun(Run r)
-        {
-            _currentTextRun = r;
-        }
+        protected void SetCurrentTextRun(Run r) => _currentTextRun = r;
+
         protected bool _needUpdateCurrentRun;
         public void InvalidateCurrentRun()
         {
