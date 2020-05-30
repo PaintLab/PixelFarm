@@ -15,10 +15,12 @@ namespace LayoutFarm.TextEditing
 
         public CharLocation(int pixelOffset, int charIndex)
         {
+#if DEBUG
             if (charIndex == -1)
             {
 
             }
+#endif
             //charIndex less than 0 ==> invalid pos 
             this.pixelOffset = pixelOffset;
             this.RunCharIndex = charIndex;
