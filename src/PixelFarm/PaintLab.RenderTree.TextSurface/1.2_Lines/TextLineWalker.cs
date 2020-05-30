@@ -212,6 +212,7 @@ namespace LayoutFarm.TextEditing
         }
         public void AddTextSpan(char[] textspan)
         {
+
             AddTextSpan(new TextRun(CurrentSpanStyle, textspan));
         }
         public void AddTextSpan(Run textRun)
@@ -401,7 +402,7 @@ namespace LayoutFarm.TextEditing
                 _currentTextRun = _currentLine.FirstRun;
             }
         }
-        internal ITextService TextService => _textFlowLayer.TextServices;
+
 #if DEBUG
         int _i_charIndex;
         int caret_char_index
@@ -449,7 +450,7 @@ namespace LayoutFarm.TextEditing
             }
 
             using (var copyContext = new TempTextLineCopyContext(_currentLine, out TextBufferSpan textBufferSpan))
-            using (ILineSegmentList segmentList = this.TextService.BreakToLineSegments(textBufferSpan))
+            using (ILineSegmentList segmentList = GlobalRootGraphic.TextService.BreakToLineSegments(textBufferSpan))
             {
                 if (segmentList == null)
                 {

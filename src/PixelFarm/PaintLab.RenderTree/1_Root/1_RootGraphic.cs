@@ -19,8 +19,7 @@ namespace LayoutFarm
     public static class GlobalRootGraphic
     {
 
-        public static RootGraphic CurrentRootGfx;
-
+        public static RootGraphic CurrentRootGfx; 
 
         static ITextService _textServices;
         public static ITextService TextService

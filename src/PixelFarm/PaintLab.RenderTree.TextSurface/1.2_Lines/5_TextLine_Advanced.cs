@@ -427,7 +427,7 @@ namespace LayoutFarm.TextEditing
         Size MeasureCopyRunLength(CopyRun copyRun)
         {
 
-            ITextService txServices = TextService;
+            ITextService txServices = GlobalRootGraphic.TextService; 
 
             char[] mybuffer = copyRun.RawContent;
             if (txServices.SupportsWordBreak)

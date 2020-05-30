@@ -55,8 +55,7 @@ namespace LayoutFarm.TextEditing
             OverlappedBottom = 3; //test only
         }
 
-        public ITextService TextService => _textFlowLayer.TextServices; //TODO: review this again***
-
+        
         internal void ClientRunInvalidateGraphics(Run clientRun)
         {
             //bubble-up invalidated area from client
