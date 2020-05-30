@@ -33,23 +33,15 @@ namespace LayoutFarm.TextEditing
 
         protected RequestFont GetFont() => _runStyle.ReqFont;
 
-        protected int MeasureLineHeightInt32()
-        {
-            return (int)Math.Round(_runStyle.MeasureBlankLineHeight());
-        }
-        protected float MeasureLineHeight()
-        {
-            return _runStyle.MeasureBlankLineHeight();
-        }
+        protected int MeasureLineHeightInt32() => (int)Math.Round(_runStyle.MeasureBlankLineHeight());
+
+        protected float MeasureLineHeight() => _runStyle.MeasureBlankLineHeight();
 
         protected Size MeasureString(in TextBufferSpan textBufferSpan) => _runStyle.MeasureString(textBufferSpan);
 
         protected bool SupportWordBreak => _runStyle.SupportsWordBreak;
 
-        protected ILineSegmentList BreakToLineSegs(in TextBufferSpan textBufferSpan)
-        {
-            return _runStyle.BreakToLineSegments(textBufferSpan);
-        }
+        protected ILineSegmentList BreakToLineSegs(in TextBufferSpan textBufferSpan) => _runStyle.BreakToLineSegments(textBufferSpan);
 
         protected void MeasureString2(in TextBufferSpan textBufferSpan,
             ILineSegmentList lineSeg,
@@ -69,22 +61,14 @@ namespace LayoutFarm.TextEditing
 
         public RunStyle RunStyle => _runStyle;
         //
-        public virtual void SetStyle(RunStyle runStyle)
-        {
-            _runStyle = runStyle;
-        }
-        public bool HitTest(Rectangle r)
-        {
-            return Bounds.IntersectsWith(r);
-        }
-        public bool HitTest(UpdateArea r)
-        {
-            return Bounds.IntersectsWith(r.CurrentRect);
-        }
-        public bool HitTest(int x, int y)
-        {
-            return Bounds.Contains(x, y);
-        }
+        public virtual void SetStyle(RunStyle runStyle) => _runStyle = runStyle;
+
+        public bool HitTest(Rectangle r) => Bounds.IntersectsWith(r);
+
+        public bool HitTest(UpdateArea r) => Bounds.IntersectsWith(r.CurrentRect);
+
+        public bool HitTest(int x, int y) => Bounds.Contains(x, y);
+
         public bool IsBlockElement { get; set; }
 
         public abstract void Draw(DrawBoard d, UpdateArea updateArea);
@@ -110,35 +94,24 @@ namespace LayoutFarm.TextEditing
             run._left = x;
             run._top = y;
         }
-        public static void RemoveParentLink(Run run)
-        {
-            run._linkNode = null;
-        }
         protected void SetSize2(int w, int h)
         {
             _width = w;
             _height = h;
         }
-        public void MarkHasValidCalculateSize()
-        {
-            _validCalSize = true;
-        }
-        public void MarkValidContentArrangement()
-        {
-            _validContentArr = true;
-        }
-        protected void InvalidateGraphics()
-        {
-            if (_ownerTextLine != null)
-            {
-                _ownerTextLine.ClientRunInvalidateGraphics(this);
-            }
-        }
+
+        public static void RemoveParentLink(Run run) => run._linkNode = null;
+
+        public void MarkHasValidCalculateSize() => _validCalSize = true;
+
+        public void MarkValidContentArrangement() => _validContentArr = true;
+
+        protected void InvalidateGraphics() => _ownerTextLine?.ClientRunInvalidateGraphics(this);
 
         internal abstract bool IsInsertable { get; }
         public abstract int CharacterCount { get; }
-        public abstract char GetChar(int index);        
-        public abstract string GetText();        
+        public abstract char GetChar(int index);
+        public abstract string GetText();
         public abstract void WriteTo(StringBuilder stbuilder);
         //--------------------
         //model
@@ -178,37 +151,12 @@ namespace LayoutFarm.TextEditing
         /// <summary>
         /// next run
         /// </summary>
-        public Run NextRun
-        {
-            get
-            {
-                if (_linkNode != null)
-                {
-                    if (_linkNode.Next != null)
-                    {
-                        return _linkNode.Next.Value;
-                    }
-                }
-                return null;
-            }
-        }
+        public Run NextRun => _linkNode?.Next?.Value;
+
         /// <summary>
         /// prev run
         /// </summary>
-        public Run PrevRun
-        {
-            get
-            {
-                if (_linkNode != null)
-                {
-                    if (_linkNode.Previous != null)
-                    {
-                        return _linkNode.Previous.Value;
-                    }
-                }
-                return null;
-            }
-        }
+        public Run PrevRun => _linkNode?.Previous?.Value;
         //
         internal TextLineBox OwnerLine => _ownerTextLine;
         //
