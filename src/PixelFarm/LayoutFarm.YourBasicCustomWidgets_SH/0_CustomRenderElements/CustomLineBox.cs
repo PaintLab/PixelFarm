@@ -5,13 +5,12 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
 using LayoutFarm.RenderBoxes;
-using PaintLab.ColorBlender.Algorithms;
 
 namespace LayoutFarm.CustomWidgets
 {
-    struct MayBeEmptyTempContext<T> : IDisposable
+    struct MayBeEmptyTempContext<T> : IDisposable where T:class
     {
-        internal readonly T _tool;
+        T _tool;
         internal MayBeEmptyTempContext(out T tool)
         {
             MayBeEmptyTempContext<T>.GetFreeItem(out _tool);
@@ -22,6 +21,7 @@ namespace LayoutFarm.CustomWidgets
             if (_tool != null)
             {
                 MayBeEmptyTempContext<T>.Release(_tool);
+                _tool = default;
             }
         }
 
