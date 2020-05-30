@@ -93,7 +93,7 @@ namespace LayoutFarm.TextEditing
         public override void UpdateRunWidth()
         {
             Size size = CalculateDrawingStringSize(_mybuffer, _mybuffer.Length);
-            SetSize2(size.Width, size.Height);
+            SetSize(size.Width, size.Height);
         }
         public override char GetChar(int index) => _mybuffer[index];
 
@@ -273,6 +273,7 @@ namespace LayoutFarm.TextEditing
                 throw new NotSupportedException();
             }
             _mybuffer = newBuff;
+            InvalidateOwnerLineCharCount();
             UpdateRunWidth();
         }
 
@@ -303,6 +304,7 @@ namespace LayoutFarm.TextEditing
 
                 Array.Copy(_mybuffer, startIndex + length, newBuff, startIndex, oldLexLength - startIndex - length);
                 _mybuffer = newBuff;
+                InvalidateOwnerLineCharCount();
                 UpdateRunWidth();
             }
 

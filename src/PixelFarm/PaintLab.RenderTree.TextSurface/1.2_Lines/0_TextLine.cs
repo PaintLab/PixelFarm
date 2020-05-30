@@ -29,6 +29,8 @@ namespace LayoutFarm.TextEditing
         int _lineTop;
         int _lineFlags;
 
+        bool _validCharCount = false;
+
         // 
         const int LINE_CONTENT_ARRANGED = 1 << (1 - 1);
         const int LINE_SIZE_VALID = 1 << (2 - 1);
@@ -46,7 +48,7 @@ namespace LayoutFarm.TextEditing
 #if DEBUG
             this.dbugLineId = dbugLineTotalCount;
             dbugLineTotalCount++;
-           
+
 #endif
 
             OverlappedTop = 3; //test only
@@ -220,6 +222,9 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
+
+        internal void InvalidateCharCount() => _validCharCount = false;
+
         public int CharCount
         {
             get
@@ -251,8 +256,8 @@ namespace LayoutFarm.TextEditing
                 Run lastRun = this.LastRun;
                 return (lastRun != null) ? lastRun.Right : 0;
             }
-        } 
-        public void SetTop(int linetop) => _lineTop = linetop; 
+        }
+        public void SetTop(int linetop) => _lineTop = linetop;
         //
         public int LineNumber => _currentLineNumber;
         //

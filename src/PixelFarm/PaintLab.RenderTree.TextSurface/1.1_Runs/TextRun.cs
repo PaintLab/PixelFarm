@@ -103,6 +103,7 @@ namespace LayoutFarm.TextEditing
 
         public override void UpdateRunWidth()
         {
+
             var textBufferSpan = new TextBufferSpan(_mybuffer);
 
             //TODO: review here, 
@@ -133,8 +134,9 @@ namespace LayoutFarm.TextEditing
             {
                 MeasureString2(textBufferSpan, null, ref measureResult);
             }
+             
 
-            SetSize2(measureResult.outputTotalW, measureResult.lineHeight);
+            SetSize(measureResult.outputTotalW, measureResult.lineHeight);
 
             InvalidateGraphics();
         }
@@ -391,7 +393,9 @@ namespace LayoutFarm.TextEditing
             {
                 throw new NotSupportedException();
             }
+
             SetNewContent(newBuff);
+            InvalidateOwnerLineCharCount();
             UpdateRunWidth();
         }
         internal override CopyRun Remove(int startIndex, int length, bool withFreeRun)
@@ -412,6 +416,7 @@ namespace LayoutFarm.TextEditing
 
                 Array.Copy(_mybuffer, startIndex + length, newBuff, startIndex, oldLexLength - startIndex - length);
                 SetNewContent(newBuff);
+                InvalidateOwnerLineCharCount();
                 UpdateRunWidth();
             }
             return withFreeRun ? freeRun : null;

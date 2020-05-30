@@ -84,19 +84,24 @@ namespace LayoutFarm.TextEditing
         public int Bottom => _top + _height;
         //
         public Rectangle Bounds => new Rectangle(_left, _top, _width, _height);
- 
-        public static void DirectSetLocation(Run run, int x, int y)
+
+        internal static void DirectSetLocation(Run run, int x, int y)
         {
             run._left = x;
             run._top = y;
         }
-        protected void SetSize2(int w, int h)
+        protected void SetSize(int w, int h)
         {
             _width = w;
             _height = h;
         }
 
-        public static void RemoveParentLink(Run run) => run._linkNode = null;         
+        public static void RemoveParentLink(Run run)
+        {
+            run._ownerTextLine?.InvalidateCharCount();
+            run._ownerTextLine = null;
+            run._linkNode = null;
+        }
 
         protected void InvalidateGraphics() => _ownerTextLine?.ClientRunInvalidateGraphics(this);
 
@@ -119,6 +124,7 @@ namespace LayoutFarm.TextEditing
         //edit funcs
         internal abstract void InsertAfter(int index, char c);
         internal abstract CopyRun Remove(int startIndex, int length, bool withFreeRun);
+
         internal static CopyRun InnerRemove(Run tt, int startIndex, int length, bool withFreeRun)
         {
             return tt.Remove(startIndex, length, withFreeRun);
@@ -158,10 +164,11 @@ namespace LayoutFarm.TextEditing
         {
             _linkNode = linkNode;
             _ownerTextLine = owner;
+            owner.InvalidateCharCount();
         }
 
         public void TopDownReCalculateContentSize() => this.UpdateRunWidth();
-
+        protected internal void InvalidateOwnerLineCharCount() => _ownerTextLine?.InvalidateCharCount();
 #if DEBUG
         //public override string dbug_FullElementDescription()
         //{

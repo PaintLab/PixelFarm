@@ -24,7 +24,6 @@ namespace LayoutFarm.TextEditing
                 Run.RemoveParentLink(curNode.Value);
                 curNode = curNode.Next;
             }
-
             _runs.Clear();
         }
 
