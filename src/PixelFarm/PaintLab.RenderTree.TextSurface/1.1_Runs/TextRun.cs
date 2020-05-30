@@ -68,10 +68,8 @@ namespace LayoutFarm.TextEditing
             Array.Copy(_mybuffer, copyBuffer, copyBuffer.Length);
             return new CopyRun(copyBuffer);
         }
-        public override void WriteTo(StringBuilder stbuilder)
-        {
-            stbuilder.Append(_mybuffer);
-        }
+        public override void WriteTo(StringBuilder stbuilder) => stbuilder.Append(_mybuffer);
+
         public override CopyRun Copy(int startIndex)
         {
             int length = _mybuffer.Length - startIndex;
@@ -99,14 +97,10 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        public override int GetRunWidth(int charOffset)
-        {
-            return CalculateDrawingStringSize(charOffset).Width;
-        }
-        public override string GetText()
-        {
-            return new string(_mybuffer);
-        }
+        public override int GetRunWidth(int charOffset) => CalculateDrawingStringSize(charOffset).Width;
+
+        public override string GetText() => new string(_mybuffer);
+
         public override void UpdateRunWidth()
         {
             var textBufferSpan = new TextBufferSpan(_mybuffer);
@@ -151,18 +145,12 @@ namespace LayoutFarm.TextEditing
                 bounds.Offset(0, this.OwnerLine.Top);
             }
         }
-        public override char GetChar(int index)
-        {
-            return _mybuffer[index];
-        }
-        public override void CopyContentToStringBuilder(StringBuilder stBuilder)
-        {
-            stBuilder.Append(_mybuffer);
-        }
-        //
+        public override char GetChar(int index) => _mybuffer[index];
+
+        public override void CopyContentToStringBuilder(StringBuilder stBuilder) => stBuilder.Append(_mybuffer);
+
         public override int CharacterCount => _mybuffer.Length;
-        //
-        //
+
         public override void SetStyle(RunStyle runstyle)
         {
             //TODO: review this again
@@ -204,17 +192,7 @@ namespace LayoutFarm.TextEditing
             return MeasureString(textBufferSpan);
         }
 
-        public override CopyRun Copy(int startIndex, int length)
-        {
-            if (startIndex > -1 && length > 0)
-            {
-                return MakeCopy(startIndex, length);
-            }
-            else
-            {
-                return null;
-            }
-        }
+        public override CopyRun Copy(int startIndex, int length) => (startIndex > -1 && length > 0) ? MakeCopy(startIndex, length) : null;
 
         const int SAME_FONT_SAME_TEXT_COLOR = 0;
         const int SAME_FONT_DIFF_TEXT_COLOR = 1;
@@ -387,17 +365,8 @@ namespace LayoutFarm.TextEditing
         //
         internal override bool IsInsertable => true;
         //
-        public override CopyRun LeftCopy(int index)
-        {
-            if (index > 0)
-            {
-                return MakeCopy(0, index);
-            }
-            else
-            {
-                return null;
-            }
-        }
+        public override CopyRun LeftCopy(int index) => (index > 0) ? MakeCopy(0, index) : null;
+
         internal override void InsertAfter(int index, char c)
         {
             int oldLexLength = _mybuffer.Length;
@@ -445,16 +414,7 @@ namespace LayoutFarm.TextEditing
                 SetNewContent(newBuff);
                 UpdateRunWidth();
             }
-
-
-            if (withFreeRun)
-            {
-                return freeRun;
-            }
-            else
-            {
-                return null;
-            }
+            return withFreeRun ? freeRun : null;
         }
 
 #if DEBUG
