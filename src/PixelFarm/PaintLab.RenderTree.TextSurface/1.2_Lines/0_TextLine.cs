@@ -30,6 +30,7 @@ namespace LayoutFarm.TextEditing
         int _lineFlags;
 
         bool _validCharCount = false;
+        int _cacheCharCount;
 
         // 
         const int LINE_CONTENT_ARRANGED = 1 << (1 - 1);
@@ -225,18 +226,23 @@ namespace LayoutFarm.TextEditing
 
         internal void InvalidateCharCount() => _validCharCount = false;
 
-        public int CharCount
+        public int CharCount()
         {
-            get
+            //TODO: reimplement this again
+            if (_validCharCount)
             {
-                //TODO: reimplement this again
-                int charCount = 0;
-                foreach (Run r in _runs)
-                {
-                    charCount += r.CharacterCount;
-                }
-                return charCount;
+                return _cacheCharCount;
             }
+
+            int charCount = 0;
+            foreach (Run r in _runs)
+            {
+                charCount += r.CharacterCount;
+            }
+
+            _validCharCount = true;
+            return _cacheCharCount = charCount;
+
         }
         public IEnumerable<Run> GetRunIter()
         {

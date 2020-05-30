@@ -809,7 +809,7 @@ namespace LayoutFarm.TextEditing
 
         public EditableVisualPointInfo GetTextPointInfoFromCharIndex(int charIndex)
         {
-            int limit = CharCount - 1;
+            int limit = CharCount() - 1;
             if (charIndex > limit)
             {
                 charIndex = limit;

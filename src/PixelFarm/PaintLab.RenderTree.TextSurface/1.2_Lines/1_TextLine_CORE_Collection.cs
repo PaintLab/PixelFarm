@@ -25,6 +25,8 @@ namespace LayoutFarm.TextEditing
                 curNode = curNode.Next;
             }
             _runs.Clear();
+            _cacheCharCount = 0;
+            _validCharCount = true;
         }
 
         public void Remove(Run v)
