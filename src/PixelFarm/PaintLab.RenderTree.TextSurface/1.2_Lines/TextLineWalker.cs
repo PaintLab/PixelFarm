@@ -55,7 +55,7 @@ namespace LayoutFarm.TextEditing
                     SetCurrentCharIndexToBegin();
                     if (index != -1)
                     {
-                        int limit = CurrentLine.CharCount;
+                        int limit = CurrentLine.CharCount();
                         if (index > limit)
                         {
                             index = limit;
@@ -72,6 +72,12 @@ namespace LayoutFarm.TextEditing
         }
         public void RemoveSelectedTextRuns(VisualSelectionRange selectionRange)
         {
+#if DEBUG   
+            //if (!CurrentLine.dbugHasOwner)
+            //{
+
+            //}
+#endif
             int precutIndex = selectionRange.StartPoint.LineCharIndex;
             CurrentLine.Remove(selectionRange);
             InvalidateCurrentRun();
@@ -200,8 +206,6 @@ namespace LayoutFarm.TextEditing
             CurrentLine.RefreshInlineArrange();
             SetCurrentCharStepRight();
         }
-
-
         public void AddTextSpan(string textspan)
         {
             AddTextSpan(new TextRun(CurrentSpanStyle, textspan.ToCharArray()));
@@ -279,7 +283,7 @@ namespace LayoutFarm.TextEditing
         }
         public char DoDeleteOneChar()
         {
-            if (CharIndex < CurrentLine.CharCount)
+            if (CharIndex < CurrentLine.CharCount())
             {
                 //simulate backspace keystroke
                 SetCurrentCharStepRight();
@@ -663,6 +667,7 @@ namespace LayoutFarm.TextEditing
                 _rCharOffset, _caretXPos, _rPixelOffset);
             return textPointInfo;
         }
+
         public Point CaretPosition => new Point(_caretXPos, _currentLineY);
 
         public char CurrentChar
@@ -792,22 +797,13 @@ namespace LayoutFarm.TextEditing
         //
         int InternalCharIndex => caret_char_index;
         //
-        public void SetCurrentCharStepRight()
-        {
-            SetCurrentCharIndex(InternalCharIndex + 1);
-        }
-        public void SetCurrentCharStepLeft()
-        {
-            SetCurrentCharIndex(InternalCharIndex - 1);
-        }
-        public void SetCurrentCharIndexToEnd()
-        {
-            SetCurrentCharIndex(this.CharCount);
-        }
-        public void SetCurrentCharIndexToBegin()
-        {
-            SetCurrentCharIndex(0);
-        }
+        public void SetCurrentCharStepRight() => SetCurrentCharIndex(InternalCharIndex + 1);
+
+        public void SetCurrentCharStepLeft() => SetCurrentCharIndex(InternalCharIndex - 1);
+
+        public void SetCurrentCharIndexToEnd() => SetCurrentCharIndex(this.CharCount);
+
+        public void SetCurrentCharIndexToBegin() => SetCurrentCharIndex(0);
 
         public void SetCurrentCharIndex2(int newCharIndexPointTo)
         {
@@ -819,7 +815,7 @@ namespace LayoutFarm.TextEditing
                 dbugTextManRecorder.BeginContext();
             }
 #endif
-            if (newCharIndexPointTo < 0 || newCharIndexPointTo > _currentLine.CharCount)
+            if (newCharIndexPointTo < 0 || newCharIndexPointTo > _currentLine.CharCount())
             {
                 throw new NotSupportedException("index out of range");
             }
@@ -937,7 +933,7 @@ namespace LayoutFarm.TextEditing
                 dbugTextManRecorder.BeginContext();
             }
 #endif
-            if (newCharIndexPointTo < 0 || newCharIndexPointTo > _currentLine.CharCount)
+            if (newCharIndexPointTo < 0 || newCharIndexPointTo > _currentLine.CharCount())
             {
                 throw new NotSupportedException("index out of range");
             }
@@ -1020,7 +1016,7 @@ namespace LayoutFarm.TextEditing
         }
 
         //
-        public bool IsOnEndOfLine => caret_char_index == _currentLine.CharCount;
+        public bool IsOnEndOfLine => caret_char_index == _currentLine.CharCount();
         //
         internal TextLineBox GetTextLine(int lineId) => TextLayer.GetTextLine(lineId);
         //
@@ -1034,28 +1030,20 @@ namespace LayoutFarm.TextEditing
         //
         public bool IsOnStartOfLine => InternalCharIndex == 0;
         //
-        public int CharCount => _currentLine.CharCount;
+        public int CharCount => _currentLine.CharCount();
         //
-        public void CopyLineContent(StringBuilder stBuilder)
-        {
-            _currentLine.CopyLineContent(stBuilder);
-        }
+        public void CopyLineContent(StringBuilder stBuilder) => _currentLine.CopyLineContent(stBuilder);
+
         //
-        public void CopySelectedTextRuns(VisualSelectionRange selectionRange, TextRangeCopy output)
-        {
-            _currentLine.Copy(selectionRange, output);
-        }
+        public void CopySelectedTextRuns(VisualSelectionRange selectionRange, TextRangeCopy output) => _currentLine.Copy(selectionRange, output);
+
         //
         public int LineNumber => _currentLine.LineNumber;
         //
-        public void MoveToNextLine()
-        {
-            MoveToLine(_currentLine.LineNumber + 1);
-        }
-        public void MoveToPrevLine()
-        {
-            MoveToLine(_currentLine.LineNumber - 1);
-        }
+        public void MoveToNextLine() => MoveToLine(_currentLine.LineNumber + 1);
+
+        public void MoveToPrevLine() => MoveToLine(_currentLine.LineNumber - 1);
+
         //
         public Rectangle LineArea => _currentLine.ActualLineArea;
 
