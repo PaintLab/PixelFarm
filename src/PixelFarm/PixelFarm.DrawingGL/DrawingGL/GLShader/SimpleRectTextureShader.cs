@@ -953,6 +953,8 @@ namespace PixelFarm.DrawingGL
         /// <param name="indexList"></param>
         public void DrawSubImages(GLBitmap glBmp, TextureCoordVboBuilder vboBuilder)
         {
+            if (vboBuilder._buffer.Length == 0) { return; }
+
             SetCurrent();
             CheckViewMatrix();
 
