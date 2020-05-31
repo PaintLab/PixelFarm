@@ -224,7 +224,7 @@ namespace LayoutFarm.UI
         void IEventPortal.PortalMouseWheel(UIMouseWheelEventArgs e)
         {
 #if DEBUG
-            if (this.dbugRootGraphics.dbugEnableGraphicInvalidateTrace)
+            if (dbugRootGraphics != null && this.dbugRootGraphics.dbugEnableGraphicInvalidateTrace)
             {
                 this.dbugRootGraphics.dbugGraphicInvalidateTracer.WriteInfo("================");
                 this.dbugRootGraphics.dbugGraphicInvalidateTracer.WriteInfo("MOUSEWHEEL");
@@ -301,7 +301,7 @@ namespace LayoutFarm.UI
         void IEventPortal.PortalMouseDown(UIMouseDownEventArgs e)
         {
 #if DEBUG
-            if (this.dbugRootGraphics.dbugEnableGraphicInvalidateTrace)
+            if (this.dbugRootGraphics != null && this.dbugRootGraphics.dbugEnableGraphicInvalidateTrace)
             {
                 this.dbugRootGraphics.dbugGraphicInvalidateTracer.WriteInfo("================");
                 this.dbugRootGraphics.dbugGraphicInvalidateTracer.WriteInfo("MOUSEDOWN");
@@ -387,10 +387,10 @@ namespace LayoutFarm.UI
             //---------------------------------------------------------------
 
 #if DEBUG
-            RootGraphic visualroot = this.dbugRootGraphics;
-            if (visualroot.dbug_RecordHitChain)
+            RootGraphic dbug_visualroot = this.dbugRootGraphics;
+            if (dbug_visualroot != null && dbug_visualroot.dbug_RecordHitChain)
             {
-                visualroot.dbug_rootHitChainMsg.Clear();
+                dbug_visualroot.dbug_rootHitChainMsg.Clear();
                 HitInfo hitInfo;
                 for (int tt = hitPointChain.Count - 1; tt >= 0; --tt)
                 {
@@ -398,12 +398,12 @@ namespace LayoutFarm.UI
                     RenderElement ve = hitInfo.HitElemAsRenderElement;
                     if (ve != null)
                     {
-                        ve.dbug_WriteOwnerLayerInfo(visualroot, tt);
-                        ve.dbug_WriteOwnerLineInfo(visualroot, tt);
+                        ve.dbug_WriteOwnerLayerInfo(dbug_visualroot, tt);
+                        ve.dbug_WriteOwnerLineInfo(dbug_visualroot, tt);
                         string hit_info = new string('.', tt) + " [" + tt + "] "
                             + "(" + hitInfo.point.X + "," + hitInfo.point.Y + ") "
                             + ve.dbug_FullElementDescription();
-                        visualroot.dbug_rootHitChainMsg.AddLast(new dbugLayoutMsg(ve, hit_info));
+                        dbug_visualroot.dbug_rootHitChainMsg.AddLast(new dbugLayoutMsg(ve, hit_info));
                     }
                 }
             }
@@ -417,8 +417,8 @@ namespace LayoutFarm.UI
             {
                 return;
             }
-            visualroot.dbugHitTracker.Write("stop-mousedown");
-            visualroot.dbugHitTracker.Play = false;
+            dbug_visualroot.dbugHitTracker.Write("stop-mousedown");
+            dbug_visualroot.dbugHitTracker.Play = false;
 #endif
         }
 
@@ -537,7 +537,7 @@ namespace LayoutFarm.UI
         void IEventPortal.PortalMouseUp(UIMouseUpEventArgs e)
         {
 #if DEBUG
-            if (this.dbugRootGraphics.dbugEnableGraphicInvalidateTrace)
+            if (this.dbugRootGraphics != null && this.dbugRootGraphics.dbugEnableGraphicInvalidateTrace)
             {
                 this.dbugRootGraphics.dbugGraphicInvalidateTracer.WriteInfo("================");
                 this.dbugRootGraphics.dbugGraphicInvalidateTracer.WriteInfo("MOUSEUP");
