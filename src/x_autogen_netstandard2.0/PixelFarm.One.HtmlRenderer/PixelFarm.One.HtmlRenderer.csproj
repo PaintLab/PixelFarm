@@ -996,6 +996,7 @@
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Typeface.cs" Link="Typography\Typography.OpenFont\Typeface.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\WebFont\Woff2Reader.cs" Link="Typography\Typography.OpenFont\WebFont\Woff2Reader.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\WebFont\WoffReader.cs" Link="Typography\Typography.OpenFont\WebFont\WoffReader.cs" />
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\BidiBreakEngine.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\BidiBreakEngine.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\BreakBounds.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\BreakBounds.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\BreakEngine.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\BreakEngine.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\BreakingEngine.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\BreakingEngine.cs" />
@@ -1008,6 +1009,30 @@
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\LaoDictionaryBreakingEngine.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\LaoDictionaryBreakingEngine.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\ThaiDictionaryBreakingEngine.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\ThaiDictionaryBreakingEngine.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\EngBreakingEngine.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\EngBreakingEngine.cs" />
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\BaseDirection.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\BaseDirection.cs" />
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Collections\BidiChain.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Collections\BidiChain.cs" />
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Collections\BidiLink.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Collections\BidiLink.cs" />
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Collections\BracketPair.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Collections\BracketPair.cs" />
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Collections\BracketQueue.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Collections\BracketQueue.cs" />
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Collections\IsolatingRun.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Collections\IsolatingRun.cs" />
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Collections\LevelRun.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Collections\LevelRun.cs" />
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Collections\RunQueue.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Collections\RunQueue.cs" />
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Collections\StatusStack.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Collections\StatusStack.cs" />
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Data\BracketType.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Data\BracketType.cs" />
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Data\CharType.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Data\CharType.cs" />
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Data\CharTypeData.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Data\CharTypeData.cs" />
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Data\CharTypeLookup.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Data\CharTypeLookup.cs" />
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Data\PairingData.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Data\PairingData.cs" />
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Data\PairingLookup.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Data\PairingLookup.cs" />
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Level.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Level.cs" />
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Line.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Line.cs" />
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\MirrorAgent.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\MirrorAgent.cs" />
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\MirrorLocator.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\MirrorLocator.cs" />
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Paragraph.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Paragraph.cs" />
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\RunAdapter.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\RunAdapter.cs" />
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\RunAgent.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\RunAgent.cs" />
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Text\UnicodeAgent.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Text\UnicodeAgent.cs" />
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Text\UnicodeLocator.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Text\UnicodeLocator.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\WordVisitor.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\WordVisitor.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.TextFlow\Dom\EditableTextBlockLayoutEngine.cs" Link="Typography\Typography.TextFlow\Dom\EditableTextBlockLayoutEngine.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.TextFlow\Dom\EditableTextLine.cs" Link="Typography\Typography.TextFlow\Dom\EditableTextLine.cs" />
@@ -1187,6 +1212,10 @@
     <Folder Include="Typography\Typography.OpenFont\WebFont" />
     <Folder Include="Typography\Typography.TextBreak\Typography.TextBreak" />
     <Folder Include="Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine" />
+    <Folder Include="Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi" />
+    <Folder Include="Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Collections" />
+    <Folder Include="Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Data" />
+    <Folder Include="Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Text" />
     <Folder Include="Typography\Typography.TextFlow\Dom" />
     <Folder Include="Typography\Typography.TextFlow\Simple" />
     <Folder Include="Typography\Typography.TextFlow\TextLexer" />
