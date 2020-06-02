@@ -1,5 +1,5 @@
 ﻿//MIT, 2020, WinterDev
-  
+
 namespace PixelFarm.Drawing
 {
 
@@ -42,21 +42,18 @@ namespace PixelFarm.Drawing
         public readonly int len;
 
         char[] _rawString;
-        public bool isRightToLeft; //TODO: review here
+
         public TextBufferSpan(char[] rawCharBuffer)
         {
             _rawString = rawCharBuffer;
             this.len = rawCharBuffer.Length;
             this.start = 0;
-            isRightToLeft = false;
-
         }
         public TextBufferSpan(char[] rawCharBuffer, int start, int len)
         {
             this.start = start;
             this.len = len;
             _rawString = rawCharBuffer;
-            isRightToLeft = false;
         }
 
         public override string ToString()
