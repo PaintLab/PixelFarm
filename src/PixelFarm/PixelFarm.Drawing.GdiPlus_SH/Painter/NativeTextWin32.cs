@@ -5,7 +5,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Text;
-  
+
 using Typography.FontManagement;
 using Typography.OpenFont;
 using Typography.OpenFont.Extensions;
@@ -354,7 +354,7 @@ namespace PixelFarm.Drawing.WinGdi
         }
     }
 
-    class Gdi32TextService : ITextService
+    class Gdi32TextService : ITextService, ITextService2
     {
         public Gdi32TextService()
         {

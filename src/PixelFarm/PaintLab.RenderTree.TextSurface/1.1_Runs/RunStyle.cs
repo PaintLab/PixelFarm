@@ -24,13 +24,13 @@ namespace LayoutFarm.TextEditing
         //
         internal Size MeasureString(in TextBufferSpan textBufferSpan)
         {
-            return GlobalRootGraphic.TextService.MeasureString(textBufferSpan, ReqFont);
+            return GlobalRootGraphic2.TextService.MeasureString(textBufferSpan, ReqFont);
         }
         internal float MeasureBlankLineHeight()
         {
-            return GlobalRootGraphic.TextService.MeasureBlankLineHeight(ReqFont);
+            return GlobalRootGraphic2.TextService.MeasureBlankLineHeight(ReqFont);
         }
-        internal bool SupportsWordBreak => GlobalRootGraphic.TextService.SupportsWordBreak;
+        internal bool SupportsWordBreak => GlobalRootGraphic2.TextService.SupportsWordBreak;
         internal ILineSegmentList BreakToLineSegments(in TextBufferSpan textBufferSpan)
         {
             return GlobalRootGraphic2.TextService.BreakToLineSegments(textBufferSpan);
@@ -40,10 +40,10 @@ namespace LayoutFarm.TextEditing
             in TextBufferSpan textBufferSpan,
             ref TextSpanMeasureResult measureResult)
         {
-            GlobalRootGraphic.TextService.CalculateUserCharGlyphAdvancePos(
-                  textBufferSpan,
-                ReqFont,
-                ref measureResult);
+            GlobalRootGraphic2.TextService.CalculateUserCharGlyphAdvancePos(
+                    textBufferSpan,
+                    ReqFont,
+                    ref measureResult);
         }
 
         internal void CalculateUserCharGlyphAdvancePos(in TextBufferSpan textBufferSpan,

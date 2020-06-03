@@ -18,7 +18,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
             WinGdiFontFace.SetInstalledTypefaceProvider(provider);
         }
-        public static ITextService GetTextService()
+        public static ITextService2 GetTextService()
         {
             return new Gdi32TextService();
         }

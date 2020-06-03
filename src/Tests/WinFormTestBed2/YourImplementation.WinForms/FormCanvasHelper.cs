@@ -117,7 +117,7 @@ namespace LayoutFarm.UI
             InitWinform();
             IInstalledTypefaceProvider fontLoader = YourImplementation.CommonTextServiceSetup.FontLoader;
             //2. 
-            ITextService textService = null;
+            ITextService2 textService = null;
             switch (internalViewportKind)
             {
                 default:
@@ -139,7 +139,7 @@ namespace LayoutFarm.UI
             w = screenClientAreaRect.Width;
             h = screenClientAreaRect.Height;
 
-            GlobalRootGraphic.TextService = textService;
+            GlobalRootGraphic2.TextService = textService;
 
             MyRootGraphic myRootGfx = new MyRootGraphic(w, h, textService);
 

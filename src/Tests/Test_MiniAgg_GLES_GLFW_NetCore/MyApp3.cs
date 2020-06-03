@@ -174,6 +174,7 @@ namespace TestGlfw
             OpenFontTextService textService = new OpenFontTextService();
             textService.LoadFontsFromFolder("Fonts");
             GlobalRootGraphic.TextService = textService;
+            GlobalRootGraphic2.TextService = textService;
             //---------------------------------------------------------------------------
 
 
