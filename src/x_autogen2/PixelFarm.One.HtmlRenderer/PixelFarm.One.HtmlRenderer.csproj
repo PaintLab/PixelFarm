@@ -1551,6 +1551,9 @@
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.0_Common\DoubleBufferCustomRenderBox.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.0_Common\DoubleBufferCustomRenderBox.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.0_Common\ITextService.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.0_Common\ITextService.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.0_Common\PlainTextDocumentHelper.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.0_Common\PlainTextDocumentHelper.cs</Link>
     </Compile>

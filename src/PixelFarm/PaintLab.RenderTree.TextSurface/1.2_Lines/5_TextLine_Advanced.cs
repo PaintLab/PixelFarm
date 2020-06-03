@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
-
+using Typography.TextBreak;
 namespace LayoutFarm.TextEditing
 {
 
@@ -363,7 +363,7 @@ namespace LayoutFarm.TextEditing
         Size MeasureCopyRunLength(CopyRun copyRun)
         {
 
-            ITextService txServices = GlobalRootGraphic.TextService;
+            ITextService2 txServices = GlobalRootGraphic2.TextService;
 
             char[] mybuffer = copyRun.RawContent;
             if (txServices.SupportsWordBreak)

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using PixelFarm.Drawing;
+using Typography.TextBreak;
 
 namespace LayoutFarm.TextEditing
 {
@@ -435,7 +436,7 @@ namespace LayoutFarm.TextEditing
             }
 
             using (var copyContext = new TempTextLineCopyContext(_currentLine, out TextBufferSpan textBufferSpan))
-            using (ILineSegmentList segmentList = GlobalRootGraphic.TextService.BreakToLineSegments(textBufferSpan))
+            using (ILineSegmentList segmentList = GlobalRootGraphic2.TextService.BreakToLineSegments(textBufferSpan))
             {
                 if (segmentList == null)
                 {

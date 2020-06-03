@@ -534,6 +534,7 @@
     <Compile Include="..\..\PixelFarm\PaintLab.PlatformBridge\Events\UIEventArgs.cs" Link="PixelFarm\PaintLab.PlatformBridge\Events\UIEventArgs.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.PlatformBridge\Events\UIEventNames.cs" Link="PixelFarm\PaintLab.PlatformBridge\Events\UIEventNames.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.0_Common\DoubleBufferCustomRenderBox.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\1.0_Common\DoubleBufferCustomRenderBox.cs" />
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.0_Common\ITextService.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\1.0_Common\ITextService.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.0_Common\PlainTextDocumentHelper.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\1.0_Common\PlainTextDocumentHelper.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.0_Common\StringBuilderPool.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\1.0_Common\StringBuilderPool.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_Runs\CharLocation.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\1.1_Runs\CharLocation.cs" />

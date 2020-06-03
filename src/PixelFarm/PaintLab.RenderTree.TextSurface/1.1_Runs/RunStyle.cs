@@ -4,9 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using PixelFarm.Drawing;
+using Typography.TextBreak; 
 
 namespace LayoutFarm.TextEditing
 {
+   
 
     public class RunStyle
     {
@@ -31,7 +33,7 @@ namespace LayoutFarm.TextEditing
         internal bool SupportsWordBreak => GlobalRootGraphic.TextService.SupportsWordBreak;
         internal ILineSegmentList BreakToLineSegments(in TextBufferSpan textBufferSpan)
         {
-            return GlobalRootGraphic.TextService.BreakToLineSegments(textBufferSpan);
+            return GlobalRootGraphic2.TextService.BreakToLineSegments(textBufferSpan);
         }
 
         internal void CalculateUserCharGlyphAdvancePos(
@@ -48,7 +50,7 @@ namespace LayoutFarm.TextEditing
             ILineSegmentList lineSegs,
             ref TextSpanMeasureResult measureResult)
         {
-            GlobalRootGraphic.TextService.CalculateUserCharGlyphAdvancePos(
+            GlobalRootGraphic2.TextService.CalculateUserCharGlyphAdvancePos(
                 textBufferSpan,
                 lineSegs,
                 ReqFont,
