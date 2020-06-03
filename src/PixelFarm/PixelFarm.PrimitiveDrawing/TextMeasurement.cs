@@ -4,27 +4,27 @@ namespace PixelFarm.Drawing
 {
 
 
-    public interface ITextService
-    {
+    //public interface ITextService
+    //{
 
-        float MeasureWhitespace(RequestFont f);
-        float MeasureBlankLineHeight(RequestFont f);
-        //
-        bool SupportsWordBreak { get; }
+    //    float MeasureWhitespace(RequestFont f);
+    //    float MeasureBlankLineHeight(RequestFont f);
+    //    //
+    //    bool SupportsWordBreak { get; }
 
-        //ILineSegmentList BreakToLineSegments(in TextBufferSpan textBufferSpan);
-        //
-        Size MeasureString(in TextBufferSpan textBufferSpan, RequestFont font);
+    //    //ILineSegmentList BreakToLineSegments(in TextBufferSpan textBufferSpan);
+    //    //
+    //    Size MeasureString(in TextBufferSpan textBufferSpan, RequestFont font);
 
-        void MeasureString(in TextBufferSpan textBufferSpan, RequestFont font, int maxWidth, out int charFit, out int charFitWidth);
+    //    void MeasureString(in TextBufferSpan textBufferSpan, RequestFont font, int maxWidth, out int charFit, out int charFitWidth);
 
-        void CalculateUserCharGlyphAdvancePos(in TextBufferSpan textBufferSpan,
-                RequestFont font,
-                ref TextSpanMeasureResult result);
-        //void CalculateUserCharGlyphAdvancePos(in TextBufferSpan textBufferSpan, ILineSegmentList lineSegs,
-        //        RequestFont font,
-        //        ref TextSpanMeasureResult result);
-    }
+    //    void CalculateUserCharGlyphAdvancePos(in TextBufferSpan textBufferSpan,
+    //            RequestFont font,
+    //            ref TextSpanMeasureResult result);
+    //    //void CalculateUserCharGlyphAdvancePos(in TextBufferSpan textBufferSpan, ILineSegmentList lineSegs,
+    //    //        RequestFont font,
+    //    //        ref TextSpanMeasureResult result);
+    //}
 
     //public interface ILineSegmentList : System.IDisposable
     //{
