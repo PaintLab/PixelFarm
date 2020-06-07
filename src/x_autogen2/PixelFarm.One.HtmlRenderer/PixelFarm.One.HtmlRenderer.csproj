@@ -2946,8 +2946,8 @@
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\BidiBreakEngine.cs">
       <Link>Typography\Typography.TextBreak\Typography.TextBreak\BidiBreakEngine.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\BreakBounds.cs">
-      <Link>Typography\Typography.TextBreak\Typography.TextBreak\BreakBounds.cs</Link>
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\BreakAtInfo.cs">
+      <Link>Typography\Typography.TextBreak\Typography.TextBreak\BreakAtInfo.cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\BreakingEngine.cs">
       <Link>Typography\Typography.TextBreak\Typography.TextBreak\BreakingEngine.cs</Link>

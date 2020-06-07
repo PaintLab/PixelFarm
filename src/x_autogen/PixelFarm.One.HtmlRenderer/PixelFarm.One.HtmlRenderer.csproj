@@ -1008,7 +1008,7 @@
     <Compile Include="D:\projects\Typography\Typography.OpenFont\WebFont\Woff2Reader.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\WebFont\WoffReader.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\BidiBreakEngine.cs" />
-    <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\BreakBounds.cs" />
+    <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\BreakAtInfo.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\BreakingEngine.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\CustomBreaker.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\CustomBreakerBuilder.cs" />
