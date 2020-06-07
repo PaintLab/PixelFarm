@@ -2676,8 +2676,8 @@
     <Compile Include="..\..\..\..\Typography\Typography.GlyphLayout\GlyphLayout.cs">
       <Link>Typography\Typography.GlyphLayout\GlyphLayout.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\Typography\Typography.GlyphLayout\GlyphPosition.cs">
-      <Link>Typography\Typography.GlyphLayout\GlyphPosition.cs</Link>
+    <Compile Include="..\..\..\..\Typography\Typography.GlyphLayout\GlyphSetPosition.cs">
+      <Link>Typography\Typography.GlyphLayout\GlyphSetPosition.cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\Typography\Typography.GlyphLayout\GlyphSubstitution.cs">
       <Link>Typography\Typography.GlyphLayout\GlyphSubstitution.cs</Link>
@@ -2687,6 +2687,9 @@
     </Compile>
     <Compile Include="..\..\..\..\Typography\Typography.GlyphLayout\PixelScaleLayoutExtensions.cs">
       <Link>Typography\Typography.GlyphLayout\PixelScaleLayoutExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.GlyphLayout\ScriptLang.cs">
+      <Link>Typography\Typography.GlyphLayout\ScriptLang.cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\Typography\Typography.GlyphLayout\UserCharToGlyphIndexMap.cs">
       <Link>Typography\Typography.GlyphLayout\UserCharToGlyphIndexMap.cs</Link>
@@ -2946,9 +2949,6 @@
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\BreakBounds.cs">
       <Link>Typography\Typography.TextBreak\Typography.TextBreak\BreakBounds.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\BreakEngine.cs">
-      <Link>Typography\Typography.TextBreak\Typography.TextBreak\BreakEngine.cs</Link>
-    </Compile>
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\BreakingEngine.cs">
       <Link>Typography\Typography.TextBreak\Typography.TextBreak\BreakingEngine.cs</Link>
     </Compile>
@@ -2978,6 +2978,18 @@
     </Compile>
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\EngBreakingEngine.cs">
       <Link>Typography\Typography.TextBreak\Typography.TextBreak\EngBreakingEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\LineSegments\BreakingParameters.cs">
+      <Link>Typography\Typography.TextBreak\Typography.TextBreak\LineSegments\BreakingParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\LineSegments\ILineSegments.cs">
+      <Link>Typography\Typography.TextBreak\Typography.TextBreak\LineSegments\ILineSegments.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\ScriptTagsAndLanguageSystemTags\ScriptLangInfo.cs">
+      <Link>Typography\Typography.TextBreak\Typography.TextBreak\ScriptTagsAndLanguageSystemTags\ScriptLangInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\ScriptTagsAndLanguageSystemTags\UnicodeLangBits.cs">
+      <Link>Typography\Typography.TextBreak\Typography.TextBreak\ScriptTagsAndLanguageSystemTags\UnicodeLangBits.cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\BaseDirection.cs">
       <Link>Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\BaseDirection.cs</Link>

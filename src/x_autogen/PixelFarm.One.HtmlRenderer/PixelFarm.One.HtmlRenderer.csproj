@@ -918,10 +918,11 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Typography\..\..\..\..\Typography\PixelFarm.Typography\4_PixelFarm_Contours\GlyphOutlineAnalyzer.cs" />
     <Compile Include="D:\projects\Typography\Typography.GlyphLayout\GlyphIndexList.cs" />
     <Compile Include="D:\projects\Typography\Typography.GlyphLayout\GlyphLayout.cs" />
-    <Compile Include="D:\projects\Typography\Typography.GlyphLayout\GlyphPosition.cs" />
+    <Compile Include="D:\projects\Typography\Typography.GlyphLayout\GlyphSetPosition.cs" />
     <Compile Include="D:\projects\Typography\Typography.GlyphLayout\GlyphSubstitution.cs" />
     <Compile Include="D:\projects\Typography\Typography.GlyphLayout\MeasureStringBox.cs" />
     <Compile Include="D:\projects\Typography\Typography.GlyphLayout\PixelScaleLayoutExtensions.cs" />
+    <Compile Include="D:\projects\Typography\Typography.GlyphLayout\ScriptLang.cs" />
     <Compile Include="D:\projects\Typography\Typography.GlyphLayout\UserCharToGlyphIndexMap.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\AdditionalInfo\AdobeGlyphList.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\AdditionalInfo\AdobeGlyphListForNewFont.cs" />
@@ -1008,7 +1009,6 @@
     <Compile Include="D:\projects\Typography\Typography.OpenFont\WebFont\WoffReader.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\BidiBreakEngine.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\BreakBounds.cs" />
-    <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\BreakEngine.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\BreakingEngine.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\CustomBreaker.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\CustomBreakerBuilder.cs" />
@@ -1019,6 +1019,10 @@
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\LaoDictionaryBreakingEngine.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\ThaiDictionaryBreakingEngine.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\EngBreakingEngine.cs" />
+    <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\LineSegments\BreakingParameters.cs" />
+    <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\LineSegments\ILineSegments.cs" />
+    <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\ScriptTagsAndLanguageSystemTags\ScriptLangInfo.cs" />
+    <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\ScriptTagsAndLanguageSystemTags\UnicodeLangBits.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\BaseDirection.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Collections\BidiChain.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Collections\BidiLink.cs" />
