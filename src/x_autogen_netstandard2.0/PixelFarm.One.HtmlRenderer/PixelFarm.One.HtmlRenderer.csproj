@@ -999,7 +999,6 @@
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\WebFont\Woff2Reader.cs" Link="Typography\Typography.OpenFont\WebFont\Woff2Reader.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\WebFont\WoffReader.cs" Link="Typography\Typography.OpenFont\WebFont\WoffReader.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\BidiBreakEngine.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\BidiBreakEngine.cs" />
-    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\BreakAtInfo.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\BreakAtInfo.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\BreakingEngine.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\BreakingEngine.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\CustomBreaker.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\CustomBreaker.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\CustomBreakerBuilder.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\CustomBreakerBuilder.cs" />
@@ -1038,6 +1037,7 @@
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\RunAgent.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\RunAgent.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Text\UnicodeAgent.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Text\UnicodeAgent.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Text\UnicodeLocator.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Text\UnicodeLocator.cs" />
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\WordKind.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\WordKind.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\WordVisitor.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\WordVisitor.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.TextFlow\Dom\EditableTextBlockLayoutEngine.cs" Link="Typography\Typography.TextFlow\Dom\EditableTextBlockLayoutEngine.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.TextFlow\Dom\EditableTextLine.cs" Link="Typography\Typography.TextFlow\Dom\EditableTextLine.cs" />
