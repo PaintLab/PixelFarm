@@ -6,7 +6,7 @@ using PixelFarm.Drawing;
 
 namespace LayoutFarm.TextEditing
 {
-    class SolidRun : Run
+    public class SolidRun : Run
     {
         //TODO: review here=> who should store/handle this handle? , owner TextBox or this run?
         Action<SolidRun, DrawBoard, UpdateArea> _externalCustomDraw;

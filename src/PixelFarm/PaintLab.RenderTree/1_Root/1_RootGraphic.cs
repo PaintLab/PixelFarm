@@ -17,26 +17,8 @@ namespace LayoutFarm
     }
 
     public static class GlobalRootGraphic
-    {
-
-        public static RootGraphic CurrentRootGfx; 
-
-        static ITextService _textServices;
-        public static ITextService TextService
-        {
-            get => _textServices;
-            set
-            {
-#if DEBUG
-                if (_textServices != null)
-                {
-
-                }
-#endif
-                _textServices = value;
-
-            }
-        }
+    {   
+        public static RootGraphic CurrentRootGfx;  
     }
 
     static class BubbleInvalidater
@@ -290,7 +272,7 @@ namespace LayoutFarm
             this.Width = width;
             this.Height = heigth;
         }
-        public abstract ITextService TextServices { get; }
+       
         public abstract RequestFont DefaultTextEditFontInfo { get; }
         public abstract IRenderElement TopWindowRenderBox { get; }
         public abstract void AddChild(RenderElement renderE);

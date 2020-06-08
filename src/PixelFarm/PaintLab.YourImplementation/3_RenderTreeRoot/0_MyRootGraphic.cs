@@ -112,7 +112,7 @@ namespace LayoutFarm.UI
             }
 
         }
-        public override ITextService TextServices => _textService;
+       
 
         public ITopWindowEventRoot TopWinEventPortal => _topWindowEventRoot;
 

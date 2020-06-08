@@ -10,7 +10,7 @@ namespace PixelFarm.Drawing
 
     static class GLES2PlatformFontMx
     {
-        internal static ScriptLang s_defaultScriptLang = ScriptLangs.Latin;
+        //internal static ScriptLangInfo s_defaultScriptLang = ScriptLangs.Latin;
         static IInstalledTypefaceProvider s_installedTypefaceProvider;
         static Dictionary<string, LateTextureFontInfo> s_textureBitmapInfos = new Dictionary<string, LateTextureFontInfo>();
 
