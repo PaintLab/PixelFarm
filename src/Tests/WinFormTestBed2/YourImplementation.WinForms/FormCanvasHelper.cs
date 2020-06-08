@@ -139,7 +139,7 @@ namespace LayoutFarm.UI
             w = screenClientAreaRect.Width;
             h = screenClientAreaRect.Height;
 
-            GlobalRootGraphic.TextService = textService;
+            GlobalTextService.TextService = textService;
 
             MyRootGraphic myRootGfx = new MyRootGraphic(w, h, textService);
 

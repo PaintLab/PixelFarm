@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
-
+using Typography.TextBreak;
 namespace LayoutFarm.TextEditing
 {
 
@@ -22,7 +22,7 @@ namespace LayoutFarm.TextEditing
             TextLineBox lowerLine = _textFlowLayer.GetTextLine(_currentLineNumber + 1);
             this.LocalSuspendLineReArrange();
             int cx = 0;
-            Run lastTextRun = (Run)this.LastRun;
+            Run lastTextRun = this.LastRun;
             if (lastTextRun != null)
             {
                 cx = lastTextRun.Right;
@@ -49,6 +49,12 @@ namespace LayoutFarm.TextEditing
                 curNode = curNode.Next;
             }
         }
+
+        void GetStartAndStopLine(EditableVisualPointInfo startPoint, EditableVisualPointInfo endPoint, out TextLineBox startLine, out TextLineBox stopLine)
+        {
+            startLine = (startPoint.LineId == _currentLineNumber) ? this : _textFlowLayer.GetTextLine(startPoint.LineId);
+            stopLine = (endPoint.LineId == _currentLineNumber) ? this : _textFlowLayer.GetTextLine(endPoint.LineId);
+        }
         public void Copy(VisualSelectionRange selectionRange, TextRangeCopy output)
         {
             EditableVisualPointInfo startPoint = selectionRange.StartPoint;
@@ -68,24 +74,9 @@ namespace LayoutFarm.TextEditing
                 }
                 else
                 {
-                    TextLineBox startLine = null;
-                    TextLineBox stopLine = null;
-                    if (startPoint.LineId == _currentLineNumber)
-                    {
-                        startLine = this;
-                    }
-                    else
-                    {
-                        startLine = _textFlowLayer.GetTextLine(startPoint.LineId);
-                    }
-                    if (endPoint.LineId == _currentLineNumber)
-                    {
-                        stopLine = this;
-                    }
-                    else
-                    {
-                        stopLine = _textFlowLayer.GetTextLine(endPoint.LineId);
-                    }
+
+                    GetStartAndStopLine(startPoint, endPoint, out TextLineBox startLine, out TextLineBox stopLine);
+
                     if (startLine == stopLine)
                     {
                         CopyRun rightPart = startPoint.Run.Copy(startPoint.RunLocalSelectedIndex);
@@ -131,26 +122,7 @@ namespace LayoutFarm.TextEditing
             }
             else
             {
-                TextLineBox startLine = null;
-                TextLineBox stopLine = null;
-                if (startPoint.LineId == _currentLineNumber)
-                {
-                    startLine = this;
-                }
-                else
-                {
-                    startLine = _textFlowLayer.GetTextLine(startPoint.LineId);
-                }
-
-                if (endPoint.LineId == _currentLineNumber)
-                {
-                    stopLine = this;
-                }
-                else
-                {
-                    stopLine = _textFlowLayer.GetTextLine(endPoint.LineId);
-                }
-
+                GetStartAndStopLine(startPoint, endPoint, out TextLineBox startLine, out TextLineBox stopLine);
 
                 if (startLine == stopLine)
                 {
@@ -233,29 +205,12 @@ namespace LayoutFarm.TextEditing
                 }
                 else
                 {
-                    EditableVisualPointInfo newStartPoint = null;
-                    EditableVisualPointInfo newStopPoint = null;
-                    TextLineBox startLine = null;
-                    TextLineBox stopLine = null;
-                    if (startPoint.LineId == _currentLineNumber)
-                    {
-                        startLine = this;
-                    }
-                    else
-                    {
-                        startLine = _textFlowLayer.GetTextLine(startPoint.LineId);
-                    }
-                    newStartPoint = startLine.Split(startPoint);
-                    if (endPoint.LineId == _currentLineNumber)
-                    {
-                        stopLine = this;
-                    }
-                    else
-                    {
-                        stopLine = _textFlowLayer.GetTextLine(endPoint.LineId);
-                    }
 
-                    newStopPoint = stopLine.Split(endPoint);
+                    GetStartAndStopLine(startPoint, endPoint, out TextLineBox startLine, out TextLineBox stopLine);
+
+                    EditableVisualPointInfo newStartPoint = startLine.Split(startPoint);
+                    EditableVisualPointInfo newStopPoint = stopLine.Split(endPoint);
+
                     if (startLine == stopLine)
                     {
                         if (newStartPoint.Run != null)
@@ -328,28 +283,9 @@ namespace LayoutFarm.TextEditing
             }
             else
             {
-                VisualPointInfo newStartPoint = null;
-                VisualPointInfo newStopPoint = null;
-                TextLineBox startLine = null;
-                TextLineBox stopLine = null;
-                if (startPoint.LineId == _currentLineNumber)
-                {
-                    startLine = this;
-                }
-                else
-                {
-                    startLine = _textFlowLayer.GetTextLine(startPoint.LineId);
-                }
-                newStartPoint = startLine.Split(startPoint);
-                if (endPoint.LineId == _currentLineNumber)
-                {
-                    stopLine = this;
-                }
-                else
-                {
-                    stopLine = _textFlowLayer.GetTextLine(endPoint.LineId);
-                }
-                newStopPoint = stopLine.Split(endPoint);
+                GetStartAndStopLine(startPoint, endPoint, out TextLineBox startLine, out TextLineBox stopLine);
+                EditableVisualPointInfo newStartPoint = startLine.Split(startPoint);
+                EditableVisualPointInfo newStopPoint = stopLine.Split(endPoint);
                 if (startLine == stopLine)
                 {
                     if (newStartPoint.Run != null)
@@ -427,7 +363,7 @@ namespace LayoutFarm.TextEditing
         Size MeasureCopyRunLength(CopyRun copyRun)
         {
 
-            ITextService txServices = TextService;
+            ITextService txServices = GlobalTextService.TextService;
 
             char[] mybuffer = copyRun.RawContent;
             if (txServices.SupportsWordBreak)

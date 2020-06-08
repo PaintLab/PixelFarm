@@ -5,11 +5,12 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Text;
-  
+
 using Typography.FontManagement;
 using Typography.OpenFont;
 using Typography.OpenFont.Extensions;
 using Typography.Contours;
+using Typography.TextBreak;
 
 namespace PixelFarm.Drawing.WinGdi
 {

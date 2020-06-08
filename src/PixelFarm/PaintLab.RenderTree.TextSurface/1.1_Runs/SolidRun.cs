@@ -6,7 +6,7 @@ using PixelFarm.Drawing;
 
 namespace LayoutFarm.TextEditing
 {
-    class SolidRun : Run
+    public class SolidRun : Run
     {
         //TODO: review here=> who should store/handle this handle? , owner TextBox or this run?
         Action<SolidRun, DrawBoard, UpdateArea> _externalCustomDraw;
@@ -45,7 +45,7 @@ namespace LayoutFarm.TextEditing
 
         public string RawText { get; set; }
 
-        public override CopyRun CreateCopy() => new CopyRun(GetText()) { RunKind = RunKind.Solid };
+        public override CopyRun CreateCopy() => MakeTextRun(0, _mybuffer.Length);
 
         public override CopyRun Copy(int startIndex)
         {
@@ -65,19 +65,10 @@ namespace LayoutFarm.TextEditing
             {
                 sourceIndex = 0;
                 length = _mybuffer.Length;
-                CopyRun newTextRun = null;
+
                 char[] newContent = new char[length];
                 Array.Copy(_mybuffer, sourceIndex, newContent, 0, length);
-                //SolidTextRun solidRun = new SolidTextRun(this.Root, newContent, this.SpanStyle) { RawText = this.RawText };
-                CopyRun solidRun = new CopyRun(this.RawText);
-                solidRun.RunKind = RunKind.Solid;
-
-                //TODO: review this again!
-                //solidRun.SetCustomExternalDraw(_externalCustomDraw); //also copy drawing handler?
-                //newTextRun = solidRun;
-                //newTextRun.IsLineBreak = this.IsLineBreak;
-                //newTextRun.UpdateRunWidth();
-                return newTextRun;
+                return new CopyRun(newContent) { RunKind = RunKind.Solid };
             }
             else
             {

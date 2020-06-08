@@ -46,12 +46,10 @@ namespace LayoutFarm.TextEditing
         List<TextLineBox> _lines = new List<TextLineBox>();
         ITextFlowLayerOwner _owner;
 
-        public TextFlowLayer(ITextFlowLayerOwner owner,
-            ITextService textService,
+        public TextFlowLayer(ITextFlowLayerOwner owner, 
             RunStyle defaultSpanStyle)
         {
-            _owner = owner;
-            TextServices = textService;
+            _owner = owner; 
 
             //start with single line per layer
             //and can be changed to multiline
@@ -69,7 +67,7 @@ namespace LayoutFarm.TextEditing
         /// </summary>
         public bool VisualLineOverlapped { get; set; }
         public int OwnerWidth => _owner.Width;
-        public ITextService TextServices { get; set; }
+       
         public RunStyle DefaultRunStyle { get; private set; }
 
         public void SetDefaultRunStyle(RunStyle runStyle)

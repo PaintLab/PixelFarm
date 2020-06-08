@@ -19,7 +19,7 @@ namespace LayoutFarm
         static int s_tracerCount = 0;
         public dbugVisualLayoutTracer(RootGraphic visualroot)
         {
-            this._visualroot = visualroot;
+            _visualroot = visualroot;
             _myTraceCount = s_tracerCount;
             ++s_tracerCount;
             _outputFileName = dbugCoreConst.dbugRootFolder + "\\layout_trace\\" + _myTraceCount + "_" + Guid.NewGuid().ToString() + ".txt";
@@ -64,7 +64,7 @@ namespace LayoutFarm
 
         public void Start(StreamWriter strmWriter)
         {
-            this._strmWriter = strmWriter;
+            _strmWriter = strmWriter;
             strmWriter.AutoFlush = true;
         }
         public void Stop()
