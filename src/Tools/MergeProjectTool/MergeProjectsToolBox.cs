@@ -9,19 +9,19 @@ namespace BuildMergeProject
 {
     public partial class MergeProjectsToolBox : UserControl
     {
-        SolutionMx slnMx;
+        SolutionMx _slnMx;
         SolutionListViewController _slnListViewController;
-        string slnFilename;
+        string _slnFilename;
         public MergeProjectsToolBox()
         {
             InitializeComponent();
         }
         public void LoadSolution(string slnFilename)
         {
-            this.slnFilename = slnFilename;
+            _slnFilename = slnFilename;
             ////read sln file 
-            slnMx = new SolutionMx();
-            slnMx.ReadSolution(slnFilename);
+            _slnMx = new SolutionMx();
+            _slnMx.ReadSolution(slnFilename);
 
             cmbNetStd.Items.AddRange(new object[]
             {
@@ -40,7 +40,7 @@ namespace BuildMergeProject
             _slnListViewController.SetSolutionListView(this.listView1);
             _slnListViewController.SetMergePlanListView(this.listView2);
             _slnListViewController.SetProjectReferenceListView(this.lstAsmReferenceList);
-            _slnListViewController.LoadSolutionMx(slnMx);
+            _slnListViewController.LoadSolutionMx(_slnMx);
         }
 
         //private void cmdBuildSelectedMergePro_Click(object sender, EventArgs e)

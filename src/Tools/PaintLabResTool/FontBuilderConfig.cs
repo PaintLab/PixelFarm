@@ -1,11 +1,11 @@
 ﻿//MIT, 2020, WinterDev
 using System;
 using System.Collections.Generic;
-using System.IO;
+ 
 using Typography.OpenFont;
 using Typography.Contours;
 using PixelFarm.CpuBlit.BitmapAtlas;
-using PixelFarm.Drawing;
+ 
 
 namespace Mini
 {
@@ -22,8 +22,8 @@ namespace Mini
         public void AddScriptLangAndHint(string lang, string hint)
         {
 
-            ScriptLang scriptLang = ScriptLangs.GetRegisteredScriptLangFromLanguageName(lang);
-            if (scriptLang == null)
+            ScriptLang scriptLang = ScriptLangs.GetRegisteredScriptLangFromLanguageName(lang).GetScriptLang();
+            if (scriptLang.IsEmpty())
             {
                 //not found this lang
                 System.Diagnostics.Debugger.Break();
@@ -121,7 +121,7 @@ namespace Mini
         public float Size;
         public List<GlyphTextureBuildDetail> TextureBuildDetails;
         public TextureKind TextureKind;
-      
+
 #if DEBUG
         public override string ToString()
         {

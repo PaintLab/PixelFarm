@@ -99,9 +99,9 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="..\..\..\..\Typography\Typography.GlyphLayout\Typography.GlyphLayout.projitems" Label="Shared" />
-  <Import Project="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\Typography.TextBreak.projitems" Label="Shared" />
   <Import Project="..\..\..\..\Typography\Typography.OpenFont\Typography.OpenFont.projitems" Label="Shared" />
   <Import Project="..\..\..\..\Typography\Typography.TextFlow\Typography.TextFlow.projitems" Label="Shared" />
   <Import Project="..\..\..\..\Typography\Typography.TextServices\Typography.TextServices.projitems" Label="Shared" />
+  <Import Project="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\Typography.TextBreak.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
