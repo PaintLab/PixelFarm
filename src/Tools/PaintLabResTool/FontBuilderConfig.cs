@@ -23,7 +23,7 @@ namespace Mini
         {
 
             ScriptLang scriptLang = ScriptLangs.GetRegisteredScriptLangFromLanguageName(lang).GetScriptLang();
-            if (scriptLang == null)
+            if (scriptLang.IsEmpty())
             {
                 //not found this lang
                 System.Diagnostics.Debugger.Break();

@@ -2988,6 +2988,9 @@
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\ScriptTagsAndLanguageSystemTags\UnicodeLangBits.cs">
       <Link>Typography\Typography.TextBreak\Typography.TextBreak\ScriptTagsAndLanguageSystemTags\UnicodeLangBits.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\ScriptTagsAndLanguageSystemTags\UnicodeRangeFinder.cs">
+      <Link>Typography\Typography.TextBreak\Typography.TextBreak\ScriptTagsAndLanguageSystemTags\UnicodeRangeFinder.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\BaseDirection.cs">
       <Link>Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\BaseDirection.cs</Link>
     </Compile>
