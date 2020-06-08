@@ -181,13 +181,13 @@ namespace LayoutFarm.CustomWidgets
             get => _backColor;
             set
             {
-                if (_backColor == value) return;
+                if (_backColor == value) return; 
 
                 _backColor = value;
 
                 BgIsNotOpaque = value.A < 255;
 
-                
+
                 if (this.HasParentLink && !this.BlockGraphicUpdateBubble)
                 {
                     this.InvalidateGraphics();
@@ -235,10 +235,14 @@ namespace LayoutFarm.CustomWidgets
             //then we skip rendering its content
             //else if this renderElement has more child, we need to walk down)
 
+            Color prevTextColorHint = d.TextBackgroundColorHint;
+            bool setNewTextColotHint = false;
             if (!WaitForStartRenderElement)
             {
+               
                 d.FillRectangle(BackColor, ViewportLeft, ViewportTop, this.Width, this.Height);
                 d.SetLatestFillAsTextBackgroundColorHint();
+                setNewTextColotHint = true;
                 //border is over background color          
             }
 
@@ -287,6 +291,11 @@ namespace LayoutFarm.CustomWidgets
                 _hasSomeBorderW && _borderColor.A > 0)
             {
                 d.DrawRectangle(_borderColor, 0, 0, this.Width, this.Height);//test
+            }
+
+            if (setNewTextColotHint)
+            {
+                d.TextBackgroundColorHint = prevTextColorHint;
             }
 
 #if DEBUG
