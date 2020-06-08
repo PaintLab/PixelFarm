@@ -9,19 +9,19 @@ namespace LayoutFarm
     public static class GlobalTextService
     {
 
-        static ITextService _textServices;
+        static ITextService s_textServices;
         public static ITextService TextService
         {
-            get => _textServices;
+            get => s_textServices;
             set
             {
 #if DEBUG
-                if (_textServices != null)
+                if (s_textServices != null)
                 {
 
                 }
 #endif
-                _textServices = value;
+                s_textServices = value;
 
             }
         }
