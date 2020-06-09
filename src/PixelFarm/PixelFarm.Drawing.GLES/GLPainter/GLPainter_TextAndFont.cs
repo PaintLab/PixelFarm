@@ -18,10 +18,12 @@ namespace PixelFarm.DrawingGL
             set
             {
                 _textBgColorHint = value;
+#if DEBUG
                 if (value.A == 0)
                 {
 
                 }
+#endif
             }
         }
         internal bool PreparingWordStrip { get; set; }
