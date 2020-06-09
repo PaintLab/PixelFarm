@@ -60,11 +60,14 @@ namespace LayoutFarm.CustomWidgets
             //then we skip rendering its content
             //else if this renderElement has more child, we need to walk down) 
 
+           
             if (!WaitForStartRenderElement)
             {
-                d.FillRectangle(BackColor, _viewportLeft, _viewportTop, this.Width, this.Height); //TODO : review drawing background color
-                d.TextBackgroundColorHint = BackColor;
-                
+                if (BackColor.A > 0)
+                {                     
+                    d.FillRectangle(BackColor, _viewportLeft, _viewportTop, this.Width, this.Height); //TODO : review drawing background color
+                    d.TextBackgroundColorHint = BackColor;
+                }
             }
 
             _gridLayer.DrawChildContent(d, updateArea);
@@ -77,6 +80,8 @@ namespace LayoutFarm.CustomWidgets
                   drawingIter,
                   d, updateArea);
             }
+
+             
 
             //selection layer
         }

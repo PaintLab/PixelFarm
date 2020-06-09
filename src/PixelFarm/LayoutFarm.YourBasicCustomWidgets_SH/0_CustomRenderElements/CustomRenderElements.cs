@@ -181,7 +181,7 @@ namespace LayoutFarm.CustomWidgets
             get => _backColor;
             set
             {
-                if (_backColor == value) return; 
+                if (_backColor == value) return;
 
                 _backColor = value;
 
@@ -239,10 +239,12 @@ namespace LayoutFarm.CustomWidgets
             bool setNewTextColotHint = false;
             if (!WaitForStartRenderElement)
             {
-               
-                d.FillRectangle(BackColor, ViewportLeft, ViewportTop, this.Width, this.Height);
-                d.TextBackgroundColorHint = BackColor;
-                setNewTextColotHint = true;
+                if (BackColor.A > 0 && (Width > 0 && Height > 0))
+                {
+                    d.FillRectangle(BackColor, ViewportLeft, ViewportTop, this.Width, this.Height);
+                    d.TextBackgroundColorHint = BackColor;
+                    setNewTextColotHint = true;
+                }
                 //border is over background color          
             }
 
