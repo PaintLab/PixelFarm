@@ -46,10 +46,10 @@ namespace LayoutFarm.TextEditing
         List<TextLineBox> _lines = new List<TextLineBox>();
         ITextFlowLayerOwner _owner;
 
-        public TextFlowLayer(ITextFlowLayerOwner owner, 
+        public TextFlowLayer(ITextFlowLayerOwner owner,
             RunStyle defaultSpanStyle)
         {
-            _owner = owner; 
+            _owner = owner;
 
             //start with single line per layer
             //and can be changed to multiline
@@ -67,7 +67,7 @@ namespace LayoutFarm.TextEditing
         /// </summary>
         public bool VisualLineOverlapped { get; set; }
         public int OwnerWidth => _owner.Width;
-       
+
         public RunStyle DefaultRunStyle { get; private set; }
 
         public void SetDefaultRunStyle(RunStyle runStyle)
@@ -225,7 +225,9 @@ namespace LayoutFarm.TextEditing
             int enter_canvasX = d.OriginX;
             int enter_canvasY = d.OriginY;
 
+            Rectangle currentClip = d.CurrentClipRect;
             Color prev_colorHint = d.TextBackgroundColorHint;
+
             for (int i = 0; i < j; ++i)
             {
                 //draw textline, along with visual selection range
@@ -268,16 +270,18 @@ namespace LayoutFarm.TextEditing
                     }
                 }
 
-                updateArea.OffsetY(-linetop); //offset
+                updateArea.OffsetY(-linetop); //offset 
 
                 switch (selRange.GetLineClip(i, out int clipLeft, out int clipWidth))
                 {
                     default: throw new NotSupportedException();
-                    case VisualSelectionRange.ClipRectKind.No:
+                    case VisualSelectionRange.ClipRectKind.No: break;
+                    case VisualSelectionRange.ClipRectKind.SameLine:
+                    case VisualSelectionRange.ClipRectKind.StartLine:
                         {
-                            d.TextBackgroundColorHint = prev_colorHint;//selection color, TODO: review this again
+
+                            //[A]: normal line
                             LinkedListNode<Run> curLineNode = line.First;
-                            d.SetClipRect(new Rectangle(enter_canvasX, enter_canvasY + linetop, this.OwnerWidth, line.ActualLineHeight));
                             while (curLineNode != null)
                             {
                                 Run run = curLineNode.Value;
@@ -286,26 +290,46 @@ namespace LayoutFarm.TextEditing
                                     int x = run.Left;
 
                                     d.SetCanvasOrigin(enter_canvasX + x, enter_canvasY + linetop);
-
                                     updateArea.OffsetX(-x);
 
                                     run.Draw(d, updateArea);
-
+                                    //-----------
                                     updateArea.OffsetX(x);
                                 }
+                                curLineNode = curLineNode.Next;
+                            }
+                            d.SetCanvasOrigin(enter_canvasX, enter_canvasY + linetop);//restore 
+                            //--------------------------------
+                            //[B] selection part                             
+                            curLineNode = line.First; //begin at first run again
+                            d.TextBackgroundColorHint = selRange.BackgroundColor; //selection color, TODO: review this again                             
+                            d.SetClipRect(new Rectangle(clipLeft, 0, clipWidth, line.ActualLineHeight));
+                            while (curLineNode != null)
+                            {
+                                Run run = curLineNode.Value;
+                                if (run.HitTest(updateArea))
+                                {
+                                    int x = run.Left;
 
+                                    d.SetCanvasOrigin(enter_canvasX + x, enter_canvasY + linetop);
+                                    updateArea.OffsetX(-x);
+                                    d.CurrentTextColor = selRange.FontColor;
+                                    run.Draw(d, updateArea);
+                                    //-----------
+                                    updateArea.OffsetX(x);
+                                }
                                 curLineNode = curLineNode.Next;
                             }
                         }
                         break;
                     case VisualSelectionRange.ClipRectKind.InBetween:
                         {
+                            //similar to [A] but we use color hint = selRange.BackgroundColor
+                            d.SetCanvasOrigin(enter_canvasX, enter_canvasY + linetop);//restore 
+                            d.SetClipRect(new Rectangle(0, 0, OwnerWidth, line.ActualLineHeight));//set clip relative to latest canvas origin
+                            d.TextBackgroundColorHint = selRange.BackgroundColor;//
 
-                            d.TextBackgroundColorHint = selRange.BackgroundColor; //selection color, TODO: review this again
                             LinkedListNode<Run> curLineNode = line.First;
-                            //entire line
-                            d.SetClipRect(new Rectangle(enter_canvasX, enter_canvasY + linetop, this.OwnerWidth, line.ActualLineHeight));
-
                             while (curLineNode != null)
                             {
                                 Run run = curLineNode.Value;
@@ -314,148 +338,63 @@ namespace LayoutFarm.TextEditing
                                     int x = run.Left;
 
                                     d.SetCanvasOrigin(enter_canvasX + x, enter_canvasY + linetop);
-
-
-                                    Color prev_font_color = d.CurrentTextColor;
-                                    d.CurrentTextColor = selRange.FontColor;
                                     updateArea.OffsetX(-x);
 
                                     run.Draw(d, updateArea);
-
+                                    //-----------
                                     updateArea.OffsetX(x);
-                                    d.CurrentTextColor = prev_font_color;
                                 }
-
                                 curLineNode = curLineNode.Next;
                             }
-
-#if DEBUG
-                            //d.FillRectangle(Color.Blue, 0, 0, 5, 5);
-#endif
+                            d.SetCanvasOrigin(enter_canvasX, enter_canvasY + linetop);//restore 
+                            //--------------------------------
                         }
                         break;
                     case VisualSelectionRange.ClipRectKind.EndLine:
                         {
-                            //TODO: review here
-                            //2 parts
-                            //[A] original
-                            //[B] selection area
+                            //[A] normal bg
+                            d.SetCanvasOrigin(enter_canvasX, enter_canvasY + linetop);//restore 
+                            d.SetClipRect(new Rectangle(0, 0, OwnerWidth, line.ActualLineHeight));//set clip relative to latest canvas origin
+                            d.TextBackgroundColorHint = prev_colorHint;//normal bg
+
+                            LinkedListNode<Run> curLineNode = line.First;
+                            while (curLineNode != null)
                             {
-                                //[A] normal line
-                                d.TextBackgroundColorHint = prev_colorHint;//selection color, TODO: review this again
-                                LinkedListNode<Run> curLineNode = line.First;
-                                d.SetClipRect(new Rectangle(enter_canvasX, enter_canvasY + linetop, this.OwnerWidth, line.ActualLineHeight));
-                                while (curLineNode != null)
+                                Run run = curLineNode.Value;
+                                if (run.HitTest(updateArea))
                                 {
-                                    Run run = curLineNode.Value;
-                                    if (run.HitTest(updateArea))
-                                    {
-                                        int x = run.Left;
+                                    int x = run.Left;
 
-                                        d.SetCanvasOrigin(enter_canvasX + x, enter_canvasY + linetop);
+                                    d.SetCanvasOrigin(enter_canvasX + x, enter_canvasY + linetop);
+                                    updateArea.OffsetX(-x);
 
-                                        
-                                        updateArea.OffsetX(-x);
-
-                                        run.Draw(d, updateArea);
-
-                                        updateArea.OffsetX(x);
-                                        
-                                    }
-
-                                    curLineNode = curLineNode.Next;
+                                    run.Draw(d, updateArea);
+                                    //-----------
+                                    updateArea.OffsetX(x);
                                 }
-                                d.SetCanvasOrigin(enter_canvasX, enter_canvasY);
+                                curLineNode = curLineNode.Next;
                             }
+                            d.SetCanvasOrigin(enter_canvasX, enter_canvasY + linetop);//restore 
+                            //--------------------------------
+                            //[B] selection part                             
+                            curLineNode = line.First; //begin at first run again
+                            d.TextBackgroundColorHint = selRange.BackgroundColor; //selection color, TODO: review this again                             
+                            d.SetClipRect(new Rectangle(0, 0, clipWidth, line.ActualLineHeight));
+                            while (curLineNode != null)
                             {
-                                //[B] selection area
-                                d.TextBackgroundColorHint = selRange.BackgroundColor;//selection color, TODO: review this again
-                                LinkedListNode<Run> curLineNode = line.First;
-
-                                d.SetClipRect(new Rectangle(enter_canvasX + clipLeft, enter_canvasY + linetop, clipWidth, line.ActualLineHeight));
-                                while (curLineNode != null)
+                                Run run = curLineNode.Value;
+                                if (run.HitTest(updateArea))
                                 {
-                                    Run run = curLineNode.Value;
-                                    if (run.HitTest(updateArea))
-                                    {
-                                        int x = run.Left;
+                                    int x = run.Left;
 
-                                        d.SetCanvasOrigin(enter_canvasX + x, enter_canvasY + linetop);
-                                        Color prev_font_color = d.CurrentTextColor;
-                                        d.CurrentTextColor = selRange.FontColor;
-                                        updateArea.OffsetX(-x);
-
-                                        run.Draw(d, updateArea);
-
-                                        updateArea.OffsetX(x);
-                                        d.CurrentTextColor = prev_font_color;
-                                    }
-
-                                    curLineNode = curLineNode.Next;
+                                    d.SetCanvasOrigin(enter_canvasX + x, enter_canvasY + linetop);
+                                    updateArea.OffsetX(-x);
+                                    d.CurrentTextColor = selRange.FontColor;
+                                    run.Draw(d, updateArea);
+                                    //-----------
+                                    updateArea.OffsetX(x);
                                 }
-                            }
-#if DEBUG
-                            //d.FillRectangle(Color.Red, 5, 5, 10, 5);
-#endif
-                        }
-                        break;
-                    case VisualSelectionRange.ClipRectKind.StartLine:
-                    case VisualSelectionRange.ClipRectKind.SameLine:
-                        {
-                            //TODO: review here
-                            //2 parts
-                            //[A] original
-                            //[B] selection area
-                            {
-                                //[A]
-                                d.TextBackgroundColorHint = prev_colorHint;//selection color, TODO: review this again
-                                LinkedListNode<Run> curLineNode = line.First;
-                                d.SetClipRect(new Rectangle(enter_canvasX, enter_canvasY + linetop, this.OwnerWidth, line.ActualLineHeight));
-                                while (curLineNode != null)
-                                {
-                                    Run run = curLineNode.Value;
-                                    if (run.HitTest(updateArea))
-                                    {
-                                        int x = run.Left;
-
-                                        d.SetCanvasOrigin(enter_canvasX + x, enter_canvasY + linetop);
-
-                                        updateArea.OffsetX(-x);
-
-                                        run.Draw(d, updateArea);
-
-                                        updateArea.OffsetX(x);
-                                    }
-
-                                    curLineNode = curLineNode.Next;
-                                }
-                                d.SetCanvasOrigin(enter_canvasX, enter_canvasY);
-                            }
-                            {
-                                //[B]
-                                d.TextBackgroundColorHint = selRange.BackgroundColor; //selection color, TODO: review this again
-                                LinkedListNode<Run> curLineNode = line.First;
-                                d.SetClipRect(new Rectangle(enter_canvasX + clipLeft, enter_canvasY + linetop, clipWidth, line.ActualLineHeight));
-                                while (curLineNode != null)
-                                {
-                                    Run run = curLineNode.Value;
-                                    if (run.HitTest(updateArea))
-                                    {
-                                        int x = run.Left;
-
-                                        d.SetCanvasOrigin(enter_canvasX + x, enter_canvasY + linetop);
-                                        Color prev_font_color = d.CurrentTextColor;
-                                        d.CurrentTextColor = selRange.FontColor;
-                                        updateArea.OffsetX(-x);
-
-                                        run.Draw(d, updateArea);
-
-                                        updateArea.OffsetX(x);
-                                        d.CurrentTextColor = prev_font_color;
-                                    }
-
-                                    curLineNode = curLineNode.Next;
-                                }
+                                curLineNode = curLineNode.Next;
                             }
                         }
                         break;
@@ -464,10 +403,12 @@ namespace LayoutFarm.TextEditing
 
                 //
                 d.SetCanvasOrigin(enter_canvasX, enter_canvasY);
+
                 updateArea.OffsetY(linetop); //restore 
             }
 
             d.SetCanvasOrigin(enter_canvasX, enter_canvasY);
+            d.SetClipRect(new Rectangle(enter_canvasX, enter_canvasY, currentClip.Width, currentClip.Height));
             d.TextBackgroundColorHint = prev_colorHint;
         }
 
@@ -488,11 +429,11 @@ namespace LayoutFarm.TextEditing
             {
                 TextLineBox line = lines[i];
 
-                int y = line.Top;
+                int lineTop = line.Top;
 
                 if (!foundFirstLine)
                 {
-                    if (y + line.ActualLineHeight < renderAreaTop)
+                    if (lineTop + line.ActualLineHeight < renderAreaTop)
                     {
                         continue;
                     }
@@ -503,7 +444,7 @@ namespace LayoutFarm.TextEditing
                 }
                 else
                 {
-                    if (y > renderAreaBottom)
+                    if (lineTop > renderAreaBottom)
                     {
                         if (VisualLineOverlapped)
                         {
@@ -512,7 +453,7 @@ namespace LayoutFarm.TextEditing
                             {
                                 //check next line
                                 TextLineBox lowerLine = lines[i + 1];
-                                if (lowerLine.Top - lowerLine.OverlappedTop > y)
+                                if (lowerLine.Top - lowerLine.OverlappedTop > lineTop)
                                 {
                                     break;
                                 }
@@ -525,7 +466,7 @@ namespace LayoutFarm.TextEditing
                     }
                 }
 
-                updateArea.OffsetY(-y); //offset
+                updateArea.OffsetY(-lineTop); //offset
 
                 LinkedListNode<Run> curLineNode = line.First;
 
@@ -536,7 +477,7 @@ namespace LayoutFarm.TextEditing
                     {
                         int x = run.Left;
 
-                        d.SetCanvasOrigin(enter_canvasX + x, enter_canvasY + y);
+                        d.SetCanvasOrigin(enter_canvasX + x, enter_canvasY + lineTop);
                         updateArea.OffsetX(-x);
 
                         run.Draw(d, updateArea);
@@ -547,7 +488,7 @@ namespace LayoutFarm.TextEditing
                     curLineNode = curLineNode.Next;
                 }
 
-                updateArea.OffsetY(y); //restore
+                updateArea.OffsetY(lineTop); //restore
             }
 
             d.SetCanvasOrigin(enter_canvasX, enter_canvasY);
@@ -619,7 +560,7 @@ namespace LayoutFarm.TextEditing
         }
 
         internal TextLineBox GetTextLine(int lineId) => (lineId < _lines.Count) ? _lines[lineId] : null;
-         
+
         internal TextLineBox GetTextLineAtPos(int y)
         {
             List<TextLineBox> lines = _lines;
