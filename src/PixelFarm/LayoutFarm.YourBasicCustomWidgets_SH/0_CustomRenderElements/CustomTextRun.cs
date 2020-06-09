@@ -293,106 +293,103 @@ namespace LayoutFarm.CustomWidgets
             //if WaitForStartRenderElement == true,
             //then we skip rendering its content
             //else if this renderElement has more child, we need to walk down)
-            if (WaitForStartRenderElement)
+
+            if (WaitForStartRenderElement || _textBuffer == null || _textBuffer.Length == 0) { return; } //early exit
+
+            //----------- 
+
+            Color prevColor = d.CurrentTextColor;
+            RequestFont prevFont = d.CurrentFont;
+            DrawTextTechnique prevTechnique = d.DrawTextTechnique;
+            Color prevBgHint = d.TextBackgroundColorHint;
+
+            d.CurrentTextColor = _textColor;
+            d.CurrentFont = _font;
+            d.DrawTextTechnique = this.DrawTextTechnique;
+
+            if (_backColor.A == 255)
             {
-                return;
+                //opaque background
+                d.FillRectangle(_backColor, 0, 0, this.Width, this.Height);
+                //for lcd-subpix, hint will help the performance
+                d.TextBackgroundColorHint = _backColor;
+            }
+            else
+            {
+
+                //for lcd-subpix, hint will help the performance
+                //label has transparent bg
+
+                //this custom text run may have transparent bg
+                //but it may place on host that has opaque color
+
+                //TODO: review this
+                //1. we should use latest text color hint or not
+
+                //in that case, we can hint the text-rendering with host color instead
+                //so we try to check the host color by policy that configure  on this CustomTextRun
+
+                //TODO: if the 
+
             }
 
-            if (_textBuffer != null && _textBuffer.Length > 0)
+            if (_textBuffer.Length > 2)
             {
-                Color prevColor = d.CurrentTextColor;
-                RequestFont prevFont = d.CurrentFont;
-                DrawTextTechnique prevTechnique = d.DrawTextTechnique;
-                Color prevBgHint = d.TextBackgroundColorHint;
-
-                d.CurrentTextColor = _textColor;
-                d.CurrentFont = _font;
-                d.DrawTextTechnique = this.DrawTextTechnique;
-
-
-                if (_backColor.A == 255)
+                //for long text ? => configurable? 
+                //use formatted string
+                if (_renderVxFormattedString == null)
                 {
-                    //opaque background
-                    d.FillRectangle(_backColor, 0, 0, this.Width, this.Height);
-                    //for lcd-subpix, hint will help the performance
-                    d.SetLatestFillAsTextBackgroundColorHint();
+                    _renderVxFormattedString = d.CreateFormattedString(_textBuffer, 0, _textBuffer.Length, DelayFormattedString);
                 }
-                else
+                //-------------
+                switch (_renderVxFormattedString.State)
                 {
+                    case RenderVxFormattedString.VxState.Ready:
+                        {
+                            d.DrawRenderVx(_renderVxFormattedString, _contentLeft, _contentTop);
 
-                    //for lcd-subpix, hint will help the performance
-                    //label has transparent bg
+                            ////-----
+                            //d.PopClipAreaRect();
+                            //Rectangle prevRect = d.CurrentClipRect;
+                            ////-----
+                            //d.DrawRenderVx(_renderVxFormattedString, _contentLeft, _contentTop);
+                            ////drawboard.FillRectangle(Color.Yellow, _contentLeft, _contentTop, this.Width, this.Height);
 
-                    //this custom text run may have transparent bg
-                    //but it may place on host that has opaque color
 
-                    //TODO: review this
-                    //1. we should use latest text color hint or not
+                            ////-----
+                            //d.PushClipAreaRect(this.Width, this.Height, ref updateArea);
+                            ////-----
+                        }
+                        break;
+                    case RenderVxFormattedString.VxState.NoStrip:
+                        {
+                            //put this to the update queue system
+                            //(TODO: add extension method for this)
 
-                    //in that case, we can hint the text-rendering with host color instead
-                    //so we try to check the host color by policy that configure  on this CustomTextRun
-
-                    //TODO: if the 
-
+                            GlobalRootGraphic.CurrentRootGfx.EnqueueRenderRequest(new RenderBoxes.RenderElementRequest(
+                                  this,
+                                  RenderBoxes.RequestCommand.ProcessFormattedString,
+                                  _renderVxFormattedString));
+                        }
+                        break;
                 }
+            }
+            else
+            {
 
-                if (_textBuffer.Length > 2)
-                {
-                    //for long text ? => configurable? 
-                    //use formatted string
-                    if (_renderVxFormattedString == null)
-                    {
-                        _renderVxFormattedString = d.CreateFormattedString(_textBuffer, 0, _textBuffer.Length, DelayFormattedString);
-                    }
-                    //-------------
-                    switch (_renderVxFormattedString.State)
-                    {
-                        case RenderVxFormattedString.VxState.Ready:
-                            {
-                                d.DrawRenderVx(_renderVxFormattedString, _contentLeft, _contentTop);
-
-                                ////-----
-                                //d.PopClipAreaRect();
-                                //Rectangle prevRect = d.CurrentClipRect;
-                                ////-----
-                                //d.DrawRenderVx(_renderVxFormattedString, _contentLeft, _contentTop);
-                                ////drawboard.FillRectangle(Color.Yellow, _contentLeft, _contentTop, this.Width, this.Height);
-
-
-                                ////-----
-                                //d.PushClipAreaRect(this.Width, this.Height, ref updateArea);
-                                ////-----
-                            }
-                            break;
-                        case RenderVxFormattedString.VxState.NoStrip:
-                            {
-                                //put this to the update queue system
-                                //(TODO: add extension method for this)
-
-                                GlobalRootGraphic.CurrentRootGfx.EnqueueRenderRequest(new RenderBoxes.RenderElementRequest(
-                                      this,
-                                      RenderBoxes.RequestCommand.ProcessFormattedString,
-                                      _renderVxFormattedString));
-                            }
-                            break;
-                    }
-                }
-                else
-                {
-
-                    //short text => run
-                    d.DrawText(_textBuffer, _contentLeft, _contentTop);
-                }
-                //
-#if DEBUG 
-                d.FillRectangle(Color.Red, 0, 0, 5, 5);
+                //short text => run
+                d.DrawText(_textBuffer, _contentLeft, _contentTop);
+            }
+            //
+#if DEBUG
+            d.FillRectangle(Color.Red, 0, 0, 5, 5);
 #endif
-                //restore
-                d.DrawTextTechnique = prevTechnique;
-                d.CurrentFont = prevFont;
-                d.CurrentTextColor = prevColor;
-                d.TextBackgroundColorHint = prevBgHint;
-            }
+            //restore
+            d.DrawTextTechnique = prevTechnique;
+            d.CurrentFont = prevFont;
+            d.CurrentTextColor = prevColor;
+            d.TextBackgroundColorHint = prevBgHint;
+
         }
     }
 }

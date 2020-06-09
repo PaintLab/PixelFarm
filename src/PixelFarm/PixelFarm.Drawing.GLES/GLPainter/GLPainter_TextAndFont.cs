@@ -11,8 +11,21 @@ namespace PixelFarm.DrawingGL
         WordPlateMx _wordPlateMx = new WordPlateMx();
         GLBitmapGlyphTextPrinter _bmpTextPrinter;
         GlyphTexturePrinterDrawingTechnique _drawingTech;
+        Color _textBgColorHint;
+        public Color TextBgColorHint
+        {
+            get => _textBgColorHint;
+            set
+            {
+                _textBgColorHint = value;
+#if DEBUG
+                if (value.A == 0)
+                {
 
-        public Color TextBgColorHint { get; set; }
+                }
+#endif
+            }
+        }
         internal bool PreparingWordStrip { get; set; }
         public Color FontFillColor
         {

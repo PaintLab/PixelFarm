@@ -82,13 +82,17 @@ namespace LayoutFarm.TextEditing
                 _isFocus = true;
             }
         }
+
+        bool _blurring;
         public override void Blur()
         {
-            if (_isEditable)
-            {
+            if (_isEditable && !_blurring)
+            { 
+                _blurring = true;
                 GlobalCaretController.CurrentTextEditBox = null;
                 this.SetCaretVisible(false);
                 _isFocus = false;
+                _blurring = false; 
             }
         }
 
