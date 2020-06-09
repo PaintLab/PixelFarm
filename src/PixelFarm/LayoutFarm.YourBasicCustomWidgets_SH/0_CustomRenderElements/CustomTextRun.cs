@@ -315,7 +315,7 @@ namespace LayoutFarm.CustomWidgets
                     //opaque background
                     d.FillRectangle(_backColor, 0, 0, this.Width, this.Height);
                     //for lcd-subpix, hint will help the performance
-                    d.SetLatestFillAsTextBackgroundColorHint();
+                    d.TextBackgroundColorHint = _backColor;
                 }
                 else
                 {

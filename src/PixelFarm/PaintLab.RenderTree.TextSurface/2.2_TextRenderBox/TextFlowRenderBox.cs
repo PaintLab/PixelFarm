@@ -528,7 +528,7 @@ namespace LayoutFarm.TextEditing
 #else
                 d.FillRectangle(BackgroundColor, 0, 0, Width, Height);
 #endif
-                d.SetLatestFillAsTextBackgroundColorHint();
+                d.TextBackgroundColorHint = BackgroundColor;
             }
 
             //2.1 markers 

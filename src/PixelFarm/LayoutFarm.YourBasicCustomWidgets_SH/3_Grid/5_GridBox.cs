@@ -63,7 +63,8 @@ namespace LayoutFarm.CustomWidgets
             if (!WaitForStartRenderElement)
             {
                 d.FillRectangle(BackColor, _viewportLeft, _viewportTop, this.Width, this.Height); //TODO : review drawing background color
-                d.SetLatestFillAsTextBackgroundColorHint();
+                d.TextBackgroundColorHint = BackColor;
+                
             }
 
             _gridLayer.DrawChildContent(d, updateArea);

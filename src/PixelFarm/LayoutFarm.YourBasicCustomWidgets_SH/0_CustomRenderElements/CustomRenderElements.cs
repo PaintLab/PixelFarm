@@ -241,7 +241,7 @@ namespace LayoutFarm.CustomWidgets
             {
                
                 d.FillRectangle(BackColor, ViewportLeft, ViewportTop, this.Width, this.Height);
-                d.SetLatestFillAsTextBackgroundColorHint();
+                d.TextBackgroundColorHint = BackColor;
                 setNewTextColotHint = true;
                 //border is over background color          
             }
