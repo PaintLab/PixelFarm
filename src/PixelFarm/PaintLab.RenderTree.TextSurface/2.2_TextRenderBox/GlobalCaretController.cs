@@ -61,13 +61,13 @@ namespace LayoutFarm.TextEditing
                     if (_currentTextBox != null)
                     {
                         //stop caret on prev element
-                        _currentTextBox.SetCaretVisible(false);
-                        _currentTextBox = null;
-
+                        _currentTextBox.SetCaretVisible(false); 
                         if (_currentTextBox.GetController() is IUIEventListener evlistener)
                         {
                             evlistener.ListenLostKeyboardFocus(null);
                         }
+
+                        _currentTextBox = null;//set the old one to null
                     }
                 }
 

@@ -34,23 +34,17 @@ namespace LayoutFarm.CustomWidgets
             set
             {
                 if (value != _isChecked)
-                {
-                   
+                {                 
 
                     _isChecked = value;
                     //check check image too!
                     //review here,
-
                     _imageBox.ImageBinder = _isChecked ? s_checkedImg : s_uncheckedImg;
-
-                    if (value && this.WhenChecked != null)
-                    {
-                        this.WhenChecked(this, EventArgs.Empty);
-                    }
+                    this.CheckChanged?.Invoke(this, EventArgs.Empty);                     
                 }
             }
         }
-        public event EventHandler WhenChecked;
+        public event EventHandler CheckChanged;
 
     }
 }
