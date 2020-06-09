@@ -4,7 +4,9 @@
 //https://developer.apple.com/library/content/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/TechniquesforWorkingwithVertexData/TechniquesforWorkingwithVertexData.html
 
 using System;
+using System.Collections.Generic;
 using OpenTK.Graphics.ES20;
+using Tesselate;
 
 namespace PixelFarm.DrawingGL
 {
@@ -15,12 +17,28 @@ namespace PixelFarm.DrawingGL
         int _indexBufferId; // element buffer
         bool _hasData;
 
+
+#if DEBUG
+        static Dictionary<int, bool> s_dbugVboCount = new Dictionary<int, bool>();
+#endif
+
         public VertexBufferObject()
         {
             //TODO: review how to create vbo object 
 #if DEBUG
+
+
             dbugId = dbugTotalId++;
-            if (dbugId > 50)
+            
+            if (s_dbugVboCount.ContainsKey(dbugId))
+            {
+                //??
+            }
+            else
+            {
+                s_dbugVboCount.Add(dbugId, true);
+            }
+            if (s_dbugVboCount.Count > 10)
             {
 
             }
@@ -119,14 +137,28 @@ namespace PixelFarm.DrawingGL
         {
             unsafe
             {
+
                 if (_vertexBufferId > 0 || _indexBufferId > 0)
                 {
+#if DEBUG
+                    if (!s_dbugVboCount.ContainsKey(dbugId))
+                    {
+                        //???
+                    }
+                    else
+                    {
+                        s_dbugVboCount.Remove(dbugId);
+                    }
+#endif
+
                     int* toDeleteBufferIndexArr = stackalloc int[2];
                     toDeleteBufferIndexArr[0] = _vertexBufferId;
                     toDeleteBufferIndexArr[1] = _indexBufferId;
                     GL.DeleteBuffers(2, toDeleteBufferIndexArr);
                     _vertexBufferId = _indexBufferId = 0;
                 }
+
+
                 _hasData = false;
             }
         }
