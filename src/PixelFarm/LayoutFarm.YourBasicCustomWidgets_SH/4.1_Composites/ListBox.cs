@@ -292,10 +292,10 @@ namespace LayoutFarm.CustomWidgets
             if (_primElement == null)
             {
                 //1.
-                var element = new CustomRenderBox(this.Width, this.Height);
-                element.SetLocation(this.Left, this.Top);
-                element.BackColor = _backColor;
-                element.SetController(this);
+                var renderE = new CustomRenderBox(this.Width, this.Height);
+                renderE.SetLocation(this.Left, this.Top);
+                renderE.BackColor = _backColor;
+                renderE.SetController(this);
                 //
                 _listItemText = new CustomTextRun(200, this.Height);
                 _listItemText.DrawTextTechnique = DrawTextTechnique.LcdSubPix;
@@ -307,17 +307,17 @@ namespace LayoutFarm.CustomWidgets
 
                     int blankLineHeight = (int)GlobalTextService.TextService.MeasureBlankLineHeight(_font);
                     _listItemText.SetHeight(blankLineHeight);
-                    element.SetHeight(blankLineHeight);
+                    renderE.SetHeight(blankLineHeight);
                 }
 
 
-                element.AddChild(_listItemText);
+                renderE.AddChild(_listItemText);
                 _listItemText.TransparentForMouseEvents = true;
                 if (_itemText != null)
                 {
                     _listItemText.Text = _itemText;
                 }
-                _primElement = element;
+                _primElement = renderE;
             }
             return _primElement;
         }

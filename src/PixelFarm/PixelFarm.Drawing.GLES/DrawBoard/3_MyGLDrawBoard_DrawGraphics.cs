@@ -12,7 +12,7 @@ namespace PixelFarm.Drawing.GLES2
     {
         class MyGLCanvasException : Exception { }
 
-        Color _latestFillSolidColor;
+        //Color _latestFillSolidColor;
         bool _latestFillCouldbeUsedAsTextBgHint;
 
         public override Color StrokeColor
@@ -54,8 +54,8 @@ namespace PixelFarm.Drawing.GLES2
                         _gpuPainter.FillRect(
                             left, top,
                             width, height,
-                           _latestFillSolidColor = solidBrush.Color);
-                        _latestFillCouldbeUsedAsTextBgHint = _latestFillSolidColor.A == 255;
+                            solidBrush.Color);
+                        _latestFillCouldbeUsedAsTextBgHint = solidBrush.Color.A == 255;
                     }
                     break;
                 case BrushKind.LinearGradient:
@@ -73,7 +73,7 @@ namespace PixelFarm.Drawing.GLES2
         public override void FillRectangle(Color color, float left, float top, float width, float height)
         {
             _gpuPainter.FillRect(left, top, width, height, color);
-            _latestFillSolidColor = color;
+            //_latestFillSolidColor = color;
             _latestFillCouldbeUsedAsTextBgHint = color.A == 255;
         }
         public override void DrawRectangle(Color color, float left, float top, float width, float height)

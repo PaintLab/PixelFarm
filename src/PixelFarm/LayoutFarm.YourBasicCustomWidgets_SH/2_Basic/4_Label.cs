@@ -98,14 +98,12 @@ namespace LayoutFarm.CustomWidgets
 
         public override void SetFont(RequestFont font)
         {
+            _font = font;
             if (_myTextRun != null)
             {
                 _myTextRun.RequestFont = font;
-            }
-            else
-            {
-                _font = font;
-            }
+            } 
+            
         }
         //
         public override RenderElement CurrentPrimaryRenderElement => _myTextRun;
@@ -118,7 +116,7 @@ namespace LayoutFarm.CustomWidgets
                 _text = value;
                 if (_myTextRun != null)
                 {
-                    _myTextRun.Text = value;                   
+                    _myTextRun.Text = value;
                 }
             }
         }

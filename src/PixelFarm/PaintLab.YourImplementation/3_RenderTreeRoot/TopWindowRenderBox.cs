@@ -22,7 +22,7 @@ namespace LayoutFarm
             {
                 //just clear with white?
                 d.FillRectangle(Color.White, 0, 0, this.Width, this.Height);
-                d.SetLatestFillAsTextBackgroundColorHint();
+                d.TextBackgroundColorHint = Color.White;
             }
             base.RenderClientContent(d, updateArea);
         }
