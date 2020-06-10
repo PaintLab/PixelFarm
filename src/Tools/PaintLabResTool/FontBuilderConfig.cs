@@ -22,7 +22,8 @@ namespace Mini
         public void AddScriptLangAndHint(string lang, string hint)
         {
 
-            ScriptLang scriptLang = ScriptLangs.GetRegisteredScriptLangFromLanguageName(lang).GetScriptLang();
+            ScriptLang scriptLang = new ScriptLang(ScriptLangs.GetRegisteredScriptLangFromLanguageName(lang).shortname);
+
             if (scriptLang.IsEmpty())
             {
                 //not found this lang
