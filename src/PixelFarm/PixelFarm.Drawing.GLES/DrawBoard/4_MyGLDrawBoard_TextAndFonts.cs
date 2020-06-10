@@ -60,15 +60,6 @@ namespace PixelFarm.Drawing.GLES2
             if (renderVx is DrawingGL.GLRenderVxFormattedString vxFmtStr)
             {
                 _gpuPainter.TextPrinter.DrawString(vxFmtStr, x, y);
-                //if (vxFmtStr.UseWithWordPlate && vxFmtStr.OwnerPlate == null)
-                //{
-                //    //TODO: review here again!
-                //    _gpuPainter.TextPrinter.DrawString(vxFmtStr, x, y);
-                //}
-                //else
-                //{
-                //    _gpuPainter.TextPrinter.DrawString(vxFmtStr, x, y);
-                //} 
             }
         }
 

@@ -148,7 +148,8 @@ namespace PixelFarm.DrawingGL
             //**
             ChangeFont(painter.CurrentFont);
             //
-            DrawingTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering; //default 
+            //DrawingTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering; //default 
+            DrawingTechnique = GlyphTexturePrinterDrawingTechnique.Stencil; //default 
             UseVBO = true;
 
             TextBaseline = TextBaseline.Top;
@@ -203,7 +204,22 @@ namespace PixelFarm.DrawingGL
 
         }
         public bool UseVBO { get; set; }
-        public GlyphTexturePrinterDrawingTechnique DrawingTechnique { get; set; }
+
+        GlyphTexturePrinterDrawingTechnique _drawingTech;
+        public GlyphTexturePrinterDrawingTechnique DrawingTechnique
+        {
+            get => _drawingTech;
+            set
+            {
+#if DEBUG
+                if (value == GlyphTexturePrinterDrawingTechnique.Stencil)
+                {
+
+                }
+#endif
+                _drawingTech = value;
+            }
+        }
         public void ChangeFillColor(Color color)
         {
             //called by owner painter  
@@ -462,6 +478,7 @@ namespace PixelFarm.DrawingGL
         {
             _pcx.FontFillColor = _painter.FontFillColor;
 
+             
 
             GLRenderVxFormattedString vxFmtStr = (GLRenderVxFormattedString)rendervx;
             switch (DrawingTechnique)
