@@ -213,7 +213,8 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
-        public void DrawChildContent(DrawBoard d, UpdateArea updateArea, VisualSelectionRange selRange)
+
+        internal void DrawChildContentLcdEffectText(DrawBoard d, UpdateArea updateArea, VisualSelectionRange selRange)
         {
 
             List<TextLineBox> lines = _lines;
@@ -226,7 +227,8 @@ namespace LayoutFarm.TextEditing
             int enter_canvasY = d.OriginY;
 
             Rectangle currentClip = d.CurrentClipRect;
-            Color prev_colorHint = d.TextBackgroundColorHint;
+            Color prev_colorHint = d.TextBackgroundColorHint; 
+
 
             for (int i = 0; i < j; ++i)
             {
@@ -234,6 +236,7 @@ namespace LayoutFarm.TextEditing
 
                 TextLineBox line = lines[i];
                 int linetop = line.Top;
+
                 if (!foundFirstLine)
                 {
                     if (linetop + line.ActualLineHeight < renderAreaTop)
@@ -412,7 +415,7 @@ namespace LayoutFarm.TextEditing
             d.TextBackgroundColorHint = prev_colorHint;
         }
 
-        public void DrawChildContent(DrawBoard d, UpdateArea updateArea)
+        internal void DrawChildContent(DrawBoard d, UpdateArea updateArea)
         {
 
             //this.BeginDrawingChildContent(); 
@@ -425,6 +428,7 @@ namespace LayoutFarm.TextEditing
 
             int enter_canvasX = d.OriginX;
             int enter_canvasY = d.OriginY;
+
             for (int i = 0; i < j; ++i)
             {
                 TextLineBox line = lines[i];

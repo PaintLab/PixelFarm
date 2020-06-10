@@ -547,11 +547,25 @@ namespace LayoutFarm.TextEditing
                 //with selection
                 _editSession.SelectionRange.FontColor = SelectionTextColor;
                 _editSession.SelectionRange.BackgroundColor = SelectionBackgroundColor;
-                //_editSession.SelectionRange.Draw(d, updateArea);
 
-                TextRun.s_currentRenderE = this;
-                _textLayer.DrawChildContent(d, updateArea, _editSession.SelectionRange);
-                TextRun.s_currentRenderE = null; //temp fix                 
+
+                
+                if (d.DrawTextTechnique == DrawTextTechnique.LcdSubPix)
+                {
+                    TextRun.s_currentRenderE = this;
+                    _textLayer.DrawChildContentLcdEffectText(d, updateArea, _editSession.SelectionRange);
+                    TextRun.s_currentRenderE = null; //temp fix
+
+                }
+                else
+                {
+                    _editSession.SelectionRange.Draw(d, updateArea);
+
+                    TextRun.s_currentRenderE = this;//temp fix
+                    _textLayer.DrawChildContent(d, updateArea);
+                    TextRun.s_currentRenderE = null;//temp fix 
+                }
+                
             }
             else
             {
