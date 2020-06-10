@@ -148,10 +148,10 @@ namespace PixelFarm.DrawingGL
             //**
             ChangeFont(painter.CurrentFont);
             //
-            //DrawingTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering; //default 
-            DrawingTechnique = GlyphTexturePrinterDrawingTechnique.Stencil; //default 
+            //TextDrawingTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering; //default 
+            TextDrawingTechnique = GlyphTexturePrinterDrawingTechnique.Stencil; //default 
             UseVBO = true;
-
+             
             TextBaseline = TextBaseline.Top;
             //TextBaseline = TextBaseline.Alphabetic;
             //TextBaseline = TextBaseline.Bottom;
@@ -206,7 +206,7 @@ namespace PixelFarm.DrawingGL
         public bool UseVBO { get; set; }
 
         GlyphTexturePrinterDrawingTechnique _drawingTech;
-        public GlyphTexturePrinterDrawingTechnique DrawingTechnique
+        public GlyphTexturePrinterDrawingTechnique TextDrawingTechnique
         {
             get => _drawingTech;
             set
@@ -333,7 +333,7 @@ namespace PixelFarm.DrawingGL
 
             if (textureKind == TextureKind.Msdf)
             {
-                DrawingTechnique = GlyphTexturePrinterDrawingTechnique.Msdf;
+                TextDrawingTechnique = GlyphTexturePrinterDrawingTechnique.Msdf;
             }
 
 
@@ -414,7 +414,7 @@ namespace PixelFarm.DrawingGL
                 }
                 else
                 {
-                    switch (DrawingTechnique)
+                    switch (TextDrawingTechnique)
                     {
                         case GlyphTexturePrinterDrawingTechnique.Msdf:
                             _pcx.DrawSubImageWithMsdf(_glBmp,
@@ -455,7 +455,7 @@ namespace PixelFarm.DrawingGL
 
             if (UseVBO)
             {
-                switch (DrawingTechnique)
+                switch (TextDrawingTechnique)
                 {
                     case GlyphTexturePrinterDrawingTechnique.Copy:
                         _pcx.DrawGlyphImageWithCopy_VBO(_glBmp, _vboBuilder);
@@ -481,7 +481,7 @@ namespace PixelFarm.DrawingGL
              
 
             GLRenderVxFormattedString vxFmtStr = (GLRenderVxFormattedString)rendervx;
-            switch (DrawingTechnique)
+            switch (TextDrawingTechnique)
             {
                 case GlyphTexturePrinterDrawingTechnique.Stencil:
                     {

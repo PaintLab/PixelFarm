@@ -10,7 +10,7 @@ namespace PixelFarm.DrawingGL
     {
         WordPlateMx _wordPlateMx = new WordPlateMx();
         GLBitmapGlyphTextPrinter _bmpTextPrinter;
-        GlyphTexturePrinterDrawingTechnique _drawingTech;
+        GlyphTexturePrinterDrawingTechnique _textPrinterDrawingTech = GlyphTexturePrinterDrawingTechnique.Stencil;
         Color _textBgColorHint;
         public Color TextBgColorHint
         {
@@ -32,15 +32,15 @@ namespace PixelFarm.DrawingGL
             get => _pcx.FontFillColor;
             set => _pcx.FontFillColor = value;
         }
-        public GlyphTexturePrinterDrawingTechnique DrawingTechnique
+        public GlyphTexturePrinterDrawingTechnique TextPrinterDrawingTechnique
         {
-            get => _drawingTech;
+            get => _textPrinterDrawingTech;
             set
             {
-                _drawingTech = value;
+                _textPrinterDrawingTech = value;
                 if (_bmpTextPrinter != null)
                 {
-                    _bmpTextPrinter.DrawingTechnique = value;
+                    _bmpTextPrinter.TextDrawingTechnique = value;
                 }
             }
         }
@@ -50,7 +50,13 @@ namespace PixelFarm.DrawingGL
             set
             {
                 _textPrinter = value;
+
                 _bmpTextPrinter = value as GLBitmapGlyphTextPrinter;
+                if (_bmpTextPrinter != null)
+                {
+                    _bmpTextPrinter.TextDrawingTechnique = _textPrinterDrawingTech;
+                }
+
                 if (value != null && _requestFont != null)
                 {
                     _textPrinter.ChangeFont(_requestFont);

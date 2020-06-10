@@ -122,10 +122,10 @@ namespace PixelFarm.Drawing.GLES2
                 switch (value)
                 {
                     case DrawTextTechnique.LcdSubPix:
-                        ((GLBitmapGlyphTextPrinter)_gpuPainter.TextPrinter).DrawingTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering;
+                        ((GLBitmapGlyphTextPrinter)_gpuPainter.TextPrinter).TextDrawingTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering;
                         break;
                     case DrawTextTechnique.Stencil:
-                        ((GLBitmapGlyphTextPrinter)_gpuPainter.TextPrinter).DrawingTechnique = GlyphTexturePrinterDrawingTechnique.Stencil;
+                        ((GLBitmapGlyphTextPrinter)_gpuPainter.TextPrinter).TextDrawingTechnique = GlyphTexturePrinterDrawingTechnique.Stencil;
                         break;
                 }
 
