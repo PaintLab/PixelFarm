@@ -81,7 +81,7 @@ namespace PixelFarm.Drawing.GLES2
         DrawBoard _cpuBlitDrawBoard;
         bool _evalCpuBlitCreator;
         Stack<SaveContext> _saveContexts = new Stack<SaveContext>();
-        DrawTextTechnique _textDrawingTechnique;
+        TextDrawingTech _textDrawingTechnique;
 
         public MyGLDrawBoard(GLPainter painter)
         {
@@ -112,7 +112,7 @@ namespace PixelFarm.Drawing.GLES2
             set => _gpuPainter.TextBgColorHint = value;
         }
        
-        public override DrawTextTechnique DrawTextTechnique
+        public override TextDrawingTech TextDrawingTech
         {
             get => _textDrawingTechnique;
             set
@@ -121,11 +121,11 @@ namespace PixelFarm.Drawing.GLES2
                 _textDrawingTechnique = value;
                 switch (value)
                 {
-                    case DrawTextTechnique.LcdSubPix:
-                        ((GLBitmapGlyphTextPrinter)_gpuPainter.TextPrinter).DrawingTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering;
+                    case TextDrawingTech.LcdSubPix:
+                        ((GLBitmapGlyphTextPrinter)_gpuPainter.TextPrinter).TextDrawingTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering;
                         break;
-                    case DrawTextTechnique.Stencil:
-                        ((GLBitmapGlyphTextPrinter)_gpuPainter.TextPrinter).DrawingTechnique = GlyphTexturePrinterDrawingTechnique.Stencil;
+                    case TextDrawingTech.Stencil:
+                        ((GLBitmapGlyphTextPrinter)_gpuPainter.TextPrinter).TextDrawingTechnique = GlyphTexturePrinterDrawingTechnique.Stencil;
                         break;
                 }
 
