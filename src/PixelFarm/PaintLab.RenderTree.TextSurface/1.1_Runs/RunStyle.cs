@@ -1,15 +1,10 @@
 ﻿//Apache2, 2014-present, WinterDev
 
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 using PixelFarm.Drawing;
-using Typography.TextBreak; 
 
 namespace LayoutFarm.TextEditing
 {
-   
-
     public class RunStyle
     {
         public RunStyle()

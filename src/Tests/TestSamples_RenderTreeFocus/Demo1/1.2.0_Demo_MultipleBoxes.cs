@@ -47,7 +47,7 @@ namespace LayoutFarm
                 statedBox.SetLocation(10, boxY);
                 boxY += boxHeight + 5;
                 host.AddChild(statedBox);
-                statedBox.WhenChecked += (s, e) =>
+                statedBox.CheckChanged += (s, e) =>
                 {
                     var selectedBox = (LayoutFarm.CustomWidgets.CheckBox)s;
                     if (selectedBox != _currentSingleCheckedBox)
