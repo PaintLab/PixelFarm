@@ -31,11 +31,11 @@ namespace LayoutFarm.CustomWidgets
 #endif
             _font = GlobalRootGraphic.CurrentRootGfx.DefaultTextEditFontInfo;
             NeedPreRenderEval = true;
-            DrawTextTechnique = DrawTextTechnique.Stencil;//default
+            TextDrawingTech = TextDrawingTech.Stencil;//default
 
         }
 
-        public DrawTextTechnique DrawTextTechnique { get; set; }
+        public TextDrawingTech TextDrawingTech { get; set; }
         public bool DelayFormattedString { get; set; }
 
 
@@ -203,16 +203,16 @@ namespace LayoutFarm.CustomWidgets
 
                         Color prevColor = d.CurrentTextColor;
                         RequestFont prevFont = d.CurrentFont;
-                        DrawTextTechnique prevTechnique = d.DrawTextTechnique;
+                        TextDrawingTech prevTechnique = d.TextDrawingTech;
 
                         d.CurrentTextColor = _textColor;
                         d.CurrentFont = _font;
-                        d.DrawTextTechnique = this.DrawTextTechnique;
+                        d.TextDrawingTech = this.TextDrawingTech;
 
                         //config delay or not
                         _renderVxFormattedString = d.CreateFormattedString(_textBuffer, 0, _textBuffer.Length, this.DelayFormattedString);
 
-                        d.DrawTextTechnique = prevTechnique;
+                        d.TextDrawingTech = prevTechnique;
                         d.CurrentFont = prevFont;
                         d.CurrentTextColor = prevColor;
                     }
@@ -300,12 +300,12 @@ namespace LayoutFarm.CustomWidgets
 
             Color prevColor = d.CurrentTextColor;
             RequestFont prevFont = d.CurrentFont;
-            DrawTextTechnique prevTechnique = d.DrawTextTechnique;
+            TextDrawingTech prevTechnique = d.TextDrawingTech;
             Color prevBgHint = d.TextBackgroundColorHint;
 
             d.CurrentTextColor = _textColor;
             d.CurrentFont = _font;
-            d.DrawTextTechnique = this.DrawTextTechnique;
+            d.TextDrawingTech = this.TextDrawingTech;
 
             if (_backColor.A == 255)
             {
@@ -385,7 +385,7 @@ namespace LayoutFarm.CustomWidgets
             d.FillRectangle(Color.Red, 0, 0, 5, 5);
 #endif
             //restore
-            d.DrawTextTechnique = prevTechnique;
+            d.TextDrawingTech = prevTechnique;
             d.CurrentFont = prevFont;
             d.CurrentTextColor = prevColor;
             d.TextBackgroundColorHint = prevBgHint;

@@ -55,7 +55,7 @@ namespace PixelFarm.Drawing.WinGdi
         GdiPlusRenderSurface _gdigsx;
         Painter _painter;
         MemBitmapBinder _memBmpBinder;
-        DrawTextTechnique _textDrawingTechnique;
+        TextDrawingTech _textDrawingTechnique;
         Color _textBackgroundColorHint;
 
         public GdiPlusDrawBoard(GdiPlusRenderSurface renderSurface)
@@ -75,7 +75,7 @@ namespace PixelFarm.Drawing.WinGdi
         }
 
         
-        public override DrawTextTechnique DrawTextTechnique
+        public override TextDrawingTech TextDrawingTech
         {
             get => _textDrawingTechnique;
             set => _textDrawingTechnique = value;

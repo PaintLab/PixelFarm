@@ -546,11 +546,9 @@ namespace LayoutFarm.TextEditing
             {
                 //with selection
                 _editSession.SelectionRange.FontColor = SelectionTextColor;
-                _editSession.SelectionRange.BackgroundColor = SelectionBackgroundColor;
-
-
+                _editSession.SelectionRange.BackgroundColor = SelectionBackgroundColor; 
                 
-                if (d.DrawTextTechnique == DrawTextTechnique.LcdSubPix)
+                if (d.TextDrawingTech == TextDrawingTech.LcdSubPix)
                 {
                     TextRun.s_currentRenderE = this;
                     _textLayer.DrawChildContentLcdEffectText(d, updateArea, _editSession.SelectionRange);
