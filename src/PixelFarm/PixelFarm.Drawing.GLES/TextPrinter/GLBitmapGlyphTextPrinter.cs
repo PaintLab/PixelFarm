@@ -149,7 +149,7 @@ namespace PixelFarm.DrawingGL
             ChangeFont(painter.CurrentFont);
             //
             //TextDrawingTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering; //default 
-            TextDrawingTechnique = GlyphTexturePrinterDrawingTechnique.Stencil; //default 
+            TextDrawingTechnique = GlyphTexturePrinterDrawingTechnique.Stencil; //default
             UseVBO = true;
              
             TextBaseline = TextBaseline.Top;
