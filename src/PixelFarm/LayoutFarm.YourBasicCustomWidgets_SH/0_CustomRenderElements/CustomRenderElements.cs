@@ -236,14 +236,23 @@ namespace LayoutFarm.CustomWidgets
             //else if this renderElement has more child, we need to walk down)
 
             Color prevTextColorHint = d.TextBackgroundColorHint;
-            bool setNewTextColotHint = false;
+
+#if DEBUG
+            if (prevTextColorHint.A == 0)
+            {
+
+            }
+#endif
+
+
+            bool setNewTextColorHint = false;
             if (!WaitForStartRenderElement)
             {
                 if (BackColor.A > 0 && (Width > 0 && Height > 0))
                 {
                     d.FillRectangle(BackColor, ViewportLeft, ViewportTop, this.Width, this.Height);
                     d.TextBackgroundColorHint = BackColor;
-                    setNewTextColotHint = true;
+                    setNewTextColorHint = true;
                 }
                 //border is over background color          
             }
@@ -295,7 +304,7 @@ namespace LayoutFarm.CustomWidgets
                 d.DrawRectangle(_borderColor, 0, 0, this.Width, this.Height);//test
             }
 
-            if (setNewTextColotHint)
+            if (setNewTextColorHint)
             {
                 d.TextBackgroundColorHint = prevTextColorHint;
             }
