@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
+using LayoutFarm.CustomWidgets;
+
 namespace LayoutFarm.UI
 {
     sealed class GridLayer
@@ -110,8 +112,8 @@ namespace LayoutFarm.UI
             GridCell cell = GetCellByPosition(testX, testY);
             if (cell != null && cell.ContentElement is RenderElement renderE)
             {
-                hitChain.OffsetTestPoint(-cell.X, -cell.Y); 
-                renderE.HitTestCore(hitChain); 
+                hitChain.OffsetTestPoint(-cell.X, -cell.Y);
+                renderE.HitTestCore(hitChain);
                 hitChain.OffsetTestPoint(cell.X, cell.Y);
                 return true;
             }
@@ -119,6 +121,33 @@ namespace LayoutFarm.UI
         }
 
         public int RowCount => _gridRows.Count;
+
+        public void UpdateParentLink(GridViewRenderBox gridViewRenderE)
+        {
+            int rowCount = _gridRows.Count;
+            int colCount = _gridCols.Count;
+
+            for (int c = 0; c < colCount; ++c)
+            {
+                GridColumn col = _gridCols.GetColumn(c);
+                for (int r = 0; r < rowCount; ++r)
+                {
+                    GridCell gridCell = col.GetCell(r);
+                    RenderElement contentRenderE = col.GetCell(r).ContentElement;
+
+#if DEBUG 
+
+                    if (contentRenderE.MyParentLink != null)
+                    {
+                        throw new NotSupportedException();
+                    }
+
+#endif
+                    RenderElement.SetParentLink(contentRenderE, gridViewRenderE);
+                }
+            }
+        }
+
 
         //        //
         //        public void TopDownReArrangeContent()
