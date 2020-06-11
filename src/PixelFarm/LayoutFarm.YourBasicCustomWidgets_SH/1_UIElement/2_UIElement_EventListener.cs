@@ -136,11 +136,11 @@ namespace LayoutFarm.UI
         //    OnContentUpdate();
         //}
 #if DEBUG
-        protected bool dbugEnableDevWriteMsg;
+
         protected string dbugDevWriteMsg = null;
         protected virtual void dbugDevWriteInformation()
         {
-            if (dbugEnableDevWriteMsg && dbugDevWriteMsg != null)
+            if (dbugDevWriteMsg != null)
             {
                 System.Diagnostics.Debug.WriteLine(dbugDevWriteMsg);
             }

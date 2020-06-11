@@ -290,7 +290,7 @@ namespace LayoutFarm.UI
         }
 
 #if DEBUG
-        bool _dbugEnableDebugMark;
+        bool _dbugEnableDebugMark = true;
         dbugHitChainPhase _dbugHitChainPhase;
 #endif
 
@@ -349,16 +349,6 @@ namespace LayoutFarm.UI
                             return false;
                         }
                         _currentMouseDown = listener;
-
-#if DEBUG
-                        if (_dbugEnableDebugMark && e1.X <= 5 && e1.Y <= 5)
-                        {
-                            //then check write some information 
-                            //about the listener
-
-                        }
-#endif
-
 
                         listener.ListenMouseDown(e1);
 
@@ -482,6 +472,16 @@ namespace LayoutFarm.UI
                 {
                     //please ensure=> no local var/pararmeter capture inside lambda
                     _mouseMoveFoundSomeHit = true;
+
+#if DEBUG
+                    if (_dbugEnableDebugMark && e.Ctrl && e1.X <= 10 && e1.Y <= 10)
+                    {
+                        //show dbug info                          
+                        listener.dbugDevWriteInfo();
+                    }
+#endif
+
+
 
                     bool _bubble = true; //temp fix
                     if (_latestMouseActive != listener && !_mouseMoveFoundLastMouseActive)
