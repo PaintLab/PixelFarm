@@ -290,7 +290,7 @@ namespace LayoutFarm.UI
         }
 
 #if DEBUG
-
+        bool _dbugEnableDebugMark;
         dbugHitChainPhase _dbugHitChainPhase;
 #endif
 
@@ -349,11 +349,22 @@ namespace LayoutFarm.UI
                             return false;
                         }
                         _currentMouseDown = listener;
+
+#if DEBUG
+                        if (_dbugEnableDebugMark && e1.X <= 5 && e1.Y <= 5)
+                        {
+                            //then check write some information 
+                            //about the listener
+
+                        }
+#endif
+
+
                         listener.ListenMouseDown(e1);
 
                         //------------------------------------------------------- 
                         //auto begin monitor mouse press 
-                        _mousePressMonitor.AddMousePressInformation(e);
+                        _mousePressMonitor.AddMousePressInformation(e1);
                         _mousePressMonitor.SetMonitoredElement(listener);
                         //------------------------------------------------------- 
                         bool cancelMouseBubbling = e1.CancelBubbling;

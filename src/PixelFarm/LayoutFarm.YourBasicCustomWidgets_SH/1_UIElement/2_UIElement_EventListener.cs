@@ -135,6 +135,18 @@ namespace LayoutFarm.UI
         //{
         //    OnContentUpdate();
         //}
+#if DEBUG
+        protected bool dbugEnableDevWriteMsg;
+        protected string dbugDevWriteMsg = null;
+        protected virtual void dbugDevWriteInformation()
+        {
+            if (dbugEnableDevWriteMsg && dbugDevWriteMsg != null)
+            {
+                System.Diagnostics.Debug.WriteLine(dbugDevWriteMsg);
+            }
+        }
+        void IUIEventListener.dbugDevWriteInfo() => dbugDevWriteInformation();
+#endif
 
         void IUIEventListener.HandleElementUpdate() => OnElementChanged();
 
