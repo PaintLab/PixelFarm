@@ -37,9 +37,6 @@ namespace LayoutFarm.UI
     }
     public interface IUIEventListener : IEventListener
     {
-
-        //void HandleContentLayout();
-        //void HandleContentUpdate();
         void HandleElementUpdate();
         bool Enabled { get; set; }
         bool BypassAllMouseEvents { get; }
@@ -48,8 +45,11 @@ namespace LayoutFarm.UI
         void GetViewport(out int left, out int top);
         bool AcceptKeyboardFocus { get; }
         bool DisableAutoMouseCapture { get; }
+
+#if DEBUG
+        void dbugDevWriteInfo();
+#endif
+
     }
-
-
 
 }

@@ -29,10 +29,16 @@ namespace LayoutFarm.CustomWidgets
             ChildrenHitTestCore(hitChain);
             return before < hitChain.Count;
         }
-        public void BuildGrid(GridTable gridTable, CellSizeStyle cellSizeStyle)
+
+        public GridLayer GridLayer
         {
-            _gridLayer = new GridLayer(this.Width, this.Height, cellSizeStyle, gridTable);
+            get => _gridLayer;
+            set
+            {
+                _gridLayer = value;
+            }
         }
+
         public UI.GridColumn GetColumn(int col) => _gridLayer.GetColumn(col);
         public UI.GridRow GetRow(int row) => _gridLayer.GetRow(row);
 
@@ -60,11 +66,11 @@ namespace LayoutFarm.CustomWidgets
             //then we skip rendering its content
             //else if this renderElement has more child, we need to walk down) 
 
-           
+
             if (!WaitForStartRenderElement)
             {
                 if (BackColor.A > 0)
-                {                     
+                {
                     d.FillRectangle(BackColor, _viewportLeft, _viewportTop, this.Width, this.Height); //TODO : review drawing background color
                     d.TextBackgroundColorHint = BackColor;
                 }
@@ -81,7 +87,7 @@ namespace LayoutFarm.CustomWidgets
                   d, updateArea);
             }
 
-             
+
 
             //selection layer
         }
@@ -636,6 +642,7 @@ namespace LayoutFarm.CustomWidgets
         CellSizeStyle _cellSizeStyle;
 
         GridTable _gridTable;
+        GridLayer _gridLayer;
 
         GridSelectionSession _gridSelectionSession;
         Color _gridBorderColor;
@@ -717,10 +724,14 @@ namespace LayoutFarm.CustomWidgets
             RaiseLayoutFinished();
         }
 
+
+
         public void BuildGrid(int ncols, int eachColumnWidth, int nrows, int eachRowHeight)
         {
             _cellSizeStyle = CellSizeStyle.ColumnAndRow;
             _gridTable = new GridTable();
+
+
             //1. create cols
             var cols = _gridTable.Columns;
             for (int n = 0; n < ncols; ++n)
@@ -735,9 +746,11 @@ namespace LayoutFarm.CustomWidgets
                 rows.Add(new UI.GridRow(eachRowHeight));
             }
 
+            _gridLayer = new GridLayer(this.Width, this.Height, _cellSizeStyle, _gridTable);
+
             if (_gridViewRenderE != null)
             {
-                _gridViewRenderE.BuildGrid(_gridTable, _cellSizeStyle);
+                _gridViewRenderE.GridLayer = _gridLayer;
             }
             this.InvalidateLayout();
         }
@@ -761,12 +774,12 @@ namespace LayoutFarm.CustomWidgets
                 rows.Add(new UI.GridRow(1));
             }
             //***
+            _gridLayer = new GridLayer(this.Width, this.Height, _cellSizeStyle, _gridTable);
 
             if (_gridViewRenderE != null)
             {
-                _gridViewRenderE.BuildGrid(_gridTable, _cellSizeStyle);
+                _gridViewRenderE.GridLayer = _gridLayer;
             }
-
         }
 
         //
@@ -1031,28 +1044,27 @@ namespace LayoutFarm.CustomWidgets
                 }
                 ui.ParentUI = this;
 
+                UI.GridCell gridCell = _gridLayer.GetCell(rowIndex, colIndex);
+                RenderElement re = ui.GetPrimaryRenderElement();
+                gridCell.ContentElement = re;
                 if (_gridViewRenderE != null)
                 {
-                    RenderElement re = ui.GetPrimaryRenderElement();
-                    _gridViewRenderE.SetContent(rowIndex, colIndex, re);
-
-                    UI.GridCell gridCell = _gridViewRenderE.GetCell(rowIndex, colIndex);
-
-                    GridCellParentLink parentLink = new GridCellParentLink(gridCell, _gridViewRenderE);
-                    RenderElement.SetParentLink(re, parentLink);
+                    //create parent link  
+                    RenderElement.SetParentLink(re, new GridCellParentLink(gridCell, _gridViewRenderE));
                 }
                 else
                 {
-                    throw new NotSupportedException();
+                    //create parent link later
                 }
+
             }
         }
 
 
         class GridCellParentLink : RenderBoxes.IParentLink
         {
-            RenderElement _parentRenderE;
-            UI.GridCell _gridCell;
+            readonly RenderElement _parentRenderE;
+            readonly UI.GridCell _gridCell;
             public GridCellParentLink(UI.GridCell gridCell, RenderElement parentRenderE)
             {
                 _parentRenderE = parentRenderE;
@@ -1141,24 +1153,24 @@ namespace LayoutFarm.CustomWidgets
         {
             if (_gridViewRenderE == null)
             {
-                var myGridBox = new GridViewRenderBox(this.Width, this.Height);
-                myGridBox.NeedClipArea = this.NeedClipArea;
+                var gridRenderE = new GridViewRenderBox(this.Width, this.Height);
+                gridRenderE.NeedClipArea = this.NeedClipArea;
 
-                myGridBox.SetLocation(this.Left, this.Top);
-                myGridBox.SetController(this);
-                myGridBox.BackColor = KnownColors.FromKnownColor(KnownColor.LightGray);
-                this.SetPrimaryRenderElement(myGridBox);
-                _gridViewRenderE = myGridBox;
+                gridRenderE.SetLocation(this.Left, this.Top);
+                gridRenderE.SetController(this);
+
+                gridRenderE.BackColor = KnownColors.FromKnownColor(KnownColor.LightGray);//TODO: use theme
+
+                this.SetPrimaryRenderElement(gridRenderE);
+
+                _gridViewRenderE = gridRenderE;
                 _primElement = _gridViewRenderE;
-                //create layers
-                int nrows = _gridTable.RowCount;
-                int ncols = _gridTable.ColumnCount;
-                //----------------------------------------        
 
+                gridRenderE.GridLayer = _gridLayer;
+                _gridLayer.UpdateParentLink(gridRenderE);
 
-                myGridBox.BuildGrid(_gridTable, this.CellSizeStyle);
-                //add grid content
-
+                //we need to update parent link between
+                //grid cell and its content
 
 
                 if (_children != null && _children.Count > 0)
@@ -1166,7 +1178,6 @@ namespace LayoutFarm.CustomWidgets
                     foreach (UIElement ui in _children.GetIter())
                     {
                         _gridViewRenderE.AddChild(ui);
-
                     }
                 }
 
