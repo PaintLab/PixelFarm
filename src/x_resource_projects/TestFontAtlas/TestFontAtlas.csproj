@@ -43,7 +43,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="TwitterColorEmoji-SVGinOT.xml" />
+    <Content Include="TwitterColorEmoji-SVGinOT.ttf.xml" />
     <Content Include="SourceSansPro-Regular.ttf.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -233,6 +233,10 @@ namespace Mini
         static void ReadFontBuilderConfig(AtlasItemSourceFile atlasSrcItem, XmlElement docElem)
         {
             FontBuilderConfig fontBuilderConfig = new FontBuilderConfig();
+            //cut 1 extension
+            //if font filename=aaa.ttf
+            //configure must be aaa.ttf.xml
+
             fontBuilderConfig.FontFilename = Path.GetFileNameWithoutExtension(atlasSrcItem.AbsoluteFilename);
             atlasSrcItem.FontBuilderConfig = fontBuilderConfig;
 
