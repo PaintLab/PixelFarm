@@ -38,8 +38,12 @@
       <Link>SourceSansPro-Regular.ttf</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\..\..\Typography\Demo\Windows\TestFonts\TwitterColorEmoji-SVGinOT.ttf">
+      <Link>TwitterColorEmoji-SVGinOT.ttf</Link>
+    </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="TwitterColorEmoji-SVGinOT.xml" />
     <Content Include="SourceSansPro-Regular.ttf.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
