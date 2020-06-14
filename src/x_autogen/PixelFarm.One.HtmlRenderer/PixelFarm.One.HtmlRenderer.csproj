@@ -904,7 +904,6 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Typography\..\..\..\..\Typography\PixelFarm.Typography\1_General\OpenFontTextService.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Typography\..\..\..\..\Typography\PixelFarm.Typography\1_General\VxsTextPrinter.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Typography\..\..\..\..\Typography\PixelFarm.Typography\2_CpuBlit_BitmapAtlas\AggGlyphTextureGen.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Typography\..\..\..\..\Typography\PixelFarm.Typography\2_CpuBlit_BitmapAtlas\BitmapCacheForSvgGlyph.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Typography\..\..\..\..\Typography\PixelFarm.Typography\2_CpuBlit_BitmapAtlas\BitmapFontMx.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Typography\..\..\..\..\Typography\PixelFarm.Typography\2_CpuBlit_BitmapAtlas\FontAtlasTextPrinter.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Typography\..\..\..\..\Typography\PixelFarm.Typography\2_CpuBlit_BitmapAtlas\GlyphBitmapStore.cs" />
