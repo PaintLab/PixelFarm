@@ -136,6 +136,9 @@ namespace PixelFarm.Drawing.GLES2
                     case TextDrawingTech.Stencil:
                         ((GLBitmapGlyphTextPrinter)_gpuPainter.TextPrinter).TextDrawingTechnique = GlyphTexturePrinterDrawingTechnique.Stencil;
                         break;
+                    case TextDrawingTech.Copy:
+                        ((GLBitmapGlyphTextPrinter)_gpuPainter.TextPrinter).TextDrawingTechnique = GlyphTexturePrinterDrawingTechnique.Copy;
+                        break;
                 }
 
             }

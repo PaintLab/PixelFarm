@@ -158,6 +158,10 @@ namespace PixelFarm.DrawingGL
         {
             _pcx.FillRenderVx(_fillColor, renderVx);
         }
+        public void ClearRect(Color color, double left, double top, double width, double height)
+        {
+            _pcx.ClearRect(color, left, top, width, height);
+        }
         public override void FillRect(double left, double top, double width, double height)
         {
             switch (_currentBrush.BrushKind)

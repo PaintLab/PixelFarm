@@ -63,8 +63,8 @@ namespace PixelFarm.Drawing
             Size = fontSize; //store user font size here
 
             Style = style;
-            float fontSizeInPts = SizeInPoints = fontSize.ToPoints();
-            FontKey = CalculateFontKey(facename, fontSizeInPts, style);
+            
+            FontKey = CalculateFontKey(facename, SizeInPoints = fontSize.ToPoints(), style);
         }
         public Len Size { get; private set; }
         //
