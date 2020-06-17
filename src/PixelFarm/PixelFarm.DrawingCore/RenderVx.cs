@@ -23,6 +23,7 @@ namespace PixelFarm.Drawing
         public float Width { get; set; }
         public float SpanHeight { get; set; }
         public VxState State { get; set; }
+        public bool BmpOnTransparentBackground { get; set; }
         public enum VxState : byte
         {
             NoStrip,

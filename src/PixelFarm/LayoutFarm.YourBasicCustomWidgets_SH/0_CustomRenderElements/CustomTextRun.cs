@@ -305,7 +305,7 @@ namespace LayoutFarm.CustomWidgets
 
             d.CurrentTextColor = _textColor;
             d.CurrentFont = _font;
-            d.TextDrawingTech = this.TextDrawingTech;
+            d.TextDrawingTech = this.TextDrawingTech; //***
 
             if (_backColor.A == 255)
             {
@@ -345,32 +345,25 @@ namespace LayoutFarm.CustomWidgets
                 switch (_renderVxFormattedString.State)
                 {
                     case RenderVxFormattedString.VxState.Ready:
+
+                        if (_renderVxFormattedString.BmpOnTransparentBackground)
                         {
-                            d.DrawRenderVx(_renderVxFormattedString, _contentLeft, _contentTop);
-
-                            ////-----
-                            //d.PopClipAreaRect();
-                            //Rectangle prevRect = d.CurrentClipRect;
-                            ////-----
-                            //d.DrawRenderVx(_renderVxFormattedString, _contentLeft, _contentTop);
-                            ////drawboard.FillRectangle(Color.Yellow, _contentLeft, _contentTop, this.Width, this.Height);
-
-
-                            ////-----
-                            //d.PushClipAreaRect(this.Width, this.Height, ref updateArea);
-                            ////-----
+                            d.TextDrawingTech = TextDrawingTech.Copy;
                         }
+
+                        d.DrawRenderVx(_renderVxFormattedString, _contentLeft, _contentTop);
+
                         break;
                     case RenderVxFormattedString.VxState.NoStrip:
-                        {
-                            //put this to the update queue system
-                            //(TODO: add extension method for this)
 
-                            GlobalRootGraphic.CurrentRootGfx.EnqueueRenderRequest(new RenderBoxes.RenderElementRequest(
-                                  this,
-                                  RenderBoxes.RequestCommand.ProcessFormattedString,
-                                  _renderVxFormattedString));
-                        }
+                        //put this to the update queue system
+                        //(TODO: add extension method for this)
+
+                        GlobalRootGraphic.CurrentRootGfx.EnqueueRenderRequest(new RenderBoxes.RenderElementRequest(
+                              this,
+                              RenderBoxes.RequestCommand.ProcessFormattedString,
+                              _renderVxFormattedString));
+
                         break;
                 }
             }
