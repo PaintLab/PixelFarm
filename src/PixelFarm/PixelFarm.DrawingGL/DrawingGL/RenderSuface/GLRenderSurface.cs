@@ -438,7 +438,7 @@ namespace PixelFarm.DrawingGL
             else if (image is CpuBlit.MemBitmap memBmp)
             {
                 glBmp = new GLBitmap(memBmp, false);
-            }            
+            }
             else
             {
                 ////TODO: review here
@@ -700,7 +700,7 @@ namespace PixelFarm.DrawingGL
                 }
                 else
                 {
-                     
+
 #if XAMARIN
                     GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, ((int)0x812D)); //ClampToBorder
                     GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, ((int)0x812D)); //ClampToBorder
@@ -919,6 +919,14 @@ namespace PixelFarm.DrawingGL
             _lcdSubPixShader.DrawSubImagesNoLcdEffect(glBmp, vbo, count, x, y);
         }
 
+        public void DrawGlyphImageWithCopyTech_FromVBO(GLBitmap glBmp, VertexBufferObject vbo, int count, float x, float y)
+        {
+
+            //use RGBA
+            _rgbaTextureShader.DrawSubImages(glBmp, vbo, count, x, y);
+            //_bgraImgTextureShader.DrawSubImages(glBmp, vbo, count, x, y);
+        }
+
         public void DrawWordSpanWithStencilTechnique(GLBitmap bmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
         {
 
@@ -936,7 +944,24 @@ namespace PixelFarm.DrawingGL
             _lcdSubPixShader.SetColor(FontFillColor);
             _lcdSubPixShader.DrawSubImageNoLcdEffect(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
         }
+        public void DrawWordSpanWithCopyTechnique(GLBitmap bmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
+        {
 
+            //similar to DrawSubImage(), use this for debug
+            //DrawSubImage(bmp,
+            //   srcLeft, srcTop,
+            //   srcW, srcH,
+            //   targetLeft,
+            //   targetTop);
+
+            if (OriginKind == RenderSurfaceOriginKind.LeftTop) //***
+            {
+                targetTop += srcH; //***
+            }
+
+            //_rgbaTextureShader.DrawSubImage(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
+            _bgraImgTextureShader.DrawSubImage(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
+        }
         public void DrawWordSpanWithLcdSubpixForSolidBgColor(GLBitmap bmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop, Color textBgColor)
         {
             //lcd-effect subpix rendering, optimized version for solid bg color
@@ -1090,12 +1115,18 @@ namespace PixelFarm.DrawingGL
         public void FillRect(Drawing.Color color, double left, double top, double width, double height)
         {
             //left,bottom,width,height
+            //skip alpha may effect some sitution
             if (color.A == 0) { return; }
 
             SimpleTessTool.CreateRectTessCoordsTriStrip((float)left, (float)(top + height), (float)width, (float)height, _rect_coords);
             FillTriangleStrip(color, _rect_coords, 4);
         }
-
+        public void ClearRect(Drawing.Color color, double left, double top, double width, double height)
+        {
+            //if (color.A == 0)=> must fill too***
+            SimpleTessTool.CreateRectTessCoordsTriStrip((float)left, (float)(top + height), (float)width, (float)height, _rect_coords);
+            _solidColorFillShader.FillTriangleStripWithVertexBuffer(_rect_coords, 4, color);
+        }
         void FillTriangleStrip(Drawing.Color color, float[] coords, int n)
         {
             if (color.A == 0) { return; }
@@ -1698,9 +1729,9 @@ namespace PixelFarm.DrawingGL
         public void SetClipRect(int left, int top, int width, int height)
         {
 
-//#if DEBUG
-//            System.Diagnostics.Debug.WriteLine("clip:" + left + "," + top + "," + width + "," + height);
-//#endif
+            //#if DEBUG
+            //            System.Diagnostics.Debug.WriteLine("clip:" + left + "," + top + "," + width + "," + height);
+            //#endif
 
             int new_left = left + _canvasOriginX;
             int bottom = _canvasOriginY + top + height;
@@ -1709,9 +1740,9 @@ namespace PixelFarm.DrawingGL
             if (_scss_left != new_left || _scss_bottom != new_bottom || _scss_width != width || _scss_height != height)
             {
 
-//#if DEBUG
-//                System.Diagnostics.Debug.WriteLine("clip_scissor:" + new_left + "," + new_bottom + "," + width + "," + height);
-//#endif
+                //#if DEBUG
+                //                System.Diagnostics.Debug.WriteLine("clip_scissor:" + new_left + "," + new_bottom + "," + width + "," + height);
+                //#endif
                 GL.Scissor(
                     _scss_left = new_left,
                     _scss_bottom = new_bottom,
@@ -1724,7 +1755,8 @@ namespace PixelFarm.DrawingGL
 
         public void SaveStates(out GLPainterStatesData stateData)
         {
-            stateData = new GLPainterStatesData {
+            stateData = new GLPainterStatesData
+            {
                 renderSurface = CurrentRenderSurface,
                 canvas_origin_X = _canvasOriginX,
                 canvas_origin_Y = _canvasOriginY,
