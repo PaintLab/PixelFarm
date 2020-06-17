@@ -45,9 +45,17 @@ namespace PixelFarm.Drawing.GLES2
                 //1. texture coords for this string
                 //2. (if not delay) => an image for this string  inside a larger img texture
                 _gpuPainter.TextPrinter.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
+                return renderVxFmtStr;
+            }
+            else
+            {
+#if DEBUG
+                throw new System.NotSupportedException();
+#else
+                return null;
+#endif
             }
 
-            return renderVxFmtStr;
         }
 
         public void PrepareWordStrips(System.Collections.Generic.List<DrawingGL.GLRenderVxFormattedString> fmtStringList)
