@@ -71,10 +71,7 @@ namespace PixelFarm.DrawingGL
             set
             {
                 _requestFont = value;
-                if (_textPrinter != null)
-                {
-                    _textPrinter.ChangeFont(value);
-                }
+                _textPrinter?.ChangeFont(value);
             }
         }
         public override void DrawString(string text, double left, double top)
@@ -88,7 +85,6 @@ namespace PixelFarm.DrawingGL
             {
                 char[] buffer = textspan.ToCharArray();
                 var renderVxFmtStr = new GLRenderVxFormattedString();
-
 #if DEBUG
                 renderVxFmtStr.dbugText = textspan;
 #endif
@@ -97,7 +93,11 @@ namespace PixelFarm.DrawingGL
             }
             else
             {
+#if DEBUG
+                throw new NotSupportedException();
+#else
                 return null;
+#endif
             }
         }
         public override RenderVxFormattedString CreateRenderVx(char[] textspanBuff, int startAt, int len)
@@ -113,7 +113,11 @@ namespace PixelFarm.DrawingGL
             }
             else
             {
+#if DEBUG
+                throw new NotSupportedException();
+#else
                 return null;
+#endif
             }
         }
         public override void DrawString(RenderVxFormattedString renderVx, double x, double y)
@@ -125,7 +129,7 @@ namespace PixelFarm.DrawingGL
         {
             int j = fmtStringList.Count;
 
-            RequestFont backupFont = CurrentFont;
+            RequestFont prevFont = CurrentFont; //save
             WordPlate latestWordplate = null;
 
             for (int i = 0; i < j; ++i)
@@ -136,7 +140,7 @@ namespace PixelFarm.DrawingGL
                     continue;
                 }
 
-                WordPlate wordPlate = _wordPlateMx.GetNewWordPlate(vxFmtStr);
+                WordPlate wordPlate = _wordPlateMx.GetWordPlate(vxFmtStr);
 
                 if (latestWordplate != wordPlate)
                 {
@@ -155,9 +159,9 @@ namespace PixelFarm.DrawingGL
                 }
                 else
                 {
-
+                    //use current font 
                 }
-
+ 
                 if (!wordPlate.CreateWordStrip(this, vxFmtStr))
                 {
                     //we have some error?
@@ -171,12 +175,12 @@ namespace PixelFarm.DrawingGL
                 _drawBoard.ExitCurrentDrawboardBuffer();
             }
 
-            this.CurrentFont = backupFont; //restore
+            this.CurrentFont = prevFont; //restore
         }
         internal void CreateWordStrip(GLRenderVxFormattedString fmtString)
         {
 
-            WordPlate wordPlate = _wordPlateMx.GetNewWordPlate(fmtString);
+            WordPlate wordPlate = _wordPlateMx.GetWordPlate(fmtString);
             if (wordPlate == null)
             {
                 throw new NotSupportedException();
@@ -198,6 +202,8 @@ namespace PixelFarm.DrawingGL
             RequestFont backupFont = _drawBoard.CurrentFont; //backup
             _drawBoard.EnterNewDrawboardBuffer(wordPlate._backBuffer);
 
+
+            //ensure font info for each vx formatter string?
             if (fmtString.RequestFont != null)
             {
                 _drawBoard.CurrentFont = fmtString.RequestFont;
@@ -206,6 +212,8 @@ namespace PixelFarm.DrawingGL
             {
 
             }
+
+
             if (!wordPlate.CreateWordStrip(this, fmtString))
             {
                 //we have some error?

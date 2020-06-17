@@ -43,7 +43,7 @@ namespace PixelFarm.Drawing
 
 
     /// <summary>
-    /// user request font specification
+    /// user-request font specification
     /// </summary>
     public sealed class RequestFont
     {
