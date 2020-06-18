@@ -6,6 +6,18 @@ using PixelFarm.Drawing;
 
 namespace PixelFarm.DrawingGL
 {
+    public interface IGLTextPrinter : ITextPrinter
+    {
+        /// <summary>
+        /// render from RenderVxFormattedString object to specific pos
+        /// </summary>
+        /// <param name="renderVx"></param>
+        /// <param name="left"></param>
+        /// <param name="top"></param>
+        void DrawString(GLRenderVxFormattedString renderVx, double left, double top);
+        void PrepareStringForRenderVx(GLRenderVxFormattedString renderVx, char[] text, int startAt, int len);
+    }
+
     partial class GLPainter
     {
         WordPlateMx _wordPlateMx = new WordPlateMx();
@@ -46,7 +58,7 @@ namespace PixelFarm.DrawingGL
                 }
             }
         }
-        public ITextPrinter TextPrinter
+        public IGLTextPrinter TextPrinter
         {
             get => _textPrinter;
             set
@@ -122,7 +134,7 @@ namespace PixelFarm.DrawingGL
         }
         public override void DrawString(RenderVxFormattedString renderVx, double x, double y)
         {
-            _textPrinter?.DrawString(renderVx, x, y);
+            _textPrinter?.DrawString((GLRenderVxFormattedString)renderVx, x, y);
         }
 
         internal void CreateWordStrips(System.Collections.Generic.List<DrawingGL.GLRenderVxFormattedString> fmtStringList)
@@ -161,7 +173,7 @@ namespace PixelFarm.DrawingGL
                 {
                     //use current font 
                 }
- 
+
                 if (!wordPlate.CreateWordStrip(this, vxFmtStr))
                 {
                     //we have some error?

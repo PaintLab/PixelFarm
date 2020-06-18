@@ -7,8 +7,8 @@ using System.Text;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.BitmapAtlas;
 using PixelFarm.Drawing;
-using SampleWinForms;
 
+using PaintLab;
 
 namespace Mini
 {

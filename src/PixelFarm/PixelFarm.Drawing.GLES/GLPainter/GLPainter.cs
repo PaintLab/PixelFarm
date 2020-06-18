@@ -22,7 +22,7 @@ namespace PixelFarm.DrawingGL
         PathRenderVxBuilder2 _pathRenderVxBuilder2;
 
         RequestFont _requestFont;
-        ITextPrinter _textPrinter;
+        IGLTextPrinter _textPrinter;
         RenderQuality _renderQuality;
 
         TargetBuffer _targetBuffer;

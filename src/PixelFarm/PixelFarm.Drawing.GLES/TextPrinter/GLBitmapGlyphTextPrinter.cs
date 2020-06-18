@@ -103,7 +103,7 @@ namespace PixelFarm.DrawingGL
         Msdf
     }
 
-    public class GLBitmapGlyphTextPrinter : ITextPrinter, IDisposable
+    public class GLBitmapGlyphTextPrinter : IGLTextPrinter, IDisposable
     {
 
         MySimpleGLBitmapFontManager _myGLBitmapFontMx;
@@ -476,10 +476,9 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-        public void DrawString(RenderVxFormattedString rendervx, double x, double y)
+        public void DrawString(GLRenderVxFormattedString vxFmtStr, double x, double y)
         {
             _pcx.FontFillColor = _painter.FontFillColor;
-            GLRenderVxFormattedString vxFmtStr = (GLRenderVxFormattedString)rendervx;
 
             switch (TextDrawingTechnique)
             {
@@ -834,9 +833,8 @@ namespace PixelFarm.DrawingGL
 
             _vboBuilder.Clear();
         }
-        public void PrepareStringForRenderVx(RenderVxFormattedString renderVx, char[] buffer, int startAt, int len)
-        {
-            var vxFmtStr = (GLRenderVxFormattedString)renderVx;
+        public void PrepareStringForRenderVx(GLRenderVxFormattedString vxFmtStr, char[] buffer, int startAt, int len)
+        { 
 
             CreateTextCoords(vxFmtStr, buffer, startAt, len);
 

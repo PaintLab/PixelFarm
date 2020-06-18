@@ -558,7 +558,7 @@ namespace PixelFarm.Drawing.WinGdi
             }
             return null;
         }
-        
+
         static System.Drawing.Bitmap ResolveInnerBmp(Image image)
         {
             if (Image.GetCacheInnerImage(image) is System.Drawing.Bitmap cacheBmp)
@@ -1133,7 +1133,7 @@ namespace PixelFarm.Drawing.WinGdi
     }
 
 
-    sealed class GdiPlusTextPrinter : ITextPrinter
+    sealed class GdiPlusTextPrinter : CpuBlit.IAggTextPrinter
     {
 
         GdiPlusRenderSurface _rendersx;
@@ -1180,11 +1180,11 @@ namespace PixelFarm.Drawing.WinGdi
                 1024),//temp we,not need clip
                 0);
         }
-        public void DrawString(RenderVxFormattedString renderVx, double left, double top)
+        public void DrawString(CpuBlit.AggRenderVxFormattedString renderVx, double left, double top)
         {
             //TODO: implement this
         }
-        public void PrepareStringForRenderVx(RenderVxFormattedString renderVx, char[] text, int startAt, int len)
+        public void PrepareStringForRenderVx(CpuBlit.AggRenderVxFormattedString renderVx, char[] text, int startAt, int len)
         {
             //TODO: implement this
         }
