@@ -8,7 +8,6 @@ using PixelFarm.Drawing;
 
 using Typography.TextLayout;
 using Typography.OpenFont;
-using Typography.OpenFont.Extensions;
 
 
 namespace PixelFarm.DrawingGL
@@ -27,15 +26,13 @@ namespace PixelFarm.DrawingGL
         public float[] VertexCoords { get; set; }
         public ushort[] IndexArray { get; set; }
         public int IndexArrayCount { get; set; }
-        public RequestFont RequestFont { get; set; }
-
-        public WordPlate OwnerPlate { get; set; }
-        public bool Delay { get; set; }
-        public bool UseWithWordPlate { get; set; }
-
         public ushort WordPlateLeft { get; set; }
         public ushort WordPlateTop { get; set; }
 
+        internal RequestFont RequestFont { get; set; }
+        internal WordPlate OwnerPlate { get; set; }
+        internal bool Delay { get; set; }
+        internal bool UseWithWordPlate { get; set; }
 
         internal void ClearOwnerPlate()
         {
@@ -43,7 +40,7 @@ namespace PixelFarm.DrawingGL
             //State = VxState.NoTicket;
         }
 
-        public DrawingGL.VertexBufferObject GetVbo()
+        internal DrawingGL.VertexBufferObject GetVbo()
         {
             if (_vbo != null)
             {
@@ -53,7 +50,8 @@ namespace PixelFarm.DrawingGL
             _vbo.CreateBuffers(this.VertexCoords, this.IndexArray);
             return _vbo;
         }
-        public void DisposeVbo()
+
+        internal void DisposeVbo()
         {
             //dispose only VBO
             //and we can create the vbo again
@@ -251,13 +249,10 @@ namespace PixelFarm.DrawingGL
             //if not-> request the MySimpleGLBitmapFontManager to create a newone 
             _fontAtlas = _myGLBitmapFontMx.GetFontAtlas(font, out _glBmp);
             _font = font;
-            Typeface typeface = _textServices.ResolveTypeface(font);
-            _px_scale = typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints);
+            _px_scale = _textServices.CalculateScaleToPixelsFromPoint(font);
         }
         public void Dispose()
         {
-
-
             if (_myGLBitmapFontMx != null)
             {
                 _myGLBitmapFontMx.Clear();
@@ -834,7 +829,7 @@ namespace PixelFarm.DrawingGL
             _vboBuilder.Clear();
         }
         public void PrepareStringForRenderVx(GLRenderVxFormattedString vxFmtStr, char[] buffer, int startAt, int len)
-        { 
+        {
 
             CreateTextCoords(vxFmtStr, buffer, startAt, len);
 

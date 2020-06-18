@@ -139,7 +139,18 @@ namespace PixelFarm.DrawingGL
 
         internal void CreateWordStrips(System.Collections.Generic.List<DrawingGL.GLRenderVxFormattedString> fmtStringList)
         {
+
+            //
             int j = fmtStringList.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                //change state before send to the drawboard
+                GLRenderVxFormattedString vxFmtStr = fmtStringList[i];
+                vxFmtStr.UseWithWordPlate = true;
+                vxFmtStr.Delay = false;
+            }
+            //
+
 
             RequestFont prevFont = CurrentFont; //save
             WordPlate latestWordplate = null;

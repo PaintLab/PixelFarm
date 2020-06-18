@@ -184,14 +184,7 @@ namespace LayoutFarm.UI
                 //so we ask for some drawboard to handle these requests 
 
                 PixelFarm.Drawing.GLES2.MyGLDrawBoard drawboard = _getDrawboard();
-
-                for (int i = 0; i < j; ++i)
-                {
-                    //change state before send to the drawboard
-                    PixelFarm.DrawingGL.GLRenderVxFormattedString vxFmtStr = _fmtList[i];
-                    vxFmtStr.UseWithWordPlate = true;
-                    vxFmtStr.Delay = false;
-                }
+                 
                 drawboard.PrepareWordStrips(_fmtList);
 
                 _fmtList.Clear();
