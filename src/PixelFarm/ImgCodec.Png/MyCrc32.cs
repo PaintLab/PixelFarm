@@ -35,7 +35,9 @@ namespace ImageTools
     {
         long _totalBytesRead;
         uint _runningCrc32Result;
-
+#if DEBUG
+        bool _dbugFirstReset;
+#endif
         /// <summary>
         /// indicates the total number of bytes read on the CRC stream.
         /// This is used when writing the ZipDirEntry when compressing files.
@@ -57,8 +59,12 @@ namespace ImageTools
         /// </summary>
         public void Reset()
         {
+
             _runningCrc32Result = 0xFFFFFFFF;
             _totalBytesRead = 0;
+#if DEBUG
+            _dbugFirstReset = true;
+#endif
         }
 
         ///// <summary>
@@ -94,13 +100,21 @@ namespace ImageTools
             {
                 throw new NotSupportedException("The data buffer must not be null.");
             }
+#if DEBUG
+            if (_dbugFirstReset)
+            {
+                throw new NotSupportedException();
+            }
+#endif
+
 
             // UInt32 tmpRunningCRC32Result = _RunningCrc32Result;
             for (int i = 0; i < count; i++)
             {
+#if DEBUG
                 int x = offset + i;
-                _runningCrc32Result = ((_runningCrc32Result) >> 8) ^ crc32Table[(block[x]) ^ ((_runningCrc32Result) & 0x000000FF)];
-                //tmpRunningCRC32Result = ((tmpRunningCRC32Result) >> 8) ^ crc32Table[(block[offset + i]) ^ ((tmpRunningCRC32Result) & 0x000000FF)];
+#endif
+                _runningCrc32Result = ((_runningCrc32Result) >> 8) ^ crc32Table[(block[offset + i]) ^ ((_runningCrc32Result) & 0x000000FF)];
             }
 
             _totalBytesRead += count;
@@ -239,8 +253,8 @@ namespace ImageTools
         }
 
 
-         
-       
+
+
 
     }
 
