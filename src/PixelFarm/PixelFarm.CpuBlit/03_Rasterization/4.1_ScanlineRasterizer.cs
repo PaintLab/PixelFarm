@@ -293,16 +293,8 @@ namespace PixelFarm.CpuBlit.Rasterization
         //    m_status = Status.MoveTo;
         //}
         //-------------------------------------------------------------------
-        public float OffsetOriginX
-        {
-            get;
-            internal set;
-        }
-        public float OffsetOriginY
-        {
-            get;
-            internal set;
-        }
+        public float OffsetOriginX { get; internal set; }
+        public float OffsetOriginY { get; internal set; }
         /// <summary>
         /// we do NOT store vxs
         /// </summary>
@@ -414,41 +406,14 @@ namespace PixelFarm.CpuBlit.Rasterization
         bool _extendWidthX3ForSubPixelLcdEffect;
         public bool ExtendWidthX3ForSubPixelLcdEffect
         {
-            get { return _extendWidthX3ForSubPixelLcdEffect; }
-            set
-            {
-                _extendWidthX3ForSubPixelLcdEffect = value;
-                if (value)
-                {
-                    //expand to 3 times
-                    _vectorClipper.SetClipBoxWidthX3ForSubPixelLcdEffect(true);
-                }
-                else
-                {
-                    _vectorClipper.SetClipBoxWidthX3ForSubPixelLcdEffect(false);
-                }
-            }
+            get => _extendWidthX3ForSubPixelLcdEffect;
+            //expand to 3 times
+            set => _vectorClipper.SetClipBoxWidthX3ForSubPixelLcdEffect(_extendWidthX3ForSubPixelLcdEffect = value);
         }
-        ///// <summary>
-        ///// we do NOT store snap ***
-        ///// </summary>
-        ///// <param name="snap"></param>
-        //public void AddPath(VertexStoreSnap snap)
-        //{
-        //    //-----------------------------------------------------
-        //    //*** we extract vertext command and coord(x,y) from
-        //    //the snap but not store the snap inside rasterizer
-        //    //-----------------------------------------------------
-        //    AddPath(VertexStoreSnap.GetInternalVxs(snap));
-
-        //}
-
         public int MinX => _cellAARas.MinX;
         public int MinY => _cellAARas.MinY;
         public int MaxX => _cellAARas.MaxX;
         public int MaxY => _cellAARas.MaxY;
-
-
         //--------------------------------------------------------------------
         void Sort()
         {

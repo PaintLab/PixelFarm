@@ -735,11 +735,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
                 }
             }
         }
-        //public RectInt GetBoundingRect()
-        //{
-        //    return new RectInt(0, 0, Width, Height);
-        //}
-        //---------
+        
         public void SetFilterImage(MemBitmap filterBmp)
         {
             _filterBmp = filterBmp;
