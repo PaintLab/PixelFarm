@@ -31,11 +31,11 @@
 // ------------------------------------------------------------------
 namespace ImageTools
 {
-    public class CRC32Calculator
+    struct CRC32Calculator
     {
-        public CRC32Calculator()
-        {
-        }
+        long _totalBytesRead;
+        uint _runningCrc32Result;
+
         /// <summary>
         /// indicates the total number of bytes read on the CRC stream.
         /// This is used when writing the ZipDirEntry when compressing files.
@@ -61,22 +61,22 @@ namespace ImageTools
             _totalBytesRead = 0;
         }
 
-        /// <summary>
-        /// Get the CRC32 for the given (word,byte) combo.  This is a computation
-        /// defined by PKzip.
-        /// </summary>
-        /// <param name="W">The word to start with.</param>
-        /// <param name="B">The byte to combine it with.</param>
-        /// <returns>The CRC-ized result.</returns>
-        static Int32 ComputeCrc32(Int32 W, byte B)
-        {
-            return _InternalComputeCrc32((UInt32)W, B);
-        }
+        ///// <summary>
+        ///// Get the CRC32 for the given (word,byte) combo.  This is a computation
+        ///// defined by PKzip.
+        ///// </summary>
+        ///// <param name="W">The word to start with.</param>
+        ///// <param name="B">The byte to combine it with.</param>
+        ///// <returns>The CRC-ized result.</returns>
+        //static Int32 ComputeCrc32(Int32 W, byte B)
+        //{
+        //    return _InternalComputeCrc32((UInt32)W, B);
+        //}
 
-        internal static Int32 _InternalComputeCrc32(UInt32 W, byte B)
-        {
-            return (Int32)(crc32Table[(W ^ B) & 0xFF] ^ (W >> 8));
-        }
+        //internal static Int32 _InternalComputeCrc32(UInt32 W, byte B)
+        //{
+        //    return (Int32)(crc32Table[(W ^ B) & 0xFF] ^ (W >> 8));
+        //}
         public void SlurpBlock(byte[] block)
         {
             SlurpBlock(block, 0, block.Length);
@@ -109,6 +109,8 @@ namespace ImageTools
 
 
         // pre-initialize the crc table for speed of lookup.
+
+        static readonly uint[] crc32Table;
         static CRC32Calculator()
         {
             unchecked
@@ -237,25 +239,9 @@ namespace ImageTools
         }
 
 
+         
+       
 
-
-        long _totalBytesRead;
-        uint _runningCrc32Result = 0xFFFFFFFF;
-        const int BUFFER_SIZE = 8192;
-        static readonly uint[] crc32Table;
-        public static int CalculateCrc32(string inputData)
-        {
-            CRC32Calculator cal = new CRC32Calculator();
-            byte[] utf8 = System.Text.Encoding.UTF8.GetBytes(inputData);
-            cal.SlurpBlock(utf8, 0, utf8.Length);
-            return cal.Crc32Result;
-        }
-        public static int CalculateCrc32(byte[] buffer)
-        {
-            CRC32Calculator cal = new CRC32Calculator();
-            cal.SlurpBlock(buffer, 0, buffer.Length);
-            return cal.Crc32Result;
-        }
     }
 
 }

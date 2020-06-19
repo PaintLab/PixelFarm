@@ -31,7 +31,8 @@
 // ------------------------------------------------------------------
 namespace PixelFarm.Drawing
 {
-    struct TinyCRC32Calculator
+
+    public struct TinyCRC32Calculator
     {
 
         /// <summary>

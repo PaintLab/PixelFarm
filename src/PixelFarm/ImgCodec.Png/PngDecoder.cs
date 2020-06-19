@@ -6,12 +6,10 @@
 
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic; 
 using System.Globalization;
 using System.IO;
-using System.Text;
-using ImageTools.Helpers;
+using System.Text; 
 
 namespace ImageTools.IO.Png
 {
@@ -531,6 +529,7 @@ namespace ImageTools.IO.Png
             //crc.Update(typeBuffer);
             //crc.Update(chunk.Data);
             CRC32Calculator crc32Cal = new CRC32Calculator();
+            crc32Cal.Reset();
             crc32Cal.SlurpBlock(typeBuffer);
             crc32Cal.SlurpBlock(chunk.Data);
             //if (crc.Value != chunk.Crc)

@@ -6,7 +6,7 @@
 
 using System;
 using System.Globalization;
-using System.IO; 
+using System.IO;
 using ImageTools.Helpers;
 
 namespace ImageTools.IO.Png
@@ -17,7 +17,7 @@ namespace ImageTools.IO.Png
     public class PngEncoder : IImageEncoder
     {
 
-        private const int MaxBlockSize = 0xFFFF; 
+        private const int MaxBlockSize = 0xFFFF;
         private Stream _stream;
         private ExtendedImage _image;
 
@@ -112,10 +112,10 @@ namespace ImageTools.IO.Png
 
             // Write the png header.
             stream.Write(
-                new byte[] 
-                { 
-                    0x89, 0x50, 0x4E, 0x47, 
-                    0x0D, 0x0A, 0x1A, 0x0A 
+                new byte[]
+                {
+                    0x89, 0x50, 0x4E, 0x47,
+                    0x0D, 0x0A, 0x1A, 0x0A
                 }, 0, 8);
 
             PngHeader header = new PngHeader();
@@ -126,7 +126,7 @@ namespace ImageTools.IO.Png
             header.FilterMethod = 0;
             header.CompressionMethod = 0;
             header.InterlaceMethod = 0;
-            
+
 
 
             WriteHeaderChunk(header);
@@ -405,6 +405,7 @@ namespace ImageTools.IO.Png
             //Crc32 crc32 = new Crc32();
             //crc32.Update(typeArray);
             CRC32Calculator crc32Cal = new CRC32Calculator();
+            crc32Cal.Reset();
             crc32Cal.SlurpBlock(typeArray, 0, typeArray.Length);
 
             if (data != null)
