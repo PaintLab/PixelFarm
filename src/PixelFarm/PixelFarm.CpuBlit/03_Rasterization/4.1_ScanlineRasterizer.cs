@@ -106,7 +106,7 @@ namespace PixelFarm.CpuBlit.Rasterization
 
         int[] _gammaLut;//current gamma lut
         bool _useDefaultGammaLut;
-        int[] _orgGammaLut = new int[AA_SCALE]; //original(built-in) gamma table
+        readonly int[] _orgGammaLut = new int[AA_SCALE]; //original(built-in) gamma table
 
 
         FillingRule _filling_rule;
@@ -236,7 +236,7 @@ namespace PixelFarm.CpuBlit.Rasterization
             }
         }
         //------------------------------------------------------------------------
-        public void MoveTo(double x, double y)
+        void MoveTo(double x, double y)
         {
             if (_cellAARas.Sorted) { Reset(); }
             if (_auto_close) { ClosePolygon(); }
@@ -247,11 +247,16 @@ namespace PixelFarm.CpuBlit.Rasterization
             _status = Status.MoveTo;
         }
         //------------------------------------------------------------------------
-        public void LineTo(double x, double y)
+        void LineTo(double x, double y)
         {
             _vectorClipper.LineTo(upscale(x), upscale(y));
             _status = Status.LineTo;
         }
+
+#if DEBUG
+        public void dbugDevMoveTo(double x, double y) => MoveTo(x, y);
+        public void dbugDevLineTo(double x, double y) => LineTo(x, y);
+#endif
 
         void ClosePolygon()
         {
@@ -489,11 +494,10 @@ namespace PixelFarm.CpuBlit.Rasterization
                 }
 
                 scline.ResetSpans();
-                //-------------------------
-                CellAA[] cells;
-                int offset;
-                int num_cells;
-                _cellAARas.GetCells(_scan_y, out cells, out offset, out num_cells);
+                //------------------------- 
+
+                _cellAARas.GetCells(_scan_y, out CellAA[] cells, out int offset, out int num_cells);
+
                 int cover = 0;
                 while (num_cells != 0)
                 {

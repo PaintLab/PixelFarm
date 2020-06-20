@@ -235,12 +235,10 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
         public override void Draw(Painter p)
         {
             //specific for agg
-
-            if (p is PixelFarm.CpuBlit.AggPainter)
+#if DEBUG
+            //low-level scanline rasterizer example
+            if (p is PixelFarm.CpuBlit.AggPainter p2)
             {
-
-
-                var p2 = (PixelFarm.CpuBlit.AggPainter)p;
                 AggRenderSurface aggsx = p2.RenderSurface;
                 ScanlineRasterizer rasterizer = aggsx.ScanlineRasterizer;
 
@@ -260,9 +258,9 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
                 int size_mul = (int)this.PixelSize;
                 CustomScanlineRasToBmp_EnlargedSubPixelRendering ren_en = new CustomScanlineRasToBmp_EnlargedSubPixelRendering(size_mul, aggsx.DestBitmap);
                 rasterizer.Reset();
-                rasterizer.MoveTo(_x[0] / size_mul, _y[0] / size_mul);
-                rasterizer.LineTo(_x[1] / size_mul, _y[1] / size_mul);
-                rasterizer.LineTo(_x[2] / size_mul, _y[2] / size_mul);
+                rasterizer.dbugDevMoveTo(_x[0] / size_mul, _y[0] / size_mul);
+                rasterizer.dbugDevLineTo(_x[1] / size_mul, _y[1] / size_mul);
+                rasterizer.dbugDevLineTo(_x[2] / size_mul, _y[2] / size_mul);
                 ren_en.RenderWithColor(clippingProxyGamma, rasterizer, sl, Color.Black);
                 //----------------------------------------
                 DestBitmapRasterizer sclineRasToBmp = aggsx.BitmapRasterizer;
@@ -295,6 +293,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest3
 
                 sclineRasToBmp.RenderWithColor(clippingProxyNormal, rasterizer, sl, new Color(200, 0, 150, 160));
             }
+#endif
         }
 
         public override void MouseDown(int mx, int my, bool isRightButton)
