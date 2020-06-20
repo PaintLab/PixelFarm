@@ -10,7 +10,6 @@ namespace LayoutFarm.ColorBlenderSample
 
     class ColorBox : AbstractControlBox
     {
-        string _note;
         public ColorBox(int w, int h) : base(w, h)
         {
 
@@ -19,11 +18,7 @@ namespace LayoutFarm.ColorBlenderSample
         {
 
         }
-        public string Note
-        {
-            get => _note;
-            set => _note = value;
-        }
+        public string Note { get; set; }
 
     }
 

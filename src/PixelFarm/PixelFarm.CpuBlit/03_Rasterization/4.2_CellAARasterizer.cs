@@ -139,6 +139,7 @@ namespace PixelFarm.CpuBlit.Rasterization
             const int BLOCK_MASK = BLOCK_SIZE - 1;
             const int BLOCK_POOL = 256;
             const int BLOCK_LIMIT = BLOCK_SIZE * 1024;
+           
             struct SortedY
             {
                 internal int start;
@@ -581,7 +582,8 @@ namespace PixelFarm.CpuBlit.Rasterization
                     int pivot = begPoint;
                     int m = begPoint + 1;
                     int n = endPoint;
-                    var x_at_PivotPoint = dataToSort[pivot].x;
+                    int x_at_PivotPoint = dataToSort[pivot].x;
+
                     while ((m < endPoint)
                         && x_at_PivotPoint >= dataToSort[m].x)
                     {

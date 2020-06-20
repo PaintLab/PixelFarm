@@ -23,13 +23,15 @@ namespace PixelFarm.CpuBlit
             PixelProcessing.IBitmapBlender destImage, Color color,
             double x, double y)
         {
-
+#if DEBUG
+            //low-level scanline rasterizer example
             ras.Reset();
-            ras.MoveTo(x * _size, y * _size);
-            ras.LineTo(x * _size + _size, y * _size);
-            ras.LineTo(x * _size + _size, y * _size + _size);
-            ras.LineTo(x * _size, y * _size + _size);
+            ras.dbugDevMoveTo(x * _size, y * _size);
+            ras.dbugDevLineTo(x * _size + _size, y * _size);
+            ras.dbugDevLineTo(x * _size + _size, y * _size + _size);
+            ras.dbugDevLineTo(x * _size, y * _size + _size);
             bmpRast.RenderWithColor(destImage, ras, sl, color);
+#endif
         }
     }
 }

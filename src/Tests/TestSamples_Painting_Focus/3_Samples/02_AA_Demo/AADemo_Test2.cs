@@ -95,8 +95,12 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest2
         public override void Draw(Painter p)
         {
             //this specific for agg
+#if DEBUG
+
+            //low-level scanline rasterizer example
             if (p is AggPainter)
             {
+                
                 AggPainter p2 = (AggPainter)p;
                 AggRenderSurface aggsx = p2.RenderSurface;
                 PixelProcessing.SubBitmapBlender subImg = PixelProcessing.BitmapBlenderExtension.CreateSubBitmapBlender(aggsx.DestBitmapBlender, aggsx.GetClippingRect());
@@ -113,9 +117,9 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest2
                 int size_mul = this.PixelSize;
                 var sclineToBmpEn2 = new CustomRas_EnlargeV2(size_mul, aggsx.DestBitmap);
                 rasterizer.Reset();
-                rasterizer.MoveTo(_x[0] / size_mul, _y[0] / size_mul);
-                rasterizer.LineTo(_x[1] / size_mul, _y[1] / size_mul);
-                rasterizer.LineTo(_x[2] / size_mul, _y[2] / size_mul);
+                rasterizer.dbugDevMoveTo(_x[0] / size_mul, _y[0] / size_mul);
+                rasterizer.dbugDevLineTo(_x[1] / size_mul, _y[1] / size_mul);
+                rasterizer.dbugDevLineTo(_x[2] / size_mul, _y[2] / size_mul);
                 sclineToBmpEn2.RenderWithColor(clippingProxyGamma, rasterizer, sl, Color.Black);
                 DestBitmapRasterizer bmpRas = aggsx.BitmapRasterizer;
                 bmpRas.RenderWithColor(clippingProxyGamma, rasterizer, sl, Color.Black);
@@ -134,6 +138,7 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest2
                     bmpRas.RenderWithColor(clippingProxyNormal, rasterizer, sl, new Color(200, 0, 150, 160));
                 }
             }
+#endif
         }
 
         public override void MouseDown(int mx, int my, bool isRightButton)

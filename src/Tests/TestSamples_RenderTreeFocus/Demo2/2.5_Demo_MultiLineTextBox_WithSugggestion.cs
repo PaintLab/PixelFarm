@@ -78,7 +78,7 @@ namespace LayoutFarm
             }
             if (_textbox.CurrentTextSpan != null)
             {
-                _textbox.ReplaceCurrentTextRunContent(currentLocalText.Length,
+                _textbox.ReplaceCurrentTextRunContent(_currentLocalText.Length,
                     (string)_listbox.GetItem(_listbox.SelectedIndex).Tag);
                 //------------------------------------- 
                 //then hide suggestion list
@@ -92,8 +92,8 @@ namespace LayoutFarm
         {
             return new string(buffer, bound.startIndex, bound.length);
         }
-        string currentLocalText = null;
 
+        string _currentLocalText = null;
         List<LayoutFarm.Composers.TextSplitBounds> _textSplitBoundsList = new List<Composers.TextSplitBounds>();
 
         static int GetProperSplitBoundIndex(List<LayoutFarm.Composers.TextSplitBounds> _textSplitBoundsList, int charIndex)
@@ -114,7 +114,7 @@ namespace LayoutFarm
         void UpdateSuggestionList()
         {
             //find suggestion words 
-            this.currentLocalText = null;
+            _currentLocalText = null;
             _listbox.ClearItems();
             TextEditing.Run currentSpan = _textbox.CurrentTextSpan;
             if (currentSpan == null)
@@ -152,10 +152,10 @@ namespace LayoutFarm
 
             //find current split bounds
             Composers.TextSplitBounds selectBounds = _textSplitBoundsList[splitBoundIndex];
-            this.currentLocalText = GetString(textBuffer, selectBounds);
+            _currentLocalText = GetString(textBuffer, selectBounds);
 
 
-            char firstChar = currentLocalText[0];
+            char firstChar = _currentLocalText[0];
             if (_words.TryGetValue(firstChar, out List<string> keywords))
             {
                 int j = keywords.Count;
@@ -163,7 +163,7 @@ namespace LayoutFarm
                 for (int i = 0; i < j; ++i)
                 {
                     string choice = keywords[i].ToUpper();
-                    if (StringStartsWithChars(choice, currentLocalText))
+                    if (StringStartsWithChars(choice, _currentLocalText))
                     {
                         CustomWidgets.ListItem item = new CustomWidgets.ListItem(listViewWidth, 17);
                         item.BackColor = KnownColors.LightGray;
@@ -474,8 +474,7 @@ Zimbabwe");
                     sepWord = sepWord.Substring(1, sepWord.Length - 2);
                 }
                 char firstChar = sepWord[0];
-                List<string> list;
-                if (!_words.TryGetValue(firstChar, out list))
+                if (!_words.TryGetValue(firstChar, out List<string> list))
                 {
                     list = new List<string>();
                     _words.Add(firstChar, list);

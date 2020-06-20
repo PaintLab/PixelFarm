@@ -111,7 +111,7 @@ namespace PixelFarm.Drawing
                 fontName = fontName.ToUpper();
                 if (!s_registerFontNames.TryGetValue(fontName, out int found))
                 {
-                    int nameCrc32 = CRC32Calculator.CalculateCrc32(fontName);
+                    int nameCrc32 = TinyCRC32Calculator.CalculateCrc32(fontName);
                     s_registerFontNames.Add(fontName, nameCrc32);
                     return nameCrc32;
                 }
