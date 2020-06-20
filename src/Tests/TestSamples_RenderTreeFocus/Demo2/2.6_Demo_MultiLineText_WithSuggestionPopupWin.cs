@@ -118,7 +118,7 @@ namespace LayoutFarm
         {
             if (_textbox.CurrentTextSpan != null)
             {
-                _textbox.ReplaceCurrentTextRunContent(currentLocalText.Length,
+                _textbox.ReplaceCurrentTextRunContent(_currentLocalText.Length,
                     (string)_sgBox.GetItem(_sgBox.SelectedIndex).Tag);
                 //------------------------------------- 
                 //then hide suggestion list
@@ -134,11 +134,11 @@ namespace LayoutFarm
 
             return new string(buffer, bound.startIndex, bound.length);
         }
-        string currentLocalText = null;
+        string _currentLocalText = null;
         void UpdateSuggestionList()
         {
             //find suggestion words 
-            this.currentLocalText = null;
+            _currentLocalText = null;
             _sgBox.ClearItems();
             if (_textbox.CurrentTextSpan == null)
             {
@@ -160,18 +160,17 @@ namespace LayoutFarm
                 return;
             }
             Composers.TextSplitBounds lastSplitPart = results[m - 1];
-            this.currentLocalText = GetString(textBuffer, lastSplitPart);
+            _currentLocalText = GetString(textBuffer, lastSplitPart);
             //char firstChar = currentTextSpanText[0];
-            char firstChar = currentLocalText[0];
-            List<string> keywords;
-            if (_words.TryGetValue(firstChar, out keywords))
+            char firstChar = _currentLocalText[0];
+            if (_words.TryGetValue(firstChar, out List<string> keywords))
             {
                 int j = keywords.Count;
                 int listViewWidth = _sgBox.Width;
                 for (int i = 0; i < j; ++i)
                 {
                     string choice = keywords[i].ToUpper();
-                    if (StringStartsWithChars(choice, currentLocalText))
+                    if (StringStartsWithChars(choice, _currentLocalText))
                     {
                         CustomWidgets.ListItem item = new CustomWidgets.ListItem(listViewWidth, 17);
                         item.BackColor = KnownColors.LightGray;
@@ -187,7 +186,7 @@ namespace LayoutFarm
                 _sgBox.SelectedIndex = 0;
 
                 //move listview under caret position 
-                var caretPos = _textbox.CaretPosition;
+                Point caretPos = _textbox.CaretPosition;
                 //temp fixed
                 //TODO: review here
                 if (!_alreadyHasTextBoxGlobalOffset)
@@ -487,8 +486,7 @@ Zimbabwe");
                     sepWord = sepWord.Substring(1, sepWord.Length - 2);
                 }
                 char firstChar = sepWord[0];
-                List<string> list;
-                if (!_words.TryGetValue(firstChar, out list))
+                if (!_words.TryGetValue(firstChar, out List<string> list))
                 {
                     list = new List<string>();
                     _words.Add(firstChar, list);
@@ -512,85 +510,54 @@ Zimbabwe");
             _floatWindow = new CustomWidgets.UIFloatWindow(w, h);
             _listbox = new CustomWidgets.ListBox(w, h);
             _floatWindow.AddContent(_listbox);
-            _listbox.ListItemMouseEvent += new CustomWidgets.ListBox.ListItemMouseHandler(listView_ListItemMouseEvent);
-            _listbox.ListItemKeyboardEvent += new CustomWidgets.ListBox.ListItemKeyboardHandler(listView_ListItemKeyboardEvent);
+            _listbox.ListItemMouseEvent += listView_ListItemMouseEvent;
+            _listbox.ListItemKeyboardEvent += listView_ListItemKeyboardEvent;
         }
 
         void listView_ListItemKeyboardEvent(object sender, UIKeyEventArgs e)
         {
-            if (ListItemKeyboardEvent != null)
-            {
-                ListItemKeyboardEvent(this, e);
-            }
+            ListItemKeyboardEvent?.Invoke(this, e);
         }
         void listView_ListItemMouseEvent(object sender, UIMouseEventArgs e)
         {
             switch (e.UIEventName)
             {
                 case UIEventName.DblClick:
-                    if (UserConfirmSelectedItem != null)
-                    {
-                        UserConfirmSelectedItem(this, EventArgs.Empty);
-                    }
+                    UserConfirmSelectedItem?.Invoke(this, EventArgs.Empty);
                     break;
             }
         }
 
-        public void ClearItems()
-        {
-            this._listbox.ClearItems();
-        }
+        public void ClearItems() => _listbox.ClearItems();
 
-        public void SetLocation(int x, int y)
-        {
-            _floatWindow.SetLocation(x, y);
-        }
-        public UIElement GetPrimaryUI()
-        {
-            return this._floatWindow;
-        }
-        public int ItemCount
-        {
-            get { return this._listbox.ItemCount; }
-        }
+        public void SetLocation(int x, int y) => _floatWindow.SetLocation(x, y);
+
+
+        public UIElement GetPrimaryUI() => _floatWindow;
+
+        public int ItemCount => _listbox.ItemCount;
+
         public int SelectedIndex
         {
-            get { return this._listbox.SelectedIndex; }
-            set
-            {
-                this._listbox.SelectedIndex = value;
-            }
+            get => _listbox.SelectedIndex;
+            set => _listbox.SelectedIndex = value;
         }
         public void EnsureSelectedItemVisible()
         {
             _listbox.EnsureSelectedItemVisible();
         }
-        public bool Visible
-        {
-            get
-            {
-                return this._floatWindow.Visible;
-            }
-        }
-        public void Hide()
-        {
-            this._floatWindow.Visible = false;
-        }
-        public void Show()
-        {
-            _floatWindow.Visible = true;
-        }
-        public CustomWidgets.ListItem GetItem(int index)
-        {
-            return this._listbox.GetItem(index);
-        }
-        public void AddItem(CustomWidgets.ListItem item)
-        {
-            this._listbox.AddItem(item);
-        }
-        public int Width
-        {
-            get { return this._listbox.Width; }
-        }
+
+        public bool Visible => _floatWindow.Visible;
+
+        public void Hide() => _floatWindow.Visible = false;
+
+        public void Show() => _floatWindow.Visible = true;
+
+        public CustomWidgets.ListItem GetItem(int index) => _listbox.GetItem(index);
+
+        public void AddItem(CustomWidgets.ListItem item) => _listbox.AddItem(item);
+
+        public int Width => _listbox.Width;
+
     }
 }

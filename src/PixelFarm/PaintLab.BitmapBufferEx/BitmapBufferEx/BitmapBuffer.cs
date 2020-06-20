@@ -84,22 +84,18 @@ namespace BitmapBufferEx
             this.Width = width;
             this.Height = height;
         }
-        public int Left { get; private set; }
-        public int Top { get; private set; }
-        public int Width { get; private set; }
-        public int Height { get; private set; }
-        public int X { get { return this.Left; } }
-        public int Y { get { return this.Top; } }
-        public int Bottom { get { return Y + Height; } }
-        public int Right { get { return Left + Width; } }
-        public bool IsEmpty
-        {
-            get
-            {
-                //TODO: eval once
-                return (this.Left | this.Top | this.Width | this.Height) == 0;
-            }
-        }
+        public int Left { get; }
+        public int Top { get; }
+        public int Width { get; }
+        public int Height { get; }
+        public int X => this.Left;
+        public int Y => this.Top;
+        public int Bottom => Y + Height;
+        public int Right => Left + Width;
+
+        //TODO: eval once
+        public bool IsEmpty => (this.Left | this.Top | this.Width | this.Height) == 0;
+
         private bool IntersectsWithInclusive(RectInt32 r)
         {
             return !((Left > r.Right) || (Right < r.Left) ||
@@ -161,14 +157,14 @@ namespace BitmapBufferEx
             this.Width = size.Width;
             this.Height = size.Height;
         }
-        public double Left { get; private set; }
-        public double Top { get; private set; }
-        public double Width { get; private set; }
-        public double Height { get; private set; }
-        public double X { get { return this.Left; } }
-        public double Y { get { return this.Top; } }
-        public double Bottom { get { return Y + Height; } }
-        public double Right { get { return Left + Width; } }
+        public double Left { get; }
+        public double Top { get; }
+        public double Width { get; }
+        public double Height { get; }
+        public double X => this.Left;
+        public double Y => this.Top;
+        public double Bottom => Y + Height;
+        public double Right => Left + Width;
         public bool IsEmpty
         {
             get
@@ -218,7 +214,7 @@ namespace BitmapBufferEx
         }
 
     }
-    
+
     public struct PointD
     {
         public double X;
@@ -368,15 +364,15 @@ namespace BitmapBufferEx
                 Pixels = IntPtr.Zero;
             }
         }
-        public bool IsBufferOwner { get; private set; }
-        public int PixelWidth { get; private set; }
-        public int PixelHeight { get; private set; }
-        public int LenInBytes { get { return _lenInBytes; } }
+        public bool IsBufferOwner { get; }
+        public int PixelWidth { get; }
+        public int PixelHeight { get; }
+        public int LenInBytes => _lenInBytes;
 
         /// <summary>
         /// pre-multiplied alpha color pixels
         /// </summary>
         public IntPtr Pixels { get; private set; }
-        public bool IsEmpty { get { return Pixels == null; } }
+        public bool IsEmpty => Pixels == null;
     }
 }
