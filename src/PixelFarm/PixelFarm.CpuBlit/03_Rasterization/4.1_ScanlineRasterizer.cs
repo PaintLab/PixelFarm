@@ -101,8 +101,8 @@ namespace PixelFarm.CpuBlit.Rasterization
 
     public sealed partial class ScanlineRasterizer
     {
-        CellAARasterizer _cellAARas;
-        VectorClipper _vectorClipper;
+        readonly CellAARasterizer _cellAARas;
+        readonly VectorClipper _vectorClipper;
 
         int[] _gammaLut;//current gamma lut
         bool _useDefaultGammaLut;
@@ -486,6 +486,8 @@ namespace PixelFarm.CpuBlit.Rasterization
         //--------------------------------------------------------------------
         internal bool SweepScanline(Scanline scline)
         {
+            //see original agg=> agg_rasterizer_scanline_aa.h => sweep_scanline()
+
             for (; ; )
             {
                 if (_scan_y > _cellAARas.MaxY)
