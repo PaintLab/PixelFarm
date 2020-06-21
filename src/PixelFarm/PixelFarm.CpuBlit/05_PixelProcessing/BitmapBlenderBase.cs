@@ -429,12 +429,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
 #endif
         }
 
-        public void BlendHL(int x1, int y, int x2, Color sourceColor, int coverIndex)
-        {
-            if (sourceColor.A == 0) { return; }
-            _blendColor = sourceColor;
-            BlendHL(x1, y, x2, coverIndex);
-        }
+        
 
         public void BlendVL(int x, int y1, int y2, Color sourceColor, byte cover)
         {
@@ -798,9 +793,7 @@ namespace PixelFarm.CpuBlit.PixelProcessing
 
         public void BlendSolidHSpan(int x, int y, int len, Color sourceColor, byte[] covers, int coversIndex)
         {
-            Color sourceColor = _blendColor;
-            byte[] covers = _covers;
-
+              
             int colorAlpha = sourceColor.A;
             if (colorAlpha != 0)
             {

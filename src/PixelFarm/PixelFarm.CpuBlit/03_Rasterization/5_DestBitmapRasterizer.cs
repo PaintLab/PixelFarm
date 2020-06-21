@@ -116,6 +116,7 @@ namespace PixelFarm.CpuBlit.Rasterization
                     byte[] lineBuff = _grayScaleLine.GetInternalBuffer();
 
                     _grayScaleLine.SetBlendAlpha(color.A);
+                    _grayScaleLine.SetCurrentCovers(scline.GetCovers());
 
                     while (sclineRas.SweepScanline(scline))
                     {
@@ -127,8 +128,8 @@ namespace PixelFarm.CpuBlit.Rasterization
                         //render solid single scanline 
                         int num_spans = scline.SpanCount;
 
-                        _grayScaleLine.SetCurrentCovers(scline.GetCovers());
-                        //render each span in the scanline
+
+                        //render each span in the scanline 
 
                         for (int i = 1; i <= num_spans; ++i)
                         {
@@ -140,7 +141,8 @@ namespace PixelFarm.CpuBlit.Rasterization
                             }
                             else
                             {
-                                //fill the line, same coverage area                                 
+                                //fill the line, same coverage area
+                                //TODO: review this again=> (span.x - span.len - 1)
                                 _grayScaleLine.BlendHL(span.x, (span.x - span.len - 1)/*x2*/, span.cover_index);
                             }
                         }
@@ -1471,6 +1473,7 @@ namespace PixelFarm.CpuBlit.Rasterization
                 default:
 
                     dest.SetBlendColor(color);//set once
+                    dest.SetCovers(scline.GetCovers()); //cover may be changed after call scline.ResetSpans()
 
                     while (sclineRas.SweepScanline(scline))
                     {
@@ -1478,9 +1481,10 @@ namespace PixelFarm.CpuBlit.Rasterization
                         //render solid single scanline
                         int y = scline.Y;
                         int num_spans = scline.SpanCount;
-                        byte[] covers = scline.GetCovers();
+                        //render each span in the scanline 
 
-                        //render each span in the scanline
+                        //TODO: inside the inner loop, y is not changed
+                        //so we can set y once for every SweepScanline()
 
                         for (int i = 1; i <= num_spans; ++i)
                         {
@@ -1496,6 +1500,7 @@ namespace PixelFarm.CpuBlit.Rasterization
                                 //int x = span.x;
                                 //int x2 = (x - span.len - 1);
                                 //dest.BlendHL(x, y, x2, color, covers[span.cover_index]);
+                                //TODO: review here again
                                 dest.BlendHL(span.x, y, span.x - span.len - 1, span.cover_index);
                             }
                         }
