@@ -16,7 +16,6 @@
 
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.Drawing.Internal;
 
 namespace PixelFarm.CpuBlit.Rasterization
 {
@@ -141,9 +140,8 @@ namespace PixelFarm.CpuBlit.Rasterization
                             }
                             else
                             {
-                                //fill the line, same coverage area
-                                //TODO: review this again=> (span.x - span.len - 1)
-                                _grayScaleLine.BlendHL(span.x, (span.x - span.len - 1)/*x2*/, span.cover_index);
+                                //fill the line, same coverage area                                 
+                                _grayScaleLine.BlendHL(span.x, -span.len, span.cover_index);
                             }
                         }
 
@@ -1280,10 +1278,12 @@ namespace PixelFarm.CpuBlit.Rasterization
             }
 
 
-            public void BlendHL(int x1, int x2, int coversIndex)
+            public void BlendHL(int x1, int len, int coversIndex)
             {
                 //use _src_alpha and _cover
-                byte src_alpha = _src_alpha;
+                byte src_alpha;
+                if ((src_alpha = _src_alpha) == 0) { return; }
+
                 byte cover = _covers[coversIndex];
 
                 //------------------------------------------------- 
@@ -1313,10 +1313,6 @@ namespace PixelFarm.CpuBlit.Rasterization
                 ////-------------------------------------------------  
 
 
-
-                if (src_alpha == 0) { return; }
-                //------------------------------------------------- 
-                int len = x2 - x1 + 1;
                 int bufferOffset = x1;
                 byte alpha = (byte)(((int)(src_alpha) * (cover + 1)) >> 8);
                 byte[] buffer = _line_buffer;
