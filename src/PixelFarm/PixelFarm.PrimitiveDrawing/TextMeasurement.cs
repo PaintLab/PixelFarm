@@ -41,19 +41,7 @@ namespace PixelFarm.Drawing
         public short minOffsetY;
         public short maxOffsetY;
     }
-    public interface ILineSegmentList
-    {
-        int Count { get; }
-        ILineSegment this[int index] { get; }
-    }
-    public interface ILineSegment
-    {
-        int StartAt { get; }
-        ushort Length { get; }
-        object SpanBreakInfo { get; }
-    }
-
-
+   
 
     public interface ITextService
     {
