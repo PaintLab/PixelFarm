@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using PixelFarm.Drawing;
 using Typography.FontManagement;
 using LayoutFarm.UI.ForImplementator;
- 
+
 namespace LayoutFarm.UI
 {
 
@@ -119,6 +119,7 @@ namespace LayoutFarm.UI
             IInstalledTypefaceProvider fontLoader = YourImplementation.CommonTextServiceSetup.FontLoader;
             //2. 
             ITextService textService = null;
+            
             switch (internalViewportKind)
             {
                 default:
@@ -129,8 +130,10 @@ namespace LayoutFarm.UI
                 case InnerViewportKind.AggOnGLES:
                 case InnerViewportKind.GLES:
                     {
-                        var openFontTextService = new OpenFontTextService();
+                        var openFontTextService = new OpenFontTextService();                        
                         openFontTextService.SvgBmpBuilder = PaintLab.SvgBuilderHelper.ParseAndRenderSvg;
+
+                        GlobalTextService.TextService2 = openFontTextService; 
                         textService = openFontTextService;
                     }
                     break;
@@ -145,7 +148,7 @@ namespace LayoutFarm.UI
             h = screenClientAreaRect.Height;
 
             GlobalTextService.TextService = textService;
-
+        
             MyRootGraphic myRootGfx = new MyRootGraphic(w, h, textService);
 
             //4. create event bridge that will bridge from native window event to root graphics
