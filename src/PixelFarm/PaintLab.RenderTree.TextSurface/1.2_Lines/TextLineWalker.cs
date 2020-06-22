@@ -429,7 +429,7 @@ namespace LayoutFarm.TextEditing
 
 
         TextPrinterWordVisitor _wordVisitor = new TextPrinterWordVisitor();
-        TextPrinterLineSegmentList _lineSegs = new TextPrinterLineSegmentList();
+        TextPrinterLineSegmentList<TextPrinterLineSegment> _lineSegs = new TextPrinterLineSegmentList<TextPrinterLineSegment>();
 
         public void FindCurrentHitWord(out int startAt, out int len)
         {
