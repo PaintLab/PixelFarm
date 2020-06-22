@@ -8,7 +8,8 @@ using PixelFarm.Drawing;
 
 using Typography.TextLayout;
 using Typography.OpenFont;
-
+using Typography.TextBreak;
+using Typography.FontManagement;
 
 namespace PixelFarm.DrawingGL
 {
@@ -93,6 +94,85 @@ namespace PixelFarm.DrawingGL
 #endif
 
     }
+    public class GLRenderVxFormattedStringSpan
+    {
+        DrawingGL.VertexBufferObject _vbo;
+        internal GLRenderVxFormattedStringSpan()
+        {
+        }
+
+        //--------
+        public float[] VertexCoords { get; set; }
+        public ushort[] IndexArray { get; set; }
+        public int IndexArrayCount { get; set; }
+        public ushort WordPlateLeft { get; set; }
+        public ushort WordPlateTop { get; set; }
+
+        internal RequestFont RequestFont { get; set; }
+        internal WordPlate OwnerPlate { get; set; }
+        internal bool Delay { get; set; }
+        internal bool UseWithWordPlate { get; set; }
+
+        internal void ClearOwnerPlate()
+        {
+            OwnerPlate = null;
+        }
+
+        internal DrawingGL.VertexBufferObject GetVbo()
+        {
+            if (_vbo != null)
+            {
+                return _vbo;
+            }
+            _vbo = new VertexBufferObject();
+            _vbo.CreateBuffers(this.VertexCoords, this.IndexArray);
+            return _vbo;
+        }
+
+        internal void DisposeVbo()
+        {
+            //dispose only VBO
+            //and we can create the vbo again
+            //from VertexCoord and IndexArray 
+
+            if (_vbo != null)
+            {
+                _vbo.Dispose();
+                _vbo = null;
+            }
+        }
+        public void Dispose()
+        {
+            //no use this any more
+            VertexCoords = null;
+            IndexArray = null;
+
+            //if (OwnerPlate != null)
+            //{
+            //    OwnerPlate.RemoveWordStrip(this);
+            //    OwnerPlate = null;
+            //}
+
+            DisposeVbo();
+
+        }
+
+#if DEBUG
+        public string dbugText;
+        public override string ToString()
+        {
+            if (dbugText != null)
+            {
+                return dbugText;
+            }
+            return base.ToString();
+        }
+#endif
+
+    }
+
+
+
     public enum GlyphTexturePrinterDrawingTechnique
     {
         Copy,
@@ -100,6 +180,9 @@ namespace PixelFarm.DrawingGL
         LcdSubPixelRendering,
         Msdf
     }
+
+
+
 
     public class GLBitmapGlyphTextPrinter : IGLTextPrinter, IDisposable
     {
@@ -154,6 +237,16 @@ namespace PixelFarm.DrawingGL
             TextBaseline = TextBaseline.Top;
             //TextBaseline = TextBaseline.Alphabetic;
             //TextBaseline = TextBaseline.Bottom;
+
+
+            //temp fix
+            var myAlternativeTypefaceSelector = new MyAlternativeTypefaceSelector();
+            var preferTypefaceList = new MyAlternativeTypefaceSelector.PreferTypefaceList();
+            preferTypefaceList.AddTypefaceName("Source Sans Pro");
+            preferTypefaceList.AddTypefaceName("Sarabun");
+            myAlternativeTypefaceSelector.SetPreferTypefaces(ScriptTagDefs.Latin, preferTypefaceList);
+            AlternativeTypefaceSelector = myAlternativeTypefaceSelector;
+
         }
         public void LoadFontAtlas(string fontTextureInfoFile, string atlasImgFilename)
         {
@@ -177,29 +270,6 @@ namespace PixelFarm.DrawingGL
                     }
                 }
             }
-
-
-            //if (System.IO.File.Exists(fontTextureInfoFile))
-            //{
-            //    using (System.IO.Stream dataStream = new System.IO.FileStream(fontTextureInfoFile, System.IO.FileMode.Open))
-            //    {
-            //        try
-            //        {
-            //            FontAtlasFile fontAtlas = new FontAtlasFile();
-            //            fontAtlas.Read(dataStream);
-            //            SimpleFontAtlas[] resultAtlases = fontAtlas.ResultSimpleFontAtlasList.ToArray();
-            //            _myGLBitmapFontMx.AddSimpleFontAtlas(resultAtlases, atlasImgFilename);
-            //        }
-            //        catch (Exception ex)
-            //        {
-            //            throw ex;
-            //        }
-            //    }
-            //}
-            //else
-            //{
-
-            //}
 
         }
         public bool UseVBO { get; set; }
@@ -744,7 +814,7 @@ namespace PixelFarm.DrawingGL
 
 
 
-        void CreateTextCoords(GLRenderVxFormattedString vxFmtStr, char[] buffer, int startAt, int len)
+        void CreateTextCoords(GLRenderVxFormattedString vxFmtStr, TextBufferSpan textBufferSpan)
         {
             int top = 0;//simulate top
             int left = 0;//simulate left
@@ -752,11 +822,10 @@ namespace PixelFarm.DrawingGL
             _vboBuilder.Clear();
             _vboBuilder.SetTextureInfo(_glBmp.Width, _glBmp.Height, _glBmp.IsYFlipped, _pcx.OriginKind);
 
-            //create temp buffer span that describe the part of a whole char buffer
-            var textBufferSpan = new TextBufferSpan(buffer, startAt, len);
-
+            //create temp buffer span that describe the part of a whole char buffer 
             //ask text service to parse user input char buffer and create a glyph-plan-sequence (list of glyph-plan) 
-            //with specific request font
+            //with specific request font  
+
             GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(textBufferSpan, _font);
             float px_scale = _px_scale;
             float scaleFromTexture = 1; //TODO: support msdf auto scale
@@ -828,10 +897,118 @@ namespace PixelFarm.DrawingGL
 
             _vboBuilder.Clear();
         }
+
+        public AlternativeTypefaceSelector AlternativeTypefaceSelector { get; set; }
         public void PrepareStringForRenderVx(GLRenderVxFormattedString vxFmtStr, char[] buffer, int startAt, int len)
         {
+            //we need to parse string 
+            //since it may contains glyph from multiple font (eg. eng, emoji etc.)
+            //see VxsTextPrinter 
 
-            CreateTextCoords(vxFmtStr, buffer, startAt, len);
+            var buffSpan = new TextBufferSpan(buffer, startAt, len);
+
+            RequestFont reqFont = vxFmtStr.RequestFont;
+            if (reqFont == null)
+            {
+                //use default
+                reqFont = _painter.CurrentFont;
+            }
+
+            //resolve this type face
+            Typeface defaultTypeface = _textServices.ResolveTypeface(reqFont);
+            Typeface curTypeface = defaultTypeface;
+
+            bool needRightToLeftArr = false;
+            using (ILineSegmentList segments = _textServices.BreakToLineSegments(buffSpan))
+            {
+                //typeface may not have a glyph for some char
+                //eg eng font + emoji
+
+                int count = segments.Count;
+                for (int i = 0; i < count; ++i)
+                {
+                    ILineSegment line_seg = segments[i];
+                    //find a proper font for each segment
+                    //so we need to check 
+                    SpanBreakInfo spBreakInfo = (SpanBreakInfo)line_seg.SpanBreakInfo;
+                    TextBufferSpan buff = new TextBufferSpan(buffer, line_seg.StartAt, line_seg.Length);
+                    if (spBreakInfo.RightToLeft)
+                    {
+                        needRightToLeftArr = true;
+                    }
+                    //each line segment may have different unicode range 
+                    //and the current typeface may not support that range
+                    //so we need to ensure that we get a proper typeface,
+                    //if not => alternative typeface
+
+                    ushort glyphIndex = 0;
+                    char sample_char = buffer[line_seg.StartAt];
+                    bool contains_surrogate_pair = false;
+                    if (line_seg.Length > 1)
+                    {
+                        //high serogate pair or not
+                        int codepoint = sample_char;
+                        if (sample_char >= 0xd800 && sample_char <= 0xdbff) //high surrogate 
+                        {
+                            char nextCh = buffer[line_seg.StartAt + 1];
+                            if (nextCh >= 0xdc00 && nextCh <= 0xdfff) //low surrogate
+                            {
+                                codepoint = char.ConvertToUtf32(sample_char, nextCh);
+                                contains_surrogate_pair = true;
+                            }
+                        }
+
+                        glyphIndex = curTypeface.GetGlyphIndex(codepoint);
+                    }
+                    else
+                    {
+                        glyphIndex = curTypeface.GetGlyphIndex(sample_char);
+                    }
+
+                    //------------
+                    if (glyphIndex == 0)
+                    {
+                        //not found then => find other typeface                    
+                        //we need more information about line seg layout
+                        if (AlternativeTypefaceSelector != null)
+                        {
+                            AlternativeTypefaceSelector.LatestTypeface = curTypeface;
+                        }
+
+                        if (_textServices.TryGetAlternativeTypefaceFromChar(sample_char, AlternativeTypefaceSelector, out Typeface alternative))
+                        {
+                            curTypeface = alternative;
+
+                        }
+                        else
+                        {
+#if DEBUG
+                            if (sample_char >= 0 && sample_char < 255)
+                            {
+
+
+                            }
+#endif
+                        }
+                    }
+
+                    //
+                    _textServices.CurrentScriptLang = new ScriptLang(spBreakInfo.ScriptTag, spBreakInfo.LangTag);
+                    GlyphPlanSequence seq = _textServices.CreateGlyphPlanSeq(buff, curTypeface, reqFont.SizeInPoints);
+                    seq.IsRightToLeft = spBreakInfo.RightToLeft;
+
+                    FormattedGlyphPlanSeq formattedGlyphPlanSeq = _fmtGlyphPlanPool.GetFreeFmtGlyphPlanSeqs();
+                    formattedGlyphPlanSeq.seq = seq;
+                    formattedGlyphPlanSeq.Typeface = curTypeface;
+                    formattedGlyphPlanSeq.ContainsSurrogatePair = contains_surrogate_pair;
+
+                    _tmpGlyphPlanSeqs.Add(formattedGlyphPlanSeq);
+                }
+            }
+
+            //---------------------------------------------------------------
+
+            CreateTextCoords(vxFmtStr, buffSpan);
 
             if (vxFmtStr.Delay)
             {
@@ -839,21 +1016,37 @@ namespace PixelFarm.DrawingGL
                 //we need to save current font setting  of the _painter
                 //with the render vx---
                 vxFmtStr.RequestFont = _painter.CurrentFont;
-                Typeface typeface = _textServices.ResolveTypeface(vxFmtStr.RequestFont);
 
                 //TODO: review here again
-                vxFmtStr.BmpOnTransparentBackground = typeface.HasSvgTable() || typeface.IsBitmapFont || typeface.HasColorTable();
+                vxFmtStr.BmpOnTransparentBackground = defaultTypeface.HasSvgTable() || defaultTypeface.IsBitmapFont || defaultTypeface.HasColorTable();
 
             }
             else
             {
-                //TODO: review here again
-                Typeface typeface = _textServices.ResolveTypeface(_painter.CurrentFont);
-                vxFmtStr.BmpOnTransparentBackground = typeface.HasSvgTable() || typeface.IsBitmapFont || typeface.HasColorTable();
+                //TODO: review here again 
+
+                vxFmtStr.BmpOnTransparentBackground = defaultTypeface.HasSvgTable() || defaultTypeface.IsBitmapFont || defaultTypeface.HasColorTable();
                 _painter.CreateWordStrip(vxFmtStr);
             }
         }
+
+
+        FormattedGlyphPlanSeqPool _fmtGlyphPlanPool = new FormattedGlyphPlanSeqPool();
+        List<FormattedGlyphPlanSeq> _tmpGlyphPlanSeqs = new List<FormattedGlyphPlanSeq>();
+        public void ClearTempFormattedGlyphPlanSeq()
+        {
+            for (int i = _tmpGlyphPlanSeqs.Count - 1; i >= 0; --i)
+            {
+                _fmtGlyphPlanPool.ReleaseFmtGlyphPlanSeqs(_tmpGlyphPlanSeqs[i]);
+            }
+            _tmpGlyphPlanSeqs.Clear();
+        }
     }
+
+
+
+
+
 
     class WordPlateMx
     {

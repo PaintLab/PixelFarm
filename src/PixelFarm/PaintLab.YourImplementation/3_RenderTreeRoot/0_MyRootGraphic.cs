@@ -38,6 +38,7 @@ namespace LayoutFarm.UI
 
             if (textService != null)
             {
+                //precalculate whitespace face for a default font
                 textService.MeasureWhitespace(_defaultTextEditFont);
             }
 #if DEBUG

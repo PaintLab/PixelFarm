@@ -436,7 +436,7 @@ namespace LayoutFarm.TextEditing
             }
 
             using (var copyContext = new TempTextLineCopyContext(_currentLine, out TextBufferSpan textBufferSpan))
-            using (ILineSegmentList segmentList = GlobalTextService.TextService.BreakToLineSegments(textBufferSpan))
+            using (ILineSegmentList segmentList = GlobalTextService.AdvanceTextService.BreakToLineSegments(textBufferSpan))
             {
                 if (segmentList == null)
                 {
