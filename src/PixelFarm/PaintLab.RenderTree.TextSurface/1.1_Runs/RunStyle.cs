@@ -2,6 +2,7 @@
 
 
 using PixelFarm.Drawing;
+using Typography.TextBreak;
 
 namespace LayoutFarm.TextEditing
 {
@@ -25,13 +26,12 @@ namespace LayoutFarm.TextEditing
         {
             return GlobalTextService.TextService.MeasureBlankLineHeight(ReqFont);
         }
-        internal bool SupportsWordBreak => GlobalTextService.AdvanceTextService.SupportsWordBreak;
-        internal ILineSegmentList BreakToLineSegments(in TextBufferSpan textBufferSpan)
-        {
-            return GlobalTextService.AdvanceTextService.BreakToLineSegments(textBufferSpan);
-        }
 
-        internal void CalculateUserCharGlyphAdvancePos(
+        public bool SupportsWordBreak => GlobalTextService.AdvanceTextService.SupportsWordBreak;
+
+        public void BreakToLineSegments(in TextBufferSpan textBufferSpan, WordVisitor wordVisitor) => GlobalTextService.AdvanceTextService.BreakToLineSegments(textBufferSpan, wordVisitor);
+
+        public void CalculateUserCharGlyphAdvancePos(
             in TextBufferSpan textBufferSpan,
             ref TextSpanMeasureResult measureResult)
         {

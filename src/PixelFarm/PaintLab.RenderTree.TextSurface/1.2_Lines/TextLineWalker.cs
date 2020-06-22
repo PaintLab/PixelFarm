@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using PixelFarm.Drawing;
- 
+
 
 namespace LayoutFarm.TextEditing
 {
@@ -426,6 +426,11 @@ namespace LayoutFarm.TextEditing
             _currentTextRun = null;
             _needUpdateCurrentRun = true;
         }
+
+
+        TextPrinterWordVisitor _wordVisitor = new TextPrinterWordVisitor();
+        TextPrinterLineSegmentList _lineSegs = new TextPrinterLineSegmentList();
+
         public void FindCurrentHitWord(out int startAt, out int len)
         {
             if (_currentTextRun == null)
@@ -436,19 +441,22 @@ namespace LayoutFarm.TextEditing
             }
 
             using (var copyContext = new TempTextLineCopyContext(_currentLine, out TextBufferSpan textBufferSpan))
-            using (ILineSegmentList segmentList = GlobalTextService.AdvanceTextService.BreakToLineSegments(textBufferSpan))
             {
-                if (segmentList == null)
+                _lineSegs.Clear();
+                _wordVisitor.SetLineSegmentList(_lineSegs);
+                GlobalTextService.AdvanceTextService.BreakToLineSegments(textBufferSpan, _wordVisitor);
+
+                if (_lineSegs.Count == 0)
                 {
                     startAt = 0;
                     len = 0;
                     return;
                 }
 
-                int segcount = segmentList.Count;
+                int segcount = _lineSegs.Count;
                 for (int i = 0; i < segcount; ++i)
                 {
-                    ILineSegment seg = segmentList[i];
+                    ILineSegment seg = _lineSegs[i];
                     if (seg.StartAt + seg.Length >= caret_char_index)
                     {
                         //stop at this segment
@@ -457,7 +465,9 @@ namespace LayoutFarm.TextEditing
                         return;
                     }
                 }
+
             }
+
             //?
             startAt = 0;
             len = 0;

@@ -20,8 +20,13 @@ namespace LayoutFarm.TextEditing
 
         int[] _outputUserCharAdvances = null;//TODO: review here-> change this to caret stop position
         bool _content_unparsed;
-        ILineSegmentList _lineSegs;
+        TextPrinterLineSegmentList _lineSegs;
         RenderVxFormattedString _renderVxFormattedString;
+
+
+        [ThreadStatic]
+        static TextPrinterWordVisitor s_wordVistor;
+
 
         public TextRun(RunStyle runstyle, char[] copyBuffer)
             : base(runstyle)
@@ -102,7 +107,7 @@ namespace LayoutFarm.TextEditing
 
         public override void UpdateRunWidth()
         {
-
+            //***
             var textBufferSpan = new TextBufferSpan(_mybuffer);
 
             //TODO: review here, 
@@ -124,21 +129,33 @@ namespace LayoutFarm.TextEditing
                 if (_content_unparsed)
                 {
                     //parse the content first 
-                    _lineSegs = BreakToLineSegs(textBufferSpan);
+                    if (_lineSegs == null) { _lineSegs = new TextPrinterLineSegmentList(); }
+                    _lineSegs.Clear();
+                    //
+                    if (s_wordVistor == null)
+                    {
+                        s_wordVistor = new TextPrinterWordVisitor();
+                    }
+
+                    s_wordVistor.SetLineSegmentList(_lineSegs);
+                    RunStyle.BreakToLineSegments(textBufferSpan, s_wordVistor);
+                    s_wordVistor.SetLineSegmentList(null);
+
+                    //BreakToLineSegs(textBufferSpan);
                 }
-                _content_unparsed = false;
-                MeasureString2(textBufferSpan, _lineSegs, ref measureResult);
+                _content_unparsed = false; 
+                RunStyle.CalculateUserCharGlyphAdvancePos(textBufferSpan, _lineSegs, ref measureResult);
             }
             else
             {
-                MeasureString2(textBufferSpan, null, ref measureResult);
-            }
-
-
+                RunStyle.CalculateUserCharGlyphAdvancePos(textBufferSpan, ref measureResult); 
+            } 
             SetSize(measureResult.outputTotalW, measureResult.lineHeight);
 
             InvalidateGraphics();
         }
+         
+
         protected void AdjustClientBounds(ref Rectangle bounds)
         {
             if (this.OwnerLine != null)
