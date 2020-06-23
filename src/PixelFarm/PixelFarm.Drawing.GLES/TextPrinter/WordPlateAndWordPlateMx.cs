@@ -218,8 +218,7 @@ namespace PixelFarm.DrawingGL
                 _full = true;
                 return false;
             }
-            //----------------------------------
-
+            //---------------------------------- 
 
             if (renderVxFormattedString.SpanHeight > _currentLineHeightMax)
             {

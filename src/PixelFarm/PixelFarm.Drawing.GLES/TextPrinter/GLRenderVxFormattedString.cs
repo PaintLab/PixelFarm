@@ -18,6 +18,7 @@ namespace PixelFarm.DrawingGL
         {
 
         }
+        public bool BmpOnTransparentBackground { get; set; }
         public ushort WordPlateLeft { get; set; }
         public ushort WordPlateTop { get; set; }
         internal WordPlate OwnerPlate { get; set; }

@@ -418,6 +418,8 @@ namespace PixelFarm.DrawingGL
             _reusableFmtString.Reuse(); //clear data
         }
 
+        public bool WordPlateMode { get; set; }
+
         public void DrawString(GLRenderVxFormattedString vxFmtStr, double x, double y)
         {
             _pcx.FontFillColor = _painter.FontFillColor;
