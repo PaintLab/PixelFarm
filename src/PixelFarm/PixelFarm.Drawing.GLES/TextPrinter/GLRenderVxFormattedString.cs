@@ -10,7 +10,7 @@ namespace PixelFarm.DrawingGL
     /// </summary>
     public class GLRenderVxFormattedString : PixelFarm.Drawing.RenderVxFormattedString
     {
-     
+
         internal List<GLGlyphPlanSeqStrip> _strips = new List<GLGlyphPlanSeqStrip>();
         internal GLRenderVxFormattedString()
         {
@@ -159,11 +159,15 @@ namespace PixelFarm.DrawingGL
         public bool FontNotChanged { get; set; }
         public RequestFont ActualFont { get; set; }
     }
+
+
     class GLGlyphPlanSeqStrip
     {
 
         public GLGlyphPlanSeqStrip() { }
         public DrawingGL.VertexBufferObject _vbo;
+
+        public int LocalStripLeftOffset { get; set; }
 
         public float[] VertexCoords { get; set; }
         public ushort[] IndexArray { get; set; }
@@ -172,9 +176,9 @@ namespace PixelFarm.DrawingGL
         public float Width { get; set; }
         public int SpanHeight { get; set; }
         public int DescendingInPx { get; set; }
+
         public RequestFont ActualFont { get; set; }
 
-        
         internal DrawingGL.VertexBufferObject GetVbo()
         {
             if (_vbo != null)
@@ -185,8 +189,6 @@ namespace PixelFarm.DrawingGL
             _vbo.CreateBuffers(this.VertexCoords, this.IndexArray);
             return _vbo;
         }
-
-        public int LocalStripLeftOffset { get; set; }
 
         internal void DisposeVbo()
         {

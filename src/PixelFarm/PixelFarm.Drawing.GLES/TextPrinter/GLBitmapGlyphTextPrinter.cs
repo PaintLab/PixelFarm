@@ -347,435 +347,440 @@ namespace PixelFarm.DrawingGL
         readonly TextPrinterLineSegmentList<TextPrinterLineSegment> _textPrinterLineSegs = new TextPrinterLineSegmentList<TextPrinterLineSegment>();
         readonly TextPrinterWordVisitor _textPrinterWordVisitor = new TextPrinterWordVisitor();
 
-        void InnerDrawI18NString(char[] buffer, int startAt, int len, double left, double top)
-        {
-            //input string may not be only Eng+ Num
-            //it may contains characters from other unicode ranges (eg. Emoji)
-            //to print it correctly we need to split it to multiple part
-            //and choose a proper typeface for each part
-            //-----------------
+        //        void InnerDrawI18NString(char[] buffer, int startAt, int len, double left, double top)
+        //        {
+        //            //input string may not be only Eng+ Num
+        //            //it may contains characters from other unicode ranges (eg. Emoji)
+        //            //to print it correctly we need to split it to multiple part
+        //            //and choose a proper typeface for each part
+        //            //-----------------
 
-            var textBufferSpan = new TextBufferSpan(buffer, startAt, len);
+        //            var textBufferSpan = new TextBufferSpan(buffer, startAt, len);
 
-            _textPrinterLineSegs.Clear();
-            _textPrinterWordVisitor.SetLineSegmentList(_textPrinterLineSegs);
-            _textServices.BreakToLineSegments(textBufferSpan, _textPrinterWordVisitor);
-            _textPrinterWordVisitor.SetLineSegmentList(null);//TODO: not need to set this,
+        //            _textPrinterLineSegs.Clear();
+        //            _textPrinterWordVisitor.SetLineSegmentList(_textPrinterLineSegs);
+        //            _textServices.BreakToLineSegments(textBufferSpan, _textPrinterWordVisitor);
+        //            _textPrinterWordVisitor.SetLineSegmentList(null);//TODO: not need to set this,
 
-            //check each split segment
-
-
-            GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(textBufferSpan, _font);
-            //-----------------
-
-            _vboBuilder.Clear();
-            _vboBuilder.SetTextureInfo(_glBmp.Width, _glBmp.Height, _glBmp.IsYFlipped, _pcx.OriginKind);
-
-            //ask text service to parse user input char buffer and create a glyph-plan-sequence (list of glyph-plan) 
-            //with specific request font
-
-            float px_scale = _px_scale;
-            //--------------------------
-            //TODO:
-            //if (x,y) is left top
-            //we need to adjust y again      
-
-            float scaleFromTexture = _font.SizeInPoints / _fontAtlas.OriginalFontSizePts;
-
-            TextureKind textureKind = _fontAtlas.TextureKind;
-
-            float g_left = 0;
-            float g_top = 0;
+        //            //check each split segment
 
 
+        //            GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(textBufferSpan, _font);
+        //            //-----------------
 
-            float acc_x = 0; //local accumulate x
-            float acc_y = 0; //local accumulate y 
+        //            _vboBuilder.Clear();
+        //            _vboBuilder.SetTextureInfo(_glBmp.Width, _glBmp.Height, _glBmp.IsYFlipped, _pcx.OriginKind);
 
-#if DEBUG
-            if (s_dbugShowMarkers)
-            {
-                if (s_dbugShowGlyphTexture)
-                {
-                    //show original glyph texture at top 
-                    _pcx.DrawImage(_glBmp, 0, 0);
-                }
-                //draw red-line-marker for baseLine
-                _painter.StrokeColor = Color.Red;
-                int baseLine = (int)Math.Round((float)top + _font.AscentInPixels);
-                _painter.DrawLine(left, baseLine, left + 200, baseLine);
-                //
-                //draw magenta-line-marker for bottom line
-                _painter.StrokeColor = Color.Magenta;
-                int bottomLine = (int)Math.Round((float)top + _font.LineSpacingInPixels);
-                _painter.DrawLine(left, bottomLine, left + 200, bottomLine);
-                //draw blue-line-marker for top line
-                _painter.StrokeColor = Color.Blue;
-                _painter.DrawLine(0, top, left + 200, top);
-            }
+        //            //ask text service to parse user input char buffer and create a glyph-plan-sequence (list of glyph-plan) 
+        //            //with specific request font
 
-            //DrawingTechnique = s_dbugDrawTechnique;//for debug only
-            //UseVBO = s_dbugUseVBO;//for debug only 
-#endif
+        //            float px_scale = _px_scale;
+        //            //--------------------------
+        //            //TODO:
+        //            //if (x,y) is left top
+        //            //we need to adjust y again      
 
-            if (textureKind == TextureKind.Msdf)
-            {
-                TextDrawingTechnique = GlyphTexturePrinterDrawingTechnique.Msdf;
-            }
+        //            float scaleFromTexture = _font.SizeInPoints / _fontAtlas.OriginalFontSizePts;
+
+        //            TextureKind textureKind = _fontAtlas.TextureKind;
+
+        //            float g_left = 0;
+        //            float g_top = 0;
 
 
-            //----------
-            float bottom = (float)top + _font.AscentInPixels - _font.DescentInPixels;
-            int seqLen = glyphPlanSeq.Count;
-            for (int i = 0; i < seqLen; ++i)
-            {
-                UnscaledGlyphPlan glyph = glyphPlanSeq[i];
-                if (!_fontAtlas.TryGetItem(glyph.glyphIndex, out AtlasItem atlasItem))
-                {
-                    //if no glyph data, we should render a missing glyph ***
-                    continue;
-                }
-                //--------------------------------------
-                //TODO: review precise height in float
-                //--------------------------------------
-                //paint src rect
 
-                var srcRect = new Rectangle(atlasItem.Left, atlasItem.Top, atlasItem.Width, atlasItem.Height);
+        //            float acc_x = 0; //local accumulate x
+        //            float acc_y = 0; //local accumulate y 
 
-                //offset length from 'base-line'
-                float x_offset = acc_x + (float)Math.Round(glyph.OffsetX * px_scale - atlasItem.TextureXOffset * scaleFromTexture);
-                float y_offset = acc_y + (float)Math.Round(glyph.OffsetY * px_scale - atlasItem.TextureYOffset * scaleFromTexture) + srcRect.Height; //***
+        //#if DEBUG
+        //            if (s_dbugShowMarkers)
+        //            {
+        //                if (s_dbugShowGlyphTexture)
+        //                {
+        //                    //show original glyph texture at top 
+        //                    _pcx.DrawImage(_glBmp, 0, 0);
+        //                }
+        //                //draw red-line-marker for baseLine
+        //                _painter.StrokeColor = Color.Red;
+        //                int baseLine = (int)Math.Round((float)top + _font.AscentInPixels);
+        //                _painter.DrawLine(left, baseLine, left + 200, baseLine);
+        //                //
+        //                //draw magenta-line-marker for bottom line
+        //                _painter.StrokeColor = Color.Magenta;
+        //                int bottomLine = (int)Math.Round((float)top + _font.LineSpacingInPixels);
+        //                _painter.DrawLine(left, bottomLine, left + 200, bottomLine);
+        //                //draw blue-line-marker for top line
+        //                _painter.StrokeColor = Color.Blue;
+        //                _painter.DrawLine(0, top, left + 200, top);
+        //            }
 
-                //NOTE:
-                // -glyphData.TextureXOffset => restore to original pos
-                // -glyphData.TextureYOffset => restore to original pos 
-                //--------------------------              
+        //            //DrawingTechnique = s_dbugDrawTechnique;//for debug only
+        //            //UseVBO = s_dbugUseVBO;//for debug only 
+        //#endif
 
-                g_left = (float)(left + x_offset);
-                g_top = (float)(bottom - y_offset); //***
-
-                switch (TextBaseline)
-                {
-                    default:
-                    case TextBaseline.Alphabetic:
-                        //nothing todo
-                        break;
-                    case TextBaseline.Top:
-                        g_top += _font.DescentInPixels;
-                        break;
-                    case TextBaseline.Bottom:
-
-                        break;
-                }
-
-                acc_x += (float)Math.Round(glyph.AdvanceX * px_scale);
-                g_top = (float)Math.Ceiling(g_top);//adjust to integer num *** 
-
-#if DEBUG
-                if (s_dbugShowMarkers)
-                {
-
-                    if (s_dbugShowGlyphTexture)
-                    {
-                        //draw yellow-rect-marker on original texture
-                        _painter.DrawRectangle(srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, Color.Yellow);
-                    }
-
-                    //draw debug-rect box at target glyph position
-                    _painter.DrawRectangle(g_left, g_top, srcRect.Width, srcRect.Height, Color.Black);
-                    _painter.StrokeColor = Color.Blue; //restore
-                }
+        //            if (textureKind == TextureKind.Msdf)
+        //            {
+        //                TextDrawingTechnique = GlyphTexturePrinterDrawingTechnique.Msdf;
+        //            }
 
 
-                //System.Diagnostics.Debug.WriteLine(
-                //    "ds:" + buffer[0] + "o=(" + left + "," + top + ")" +
-                //    "g=(" + g_left + "," + g_top + ")" + "srcRect=" + srcRect);
+        //            //----------
+        //            float bottom = (float)top + _font.AscentInPixels - _font.DescentInPixels;
+        //            int seqLen = glyphPlanSeq.Count;
+        //            for (int i = 0; i < seqLen; ++i)
+        //            {
+        //                UnscaledGlyphPlan glyph = glyphPlanSeq[i];
+        //                if (!_fontAtlas.TryGetItem(glyph.glyphIndex, out AtlasItem atlasItem))
+        //                {
+        //                    //if no glyph data, we should render a missing glyph ***
+        //                    continue;
+        //                }
+        //                //--------------------------------------
+        //                //TODO: review precise height in float
+        //                //--------------------------------------
+        //                //paint src rect
 
-#endif
+        //                var srcRect = new Rectangle(atlasItem.Left, atlasItem.Top, atlasItem.Width, atlasItem.Height);
 
-                if (UseVBO)
-                {
-                    _vboBuilder.WriteRect(
-                           srcRect,
-                           g_left, g_top, scaleFromTexture);
-                }
-                else
-                {
-                    switch (TextDrawingTechnique)
-                    {
-                        case GlyphTexturePrinterDrawingTechnique.Msdf:
-                            _pcx.DrawSubImageWithMsdf(_glBmp,
-                                  srcRect,
-                                 g_left,
-                                 g_top,
-                                 scaleFromTexture);
-                            break;
-                        case GlyphTexturePrinterDrawingTechnique.Stencil:
-                            //stencil gray scale with fill-color
-                            _pcx.DrawGlyphImageWithStecil(_glBmp,
-                                srcRect,
-                                g_left,
-                                g_top,
-                                scaleFromTexture);
-                            break;
-                        case GlyphTexturePrinterDrawingTechnique.Copy:
-                            _pcx.DrawSubImage(_glBmp,
-                                srcRect,
-                                g_left,
-                                g_top,
-                                1);
-                            break;
-                        case GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering:
-                            _pcx.DrawGlyphImageWithSubPixelRenderingTechnique2_GlyphByGlyph(
-                                _glBmp,
-                                srcRect,
-                                g_left,
-                                g_top,
-                                1);
-                            break;
-                    }
-                }
+        //                //offset length from 'base-line'
+        //                float x_offset = acc_x + (float)Math.Round(glyph.OffsetX * px_scale - atlasItem.TextureXOffset * scaleFromTexture);
+        //                float y_offset = acc_y + (float)Math.Round(glyph.OffsetY * px_scale - atlasItem.TextureYOffset * scaleFromTexture) + srcRect.Height; //***
 
-            }
-            //-------------------------------------------
-            //
+        //                //NOTE:
+        //                // -glyphData.TextureXOffset => restore to original pos
+        //                // -glyphData.TextureYOffset => restore to original pos 
+        //                //--------------------------              
 
-            if (UseVBO)
-            {
-                switch (TextDrawingTechnique)
-                {
-                    case GlyphTexturePrinterDrawingTechnique.Copy:
-                        _pcx.DrawGlyphImageWithCopy_VBO(_glBmp, _vboBuilder);
-                        break;
-                    case GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering:
-                        _pcx.DrawGlyphImageWithSubPixelRenderingTechnique3_DrawElements(_glBmp, _vboBuilder);
-                        break;
-                    case GlyphTexturePrinterDrawingTechnique.Stencil:
-                        _pcx.DrawGlyphImageWithStecil_VBO(_glBmp, _vboBuilder);
-                        break;
-                    case GlyphTexturePrinterDrawingTechnique.Msdf:
-                        _pcx.DrawImagesWithMsdf_VBO(_glBmp, _vboBuilder);
-                        break;
-                }
+        //                g_left = (float)(left + x_offset);
+        //                g_top = (float)(bottom - y_offset); //***
 
-                _vboBuilder.Clear();
-            }
-        }
+        //                switch (TextBaseline)
+        //                {
+        //                    default:
+        //                    case TextBaseline.Alphabetic:
+        //                        //nothing todo
+        //                        break;
+        //                    case TextBaseline.Top:
+        //                        g_top += _font.DescentInPixels;
+        //                        break;
+        //                    case TextBaseline.Bottom:
+
+        //                        break;
+        //                }
+
+        //                acc_x += (float)Math.Round(glyph.AdvanceX * px_scale);
+        //                g_top = (float)Math.Ceiling(g_top);//adjust to integer num *** 
+
+        //#if DEBUG
+        //                if (s_dbugShowMarkers)
+        //                {
+
+        //                    if (s_dbugShowGlyphTexture)
+        //                    {
+        //                        //draw yellow-rect-marker on original texture
+        //                        _painter.DrawRectangle(srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, Color.Yellow);
+        //                    }
+
+        //                    //draw debug-rect box at target glyph position
+        //                    _painter.DrawRectangle(g_left, g_top, srcRect.Width, srcRect.Height, Color.Black);
+        //                    _painter.StrokeColor = Color.Blue; //restore
+        //                }
+
+
+        //                //System.Diagnostics.Debug.WriteLine(
+        //                //    "ds:" + buffer[0] + "o=(" + left + "," + top + ")" +
+        //                //    "g=(" + g_left + "," + g_top + ")" + "srcRect=" + srcRect);
+
+        //#endif
+
+        //                if (UseVBO)
+        //                {
+        //                    _vboBuilder.WriteRect(
+        //                           srcRect,
+        //                           g_left, g_top, scaleFromTexture);
+        //                }
+        //                else
+        //                {
+        //                    switch (TextDrawingTechnique)
+        //                    {
+        //                        case GlyphTexturePrinterDrawingTechnique.Msdf:
+        //                            _pcx.DrawSubImageWithMsdf(_glBmp,
+        //                                  srcRect,
+        //                                 g_left,
+        //                                 g_top,
+        //                                 scaleFromTexture);
+        //                            break;
+        //                        case GlyphTexturePrinterDrawingTechnique.Stencil:
+        //                            //stencil gray scale with fill-color
+        //                            _pcx.DrawGlyphImageWithStecil(_glBmp,
+        //                                srcRect,
+        //                                g_left,
+        //                                g_top,
+        //                                scaleFromTexture);
+        //                            break;
+        //                        case GlyphTexturePrinterDrawingTechnique.Copy:
+        //                            _pcx.DrawSubImage(_glBmp,
+        //                                srcRect,
+        //                                g_left,
+        //                                g_top,
+        //                                1);
+        //                            break;
+        //                        case GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering:
+        //                            _pcx.DrawGlyphImageWithSubPixelRenderingTechnique2_GlyphByGlyph(
+        //                                _glBmp,
+        //                                srcRect,
+        //                                g_left,
+        //                                g_top,
+        //                                1);
+        //                            break;
+        //                    }
+        //                }
+
+        //            }
+        //            //-------------------------------------------
+        //            //
+
+        //            if (UseVBO)
+        //            {
+        //                switch (TextDrawingTechnique)
+        //                {
+        //                    case GlyphTexturePrinterDrawingTechnique.Copy:
+        //                        _pcx.DrawGlyphImageWithCopy_VBO(_glBmp, _vboBuilder);
+        //                        break;
+        //                    case GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering:
+        //                        _pcx.DrawGlyphImageWithSubPixelRenderingTechnique3_DrawElements(_glBmp, _vboBuilder);
+        //                        break;
+        //                    case GlyphTexturePrinterDrawingTechnique.Stencil:
+        //                        _pcx.DrawGlyphImageWithStecil_VBO(_glBmp, _vboBuilder);
+        //                        break;
+        //                    case GlyphTexturePrinterDrawingTechnique.Msdf:
+        //                        _pcx.DrawImagesWithMsdf_VBO(_glBmp, _vboBuilder);
+        //                        break;
+        //                }
+
+        //                _vboBuilder.Clear();
+        //            }
+        //        }
         public void DrawString(char[] buffer, int startAt, int len, double left, double top)
         {
 
+            //for internal use
+            GLRenderVxFormattedString tmp = new GLRenderVxFormattedString();
+            PrepareStringForRenderVx(tmp, buffer, startAt, len);
+            DrawString(tmp, left, top);
 
 
+            //InnerDrawI18NString(buffer, startAt, len, left, top);
             //input string may not be only Eng+ Num
             //it may contains characters from other unicode ranges (eg. Emoji)
             //to print it correctly we need to split it to multiple part
             //and choose a proper typeface for each part
 
 
-            InnerDrawI18NString(buffer, startAt, len, left, top);
-            return;
+            //            InnerDrawI18NString(buffer, startAt, len, left, top);
+            //            return;
 
-            //OLD
+            //            //OLD
 
-            //create temp buffer span that describe the part of a whole char buffer
-            //-----------------
-            var textBufferSpan = new TextBufferSpan(buffer, startAt, len);
+            //            //create temp buffer span that describe the part of a whole char buffer
+            //            //-----------------
+            //            var textBufferSpan = new TextBufferSpan(buffer, startAt, len);
 
-            GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(textBufferSpan, _font);
-            //-----------------
+            //            GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(textBufferSpan, _font);
+            //            //-----------------
 
-            _vboBuilder.Clear();
-            _vboBuilder.SetTextureInfo(_glBmp.Width, _glBmp.Height, _glBmp.IsYFlipped, _pcx.OriginKind);
+            //            _vboBuilder.Clear();
+            //            _vboBuilder.SetTextureInfo(_glBmp.Width, _glBmp.Height, _glBmp.IsYFlipped, _pcx.OriginKind);
 
-            //ask text service to parse user input char buffer and create a glyph-plan-sequence (list of glyph-plan) 
-            //with specific request font
+            //            //ask text service to parse user input char buffer and create a glyph-plan-sequence (list of glyph-plan) 
+            //            //with specific request font
 
-            float px_scale = _px_scale;
-            //--------------------------
-            //TODO:
-            //if (x,y) is left top
-            //we need to adjust y again      
+            //            float px_scale = _px_scale;
+            //            //--------------------------
+            //            //TODO:
+            //            //if (x,y) is left top
+            //            //we need to adjust y again      
 
-            float scaleFromTexture = _font.SizeInPoints / _fontAtlas.OriginalFontSizePts;
+            //            float scaleFromTexture = _font.SizeInPoints / _fontAtlas.OriginalFontSizePts;
 
-            TextureKind textureKind = _fontAtlas.TextureKind;
+            //            TextureKind textureKind = _fontAtlas.TextureKind;
 
-            float g_left = 0;
-            float g_top = 0;
-
-
-
-            float acc_x = 0; //local accumulate x
-            float acc_y = 0; //local accumulate y 
-
-#if DEBUG
-            if (s_dbugShowMarkers)
-            {
-                if (s_dbugShowGlyphTexture)
-                {
-                    //show original glyph texture at top 
-                    _pcx.DrawImage(_glBmp, 0, 0);
-                }
-                //draw red-line-marker for baseLine
-                _painter.StrokeColor = Color.Red;
-                int baseLine = (int)Math.Round((float)top + _font.AscentInPixels);
-                _painter.DrawLine(left, baseLine, left + 200, baseLine);
-                //
-                //draw magenta-line-marker for bottom line
-                _painter.StrokeColor = Color.Magenta;
-                int bottomLine = (int)Math.Round((float)top + _font.LineSpacingInPixels);
-                _painter.DrawLine(left, bottomLine, left + 200, bottomLine);
-                //draw blue-line-marker for top line
-                _painter.StrokeColor = Color.Blue;
-                _painter.DrawLine(0, top, left + 200, top);
-            }
-
-            //DrawingTechnique = s_dbugDrawTechnique;//for debug only
-            //UseVBO = s_dbugUseVBO;//for debug only 
-#endif
-
-            if (textureKind == TextureKind.Msdf)
-            {
-                TextDrawingTechnique = GlyphTexturePrinterDrawingTechnique.Msdf;
-            }
+            //            float g_left = 0;
+            //            float g_top = 0;
 
 
-            //----------
-            float bottom = (float)top + _font.AscentInPixels - _font.DescentInPixels;
-            int seqLen = glyphPlanSeq.Count;
-            for (int i = 0; i < seqLen; ++i)
-            {
-                UnscaledGlyphPlan glyph = glyphPlanSeq[i];
-                if (!_fontAtlas.TryGetItem(glyph.glyphIndex, out AtlasItem atlasItem))
-                {
-                    //if no glyph data, we should render a missing glyph ***
-                    continue;
-                }
-                //--------------------------------------
-                //TODO: review precise height in float
-                //--------------------------------------
-                //paint src rect
 
-                var srcRect = new Rectangle(atlasItem.Left, atlasItem.Top, atlasItem.Width, atlasItem.Height);
+            //            float acc_x = 0; //local accumulate x
+            //            float acc_y = 0; //local accumulate y 
 
-                //offset length from 'base-line'
-                float x_offset = acc_x + (float)Math.Round(glyph.OffsetX * px_scale - atlasItem.TextureXOffset * scaleFromTexture);
-                float y_offset = acc_y + (float)Math.Round(glyph.OffsetY * px_scale - atlasItem.TextureYOffset * scaleFromTexture) + srcRect.Height; //***
+            //#if DEBUG
+            //            if (s_dbugShowMarkers)
+            //            {
+            //                if (s_dbugShowGlyphTexture)
+            //                {
+            //                    //show original glyph texture at top 
+            //                    _pcx.DrawImage(_glBmp, 0, 0);
+            //                }
+            //                //draw red-line-marker for baseLine
+            //                _painter.StrokeColor = Color.Red;
+            //                int baseLine = (int)Math.Round((float)top + _font.AscentInPixels);
+            //                _painter.DrawLine(left, baseLine, left + 200, baseLine);
+            //                //
+            //                //draw magenta-line-marker for bottom line
+            //                _painter.StrokeColor = Color.Magenta;
+            //                int bottomLine = (int)Math.Round((float)top + _font.LineSpacingInPixels);
+            //                _painter.DrawLine(left, bottomLine, left + 200, bottomLine);
+            //                //draw blue-line-marker for top line
+            //                _painter.StrokeColor = Color.Blue;
+            //                _painter.DrawLine(0, top, left + 200, top);
+            //            }
 
-                //NOTE:
-                // -glyphData.TextureXOffset => restore to original pos
-                // -glyphData.TextureYOffset => restore to original pos 
-                //--------------------------              
+            //            //DrawingTechnique = s_dbugDrawTechnique;//for debug only
+            //            //UseVBO = s_dbugUseVBO;//for debug only 
+            //#endif
 
-                g_left = (float)(left + x_offset);
-                g_top = (float)(bottom - y_offset); //***
-
-                switch (TextBaseline)
-                {
-                    default:
-                    case TextBaseline.Alphabetic:
-                        //nothing todo
-                        break;
-                    case TextBaseline.Top:
-                        g_top += _font.DescentInPixels;
-                        break;
-                    case TextBaseline.Bottom:
-
-                        break;
-                }
-
-                acc_x += (float)Math.Round(glyph.AdvanceX * px_scale);
-                g_top = (float)Math.Ceiling(g_top);//adjust to integer num *** 
-
-#if DEBUG
-                if (s_dbugShowMarkers)
-                {
-
-                    if (s_dbugShowGlyphTexture)
-                    {
-                        //draw yellow-rect-marker on original texture
-                        _painter.DrawRectangle(srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, Color.Yellow);
-                    }
-
-                    //draw debug-rect box at target glyph position
-                    _painter.DrawRectangle(g_left, g_top, srcRect.Width, srcRect.Height, Color.Black);
-                    _painter.StrokeColor = Color.Blue; //restore
-                }
+            //            if (textureKind == TextureKind.Msdf)
+            //            {
+            //                TextDrawingTechnique = GlyphTexturePrinterDrawingTechnique.Msdf;
+            //            }
 
 
-                //System.Diagnostics.Debug.WriteLine(
-                //    "ds:" + buffer[0] + "o=(" + left + "," + top + ")" +
-                //    "g=(" + g_left + "," + g_top + ")" + "srcRect=" + srcRect);
+            //            //----------
+            //            float bottom = (float)top + _font.AscentInPixels - _font.DescentInPixels;
+            //            int seqLen = glyphPlanSeq.Count;
+            //            for (int i = 0; i < seqLen; ++i)
+            //            {
+            //                UnscaledGlyphPlan glyph = glyphPlanSeq[i];
+            //                if (!_fontAtlas.TryGetItem(glyph.glyphIndex, out AtlasItem atlasItem))
+            //                {
+            //                    //if no glyph data, we should render a missing glyph ***
+            //                    continue;
+            //                }
+            //                //--------------------------------------
+            //                //TODO: review precise height in float
+            //                //--------------------------------------
+            //                //paint src rect
 
-#endif
+            //                var srcRect = new Rectangle(atlasItem.Left, atlasItem.Top, atlasItem.Width, atlasItem.Height);
 
-                if (UseVBO)
-                {
-                    _vboBuilder.WriteRect(
-                           srcRect,
-                           g_left, g_top, scaleFromTexture);
-                }
-                else
-                {
-                    switch (TextDrawingTechnique)
-                    {
-                        case GlyphTexturePrinterDrawingTechnique.Msdf:
-                            _pcx.DrawSubImageWithMsdf(_glBmp,
-                                  srcRect,
-                                 g_left,
-                                 g_top,
-                                 scaleFromTexture);
-                            break;
-                        case GlyphTexturePrinterDrawingTechnique.Stencil:
-                            //stencil gray scale with fill-color
-                            _pcx.DrawGlyphImageWithStecil(_glBmp,
-                                srcRect,
-                                g_left,
-                                g_top,
-                                scaleFromTexture);
-                            break;
-                        case GlyphTexturePrinterDrawingTechnique.Copy:
-                            _pcx.DrawSubImage(_glBmp,
-                                srcRect,
-                                g_left,
-                                g_top,
-                                1);
-                            break;
-                        case GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering:
-                            _pcx.DrawGlyphImageWithSubPixelRenderingTechnique2_GlyphByGlyph(
-                                _glBmp,
-                                srcRect,
-                                g_left,
-                                g_top,
-                                1);
-                            break;
-                    }
-                }
+            //                //offset length from 'base-line'
+            //                float x_offset = acc_x + (float)Math.Round(glyph.OffsetX * px_scale - atlasItem.TextureXOffset * scaleFromTexture);
+            //                float y_offset = acc_y + (float)Math.Round(glyph.OffsetY * px_scale - atlasItem.TextureYOffset * scaleFromTexture) + srcRect.Height; //***
 
-            }
-            //-------------------------------------------
-            //
+            //                //NOTE:
+            //                // -glyphData.TextureXOffset => restore to original pos
+            //                // -glyphData.TextureYOffset => restore to original pos 
+            //                //--------------------------              
 
-            if (UseVBO)
-            {
-                switch (TextDrawingTechnique)
-                {
-                    case GlyphTexturePrinterDrawingTechnique.Copy:
-                        _pcx.DrawGlyphImageWithCopy_VBO(_glBmp, _vboBuilder);
-                        break;
-                    case GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering:
-                        _pcx.DrawGlyphImageWithSubPixelRenderingTechnique3_DrawElements(_glBmp, _vboBuilder);
-                        break;
-                    case GlyphTexturePrinterDrawingTechnique.Stencil:
-                        _pcx.DrawGlyphImageWithStecil_VBO(_glBmp, _vboBuilder);
-                        break;
-                    case GlyphTexturePrinterDrawingTechnique.Msdf:
-                        _pcx.DrawImagesWithMsdf_VBO(_glBmp, _vboBuilder);
-                        break;
-                }
+            //                g_left = (float)(left + x_offset);
+            //                g_top = (float)(bottom - y_offset); //***
 
-                _vboBuilder.Clear();
-            }
+            //                switch (TextBaseline)
+            //                {
+            //                    default:
+            //                    case TextBaseline.Alphabetic:
+            //                        //nothing todo
+            //                        break;
+            //                    case TextBaseline.Top:
+            //                        g_top += _font.DescentInPixels;
+            //                        break;
+            //                    case TextBaseline.Bottom:
+
+            //                        break;
+            //                }
+
+            //                acc_x += (float)Math.Round(glyph.AdvanceX * px_scale);
+            //                g_top = (float)Math.Ceiling(g_top);//adjust to integer num *** 
+
+            //#if DEBUG
+            //                if (s_dbugShowMarkers)
+            //                {
+
+            //                    if (s_dbugShowGlyphTexture)
+            //                    {
+            //                        //draw yellow-rect-marker on original texture
+            //                        _painter.DrawRectangle(srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, Color.Yellow);
+            //                    }
+
+            //                    //draw debug-rect box at target glyph position
+            //                    _painter.DrawRectangle(g_left, g_top, srcRect.Width, srcRect.Height, Color.Black);
+            //                    _painter.StrokeColor = Color.Blue; //restore
+            //                }
+
+
+            //                //System.Diagnostics.Debug.WriteLine(
+            //                //    "ds:" + buffer[0] + "o=(" + left + "," + top + ")" +
+            //                //    "g=(" + g_left + "," + g_top + ")" + "srcRect=" + srcRect);
+
+            //#endif
+
+            //                if (UseVBO)
+            //                {
+            //                    _vboBuilder.WriteRect(
+            //                           srcRect,
+            //                           g_left, g_top, scaleFromTexture);
+            //                }
+            //                else
+            //                {
+            //                    switch (TextDrawingTechnique)
+            //                    {
+            //                        case GlyphTexturePrinterDrawingTechnique.Msdf:
+            //                            _pcx.DrawSubImageWithMsdf(_glBmp,
+            //                                  srcRect,
+            //                                 g_left,
+            //                                 g_top,
+            //                                 scaleFromTexture);
+            //                            break;
+            //                        case GlyphTexturePrinterDrawingTechnique.Stencil:
+            //                            //stencil gray scale with fill-color
+            //                            _pcx.DrawGlyphImageWithStecil(_glBmp,
+            //                                srcRect,
+            //                                g_left,
+            //                                g_top,
+            //                                scaleFromTexture);
+            //                            break;
+            //                        case GlyphTexturePrinterDrawingTechnique.Copy:
+            //                            _pcx.DrawSubImage(_glBmp,
+            //                                srcRect,
+            //                                g_left,
+            //                                g_top,
+            //                                1);
+            //                            break;
+            //                        case GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering:
+            //                            _pcx.DrawGlyphImageWithSubPixelRenderingTechnique2_GlyphByGlyph(
+            //                                _glBmp,
+            //                                srcRect,
+            //                                g_left,
+            //                                g_top,
+            //                                1);
+            //                            break;
+            //                    }
+            //                }
+
+            //            }
+            //            //-------------------------------------------
+            //            //
+
+            //            if (UseVBO)
+            //            {
+            //                switch (TextDrawingTechnique)
+            //                {
+            //                    case GlyphTexturePrinterDrawingTechnique.Copy:
+            //                        _pcx.DrawGlyphImageWithCopy_VBO(_glBmp, _vboBuilder);
+            //                        break;
+            //                    case GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering:
+            //                        _pcx.DrawGlyphImageWithSubPixelRenderingTechnique3_DrawElements(_glBmp, _vboBuilder);
+            //                        break;
+            //                    case GlyphTexturePrinterDrawingTechnique.Stencil:
+            //                        _pcx.DrawGlyphImageWithStecil_VBO(_glBmp, _vboBuilder);
+            //                        break;
+            //                    case GlyphTexturePrinterDrawingTechnique.Msdf:
+            //                        _pcx.DrawImagesWithMsdf_VBO(_glBmp, _vboBuilder);
+            //                        break;
+            //                }
+
+            //                _vboBuilder.Clear();
+            //            }
         }
 
         void DrawString_WhenNoWordPlate_Copy(GLRenderVxFormattedString vxFmtStr, double x, double y)
