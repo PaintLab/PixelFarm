@@ -421,6 +421,54 @@ namespace PixelFarm.DrawingGL
         public void DrawString(GLRenderVxFormattedString vxFmtStr, double x, double y)
         {
             _pcx.FontFillColor = _painter.FontFillColor;
+            if (vxFmtStr.Delay && vxFmtStr.OwnerPlate == null)
+            {
+                //add this to queue to create                              
+                return;
+            }
+
+            float base_offset = 0;
+            switch (TextBaseline)
+            {
+                case TextBaseline.Alphabetic:
+                    //base_offset = -(vxFmtStr.SpanHeight + vxFmtStr.DescendingInPx);
+                    break;
+                case TextBaseline.Top:
+                    base_offset = vxFmtStr.DescendingInPx;
+                    break;
+                case TextBaseline.Bottom:
+                    base_offset = -vxFmtStr.SpanHeight;
+                    break;
+            }
+
+            if (!vxFmtStr.UseWithWordPlate)
+            {
+                //one part compose of multiple strip
+
+                //List<GLGlyphPlanSeqStrip> strips = vxFmtStr._strips;
+                //int j = strips.Count;
+                //float start_x = (float)Math.Round(x);
+                //float start_y = (float)Math.Floor(y + base_offset);
+
+
+                //for (int n = 0; n < j; ++n)
+                //{
+                //    GLGlyphPlanSeqStrip s = strips[n];
+
+                //    //change font, bitmap atlas , px_scale
+                //    ChangeFont(s.ActualFont);
+
+                //    start_x += s.LocalStripLeftOffset;
+
+                //    _pcx.DrawGlyphImageWithCopyTech_FromVBO(
+                //       _glBmp,
+                //       s.GetVbo(),
+                //       s.IndexArrayCount,
+                //       start_x,
+                //       start_y);
+                //}
+            }
+
 
             switch (TextDrawingTechnique)
             {
@@ -431,25 +479,7 @@ namespace PixelFarm.DrawingGL
                 case GlyphTexturePrinterDrawingTechnique.Copy:
                     {
                         //eg. bitmap glyph
-                        if (vxFmtStr.Delay && vxFmtStr.OwnerPlate == null)
-                        {
-                            //add this to queue to create                              
-                            return;
-                        }
 
-                        float base_offset = 0;
-                        switch (TextBaseline)
-                        {
-                            case TextBaseline.Alphabetic:
-                                //base_offset = -(vxFmtStr.SpanHeight + vxFmtStr.DescendingInPx);
-                                break;
-                            case TextBaseline.Top:
-                                base_offset = vxFmtStr.DescendingInPx;
-                                break;
-                            case TextBaseline.Bottom:
-                                base_offset = -vxFmtStr.SpanHeight;
-                                break;
-                        }
 
                         //---------
                         //use word plate 
@@ -496,25 +526,6 @@ namespace PixelFarm.DrawingGL
                     break;
                 case GlyphTexturePrinterDrawingTechnique.Stencil:
                     {
-                        if (vxFmtStr.Delay && vxFmtStr.OwnerPlate == null)
-                        {
-                            //add this to queue to create                              
-                            return;
-                        }
-
-                        float base_offset = 0;
-                        switch (TextBaseline)
-                        {
-                            case TextBaseline.Alphabetic:
-                                //base_offset = -(vxFmtStr.SpanHeight + vxFmtStr.DescendingInPx);
-                                break;
-                            case TextBaseline.Top:
-                                base_offset = vxFmtStr.DescendingInPx;
-                                break;
-                            case TextBaseline.Bottom:
-                                base_offset = -vxFmtStr.SpanHeight;
-                                break;
-                        }
 
                         if (vxFmtStr.UseWithWordPlate && (vxFmtStr.OwnerPlate != null || _painter.TryCreateWordStrip(vxFmtStr)))
                         {
@@ -554,29 +565,9 @@ namespace PixelFarm.DrawingGL
                     break;
                 case GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering:
                     {
-                        if (vxFmtStr.Delay && vxFmtStr.OwnerPlate == null)
-                        {
-                            //add this to queue to create                              
-                            return;
-                        }
-
-                        float base_offset = 0;
-                        switch (TextBaseline)
-                        {
-                            case TextBaseline.Alphabetic:
-                                //base_offset = -(vxFmtStr.SpanHeight + vxFmtStr.DescendingInPx);
-                                break;
-                            case TextBaseline.Top:
-                                base_offset = vxFmtStr.DescendingInPx;
-                                break;
-                            case TextBaseline.Bottom:
-                                base_offset = -vxFmtStr.SpanHeight;
-                                break;
-                        }
-
-                        //LCD-Effect****
 
 
+                        //LCD-Effect**** 
                         //use word plate 
                         Color bgColorHint = _painter.TextBgColorHint;
                         if (vxFmtStr.UseWithWordPlate && bgColorHint.A == 255 && (vxFmtStr.OwnerPlate != null || _painter.TryCreateWordStrip(vxFmtStr)))
@@ -769,12 +760,7 @@ namespace PixelFarm.DrawingGL
 
             var buffSpan = new TextBufferSpan(buffer, startAt, len);
 
-            RequestFont reqFont = vxFmtStr.RequestFont;
-            if (reqFont == null)
-            {
-                //use default
-                reqFont = _painter.CurrentFont;
-            }
+            RequestFont reqFont = _painter.CurrentFont; //init with default
 
             //resolve this type face
             Typeface defaultTypeface = _textServices.ResolveTypeface(reqFont);
@@ -896,6 +882,10 @@ namespace PixelFarm.DrawingGL
                     _tmpPlanSeqStrips.Add(latestSeqStrip);
                 }
 
+                if (latestSeqStrip.ActualFont == null)
+                {
+
+                }
 
 
                 _tmpStrips.Add(latestGLFormatPlanSeq);
@@ -909,6 +899,7 @@ namespace PixelFarm.DrawingGL
             float spanHeight = 0;
             float spanWidth = 0;
             int descendingInPx = 0;
+
             for (int i = 0; i < count; ++i)
             {
                 GLGlyphPlanSeqStrip seqStrip = _tmpPlanSeqStrips[i];
@@ -935,7 +926,7 @@ namespace PixelFarm.DrawingGL
                 //when we use delay mode
                 //we need to save current font setting  of the _painter
                 //with the render vx---
-                vxFmtStr.RequestFont = _painter.CurrentFont;  
+                //vxFmtStr.RequestFont = _painter.CurrentFont;
             }
             else
             {

@@ -11,15 +11,15 @@ namespace PixelFarm.DrawingGL
     public class GLRenderVxFormattedString : PixelFarm.Drawing.RenderVxFormattedString
     {
 
+        
         internal List<GLGlyphPlanSeqStrip> _strips = new List<GLGlyphPlanSeqStrip>();
+
         internal GLRenderVxFormattedString()
         {
-        }
 
+        }
         public ushort WordPlateLeft { get; set; }
         public ushort WordPlateTop { get; set; }
-
-        internal RequestFont RequestFont { get; set; }
         internal WordPlate OwnerPlate { get; set; }
         internal bool Delay { get; set; }
         internal bool UseWithWordPlate { get; set; }
@@ -37,7 +37,7 @@ namespace PixelFarm.DrawingGL
             WordPlateLeft = WordPlateTop = 0;
             ClearOwnerPlate();
             OwnerPlate = null;
-            RequestFont = null;
+
             Delay = false;
             UseWithWordPlate = true;
 

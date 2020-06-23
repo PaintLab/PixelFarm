@@ -176,14 +176,14 @@ namespace PixelFarm.DrawingGL
                     _drawBoard.EnterNewDrawboardBuffer(wordPlate._backBuffer);
                 }
 
-                if (vxFmtStr.RequestFont != null)
-                {
-                    _drawBoard.CurrentFont = vxFmtStr.RequestFont;
-                }
-                else
-                {
-                    //use current font 
-                }
+                //if (vxFmtStr.RequestFont != null)
+                //{
+                //    _drawBoard.CurrentFont = vxFmtStr.RequestFont;
+                //}
+                //else
+                //{
+                //    //use current font 
+                //}
 
                 if (!wordPlate.CreateWordStrip(this, vxFmtStr))
                 {
@@ -231,14 +231,14 @@ namespace PixelFarm.DrawingGL
 
 
             //ensure font info for each vx formatter string?
-            if (fmtString.RequestFont != null)
-            {
-                _drawBoard.CurrentFont = fmtString.RequestFont;
-            }
-            else
-            {
+            //if (fmtString.RequestFont != null)
+            //{
+            //    _drawBoard.CurrentFont = fmtString.RequestFont;
+            //}
+            //else
+            //{
 
-            }
+            //}
 
 
             if (!wordPlate.CreateWordStrip(this, fmtString))

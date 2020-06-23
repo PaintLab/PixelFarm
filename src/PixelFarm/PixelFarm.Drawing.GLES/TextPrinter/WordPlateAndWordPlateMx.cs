@@ -190,12 +190,15 @@ namespace PixelFarm.DrawingGL
             //create stencil text buffer                  
             //we use white glyphs on black bg
             //--------------
+
             if (!_isInitBg)
             {
                 //by default, we init bg to black for stencil buffer
                 _isInitBg = true;
                 painter.Clear(Color.Black);
             }
+
+            GLBitmapGlyphTextPrinter textPrinter = (GLBitmapGlyphTextPrinter)painter.TextPrinter;
 
             float width = renderVxFormattedString.Width;
 
@@ -235,7 +238,7 @@ namespace PixelFarm.DrawingGL
             renderVxFormattedString.UseWithWordPlate = false;
 
             //----
-            RequestFont reqFont = painter.CurrentFont; 
+            RequestFont reqFont = painter.CurrentFont;
             //This is a temp FIX
             if (reqFont.Name.Contains("Emoji"))
             {
@@ -246,7 +249,9 @@ namespace PixelFarm.DrawingGL
                 //we will send background rgn for it to transparent bg
                 //painter.ClearRect(Color.Transparent, _currentX, _currentY, width, _currentLineHeightMax);
                 //painter.ClearRect(Color.Red, _currentX, _currentY, 200, 200);
-                painter.TextPrinterDrawingTechnique = GlyphTexturePrinterDrawingTechnique.Copy;
+
+                //painter.TextPrinterDrawingTechnique = GlyphTexturePrinterDrawingTechnique.Copy;
+
                 //painter.Clear(Color.Transparent);
 
                 //choice 1
@@ -258,13 +263,17 @@ namespace PixelFarm.DrawingGL
                 painter.SetClipBox(_currentX, _currentY, (int)(_currentX + width), _currentY + _currentLineHeightMax);
                 painter.Clear(Color.Transparent);
                 painter.SetClipBox(currentClip.Left, currentClip.Top, currentClip.Right, currentClip.Bottom); //restore
-                //--
+
             }
 
+            //use special mode of the GLBitmapGlyphTextPrinter
+            //-----------
+
+            textPrinter.DrawString(renderVxFormattedString, _currentX, _currentY);
 
 
-            painter.DrawString(renderVxFormattedString, _currentX, _currentY);
 
+            //-----------
             renderVxFormattedString.UseWithWordPlate = true;//restore
             painter.FontFillColor = prevColor;//restore
             painter.TextBgColorHint = prevTextBgHint;//restore

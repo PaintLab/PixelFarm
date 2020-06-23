@@ -38,8 +38,9 @@ namespace LayoutFarm
             host.AddChild(background_box);
 
             RequestFont font = new RequestFont("Twitter Color Emoji", 20);
+            //RequestFont font = new RequestFont("Source Sans Pro", 20);
 
-            for (int i = 0; i < 10; ++i)
+            for (int i = 0; i < 1; ++i)
             {
                 TextFlowLabel label = new TextFlowLabel(100, 50);
                 label.SetLocation(i * 55, i * 55);
@@ -48,6 +49,7 @@ namespace LayoutFarm
                 //label.Color = PixelFarm.Drawing.Color.Black;
                 //label.Text = "ABC  DE FG\r\nHIJ KLM NOP\r\nQRSTUVWXZYZ\r\n0123456789";
                 //label.Text = "ABCDEFG\r\nHIJKLMNOP\r\nQRSTUVWXZYZ\r\n0123456789";
+                //label.Text = "A😁😁";
                 label.Text = "😁😁";
                 host.AddChild(label);
             }
