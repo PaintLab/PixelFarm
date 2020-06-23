@@ -42,6 +42,7 @@ namespace LayoutFarm
                 label.BackColor = PixelFarm.Drawing.Color.Yellow;
                 //label.Color = PixelFarm.Drawing.Color.Black;
                 label.Text = "ABC  DE FG\r\nHIJ KLM NOP\r\nQRSTUVWXZYZ\r\n0123456789";
+                //label.Text = "ABCDEFG\r\nHIJKLMNOP\r\nQRSTUVWXZYZ\r\n0123456789";
                 host.AddChild(label);
             }
         }
