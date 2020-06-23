@@ -405,74 +405,18 @@ namespace PixelFarm.DrawingGL
                 _vboBuilder.Clear();
             }
         }
+#endif    
 
-#endif        
-
-
+        GLRenderVxFormattedString _reusableFmtString = new GLRenderVxFormattedString();
         public void DrawString(char[] buffer, int startAt, int len, double left, double top)
         {
-
             //for internal use
-            GLRenderVxFormattedString tmp = new GLRenderVxFormattedString();
-            PrepareStringForRenderVx(tmp, buffer, startAt, len);
-            DrawString(tmp, left, top);
+            _reusableFmtString.Reuse(); //use sure
+            PrepareStringForRenderVx(_reusableFmtString, buffer, startAt, len);
+            DrawString(_reusableFmtString, left, top);
+
+            _reusableFmtString.Reuse(); //clear data
         }
-
-
-
-        void DrawString_DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(GLRenderVxFormattedString vxFmtStr, double x, double y)
-        {
-            List<GLGlyphPlanSeqStrip> strips = vxFmtStr._strips;
-            int j = strips.Count;
-            float start_x = (float)Math.Round(x);
-            float start_y = (float)Math.Floor(y);
-            float spanHeight = 0;
-            float spanWidth = 0;
-
-            for (int n = 0; n < j; ++n)
-            {
-                GLGlyphPlanSeqStrip s = strips[n];
-                spanHeight = s.SpanHeight;
-                spanWidth += s.Width;
-
-                //change font, bitmap atlas , px_scale
-                ChangeFont(s.ActualFont);
-
-                start_x += s.LocalStripLeftOffset;
-                _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(
-                                   _glBmp,
-                                   s.GetVbo(),
-                                   s.IndexArrayCount,
-                                   start_x,
-                                   start_y);
-
-            }
-        }
-        void DrawString_DrawGlyphImageWithSubPixelRenderingTechnique4_ForWordStrip_FromVBO(GLRenderVxFormattedString vxFmtStr, double x, double y)
-        {
-            List<GLGlyphPlanSeqStrip> strips = vxFmtStr._strips;
-            int j = strips.Count;
-            float start_x = (float)Math.Round(x);
-            float start_y = (float)Math.Floor(y);
-
-            for (int n = 0; n < j; ++n)
-            {
-                GLGlyphPlanSeqStrip s = strips[n];
-
-                //change font, bitmap atlas , px_scale
-                ChangeFont(s.ActualFont);
-
-                start_x += s.LocalStripLeftOffset;
-                _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_ForWordStrip_FromVBO(
-                                   _glBmp,
-                                   s.GetVbo(),
-                                   s.IndexArrayCount,
-                                   start_x,
-                                   start_y);
-
-            }
-        }
-
 
         public void DrawString(GLRenderVxFormattedString vxFmtStr, double x, double y)
         {
@@ -480,6 +424,10 @@ namespace PixelFarm.DrawingGL
 
             switch (TextDrawingTechnique)
             {
+                default: throw new NotSupportedException();//UNKNOWN TECH
+
+                case GlyphTexturePrinterDrawingTechnique.Msdf: break; //support this later
+
                 case GlyphTexturePrinterDrawingTechnique.Copy:
                     {
                         //eg. bitmap glyph
@@ -600,7 +548,7 @@ namespace PixelFarm.DrawingGL
                                                    start_x,
                                                    start_y);
 
-                            }                             
+                            }
                         }
                     }
                     break;
@@ -627,22 +575,11 @@ namespace PixelFarm.DrawingGL
                         }
 
                         //LCD-Effect****
-                        if (!vxFmtStr.UseWithWordPlate)
-                        {
-                            if (_painter.PreparingWordStrip)
-                            {
-                                DrawString_DrawGlyphImageWithSubPixelRenderingTechnique4_ForWordStrip_FromVBO(vxFmtStr, x, y + base_offset);
-                            }
-                            else
-                            {
-                                DrawString_DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(vxFmtStr, x, y + base_offset);
-                            }
-                            return;
-                        }
+
 
                         //use word plate 
                         Color bgColorHint = _painter.TextBgColorHint;
-                        if (bgColorHint.A == 255 && (vxFmtStr.OwnerPlate != null || _painter.TryCreateWordStrip(vxFmtStr)))
+                        if (vxFmtStr.UseWithWordPlate && bgColorHint.A == 255 && (vxFmtStr.OwnerPlate != null || _painter.TryCreateWordStrip(vxFmtStr)))
                         {
                             //1. opaque bg is candidate for word plate
                             //2. if it already has a WordPlate then render with WordPlate
@@ -662,8 +599,57 @@ namespace PixelFarm.DrawingGL
                         }
                         else
                         {
-                            //render with vbo
-                            DrawString_DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(vxFmtStr, x, y + base_offset);
+                            //not use wordplate
+                            if (_painter.PreparingWordStrip)
+                            {
+                                List<GLGlyphPlanSeqStrip> strips = vxFmtStr._strips;
+                                int j = strips.Count;
+                                float start_x = (float)Math.Round(x);
+                                float start_y = (float)Math.Floor(y + base_offset);
+
+                                for (int n = 0; n < j; ++n)
+                                {
+                                    GLGlyphPlanSeqStrip s = strips[n];
+
+                                    //change font, bitmap atlas , px_scale
+                                    ChangeFont(s.ActualFont);
+
+                                    start_x += s.LocalStripLeftOffset;
+                                    _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_ForWordStrip_FromVBO(
+                                                       _glBmp,
+                                                       s.GetVbo(),
+                                                       s.IndexArrayCount,
+                                                       start_x,
+                                                       start_y);
+                                }
+                            }
+                            else
+                            {
+                                List<GLGlyphPlanSeqStrip> strips = vxFmtStr._strips;
+                                int j = strips.Count;
+                                float start_x = (float)Math.Round(x);
+                                float start_y = (float)Math.Floor(y + base_offset);
+                                float spanHeight = 0;
+                                float spanWidth = 0;
+
+                                for (int n = 0; n < j; ++n)
+                                {
+                                    GLGlyphPlanSeqStrip s = strips[n];
+                                    spanHeight = s.SpanHeight;
+                                    spanWidth += s.Width;
+
+                                    //change font, bitmap atlas , px_scale
+                                    ChangeFont(s.ActualFont);
+
+                                    start_x += s.LocalStripLeftOffset;
+                                    _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(
+                                                       _glBmp,
+                                                       s.GetVbo(),
+                                                       s.IndexArrayCount,
+                                                       start_x,
+                                                       start_y);
+                                }
+                            }
                         }
                     }
                     break;
