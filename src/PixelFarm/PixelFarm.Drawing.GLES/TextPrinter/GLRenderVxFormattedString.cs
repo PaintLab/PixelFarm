@@ -10,8 +10,7 @@ namespace PixelFarm.DrawingGL
     /// </summary>
     public class GLRenderVxFormattedString : PixelFarm.Drawing.RenderVxFormattedString
     {
-        //DrawingGL.VertexBufferObject _vbo;
-
+     
         internal List<GLGlyphPlanSeqStrip> _strips = new List<GLGlyphPlanSeqStrip>();
         internal GLRenderVxFormattedString()
         {
@@ -175,9 +174,7 @@ namespace PixelFarm.DrawingGL
         public int DescendingInPx { get; set; }
         public RequestFont ActualFont { get; set; }
 
-        //this Seqs should be cleared after we get VertexCoords, IndexArray
-        public List<GLFormattedGlyphPlanSeq> Seqs { get; set; } = new List<GLFormattedGlyphPlanSeq>();
-
+        
         internal DrawingGL.VertexBufferObject GetVbo()
         {
             if (_vbo != null)

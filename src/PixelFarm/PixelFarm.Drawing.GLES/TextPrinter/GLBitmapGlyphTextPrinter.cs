@@ -13,7 +13,7 @@ using Typography.FontManagement;
 
 namespace PixelFarm.DrawingGL
 {
-   
+
 
     public enum GlyphTexturePrinterDrawingTechnique
     {
@@ -563,6 +563,9 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawString(char[] buffer, int startAt, int len, double left, double top)
         {
+
+
+
             //input string may not be only Eng+ Num
             //it may contains characters from other unicode ranges (eg. Emoji)
             //to print it correctly we need to split it to multiple part
@@ -1043,7 +1046,6 @@ namespace PixelFarm.DrawingGL
                             _painter.CreateWordStrip(vxFmtStr);
                         }
 
-
                         //eval again                         
 
                         Color bgColorHint = _painter.TextBgColorHint;
@@ -1077,12 +1079,12 @@ namespace PixelFarm.DrawingGL
 #endif
 
 
-        void CreateTextCoords(GLGlyphPlanSeqStrip planSeqStrip)
+        void CreateTextCoords(GLGlyphPlanSeqStrip planSeqStrip, List<GLFormattedGlyphPlanSeq> seqs)
         {
             int top = 0;//simulate top
             int left = 0;//simulate left
 
-            int count = planSeqStrip.Seqs.Count;
+            int count = seqs.Count;
             float g_left = 0;
             float g_top = 0;
 
@@ -1096,7 +1098,7 @@ namespace PixelFarm.DrawingGL
 
             for (int s = 0; s < count; ++s)
             {
-                GLFormattedGlyphPlanSeq sq = planSeqStrip.Seqs[s];
+                GLFormattedGlyphPlanSeq sq = seqs[s];
                 if (s == 0)
                 {
                     //the first one
@@ -1211,6 +1213,8 @@ namespace PixelFarm.DrawingGL
             GLFormattedGlyphPlanSeq latestGLFormatPlanSeq = null;
             GLGlyphPlanSeqStrip latestSeqStrip = null;
 
+            _tmpStrips.Clear();//ensure
+
             for (int i = 0; i < count; ++i)
             {
                 TextPrinterLineSegment line_seg = _textPrinterLineSegs.GetLineSegment(i);
@@ -1284,7 +1288,7 @@ namespace PixelFarm.DrawingGL
                 GlyphPlanSequence seq = _textServices.CreateGlyphPlanSeq(buff, curTypeface, reqFont.SizeInPoints);
                 seq.IsRightToLeft = spBreakInfo.RightToLeft;
 
-                GLFormattedGlyphPlanSeq formattedGlyphPlanSeq = _fmtGlyphPlanPool.GetFreeFmtGlyphPlanSeqs();
+                GLFormattedGlyphPlanSeq formattedGlyphPlanSeq = new GLFormattedGlyphPlanSeq();
                 formattedGlyphPlanSeq.seq = seq;
                 formattedGlyphPlanSeq.Typeface = curTypeface;
                 formattedGlyphPlanSeq.ContainsSurrogatePair = contains_surrogate_pair;
@@ -1311,7 +1315,7 @@ namespace PixelFarm.DrawingGL
                     _tmpPlanSeqStrips.Add(latestSeqStrip);
                 }
 
-                latestSeqStrip.Seqs.Add(latestGLFormatPlanSeq);
+                _tmpStrips.Add(latestGLFormatPlanSeq);
             }
 
 
@@ -1324,7 +1328,7 @@ namespace PixelFarm.DrawingGL
             for (int i = 0; i < count; ++i)
             {
                 GLGlyphPlanSeqStrip seqStrip = _tmpPlanSeqStrips[i];
-                CreateTextCoords(seqStrip);
+                CreateTextCoords(seqStrip, _tmpStrips);
                 vxFmtStr._strips.Add(seqStrip);
 
                 spanHeight += seqStrip.SpanHeight;
@@ -1332,6 +1336,8 @@ namespace PixelFarm.DrawingGL
             }
             vxFmtStr.SpanHeight = spanHeight;
             vxFmtStr.Width = spanWidth;
+
+            _tmpStrips.Clear();
             //-----------
 
             if (vxFmtStr.Delay)
@@ -1356,9 +1362,7 @@ namespace PixelFarm.DrawingGL
             ClearTempFormattedGlyphPlanSeqList();
         }
 
-
-        FormattedGlyphPlanSeqPool<GLFormattedGlyphPlanSeq> _fmtGlyphPlanPool = new FormattedGlyphPlanSeqPool<GLFormattedGlyphPlanSeq>(() => new GLFormattedGlyphPlanSeq());
-
+        List<GLFormattedGlyphPlanSeq> _tmpStrips = new List<GLFormattedGlyphPlanSeq>();
         List<GLGlyphPlanSeqStrip> _tmpPlanSeqStrips = new List<GLGlyphPlanSeqStrip>();
         void ClearTempFormattedGlyphPlanSeqList()
         {
