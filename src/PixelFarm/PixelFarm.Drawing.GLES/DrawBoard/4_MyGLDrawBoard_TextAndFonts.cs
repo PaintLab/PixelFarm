@@ -67,7 +67,18 @@ namespace PixelFarm.Drawing.GLES2
         {
             if (renderVx is DrawingGL.GLRenderVxFormattedString vxFmtStr)
             {
-                _gpuPainter.TextPrinter.DrawString(vxFmtStr, x, y);
+                if (vxFmtStr.BmpOnTransparentBackground)
+                {
+                    DrawingGL.GlyphTexturePrinterDrawingTechnique prevTech = _gpuPainter.TextPrinterDrawingTechnique; //save
+                    _gpuPainter.TextPrinterDrawingTechnique = DrawingGL.GlyphTexturePrinterDrawingTechnique.Copy;
+                    _gpuPainter.TextPrinter.DrawString(vxFmtStr, x, y);
+                    _gpuPainter.TextPrinterDrawingTechnique = prevTech;//restore
+                }
+                else
+                {
+                    _gpuPainter.TextPrinter.DrawString(vxFmtStr, x, y);
+                }
+
             }
         }
 
