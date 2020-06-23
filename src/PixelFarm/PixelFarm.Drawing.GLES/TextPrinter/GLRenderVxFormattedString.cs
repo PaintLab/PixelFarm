@@ -49,6 +49,7 @@ namespace PixelFarm.DrawingGL
 
             _strips.Clear();
         }
+
         public void DisposeVbo()
         {
             //dispose only its vbo
@@ -65,17 +66,10 @@ namespace PixelFarm.DrawingGL
             //VertexCoords = null;
             //IndexArray = null;
 
-            if (OwnerPlate != null)
-            {
-                OwnerPlate.RemoveWordStrip(this);
-                OwnerPlate = null;
-            }
-
-            foreach (GLGlyphPlanSeqStrip s in _strips)
-            {
-                s.DisposeVbo();
-            }
+            ClearOwnerPlate();
+            DisposeVbo();
             _strips.Clear();
+
             base.Dispose();
         }
 
