@@ -66,7 +66,7 @@ namespace PixelFarm.Drawing.GLES2
         public override void DrawRenderVx(RenderVx renderVx, float x, float y)
         {
             if (renderVx is DrawingGL.GLRenderVxFormattedString vxFmtStr)
-            {
+            {                 
                 if (vxFmtStr.BmpOnTransparentBackground)
                 {
                     DrawingGL.GlyphTexturePrinterDrawingTechnique prevTech = _gpuPainter.TextPrinterDrawingTechnique; //save

@@ -197,8 +197,6 @@ namespace PixelFarm.DrawingGL
                 painter.Clear(Color.Black);
             }
 
-
-
             float width = renderVxFormattedString.Width;
 
             if (_currentX + width > _plateWidth)
@@ -271,7 +269,7 @@ namespace PixelFarm.DrawingGL
             painter.FontFillColor = prevColor;//restore
             painter.TextBgColorHint = prevTextBgHint;//restore
             painter.PreparingWordStrip = prevPreparingWordStrip;
-            painter.TextPrinterDrawingTechnique = prevTextDrawing;
+            painter.TextPrinterDrawingTechnique = prevTextDrawing;//restore
             //in this case we can dispose vbo inside renderVx
             //(we can recreate that vbo later)
             renderVxFormattedString.DisposeVbo();
