@@ -2,8 +2,8 @@
 using System;
 using System.Collections.Generic;
 //
-using PixelFarm.CpuBlit; 
-using PixelFarm.Drawing; 
+using PixelFarm.CpuBlit;
+using PixelFarm.Drawing;
 
 namespace PixelFarm.DrawingGL
 {
@@ -237,11 +237,11 @@ namespace PixelFarm.DrawingGL
             renderVxFormattedString.UseWithWordPlate = false;
 
             //----
-            RequestFont reqFont = painter.CurrentFont;
-
-
+            RequestFont reqFont = painter.CurrentFont; 
+            //This is a temp FIX
             if (reqFont.Name.Contains("Emoji"))
             {
+                //System.Diagnostics.Debugger.Break();
 
                 //some font is color font,
                 //eg some bitmap font, some svg, or color glyph

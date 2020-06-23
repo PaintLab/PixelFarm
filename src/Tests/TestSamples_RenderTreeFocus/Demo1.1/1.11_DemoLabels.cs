@@ -1,5 +1,7 @@
 ﻿//Apache2, 2014-present, WinterDev
 using LayoutFarm.CustomWidgets;
+using PixelFarm.Drawing;
+
 namespace LayoutFarm
 {
     [DemoNote("1.11_1 MultipleLabels")]
@@ -35,14 +37,18 @@ namespace LayoutFarm
             background_box.BackColor = PixelFarm.Drawing.Color.Blue;
             host.AddChild(background_box);
 
+            RequestFont font = new RequestFont("Twitter Color Emoji", 20);
+
             for (int i = 0; i < 10; ++i)
             {
                 TextFlowLabel label = new TextFlowLabel(100, 50);
                 label.SetLocation(i * 55, i * 55);
                 label.BackColor = PixelFarm.Drawing.Color.Yellow;
+                label.RequestFont = font;
                 //label.Color = PixelFarm.Drawing.Color.Black;
-                label.Text = "ABC  DE FG\r\nHIJ KLM NOP\r\nQRSTUVWXZYZ\r\n0123456789";
+                //label.Text = "ABC  DE FG\r\nHIJ KLM NOP\r\nQRSTUVWXZYZ\r\n0123456789";
                 //label.Text = "ABCDEFG\r\nHIJKLMNOP\r\nQRSTUVWXZYZ\r\n0123456789";
+                label.Text = "😁😁";
                 host.AddChild(label);
             }
         }

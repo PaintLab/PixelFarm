@@ -183,7 +183,7 @@ namespace PixelFarm.DrawingGL
             h = s.Height;
         }
 
-        readonly TextPrinterLineSegmentList<TextPrinterLineSegment> _textPrinterLineSegs = new TextPrinterLineSegmentList<TextPrinterLineSegment>();
+        readonly TextPrinterLineSegmentList<TextPrinterLineSegment> _lineSegs = new TextPrinterLineSegmentList<TextPrinterLineSegment>();
         readonly TextPrinterWordVisitor _textPrinterWordVisitor = new TextPrinterWordVisitor();
 
 
@@ -782,14 +782,14 @@ namespace PixelFarm.DrawingGL
 
             bool needRightToLeftArr = false;
 
-            _textPrinterLineSegs.Clear();
-            _textPrinterWordVisitor.SetLineSegmentList(_textPrinterLineSegs);
+            _lineSegs.Clear();
+            _textPrinterWordVisitor.SetLineSegmentList(_lineSegs);
             _textServices.BreakToLineSegments(buffSpan, _textPrinterWordVisitor);
             _textPrinterWordVisitor.SetLineSegmentList(null);
             //typeface may not have a glyph for some char
             //eg eng font + emoji
 
-            int count = _textPrinterLineSegs.Count;
+            int count = _lineSegs.Count;
 
             GLFormattedGlyphPlanSeq latestGLFormatPlanSeq = null;
             GLGlyphPlanSeqStrip latestSeqStrip = null;
@@ -798,7 +798,7 @@ namespace PixelFarm.DrawingGL
 
             for (int i = 0; i < count; ++i)
             {
-                TextPrinterLineSegment line_seg = _textPrinterLineSegs.GetLineSegment(i);
+                TextPrinterLineSegment line_seg = _lineSegs.GetLineSegment(i);
                 //find a proper font for each segment
                 //so we need to check 
                 SpanBreakInfo spBreakInfo = line_seg.BreakInfo;
@@ -896,6 +896,8 @@ namespace PixelFarm.DrawingGL
                     _tmpPlanSeqStrips.Add(latestSeqStrip);
                 }
 
+
+
                 _tmpStrips.Add(latestGLFormatPlanSeq);
             }
 
@@ -924,23 +926,20 @@ namespace PixelFarm.DrawingGL
 
             _tmpStrips.Clear();
             //-----------
+            //TODO: review here again
+
+            vxFmtStr.BmpOnTransparentBackground = defaultTypeface.HasSvgTable() || defaultTypeface.IsBitmapFont || defaultTypeface.HasColorTable();
 
             if (vxFmtStr.Delay)
             {
                 //when we use delay mode
                 //we need to save current font setting  of the _painter
                 //with the render vx---
-                vxFmtStr.RequestFont = _painter.CurrentFont;
-
-                //TODO: review here again
-                vxFmtStr.BmpOnTransparentBackground = defaultTypeface.HasSvgTable() || defaultTypeface.IsBitmapFont || defaultTypeface.HasColorTable();
-
+                vxFmtStr.RequestFont = _painter.CurrentFont;  
             }
             else
             {
-                //TODO: review here again 
-
-                vxFmtStr.BmpOnTransparentBackground = defaultTypeface.HasSvgTable() || defaultTypeface.IsBitmapFont || defaultTypeface.HasColorTable();
+                //TODO: review here again   
                 _painter.TryCreateWordStrip(vxFmtStr);
             }
 
