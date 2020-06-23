@@ -25,8 +25,7 @@ namespace PixelFarm.DrawingGL
         internal bool UseWithWordPlate { get; set; }
         internal void ClearOwnerPlate()
         {
-            OwnerPlate = null;
-            //State = VxState.NoTicket;
+            OwnerPlate = null;            
         }
         public void DisposeVbo()
         {

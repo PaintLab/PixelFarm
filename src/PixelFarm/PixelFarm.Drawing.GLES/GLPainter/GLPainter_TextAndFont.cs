@@ -200,13 +200,17 @@ namespace PixelFarm.DrawingGL
 
             this.CurrentFont = prevFont; //restore
         }
-        internal void CreateWordStrip(GLRenderVxFormattedString fmtString)
+        internal bool TryCreateWordStrip(GLRenderVxFormattedString fmtString)
         {
 
             WordPlate wordPlate = _wordPlateMx.GetWordPlate(fmtString);
             if (wordPlate == null)
             {
+#if DEBUG
                 throw new NotSupportedException();
+#else
+                return false;
+#endif
             }
 
 
@@ -240,14 +244,17 @@ namespace PixelFarm.DrawingGL
             if (!wordPlate.CreateWordStrip(this, fmtString))
             {
                 //we have some error?
+#if DEBUG
                 throw new NotSupportedException();
+#else
+                return false;
+#endif
             }
             fmtString.State = RenderVxFormattedString.VxState.Ready;
 
-
-
             _drawBoard.ExitCurrentDrawboardBuffer();
             _drawBoard.CurrentFont = backupFont;//restore
+            return fmtString.OwnerPlate != null;
         }
     }
 }
