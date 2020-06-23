@@ -182,10 +182,10 @@ namespace PixelFarm.DrawingGL
             w = s.Width;
             h = s.Height;
         }
-   
+
         readonly TextPrinterLineSegmentList<TextPrinterLineSegment> _textPrinterLineSegs = new TextPrinterLineSegmentList<TextPrinterLineSegment>();
         readonly TextPrinterWordVisitor _textPrinterWordVisitor = new TextPrinterWordVisitor();
-         
+
 
 #if DEBUG
         void dbugInnerDrawI18NStringNO_WordPlate(char[] buffer, int startAt, int len, double left, double top)
@@ -418,58 +418,7 @@ namespace PixelFarm.DrawingGL
             DrawString(tmp, left, top);
         }
 
-        void DrawString_WhenNoWordPlate_Copy(GLRenderVxFormattedString vxFmtStr, double x, double y)
-        {
-            List<GLGlyphPlanSeqStrip> strips = vxFmtStr._strips;
-            int j = strips.Count;
-            float start_x = (float)Math.Round(x);
-            float start_y = (float)Math.Floor(y);
 
-
-            for (int n = 0; n < j; ++n)
-            {
-                GLGlyphPlanSeqStrip s = strips[n];
-
-                //change font, bitmap atlas , px_scale
-                ChangeFont(s.ActualFont);
-
-
-                start_x += s.LocalStripLeftOffset;
-
-                _pcx.DrawGlyphImageWithCopyTech_FromVBO(
-                   _glBmp,
-                   s.GetVbo(),
-                   s.IndexArrayCount,
-                   start_x,
-                   start_y);
-            }
-
-
-        }
-        void DrawString_WhenNoWordPlate_Stencil(GLRenderVxFormattedString vxFmtStr, double x, double y)
-        {
-            List<GLGlyphPlanSeqStrip> strips = vxFmtStr._strips;
-            int j = strips.Count;
-            float start_x = (float)Math.Round(x);
-            float start_y = (float)Math.Floor(y);
-
-            for (int n = 0; n < j; ++n)
-            {
-                GLGlyphPlanSeqStrip s = strips[n];
-
-                //change font, bitmap atlas , px_scale
-                ChangeFont(s.ActualFont);
-
-                start_x += s.LocalStripLeftOffset;
-                _pcx.DrawGlyphImageWithStencilRenderingTechnique4_FromVBO(
-                                   _glBmp,
-                                   s.GetVbo(),
-                                   s.IndexArrayCount,
-                                   start_x,
-                                   start_y);
-
-            }
-        }
 
         void DrawString_DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(GLRenderVxFormattedString vxFmtStr, double x, double y)
         {
@@ -554,15 +503,9 @@ namespace PixelFarm.DrawingGL
                                 break;
                         }
 
-                        if (!vxFmtStr.UseWithWordPlate)
-                        {
-                            DrawString_WhenNoWordPlate_Copy(vxFmtStr, x, y + base_offset);
-                            return;
-                        }
-
                         //---------
                         //use word plate 
-                        if (vxFmtStr.OwnerPlate != null || _painter.TryCreateWordStrip(vxFmtStr))
+                        if (vxFmtStr.UseWithWordPlate && (vxFmtStr.OwnerPlate != null || _painter.TryCreateWordStrip(vxFmtStr)))
                         {
                             //UseWithWordPlate=> this renderVx has beed assign to wordplate,
                             //but when OwnerPlate ==null, this mean the wordplate was disposed.
@@ -577,8 +520,28 @@ namespace PixelFarm.DrawingGL
                         else
                         {
                             //BUT if it not success => then...
-                            DrawString_WhenNoWordPlate_Copy(vxFmtStr, x, y + base_offset);
 
+                            List<GLGlyphPlanSeqStrip> strips = vxFmtStr._strips;
+                            int j = strips.Count;
+                            float start_x = (float)Math.Round(x);
+                            float start_y = (float)Math.Floor(y + base_offset);
+
+                            for (int n = 0; n < j; ++n)
+                            {
+                                GLGlyphPlanSeqStrip s = strips[n];
+
+                                //change font, bitmap atlas , px_scale
+                                ChangeFont(s.ActualFont);
+
+                                start_x += s.LocalStripLeftOffset;
+
+                                _pcx.DrawGlyphImageWithCopyTech_FromVBO(
+                                   _glBmp,
+                                   s.GetVbo(),
+                                   s.IndexArrayCount,
+                                   start_x,
+                                   start_y);
+                            }
                         }
 
                     }
@@ -605,29 +568,39 @@ namespace PixelFarm.DrawingGL
                                 break;
                         }
 
-                        if (!vxFmtStr.UseWithWordPlate)
-                        {
-                            DrawString_WhenNoWordPlate_Stencil(vxFmtStr, x, y + base_offset);
-                            return;
-                        }
-                        //---------
-                        //use word plate 
-
-
-                        //eval again 
-                        if (vxFmtStr.OwnerPlate != null || _painter.TryCreateWordStrip(vxFmtStr))
+                        if (vxFmtStr.UseWithWordPlate && (vxFmtStr.OwnerPlate != null || _painter.TryCreateWordStrip(vxFmtStr)))
                         {
                             _pcx.DrawWordSpanWithStencilTechnique((GLBitmap)vxFmtStr.OwnerPlate._backBuffer.GetImage(),
                                 vxFmtStr.WordPlateLeft, -vxFmtStr.WordPlateTop - vxFmtStr.SpanHeight,
                                 vxFmtStr.Width, vxFmtStr.SpanHeight,
                                 (float)Math.Round(x),
-                                (float)Math.Floor(y));
+                                (float)Math.Floor(y));//*** NO base_offset here
                         }
                         else
                         {
                             //can't create at this time
                             //render with vbo 
-                            DrawString_WhenNoWordPlate_Stencil(vxFmtStr, x, y + base_offset);
+                            List<GLGlyphPlanSeqStrip> strips = vxFmtStr._strips;
+                            int j = strips.Count;
+                            float start_x = (float)Math.Round(x);
+                            float start_y = (float)Math.Floor(y + base_offset);
+
+                            for (int n = 0; n < j; ++n)
+                            {
+                                GLGlyphPlanSeqStrip s = strips[n];
+
+                                //change font, bitmap atlas , px_scale
+                                ChangeFont(s.ActualFont);
+
+                                start_x += s.LocalStripLeftOffset;
+                                _pcx.DrawGlyphImageWithStencilRenderingTechnique4_FromVBO(
+                                                   _glBmp,
+                                                   s.GetVbo(),
+                                                   s.IndexArrayCount,
+                                                   start_x,
+                                                   start_y);
+
+                            }                             
                         }
                     }
                     break;
@@ -684,7 +657,7 @@ namespace PixelFarm.DrawingGL
                               vxFmtStr.WordPlateLeft, -vxFmtStr.WordPlateTop - vxFmtStr.SpanHeight - base_offset,
                               vxFmtStr.Width, vxFmtStr.SpanHeight,
                               (float)Math.Round(x),
-                              (float)Math.Floor(y + base_offset), //USE b
+                              (float)Math.Floor(y + base_offset), //USE base_offset
                               _painter.TextBgColorHint);
                         }
                         else
