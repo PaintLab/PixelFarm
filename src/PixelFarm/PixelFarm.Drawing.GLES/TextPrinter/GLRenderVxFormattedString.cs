@@ -25,7 +25,29 @@ namespace PixelFarm.DrawingGL
         internal bool UseWithWordPlate { get; set; }
         internal void ClearOwnerPlate()
         {
-            OwnerPlate = null;            
+            if (OwnerPlate != null)
+            {
+                //TODO: review clear owner plate again
+                OwnerPlate.RemoveWordStrip(this);
+                OwnerPlate = null;
+            }
+        }
+        internal void Reuse()
+        {
+            WordPlateLeft = WordPlateTop = 0;
+            ClearOwnerPlate();
+            OwnerPlate = null;
+            RequestFont = null;
+            Delay = false;
+            UseWithWordPlate = true;
+
+            int j = _strips.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                _strips[i].DisposeVbo();
+            }
+
+            _strips.Clear();
         }
         public void DisposeVbo()
         {
