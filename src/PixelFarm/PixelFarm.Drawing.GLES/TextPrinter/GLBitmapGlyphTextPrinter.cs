@@ -150,11 +150,6 @@ namespace PixelFarm.DrawingGL
                 return;
             }
 
-            //System.Diagnostics.Debug.WriteLine(font.Name + font.SizeInPoints);  
-            //font has been changed, 
-            //resolve for the new one 
-            //check if we have this texture-font atlas in our MySimpleGLBitmapFontManager 
-            //if not-> request the MySimpleGLBitmapFontManager to create a newone 
             _fontAtlas = _myGLBitmapFontMx.GetFontAtlas(font, out _glBmp);
             _font = font;
             _typeface = _textServices.ResolveTypeface(font);
@@ -744,12 +739,10 @@ namespace PixelFarm.DrawingGL
         static int _dbugCount;
 #endif
 
-
-        void CreateTextCoords2(SameFontWordPlateTextStrip sameFont, List<GLFormattedGlyphPlanSeq> seqs)
+        void CreateTextCoords(SameFontWordPlateTextStrip sameFont, List<GLFormattedGlyphPlanSeq> seqs)
         {
             int top = 0;//simulate top
             int left = 0;//simulate left
-
 
             //change font once
             RequestFont reqFont = sameFont.ActualFont;
@@ -789,7 +782,6 @@ namespace PixelFarm.DrawingGL
                 bottom = (float)top + _font.AscentInPixels - _font.DescentInPixels;
                 each_white_spaceW = (int)Math.Round(_white_space_width);
 
-
                 //create temp buffer span that describe the part of a whole char buffer 
                 //ask text service to parse user input char buffer and create a glyph-plan-sequence (list of glyph-plan) 
                 //with specific request font   
@@ -798,16 +790,22 @@ namespace PixelFarm.DrawingGL
                 for (int i = 0; i < seqLen; ++i)
                 {
                     UnscaledGlyphPlan glyph = glyphPlanSeq[i];
-
                     if (!_fontAtlas.TryGetItem(glyph.glyphIndex, out AtlasItem atlasItem))
                     {
                         //if no glyph data, we should render a missing glyph ***
                         continue;
                     }
+                    if (!isTargetFont)
+                    {
+                        //not the target
+                        //find only advance and go next
+                        acc_x += (float)Math.Round(glyph.AdvanceX * px_scale);
+                        continue;//***
+                    }
+
                     //--------------------------------------
                     //TODO: review precise height in float
-                    //--------------------------------------  
-                    //paint src rect
+                    //--------------------------------------   
 
                     var srcRect = new Rectangle(atlasItem.Left, atlasItem.Top, atlasItem.Width, atlasItem.Height);
 
@@ -824,13 +822,11 @@ namespace PixelFarm.DrawingGL
                     g_top = (float)(bottom - y_offset); //***
 
                     acc_x += (float)Math.Round(glyph.AdvanceX * px_scale);
-                    g_top = (float)Math.Floor(g_top);//adjust to integer num *** 
+                    g_top = (float)Math.Floor(g_top);//adjust to integer num ***  
 
-                    if (isTargetFont)
-                    {
-                        hasSomeGlyphs = true;
-                        _vboBuilder.WriteRect(srcRect, g_left, g_top, scaleFromTexture);
-                    }
+                    hasSomeGlyphs = true;
+                    _vboBuilder.WriteRect(srcRect, g_left, g_top, scaleFromTexture);
+
                 }
 
                 //
@@ -859,7 +855,7 @@ namespace PixelFarm.DrawingGL
 
             _vboBuilder.Clear();
         }
- 
+
         public AlternativeTypefaceSelector AlternativeTypefaceSelector { get; set; }
 
 
@@ -1055,7 +1051,7 @@ namespace PixelFarm.DrawingGL
                 Typeface typeface = kv.Key;
                 sameFontTextStrip.ColorGlyphOnTransparentBG = (typeface.HasSvgTable() || typeface.IsBitmapFont || typeface.HasColorTable());
 
-                CreateTextCoords2(sameFontTextStrip, _fmtGlyphPlanSeqs);
+                CreateTextCoords(sameFontTextStrip, _fmtGlyphPlanSeqs);
                 descendingInPx = sameFontTextStrip.DescendingInPx;
                 spanHeight = sameFontTextStrip.SpanHeight;
                 spanWidth = sameFontTextStrip.Width;
