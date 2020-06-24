@@ -138,7 +138,7 @@ namespace PixelFarm.Drawing
         //------------------ 
         //caching ...
 
-        internal int _platform_id;//resolve by system id
+
         internal object _latestResolved; //result of the actual font
         internal int _whitespace_width;
         internal int _generalLineSpacingInPx;
@@ -171,23 +171,15 @@ namespace PixelFarm.Drawing
     {
         public static class RequestFontCacheAccess
         {
-            static int s_totalCacheSystemId;
-            public static int GetNewCacheSystemId()
-            {
-                return ++s_totalCacheSystemId;
-            }
+
             public static void ClearCache(RequestFont reqFont)
             {
-                reqFont._platform_id = 0;
                 reqFont._latestResolved = null;
                 reqFont._whitespace_width = reqFont._generalLineSpacingInPx = 0;
             }
-            public static void SetActualFont(RequestFont reqFont,
-                int platform_id,
-                object platformFont)
+            public static void SetActualFont(RequestFont reqFont, object platformFont)
             {
-                //replace 
-                reqFont._platform_id = platform_id;
+                //replace  
                 reqFont._latestResolved = platformFont;
             }
             public static void SetGeneralFontMetricInfo(
@@ -203,20 +195,14 @@ namespace PixelFarm.Drawing
                 reqFont._generalLineSpacingInPx = (int)Math.Round(lineHeight);
             }
 
-            public static T GetActualFont<T>(RequestFont reqFont, int platform_id)
+            public static T GetActualFont<T>(RequestFont reqFont)
                where T : class
             {
-                if (reqFont._platform_id == platform_id &&
-                    reqFont._latestResolved != null)
-                {
-                    return reqFont._latestResolved as T;
-                }
-                return null;
+                return reqFont._latestResolved as T;
             }
-            public static bool GetWhitespaceWidth(RequestFont reqFont, int platform_id, out int cacheWhitespaceWidth)
+            public static bool GetWhitespaceWidth(RequestFont reqFont, out int cacheWhitespaceWidth)
             {
-                if (reqFont._platform_id == platform_id &&
-                    reqFont._latestResolved != null)
+                if (reqFont._latestResolved != null)
                 {
                     cacheWhitespaceWidth = reqFont._whitespace_width;
                     return true;
@@ -224,27 +210,20 @@ namespace PixelFarm.Drawing
                 cacheWhitespaceWidth = 0;
                 return false;
             }
-            public static void SetWhitespaceWidth(RequestFont reqFont,
-                int platform_id,
-                int whitespaceW)
+            public static void SetWhitespaceWidth(RequestFont reqFont, int whitespaceW)
             {
-                reqFont._platform_id = platform_id;
                 reqFont._whitespace_width = whitespaceW;
             }
-            public static int GetLinespaceHeight(RequestFont reqFont, int platform_id)
+            public static int GetLinespaceHeight(RequestFont reqFont)
             {
-                if (reqFont._platform_id == platform_id &&
-                    reqFont._latestResolved != null)
+                if (reqFont._latestResolved != null)
                 {
                     return reqFont._generalLineSpacingInPx;
                 }
                 return 0;
             }
-            public static void SetLineSpaceHeight(RequestFont reqFont,
-               int platform_id,
-               int height)
+            public static void SetLineSpaceHeight(RequestFont reqFont, int height)
             {
-                reqFont._platform_id = platform_id;
                 reqFont._generalLineSpacingInPx = height;
             }
         }
