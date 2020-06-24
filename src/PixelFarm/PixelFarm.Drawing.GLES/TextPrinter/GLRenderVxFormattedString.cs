@@ -18,7 +18,7 @@ namespace PixelFarm.DrawingGL
     /// </summary>
     public class GLRenderVxFormattedString : PixelFarm.Drawing.RenderVxFormattedString
     {
-        internal List<GLGlyphPlanSeqStrip> _strips = new List<GLGlyphPlanSeqStrip>();
+        internal List<SameFontWordPlateTextStrip> _strips = new List<SameFontWordPlateTextStrip>();
 
         internal GLRenderVxFormattedString()
         {
@@ -62,7 +62,7 @@ namespace PixelFarm.DrawingGL
         {
             //dispose only its vbo
             //preserve coord data
-            foreach (GLGlyphPlanSeqStrip s in _strips)
+            foreach (SameFontWordPlateTextStrip s in _strips)
             {
                 s.DisposeVbo();
             }
@@ -182,15 +182,14 @@ namespace PixelFarm.DrawingGL
 
         public RequestFont ActualFont { get; set; }
     }
-    /// <summary>
-    /// same font 
-    /// </summary>
-    class GLGlyphPlanSeqStrip
-    {
-        public GLGlyphPlanSeqStrip() { }
-        public DrawingGL.VertexBufferObject _vbo;
 
-        public int LocalStripLeftOffset { get; set; }
+    /// <summary>
+    /// same font text-strip of specific WordPlate
+    /// </summary>
+    class SameFontWordPlateTextStrip
+    {
+        public SameFontWordPlateTextStrip() { }
+        public DrawingGL.VertexBufferObject _vbo;
 
         public float[] VertexCoords { get; set; }
         public ushort[] IndexArray { get; set; }
