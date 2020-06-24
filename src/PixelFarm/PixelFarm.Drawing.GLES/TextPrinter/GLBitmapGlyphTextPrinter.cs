@@ -75,8 +75,7 @@ namespace PixelFarm.DrawingGL
 
             TextBaseline = TextBaseline.Top;
             //TextBaseline = TextBaseline.Alphabetic;
-            //TextBaseline = TextBaseline.Bottom;
-
+            //TextBaseline = TextBaseline.Bottom; 
 
             //TODO: temp fix, 
             var myAlternativeTypefaceSelector = new MyAlternativeTypefaceSelector();
@@ -876,6 +875,7 @@ namespace PixelFarm.DrawingGL
 
         Dictionary<Typeface, RequestFont> _uniqueTypefaces = new Dictionary<Typeface, RequestFont>();
         List<GLFormattedGlyphPlanSeq> _fmtGlyphPlanSeqs = new List<GLFormattedGlyphPlanSeq>();
+
         public void PrepareStringForRenderVx(GLRenderVxFormattedString vxFmtStr, char[] buffer, int startAt, int len)
         {
             //we need to parse string 
@@ -891,16 +891,14 @@ namespace PixelFarm.DrawingGL
             Typeface curTypeface = defaultTypeface;
 
             bool needRightToLeftArr = false;
-
+                        
             _lineSegs.Clear();
             _textPrinterWordVisitor.SetLineSegmentList(_lineSegs);
             _textServices.BreakToLineSegments(buffSpan, _textPrinterWordVisitor);
             _textPrinterWordVisitor.SetLineSegmentList(null);
             //typeface may not have a glyph for some char
             //eg eng font + emoji
-
-            int count = _lineSegs.Count;
-
+             
 
             //check if we have a mix stencil and color glyph or not
             GLRenderVxFormattedStringGlyphMixMode glyphMixMode = GLRenderVxFormattedStringGlyphMixMode.Unknown;
@@ -910,6 +908,8 @@ namespace PixelFarm.DrawingGL
             _fmtGlyphPlanSeqs.Clear();
 
             int prefix_whitespaceCount = 0;
+
+            int count = _lineSegs.Count;
             for (int i = 0; i < count; ++i)
             {
                 TextPrinterLineSegment line_seg = _lineSegs.GetLineSegment(i);
@@ -985,6 +985,7 @@ namespace PixelFarm.DrawingGL
 
                 _textServices.CurrentScriptLang = new ScriptLang(spBreakInfo.ScriptTag, spBreakInfo.LangTag);
                 //layout glyphs in each context
+
                 GlyphPlanSequence seq = _textServices.CreateGlyphPlanSeq(buff, curTypeface, reqFont.SizeInPoints);
                 seq.IsRightToLeft = spBreakInfo.RightToLeft;
 

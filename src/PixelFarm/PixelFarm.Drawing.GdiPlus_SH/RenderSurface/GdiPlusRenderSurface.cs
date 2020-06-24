@@ -1146,12 +1146,6 @@ namespace PixelFarm.Drawing.WinGdi
         {
             _rendersx.CurrentFont = font;
             _rendersx.OpenFontTextService.ResolveTypeface(font);
-            ////call to service
-            //_font = font;
-            //_textServices.ResolveTypeface(font); //resolve for 'actual' font
-            //_fontAtlas = _bmpFontMx.GetFontAtlas(_font, out _fontBmp);
-            //FontSizeInPoints = font.SizeInPoints;
-
         }
 
         public RequestFont CurrentFont => _rendersx.CurrentFont;
