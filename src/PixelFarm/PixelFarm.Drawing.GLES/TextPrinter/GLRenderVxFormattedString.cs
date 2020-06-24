@@ -172,14 +172,18 @@ namespace PixelFarm.DrawingGL
 
     }
 
+
     class GLFormattedGlyphPlanSeq : FormattedGlyphPlanSeq
     {
         public GLFormattedGlyphPlanSeq() { }
         /// <summary>
-        /// whitespace count append at the end of this seq
+        /// whitespace count at the end of this seq
         /// </summary>
         public ushort PostfixWhitespaceCount { get; set; }
-
+        /// <summary>
+        /// whitespace count at the begin of this seq
+        /// </summary>
+        public ushort PrefixWhitespaceCount { get; set; }
         public RequestFont ActualFont { get; set; }
     }
 

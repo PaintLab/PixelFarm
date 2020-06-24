@@ -782,6 +782,12 @@ namespace PixelFarm.DrawingGL
                 bottom = (float)top + _font.AscentInPixels - _font.DescentInPixels;
                 each_white_spaceW = (int)Math.Round(_white_space_width);
 
+                if (sq.PrefixWhitespaceCount > 0)
+                {
+                    acc_x += each_white_spaceW * sq.PrefixWhitespaceCount;
+                }
+
+
                 //create temp buffer span that describe the part of a whole char buffer 
                 //ask text service to parse user input char buffer and create a glyph-plan-sequence (list of glyph-plan) 
                 //with specific request font   
@@ -893,21 +899,27 @@ namespace PixelFarm.DrawingGL
 
             _uniqueTypefaces.Clear();
             _fmtGlyphPlanSeqs.Clear();
+
+            int prefix_whitespaceCount = 0;
             for (int i = 0; i < count; ++i)
             {
                 TextPrinterLineSegment line_seg = _lineSegs.GetLineSegment(i);
-
                 //find a proper font for each segment
                 //so we need to check 
                 SpanBreakInfo spBreakInfo = line_seg.BreakInfo;
-
-                if (line_seg.WordKind == WordKind.Whitespace && latestFmtGlyphPlanSeq != null)
+                if (line_seg.WordKind == WordKind.Whitespace)
                 {
-                    //not need to layout this
-                    //append this whitespace info to prev part
-                    latestFmtGlyphPlanSeq.PostfixWhitespaceCount = line_seg.Length;
-                    continue;
+                    if (latestFmtGlyphPlanSeq == null)
+                    {
+                        prefix_whitespaceCount += line_seg.Length;
+                    }
+                    else
+                    {
+                        latestFmtGlyphPlanSeq.PostfixWhitespaceCount += line_seg.Length;
+                    }
+                    continue; //***
                 }
+                //---------------
 
                 TextBufferSpan buff = new TextBufferSpan(buffer, line_seg.StartAt, line_seg.Length);
                 if (spBreakInfo.RightToLeft)
@@ -976,13 +988,21 @@ namespace PixelFarm.DrawingGL
 
                 //----------------
                 //create an object that hold more information about GlyphPlanSequence
-                GLFormattedGlyphPlanSeq formattedGlyphPlanSeq = new GLFormattedGlyphPlanSeq();
-                formattedGlyphPlanSeq.seq = seq;
-                formattedGlyphPlanSeq.ActualFont = reqFont2;
-                formattedGlyphPlanSeq.Typeface = curTypeface;
-                formattedGlyphPlanSeq.ContainsSurrogatePair = contains_surrogate_pair;
-                formattedGlyphPlanSeq.ColorGlyphOnTransparentBG = (curTypeface.HasSvgTable() || curTypeface.IsBitmapFont || curTypeface.HasColorTable());
-                //------------------------------
+
+                GLFormattedGlyphPlanSeq formattedGlyphPlanSeq = new GLFormattedGlyphPlanSeq
+                {
+                    seq = seq,
+                    ActualFont = reqFont2,
+                    Typeface = curTypeface,
+                    ContainsSurrogatePair = contains_surrogate_pair,
+                    ColorGlyphOnTransparentBG = (curTypeface.HasSvgTable() || curTypeface.IsBitmapFont || curTypeface.HasColorTable()),
+                    PrefixWhitespaceCount = (ushort)prefix_whitespaceCount//***
+                };
+                //add to temp location 
+
+                _fmtGlyphPlanSeqs.Add(latestFmtGlyphPlanSeq = formattedGlyphPlanSeq);
+
+                prefix_whitespaceCount = 0;//reset
 
 
                 switch (glyphMixMode)
@@ -1029,8 +1049,7 @@ namespace PixelFarm.DrawingGL
                         break;
                 }
 
-                //add to temp location
-                _fmtGlyphPlanSeqs.Add(latestFmtGlyphPlanSeq = formattedGlyphPlanSeq);
+
             }
 
             //-------------             
@@ -1038,7 +1057,6 @@ namespace PixelFarm.DrawingGL
             //now, create a overlapped strip for each 
 
             vxFmtStr._strips.Clear();
-
 
             float spanHeight = 0;
             float spanWidth = 0;
@@ -1051,12 +1069,14 @@ namespace PixelFarm.DrawingGL
                 Typeface typeface = kv.Key;
                 sameFontTextStrip.ColorGlyphOnTransparentBG = (typeface.HasSvgTable() || typeface.IsBitmapFont || typeface.HasColorTable());
 
+                //**
                 CreateTextCoords(sameFontTextStrip, _fmtGlyphPlanSeqs);
+                //**
+                //use max size of height and descending ?
                 descendingInPx = sameFontTextStrip.DescendingInPx;
                 spanHeight = sameFontTextStrip.SpanHeight;
-                spanWidth = sameFontTextStrip.Width;
+                spanWidth = sameFontTextStrip.Width;//same width for all strip                 
 
-                //-----
                 vxFmtStr._strips.Add(sameFontTextStrip);
             }
 
