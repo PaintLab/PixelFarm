@@ -204,6 +204,8 @@ namespace PixelFarm.DrawingGL
         public int SpanHeight { get; set; }
         public int DescendingInPx { get; set; }
 
+        public int AdditionalVerticalOffset { get; set; }
+
         public RequestFont ActualFont { get; set; }
         public bool ColorGlyphOnTransparentBG { get; set; }
 

@@ -736,7 +736,7 @@ namespace PixelFarm.DrawingGL
                                s.GetVbo(),
                                s.IndexArrayCount,
                                start_x,
-                               start_y);
+                               start_y + s.AdditionalVerticalOffset);
                         }
                     }
                 }
@@ -1072,6 +1072,7 @@ namespace PixelFarm.DrawingGL
             float spanWidth = 0;
             int descendingInPx = 0;
 
+            int maxStripHeight = 0;
             foreach (var kv in _uniqueTypefaces)
             {
                 SameFontWordPlateTextStrip sameFontTextStrip = new SameFontWordPlateTextStrip();
@@ -1084,10 +1085,21 @@ namespace PixelFarm.DrawingGL
                 //**
                 //use max size of height and descending ?
                 descendingInPx = sameFontTextStrip.DescendingInPx;
-                spanHeight = sameFontTextStrip.SpanHeight;
-                spanWidth = sameFontTextStrip.Width;//same width for all strip                 
 
+                maxStripHeight = Math.Max(maxStripHeight, sameFontTextStrip.SpanHeight);
+
+                spanWidth = sameFontTextStrip.Width;//same width for all strip                 
                 vxFmtStr._strips.Add(sameFontTextStrip);
+            }
+
+            //adjust addition vertical height
+
+            spanHeight = maxStripHeight;
+            int stripCount = vxFmtStr._strips.Count;
+            for (int i = 0; i < stripCount; ++i)
+            {
+                SameFontWordPlateTextStrip sameFontTextStrip = vxFmtStr._strips[i];
+                sameFontTextStrip.AdditionalVerticalOffset = maxStripHeight - sameFontTextStrip.SpanHeight;
             }
 
 
