@@ -64,26 +64,26 @@ namespace BitmapBufferEx
     /// <remarks>Attempting to put as many preprocessor hacks in this file, to keep the rest of the codebase relatively clean</remarks>
     public struct BitmapContext : IDisposable
     {
-        private readonly BitmapBuffer _writeableBitmap;
-        private readonly ReadWriteMode _mode;
+        readonly BitmapBuffer _writeableBitmap;
+        readonly ReadWriteMode _mode;
 
-        private readonly int _pixelWidth;
-        private readonly int _pixelHeight;
+        readonly int _pixelWidth;
+        readonly int _pixelHeight;
 
         /// <summary>
         /// The Bitmap
         /// </summary>
-        public BitmapBuffer WriteableBitmap { get { return _writeableBitmap; } }
+        public BitmapBuffer WriteableBitmap => _writeableBitmap;
 
         /// <summary>
         /// Width of the bitmap
         /// </summary>
-        public int Width { get { return _writeableBitmap.PixelWidth; } }
+        public int Width => _writeableBitmap.PixelWidth;
 
         /// <summary>
         /// Height of the bitmap
         /// </summary>
-        public int Height { get { return _writeableBitmap.PixelHeight; } }
+        public int Height => _writeableBitmap.PixelHeight;
 
         /// <summary>
         /// Creates an instance of a BitmapContext, with default mode = ReadWrite
@@ -123,7 +123,7 @@ namespace BitmapBufferEx
         /// <summary>
         /// Gets the length of the Pixels array 
         /// </summary>
-        public int Length { get { return _writeableBitmap.LenInBytes / 4; } }
+        public int Length => _writeableBitmap.LenInBytes / 4; 
 
         /// <summary>
         /// Performs a Copy operation from source BitmapContext to destination BitmapContext

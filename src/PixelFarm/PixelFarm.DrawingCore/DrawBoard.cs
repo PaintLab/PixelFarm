@@ -231,6 +231,7 @@ namespace PixelFarm.Drawing
     {
         Stencil,//default
         LcdSubPix,
+        Copy,
     }
     public abstract class DrawboardBuffer : System.IDisposable
     {

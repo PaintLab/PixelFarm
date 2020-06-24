@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <typeface_builder_config>
-  <set texture_kind="stencil_lcd">
-    <size>16,18,34</size>
+  <set texture_kind="bitmap">
+    <size>16</size>
     <script_lang lang="Latin" hint="none"></script_lang>     
   </set> 
 </typeface_builder_config>

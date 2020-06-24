@@ -53,9 +53,6 @@
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\2_CpuBlit_BitmapAtlas\AggGlyphTextureGen.cs">
       <Link>2_CpuBlit_BitmapAtlas\AggGlyphTextureGen.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\2_CpuBlit_BitmapAtlas\BitmapCacheForSvgGlyph.cs">
-      <Link>2_CpuBlit_BitmapAtlas\BitmapCacheForSvgGlyph.cs</Link>
-    </Compile>
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\2_CpuBlit_BitmapAtlas\BitmapFontMx.cs">
       <Link>2_CpuBlit_BitmapAtlas\BitmapFontMx.cs</Link>
     </Compile>
@@ -96,12 +93,11 @@
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Typography.One\Typography.One.csproj">
+      <Project>{5278fab9-33f0-40e0-adca-7237ea0e935b}</Project>
+      <Name>Typography.One</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
-  <Import Project="..\..\..\..\Typography\Typography.GlyphLayout\Typography.GlyphLayout.projitems" Label="Shared" />
-  <Import Project="..\..\..\..\Typography\Typography.OpenFont\Typography.OpenFont.projitems" Label="Shared" />
-  <Import Project="..\..\..\..\Typography\Typography.TextFlow\Typography.TextFlow.projitems" Label="Shared" />
-  <Import Project="..\..\..\..\Typography\Typography.TextServices\Typography.TextServices.projitems" Label="Shared" />
-  <Import Project="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\Typography.TextBreak.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

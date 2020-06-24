@@ -143,9 +143,17 @@ namespace LayoutFarm.UI
                         _glPainter = new GLPainter();
                         _glPainter.BindToPainterCore(_pcx);
 
+
+                        if (PixelFarm.Drawing.GLES2.GLES2Platform.TextService == null)
+                        {
+                            PixelFarm.Drawing.GLES2.GLES2Platform.TextService = (PixelFarm.Drawing.OpenFontTextService)GlobalTextService.TextService;
+                        }
+
                         if (PixelFarm.Drawing.GLES2.GLES2Platform.TextService != null)
                         {
-                            _glPainter.TextPrinter = new GLBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
+                            var printer = new GLBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
+
+                            _glPainter.TextPrinter = printer;
                         }
                         else
                         {
@@ -199,6 +207,6 @@ namespace LayoutFarm.UI
         public IdbugOutputWindow IdebugOutputWin => _winBridge;
 
 #endif
-       
+
     }
 }

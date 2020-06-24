@@ -1,11 +1,11 @@
 ﻿//MIT, 2020, WinterDev
 using System;
 using System.Collections.Generic;
- 
+
 using Typography.OpenFont;
 using Typography.Contours;
 using PixelFarm.CpuBlit.BitmapAtlas;
- 
+
 
 namespace Mini
 {
@@ -82,6 +82,9 @@ namespace Mini
                     break;
                 case "stencil_lcd":
                     TextureKind = TextureKind.StencilLcdEffect;
+                    break;
+                case "bitmap":
+                    TextureKind = TextureKind.Bitmap;
                     break;
             }
         }

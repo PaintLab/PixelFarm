@@ -648,7 +648,7 @@ namespace PixelFarm.Drawing.WinGdi
             //1.  
             FontGlyph fontGlyph = new FontGlyph();
             fontGlyph.flattenVxs = GetGlyphVxs(glyphIndex);
-            fontGlyph.horiz_adv_x = _typeFace.GetHAdvanceWidthFromGlyphIndex(glyphIndex);
+            fontGlyph.horiz_adv_x = _typeFace.GetAdvanceWidthFromGlyphIndex(glyphIndex);
 
             return fontGlyph;
         }
