@@ -66,19 +66,19 @@ namespace PixelFarm.Drawing
 
             FontKey = CalculateFontKey(facename, SizeInPoints = fontSize.ToPoints(), style);
         }
-        public Len Size { get; private set; }
+        public Len Size { get; }
         //
-        public int FontKey { get; private set; }
+        public int FontKey { get; }
         /// <summary>
         /// font's face name
         /// </summary>
-        public string Name { get; private set; }
-        public FontStyle Style { get; private set; }
+        public string Name { get; }
+        public FontStyle Style { get; }
 
         /// <summary>
         /// emheight in point unit
         /// </summary>
-        public float SizeInPoints { get; private set; }
+        public float SizeInPoints { get; }
 
         public static int CalculateFontKey(string facename, float fontSizeInPts, FontStyle style)
         {

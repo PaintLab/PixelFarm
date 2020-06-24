@@ -185,6 +185,7 @@ namespace PixelFarm.DrawingGL
         /// </summary>
         public ushort PrefixWhitespaceCount { get; set; }
         public RequestFont ActualFont { get; set; }
+        public bool ColorGlyphOnTransparentBG { get; set; }
     }
 
     /// <summary>

@@ -78,12 +78,19 @@ namespace PixelFarm.DrawingGL
             //TextBaseline = TextBaseline.Bottom;
 
 
-            //temp fix
+            //TODO: temp fix, 
             var myAlternativeTypefaceSelector = new MyAlternativeTypefaceSelector();
-            var preferTypefaceList = new MyAlternativeTypefaceSelector.PreferTypefaceList();
-            preferTypefaceList.AddTypefaceName("Source Sans Pro");
-            preferTypefaceList.AddTypefaceName("Sarabun");
-            myAlternativeTypefaceSelector.SetPreferTypefaces(ScriptTagDefs.Latin, preferTypefaceList);
+            {
+                var preferTypefaceList = new MyAlternativeTypefaceSelector.PreferTypefaceList();
+                preferTypefaceList.AddTypefaceName("Source Sans Pro");
+                preferTypefaceList.AddTypefaceName("Sarabun");
+                myAlternativeTypefaceSelector.SetPreferTypefaces(ScriptTagDefs.Latin, preferTypefaceList);
+            }
+            {
+                var preferTypefaceList = new MyAlternativeTypefaceSelector.PreferTypefaceList();
+                preferTypefaceList.AddTypefaceName("Twitter Color Emoji");
+                myAlternativeTypefaceSelector.SetPerferEmoji(preferTypefaceList);
+            }
             AlternativeTypefaceSelector = myAlternativeTypefaceSelector;
 
         }
@@ -752,6 +759,9 @@ namespace PixelFarm.DrawingGL
 
             ChangeFont(reqFont);
 
+            sameFont.SpanHeight = _font.LineSpacingInPixels;
+            sameFont.DescendingInPx = (short)_font.DescentInPixels;
+
             int count = seqs.Count;
             float g_left = 0;
             float g_top = 0;
@@ -856,8 +866,7 @@ namespace PixelFarm.DrawingGL
             sameFont.IndexArray = _vboBuilder._indexList.ToArray();
             sameFont.VertexCoords = _vboBuilder._buffer.ToArray();
             sameFont.Width = acc_x;
-            sameFont.SpanHeight = _font.LineSpacingInPixels;
-            sameFont.DescendingInPx = (short)_font.DescentInPixels;
+
 
             _vboBuilder.Clear();
         }
@@ -935,14 +944,15 @@ namespace PixelFarm.DrawingGL
                 char sample_char = buffer[line_seg.StartAt];
                 bool contains_surrogate_pair = false;
 
+                int codepoint = sample_char;
                 if (line_seg.Length > 1 && line_seg.WordKind == WordKind.SurrogatePair)
                 {
-                    //high serogate pair or not 
-                    glyphIndex = curTypeface.GetGlyphIndex(char.ConvertToUtf32(sample_char, buffer[line_seg.StartAt + 1]));
+                    //high serogate pair or not
+                    glyphIndex = curTypeface.GetGlyphIndex(codepoint = char.ConvertToUtf32(sample_char, buffer[line_seg.StartAt + 1]));
                 }
                 else
                 {
-                    glyphIndex = curTypeface.GetGlyphIndex(sample_char);
+                    glyphIndex = curTypeface.GetGlyphIndex(codepoint);
                 }
 
                 //------------
@@ -955,7 +965,7 @@ namespace PixelFarm.DrawingGL
                         AlternativeTypefaceSelector.LatestTypeface = curTypeface;
                     }
 
-                    if (_textServices.TryGetAlternativeTypefaceFromChar(sample_char, AlternativeTypefaceSelector, out Typeface alternative))
+                    if (_textServices.TryGetAlternativeTypefaceFromCodepoint(codepoint, AlternativeTypefaceSelector, out Typeface alternative))
                     {
                         //change to another
                         curTypeface = alternative;
