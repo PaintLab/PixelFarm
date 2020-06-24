@@ -198,7 +198,6 @@ namespace PixelFarm.DrawingGL
                 painter.Clear(Color.Black);
             }
 
-            GLBitmapGlyphTextPrinter textPrinter = (GLBitmapGlyphTextPrinter)painter.TextPrinter;
 
             float width = renderVxFormattedString.Width;
 
@@ -236,42 +235,29 @@ namespace PixelFarm.DrawingGL
             painter.PreparingWordStrip = true;
             renderVxFormattedString.UseWithWordPlate = false;
 
-            //----
-            RequestFont reqFont = painter.CurrentFont;
-            //This is a temp FIX
-            if (reqFont.Name.Contains("Emoji"))
+
+            GLBitmapGlyphTextPrinter textPrinter = (GLBitmapGlyphTextPrinter)painter.TextPrinter;
+
+            switch (renderVxFormattedString.GlyphMixMode)
             {
-                //System.Diagnostics.Debugger.Break();
-
-                //some font is color font,
-                //eg some bitmap font, some svg, or color glyph
-                //we will send background rgn for it to transparent bg
-                //painter.ClearRect(Color.Transparent, _currentX, _currentY, width, _currentLineHeightMax);
-                //painter.ClearRect(Color.Red, _currentX, _currentY, 200, 200);
-
-                //painter.TextPrinterDrawingTechnique = GlyphTexturePrinterDrawingTechnique.Copy;
-
-                //painter.Clear(Color.Transparent);
-
-                //choice 1
-                //painter.ClearRect(Color.Red, _currentX, _currentY, width, _currentLineHeightMax);
-
-                //--
-                //choice 2
-                Rectangle currentClip = painter.ClipBox;
-                painter.SetClipBox(_currentX, _currentY, (int)(_currentX + width), _currentY + _currentLineHeightMax);
-                painter.Clear(Color.Transparent);
-                painter.SetClipBox(currentClip.Left, currentClip.Top, currentClip.Right, currentClip.Bottom); //restore
-
+                case GLRenderVxFormattedStringGlyphMixMode.OnlyColorGlyphs:
+                    {
+                        //TODO: review this option again
+                        //optional
+                        painter.TextPrinterDrawingTechnique = GlyphTexturePrinterDrawingTechnique.Copy;
+                        Rectangle currentClip = painter.ClipBox;
+                        painter.SetClipBox(_currentX, _currentY, (int)(_currentX + width), _currentY + _currentLineHeightMax);
+                        painter.Clear(Color.Transparent);
+                        painter.SetClipBox(currentClip.Left, currentClip.Top, currentClip.Right, currentClip.Bottom); //restore
+                    }
+                    break;
             }
 
             //use special mode of the GLBitmapGlyphTextPrinter
             //-----------
-
+            textPrinter.WordPlateCreatingMode = true; //turn on platemode
             textPrinter.DrawString(renderVxFormattedString, _currentX, _currentY);
-
-
-
+            textPrinter.WordPlateCreatingMode = false;//switch back
             //-----------
             renderVxFormattedString.UseWithWordPlate = true;//restore
             painter.FontFillColor = prevColor;//restore

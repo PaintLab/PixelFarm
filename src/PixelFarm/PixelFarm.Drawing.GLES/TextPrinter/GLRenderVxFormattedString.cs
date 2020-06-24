@@ -5,25 +5,32 @@ using PixelFarm.Drawing;
 
 namespace PixelFarm.DrawingGL
 {
+    enum GLRenderVxFormattedStringGlyphMixMode : byte
+    {
+        Unknown,
+        OnlyStencilGlyphs,
+        OnlyColorGlyphs,
+        MixedStencilAndColorGlyphs
+    }
+
     /// <summary>
     /// texture-based render vx
     /// </summary>
     public class GLRenderVxFormattedString : PixelFarm.Drawing.RenderVxFormattedString
     {
-
-        
         internal List<GLGlyphPlanSeqStrip> _strips = new List<GLGlyphPlanSeqStrip>();
 
         internal GLRenderVxFormattedString()
         {
 
         }
-        public bool BmpOnTransparentBackground { get; set; }
+
         public ushort WordPlateLeft { get; set; }
         public ushort WordPlateTop { get; set; }
         internal WordPlate OwnerPlate { get; set; }
         internal bool Delay { get; set; }
         internal bool UseWithWordPlate { get; set; }
+        internal GLRenderVxFormattedStringGlyphMixMode GlyphMixMode { get; set; }
         internal void ClearOwnerPlate()
         {
             if (OwnerPlate != null)
@@ -41,7 +48,7 @@ namespace PixelFarm.DrawingGL
 
             Delay = false;
             UseWithWordPlate = true;
-
+            GlyphMixMode = GLRenderVxFormattedStringGlyphMixMode.Unknown;
             int j = _strips.Count;
             for (int i = 0; i < j; ++i)
             {
@@ -172,14 +179,14 @@ namespace PixelFarm.DrawingGL
         /// whitespace count append at the end of this seq
         /// </summary>
         public ushort PostfixWhitespaceCount { get; set; }
-        public bool FontNotChanged { get; set; }
+
         public RequestFont ActualFont { get; set; }
     }
-
-
+    /// <summary>
+    /// same font 
+    /// </summary>
     class GLGlyphPlanSeqStrip
     {
-
         public GLGlyphPlanSeqStrip() { }
         public DrawingGL.VertexBufferObject _vbo;
 
@@ -194,6 +201,7 @@ namespace PixelFarm.DrawingGL
         public int DescendingInPx { get; set; }
 
         public RequestFont ActualFont { get; set; }
+        public bool ColorGlyphOnTransparentBG { get; set; }
 
         internal DrawingGL.VertexBufferObject GetVbo()
         {
@@ -219,6 +227,5 @@ namespace PixelFarm.DrawingGL
             }
         }
     }
-
 
 }

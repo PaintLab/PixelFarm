@@ -140,6 +140,8 @@ namespace PixelFarm.DrawingGL
 
         public TextBaseline TextBaseline { get; set; }
 
+        Typeface _typeface;
+        float _white_space_width;
         public void ChangeFont(RequestFont font)
         {
             if (_font == font || (_font != null && _font.FontKey == font.FontKey))
@@ -148,16 +150,20 @@ namespace PixelFarm.DrawingGL
                 return;
             }
 
-            //System.Diagnostics.Debug.WriteLine(font.Name + font.SizeInPoints);
-
-
+            //System.Diagnostics.Debug.WriteLine(font.Name + font.SizeInPoints);  
             //font has been changed, 
             //resolve for the new one 
             //check if we have this texture-font atlas in our MySimpleGLBitmapFontManager 
             //if not-> request the MySimpleGLBitmapFontManager to create a newone 
             _fontAtlas = _myGLBitmapFontMx.GetFontAtlas(font, out _glBmp);
             _font = font;
-            _px_scale = _textServices.CalculateScaleToPixelsFromPoint(font);
+            _typeface = _textServices.ResolveTypeface(font);
+            _px_scale = _typeface.CalculateScaleToPixel(font.SizeInPoints);
+
+            //TODO: caching 
+            _white_space_width = (int)Math.Round((_typeface.GetAdvanceWidthFromGlyphIndex(_typeface.GetGlyphIndex(' ')) * _px_scale));
+
+            return;
         }
 
         public void Dispose()
@@ -418,7 +424,7 @@ namespace PixelFarm.DrawingGL
             _reusableFmtString.Reuse(); //clear data
         }
 
-        public bool WordPlateMode { get; set; }
+        public bool WordPlateCreatingMode { get; set; }
 
         public void DrawString(GLRenderVxFormattedString vxFmtStr, double x, double y)
         {
@@ -443,64 +449,17 @@ namespace PixelFarm.DrawingGL
                     break;
             }
 
-            if (!vxFmtStr.UseWithWordPlate)
+            if (WordPlateCreatingMode)
             {
-                //one part compose of multiple strip
+                //on word plate mode
+                //in this version
+                //we prepare only stencil glyph
 
-                //List<GLGlyphPlanSeqStrip> strips = vxFmtStr._strips;
-                //int j = strips.Count;
-                //float start_x = (float)Math.Round(x);
-                //float start_y = (float)Math.Floor(y + base_offset);
-
-
-                //for (int n = 0; n < j; ++n)
-                //{
-                //    GLGlyphPlanSeqStrip s = strips[n];
-
-                //    //change font, bitmap atlas , px_scale
-                //    ChangeFont(s.ActualFont);
-
-                //    start_x += s.LocalStripLeftOffset;
-
-                //    _pcx.DrawGlyphImageWithCopyTech_FromVBO(
-                //       _glBmp,
-                //       s.GetVbo(),
-                //       s.IndexArrayCount,
-                //       start_x,
-                //       start_y);
-                //}
-            }
-
-
-            switch (TextDrawingTechnique)
-            {
-                default: throw new NotSupportedException();//UNKNOWN TECH
-
-                case GlyphTexturePrinterDrawingTechnique.Msdf: break; //support this later
-
-                case GlyphTexturePrinterDrawingTechnique.Copy:
-                    {
-                        //eg. bitmap glyph
-
-
-                        //---------
-                        //use word plate 
-                        if (vxFmtStr.UseWithWordPlate && (vxFmtStr.OwnerPlate != null || _painter.TryCreateWordStrip(vxFmtStr)))
+                switch (vxFmtStr.GlyphMixMode)
+                {
+                    case GLRenderVxFormattedStringGlyphMixMode.OnlyColorGlyphs:
                         {
-                            //UseWithWordPlate=> this renderVx has beed assign to wordplate,
-                            //but when OwnerPlate ==null, this mean the wordplate was disposed.
-                            //so create it again
-                            //Has WordPlate
-                            _pcx.DrawWordSpanWithCopyTechnique((GLBitmap)vxFmtStr.OwnerPlate._backBuffer.GetImage(),
-                                vxFmtStr.WordPlateLeft, -vxFmtStr.WordPlateTop - vxFmtStr.SpanHeight,
-                                vxFmtStr.Width, vxFmtStr.SpanHeight,
-                                (float)Math.Round(x),
-                                (float)Math.Floor(y + base_offset));
-                        }
-                        else
-                        {
-                            //BUT if it not success => then...
-
+                            //all glyph are color
                             List<GLGlyphPlanSeqStrip> strips = vxFmtStr._strips;
                             int j = strips.Count;
                             float start_x = (float)Math.Round(x);
@@ -522,169 +481,529 @@ namespace PixelFarm.DrawingGL
                                    start_x,
                                    start_y);
                             }
+                            return;//**
                         }
-
-                    }
-                    break;
-                case GlyphTexturePrinterDrawingTechnique.Stencil:
-                    {
-
-                        if (vxFmtStr.UseWithWordPlate && (vxFmtStr.OwnerPlate != null || _painter.TryCreateWordStrip(vxFmtStr)))
+                    case GLRenderVxFormattedStringGlyphMixMode.MixedStencilAndColorGlyphs:
+                    case GLRenderVxFormattedStringGlyphMixMode.OnlyStencilGlyphs:
                         {
-                            _pcx.DrawWordSpanWithStencilTechnique((GLBitmap)vxFmtStr.OwnerPlate._backBuffer.GetImage(),
-                                vxFmtStr.WordPlateLeft, -vxFmtStr.WordPlateTop - vxFmtStr.SpanHeight,
-                                vxFmtStr.Width, vxFmtStr.SpanHeight,
-                                (float)Math.Round(x),
-                                (float)Math.Floor(y));//*** NO base_offset here
-                        }
-                        else
-                        {
-                            //can't create at this time
-                            //render with vbo 
+                            //in this mode =>don't draw color bitmap
+
                             List<GLGlyphPlanSeqStrip> strips = vxFmtStr._strips;
                             int j = strips.Count;
                             float start_x = (float)Math.Round(x);
                             float start_y = (float)Math.Floor(y + base_offset);
 
-                            for (int n = 0; n < j; ++n)
+                            switch (TextDrawingTechnique)
                             {
-                                GLGlyphPlanSeqStrip s = strips[n];
+                                case GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering:
+                                    {
+                                        for (int n = 0; n < j; ++n)
+                                        {
+                                            GLGlyphPlanSeqStrip s = strips[n];
 
-                                //change font, bitmap atlas , px_scale
-                                ChangeFont(s.ActualFont);
+                                            start_x += s.LocalStripLeftOffset;
 
-                                start_x += s.LocalStripLeftOffset;
-                                _pcx.DrawGlyphImageWithStencilRenderingTechnique4_FromVBO(
+                                            if (s.ColorGlyphOnTransparentBG)
+                                            {
+                                                continue;
+                                            }
+                                            //change font, bitmap atlas , px_scale
+                                            ChangeFont(s.ActualFont);
+
+                                            _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_ForWordStrip_FromVBO(
+                                                      _glBmp,
+                                                      s.GetVbo(),
+                                                      s.IndexArrayCount,
+                                                      start_x,
+                                                      start_y);
+                                        }
+
+                                    }
+                                    break;
+                                case GlyphTexturePrinterDrawingTechnique.Stencil:
+                                    {
+                                        for (int n = 0; n < j; ++n)
+                                        {
+                                            GLGlyphPlanSeqStrip s = strips[n];
+
+                                            start_x += s.LocalStripLeftOffset;
+
+                                            if (s.ColorGlyphOnTransparentBG)
+                                            {
+                                                continue;
+                                            }
+                                            //change font, bitmap atlas , px_scale
+                                            ChangeFont(s.ActualFont);
+
+                                            _pcx.DrawGlyphImageWithStencilRenderingTechnique4_FromVBO(
                                                    _glBmp,
                                                    s.GetVbo(),
                                                    s.IndexArrayCount,
                                                    start_x,
                                                    start_y);
-
+                                        }
+                                    }
+                                    break;
                             }
+                            return;//** 
                         }
-                    }
-                    break;
-                case GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering:
+                }
+            }
+
+            //if (!vxFmtStr.UseWithWordPlate)
+            //{
+            //    //one part compose of multiple strip
+
+            //    //List<GLGlyphPlanSeqStrip> strips = vxFmtStr._strips;
+            //    //int j = strips.Count;
+            //    //float start_x = (float)Math.Round(x);
+            //    //float start_y = (float)Math.Floor(y + base_offset);
+
+
+            //    //for (int n = 0; n < j; ++n)
+            //    //{
+            //    //    GLGlyphPlanSeqStrip s = strips[n];
+
+            //    //    //change font, bitmap atlas , px_scale
+            //    //    ChangeFont(s.ActualFont);
+
+            //    //    start_x += s.LocalStripLeftOffset;
+
+            //    //    _pcx.DrawGlyphImageWithCopyTech_FromVBO(
+            //    //       _glBmp,
+            //    //       s.GetVbo(),
+            //    //       s.IndexArrayCount,
+            //    //       start_x,
+            //    //       start_y);
+            //    //}
+            //}
+            if (vxFmtStr.GlyphMixMode == GLRenderVxFormattedStringGlyphMixMode.OnlyColorGlyphs)
+            {
+                //eg. bitmap glyph 
+                //---------
+                //use word plate 
+                if (vxFmtStr.UseWithWordPlate && (vxFmtStr.OwnerPlate != null || _painter.TryCreateWordStrip(vxFmtStr)))
+                {
+                    //UseWithWordPlate=> this renderVx has beed assign to wordplate,
+                    //but when OwnerPlate ==null, this mean the wordplate was disposed.
+                    //so create it again
+                    //Has WordPlate
+                    _pcx.DrawWordSpanWithCopyTechnique((GLBitmap)vxFmtStr.OwnerPlate._backBuffer.GetImage(),
+                        vxFmtStr.WordPlateLeft, -vxFmtStr.WordPlateTop - vxFmtStr.SpanHeight,
+                        vxFmtStr.Width, vxFmtStr.SpanHeight,
+                        (float)Math.Round(x),
+                        (float)Math.Floor(y + base_offset));
+                }
+                else
+                {
+                    //BUT if it not success => then...
+
+                    List<GLGlyphPlanSeqStrip> strips = vxFmtStr._strips;
+                    int j = strips.Count;
+                    float start_x = (float)Math.Round(x);
+                    float start_y = (float)Math.Floor(y + base_offset);
+
+                    for (int n = 0; n < j; ++n)
                     {
+                        GLGlyphPlanSeqStrip s = strips[n];
 
+                        //change font, bitmap atlas , px_scale
+                        ChangeFont(s.ActualFont);
 
-                        //LCD-Effect**** 
-                        //use word plate 
-                        Color bgColorHint = _painter.TextBgColorHint;
-                        if (vxFmtStr.UseWithWordPlate && bgColorHint.A == 255 && (vxFmtStr.OwnerPlate != null || _painter.TryCreateWordStrip(vxFmtStr)))
+                        start_x += s.LocalStripLeftOffset;
+
+                        _pcx.DrawGlyphImageWithCopyTech_FromVBO(
+                           _glBmp,
+                           s.GetVbo(),
+                           s.IndexArrayCount,
+                           start_x,
+                           start_y);
+                    }
+                }
+            }
+            else
+            {
+                //draw stencil
+                switch (TextDrawingTechnique)
+                {
+                    default: throw new NotSupportedException();
+                    case GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering:
                         {
-                            //1. opaque bg is candidate for word plate
-                            //2. if it already has a WordPlate then render with WordPlate
-                            //3. if it does not have a WordPlate try create a WordStrip=>
-                            //      if success then render with word plate
-
-                            //review:
-                            //solid bg color
-                            //TODO: configure this value to range 
-                            //since this works with since some light color (near white) too 
-                            _pcx.DrawWordSpanWithLcdSubpixForSolidBgColor((GLBitmap)vxFmtStr.OwnerPlate._backBuffer.GetImage(),
-                              vxFmtStr.WordPlateLeft, -vxFmtStr.WordPlateTop - vxFmtStr.SpanHeight - base_offset,
-                              vxFmtStr.Width, vxFmtStr.SpanHeight,
-                              (float)Math.Round(x),
-                              (float)Math.Floor(y + base_offset), //USE base_offset
-                              _painter.TextBgColorHint);
-                        }
-                        else
-                        {
-                            //not use wordplate
-                            if (_painter.PreparingWordStrip)
+                            //LCD-Effect**** 
+                            //use word plate 
+                            Color bgColorHint = _painter.TextBgColorHint;
+                            if (vxFmtStr.UseWithWordPlate && bgColorHint.A == 255 && (vxFmtStr.OwnerPlate != null || _painter.TryCreateWordStrip(vxFmtStr)))
                             {
-                                List<GLGlyphPlanSeqStrip> strips = vxFmtStr._strips;
-                                int j = strips.Count;
-                                float start_x = (float)Math.Round(x);
-                                float start_y = (float)Math.Floor(y + base_offset);
+                                //1. opaque bg is candidate for word plate
+                                //2. if it already has a WordPlate then render with WordPlate
+                                //3. if it does not have a WordPlate try create a WordStrip=>
+                                //      if success then render with word plate
 
-                                for (int n = 0; n < j; ++n)
-                                {
-                                    GLGlyphPlanSeqStrip s = strips[n];
-
-                                    //change font, bitmap atlas , px_scale
-                                    ChangeFont(s.ActualFont);
-
-                                    start_x += s.LocalStripLeftOffset;
-                                    _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_ForWordStrip_FromVBO(
-                                                       _glBmp,
-                                                       s.GetVbo(),
-                                                       s.IndexArrayCount,
-                                                       start_x,
-                                                       start_y);
-                                }
+                                //review:
+                                //solid bg color
+                                //TODO: configure this value to range 
+                                //since this works with since some light color (near white) too 
+                                _pcx.DrawWordSpanWithLcdSubpixForSolidBgColor((GLBitmap)vxFmtStr.OwnerPlate._backBuffer.GetImage(),
+                                  vxFmtStr.WordPlateLeft, -vxFmtStr.WordPlateTop - vxFmtStr.SpanHeight - base_offset,
+                                  vxFmtStr.Width, vxFmtStr.SpanHeight,
+                                  (float)Math.Round(x),
+                                  (float)Math.Floor(y + base_offset), //USE base_offset
+                                  _painter.TextBgColorHint);
                             }
                             else
                             {
+                                //not use wordplate
+                                if (_painter.PreparingWordStrip)
+                                {
+                                    List<GLGlyphPlanSeqStrip> strips = vxFmtStr._strips;
+                                    int j = strips.Count;
+                                    float start_x = (float)Math.Round(x);
+                                    float start_y = (float)Math.Floor(y + base_offset);
+
+                                    for (int n = 0; n < j; ++n)
+                                    {
+                                        GLGlyphPlanSeqStrip s = strips[n];
+
+                                        //change font, bitmap atlas , px_scale
+                                        ChangeFont(s.ActualFont);
+
+                                        start_x += s.LocalStripLeftOffset;
+                                        _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_ForWordStrip_FromVBO(
+                                                           _glBmp,
+                                                           s.GetVbo(),
+                                                           s.IndexArrayCount,
+                                                           start_x,
+                                                           start_y);
+                                    }
+                                }
+                                else
+                                {
+                                    List<GLGlyphPlanSeqStrip> strips = vxFmtStr._strips;
+                                    int j = strips.Count;
+                                    float start_x = (float)Math.Round(x);
+                                    float start_y = (float)Math.Floor(y + base_offset);
+                                    float spanHeight = 0;
+                                    float spanWidth = 0;
+
+                                    for (int n = 0; n < j; ++n)
+                                    {
+                                        GLGlyphPlanSeqStrip s = strips[n];
+                                        spanHeight = s.SpanHeight;
+                                        spanWidth += s.Width;
+
+                                        //change font, bitmap atlas , px_scale
+                                        ChangeFont(s.ActualFont);
+
+                                        start_x += s.LocalStripLeftOffset;
+                                        _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(
+                                                           _glBmp,
+                                                           s.GetVbo(),
+                                                           s.IndexArrayCount,
+                                                           start_x,
+                                                           start_y);
+                                    }
+                                }
+                            }
+
+                        }
+                        break;
+                    case GlyphTexturePrinterDrawingTechnique.Stencil:
+                        {
+
+                            if (vxFmtStr.UseWithWordPlate && (vxFmtStr.OwnerPlate != null || _painter.TryCreateWordStrip(vxFmtStr)))
+                            {
+                                _pcx.DrawWordSpanWithStencilTechnique((GLBitmap)vxFmtStr.OwnerPlate._backBuffer.GetImage(),
+                                    vxFmtStr.WordPlateLeft, -vxFmtStr.WordPlateTop - vxFmtStr.SpanHeight,
+                                    vxFmtStr.Width, vxFmtStr.SpanHeight,
+                                    (float)Math.Round(x),
+                                    (float)Math.Floor(y));//*** NO base_offset here
+                            }
+                            else
+                            {
+                                //can't create at this time
+                                //render with vbo 
                                 List<GLGlyphPlanSeqStrip> strips = vxFmtStr._strips;
                                 int j = strips.Count;
                                 float start_x = (float)Math.Round(x);
                                 float start_y = (float)Math.Floor(y + base_offset);
-                                float spanHeight = 0;
-                                float spanWidth = 0;
 
                                 for (int n = 0; n < j; ++n)
                                 {
                                     GLGlyphPlanSeqStrip s = strips[n];
-                                    spanHeight = s.SpanHeight;
-                                    spanWidth += s.Width;
 
                                     //change font, bitmap atlas , px_scale
                                     ChangeFont(s.ActualFont);
 
                                     start_x += s.LocalStripLeftOffset;
-                                    _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(
+                                    _pcx.DrawGlyphImageWithStencilRenderingTechnique4_FromVBO(
                                                        _glBmp,
                                                        s.GetVbo(),
                                                        s.IndexArrayCount,
                                                        start_x,
                                                        start_y);
+
                                 }
                             }
                         }
+                        break;
+                }
+
+                if (vxFmtStr.GlyphMixMode == GLRenderVxFormattedStringGlyphMixMode.MixedStencilAndColorGlyphs)
+                {
+                    ////draw color pat
+                    List<GLGlyphPlanSeqStrip> strips = vxFmtStr._strips;
+                    int j = strips.Count;
+                    float start_x = (float)Math.Round(x);
+                    float start_y = (float)Math.Floor(y + base_offset);
+
+                    for (int n = 0; n < j; ++n)
+                    {
+                        GLGlyphPlanSeqStrip s = strips[n];
+
+                        //TEST
+                        start_x += 20;// s.LocalStripLeftOffset;
+
+                        if (s.ColorGlyphOnTransparentBG)
+                        {
+                            //change font, bitmap atlas , px_scale
+                            ChangeFont(s.ActualFont);
+                            //this.TextDrawingTechnique = GlyphTexturePrinterDrawingTechnique.Copy;
+                            _pcx.DrawGlyphImageWithCopyTech_FromVBO(
+                               _glBmp,
+                               s.GetVbo(),
+                               s.IndexArrayCount,
+                               start_x,
+                               start_y);
+                        }
                     }
-                    break;
+                }
             }
+
+
+            //switch (vxFmtStr.GlyphMixMode)
+            //{
+            //    default: throw new NotSupportedException();
+            //    case GLRenderVxFormattedStringGlyphMixMode.OnlyColorGlyphs:
+            //        {
+
+            //            break;
+            //    case GLRenderVxFormattedStringGlyphMixMode.OnlyStencilGlyphs:
+            //    case GLRenderVxFormattedStringGlyphMixMode.MixedStencilAndColorGlyphs:
+            //        {
+
+            //        }
+            //        break;
+
+
+            //}
+            //switch (TextDrawingTechnique)
+            //{
+            //    default: throw new NotSupportedException();//UNKNOWN TECH
+
+            //    case GlyphTexturePrinterDrawingTechnique.Msdf: break; //support this later
+
+            //    case GlyphTexturePrinterDrawingTechnique.Copy:
+            //        {
+            //            //eg. bitmap glyph 
+            //            //---------
+            //            //use word plate 
+            //            if (vxFmtStr.UseWithWordPlate && (vxFmtStr.OwnerPlate != null || _painter.TryCreateWordStrip(vxFmtStr)))
+            //            {
+            //                //UseWithWordPlate=> this renderVx has beed assign to wordplate,
+            //                //but when OwnerPlate ==null, this mean the wordplate was disposed.
+            //                //so create it again
+            //                //Has WordPlate
+            //                _pcx.DrawWordSpanWithCopyTechnique((GLBitmap)vxFmtStr.OwnerPlate._backBuffer.GetImage(),
+            //                    vxFmtStr.WordPlateLeft, -vxFmtStr.WordPlateTop - vxFmtStr.SpanHeight,
+            //                    vxFmtStr.Width, vxFmtStr.SpanHeight,
+            //                    (float)Math.Round(x),
+            //                    (float)Math.Floor(y + base_offset));
+            //            }
+            //            else
+            //            {
+            //                //BUT if it not success => then...
+
+            //                List<GLGlyphPlanSeqStrip> strips = vxFmtStr._strips;
+            //                int j = strips.Count;
+            //                float start_x = (float)Math.Round(x);
+            //                float start_y = (float)Math.Floor(y + base_offset);
+
+            //                for (int n = 0; n < j; ++n)
+            //                {
+            //                    GLGlyphPlanSeqStrip s = strips[n];
+
+            //                    //change font, bitmap atlas , px_scale
+            //                    ChangeFont(s.ActualFont);
+
+            //                    start_x += s.LocalStripLeftOffset;
+
+            //                    _pcx.DrawGlyphImageWithCopyTech_FromVBO(
+            //                       _glBmp,
+            //                       s.GetVbo(),
+            //                       s.IndexArrayCount,
+            //                       start_x,
+            //                       start_y);
+            //                }
+            //            }
+
+            //        }
+            //        break;
+            //    case GlyphTexturePrinterDrawingTechnique.Stencil:
+            //        {
+
+            //            if (vxFmtStr.UseWithWordPlate && (vxFmtStr.OwnerPlate != null || _painter.TryCreateWordStrip(vxFmtStr)))
+            //            {
+            //                _pcx.DrawWordSpanWithStencilTechnique((GLBitmap)vxFmtStr.OwnerPlate._backBuffer.GetImage(),
+            //                    vxFmtStr.WordPlateLeft, -vxFmtStr.WordPlateTop - vxFmtStr.SpanHeight,
+            //                    vxFmtStr.Width, vxFmtStr.SpanHeight,
+            //                    (float)Math.Round(x),
+            //                    (float)Math.Floor(y));//*** NO base_offset here
+            //            }
+            //            else
+            //            {
+            //                //can't create at this time
+            //                //render with vbo 
+            //                List<GLGlyphPlanSeqStrip> strips = vxFmtStr._strips;
+            //                int j = strips.Count;
+            //                float start_x = (float)Math.Round(x);
+            //                float start_y = (float)Math.Floor(y + base_offset);
+
+            //                for (int n = 0; n < j; ++n)
+            //                {
+            //                    GLGlyphPlanSeqStrip s = strips[n];
+
+            //                    //change font, bitmap atlas , px_scale
+            //                    ChangeFont(s.ActualFont);
+
+            //                    start_x += s.LocalStripLeftOffset;
+            //                    _pcx.DrawGlyphImageWithStencilRenderingTechnique4_FromVBO(
+            //                                       _glBmp,
+            //                                       s.GetVbo(),
+            //                                       s.IndexArrayCount,
+            //                                       start_x,
+            //                                       start_y);
+
+            //                }
+            //            }
+            //        }
+            //        break;
+            //    case GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering:
+            //        {
+
+
+            //            //LCD-Effect**** 
+            //            //use word plate 
+            //            Color bgColorHint = _painter.TextBgColorHint;
+            //            if (vxFmtStr.UseWithWordPlate && bgColorHint.A == 255 && (vxFmtStr.OwnerPlate != null || _painter.TryCreateWordStrip(vxFmtStr)))
+            //            {
+            //                //1. opaque bg is candidate for word plate
+            //                //2. if it already has a WordPlate then render with WordPlate
+            //                //3. if it does not have a WordPlate try create a WordStrip=>
+            //                //      if success then render with word plate
+
+            //                //review:
+            //                //solid bg color
+            //                //TODO: configure this value to range 
+            //                //since this works with since some light color (near white) too 
+            //                _pcx.DrawWordSpanWithLcdSubpixForSolidBgColor((GLBitmap)vxFmtStr.OwnerPlate._backBuffer.GetImage(),
+            //                  vxFmtStr.WordPlateLeft, -vxFmtStr.WordPlateTop - vxFmtStr.SpanHeight - base_offset,
+            //                  vxFmtStr.Width, vxFmtStr.SpanHeight,
+            //                  (float)Math.Round(x),
+            //                  (float)Math.Floor(y + base_offset), //USE base_offset
+            //                  _painter.TextBgColorHint);
+            //            }
+            //            else
+            //            {
+            //                //not use wordplate
+            //                if (_painter.PreparingWordStrip)
+            //                {
+            //                    List<GLGlyphPlanSeqStrip> strips = vxFmtStr._strips;
+            //                    int j = strips.Count;
+            //                    float start_x = (float)Math.Round(x);
+            //                    float start_y = (float)Math.Floor(y + base_offset);
+
+            //                    for (int n = 0; n < j; ++n)
+            //                    {
+            //                        GLGlyphPlanSeqStrip s = strips[n];
+
+            //                        //change font, bitmap atlas , px_scale
+            //                        ChangeFont(s.ActualFont);
+
+            //                        start_x += s.LocalStripLeftOffset;
+            //                        _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_ForWordStrip_FromVBO(
+            //                                           _glBmp,
+            //                                           s.GetVbo(),
+            //                                           s.IndexArrayCount,
+            //                                           start_x,
+            //                                           start_y);
+            //                    }
+            //                }
+            //                else
+            //                {
+            //                    List<GLGlyphPlanSeqStrip> strips = vxFmtStr._strips;
+            //                    int j = strips.Count;
+            //                    float start_x = (float)Math.Round(x);
+            //                    float start_y = (float)Math.Floor(y + base_offset);
+            //                    float spanHeight = 0;
+            //                    float spanWidth = 0;
+
+            //                    for (int n = 0; n < j; ++n)
+            //                    {
+            //                        GLGlyphPlanSeqStrip s = strips[n];
+            //                        spanHeight = s.SpanHeight;
+            //                        spanWidth += s.Width;
+
+            //                        //change font, bitmap atlas , px_scale
+            //                        ChangeFont(s.ActualFont);
+
+            //                        start_x += s.LocalStripLeftOffset;
+            //                        _pcx.DrawGlyphImageWithSubPixelRenderingTechnique4_FromVBO(
+            //                                           _glBmp,
+            //                                           s.GetVbo(),
+            //                                           s.IndexArrayCount,
+            //                                           start_x,
+            //                                           start_y);
+            //                    }
+            //                }
+            //            }
+            //        }
+            //        break;
+            //}
         }
 #if DEBUG
         static int _dbugCount;
 #endif
 
 
-        void CreateTextCoords(GLGlyphPlanSeqStrip planSeqStrip, List<GLFormattedGlyphPlanSeq> seqs)
+        void CreateTextCoords2(GLGlyphPlanSeqStrip sameFont, List<GLFormattedGlyphPlanSeq> seqs, RequestFont reqFont)
         {
             int top = 0;//simulate top
             int left = 0;//simulate left
 
+
+            //change font once
+            ChangeFont(reqFont);
+
             int count = seqs.Count;
             float g_left = 0;
             float g_top = 0;
-
-            float px_scale = _px_scale;
+            float px_scale = _px_scale; //init
             float scaleFromTexture = 1; //TODO: support msdf auto scale 
-            float bottom = 0;
+            float bottom = (float)top + _font.AscentInPixels - _font.DescentInPixels;
             float acc_x = 0; //local accumulate x
             float acc_y = 0; //local accumulate y  
             bool hasSomeGlyphs = false;
-            int each_white_spaceW = 0;
+            int each_white_spaceW = (int)Math.Round(_white_space_width);
+
+
+            _vboBuilder.Clear();//***
+            _vboBuilder.SetTextureInfo(_glBmp.Width, _glBmp.Height, _glBmp.IsYFlipped, _pcx.OriginKind);
 
             for (int s = 0; s < count; ++s)
             {
                 GLFormattedGlyphPlanSeq sq = seqs[s];
-                if (s == 0)
-                {
-                    //the first one
-                    ChangeFont(sq.ActualFont);
 
-                    //----
-                    px_scale = _px_scale;
-                    bottom = (float)top + _font.AscentInPixels - _font.DescentInPixels;
-                    _vboBuilder.Clear();//***
-                    _vboBuilder.SetTextureInfo(_glBmp.Width, _glBmp.Height, _glBmp.IsYFlipped, _pcx.OriginKind);
-                    each_white_spaceW = (int)Math.Round((sq.Typeface.GetAdvanceWidthFromGlyphIndex(sq.Typeface.GetGlyphIndex(' ')) * _px_scale));
-                }
+                bool isTargetFont = sq.ActualFont == reqFont;
 
                 //create temp buffer span that describe the part of a whole char buffer 
                 //ask text service to parse user input char buffer and create a glyph-plan-sequence (list of glyph-plan) 
@@ -722,16 +1041,24 @@ namespace PixelFarm.DrawingGL
 
                     acc_x += (float)Math.Round(glyph.AdvanceX * px_scale);
                     g_top = (float)Math.Floor(g_top);//adjust to integer num *** 
-                                                     //
-                    _vboBuilder.WriteRect(srcRect, g_left, g_top, scaleFromTexture);
-                    hasSomeGlyphs = true;
+
+                    if (isTargetFont)
+                    {
+                        hasSomeGlyphs = true;
+                        _vboBuilder.WriteRect(srcRect, g_left, g_top, scaleFromTexture);
+                    }
+
+
                 }
 
                 //
                 if (sq.PostfixWhitespaceCount > 0)
                 {
                     //***
-                    _vboBuilder.AppendDegenerativeTriangle();
+                    if (isTargetFont)
+                    {
+                        _vboBuilder.AppendDegenerativeTriangle();
+                    }
                     acc_x += each_white_spaceW * sq.PostfixWhitespaceCount;
                 }
             }
@@ -741,15 +1068,114 @@ namespace PixelFarm.DrawingGL
                 _vboBuilder.AppendDegenerativeTriangle();
             }
 
-            planSeqStrip.IndexArrayCount = _vboBuilder._indexList.Count;
-            planSeqStrip.IndexArray = _vboBuilder._indexList.ToArray();
-            planSeqStrip.VertexCoords = _vboBuilder._buffer.ToArray();
-            planSeqStrip.Width = acc_x;
-            planSeqStrip.SpanHeight = _font.LineSpacingInPixels;
-            planSeqStrip.DescendingInPx = (short)_font.DescentInPixels;
+            sameFont.IndexArrayCount = _vboBuilder._indexList.Count;
+            sameFont.IndexArray = _vboBuilder._indexList.ToArray();
+            sameFont.VertexCoords = _vboBuilder._buffer.ToArray();
+            sameFont.Width = acc_x;
+            sameFont.SpanHeight = _font.LineSpacingInPixels;
+            sameFont.DescendingInPx = (short)_font.DescentInPixels;
 
             _vboBuilder.Clear();
         }
+
+        //void CreateTextCoords(GLGlyphPlanSeqStrip planSeqStrip, List<GLFormattedGlyphPlanSeq> seqs)
+        //{
+        //    int top = 0;//simulate top
+        //    int left = 0;//simulate left
+
+        //    int count = seqs.Count;
+        //    float g_left = 0;
+        //    float g_top = 0;
+
+        //    float px_scale = _px_scale; //init
+        //    float scaleFromTexture = 1; //TODO: support msdf auto scale 
+        //    float bottom = (float)top + _font.AscentInPixels - _font.DescentInPixels;
+        //    float acc_x = 0; //local accumulate x
+        //    float acc_y = 0; //local accumulate y  
+        //    bool hasSomeGlyphs = false;
+
+        //    int each_white_spaceW = (int)Math.Round(_white_space_width);
+
+        //    for (int s = 0; s < count; ++s)
+        //    {
+        //        GLFormattedGlyphPlanSeq sq = seqs[s];
+
+        //        //the first one
+        //        ChangeFont(sq.ActualFont);
+        //        //----
+        //        px_scale = _px_scale;
+        //        bottom = (float)top + _font.AscentInPixels - _font.DescentInPixels;
+
+        //        _vboBuilder.Clear();//***
+        //        _vboBuilder.SetTextureInfo(_glBmp.Width, _glBmp.Height, _glBmp.IsYFlipped, _pcx.OriginKind);
+
+        //        each_white_spaceW = (int)Math.Round((sq.Typeface.GetAdvanceWidthFromGlyphIndex(sq.Typeface.GetGlyphIndex(' ')) * _px_scale));
+
+
+        //        //create temp buffer span that describe the part of a whole char buffer 
+        //        //ask text service to parse user input char buffer and create a glyph-plan-sequence (list of glyph-plan) 
+        //        //with specific request font   
+        //        GlyphPlanSequence glyphPlanSeq = sq.seq;
+        //        int seqLen = glyphPlanSeq.Count;
+        //        for (int i = 0; i < seqLen; ++i)
+        //        {
+        //            UnscaledGlyphPlan glyph = glyphPlanSeq[i];
+
+        //            if (!_fontAtlas.TryGetItem(glyph.glyphIndex,
+        //                out AtlasItem atlasItem))
+        //            {
+        //                //if no glyph data, we should render a missing glyph ***
+        //                continue;
+        //            }
+        //            //--------------------------------------
+        //            //TODO: review precise height in float
+        //            //--------------------------------------  
+        //            //paint src rect
+
+        //            var srcRect = new Rectangle(atlasItem.Left, atlasItem.Top, atlasItem.Width, atlasItem.Height);
+
+        //            //offset length from 'base-line'
+        //            float x_offset = acc_x + (float)Math.Round(glyph.OffsetX * px_scale - atlasItem.TextureXOffset);
+        //            float y_offset = acc_y + (float)Math.Round(glyph.OffsetY * px_scale - atlasItem.TextureYOffset) + srcRect.Height; //***
+
+        //            //NOTE:
+        //            // -glyphData.TextureXOffset => restore to original pos
+        //            // -glyphData.TextureYOffset => restore to original pos 
+        //            //--------------------------              
+
+        //            g_left = (float)(left + x_offset);
+        //            g_top = (float)(bottom - y_offset); //***
+
+        //            acc_x += (float)Math.Round(glyph.AdvanceX * px_scale);
+        //            g_top = (float)Math.Floor(g_top);//adjust to integer num *** 
+        //                                             //
+        //            _vboBuilder.WriteRect(srcRect, g_left, g_top, scaleFromTexture);
+        //            hasSomeGlyphs = true;
+        //        }
+
+        //        //
+        //        if (sq.PostfixWhitespaceCount > 0)
+        //        {
+        //            //***
+        //            _vboBuilder.AppendDegenerativeTriangle();
+        //            acc_x += each_white_spaceW * sq.PostfixWhitespaceCount;
+        //        }
+        //    }
+
+        //    if (hasSomeGlyphs)
+        //    {
+        //        _vboBuilder.AppendDegenerativeTriangle();
+        //    }
+
+        //    planSeqStrip.IndexArrayCount = _vboBuilder._indexList.Count;
+        //    planSeqStrip.IndexArray = _vboBuilder._indexList.ToArray();
+        //    planSeqStrip.VertexCoords = _vboBuilder._buffer.ToArray();
+        //    planSeqStrip.Width = acc_x;
+        //    planSeqStrip.SpanHeight = _font.LineSpacingInPixels;
+        //    planSeqStrip.DescendingInPx = (short)_font.DescentInPixels;
+
+        //    _vboBuilder.Clear();
+        //}
 
 
         public AlternativeTypefaceSelector AlternativeTypefaceSelector { get; set; }
@@ -778,24 +1204,27 @@ namespace PixelFarm.DrawingGL
             //eg eng font + emoji
 
             int count = _lineSegs.Count;
-
-            GLFormattedGlyphPlanSeq latestGLFormatPlanSeq = null;
-            GLGlyphPlanSeqStrip latestSeqStrip = null;
-
             _tmpStrips.Clear();//ensure
 
+            //check if we have a mix stencil and color glyph or not
+            GLRenderVxFormattedStringGlyphMixMode glyphMixMode = GLRenderVxFormattedStringGlyphMixMode.Unknown;
+            GLFormattedGlyphPlanSeq latestFmtGlyphPlanSeq = null;
+
+            Dictionary<Typeface, RequestFont> uniqueTypefaces = new Dictionary<Typeface, RequestFont>();
+            List<GLFormattedGlyphPlanSeq> fmtGlyphPlanSeqs = new List<GLFormattedGlyphPlanSeq>();
             for (int i = 0; i < count; ++i)
             {
                 TextPrinterLineSegment line_seg = _lineSegs.GetLineSegment(i);
+
                 //find a proper font for each segment
                 //so we need to check 
                 SpanBreakInfo spBreakInfo = line_seg.BreakInfo;
 
-                if (line_seg.WordKind == WordKind.Whitespace && latestGLFormatPlanSeq != null)
+                if (line_seg.WordKind == WordKind.Whitespace && latestFmtGlyphPlanSeq != null)
                 {
                     //not need to layout this
                     //append this whitespace info to prev part
-                    latestGLFormatPlanSeq.PostfixWhitespaceCount = line_seg.Length;
+                    latestFmtGlyphPlanSeq.PostfixWhitespaceCount = line_seg.Length;
                     continue;
                 }
 
@@ -850,69 +1279,110 @@ namespace PixelFarm.DrawingGL
                     }
                 }
 
-                // 
-                _textServices.CurrentScriptLang = new ScriptLang(spBreakInfo.ScriptTag, spBreakInfo.LangTag);
 
+                _textServices.CurrentScriptLang = new ScriptLang(spBreakInfo.ScriptTag, spBreakInfo.LangTag);
                 //layout glyphs in each context
                 GlyphPlanSequence seq = _textServices.CreateGlyphPlanSeq(buff, curTypeface, reqFont.SizeInPoints);
                 seq.IsRightToLeft = spBreakInfo.RightToLeft;
 
+
+                if (!uniqueTypefaces.TryGetValue(curTypeface, out RequestFont reqFont2))
+                {
+                    reqFont2 = new RequestFont(curTypeface.Name, reqFont.SizeInPoints);
+                    uniqueTypefaces[curTypeface] = reqFont2;
+                }
+
+
+                //----------------
+                //create an object that hold more information about GlyphPlanSequence
                 GLFormattedGlyphPlanSeq formattedGlyphPlanSeq = new GLFormattedGlyphPlanSeq();
                 formattedGlyphPlanSeq.seq = seq;
+                formattedGlyphPlanSeq.ActualFont = reqFont2;
                 formattedGlyphPlanSeq.Typeface = curTypeface;
                 formattedGlyphPlanSeq.ContainsSurrogatePair = contains_surrogate_pair;
+                formattedGlyphPlanSeq.ColorGlyphOnTransparentBG = (curTypeface.HasSvgTable() || curTypeface.IsBitmapFont || curTypeface.HasColorTable());
+                //------------------------------
 
-                if (latestGLFormatPlanSeq != null && latestGLFormatPlanSeq.Typeface == curTypeface)
+
+                switch (glyphMixMode)
                 {
-                    formattedGlyphPlanSeq.ActualFont = latestGLFormatPlanSeq.ActualFont;
-                    formattedGlyphPlanSeq.FontNotChanged = true;
+                    case GLRenderVxFormattedStringGlyphMixMode.Unknown:
+                        {
+                            if (formattedGlyphPlanSeq.ColorGlyphOnTransparentBG)
+                            {
+                                glyphMixMode = GLRenderVxFormattedStringGlyphMixMode.OnlyColorGlyphs;
+                            }
+                            else
+                            {
+                                glyphMixMode = GLRenderVxFormattedStringGlyphMixMode.OnlyStencilGlyphs;
+                            }
+                        }
+                        break;
+                    case GLRenderVxFormattedStringGlyphMixMode.MixedStencilAndColorGlyphs:
+                        //not need to evalute 
+                        break;
+                    case GLRenderVxFormattedStringGlyphMixMode.OnlyColorGlyphs:
+                        {
+                            if (formattedGlyphPlanSeq.ColorGlyphOnTransparentBG)
+                            {
+                                //already color
+                            }
+                            else
+                            {
+                                glyphMixMode = GLRenderVxFormattedStringGlyphMixMode.MixedStencilAndColorGlyphs;
+                            }
+                        }
+                        break;
+                    case GLRenderVxFormattedStringGlyphMixMode.OnlyStencilGlyphs:
+                        {
+                            if (formattedGlyphPlanSeq.ColorGlyphOnTransparentBG)
+                            {
+                                //
+                                glyphMixMode = GLRenderVxFormattedStringGlyphMixMode.MixedStencilAndColorGlyphs;
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                        break;
                 }
-                else
-                {
-                    latestSeqStrip = new GLGlyphPlanSeqStrip();
-                    _tmpPlanSeqStrips.Add(latestSeqStrip);
 
-                    latestSeqStrip.ActualFont = formattedGlyphPlanSeq.ActualFont = new RequestFont(curTypeface.Name, reqFont.SizeInPoints);
-                }
-
-                latestGLFormatPlanSeq = formattedGlyphPlanSeq;
-
-                if (latestSeqStrip == null)
-                {
-                    latestSeqStrip = new GLGlyphPlanSeqStrip();
-                    latestSeqStrip.ActualFont = latestSeqStrip.ActualFont;
-                    _tmpPlanSeqStrips.Add(latestSeqStrip);
-                }
-
-                if (latestSeqStrip.ActualFont == null)
-                {
-
-                }
-
-
-                _tmpStrips.Add(latestGLFormatPlanSeq);
+                //add to temp location
+                fmtGlyphPlanSeqs.Add(latestFmtGlyphPlanSeq = formattedGlyphPlanSeq);
             }
 
-
-            count = _tmpPlanSeqStrips.Count;
+            //-------------             
+            //a fmtGlyphPlanSeqs may contains glyph from  more than 1 font,
+            //now, create a overlapped strip for each 
 
             vxFmtStr._strips.Clear();
+            GLGlyphPlanSeqStrip[] sameFontStrips = new GLGlyphPlanSeqStrip[uniqueTypefaces.Count];
+            int t_index = 0;
 
             float spanHeight = 0;
             float spanWidth = 0;
             int descendingInPx = 0;
 
-            for (int i = 0; i < count; ++i)
+            foreach (var kv in uniqueTypefaces)
             {
-                GLGlyphPlanSeqStrip seqStrip = _tmpPlanSeqStrips[i];
-                CreateTextCoords(seqStrip, _tmpStrips);
-                vxFmtStr._strips.Add(seqStrip);
+                GLGlyphPlanSeqStrip sameFontGlyphStrip = new GLGlyphPlanSeqStrip();
+                sameFontGlyphStrip.ActualFont = kv.Value;
 
-                descendingInPx = seqStrip.DescendingInPx;
-                spanHeight = seqStrip.SpanHeight;
+                sameFontStrips[t_index] = sameFontGlyphStrip;
 
-                spanWidth += seqStrip.Width;
+                t_index++;
+                CreateTextCoords2(sameFontGlyphStrip, fmtGlyphPlanSeqs, kv.Value);
+                descendingInPx = sameFontGlyphStrip.DescendingInPx;
+                spanHeight = sameFontGlyphStrip.SpanHeight;
+                spanWidth = sameFontGlyphStrip.Width;
+
+                //-----
+                vxFmtStr._strips.Add(sameFontGlyphStrip);
             }
+
+
+            vxFmtStr.GlyphMixMode = glyphMixMode;
             vxFmtStr.SpanHeight = spanHeight;
             vxFmtStr.Width = spanWidth;
             vxFmtStr.DescendingInPx = (short)descendingInPx;
@@ -920,8 +1390,6 @@ namespace PixelFarm.DrawingGL
             _tmpStrips.Clear();
             //-----------
             //TODO: review here again
-
-            vxFmtStr.BmpOnTransparentBackground = defaultTypeface.HasSvgTable() || defaultTypeface.IsBitmapFont || defaultTypeface.HasColorTable();
 
             if (vxFmtStr.Delay)
             {
@@ -940,10 +1408,10 @@ namespace PixelFarm.DrawingGL
         }
 
         List<GLFormattedGlyphPlanSeq> _tmpStrips = new List<GLFormattedGlyphPlanSeq>();
-        List<GLGlyphPlanSeqStrip> _tmpPlanSeqStrips = new List<GLGlyphPlanSeqStrip>();
+
         void ClearTempFormattedGlyphPlanSeqList()
         {
-            _tmpPlanSeqStrips.Clear();
+
         }
     }
 

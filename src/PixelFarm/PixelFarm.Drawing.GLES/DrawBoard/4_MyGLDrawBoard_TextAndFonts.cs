@@ -55,9 +55,7 @@ namespace PixelFarm.Drawing.GLES2
                 return null;
 #endif
             }
-
         }
-
         public void PrepareWordStrips(System.Collections.Generic.List<DrawingGL.GLRenderVxFormattedString> fmtStringList)
         {
             _gpuPainter.CreateWordStrips(fmtStringList);
@@ -66,18 +64,20 @@ namespace PixelFarm.Drawing.GLES2
         public override void DrawRenderVx(RenderVx renderVx, float x, float y)
         {
             if (renderVx is DrawingGL.GLRenderVxFormattedString vxFmtStr)
-            {                 
-                if (vxFmtStr.BmpOnTransparentBackground)
-                {
-                    DrawingGL.GlyphTexturePrinterDrawingTechnique prevTech = _gpuPainter.TextPrinterDrawingTechnique; //save
-                    _gpuPainter.TextPrinterDrawingTechnique = DrawingGL.GlyphTexturePrinterDrawingTechnique.Copy;
-                    _gpuPainter.TextPrinter.DrawString(vxFmtStr, x, y);
-                    _gpuPainter.TextPrinterDrawingTechnique = prevTech;//restore
-                }
-                else
-                {
-                    _gpuPainter.TextPrinter.DrawString(vxFmtStr, x, y);
-                }
+            {
+                _gpuPainter.TextPrinter.DrawString(vxFmtStr, x, y);
+
+                //if (vxFmtStr.BmpOnTransparentBackground)
+                //{
+                //    DrawingGL.GlyphTexturePrinterDrawingTechnique prevTech = _gpuPainter.TextPrinterDrawingTechnique; //save
+                //    _gpuPainter.TextPrinterDrawingTechnique = DrawingGL.GlyphTexturePrinterDrawingTechnique.Copy;
+                //    _gpuPainter.TextPrinter.DrawString(vxFmtStr, x, y);
+                //    _gpuPainter.TextPrinterDrawingTechnique = prevTech;//restore
+                //}
+                //else
+                //{
+                //    _gpuPainter.TextPrinter.DrawString(vxFmtStr, x, y);
+                //}
 
             }
         }
