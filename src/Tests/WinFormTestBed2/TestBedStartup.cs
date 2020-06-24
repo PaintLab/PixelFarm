@@ -90,6 +90,7 @@ namespace YourImplementation
                 s_intalledTypefaces.LoadSystemFonts();
                 s_intalledTypefaces.LoadFontsFromFolder(@"D:\projects\Typography\Demo\Windows\TestFonts");//demo
                 s_intalledTypefaces.LoadFontsFromFolder(@"D:\projects\Typography\Demo\Windows\Test_PrivateFonts");//demo
+                s_intalledTypefaces.UpdateUnicodeRanges();
 
                 YourImplementation.CommonTextServiceSetup.SetInstalledTypefaceCollection(s_intalledTypefaces);
                 InstalledTypefaceCollection.SetAsSharedTypefaceCollection(s_intalledTypefaces);

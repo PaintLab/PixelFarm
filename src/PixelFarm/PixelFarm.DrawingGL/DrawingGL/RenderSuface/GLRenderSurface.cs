@@ -926,7 +926,13 @@ namespace PixelFarm.DrawingGL
             _rgbaTextureShader.DrawSubImages(glBmp, vbo, count, x, y);
             //_bgraImgTextureShader.DrawSubImages(glBmp, vbo, count, x, y);
         }
+        public void DrawGlyphImageWithCopyBGRATech_FromVBO(GLBitmap glBmp, VertexBufferObject vbo, int count, float x, float y)
+        {
 
+            //use RGBA
+            //_rgbaTextureShader.DrawSubImages(glBmp, vbo, count, x, y);
+            _bgraImgTextureShader.DrawSubImages(glBmp, vbo, count, x, y);
+        }
         public void DrawWordSpanWithStencilTechnique(GLBitmap bmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
         {
 

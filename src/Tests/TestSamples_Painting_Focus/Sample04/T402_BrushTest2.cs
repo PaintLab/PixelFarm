@@ -27,7 +27,7 @@ namespace OpenTkEssTest
         {
             InstalledTypefaceCollection collection = new InstalledTypefaceCollection();
             collection.LoadSystemFonts();
-            InstalledTypeface tahomaFont = collection.GetInstalledTypeface("tahoma", TypefaceStyle.Regular);
+            //InstalledTypeface tahomaFont = collection.GetInstalledTypeface("tahoma", TypefaceStyle.Regular);
             //TODO: reimplement this again
             //FontFace tahomaFace = OpenFontLoader.LoadFont(tahomaFont.FontPath);
             //ActualFont actualFont = tahomaFace.GetFontAtPointSize(72);
