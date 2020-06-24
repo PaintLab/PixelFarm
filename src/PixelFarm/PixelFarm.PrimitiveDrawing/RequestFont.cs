@@ -57,28 +57,28 @@ namespace PixelFarm.Drawing
         }
         public RequestFont(string facename, Len fontSize, FontStyle style = FontStyle.Regular)
         {
-            
+
             //Lang = "en";//default
             Name = facename;
             Size = fontSize; //store user font size here
 
             Style = style;
-            
+
             FontKey = CalculateFontKey(facename, SizeInPoints = fontSize.ToPoints(), style);
         }
-        public Len Size { get; private set; }
+        public Len Size { get; }
         //
-        public int FontKey { get; private set; }
+        public int FontKey { get; }
         /// <summary>
         /// font's face name
         /// </summary>
-        public string Name { get; private set; }
-        public FontStyle Style { get; private set; }
+        public string Name { get; }
+        public FontStyle Style { get; }
 
         /// <summary>
         /// emheight in point unit
         /// </summary>
-        public float SizeInPoints { get; private set; }
+        public float SizeInPoints { get; }
 
         public static int CalculateFontKey(string facename, float fontSizeInPts, FontStyle style)
         {
@@ -213,14 +213,16 @@ namespace PixelFarm.Drawing
                 }
                 return null;
             }
-            public static int GetWhitespaceWidth(RequestFont reqFont, int platform_id)
+            public static bool GetWhitespaceWidth(RequestFont reqFont, int platform_id, out int cacheWhitespaceWidth)
             {
                 if (reqFont._platform_id == platform_id &&
                     reqFont._latestResolved != null)
                 {
-                    return reqFont._whitespace_width;
+                    cacheWhitespaceWidth = reqFont._whitespace_width;
+                    return true;
                 }
-                return 0;
+                cacheWhitespaceWidth = 0;
+                return false;
             }
             public static void SetWhitespaceWidth(RequestFont reqFont,
                 int platform_id,

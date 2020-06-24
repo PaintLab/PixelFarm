@@ -346,10 +346,7 @@ namespace LayoutFarm.CustomWidgets
                 {
                     case RenderVxFormattedString.VxState.Ready:
 
-                        if (_renderVxFormattedString.BmpOnTransparentBackground)
-                        {
-                            d.TextDrawingTech = TextDrawingTech.Copy;
-                        }
+                       
 
                         d.DrawRenderVx(_renderVxFormattedString, _contentLeft, _contentTop);
 

@@ -3,11 +3,8 @@
 using System;
 using System.Collections.Generic;
 
-using PixelFarm.Drawing;
-using Typography.TextServices;
-using Typography.TextBreak;
-using Typography.OpenFont;
-using System.Runtime.Remoting.Messaging;
+using PixelFarm.Drawing; 
+using Typography.TextBreak; 
 
 namespace LayoutFarm
 {
@@ -19,26 +16,21 @@ namespace LayoutFarm
                 RequestFont font,
                 ref TextSpanMeasureResult result);
 
-        ILineSegmentList BreakToLineSegments(in TextBufferSpan textBufferSpan);
+        void BreakToLineSegments(in TextBufferSpan textBufferSpan, WordVisitor wordVisitor);
 
         void CalculateUserCharGlyphAdvancePos(in TextBufferSpan textBufferSpan, ILineSegmentList lineSegs,
               RequestFont font,
               ref TextSpanMeasureResult result);
     }
 
-
-
     class AdvanceTextServiceImpl : IAdvanceTextService
-    { 
+    {
         readonly OpenFontTextService _textService;
         public AdvanceTextServiceImpl(OpenFontTextService textService) => _textService = textService;
 
         public bool SupportsWordBreak => true;
 
-        public ILineSegmentList BreakToLineSegments(in TextBufferSpan textBufferSpan)
-        {
-            return _textService.BreakToLineSegments(textBufferSpan);
-        }
+        public void BreakToLineSegments(in TextBufferSpan textBufferSpan, WordVisitor visitor) => _textService.BreakToLineSegments(textBufferSpan, visitor);
 
         public void CalculateUserCharGlyphAdvancePos(in TextBufferSpan textBufferSpan, RequestFont font, ref TextSpanMeasureResult measureResult)
         {
@@ -54,8 +46,8 @@ namespace LayoutFarm
                 lineSegs,
                 font,
                 ref measureResult);
-        } 
-    } 
+        }
+    }
     public static class GlobalTextService
     {
 

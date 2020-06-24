@@ -2004,8 +2004,14 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GLES\TextPrinter\GLBitmapGlyphTextPrinter.cs">
       <Link>PixelFarm\PixelFarm.Drawing.GLES\TextPrinter\GLBitmapGlyphTextPrinter.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GLES\TextPrinter\GLRenderVxFormattedString.cs">
+      <Link>PixelFarm\PixelFarm.Drawing.GLES\TextPrinter\GLRenderVxFormattedString.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GLES\TextPrinter\MySimpleGLBitmapFontManager.cs">
       <Link>PixelFarm\PixelFarm.Drawing.GLES\TextPrinter\MySimpleGLBitmapFontManager.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GLES\TextPrinter\WordPlateAndWordPlateMx.cs">
+      <Link>PixelFarm\PixelFarm.Drawing.GLES\TextPrinter\WordPlateAndWordPlateMx.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.BurningMineCurve\curveutils\CubicBezier.cs">
       <Link>PixelFarm\BackEnd.BurningMineCurve\curveutils\CubicBezier.cs</Link>
