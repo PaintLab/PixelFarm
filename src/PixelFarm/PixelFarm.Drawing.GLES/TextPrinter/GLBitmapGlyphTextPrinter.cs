@@ -158,7 +158,7 @@ namespace PixelFarm.DrawingGL
             _fontAtlas = _myGLBitmapFontMx.GetFontAtlas(font, out _glBmp);
             _font = font;
             _typeface = _textServices.ResolveTypeface(font);
-            _px_scale = _typeface.CalculateScaleToPixel(font.SizeInPoints);
+            _px_scale = _typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints);
 
             //TODO: caching 
             _white_space_width = (int)Math.Round((_typeface.GetAdvanceWidthFromGlyphIndex(_typeface.GetGlyphIndex(' ')) * _px_scale));
