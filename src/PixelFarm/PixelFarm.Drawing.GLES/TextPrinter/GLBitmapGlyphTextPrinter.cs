@@ -891,14 +891,14 @@ namespace PixelFarm.DrawingGL
             Typeface curTypeface = defaultTypeface;
 
             bool needRightToLeftArr = false;
-                        
+
             _lineSegs.Clear();
             _textPrinterWordVisitor.SetLineSegmentList(_lineSegs);
             _textServices.BreakToLineSegments(buffSpan, _textPrinterWordVisitor);
             _textPrinterWordVisitor.SetLineSegmentList(null);
             //typeface may not have a glyph for some char
             //eg eng font + emoji
-             
+
 
             //check if we have a mix stencil and color glyph or not
             GLRenderVxFormattedStringGlyphMixMode glyphMixMode = GLRenderVxFormattedStringGlyphMixMode.Unknown;
@@ -942,7 +942,7 @@ namespace PixelFarm.DrawingGL
 
                 ushort glyphIndex = 0;
                 char sample_char = buffer[line_seg.StartAt];
-                bool contains_surrogate_pair = false;
+                
 
                 int codepoint = sample_char;
                 if (line_seg.Length > 1 && line_seg.WordKind == WordKind.SurrogatePair)
@@ -987,11 +987,13 @@ namespace PixelFarm.DrawingGL
                 //layout glyphs in each context
 
                 GlyphPlanSequence seq = _textServices.CreateGlyphPlanSeq(buff, curTypeface, reqFont.SizeInPoints);
+
                 seq.IsRightToLeft = spBreakInfo.RightToLeft;
 
 
                 if (!_uniqueTypefaces.TryGetValue(curTypeface, out RequestFont reqFont2))
                 {
+                    //typeface can be key, because,each time this method is called,  font size/style must be the same 
                     reqFont2 = new RequestFont(curTypeface.Name, reqFont.SizeInPoints);
                     _uniqueTypefaces[curTypeface] = reqFont2;
                 }
@@ -1005,7 +1007,7 @@ namespace PixelFarm.DrawingGL
                     seq = seq,
                     ActualFont = reqFont2,
                     Typeface = curTypeface,
-                    ContainsSurrogatePair = contains_surrogate_pair,
+                     
                     ColorGlyphOnTransparentBG = (curTypeface.HasSvgTable() || curTypeface.IsBitmapFont || curTypeface.HasColorTable()),
                     PrefixWhitespaceCount = (ushort)prefix_whitespaceCount//***
                 };
