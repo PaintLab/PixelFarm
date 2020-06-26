@@ -14,6 +14,7 @@ using Typography.TextBreak;
 
 namespace PixelFarm.Drawing.WinGdi
 {
+    using PixelFarm.Drawing;
     using Win32;
 
     static class WinGdiTextService
@@ -93,7 +94,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
 
             SetFont(font);
-            Win32.Size win32_size = new Size();
+            Win32.Size win32_size = new Win32.Size();
             if (buff.Length > 0)
             {
                 unsafe
@@ -132,7 +133,7 @@ namespace PixelFarm.Drawing.WinGdi
                 return PixelFarm.Drawing.Size.Empty;
             }
 
-            var size = new Size(); //win32
+            var size = new Win32.Size(); //win32
             unsafe
             {
                 fixed (char* startAddr = &buff[0])
@@ -358,7 +359,10 @@ namespace PixelFarm.Drawing.WinGdi
     {
         public Gdi32TextService()
         {
-
+        }
+        public ResolvedFontBase ResolveFont(RequestFont f)
+        {
+            throw new NotImplementedException();
         }
         public float MeasureWhitespace(RequestFont f)
         {
@@ -394,6 +398,12 @@ namespace PixelFarm.Drawing.WinGdi
         {
             throw new NotImplementedException();
         }
+
+        public Drawing.Size MeasureString(in TextBufferSpan textBufferSpan, ResolvedFontBase font)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool SupportsWordBreak => false;
 
     }

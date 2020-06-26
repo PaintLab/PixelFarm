@@ -32,7 +32,7 @@ namespace PixelFarm.DrawingGL
         GLPainter _painter;
         GLBitmap _glBmp;
         RequestFont _font;
-
+        ResolvedFont _resolvedFont;
         readonly OpenFontTextService _textServices;
         readonly TextureCoordVboBuilder _vboBuilder = new TextureCoordVboBuilder();
 
@@ -147,6 +147,7 @@ namespace PixelFarm.DrawingGL
         public TextBaseline TextBaseline { get; set; }
 
         Typeface _typeface;
+
         float _white_space_width;
         public void ChangeFont(RequestFont font)
         {
@@ -156,14 +157,13 @@ namespace PixelFarm.DrawingGL
                 return;
             }
 
-            _fontAtlas = _myGLBitmapFontMx.GetFontAtlas(font, out _glBmp);
+            ResolvedFont resolvedFont = _textServices.ResolveFont(font);
+            _resolvedFont = resolvedFont;
+            _fontAtlas = _myGLBitmapFontMx.GetFontAtlas(resolvedFont, out _glBmp);
             _font = font;
-            _typeface = _textServices.ResolveTypeface(font);
+            _typeface = resolvedFont.Typeface;
             _px_scale = _typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints);
-
-            //TODO: caching 
-            _white_space_width = (int)Math.Round((_typeface.GetAdvanceWidthFromGlyphIndex(_typeface.GetGlyphIndex(' ')) * _px_scale));
-
+            _white_space_width = resolvedFont.WhitespaceWidth;
             return;
         }
 
@@ -203,9 +203,6 @@ namespace PixelFarm.DrawingGL
             //and choose a proper typeface for each part
             //-----------------
 
-
-
-
             var textBufferSpan = new TextBufferSpan(buffer, startAt, len);
 
             //_textPrinterLineSegs.Clear();
@@ -215,7 +212,7 @@ namespace PixelFarm.DrawingGL
 
             //check each split segment
 
-
+            ResolvedFont resolved = _textServices.ResolveFont(_font);
             GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(textBufferSpan, _font);
             //-----------------
 
@@ -231,7 +228,7 @@ namespace PixelFarm.DrawingGL
             //if (x,y) is left top
             //we need to adjust y again      
 
-            float scaleFromTexture = _font.SizeInPoints / _fontAtlas.OriginalFontSizePts;
+            float scaleFromTexture = resolved.SizeInPoints / _fontAtlas.OriginalFontSizePts;
 
             TextureKind textureKind = _fontAtlas.TextureKind;
 
@@ -253,12 +250,12 @@ namespace PixelFarm.DrawingGL
                 }
                 //draw red-line-marker for baseLine
                 _painter.StrokeColor = Color.Red;
-                int baseLine = (int)Math.Round((float)top + _font.AscentInPixels);
+                int baseLine = (int)Math.Round((float)top + resolved.AscentInPixels);
                 _painter.DrawLine(left, baseLine, left + 200, baseLine);
                 //
                 //draw magenta-line-marker for bottom line
                 _painter.StrokeColor = Color.Magenta;
-                int bottomLine = (int)Math.Round((float)top + _font.LineSpacingInPixels);
+                int bottomLine = (int)Math.Round((float)top + resolved.LineSpacingInPixels);
                 _painter.DrawLine(left, bottomLine, left + 200, bottomLine);
                 //draw blue-line-marker for top line
                 _painter.StrokeColor = Color.Blue;
@@ -276,7 +273,7 @@ namespace PixelFarm.DrawingGL
 
 
             //----------
-            float bottom = (float)top + _font.AscentInPixels - _font.DescentInPixels;
+            float bottom = (float)top + resolved.AscentInPixels - resolved.DescentInPixels;
             int seqLen = glyphPlanSeq.Count;
             for (int i = 0; i < seqLen; ++i)
             {
@@ -312,7 +309,7 @@ namespace PixelFarm.DrawingGL
                         //nothing todo
                         break;
                     case TextBaseline.Top:
-                        g_top += _font.DescentInPixels;
+                        g_top += _resolvedFont.DescentInPixels;
                         break;
                     case TextBaseline.Bottom:
 
@@ -758,8 +755,9 @@ namespace PixelFarm.DrawingGL
 
             ChangeFont(reqFont);
 
-            sameFont.SpanHeight = _font.LineSpacingInPixels;
-            sameFont.DescendingInPx = (short)_font.DescentInPixels;
+            //TODO: review here, rounding error*** 
+            sameFont.SpanHeight = _resolvedFont.LineSpacingInPixels;
+            sameFont.DescendingInPx = (short)_resolvedFont.DescentInPixels;
 
             int count = seqs.Count;
             float g_left = 0;
@@ -773,7 +771,7 @@ namespace PixelFarm.DrawingGL
 
             //reset after change font....
             float px_scale = _px_scale; //init
-            float bottom = (float)top + _font.AscentInPixels - _font.DescentInPixels;
+            float bottom = (float)top + _resolvedFont.AscentInPixels - _resolvedFont.DescentInPixels;
             int each_white_spaceW = (int)Math.Round(_white_space_width);
 
 
@@ -788,7 +786,7 @@ namespace PixelFarm.DrawingGL
                 ChangeFont(sq.ActualFont);
 
                 px_scale = _px_scale; //init
-                bottom = (float)top + _font.AscentInPixels - _font.DescentInPixels;
+                bottom = (float)top + _resolvedFont.AscentInPixels - _resolvedFont.DescentInPixels;
                 each_white_spaceW = (int)Math.Round(_white_space_width);
 
                 if (sq.PrefixWhitespaceCount > 0)
@@ -887,7 +885,9 @@ namespace PixelFarm.DrawingGL
             RequestFont reqFont = _painter.CurrentFont; //init with default
 
             //resolve this type face
-            Typeface defaultTypeface = _textServices.ResolveTypeface(reqFont);
+
+            ResolvedFont resolvedFont = _textServices.ResolveFont(reqFont);
+            Typeface defaultTypeface = resolvedFont.Typeface;
             Typeface curTypeface = defaultTypeface;
 
             bool needRightToLeftArr = false;
@@ -942,7 +942,7 @@ namespace PixelFarm.DrawingGL
 
                 ushort glyphIndex = 0;
                 char sample_char = buffer[line_seg.StartAt];
-                
+
 
                 int codepoint = sample_char;
                 if (line_seg.Length > 1 && line_seg.WordKind == WordKind.SurrogatePair)
@@ -1007,7 +1007,7 @@ namespace PixelFarm.DrawingGL
                     seq = seq,
                     ActualFont = reqFont2,
                     Typeface = curTypeface,
-                     
+
                     ColorGlyphOnTransparentBG = (curTypeface.HasSvgTable() || curTypeface.IsBitmapFont || curTypeface.HasColorTable()),
                     PrefixWhitespaceCount = (ushort)prefix_whitespaceCount//***
                 };

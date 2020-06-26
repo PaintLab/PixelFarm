@@ -7,6 +7,8 @@ using PixelFarm.CpuBlit.BitmapAtlas;
 using PixelFarm.Contours;
 
 using Typography.OpenFont;
+using LayoutFarm;
+using PixelFarm.Drawing;
 
 namespace OpenTkEssTest
 {
@@ -49,15 +51,15 @@ namespace OpenTkEssTest
             glyphTextureGen.MsdfGenVersion = 3;
 
             //2. generate the glyphs
+
+            ResolvedFont resolvedFont = GlobalTextService.TextService2.ResolveFont(reqFont);
+
             SimpleBitmapAtlasBuilder atlasBuilder = glyphTextureGen.CreateTextureFontFromBuildDetail(
                 _typeface,
                 reqFont.SizeInPoints,
                  TextureKind.Msdf,
-                GlyphTextureCustomConfigs.TryGetGlyphTextureBuildDetail(reqFont, false, false)
+                GlyphTextureCustomConfigs.TryGetGlyphTextureBuildDetail(resolvedFont, false, false)
             );
-
-
-
 
             //3. set information before write to font-info
             atlasBuilder.FontFilename = reqFont.Name;//TODO: review here, check if we need 'filename' or 'fontname'
@@ -114,7 +116,7 @@ namespace OpenTkEssTest
             _pcx.DrawImage(_msdf_bmp, 0, 100);
             SwapBuffers();
         }
-        
+
     }
 
 }
