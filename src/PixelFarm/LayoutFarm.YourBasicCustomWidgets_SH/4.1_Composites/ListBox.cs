@@ -355,8 +355,6 @@ namespace LayoutFarm.CustomWidgets
             {
                 _listItemText.RequestFont = font;
             }
-        }
-
-
+        } 
     }
 }
