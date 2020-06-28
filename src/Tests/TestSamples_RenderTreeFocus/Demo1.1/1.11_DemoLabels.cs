@@ -51,6 +51,8 @@ namespace LayoutFarm
                 //label.Text = "ABCDEFG\r\nHIJKLMNOP\r\nQRSTUVWXZYZ\r\n0123456789";
                 label.Text = " A 😁😁X 012345";
                 //label.Text = "😁😁";
+                //label.Text = "😁";
+                //label.Text = "A😁";
                 host.AddChild(label);
             }
         }
