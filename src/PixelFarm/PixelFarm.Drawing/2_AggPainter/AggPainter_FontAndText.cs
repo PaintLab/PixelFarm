@@ -15,12 +15,13 @@ namespace PixelFarm.CpuBlit
         /// <param name="top"></param>
         void DrawString(AggRenderVxFormattedString renderVx, double left, double top);
         void PrepareStringForRenderVx(AggRenderVxFormattedString renderVx, char[] text, int startAt, int len);
+        int CurrentLineSpaceHeight { get; }
     }
 
     partial class AggPainter
     {
         //font
-        
+
         RequestFont _currentFont;
         IAggTextPrinter _textPrinter;
 
@@ -37,7 +38,7 @@ namespace PixelFarm.CpuBlit
             }
         }
 
-        
+
         public override RequestFont CurrentFont
         {
             get => _currentFont;
@@ -51,6 +52,8 @@ namespace PixelFarm.CpuBlit
                 }
             }
         }
+
+        public int CurrentLineSpaceHeight => (_textPrinter != null) ? _textPrinter.CurrentLineSpaceHeight : 0;
 
         public override void DrawString(
            string text,

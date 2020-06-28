@@ -1161,6 +1161,8 @@ namespace PixelFarm.Drawing.WinGdi
 
         public TextBaseline TextBaseline { get; set; }
 
+        public int CurrentLineSpaceHeight => throw new NotImplementedException();
+
         public void ChangeFillColor(Color fontColor)
         {
             //change font color

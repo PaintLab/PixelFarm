@@ -122,7 +122,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             p.FillColor = Color.Black;
 
 
-            int lineSpaceInPx = (int)p.CurrentResolvedFont.LineSpacingInPixels;
+            int lineSpaceInPx = p.CurrentLineSpaceHeight;
             if (lineSpaceInPx == 0)
             {
                 lineSpaceInPx = 16; //tmp fix
