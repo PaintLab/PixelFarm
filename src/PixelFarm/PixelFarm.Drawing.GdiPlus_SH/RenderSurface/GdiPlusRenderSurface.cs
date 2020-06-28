@@ -885,6 +885,7 @@ namespace PixelFarm.Drawing.WinGdi
     //text and font
     partial class GdiPlusRenderSurface
     {
+        ResolvedFont _resolvedFont;
         RequestFont _currentTextFont = null;
         Color _mycurrentTextColor = Color.Black;
 
@@ -1002,14 +1003,22 @@ namespace PixelFarm.Drawing.WinGdi
             //test
             _win32MemDc.MeasureTextSize(str, startAt, len, out w, out h);
         }
-        //====================================================
+
+        public ResolvedFont CurrentResolvedFont
+        {
+            get => _resolvedFont;
+            set
+            {
+                _resolvedFont = value;
+            }
+        }
+
         public RequestFont CurrentFont
         {
             get => _currentTextFont;
 
             set
             {
-
                 _currentTextFont = value;
                 _win32MemDc.SetFont(WinGdiFontSystem.GetWinGdiFont(value).CachedHFont());
             }
@@ -1136,7 +1145,7 @@ namespace PixelFarm.Drawing.WinGdi
     sealed class GdiPlusTextPrinter : CpuBlit.IAggTextPrinter
     {
 
-        GdiPlusRenderSurface _rendersx;
+        readonly GdiPlusRenderSurface _rendersx;
         public GdiPlusTextPrinter(GdiPlusRenderSurface rendersx)
         {
             _rendersx = rendersx;
@@ -1145,18 +1154,14 @@ namespace PixelFarm.Drawing.WinGdi
         public void ChangeFont(RequestFont font)
         {
             _rendersx.CurrentFont = font;
-            _rendersx.OpenFontTextService.ResolveTypeface(font);
-            ////call to service
-            //_font = font;
-            //_textServices.ResolveTypeface(font); //resolve for 'actual' font
-            //_fontAtlas = _bmpFontMx.GetFontAtlas(_font, out _fontBmp);
-            //FontSizeInPoints = font.SizeInPoints;
-
+            _rendersx.OpenFontTextService.ResolveFont(font);
         }
 
         public RequestFont CurrentFont => _rendersx.CurrentFont;
 
         public TextBaseline TextBaseline { get; set; }
+
+        public int CurrentLineSpaceHeight => throw new NotImplementedException();
 
         public void ChangeFillColor(Color fontColor)
         {
@@ -1175,7 +1180,7 @@ namespace PixelFarm.Drawing.WinGdi
             _rendersx.DrawText(text,
                 startAt, len,
                 new Rectangle((int)left,
-                (int)(top - _rendersx.CurrentFont.LineSpacingInPixels),
+                (int)(top - _rendersx.CurrentResolvedFont.LineSpacingInPixels),
                 2480, //temp we,not need clip
                 1024),//temp we,not need clip
                 0);

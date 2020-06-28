@@ -14,9 +14,42 @@ namespace LayoutFarm.TextEditing
         }
         //
         public byte ContentHAlign;
-        //
-        public RequestFont ReqFont { get; set; }
         public Color FontColor { get; set; }
+
+        RequestFont _reqFont;
+        ResolvedFont _resolvedFont;
+        public RequestFont ReqFont
+        {
+            get => _reqFont;
+            set
+            {
+                _reqFont = value;
+                _resolvedFont = null;
+            }
+        }
+        public ResolvedFont ResolvedFont
+        {
+            get
+            {
+                if (_resolvedFont != null)
+                {
+                    return _resolvedFont;
+                }
+                else if (_reqFont != null)
+                {
+                    return _resolvedFont = GlobalTextService.TextService2.ResolveFont(_reqFont);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _resolvedFont = value;
+                _reqFont = null;
+            }
+        }
         //
         internal Size MeasureString(in TextBufferSpan textBufferSpan)
         {

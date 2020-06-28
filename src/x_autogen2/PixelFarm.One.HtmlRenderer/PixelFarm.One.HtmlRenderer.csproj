@@ -2781,9 +2781,6 @@
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.AdvancedLayout\MathTable.cs">
       <Link>Typography\Typography.OpenFont\Tables.AdvancedLayout\MathTable.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.AdvancedLayout\ScriptLang.cs">
-      <Link>Typography\Typography.OpenFont\Tables.AdvancedLayout\ScriptLang.cs</Link>
-    </Compile>
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.AdvancedLayout\ScriptList.cs">
       <Link>Typography\Typography.OpenFont\Tables.AdvancedLayout\ScriptList.cs</Link>
     </Compile>
@@ -2942,6 +2939,9 @@
     </Compile>
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Typeface.cs">
       <Link>Typography\Typography.OpenFont\Typeface.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Typeface_TrimableExtensions.cs">
+      <Link>Typography\Typography.OpenFont\Typeface_TrimableExtensions.cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\WebFont\Woff2Reader.cs">
       <Link>Typography\Typography.OpenFont\WebFont\Woff2Reader.cs</Link>

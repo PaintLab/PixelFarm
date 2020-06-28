@@ -86,15 +86,16 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             //with specific request font
             GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(textBufferSpan, _font);
 
-            Typeface typeface = _textServices.ResolveTypeface(_font);
+            ResolvedFont resolvedFont = _textServices.ResolveFont(_font);
+            Typeface typeface = resolvedFont.Typeface;
             float scale = typeface.CalculateScaleToPixelFromPointSize(_font.SizeInPoints);
 
-            int recommendLineSpacing = (int)_font.LineSpacingInPixels;
+            int recommendLineSpacing = resolvedFont.LineSpacingInPixels;
             //--------------------------
             //TODO:
             //if (x,y) is left top
             //we need to adjust y again
-            y -= _font.LineSpacingInPixels;
+            y -= resolvedFont.LineSpacingInPixels;
 
             // 
             float scaleFromTexture = _finalTextureScale;

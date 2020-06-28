@@ -40,8 +40,6 @@ namespace PixelFarm.Drawing
         Underline = 1 << 2,
         Strikeout = 1 << 3
     }
-
-
     /// <summary>
     /// user-request font specification
     /// </summary>
@@ -51,114 +49,97 @@ namespace PixelFarm.Drawing
         //this is just a request for specficic font presentation at a time
         //----- 
 
-        public RequestFont(string facename, float fontSizeInPts, FontStyle style = FontStyle.Regular)
-            : this(facename, Len.Pt(fontSizeInPts), style)
+        public sealed class OtherChoice
         {
+            /// <summary>
+            /// primary font size
+            /// </summary>
+            public Len Size { get; }
+            /// <summary>
+            /// font's face name
+            /// </summary>
+            public string Name { get; }
+            public FontStyle Style { get; }
+            public int FontKey { get; }
+            public float SizeInPoints { get; }
+
+            public OtherChoice(string facename, float fontSizeInPts, FontStyle style = FontStyle.Regular)
+                : this(facename, Len.Pt(fontSizeInPts), style)
+            {
+            }
+            public OtherChoice(string facename, Len fontSize, FontStyle style = FontStyle.Regular)
+            {
+                Name = facename; //primary typeface name
+                Size = fontSize; //store user font size here 
+                Style = style;
+                FontKey = CalculateFontKey(facename, SizeInPoints = fontSize.ToPoints(), style);
+            }
+
         }
-        public RequestFont(string facename, Len fontSize, FontStyle style = FontStyle.Regular)
-        {
 
-            //Lang = "en";//default
-            Name = facename;
-            Size = fontSize; //store user font size here
 
-            Style = style;
-
-            FontKey = CalculateFontKey(facename, SizeInPoints = fontSize.ToPoints(), style);
-        }
-        public Len Size { get; }
-        //
         public int FontKey { get; }
-        /// <summary>
-        /// font's face name
-        /// </summary>
+        public Len Size { get; }
         public string Name { get; }
         public FontStyle Style { get; }
-
         /// <summary>
         /// emheight in point unit
         /// </summary>
         public float SizeInPoints { get; }
 
-        public static int CalculateFontKey(string facename, float fontSizeInPts, FontStyle style)
+        readonly OtherChoice[] _otherChoices;
+
+        public RequestFont(string facename, float fontSizeInPts, FontStyle style = FontStyle.Regular, OtherChoice[] otherChoices = null)
+            : this(facename, Len.Pt(fontSizeInPts), style, otherChoices)
         {
-            return (new InternalFontKey(facename, fontSizeInPts, style)).GetHashCode();
+        }
+        public RequestFont(string facename, Len fontSize, FontStyle style = FontStyle.Regular, OtherChoice[] otherChoices = null)
+        {
+            Name = facename; //primary typeface name
+            Size = fontSize; //store user font size here 
+            Style = style;
+            FontKey = CalculateFontKey(facename, SizeInPoints = fontSize.ToPoints(), style);
+
+            _otherChoices = otherChoices;
         }
 
-        struct InternalFontKey
+        public int OtherChoicesCount => (_otherChoices != null) ? _otherChoices.Length : 0;
+        public OtherChoice GetOtherChoice(int index) => _otherChoices[index];
+
+
+        public static int CalculateFontKey(string typefaceName, float fontSizeInPts, FontStyle style)
         {
-
-            public readonly int FontNameIndex;
-            public readonly float FontSize;
-            public readonly FontStyle FontStyle;
-
-            public InternalFontKey(string fontname, float fontSize, FontStyle fs)
-            {
-                //font name/ not filename
-                this.FontNameIndex = RegisterFontName(fontname.ToLower());
-                this.FontSize = fontSize;
-                this.FontStyle = fs;
-            }
-
-            static Dictionary<string, int> s_registerFontNames = new Dictionary<string, int>();
-
-            static InternalFontKey()
-            {
-                RegisterFontName(""); //blank font name
-            }
-            static int RegisterFontName(string fontName)
-            {
-                fontName = fontName.ToUpper();
-                if (!s_registerFontNames.TryGetValue(fontName, out int found))
-                {
-                    int nameCrc32 = TinyCRC32Calculator.CalculateCrc32(fontName);
-                    s_registerFontNames.Add(fontName, nameCrc32);
-                    return nameCrc32;
-                }
-                return found;
-            }
-            public override int GetHashCode()
-            {
-                return CalculateGetHasCode(this.FontNameIndex, this.FontSize, (int)this.FontStyle);
-            }
-            static int CalculateGetHasCode(int nameIndex, float fontSize, int fontstyle)
-            {
-                //modified from https://stackoverflow.com/questions/1646807/quick-and-simple-hash-code-combinations
-                unchecked
-                {
-                    int hash = 17;
-                    hash = hash * 31 + nameIndex.GetHashCode();
-                    hash = hash * 31 + fontSize.GetHashCode();
-                    hash = hash * 31 + fontstyle.GetHashCode();
-                    return hash;
-                }
-            }
+            return (new InternalFontKey(typefaceName, fontSizeInPts, style)).GetHashCode();
         }
+
+
 
         //------------------ 
         //caching ...
 
-        internal int _platform_id;//resolve by system id
-        internal object _latestResolved; //result of the actual font
-        internal int _whitespace_width;
-        internal int _generalLineSpacingInPx;
+        //preserve 2 field user cache their actual here
+        internal ResolvedFontBase _resolvedFont1;
+        internal object _resolvedFont2;
 
-
-        //TODO: review here again
-        internal float _sizeInPx;
-        internal float _descentInPx;
-        internal float _ascentInPx;
-        internal float _lineGapInPx;
-
-        public float SizeInPixels => _sizeInPx;
-        public float DescentInPixels => _descentInPx;
-        public float AscentInPixels => _ascentInPx;
-        public float LineGapInPixels => _lineGapInPx;
-
-        /// <summary>
-        /// already in pixels
-        /// </summary>
-        public int LineSpacingInPixels => _generalLineSpacingInPx;
+        public static void SetResolvedFont1(RequestFont reqFont, ResolvedFontBase resolvedFont)
+        {
+            reqFont._resolvedFont1 = resolvedFont;
+        }
+        public static void SetResolvedFont2(RequestFont reqFont, object resolvedFont)
+        {
+            reqFont._resolvedFont2 = resolvedFont;
+        }
+        public static T GetResolvedFont1<T>(RequestFont reqFont)
+           where T : ResolvedFontBase
+        {
+            return reqFont._resolvedFont1 as T;
+        }
+        public static T GetResolvedFont2<T>(RequestFont reqFont)
+           where T : class
+        {
+            return reqFont._resolvedFont2 as T;
+        }
+       
 #if DEBUG
         public override string ToString()
         {
@@ -167,87 +148,89 @@ namespace PixelFarm.Drawing
 #endif
     }
 
-    namespace Internal
-    {
-        public static class RequestFontCacheAccess
-        {
-            static int s_totalCacheSystemId;
-            public static int GetNewCacheSystemId()
-            {
-                return ++s_totalCacheSystemId;
-            }
-            public static void ClearCache(RequestFont reqFont)
-            {
-                reqFont._platform_id = 0;
-                reqFont._latestResolved = null;
-                reqFont._whitespace_width = reqFont._generalLineSpacingInPx = 0;
-            }
-            public static void SetActualFont(RequestFont reqFont,
-                int platform_id,
-                object platformFont)
-            {
-                //replace 
-                reqFont._platform_id = platform_id;
-                reqFont._latestResolved = platformFont;
-            }
-            public static void SetGeneralFontMetricInfo(
-               RequestFont reqFont,
-               float sizeInPx, float ascentInPx,
-               float descentInPx, float lineGapInPx,
-               float lineHeight)
-            {
-                reqFont._sizeInPx = sizeInPx;
-                reqFont._ascentInPx = ascentInPx;
-                reqFont._descentInPx = descentInPx;
-                reqFont._lineGapInPx = lineGapInPx;
-                reqFont._generalLineSpacingInPx = (int)Math.Round(lineHeight);
-            }
 
-            public static T GetActualFont<T>(RequestFont reqFont, int platform_id)
-               where T : class
+    struct InternalFontKey
+    {
+
+        public readonly int FontNameIndex;
+        public readonly float FontSize;
+        public readonly FontStyle FontStyle;
+
+        public InternalFontKey(string typefaceName, float fontSize, FontStyle fs)
+        {
+            //font name/ not filename
+            this.FontNameIndex = RegisterFontName(typefaceName.ToLower());
+            this.FontSize = fontSize;
+            this.FontStyle = fs;
+        }
+
+        static Dictionary<string, int> s_registerFontNames = new Dictionary<string, int>();
+
+        static InternalFontKey()
+        {
+            RegisterFontName(""); //blank font name
+        }
+        static int RegisterFontName(string fontName)
+        {
+            fontName = fontName.ToUpper();
+            if (!s_registerFontNames.TryGetValue(fontName, out int found))
             {
-                if (reqFont._platform_id == platform_id &&
-                    reqFont._latestResolved != null)
-                {
-                    return reqFont._latestResolved as T;
-                }
-                return null;
+                int nameCrc32 = TinyCRC32Calculator.CalculateCrc32(fontName);
+                s_registerFontNames.Add(fontName, nameCrc32);
+                return nameCrc32;
             }
-            public static bool GetWhitespaceWidth(RequestFont reqFont, int platform_id, out int cacheWhitespaceWidth)
+            return found;
+        }
+        public override int GetHashCode()
+        {
+            return CalculateGetHasCode(this.FontNameIndex, this.FontSize, (int)this.FontStyle);
+        }
+        static int CalculateGetHasCode(int nameIndex, float fontSize, int fontstyle)
+        {
+            //modified from https://stackoverflow.com/questions/1646807/quick-and-simple-hash-code-combinations
+            unchecked
             {
-                if (reqFont._platform_id == platform_id &&
-                    reqFont._latestResolved != null)
-                {
-                    cacheWhitespaceWidth = reqFont._whitespace_width;
-                    return true;
-                }
-                cacheWhitespaceWidth = 0;
-                return false;
-            }
-            public static void SetWhitespaceWidth(RequestFont reqFont,
-                int platform_id,
-                int whitespaceW)
-            {
-                reqFont._platform_id = platform_id;
-                reqFont._whitespace_width = whitespaceW;
-            }
-            public static int GetLinespaceHeight(RequestFont reqFont, int platform_id)
-            {
-                if (reqFont._platform_id == platform_id &&
-                    reqFont._latestResolved != null)
-                {
-                    return reqFont._generalLineSpacingInPx;
-                }
-                return 0;
-            }
-            public static void SetLineSpaceHeight(RequestFont reqFont,
-               int platform_id,
-               int height)
-            {
-                reqFont._platform_id = platform_id;
-                reqFont._generalLineSpacingInPx = height;
+                int hash = 17;
+                hash = hash * 31 + nameIndex.GetHashCode();
+                hash = hash * 31 + fontSize.GetHashCode();
+                hash = hash * 31 + fontstyle.GetHashCode();
+                return hash;
             }
         }
     }
 
+    public abstract class ResolvedFontBase
+    {
+        public float SizeInPoints { get; protected set; }
+        public FontStyle FontStyle { get; protected set; }
+        public int FontKey { get; protected set; }
+        public float ScaleToPixel { get; protected set; }
+
+        public float WhitespaceWidthF { get; protected set; }
+        public int WhitespaceWidth { get; protected set; }
+
+        public float AscentInPixels { get; protected set; }
+        public float DescentInPixels { get; protected set; }
+        public int LineSpacingInPixels { get; protected set; }
+        public float LineGapInPx { get; protected set; }
+
+
+        public ResolvedFontBase(string name, float sizeInPoints, FontStyle fontStyle, int fontKey)
+        {
+            Name = name;
+            SizeInPoints = sizeInPoints;
+            FontStyle = fontStyle;
+            FontKey = fontKey;
+        }
+        public ResolvedFontBase(string name, float sizeInPoints, FontStyle fontStyle)
+        {
+            SizeInPoints = sizeInPoints;
+            FontStyle = fontStyle;
+            Name = name;
+            FontKey = (new InternalFontKey(name ?? "", sizeInPoints, fontStyle)).GetHashCode();
+        }
+        public string Name { get; }
+    }
+
+ 
 }

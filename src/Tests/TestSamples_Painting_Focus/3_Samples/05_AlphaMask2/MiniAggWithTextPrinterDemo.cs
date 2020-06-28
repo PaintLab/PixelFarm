@@ -107,8 +107,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         }
         public override void Draw(Painter painter)
         {
-            AggPainter p = painter as AggPainter;
-            if (p == null) return;
+            if (!(painter is AggPainter p)) return;
             if (!_fontAtlasPrinterReady)
             {
                 SetupFontAtlasPrinter(p);
@@ -123,7 +122,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             p.FillColor = Color.Black;
 
 
-            int lineSpaceInPx = (int)p.CurrentFont.LineSpacingInPixels;
+            int lineSpaceInPx = p.CurrentLineSpaceHeight;
             if (lineSpaceInPx == 0)
             {
                 lineSpaceInPx = 16; //tmp fix

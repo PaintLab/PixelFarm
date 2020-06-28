@@ -67,10 +67,6 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         }
         public void DrawString(Painter p, char[] buffer, int startAt, int len, double x, double y)
         {
-
-
-
-
             if (!(p is AggPainter painter)) return;
             //
 
@@ -87,15 +83,17 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             var textBufferSpan = new TextBufferSpan(buffer, startAt, len);
             //ask text service to parse user input char buffer and create a glyph-plan-sequence (list of glyph-plan) 
             //with specific request font
+
+            ResolvedFont font = _textServices.ResolveFont(_font);
             GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(textBufferSpan, _font);
 
             float scale = 1;// _fontAtlas.TargetTextureScale;
-            int recommendLineSpacing = (int)_font.LineSpacingInPixels;
+            int recommendLineSpacing = (int)font.LineSpacingInPixels;
             //--------------------------
             //TODO:
             //if (x,y) is left top
             //we need to adjust y again
-            y -= _font.LineSpacingInPixels;
+            y -= font.LineSpacingInPixels;
 
             // 
             float scaleFromTexture = _finalTextureScale;
@@ -108,7 +106,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             float acc_x = 0;
             float acc_y = 0;
 
-            int lineHeight = (int)_font.LineSpacingInPixels;//temp
+            int lineHeight = (int)font.LineSpacingInPixels;//temp
             //painter.DestBitmapBlender.OutputPixelBlender = maskPixelBlenderPerCompo; //change to new blender 
             painter.DestBitmapBlender.OutputPixelBlender = _maskPixelBlenderPerCompo; //change to new blender  
 
@@ -211,7 +209,10 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             p.Clear(Drawing.Color.White);
             p.FillColor = Color.Black;
 
-            int lineSpaceInPx = (int)_font.LineSpacingInPixels;
+            //TODO: review here again
+            ResolvedFont resolvedFont = _textServices.ResolveFont(_font);
+
+            int lineSpaceInPx = resolvedFont.LineSpacingInPixels;
             int ypos = 0;
             DrawString(p, "Hello World", 10, ypos);
             ypos += lineSpaceInPx;
