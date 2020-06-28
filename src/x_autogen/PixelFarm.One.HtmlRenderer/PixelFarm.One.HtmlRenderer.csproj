@@ -953,7 +953,6 @@
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.AdvancedLayout\JustificationTable.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.AdvancedLayout\LigatureCaretListTable.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.AdvancedLayout\MathTable.cs" />
-    <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.AdvancedLayout\ScriptLang.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.AdvancedLayout\ScriptList.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.AdvancedLayout\ScriptTable.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.BitmapAndSvgFonts\BitmapFontGlyphSource.cs" />
@@ -1007,6 +1006,7 @@
     <Compile Include="D:\projects\Typography\Typography.OpenFont\TrueTypeInterperter\InvalidFontException.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\TrueTypeInterperter\TrueTypeInterpreter.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Typeface.cs" />
+    <Compile Include="D:\projects\Typography\Typography.OpenFont\Typeface_TrimableExtensions.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\WebFont\Woff2Reader.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\WebFont\WoffReader.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\BidiBreakEngine.cs" />
