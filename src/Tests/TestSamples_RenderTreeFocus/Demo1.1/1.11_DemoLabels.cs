@@ -37,8 +37,8 @@ namespace LayoutFarm
             background_box.BackColor = PixelFarm.Drawing.Color.Blue;
             host.AddChild(background_box);
 
-            RequestFont font = new RequestFont("Twitter Color Emoji", 20);
-            //RequestFont font = new RequestFont("Source Sans Pro", 20);
+            //RequestFont font = new RequestFont("Twitter Color Emoji", 20);
+            RequestFont font = new RequestFont("Source Sans Pro", 20);
 
             for (int i = 0; i < 1; ++i)
             {
