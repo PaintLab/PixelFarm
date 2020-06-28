@@ -184,7 +184,7 @@ namespace PixelFarm.DrawingGL
         /// whitespace count at the begin of this seq
         /// </summary>
         public ushort PrefixWhitespaceCount { get; set; }
-        public RequestFont ActualFont { get; set; }
+        
         public bool ColorGlyphOnTransparentBG { get; set; }
     }
 
@@ -206,7 +206,7 @@ namespace PixelFarm.DrawingGL
 
         public int AdditionalVerticalOffset { get; set; }
 
-        public RequestFont ActualFont { get; set; }
+        public ResolvedFont ActualFont { get; set; }
         public bool ColorGlyphOnTransparentBG { get; set; }
 
         internal DrawingGL.VertexBufferObject GetVbo()

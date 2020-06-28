@@ -944,7 +944,6 @@
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.AdvancedLayout\JustificationTable.cs" Link="Typography\Typography.OpenFont\Tables.AdvancedLayout\JustificationTable.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.AdvancedLayout\LigatureCaretListTable.cs" Link="Typography\Typography.OpenFont\Tables.AdvancedLayout\LigatureCaretListTable.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.AdvancedLayout\MathTable.cs" Link="Typography\Typography.OpenFont\Tables.AdvancedLayout\MathTable.cs" />
-    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.AdvancedLayout\ScriptLang.cs" Link="Typography\Typography.OpenFont\Tables.AdvancedLayout\ScriptLang.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.AdvancedLayout\ScriptList.cs" Link="Typography\Typography.OpenFont\Tables.AdvancedLayout\ScriptList.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.AdvancedLayout\ScriptTable.cs" Link="Typography\Typography.OpenFont\Tables.AdvancedLayout\ScriptTable.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Tables.BitmapAndSvgFonts\BitmapFontGlyphSource.cs" Link="Typography\Typography.OpenFont\Tables.BitmapAndSvgFonts\BitmapFontGlyphSource.cs" />
@@ -998,6 +997,7 @@
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\TrueTypeInterperter\InvalidFontException.cs" Link="Typography\Typography.OpenFont\TrueTypeInterperter\InvalidFontException.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\TrueTypeInterperter\TrueTypeInterpreter.cs" Link="Typography\Typography.OpenFont\TrueTypeInterperter\TrueTypeInterpreter.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Typeface.cs" Link="Typography\Typography.OpenFont\Typeface.cs" />
+    <Compile Include="..\..\..\..\Typography\Typography.OpenFont\Typeface_TrimableExtensions.cs" Link="Typography\Typography.OpenFont\Typeface_TrimableExtensions.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\WebFont\Woff2Reader.cs" Link="Typography\Typography.OpenFont\WebFont\Woff2Reader.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.OpenFont\WebFont\WoffReader.cs" Link="Typography\Typography.OpenFont\WebFont\WoffReader.cs" />
     <Compile Include="..\..\..\..\Typography\Typography.TextBreak\Typography.TextBreak\BidiBreakEngine.cs" Link="Typography\Typography.TextBreak\Typography.TextBreak\BidiBreakEngine.cs" />

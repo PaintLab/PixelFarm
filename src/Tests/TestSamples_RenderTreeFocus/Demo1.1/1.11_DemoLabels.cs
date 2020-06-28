@@ -37,20 +37,22 @@ namespace LayoutFarm
             background_box.BackColor = PixelFarm.Drawing.Color.Blue;
             host.AddChild(background_box);
 
-            RequestFont font = new RequestFont("Twitter Color Emoji", 20);
-            //RequestFont font = new RequestFont("Source Sans Pro", 20);
+            //RequestFont font = new RequestFont("Twitter Color Emoji", 20);
+            RequestFont font = new RequestFont("Source Sans Pro", 20);
 
             for (int i = 0; i < 1; ++i)
             {
-                TextFlowLabel label = new TextFlowLabel(100, 50);
+                TextFlowLabel label = new TextFlowLabel(300, 50);
                 label.SetLocation(i * 55, i * 55);
                 label.BackColor = PixelFarm.Drawing.Color.Yellow;
                 label.RequestFont = font;
                 //label.Color = PixelFarm.Drawing.Color.Black;
                 //label.Text = "ABC  DE FG\r\nHIJ KLM NOP\r\nQRSTUVWXZYZ\r\n0123456789";
                 //label.Text = "ABCDEFG\r\nHIJKLMNOP\r\nQRSTUVWXZYZ\r\n0123456789";
-                label.Text = " A 😁😁X";
+                label.Text = " A 😁😁X 012345";
                 //label.Text = "😁😁";
+                //label.Text = "😁";
+                //label.Text = "A😁";
                 host.AddChild(label);
             }
         }
