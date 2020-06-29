@@ -332,11 +332,20 @@
     <Compile Include="..\PixelFarm.Painter\Drawing\ColorEx.cs">
       <Link>0_REF_Painter\Drawing\ColorEx.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.Painter\Drawing\DrawBoard.cs">
+      <Link>0_REF_Painter\DrawBoard.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.Painter\Drawing\ITextPrinter.cs">
       <Link>0_REF_Painter\Drawing\ITextPrinter.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.Painter\Drawing\Painter.cs">
+      <Link>0_REF_Painter\Painter.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.Painter\Drawing\TextBaseline.cs">
       <Link>0_REF_Painter\Drawing\TextBaseline.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.Painter\Drawing\TextMeasurement.cs">
+      <Link>0_REF_Painter\TextMeasurement.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.Painter\TempContext.cs">
       <Link>0_REF_Painter\TempContext.cs</Link>

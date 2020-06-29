@@ -38,7 +38,6 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DrawBoard.cs" />
     <Compile Include="Brushes_Pens.cs" />
     <Compile Include="CombineMode.cs" />
     <Compile Include="DashStyle.cs" />

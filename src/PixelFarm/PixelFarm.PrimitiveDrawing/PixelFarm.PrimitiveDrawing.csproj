@@ -42,8 +42,6 @@
     <Compile Include="Image.cs" />
     <Compile Include="ImageBinder.cs" />
     <Compile Include="LenAndLenUnit.cs" />
-    <Compile Include="RequestFont.cs" />
-    <Compile Include="TextMeasurement.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PixelFarm.PrimitiveGeo\PixelFarm.PrimitiveGeo.csproj">

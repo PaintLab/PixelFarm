@@ -139,7 +139,7 @@ namespace PixelFarm.Drawing
         {
             return reqFont._resolvedFont2 as T;
         }
-       
+
 #if DEBUG
         public override string ToString()
         {
@@ -232,5 +232,5 @@ namespace PixelFarm.Drawing
         public string Name { get; }
     }
 
- 
+
 }

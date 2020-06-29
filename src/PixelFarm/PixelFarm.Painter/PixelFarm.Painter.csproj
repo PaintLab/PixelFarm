@@ -163,6 +163,10 @@
     <Compile Include="CpuBlit\MemBitmapExt.cs" />
     <Compile Include="CpuBlit\TempMemPtr.cs" />
     <Compile Include="Drawing\ClipingTechnique.cs" />
+    <Compile Include="Drawing\DrawBoard.cs" />
+    <Compile Include="Drawing\Painter.cs" />
+    <Compile Include="Drawing\RequestFont.cs" />
+    <Compile Include="Drawing\TextMeasurement.cs" />
     <Compile Include="TempContext.cs" />
     <Compile Include="Drawing\TextBaseline.cs" />
     <Compile Include="CpuBlit\ColorRGBAf.cs" />
