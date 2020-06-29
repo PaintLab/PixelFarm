@@ -25,8 +25,12 @@ namespace PixelFarm.CpuBlit.Rasterization
         Custom,
         SubPixelLcdEffect
     }
+
+
+
     public partial class ScanlineSubPixelRasterizer
     {
+
         //this class design for render 32 bits RGBA  
 
         readonly TempForwardAccumBuffer _forwardTempBuff = new TempForwardAccumBuffer();

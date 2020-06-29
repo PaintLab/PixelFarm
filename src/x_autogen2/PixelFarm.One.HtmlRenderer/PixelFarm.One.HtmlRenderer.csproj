@@ -2061,6 +2061,9 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\03_rasterization\5_DestBitmapRasterizer.cs">
       <Link>PixelFarm\PixelFarm.CpuBlit\03_rasterization\5_DestBitmapRasterizer.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\03_Rasterization\AggMathRound.cs">
+      <Link>PixelFarm\PixelFarm.CpuBlit\03_Rasterization\AggMathRound.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\03_rasterization\SubPixConst.cs">
       <Link>PixelFarm\PixelFarm.CpuBlit\03_rasterization\SubPixConst.cs</Link>
     </Compile>
@@ -2175,6 +2178,9 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\DrawBoard.cs">
       <Link>PixelFarm\PixelFarm.DrawingCore\DrawBoard.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\FillingRule.cs">
+      <Link>PixelFarm\PixelFarm.DrawingCore\FillingRule.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\MemMx.cs">
       <Link>PixelFarm\PixelFarm.DrawingCore\MemMx.cs</Link>
     </Compile>
@@ -2189,9 +2195,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\RenderVx.cs">
       <Link>PixelFarm\PixelFarm.DrawingCore\RenderVx.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\VertexCommandAndOrientation.cs">
-      <Link>PixelFarm\PixelFarm.DrawingCore\VertexCommandAndOrientation.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\VertexStore.cs">
       <Link>PixelFarm\PixelFarm.DrawingCore\VertexStore.cs</Link>
@@ -2250,8 +2253,14 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\CpuBlit\ColorRGBAf.cs">
       <Link>PixelFarm\PixelFarm.Painter\CpuBlit\ColorRGBAf.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\CpuBlit\IBitmapSrc.cs">
+      <Link>PixelFarm\PixelFarm.Painter\CpuBlit\IBitmapSrc.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\CpuBlit\MemBitmap.cs">
       <Link>PixelFarm\PixelFarm.Painter\CpuBlit\MemBitmap.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\CpuBlit\MemBitmapExt.cs">
+      <Link>PixelFarm\PixelFarm.Painter\CpuBlit\MemBitmapExt.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\CpuBlit\PathWriter.cs">
       <Link>PixelFarm\PixelFarm.Painter\CpuBlit\PathWriter.cs</Link>
@@ -2282,6 +2291,9 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\AffineMat.cs">
       <Link>PixelFarm\PixelFarm.PrimitiveDrawing\AffineMat.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\BitmapBufferFormat.cs">
+      <Link>PixelFarm\PixelFarm.PrimitiveDrawing\BitmapBufferFormat.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\Color.cs">
       <Link>PixelFarm\PixelFarm.PrimitiveDrawing\Color.cs</Link>

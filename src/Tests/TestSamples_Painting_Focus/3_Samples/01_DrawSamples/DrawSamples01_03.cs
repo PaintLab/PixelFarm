@@ -26,7 +26,8 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             string imgFileName = "Samples\\lion1.png";
             if (System.IO.File.Exists(imgFileName))
             {
-                _lionImg = MemBitmap.LoadBitmap(imgFileName);
+                
+                _lionImg = MemBitmapExt.LoadBitmap(imgFileName);
             }
 
         }
