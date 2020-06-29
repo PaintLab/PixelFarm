@@ -87,25 +87,25 @@
       <Link>05_PixelProcessing\PixelBlenderBGRA.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\FillingRule.cs">
-      <Link>02_BitmapAndBlenders\FillingRule.cs</Link>
+      <Link>01_From_DrawingCore\FillingRule.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\MemMx.cs">
-      <Link>02_BitmapAndBlenders\MemMx.cs</Link>
+      <Link>01_From_DrawingCore\MemMx.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\NativeMemMx.cs">
-      <Link>02_BitmapAndBlenders\NativeMemMx.cs</Link>
+      <Link>01_From_DrawingCore\NativeMemMx.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\VertexStore.cs">
       <Link>01_From_DrawingCore\VertexStore.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\CpuBlit\IBitmapSrc.cs">
-      <Link>02_BitmapAndBlenders\IBitmapSrc.cs</Link>
+      <Link>01_From_Painter\IBitmapSrc.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\CpuBlit\MemBitmap.cs">
-      <Link>02_BitmapAndBlenders\MemBitmap.cs</Link>
+      <Link>01_From_Painter\MemBitmap.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\CpuBlit\TempMemPtr.cs">
-      <Link>02_BitmapAndBlenders\TempMemPtr.cs</Link>
+      <Link>01_From_Painter\TempMemPtr.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\Drawing.Internal\CO.cs">
       <Link>01_From_Painter\CO.cs</Link>
@@ -117,7 +117,7 @@
       <Link>01_From_PrimitiveDrawing\AffineMat.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\BitmapBufferFormat.cs">
-      <Link>02_BitmapAndBlenders\BitmapBufferFormat.cs</Link>
+      <Link>01_From_PrimitiveDrawing\BitmapBufferFormat.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\Color.cs">
       <Link>01_From_PrimitiveDrawing\Color.cs</Link>
@@ -126,7 +126,7 @@
       <Link>PORT\ExtensionAttribute.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\Image.cs">
-      <Link>02_BitmapAndBlenders\Image.cs</Link>
+      <Link>01_From_PrimitiveDrawing\Image.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\ICoordTransformer.cs">
       <Link>01_From_PrimitiveGeo\ICoordTransformer.cs</Link>
