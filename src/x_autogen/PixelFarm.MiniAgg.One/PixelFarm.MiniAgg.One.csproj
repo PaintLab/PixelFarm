@@ -116,7 +116,6 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\Brushes_Pens.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\CombineMode.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\DashStyle.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\DrawBoard.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\ExtensionAttribute.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\FillingRule.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCore\MemMx.cs" />
@@ -152,8 +151,12 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\Drawing.Internal\MicroPainter.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\Drawing\ClipingTechnique.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\Drawing\ColorEx.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\Drawing\DrawBoard.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\Drawing\ITextPrinter.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\Drawing\Painter.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\Drawing\RequestFont.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\Drawing\TextBaseline.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\Drawing\TextMeasurement.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.Painter\TempContext.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveDrawing\AffineMat.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveDrawing\BitmapBufferFormat.cs" />
@@ -162,8 +165,6 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveDrawing\Image.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveDrawing\ImageBinder.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveDrawing\LenAndLenUnit.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveDrawing\RequestFont.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveDrawing\TextMeasurement.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\BasicGeometries.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\ICoordTransformer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.PrimitiveGeo\Rectangle.cs" />

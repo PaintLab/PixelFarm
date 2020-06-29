@@ -224,9 +224,6 @@
     <Compile Include="..\PixelFarm.DrawingCore\DashStyle.cs">
       <Link>0_REF_DrawingCore\DashStyle.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\DrawBoard.cs">
-      <Link>0_REF_DrawingCore\DrawBoard.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.DrawingCore\ExtensionAttribute.cs">
       <Link>0_REF_DrawingCore\ExtensionAttribute.cs</Link>
     </Compile>
@@ -341,6 +338,9 @@
     <Compile Include="..\PixelFarm.Painter\Drawing\Painter.cs">
       <Link>0_REF_Painter\Painter.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.Painter\Drawing\RequestFont.cs">
+      <Link>0_REF_Painter\Drawing\RequestFont.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.Painter\Drawing\TextBaseline.cs">
       <Link>0_REF_Painter\Drawing\TextBaseline.cs</Link>
     </Compile>
@@ -370,12 +370,6 @@
     </Compile>
     <Compile Include="..\PixelFarm.PrimitiveDrawing\LenAndLenUnit.cs">
       <Link>0_REF_DrawingCore\1_PrimitiveDrawing\LenAndLenUnit.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.PrimitiveDrawing\RequestFont.cs">
-      <Link>0_REF_DrawingCore\1_PrimitiveDrawing\RequestFont.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.PrimitiveDrawing\TextMeasurement.cs">
-      <Link>0_REF_DrawingCore\1_PrimitiveDrawing\TextMeasurement.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.PrimitiveGeo\BasicGeometries.cs">
       <Link>0_REF_DrawingCore\1_PrimitiveGeo\BasicGeometries.cs</Link>
