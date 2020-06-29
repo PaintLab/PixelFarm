@@ -68,7 +68,7 @@ namespace OpenTkEssTest
             mSamplerLoc = GL.GetUniformLocation(mProgram, "s_texture");
             //// Load the texture
 
-            PixelFarm.CpuBlit.MemBitmap bmp = PixelFarm.CpuBlit.MemBitmap.LoadBitmap(RootDemoPath.Path + @"\lion1.png");
+            PixelFarm.CpuBlit.MemBitmap bmp = PixelFarm.CpuBlit.MemBitmapExt.LoadBitmap(RootDemoPath.Path + @"\lion1.png");
             int bmpW = bmp.Width;
             int bmpH = bmp.Height;
             mTexture = LoadTexture(bmp);
