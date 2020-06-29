@@ -99,7 +99,7 @@ namespace Mini
         {
             using (System.IO.FileStream fs = new System.IO.FileStream(imgFileName, System.IO.FileMode.Open))
             {
-                return LoadTexture(PixelFarm.CpuBlit.MemBitmapExtensions.LoadImage(fs));
+                return LoadTexture(PixelFarm.CpuBlit.MemBitmapExt.LoadBitmap(fs));
             }
         }
         public static GLBitmap LoadTexture(PixelFarm.CpuBlit.MemBitmap memBmp)
