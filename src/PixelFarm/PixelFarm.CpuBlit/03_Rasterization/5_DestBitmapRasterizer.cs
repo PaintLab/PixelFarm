@@ -1187,6 +1187,8 @@ namespace PixelFarm.CpuBlit.Rasterization
 
             int _stride;
             byte[] _line_buffer; //buffer for 8 bits grey scale byte buffer
+            byte _src_alpha;
+            byte[] _covers;
             public SingleLineBuffer()
             {
                 //default
@@ -1207,25 +1209,14 @@ namespace PixelFarm.CpuBlit.Rasterization
                     _line_buffer = new byte[stride8Bits];
                 }
             }
-            public void Clear()
-            {
-                Array.Clear(_line_buffer, 0, _line_buffer.Length);
-            }
+            public void Clear() => Array.Clear(_line_buffer, 0, _line_buffer.Length);
 
             public byte[] GetInternalBuffer() => _line_buffer;
 
+            public void SetBlendAlpha(byte src_alpha) => _src_alpha = src_alpha;//similar to SetBlendColor(Color c)
 
-            byte _src_alpha;
-            public void SetBlendAlpha(byte src_alpha)
-            {
-                //similar to SetBlendColor(Color c)
-                _src_alpha = src_alpha;
-            }
-            byte[] _covers;
-            public void SetCurrentCovers(byte[] covers)
-            {
-                _covers = covers;
-            }
+            public void SetCurrentCovers(byte[] covers) => _covers = covers;
+
             public void BlendSolidHSpan(int x, int len, int coversIndex)
             {
                 byte src_alpha = _src_alpha;
@@ -1660,16 +1651,15 @@ namespace PixelFarm.CpuBlit.Rasterization
 
 
         //look up table 
-        byte[] _primary;
-        byte[] _secondary;
-        byte[] _tertiary;
+        readonly byte[] _primary;
+        readonly byte[] _secondary;
+        readonly byte[] _tertiary;
 
-        byte[] _primary_255;
-        byte[] _secondary_255;
-        byte[] _tertiary_255;
+        readonly byte[] _primary_255;
+        readonly byte[] _secondary_255;
+        readonly byte[] _tertiary_255;
 
-
-        int _nLevel;
+        readonly int _nLevel;
         public LcdDistributionLut(byte grayLevel, double prim, double second, double tert)
         {
             _nLevel = grayLevel;
