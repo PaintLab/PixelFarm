@@ -220,6 +220,7 @@ namespace PixelFarm.DrawingGL
 
             }
         }
+
         protected static unsafe void AssignVertice5_4(
              in PixelFarm.CpuBlit.VertexProcessing.Quad2f quad,
              in PixelFarm.CpuBlit.VertexProcessing.Quad2f srcRect,
@@ -1805,15 +1806,15 @@ namespace PixelFarm.DrawingGL
 
             unsafe
             {
-                float* srcDestList = stackalloc float[6];
+                float* srcDestList = stackalloc float[]
                 {
-                    srcDestList[0] = srcLeft;
-                    srcDestList[1] = srcTop;
-                    srcDestList[2] = srcW;
-                    srcDestList[3] = srcH;
-                    srcDestList[4] = targetLeft;
-                    srcDestList[5] = targetTop;
-                }
+                    srcLeft,
+                    srcTop,
+                    srcW,
+                    srcH,
+                    targetLeft,
+                    targetTop
+                };
                 shader.UnsafeDrawSubImages(srcDestList, 6, 1);
             }
         }
@@ -1827,15 +1828,16 @@ namespace PixelFarm.DrawingGL
 
             unsafe
             {
-                float* srcDestList = stackalloc float[6];
+                float* srcDestList = stackalloc float[]
                 {
-                    srcDestList[0] = srcLeft;
-                    srcDestList[1] = srcTop;
-                    srcDestList[2] = srcW;
-                    srcDestList[3] = srcH;
-                    srcDestList[4] = targetLeft;
-                    srcDestList[5] = targetTop;
-                }
+                    srcLeft,
+                    srcTop,
+                    srcW,
+                    srcH,
+                    targetLeft,
+                    targetTop
+                };
+
                 shader.LoadGLBitmap(bmp);
                 shader.UnsafeDrawSubImages(srcDestList, 6, scale);
             }

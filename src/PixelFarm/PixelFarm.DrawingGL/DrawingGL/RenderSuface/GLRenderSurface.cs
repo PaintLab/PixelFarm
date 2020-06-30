@@ -1009,15 +1009,15 @@ namespace PixelFarm.DrawingGL
 
             unsafe
             {
-                float* srcDestList = stackalloc float[6];
+                float* srcDestList = stackalloc float[]
                 {
-                    srcDestList[0] = srcRect.Left;
-                    srcDestList[1] = srcRect.Top;
-                    srcDestList[2] = srcRect.Width;
-                    srcDestList[3] = srcRect.Height;
-                    srcDestList[4] = targetLeft;
-                    srcDestList[5] = targetTop;
-                }
+                    srcRect.Left,
+                    srcRect.Top,
+                    srcRect.Width,
+                    srcRect.Height,
+                    targetLeft,
+                    targetTop
+                };
 
                 //------------
                 //TODO: review performance here ***

@@ -4,11 +4,11 @@ using System;
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
-    
+
     sealed class SolidColorFillShader : ColorFillShaderBase
     {
         ShaderVtxAttrib2f a_position;
-        ShaderUniformVar4 u_solidColor; 
+        ShaderUniformVar4 u_solidColor;
         Drawing.Color _fillColor; //latest fill color
 
         public SolidColorFillShader(ShaderSharedResource shareRes)
@@ -53,7 +53,7 @@ namespace PixelFarm.DrawingGL
 
             a_position = _shaderProgram.GetAttrV2f("a_position");
             u_ortho_offset = _shaderProgram.GetUniform2("u_ortho_offset");
-            u_matrix = _shaderProgram.GetUniformMat4("u_mvpMatrix");            
+            u_matrix = _shaderProgram.GetUniformMat4("u_mvpMatrix");
             u_solidColor = _shaderProgram.GetUniform4("u_solidColor");
         }
         void SetColor(Drawing.Color c)
@@ -71,7 +71,7 @@ namespace PixelFarm.DrawingGL
             //--------------------------------------------
 
             SetColor(color);
-            a_position.LoadPureV2f(linesBuffer);            
+            a_position.LoadPureV2f(linesBuffer);
             GL.DrawArrays(BeginMode.TriangleStrip, 0, nelements);
         }
         //-------------------------------------------- 
@@ -160,9 +160,7 @@ namespace PixelFarm.DrawingGL
             SetColor(color);
             unsafe
             {
-                float* vtx = stackalloc float[4];
-                vtx[0] = x1; vtx[1] = y1;
-                vtx[2] = x2; vtx[3] = y2;
+                float* vtx = stackalloc float[] { x1, y1, x2, y2 };
                 a_position.UnsafeLoadPureV2f(vtx);
             }
             GL.DrawArrays(BeginMode.LineStrip, 0, 2);
