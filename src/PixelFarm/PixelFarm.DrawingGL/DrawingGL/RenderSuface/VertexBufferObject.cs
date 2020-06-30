@@ -29,7 +29,7 @@ namespace PixelFarm.DrawingGL
 
 
             dbugId = dbugTotalId++;
-            
+
             if (s_dbugVboCount.ContainsKey(dbugId))
             {
                 //??
@@ -151,9 +151,8 @@ namespace PixelFarm.DrawingGL
                     }
 #endif
 
-                    int* toDeleteBufferIndexArr = stackalloc int[2];
-                    toDeleteBufferIndexArr[0] = _vertexBufferId;
-                    toDeleteBufferIndexArr[1] = _indexBufferId;
+                    int* toDeleteBufferIndexArr = stackalloc int[] { _vertexBufferId, _indexBufferId };
+
                     GL.DeleteBuffers(2, toDeleteBufferIndexArr);
                     _vertexBufferId = _indexBufferId = 0;
                 }
