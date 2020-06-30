@@ -14,10 +14,7 @@ namespace WinFormGdiPlus
         // value from 0 to 1 
         public double S;
         // value from 0 to 1 
-        public double L;
-
-
-
+        public double L; 
         private static double ByteToPct(byte v)
         {
             double d = v;

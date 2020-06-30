@@ -17,7 +17,7 @@ namespace PixelFarm.Drawing
         Picas, //pc 
     }
 
-    public struct Len
+    public readonly struct Len
     {
         public readonly float Number;
         public readonly LenUnit Unit;

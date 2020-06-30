@@ -91,10 +91,10 @@ namespace PaintLab.Colourful
             _matrixArr[row * ColCount + col] += value;
         }
     }
-    public struct MatrixRow
+    public readonly struct MatrixRow
     {
-        Matrix _owner;
-        int _rowId;
+        readonly Matrix _owner;
+        readonly int _rowId;
         internal MatrixRow(Matrix owner, int rowId)
         {
             _owner = owner;

@@ -2,11 +2,11 @@
 
 namespace LayoutFarm.RenderBoxes
 {
-    public struct RenderElementRequest
+    public readonly struct RenderElementRequest
     {
-        public RenderElement renderElem;
-        public RequestCommand req;
-        public object parameters;
+        public readonly RenderElement renderElem;
+        public readonly RequestCommand req;
+        public readonly object parameters;
 
         public RenderElementRequest(RenderElement ve, RequestCommand req)
         {

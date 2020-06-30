@@ -19,7 +19,7 @@ namespace LayoutFarm.UI
     partial class UIElement
     {
 
-        struct CollectionHelper
+        readonly struct CollectionHelper
         {
             public static void CheckUI<T>(UIElement parent, T ui)
                 where T : UIElement

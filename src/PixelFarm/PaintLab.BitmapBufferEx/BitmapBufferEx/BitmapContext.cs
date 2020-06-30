@@ -34,7 +34,7 @@ namespace BitmapBufferEx
         ReadWrite
     }
 
-    public unsafe struct NativeInt32Arr
+    public unsafe readonly struct NativeInt32Arr
     {
         public readonly unsafe int* _inf32Buffer;
         public readonly int _len;
@@ -62,7 +62,7 @@ namespace BitmapBufferEx
     /// A disposable cross-platform wrapper around a WriteableBitmap, allowing a common API for Silverlight + WPF with locking + unlocking if necessary
     /// </summary>
     /// <remarks>Attempting to put as many preprocessor hacks in this file, to keep the rest of the codebase relatively clean</remarks>
-    public struct BitmapContext : IDisposable
+    public readonly struct BitmapContext : IDisposable
     {
         readonly BitmapBuffer _writeableBitmap;
         readonly ReadWriteMode _mode;

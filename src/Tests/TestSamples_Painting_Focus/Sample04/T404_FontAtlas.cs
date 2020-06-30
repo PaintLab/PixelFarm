@@ -50,15 +50,14 @@ namespace OpenTkEssTest
             var glyphTextureGen = new GlyphTextureBitmapGenerator();
             glyphTextureGen.MsdfGenVersion = 3;
 
-            //2. generate the glyphs
-
-            ResolvedFont resolvedFont = GlobalTextService.TextService2.ResolveFont(reqFont);
+            //2. generate the glyphs             
 
             SimpleBitmapAtlasBuilder atlasBuilder = glyphTextureGen.CreateTextureFontFromBuildDetail(
                 _typeface,
                 reqFont.SizeInPoints,
-                 TextureKind.Msdf,
-                GlyphTextureCustomConfigs.TryGetGlyphTextureBuildDetail(resolvedFont, false, false)
+                TextureKind.Msdf,
+                GlyphTextureCustomConfigs.TryGetGlyphTextureBuildDetail(
+                    new ResolvedFont2(GlobalTextService.TextService2.ResolveFont(reqFont)), false, false)
             );
 
             //3. set information before write to font-info
