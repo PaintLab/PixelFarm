@@ -6,7 +6,7 @@ using System.Text;
 using PixelFarm.Drawing;
 namespace LayoutFarm.TextEditing
 {
-    public struct VisualSelectionRangeSnapShot
+    public readonly struct VisualSelectionRangeSnapShot
     {
         public readonly int startLineNum;
         public readonly int startColumnNum;

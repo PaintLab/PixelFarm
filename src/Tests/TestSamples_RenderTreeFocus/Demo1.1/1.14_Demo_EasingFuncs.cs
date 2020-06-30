@@ -99,7 +99,7 @@ namespace LayoutFarm
 
         delegate double PennerAnimationGeneratorDelegate(double t, double b, double c, double d);
 
-        struct PennerAnimationInfo
+        readonly struct PennerAnimationInfo
         {
             public readonly string _name;
             public readonly PennerAnimationGeneratorDelegate _generatorDelegate;
@@ -108,10 +108,7 @@ namespace LayoutFarm
                 _name = name;
                 _generatorDelegate = targetDel;
             }
-            public override string ToString()
-            {
-                return _name;
-            }
+            public override string ToString() => _name;
         }
 
         static List<PennerAnimationInfo> LoadAllPennerAnimationList()

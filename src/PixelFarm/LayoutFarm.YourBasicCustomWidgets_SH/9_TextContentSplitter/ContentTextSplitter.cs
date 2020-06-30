@@ -6,10 +6,15 @@ namespace LayoutFarm.Composers
 {
     //temp here, 
     //these will be moved later
-    public struct WordBreakInfo
+    public readonly struct WordBreakInfo
     {
-        public int breakAt;
-        public byte wordKind;
+        public readonly int breakAt;
+        public readonly byte wordKind;
+        public WordBreakInfo(int breakAt, byte wordKind)
+        {
+            this.breakAt = breakAt;
+            this.wordKind = wordKind;
+        }
     }
     public interface ITextBreaker
     {
@@ -18,7 +23,7 @@ namespace LayoutFarm.Composers
     }
 
     //TODO: review here
-    public struct TextSplitBounds
+    public readonly struct TextSplitBounds
     {
         public readonly int startIndex;
         public readonly int length;
@@ -56,7 +61,7 @@ namespace LayoutFarm.CustomWidgets
     {
 
         ITextBreaker _textBreaker;
-        List<int> _breakAtList = new List<int>();
+        readonly List<int> _breakAtList = new List<int>();
         public ContentTextSplitter()
         {
             _textBreaker = Default.TextBreaker;

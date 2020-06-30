@@ -11,7 +11,7 @@ namespace PixelFarm.DrawingGL
 
     public class GLRenderSurface : IDisposable
     {
-        public struct InnerGLData
+        public readonly struct InnerGLData
         {
             public readonly GLBitmap GLBmp;
             public readonly int FramebufferId;
@@ -1808,7 +1808,8 @@ namespace PixelFarm.DrawingGL
         }
         public void Dispose()
         {
-            _owner.RestoreStates(_stateData);
+            _owner?.RestoreStates(_stateData);
+            _owner = null;
         }
     }
 

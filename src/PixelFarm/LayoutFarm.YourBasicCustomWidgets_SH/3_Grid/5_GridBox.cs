@@ -549,7 +549,7 @@ namespace LayoutFarm.CustomWidgets
         }
     }
 
-    public struct GridColumn
+    public readonly struct GridColumn
     {
         readonly UI.GridColumn _col;
         readonly GridBox _gridbox;
@@ -573,7 +573,7 @@ namespace LayoutFarm.CustomWidgets
         }
     }
 
-    public struct GridRow
+    public readonly struct GridRow
     {
         readonly UI.GridRow _row;
         readonly GridBox _gridbox;
@@ -597,7 +597,7 @@ namespace LayoutFarm.CustomWidgets
         }
 
     }
-    public struct GridCell
+    public readonly struct GridCell
     {
         public readonly int Row;
         public readonly int Column;

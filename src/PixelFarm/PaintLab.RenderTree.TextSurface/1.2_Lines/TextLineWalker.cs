@@ -8,7 +8,7 @@ using PixelFarm.Drawing;
 
 namespace LayoutFarm.TextEditing
 {
-    public struct SelectionRangeInfo
+    public readonly struct SelectionRangeInfo
     {
         public readonly EditableVisualPointInfo start;
         public readonly EditableVisualPointInfo end;

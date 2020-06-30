@@ -4,29 +4,29 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 namespace LayoutFarm.RenderBoxes
 {
-    public struct HitInfo
+    public readonly struct HitInfo
     {
         public readonly Point point;
+        public readonly object HitElem;
 
-        object _hitObject;
         public static readonly HitInfo Empty = new HitInfo();
         public HitInfo(object hitObject, Point point)
         {
             this.point = point;
-            _hitObject = hitObject;
+            HitElem = hitObject;
         }
         //
-        public RenderElement HitElemAsRenderElement => _hitObject as RenderElement;
+        public RenderElement HitElemAsRenderElement => HitElem as RenderElement;
         //
-        public object HitElem => _hitObject;
+     
         //
         public static bool operator ==(HitInfo pair1, HitInfo pair2)
         {
-            return ((pair1._hitObject == pair2._hitObject) && (pair1.point == pair2.point));
+            return ((pair1.HitElem == pair2.HitElem) && (pair1.point == pair2.point));
         }
         public static bool operator !=(HitInfo pair1, HitInfo pair2)
         {
-            return ((pair1._hitObject == pair2._hitObject) && (pair1.point == pair2.point));
+            return ((pair1.HitElem == pair2.HitElem) && (pair1.point == pair2.point));
         }
 
         public override int GetHashCode()
@@ -41,7 +41,7 @@ namespace LayoutFarm.RenderBoxes
 #if DEBUG
         public override string ToString()
         {
-            RenderElement renderE = _hitObject as RenderElement;
+            RenderElement renderE = HitElem as RenderElement;
             if (renderE != null)
             {
                 object controller = renderE.GetController();
@@ -57,7 +57,7 @@ namespace LayoutFarm.RenderBoxes
             }
             else
             {
-                return point + " :" + _hitObject.ToString();
+                return point + " :" + HitElem.ToString();
             }
         }
 #endif
@@ -182,7 +182,7 @@ namespace LayoutFarm.RenderBoxes
             }
         }
 
-         
+
         public bool Exclude_TransparentMouse_Element { get; set; } = true;
 
         public static void UnsafeClear(HitChain hitchain)

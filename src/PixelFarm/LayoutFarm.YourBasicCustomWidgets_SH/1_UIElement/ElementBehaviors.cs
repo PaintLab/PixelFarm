@@ -57,16 +57,16 @@ namespace LayoutFarm.UI
     public abstract class UIMouseBehaviourBase<S, T>
                           where S : IAcceptBehviour
     {
-        public struct SenderInfo
+        public readonly struct SenderInfo
         {
             /// <summary>
             /// event source
             /// </summary>
-            public S Source { get; internal set; }
+            public readonly S Source;
             /// <summary>
             /// state, may be nothing
             /// </summary>
-            public T State { get; internal set; }
+            public readonly T State;
 
             public SenderInfo(S source, T state)
             {
