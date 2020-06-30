@@ -8,6 +8,7 @@
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AssemblyName>PixelFarm.MiniAgg.One</AssemblyName>
+	  <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -296,9 +297,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\NativeMemMx.cs">
       <Link>PixelFarm\PixelFarm.DrawingCore\NativeMemMx.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\Painter.cs">
-      <Link>PixelFarm\PixelFarm.DrawingCore\Painter.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\Region.cs">
       <Link>PixelFarm\PixelFarm.DrawingCore\Region.cs</Link>
     </Compile>
@@ -398,9 +396,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\Drawing\Painter.cs">
       <Link>PixelFarm\PixelFarm.Painter\Drawing\Painter.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\Drawing\RequestFont.cs">
-      <Link>PixelFarm\PixelFarm.Painter\Drawing\RequestFont.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\Drawing\TextBaseline.cs">
       <Link>PixelFarm\PixelFarm.Painter\Drawing\TextBaseline.cs</Link>
     </Compile>
@@ -430,6 +425,9 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\LenAndLenUnit.cs">
       <Link>PixelFarm\PixelFarm.PrimitiveDrawing\LenAndLenUnit.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\RequestFont.cs">
+      <Link>PixelFarm\PixelFarm.PrimitiveDrawing\RequestFont.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\BasicGeometries.cs">
       <Link>PixelFarm\PixelFarm.PrimitiveGeo\BasicGeometries.cs</Link>

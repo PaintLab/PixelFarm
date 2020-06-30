@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
+using Typography.OpenFont;
 
 namespace PixelFarm.DrawingGL
 {
@@ -18,7 +19,7 @@ namespace PixelFarm.DrawingGL
     /// </summary>
     public class GLRenderVxFormattedString : PixelFarm.Drawing.RenderVxFormattedString
     {
-        internal List<SameFontWordPlateTextStrip> _strips = new List<SameFontWordPlateTextStrip>();
+        internal List<SameFontTextStrip> _strips = new List<SameFontTextStrip>();
 
         internal GLRenderVxFormattedString()
         {
@@ -62,7 +63,7 @@ namespace PixelFarm.DrawingGL
         {
             //dispose only its vbo
             //preserve coord data
-            foreach (SameFontWordPlateTextStrip s in _strips)
+            foreach (SameFontTextStrip s in _strips)
             {
                 s.DisposeVbo();
             }
@@ -173,27 +174,13 @@ namespace PixelFarm.DrawingGL
     }
 
 
-    class GLFormattedGlyphPlanSeq : FormattedGlyphPlanSeq
-    {
-        public GLFormattedGlyphPlanSeq() { }
-        /// <summary>
-        /// whitespace count at the end of this seq
-        /// </summary>
-        public ushort PostfixWhitespaceCount { get; set; }
-        /// <summary>
-        /// whitespace count at the begin of this seq
-        /// </summary>
-        public ushort PrefixWhitespaceCount { get; set; }
-        
-        public bool ColorGlyphOnTransparentBG { get; set; }
-    }
 
     /// <summary>
     /// same font text-strip of specific WordPlate
     /// </summary>
-    class SameFontWordPlateTextStrip
+    class SameFontTextStrip
     {
-        public SameFontWordPlateTextStrip() { }
+        public SameFontTextStrip() { }
         public DrawingGL.VertexBufferObject _vbo;
 
         public float[] VertexCoords { get; set; }
@@ -203,10 +190,7 @@ namespace PixelFarm.DrawingGL
         public float Width { get; set; }
         public int SpanHeight { get; set; }
         public int DescendingInPx { get; set; }
-
         public int AdditionalVerticalOffset { get; set; }
-
-        public ResolvedFont ActualFont { get; set; }
         public bool ColorGlyphOnTransparentBG { get; set; }
 
         internal DrawingGL.VertexBufferObject GetVbo()
@@ -232,6 +216,13 @@ namespace PixelFarm.DrawingGL
                 _vbo = null;
             }
         }
+
+
+        public Typeface Typeface { get; set; }
+        public float SizeInPoints { get; set; }
+        public FontStyle Style { get; set; }
+
     }
+
 
 }

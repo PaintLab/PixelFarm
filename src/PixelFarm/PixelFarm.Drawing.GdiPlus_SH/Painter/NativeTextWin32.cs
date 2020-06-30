@@ -360,10 +360,10 @@ namespace PixelFarm.Drawing.WinGdi
         public Gdi32TextService()
         {
         }
-        public ResolvedFontBase ResolveFont(RequestFont f)
-        {
-            throw new NotImplementedException();
-        }
+        //public ResolvedFontBase ResolveFont(RequestFont f)
+        //{
+        //    throw new NotImplementedException();
+        //}
         public float MeasureWhitespace(RequestFont f)
         {
             return WinGdiTextService.MeasureWhitespace(f);
@@ -397,12 +397,7 @@ namespace PixelFarm.Drawing.WinGdi
             ref TextSpanMeasureResult measureResult)
         {
             throw new NotImplementedException();
-        }
-
-        public Drawing.Size MeasureString(in TextBufferSpan textBufferSpan, ResolvedFontBase font)
-        {
-            throw new NotImplementedException();
-        }
+        } 
 
         public bool SupportsWordBreak => false;
 

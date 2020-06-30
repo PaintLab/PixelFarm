@@ -98,7 +98,7 @@ namespace TestGlfw
             PixelFarm.Platforms.StorageService.RegisterProvider(new YourImplementation.LocalFileStorageProvider(""));
 
             //2. img-io implementation
-            PixelFarm.CpuBlit.MemBitmapExtensions.DefaultMemBitmapIO = new YourImplementation.ImgCodecMemBitmapIO(); // new PixelFarm.Drawing.WinGdi.GdiBitmapIO();
+            PixelFarm.CpuBlit.MemBitmapExt.DefaultMemBitmapIO = new YourImplementation.ImgCodecMemBitmapIO(); // new PixelFarm.Drawing.WinGdi.GdiBitmapIO();
 
             //------------------------------------------------------------------------
             //5. image-IO (optional)
@@ -111,7 +111,7 @@ namespace TestGlfw
                 MemBitmap memBmp = new MemBitmap(width, height, imgBuffer);
                 using (FileStream fs = new FileStream(filename, FileMode.Create))
                 {
-                    PixelFarm.CpuBlit.MemBitmapExtensions.DefaultMemBitmapIO.SaveImage(memBmp, fs,
+                    PixelFarm.CpuBlit.MemBitmapExt.DefaultMemBitmapIO.SaveImage(memBmp, fs,
                          MemBitmapIO.OutputImageFormat.Png,
                          null);
                 }

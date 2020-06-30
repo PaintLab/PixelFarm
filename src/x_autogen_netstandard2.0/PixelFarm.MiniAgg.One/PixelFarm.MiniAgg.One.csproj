@@ -118,7 +118,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\FillingRule.cs" Link="PixelFarm\PixelFarm.DrawingCore\FillingRule.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\MemMx.cs" Link="PixelFarm\PixelFarm.DrawingCore\MemMx.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\NativeMemMx.cs" Link="PixelFarm\PixelFarm.DrawingCore\NativeMemMx.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\Painter.cs" Link="PixelFarm\PixelFarm.DrawingCore\Painter.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\Region.cs" Link="PixelFarm\PixelFarm.DrawingCore\Region.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\RenderVx.cs" Link="PixelFarm\PixelFarm.DrawingCore\RenderVx.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\VertexStore.cs" Link="PixelFarm\PixelFarm.DrawingCore\VertexStore.cs" />
@@ -152,7 +151,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\Drawing\DrawBoard.cs" Link="PixelFarm\PixelFarm.Painter\Drawing\DrawBoard.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\Drawing\ITextPrinter.cs" Link="PixelFarm\PixelFarm.Painter\Drawing\ITextPrinter.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\Drawing\Painter.cs" Link="PixelFarm\PixelFarm.Painter\Drawing\Painter.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\Drawing\RequestFont.cs" Link="PixelFarm\PixelFarm.Painter\Drawing\RequestFont.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\Drawing\TextBaseline.cs" Link="PixelFarm\PixelFarm.Painter\Drawing\TextBaseline.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\Drawing\TextMeasurement.cs" Link="PixelFarm\PixelFarm.Painter\Drawing\TextMeasurement.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter\TempContext.cs" Link="PixelFarm\PixelFarm.Painter\TempContext.cs" />
@@ -163,6 +161,7 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\Image.cs" Link="PixelFarm\PixelFarm.PrimitiveDrawing\Image.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\ImageBinder.cs" Link="PixelFarm\PixelFarm.PrimitiveDrawing\ImageBinder.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\LenAndLenUnit.cs" Link="PixelFarm\PixelFarm.PrimitiveDrawing\LenAndLenUnit.cs" />
+    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\RequestFont.cs" Link="PixelFarm\PixelFarm.PrimitiveDrawing\RequestFont.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\BasicGeometries.cs" Link="PixelFarm\PixelFarm.PrimitiveGeo\BasicGeometries.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\ICoordTransformer.cs" Link="PixelFarm\PixelFarm.PrimitiveGeo\ICoordTransformer.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\Rectangle.cs" Link="PixelFarm\PixelFarm.PrimitiveGeo\Rectangle.cs" />
