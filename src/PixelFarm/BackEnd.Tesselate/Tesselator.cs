@@ -73,7 +73,7 @@ namespace Tesselate
 
 
         public struct CombineParameters
-        {
+        {//mutable-struct//
             public int d0, d1, d2, d3;
             public double w0, w1, w2, w3;
         }

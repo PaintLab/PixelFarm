@@ -16,11 +16,13 @@ namespace PaintFx
     /// "A Primer on Building a Color Picker User Control with GDI+ in Visual Basic .NET or C#"
     /// http://www.msdnaa.net/Resources/display.aspx?ResID=2460
     /// </summary>
-    public readonly struct HsvColor
+    public struct HsvColor
     {
-        public readonly int Hue; // 0-360
-        public readonly int Saturation; // 0-100
-        public readonly int Value; // 0-100
+        //mutable-struct//
+
+        public int Hue; // 0-360
+        public int Saturation; // 0-100
+        public int Value; // 0-100
 
         public static bool operator ==(HsvColor lhs, HsvColor rhs)
         {
