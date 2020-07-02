@@ -189,7 +189,7 @@ namespace PixelFarm.PathReconstruction
 
         HSpan[] SortAndCollectHSpans()
         {
-            static int spanSort(HSpan sp1, HSpan sp2)
+            int spanSort(HSpan sp1, HSpan sp2)
             {
                 //NESTED METHOD
                 //sort  asc,

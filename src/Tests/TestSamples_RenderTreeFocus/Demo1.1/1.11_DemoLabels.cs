@@ -53,6 +53,7 @@ namespace LayoutFarm
                 //label.Text = "😁😁";
                 //label.Text = "😁";
                 //label.Text = "A😁";
+                //label.Text = "A";
                 host.AddChild(label);
             }
         }

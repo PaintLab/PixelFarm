@@ -57,7 +57,7 @@ namespace OpenTkEssTest
                 reqFont.SizeInPoints,
                 TextureKind.Msdf,
                 GlyphTextureCustomConfigs.TryGetGlyphTextureBuildDetail(
-                    new ResolvedFont2(GlobalTextService.TextService2.ResolveFont(reqFont)), false, false)
+                    GlobalTextService.TextService2.ResolveFont(reqFont), false, false)
             );
 
             //3. set information before write to font-info

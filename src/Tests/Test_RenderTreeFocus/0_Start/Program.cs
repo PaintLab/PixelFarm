@@ -8,8 +8,7 @@ namespace TestGraphicPackage2
 
         [STAThread]
         static void Main(string[] args)
-        {
-
+        { 
 
             PixelFarm.Platforms.StorageService.RegisterProvider(new YourImplementation.LocalFileStorageProvider(""));
 
