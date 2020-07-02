@@ -397,7 +397,7 @@ namespace PixelFarm.Drawing.WinGdi
             ref TextSpanMeasureResult measureResult)
         {
             throw new NotImplementedException();
-        } 
+        }
 
         public bool SupportsWordBreak => false;
 
@@ -543,16 +543,19 @@ namespace PixelFarm.Drawing.WinGdi
             //read font file 
             //TODO:...
             //set shape engine ***  
-            var openFont = new NOpenFontFace(typeface, typeface.Name, typeface.Filename);
-            return openFont;
+            return new NOpenFontFace(typeface, typeface.Name, typeface.Filename);
         }
         public static FontFace LoadFont(string fontpath)
         {
-
             using (FileStream fs = new FileStream(fontpath, FileMode.Open, FileAccess.Read))
             {
                 var reader = new OpenFontReader();
                 Typeface t = reader.Read(fs);
+                if (t == null)
+                {
+                    return null;
+                }
+
                 t.Filename = fontpath;
                 return LoadFont(t);
             }

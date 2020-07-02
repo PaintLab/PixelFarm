@@ -8,6 +8,7 @@
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AssemblyName>PixelFarm.One.HtmlRenderer</AssemblyName>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -1013,6 +1014,7 @@
     <Compile Include="D:\projects\Typography\Typography.OpenFont\TrueTypeInterperter\InvalidFontException.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\TrueTypeInterperter\TrueTypeInterpreter.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Typeface.cs" />
+    <Compile Include="D:\projects\Typography\Typography.OpenFont\Typeface_Extensions.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Typeface_TrimableExtensions.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\WebFont\Woff2Reader.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\WebFont\WoffReader.cs" />

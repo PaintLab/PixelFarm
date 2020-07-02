@@ -217,11 +217,7 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-
-        public Typeface Typeface { get; set; }
-        public float SizeInPoints { get; set; }
-        public FontStyle Style { get; set; }
-
+        public ResolvedFont ResolvedFont { get; set; }
     }
 
 

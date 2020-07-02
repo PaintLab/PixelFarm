@@ -103,12 +103,36 @@ namespace PixelFarm.DrawingGL
 
         void ChangeFont(SameFontTextStrip s)
         {
+            ResolvedFont r_font = s.ResolvedFont;
+#if DEBUG
+            if (r_font == null) { throw new NotSupportedException(); }
+#endif
+            _px_scale = r_font.GetScaleToPixelFromPointInSize();
+            _white_space_width = r_font.WhitespaceWidth;
+            _ascending = r_font.AscentInPixels;
+            _descending = r_font.DescentInPixels;
+            _lineSpacingInPx = r_font.LineSpacingInPixels;
 
-
+            _fontAtlas = _myGLBitmapFontMx.GetFontAtlas(r_font, out _glBmp);
         }
         void ChangeFont(FormattedGlyphPlanSeq s)
         {
 
+            //_resolvedFont = font;
+            ResolvedFont r_font = s.ResolvedFont;
+#if DEBUG
+            if (r_font == null) { throw new NotSupportedException(); }
+#endif
+            Typeface typeface = r_font.Typeface;
+            _fontSizeInPoints = r_font.SizeInPoints;
+            _px_scale = r_font.GetScaleToPixelFromPointInSize();
+
+            _white_space_width = r_font.WhitespaceWidth;//(int)Math.Round(typeface.GetWhitespaceWidth() * _px_scale);
+            _ascending = r_font.AscentInPixels;
+            _descending = r_font.DescentInPixels;
+            _lineSpacingInPx = r_font.LineSpacingInPixels; //typeface.CalculateMaxLineClipHeight() * _px_scale;
+
+            _fontAtlas = _myGLBitmapFontMx.GetFontAtlas(r_font, out _glBmp);
 
         }
         public void ChangeFont(ResolvedFont font)
@@ -778,21 +802,22 @@ namespace PixelFarm.DrawingGL
             int left = 0;//simulate left
 
             //change font once 
-
-            Typeface expectedTypeface = txtStrip.Typeface;
+            ResolvedFont expected_resolvedFont = txtStrip.ResolvedFont;
+            Typeface expectedTypeface = expected_resolvedFont.Typeface;
 #if DEBUG
             if (expectedTypeface == null) { throw new NotSupportedException(); }
 #endif
 
             ChangeFont(txtStrip);
 
-            float px_scale = expectedTypeface.CalculateScaleToPixelFromPointSize(txtStrip.SizeInPoints);
+            float px_scale = expected_resolvedFont.GetScaleToPixelFromPointInSize();
 
             //TODO: review here, rounding error*** 
-            txtStrip.SpanHeight = (int)Math.Round(expectedTypeface.CalculateMaxLineClipHeight() * px_scale);// expectedFont.LineSpacingInPixels;
+            txtStrip.SpanHeight = expected_resolvedFont.LineSpacingInPixels;// (int)Math.Round(expectedTypeface.CalculateMaxLineClipHeight() * px_scale);// expectedFont.LineSpacingInPixels;
 
-            int descend_px = (int)(expectedTypeface.Descender * px_scale);
-            int ascentd_px = (int)(expectedTypeface.Ascender * px_scale);
+            //TODO: review here, Rounding error
+            int descend_px = (int)expected_resolvedFont.DescentInPixels;// (int)(expectedTypeface.Descender * px_scale);
+            int ascentd_px = (int)expected_resolvedFont.AscentInPixels;// (int)(expectedTypeface.Ascender * px_scale);
             txtStrip.DescendingInPx = descend_px;// (short)(expectedTypeface.Descender * px_scale);  //expectedFont.DescentInPixels;
 
             int count = seqs.Count;
@@ -819,7 +844,7 @@ namespace PixelFarm.DrawingGL
             for (int s = 0; s < count; ++s)
             {
                 FormattedGlyphPlanSeq sq = seqs[s];
-                bool isTargetFont = sq.Typeface == expectedTypeface;
+                bool isTargetFont = sq.ResolvedFont.Typeface == expectedTypeface;
 
                 //if this seq use another font=> just calculate entire advance with
 
@@ -915,63 +940,31 @@ namespace PixelFarm.DrawingGL
         public AlternativeTypefaceSelector AlternativeTypefaceSelector { get; set; }
 
 
-        readonly Dictionary<Typeface, bool> _uniqueResolvedFonts = new Dictionary<Typeface, bool>();
+        readonly Dictionary<int, ResolvedFont> _uniqueResolvedFonts = new Dictionary<int, ResolvedFont>();
+        readonly Dictionary<int, ResolvedFont> _localResolvedFonts = new Dictionary<int, ResolvedFont>();
+
         readonly List<FormattedGlyphPlanSeq> _fmtGlyphPlanSeqs = new List<FormattedGlyphPlanSeq>();
 
-        /// <summary>
-        /// helper struct for summarize glyph mixed mode
-        /// </summary>
-        struct GlyphMixModeSummary
+        ResolvedFont LocalResolveFont(Typeface typeface, float sizeInPoint, FontStyle style)
         {
-            public GLRenderVxFormattedStringGlyphMixMode FinalMixMode { get; private set; }
-            public void AddGlyphMixMode(bool colorGlyphOnTransparentBG)
+            //find local resolved font cache
+
+            //check if we have a cache key or not
+            int typefaceKey = TypefaceExtensions.GetCustomTypefaceKey(typeface);
+            if (typefaceKey == 0)
             {
-                switch (FinalMixMode)
-                {
-                    case GLRenderVxFormattedStringGlyphMixMode.Unknown:
-
-                        if (colorGlyphOnTransparentBG)
-                        {
-                            FinalMixMode = GLRenderVxFormattedStringGlyphMixMode.OnlyColorGlyphs;
-                        }
-                        else
-                        {
-                            FinalMixMode = GLRenderVxFormattedStringGlyphMixMode.OnlyStencilGlyphs;
-                        }
-
-                        break;
-                    case GLRenderVxFormattedStringGlyphMixMode.MixedStencilAndColorGlyphs:
-                        //not need to evalute 
-                        break;
-                    case GLRenderVxFormattedStringGlyphMixMode.OnlyColorGlyphs:
-
-                        if (colorGlyphOnTransparentBG)
-                        {
-                            //already color
-                        }
-                        else
-                        {
-                            FinalMixMode = GLRenderVxFormattedStringGlyphMixMode.MixedStencilAndColorGlyphs;
-                        }
-
-                        break;
-                    case GLRenderVxFormattedStringGlyphMixMode.OnlyStencilGlyphs:
-
-                        if (colorGlyphOnTransparentBG)
-                        {
-                            //
-                            FinalMixMode = GLRenderVxFormattedStringGlyphMixMode.MixedStencilAndColorGlyphs;
-                        }
-                        else
-                        {
-
-                        }
-
-                        break;
-                }
+                //calculate and cache
+                TypefaceExtensions.SetCustomTypefaceKey(typeface,
+                    typefaceKey = RequestFont.CalculateTypefaceKey(typeface.Name));
             }
-        }
 
+            int key = RequestFont.CalculateFontKey(typefaceKey, sizeInPoint, style);
+            if (!_localResolvedFonts.TryGetValue(key, out ResolvedFont found))
+            {
+                return _localResolvedFonts[key] = new ResolvedFont(typeface, sizeInPoint, style, key);
+            }
+            return found;
+        }
 
         public void PrepareStringForRenderVx(GLRenderVxFormattedString vxFmtStr, char[] buffer, int startAt, int len)
         {
@@ -1001,7 +994,7 @@ namespace PixelFarm.DrawingGL
             FormattedGlyphPlanSeq latestFmtGlyphPlanSeq = null;
 
             _uniqueResolvedFonts.Clear();
-            _uniqueResolvedFonts.Add(curTypeface, true);
+            _uniqueResolvedFonts.Add(resolvedFont.FontKey, resolvedFont);
 
             _fmtGlyphPlanSeqs.Clear();
 
@@ -1027,7 +1020,7 @@ namespace PixelFarm.DrawingGL
                     }
                     continue; //***
                 }
-                //---------------
+                //--------------
 
                 if (spBreakInfo.RightToLeft)
                 {
@@ -1055,6 +1048,7 @@ namespace PixelFarm.DrawingGL
                 }
 
                 //------------
+
                 if (sample_glyphIndex == 0)
                 {
                     //not found then => find other typeface                    
@@ -1067,7 +1061,9 @@ namespace PixelFarm.DrawingGL
                     if (_textServices.TryGetAlternativeTypefaceFromCodepoint(codepoint, AlternativeTypefaceSelector, out Typeface alternative))
                     {
                         //change to another
+                        //create local resolved font
                         curTypeface = alternative;
+                        resolvedFont = LocalResolveFont(curTypeface, _fontSizeInPoints, FontStyle.Regular);
                     }
                     else
                     {
@@ -1084,14 +1080,15 @@ namespace PixelFarm.DrawingGL
 
                 _textServices.CurrentScriptLang = new ScriptLang(spBreakInfo.ScriptTag, spBreakInfo.LangTag);
                 //layout glyphs in each context
-
                 GlyphPlanSequence seq = _textServices.CreateGlyphPlanSeq(buff, curTypeface, reqFont.SizeInPoints);
-
                 seq.IsRightToLeft = spBreakInfo.RightToLeft;
 
-                if (!_uniqueResolvedFonts.ContainsKey(curTypeface))
+                //calculate font key => get resolved font
+
+
+                if (!_uniqueResolvedFonts.ContainsKey(resolvedFont.FontKey))
                 {
-                    _uniqueResolvedFonts[curTypeface] = true;
+                    _uniqueResolvedFonts.Add(resolvedFont.FontKey, resolvedFont);
                 }
 
                 //----------------
@@ -1102,7 +1099,7 @@ namespace PixelFarm.DrawingGL
                     PrefixWhitespaceCount = (ushort)prefix_whitespaceCount//***
                 };
 
-                formattedGlyphPlanSeq.SetData(seq, curTypeface, reqFont.SizeInPoints, reqFont.Style);
+                formattedGlyphPlanSeq.SetData(seq, resolvedFont);
 
                 //add to temp location 
 
@@ -1127,16 +1124,27 @@ namespace PixelFarm.DrawingGL
             foreach (var kv in _uniqueResolvedFonts)
             {
                 //once for each typeface***
+                ResolvedFont resolvedFont1 = kv.Value;
 
-                SameFontTextStrip sameFontTextStrip = new SameFontTextStrip();
+#if DEBUG
+                if (resolvedFont1 == null) { throw new NotSupportedException(); }
+#endif
 
-                Typeface typeface = kv.Key;
-                sameFontTextStrip.Typeface = typeface;
+                Typeface typeface = resolvedFont1.Typeface;
+
+                SameFontTextStrip sameFontTextStrip = new SameFontTextStrip
+                {
+                    SpanHeight = 30,
+                    ResolvedFont = resolvedFont1
+                };
+
+
 
                 //assign ColorGlyphOnTransparentBG and update mix mode state
                 mixModeSummary.AddGlyphMixMode(
                     sameFontTextStrip.ColorGlyphOnTransparentBG =
                             (typeface.HasSvgTable() || typeface.IsBitmapFont || typeface.HasColorTable()));
+
 
                 //** 
                 CreateTextCoords(sameFontTextStrip, _fmtGlyphPlanSeqs);
@@ -1199,6 +1207,62 @@ namespace PixelFarm.DrawingGL
             _uniqueResolvedFonts.Clear();
             _fmtGlyphPlanSeqs.Clear();
         }
+
+
+        /// <summary>
+        /// helper struct for summarize glyph mixed mode
+        /// </summary>
+        struct GlyphMixModeSummary
+        {
+            public GLRenderVxFormattedStringGlyphMixMode FinalMixMode { get; private set; }
+            public void AddGlyphMixMode(bool colorGlyphOnTransparentBG)
+            {
+                switch (FinalMixMode)
+                {
+                    case GLRenderVxFormattedStringGlyphMixMode.Unknown:
+
+                        if (colorGlyphOnTransparentBG)
+                        {
+                            FinalMixMode = GLRenderVxFormattedStringGlyphMixMode.OnlyColorGlyphs;
+                        }
+                        else
+                        {
+                            FinalMixMode = GLRenderVxFormattedStringGlyphMixMode.OnlyStencilGlyphs;
+                        }
+
+                        break;
+                    case GLRenderVxFormattedStringGlyphMixMode.MixedStencilAndColorGlyphs:
+                        //not need to evalute 
+                        break;
+                    case GLRenderVxFormattedStringGlyphMixMode.OnlyColorGlyphs:
+
+                        if (colorGlyphOnTransparentBG)
+                        {
+                            //already color
+                        }
+                        else
+                        {
+                            FinalMixMode = GLRenderVxFormattedStringGlyphMixMode.MixedStencilAndColorGlyphs;
+                        }
+
+                        break;
+                    case GLRenderVxFormattedStringGlyphMixMode.OnlyStencilGlyphs:
+
+                        if (colorGlyphOnTransparentBG)
+                        {
+                            //
+                            FinalMixMode = GLRenderVxFormattedStringGlyphMixMode.MixedStencilAndColorGlyphs;
+                        }
+                        else
+                        {
+
+                        }
+
+                        break;
+                }
+            }
+        }
+
     }
 
 

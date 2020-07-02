@@ -981,6 +981,7 @@ namespace BuildMergeProject
                 one1.AddProperty("TargetFrameworkProfile", "Profile111");
             }
 
+            one1.AddProperty("LangVersion", "8.0");
 
             string defineConstForDebug = " DEBUG; TRACE";
             string defineConstForRelease = " TRACE";

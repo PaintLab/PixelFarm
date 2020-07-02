@@ -82,6 +82,13 @@ namespace PixelFarm.DrawingGL
             get => _requestFont;
             set
             {
+#if DEBUG
+                if (value.SizeInPoints == 0)
+                {
+
+                }
+#endif
+
                 _requestFont = value;
                 _textPrinter?.ChangeFont(value);
             }
