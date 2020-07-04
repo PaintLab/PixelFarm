@@ -6,7 +6,7 @@ namespace LayoutFarm.TextEditing
 {
     static class Temp<Owner, T>
     {
-        public struct TempContext : IDisposable
+        public readonly struct TempContext : IDisposable
         {
             internal readonly T _tool;
             internal TempContext(out T tool)

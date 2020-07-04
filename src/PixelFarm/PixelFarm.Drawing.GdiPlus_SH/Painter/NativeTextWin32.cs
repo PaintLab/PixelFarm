@@ -14,6 +14,7 @@ using Typography.TextBreak;
 
 namespace PixelFarm.Drawing.WinGdi
 {
+    using PixelFarm.Drawing;
     using Win32;
 
     static class WinGdiTextService
@@ -93,7 +94,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
 
             SetFont(font);
-            Win32.Size win32_size = new Size();
+            Win32.Size win32_size = new Win32.Size();
             if (buff.Length > 0)
             {
                 unsafe
@@ -132,7 +133,7 @@ namespace PixelFarm.Drawing.WinGdi
                 return PixelFarm.Drawing.Size.Empty;
             }
 
-            var size = new Size(); //win32
+            var size = new Win32.Size(); //win32
             unsafe
             {
                 fixed (char* startAddr = &buff[0])
@@ -358,8 +359,11 @@ namespace PixelFarm.Drawing.WinGdi
     {
         public Gdi32TextService()
         {
-
         }
+        //public ResolvedFontBase ResolveFont(RequestFont f)
+        //{
+        //    throw new NotImplementedException();
+        //}
         public float MeasureWhitespace(RequestFont f)
         {
             return WinGdiTextService.MeasureWhitespace(f);
@@ -394,6 +398,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
             throw new NotImplementedException();
         }
+
         public bool SupportsWordBreak => false;
 
     }
@@ -538,16 +543,19 @@ namespace PixelFarm.Drawing.WinGdi
             //read font file 
             //TODO:...
             //set shape engine ***  
-            var openFont = new NOpenFontFace(typeface, typeface.Name, typeface.Filename);
-            return openFont;
+            return new NOpenFontFace(typeface, typeface.Name, typeface.Filename);
         }
         public static FontFace LoadFont(string fontpath)
         {
-
             using (FileStream fs = new FileStream(fontpath, FileMode.Open, FileAccess.Read))
             {
                 var reader = new OpenFontReader();
                 Typeface t = reader.Read(fs);
+                if (t == null)
+                {
+                    return null;
+                }
+
                 t.Filename = fontpath;
                 return LoadFont(t);
             }
@@ -648,7 +656,7 @@ namespace PixelFarm.Drawing.WinGdi
             //1.  
             FontGlyph fontGlyph = new FontGlyph();
             fontGlyph.flattenVxs = GetGlyphVxs(glyphIndex);
-            fontGlyph.horiz_adv_x = _typeFace.GetHAdvanceWidthFromGlyphIndex(glyphIndex);
+            fontGlyph.horiz_adv_x = _typeFace.GetAdvanceWidthFromGlyphIndex(glyphIndex);
 
             return fontGlyph;
         }

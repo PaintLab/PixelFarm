@@ -109,9 +109,18 @@ namespace PixelFarm.Drawing.GLES2
         {
             //temp fix
             get => _gpuPainter.TextBgColorHint;
-            set => _gpuPainter.TextBgColorHint = value;
+            set
+            {
+#if DEBUG
+                if (value.A < 255)
+                {
+
+                }
+#endif
+                _gpuPainter.TextBgColorHint = value;
+            }
         }
-       
+
         public override TextDrawingTech TextDrawingTech
         {
             get => _textDrawingTechnique;
@@ -126,6 +135,9 @@ namespace PixelFarm.Drawing.GLES2
                         break;
                     case TextDrawingTech.Stencil:
                         ((GLBitmapGlyphTextPrinter)_gpuPainter.TextPrinter).TextDrawingTechnique = GlyphTexturePrinterDrawingTechnique.Stencil;
+                        break;
+                    case TextDrawingTech.Copy:
+                        ((GLBitmapGlyphTextPrinter)_gpuPainter.TextPrinter).TextDrawingTechnique = GlyphTexturePrinterDrawingTechnique.Copy;
                         break;
                 }
 

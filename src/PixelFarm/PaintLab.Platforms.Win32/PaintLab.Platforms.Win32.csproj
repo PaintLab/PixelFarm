@@ -12,7 +12,8 @@
     <AssemblyName>PaintLab.Platforms.Win32</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <FileUpgradeFlags>
+	  <LangVersion>8.0</LangVersion>
+	  <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>

@@ -31,11 +31,13 @@
 // ------------------------------------------------------------------
 namespace ImageTools
 {
-    public class CRC32Calculator
+    struct CRC32Calculator
     {
-        public CRC32Calculator()
-        {
-        }
+        long _totalBytesRead;
+        uint _runningCrc32Result;
+#if DEBUG
+        bool _dbugFirstReset;
+#endif
         /// <summary>
         /// indicates the total number of bytes read on the CRC stream.
         /// This is used when writing the ZipDirEntry when compressing files.
@@ -57,26 +59,30 @@ namespace ImageTools
         /// </summary>
         public void Reset()
         {
+
             _runningCrc32Result = 0xFFFFFFFF;
             _totalBytesRead = 0;
+#if DEBUG
+            _dbugFirstReset = true;
+#endif
         }
 
-        /// <summary>
-        /// Get the CRC32 for the given (word,byte) combo.  This is a computation
-        /// defined by PKzip.
-        /// </summary>
-        /// <param name="W">The word to start with.</param>
-        /// <param name="B">The byte to combine it with.</param>
-        /// <returns>The CRC-ized result.</returns>
-        static Int32 ComputeCrc32(Int32 W, byte B)
-        {
-            return _InternalComputeCrc32((UInt32)W, B);
-        }
+        ///// <summary>
+        ///// Get the CRC32 for the given (word,byte) combo.  This is a computation
+        ///// defined by PKzip.
+        ///// </summary>
+        ///// <param name="W">The word to start with.</param>
+        ///// <param name="B">The byte to combine it with.</param>
+        ///// <returns>The CRC-ized result.</returns>
+        //static Int32 ComputeCrc32(Int32 W, byte B)
+        //{
+        //    return _InternalComputeCrc32((UInt32)W, B);
+        //}
 
-        internal static Int32 _InternalComputeCrc32(UInt32 W, byte B)
-        {
-            return (Int32)(crc32Table[(W ^ B) & 0xFF] ^ (W >> 8));
-        }
+        //internal static Int32 _InternalComputeCrc32(UInt32 W, byte B)
+        //{
+        //    return (Int32)(crc32Table[(W ^ B) & 0xFF] ^ (W >> 8));
+        //}
         public void SlurpBlock(byte[] block)
         {
             SlurpBlock(block, 0, block.Length);
@@ -94,13 +100,21 @@ namespace ImageTools
             {
                 throw new NotSupportedException("The data buffer must not be null.");
             }
+#if DEBUG
+            if (_dbugFirstReset)
+            {
+                throw new NotSupportedException();
+            }
+#endif
+
 
             // UInt32 tmpRunningCRC32Result = _RunningCrc32Result;
             for (int i = 0; i < count; i++)
             {
+#if DEBUG
                 int x = offset + i;
-                _runningCrc32Result = ((_runningCrc32Result) >> 8) ^ crc32Table[(block[x]) ^ ((_runningCrc32Result) & 0x000000FF)];
-                //tmpRunningCRC32Result = ((tmpRunningCRC32Result) >> 8) ^ crc32Table[(block[offset + i]) ^ ((tmpRunningCRC32Result) & 0x000000FF)];
+#endif
+                _runningCrc32Result = ((_runningCrc32Result) >> 8) ^ crc32Table[(block[offset + i]) ^ ((_runningCrc32Result) & 0x000000FF)];
             }
 
             _totalBytesRead += count;
@@ -109,6 +123,8 @@ namespace ImageTools
 
 
         // pre-initialize the crc table for speed of lookup.
+
+        static readonly uint[] crc32Table;
         static CRC32Calculator()
         {
             unchecked
@@ -239,23 +255,7 @@ namespace ImageTools
 
 
 
-        long _totalBytesRead;
-        uint _runningCrc32Result = 0xFFFFFFFF;
-        const int BUFFER_SIZE = 8192;
-        static readonly uint[] crc32Table;
-        public static int CalculateCrc32(string inputData)
-        {
-            CRC32Calculator cal = new CRC32Calculator();
-            byte[] utf8 = System.Text.Encoding.UTF8.GetBytes(inputData);
-            cal.SlurpBlock(utf8, 0, utf8.Length);
-            return cal.Crc32Result;
-        }
-        public static int CalculateCrc32(byte[] buffer)
-        {
-            CRC32Calculator cal = new CRC32Calculator();
-            cal.SlurpBlock(buffer, 0, buffer.Length);
-            return cal.Crc32Result;
-        }
+
     }
 
 }

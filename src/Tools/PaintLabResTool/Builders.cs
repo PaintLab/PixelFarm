@@ -7,8 +7,8 @@ using System.Text;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.BitmapAtlas;
 using PixelFarm.Drawing;
-using SampleWinForms;
 
+using PaintLab;
 
 namespace Mini
 {
@@ -368,6 +368,7 @@ namespace Mini
                     {
                         //1. create glyph-texture-bitmap generator
                         var glyphTextureGen = new GlyphTextureBitmapGenerator();
+                        glyphTextureGen.SetSvgBmpBuilderFunc(SvgBuilderHelper.ParseAndRenderSvg);
                         //2. generate the glyphs
                         if (builderTask.TextureKind == TextureKind.Msdf)
                         {

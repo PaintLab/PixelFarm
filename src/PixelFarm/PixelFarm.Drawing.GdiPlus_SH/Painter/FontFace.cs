@@ -2,10 +2,10 @@
 
 using System;
 using PixelFarm.CpuBlit;
-using System.Collections.Generic; 
-namespace PixelFarm.Drawing 
+using System.Collections.Generic;
+namespace PixelFarm.Drawing
 {
-    
+
     public abstract class FontFace : IDisposable
     {
         public bool HasKerning { get; set; }
@@ -38,7 +38,7 @@ namespace PixelFarm.Drawing
         /// </summary>
         public int codePoint;
 
-        
+
         /// <summary>
         /// 32 bpp image for render
         /// </summary>
@@ -117,7 +117,7 @@ namespace PixelFarm.Drawing
         }
         public static void SetCacheActualFont(RequestFont r, ActualFont a)
         {
-            s_actualFonts[r.FontKey] = a; 
+            s_actualFonts[r.FontKey] = a;
         }
     }
 }

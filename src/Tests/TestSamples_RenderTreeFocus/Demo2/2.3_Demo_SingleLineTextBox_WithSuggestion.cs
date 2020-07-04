@@ -74,7 +74,7 @@ namespace LayoutFarm
             {
                 if (_listbox.SelectedIndex >= 0)
                 {
-                    _textbox.ReplaceCurrentTextRunContent(currentLocalText.Length,
+                    _textbox.ReplaceCurrentTextRunContent(_currentLocalText.Length,
                         (string)_listbox.GetItem(_listbox.SelectedIndex).Tag);
                     //------------------------------------- 
                     //then hide suggestion list
@@ -90,11 +90,12 @@ namespace LayoutFarm
         {
             return new string(buffer, bound.startIndex, bound.length);
         }
-        string currentLocalText = null;
+
+        string _currentLocalText = null;
         void UpdateSuggestionList()
         {
             //find suggestion words 
-            this.currentLocalText = null;
+            _currentLocalText = null;
             _listbox.ClearItems();
             if (_textbox.CurrentTextSpan == null)
             {
@@ -116,9 +117,9 @@ namespace LayoutFarm
                 return;
             }
             Composers.TextSplitBounds lastSplitPart = results[m - 1];
-            this.currentLocalText = GetString(textBuffer, lastSplitPart);
+            _currentLocalText = GetString(textBuffer, lastSplitPart);
             //char firstChar = currentTextSpanText[0];
-            char firstChar = currentLocalText[0];
+            char firstChar = _currentLocalText[0];
             List<string> keywords;
             if (_words.TryGetValue(firstChar, out keywords))
             {
@@ -127,7 +128,7 @@ namespace LayoutFarm
                 for (int i = 0; i < j; ++i)
                 {
                     string choice = keywords[i].ToUpper();
-                    if (choice.StartsWith(currentLocalText))
+                    if (choice.StartsWith(_currentLocalText))
                     {
                         CustomWidgets.ListItem item = new CustomWidgets.ListItem(listViewWidth, 17);
                         item.BackColor = KnownColors.LightGray;
@@ -400,8 +401,7 @@ Zimbabwe");
                     sepWord = sepWord.Substring(1, sepWord.Length - 2);
                 }
                 char firstChar = sepWord[0];
-                List<string> list;
-                if (!_words.TryGetValue(firstChar, out list))
+                if (!_words.TryGetValue(firstChar, out List<string> list))
                 {
                     list = new List<string>();
                     _words.Add(firstChar, list);

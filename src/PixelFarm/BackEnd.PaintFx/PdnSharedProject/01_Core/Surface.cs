@@ -132,7 +132,7 @@ namespace PaintFx
         /// This is a convenience function that returns Rectangle(0, 0, Width, Height).
         /// This property will never throw an ObjectDisposedException.
         /// </remarks>
-        public Rectangle Bounds =>new Rectangle(0, 0, Width, Height);
+        public Rectangle Bounds => new Rectangle(0, 0, Width, Height);
 
         ///// <summary>
         ///// Creates a new instance of the Surface class.
@@ -516,14 +516,14 @@ namespace PaintFx
         //    return new MemoryBlock(scan0, GetRowByteOffset(y), (long)width * (long)ColorBgra.SizeOf);
         //}
 
-        public bool IsContiguousMemoryRegion(Rectangle bounds)
-        {
-            bool oneRow = (bounds.Height == 1);
-            bool manyRows = (this.Stride == (this.Width * ColorBgra.SizeOf) &&
-                this.Width == bounds.Width);
+        //public bool IsContiguousMemoryRegion(Rectangle bounds)
+        //{
+        //    bool oneRow = (bounds.Height == 1);
+        //    bool manyRows = (this.Stride == (this.Width * ColorBgra.SizeOf) &&
+        //        this.Width == bounds.Width);
 
-            return oneRow || manyRows;
-        }
+        //    return oneRow || manyRows;
+        //}
 
         /// <summary>
         /// Determines if the requested pixel coordinate is within bounds.

@@ -17,7 +17,7 @@ namespace LayoutFarm.CustomWidgets
 
         RequestFont _font;
         CustomTextRun _myTextRun;
-        TextDrawingTech _drawTextTechnique;
+        TextDrawingTech _textDrawingTech;
 
         public Label() : this(10, 10)
         {
@@ -30,7 +30,7 @@ namespace LayoutFarm.CustomWidgets
             : base(w, h)
         {
             _textColor = PixelFarm.Drawing.Color.Black;
-            DrawTextTechnique = TextDrawingTech.Stencil;
+            TextDrawingTech = TextDrawingTech.Stencil;
         }
 
 #if DEBUG
@@ -41,7 +41,7 @@ namespace LayoutFarm.CustomWidgets
             if (_myTextRun == null)
             {
                 var t_run = new CustomTextRun(this.Width, this.Height);
-                t_run.TextDrawingTech = _drawTextTechnique;
+                t_run.TextDrawingTech = _textDrawingTech;
 
                 t_run.TextColor = _textColor;
                 t_run.BackColor = _backColor;
@@ -120,12 +120,12 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-        public TextDrawingTech DrawTextTechnique
+        public TextDrawingTech TextDrawingTech
         {
-            get => _drawTextTechnique;
+            get => _textDrawingTech;
             set
             {
-                _drawTextTechnique = value;
+                _textDrawingTech = value;
                 if (_myTextRun != null)
                 {
                     _myTextRun.TextDrawingTech = value;

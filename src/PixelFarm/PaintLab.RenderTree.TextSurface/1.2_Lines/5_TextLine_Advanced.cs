@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
- 
+
 namespace LayoutFarm.TextEditing
 {
 
@@ -360,22 +360,29 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
+
+        //use pool?
+        TextPrinterWordVisitor _wordVisitor = new TextPrinterWordVisitor();
+        TextPrinterLineSegmentList<TextPrinterLineSegment> _lineSegs = new TextPrinterLineSegmentList<TextPrinterLineSegment>();
+
         Size MeasureCopyRunLength(CopyRun copyRun)
         {
 
-            ITextService txServices = GlobalTextService.TextService;
+            IAdvanceTextService txServices = GlobalTextService.AdvanceTextService;
 
             char[] mybuffer = copyRun.RawContent;
             if (txServices.SupportsWordBreak)
             {
                 var textBufferSpan = new TextBufferSpan(mybuffer);
 
-                ILineSegmentList lineSegs = txServices.BreakToLineSegments(textBufferSpan);
+                _lineSegs.Clear();
+                _wordVisitor.SetLineSegmentList(_lineSegs);
+                txServices.BreakToLineSegments(textBufferSpan, _wordVisitor);
 
                 var result = new TextSpanMeasureResult();
                 result.outputXAdvances = new int[mybuffer.Length];
 
-                txServices.CalculateUserCharGlyphAdvancePos(textBufferSpan, lineSegs,
+                txServices.CalculateUserCharGlyphAdvancePos(textBufferSpan, _lineSegs,
                     DefaultRunStyle.ReqFont,
                     ref result);
 

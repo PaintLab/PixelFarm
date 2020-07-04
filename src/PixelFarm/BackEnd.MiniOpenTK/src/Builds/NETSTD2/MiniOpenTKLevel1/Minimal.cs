@@ -716,27 +716,27 @@ namespace OpenTK
     /// Represents a color with 4 8bit components (R, G, B, A).
     /// </summary>
 
-    public struct Color : IEquatable<Color>
+    public readonly struct Color : IEquatable<Color>
     {
         /// <summary>
         /// The red component of this Color structure.
         /// </summary>
-        public byte R;
+        public readonly byte R;
 
         /// <summary>
         /// The green component of this Color structure.
         /// </summary>
-        public byte G;
+        public readonly byte G;
 
         /// <summary>
         /// The blue component of this Color structure.
         /// </summary>
-        public byte B;
+        public readonly byte B;
 
         /// <summary>
         /// The alpha component of this Color structure.
         /// </summary>
-        public byte A;
+        public readonly byte A;
 
         /// <summary>
         /// Constructs a new Color structure from the specified components.

@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using PixelFarm.Drawing; 
+using PixelFarm.Drawing;
 
 namespace LayoutFarm.TextEditing
 {
@@ -42,24 +42,8 @@ namespace LayoutFarm.TextEditing
 
         protected bool SupportWordBreak => _runStyle.SupportsWordBreak;
 
-        protected ILineSegmentList BreakToLineSegs(in TextBufferSpan textBufferSpan) => _runStyle.BreakToLineSegments(textBufferSpan);
-
-        protected void MeasureString2(in TextBufferSpan textBufferSpan,
-            ILineSegmentList lineSeg,
-            ref TextSpanMeasureResult measureResult)
-        {
-            if (lineSeg != null)
-            {
-                ILineSegmentList seglist = _runStyle.BreakToLineSegments(textBufferSpan);
-                _runStyle.CalculateUserCharGlyphAdvancePos(textBufferSpan, seglist, ref measureResult);
-
-            }
-            else
-            {
-                _runStyle.CalculateUserCharGlyphAdvancePos(textBufferSpan, ref measureResult);
-            }
-        }
-
+      
+       
         public RunStyle RunStyle => _runStyle;
         //
         public virtual void SetStyle(RunStyle runStyle) => _runStyle = runStyle;

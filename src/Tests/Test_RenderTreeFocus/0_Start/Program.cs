@@ -8,8 +8,7 @@ namespace TestGraphicPackage2
 
         [STAThread]
         static void Main(string[] args)
-        {
-
+        { 
 
             PixelFarm.Platforms.StorageService.RegisterProvider(new YourImplementation.LocalFileStorageProvider(""));
 
@@ -29,7 +28,7 @@ namespace TestGraphicPackage2
             var dicProvider = new Typography.TextBreak.IcuSimpleTextFileDictionaryProvider() { DataDir = icu_datadir };
             Typography.TextBreak.CustomBreakerBuilder.Setup(dicProvider);
 
-            PixelFarm.CpuBlit.MemBitmapExtensions.DefaultMemBitmapIO = new PixelFarm.Drawing.WinGdi.GdiBitmapIO();
+            PixelFarm.CpuBlit.MemBitmapExt.DefaultMemBitmapIO = new PixelFarm.Drawing.WinGdi.GdiBitmapIO();
 
             YourImplementation.TestBedStartup.Setup();
             //-------------------------------------------

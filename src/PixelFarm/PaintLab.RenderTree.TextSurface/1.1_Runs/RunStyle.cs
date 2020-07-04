@@ -2,6 +2,7 @@
 
 
 using PixelFarm.Drawing;
+using Typography.TextBreak;
 
 namespace LayoutFarm.TextEditing
 {
@@ -13,9 +14,42 @@ namespace LayoutFarm.TextEditing
         }
         //
         public byte ContentHAlign;
-        //
-        public RequestFont ReqFont { get; set; }
         public Color FontColor { get; set; }
+
+        RequestFont _reqFont;
+        ResolvedFont _resolvedFont;
+        public RequestFont ReqFont
+        {
+            get => _reqFont;
+            set
+            {
+                _reqFont = value;
+                _resolvedFont = null;
+            }
+        }
+        public ResolvedFont ResolvedFont
+        {
+            get
+            {
+                if (_resolvedFont != null)
+                {
+                    return _resolvedFont;
+                }
+                else if (_reqFont != null)
+                {
+                    return _resolvedFont = GlobalTextService.TextService2.ResolveFont(_reqFont);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _resolvedFont = value;
+                _reqFont = null;
+            }
+        }
         //
         internal Size MeasureString(in TextBufferSpan textBufferSpan)
         {
@@ -25,17 +59,16 @@ namespace LayoutFarm.TextEditing
         {
             return GlobalTextService.TextService.MeasureBlankLineHeight(ReqFont);
         }
-        internal bool SupportsWordBreak => GlobalTextService.TextService.SupportsWordBreak;
-        internal ILineSegmentList BreakToLineSegments(in TextBufferSpan textBufferSpan)
-        {
-            return GlobalTextService.TextService.BreakToLineSegments(textBufferSpan);
-        }
 
-        internal void CalculateUserCharGlyphAdvancePos(
+        public bool SupportsWordBreak => GlobalTextService.AdvanceTextService.SupportsWordBreak;
+
+        public void BreakToLineSegments(in TextBufferSpan textBufferSpan, WordVisitor wordVisitor) => GlobalTextService.AdvanceTextService.BreakToLineSegments(textBufferSpan, wordVisitor);
+
+        public void CalculateUserCharGlyphAdvancePos(
             in TextBufferSpan textBufferSpan,
             ref TextSpanMeasureResult measureResult)
         {
-            GlobalTextService.TextService.CalculateUserCharGlyphAdvancePos(
+            GlobalTextService.AdvanceTextService.CalculateUserCharGlyphAdvancePos(
                     textBufferSpan,
                     ReqFont,
                     ref measureResult);
@@ -45,7 +78,7 @@ namespace LayoutFarm.TextEditing
             ILineSegmentList lineSegs,
             ref TextSpanMeasureResult measureResult)
         {
-            GlobalTextService.TextService.CalculateUserCharGlyphAdvancePos(
+            GlobalTextService.AdvanceTextService.CalculateUserCharGlyphAdvancePos(
                 textBufferSpan,
                 lineSegs,
                 ReqFont,

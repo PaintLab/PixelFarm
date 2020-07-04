@@ -49,6 +49,7 @@ namespace LayoutFarm.TextEditing
         {
             _editSession.SelectAll();
         }
+        public TextDrawingTech TextDrawingTech { get; set; } = TextDrawingTech.LcdSubPix;
         internal TextFlowLayer TextFlowLayer => _textLayer;
         public Color SelectionTextColor { get; set; } = Color.Black;
         public Color SelectionBackgroundColor { get; set; } = Color.Yellow;
@@ -517,6 +518,9 @@ namespace LayoutFarm.TextEditing
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
             RequestFont enterFont = d.CurrentFont;
+            TextDrawingTech prev_text_drawing_tech = d.TextDrawingTech;//backup
+            
+            d.TextDrawingTech = this.TextDrawingTech;
 
             d.CurrentFont = this.CurrentTextSpanStyle.ReqFont;
             //1. bg 
@@ -546,8 +550,8 @@ namespace LayoutFarm.TextEditing
             {
                 //with selection
                 _editSession.SelectionRange.FontColor = SelectionTextColor;
-                _editSession.SelectionRange.BackgroundColor = SelectionBackgroundColor; 
-                
+                _editSession.SelectionRange.BackgroundColor = SelectionBackgroundColor;
+
                 if (d.TextDrawingTech == TextDrawingTech.LcdSubPix)
                 {
                     TextRun.s_currentRenderE = this;
@@ -563,7 +567,7 @@ namespace LayoutFarm.TextEditing
                     _textLayer.DrawChildContent(d, updateArea);
                     TextRun.s_currentRenderE = null;//temp fix 
                 }
-                
+
             }
             else
             {
@@ -578,9 +582,9 @@ namespace LayoutFarm.TextEditing
 
 #endif
 
-
             d.CurrentFont = enterFont;
             d.TextBackgroundColorHint = prev_hintColor;
+            d.TextDrawingTech = prev_text_drawing_tech;
         }
 
         internal void OnTextContentSizeChanged()

@@ -5,25 +5,39 @@ using PixelFarm.Drawing;
 
 namespace PixelFarm.CpuBlit
 {
+    public interface IAggTextPrinter : ITextPrinter
+    {
+        /// <summary>
+        /// render from RenderVxFormattedString object to specific pos
+        /// </summary>
+        /// <param name="renderVx"></param>
+        /// <param name="left"></param>
+        /// <param name="top"></param>
+        void DrawString(AggRenderVxFormattedString renderVx, double left, double top);
+        void PrepareStringForRenderVx(AggRenderVxFormattedString renderVx, char[] text, int startAt, int len);
+        int CurrentLineSpaceHeight { get; }
+    }
 
     partial class AggPainter
     {
         //font
+
         RequestFont _currentFont;
-        ITextPrinter _textPrinter;
-         
-        public ITextPrinter TextPrinter
+        IAggTextPrinter _textPrinter;
+
+        public IAggTextPrinter TextPrinter
         {
             get => _textPrinter;
             set
             {
                 _textPrinter = value;
-                if (_textPrinter != null)
+                if (_currentFont != null)
                 {
-                    _textPrinter.ChangeFont(_currentFont);
+                    _textPrinter?.ChangeFont(_currentFont);
                 }
             }
         }
+
 
         public override RequestFont CurrentFont
         {
@@ -31,15 +45,15 @@ namespace PixelFarm.CpuBlit
             set
             {
                 _currentFont = value;
-                //this request font must resolve to actual font
-                //within canvas *** 
-                //TODO: review drawing string  with agg here 
+                //                
                 if (_textPrinter != null && value != null)
                 {
                     _textPrinter.ChangeFont(value);
                 }
             }
         }
+
+        public int CurrentLineSpaceHeight => (_textPrinter != null) ? _textPrinter.CurrentLineSpaceHeight : 0;
 
         public override void DrawString(
            string text,
@@ -67,7 +81,8 @@ namespace PixelFarm.CpuBlit
         public override void DrawString(RenderVxFormattedString renderVx, double left, double top)
         {
             //draw string from render vx 
-            _textPrinter?.DrawString(renderVx, left, top);
+
+            _textPrinter?.DrawString((AggRenderVxFormattedString)renderVx, left, top);
         }
         public override RenderVxFormattedString CreateRenderVx(string textspan)
         {

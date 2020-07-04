@@ -22,7 +22,7 @@ namespace LayoutFarm.CustomWidgets
         public Color? BorderColor;        
     }
 
-    public struct SideSpec
+    public readonly struct SideSpec
     {
         public readonly Len Margin;
         public readonly Len Border;

@@ -77,7 +77,6 @@ namespace PixelFarm
             using (Tools.BorrowVxs(out var v1, out var v3))
             using (Tools.BorrowCurveFlattener(out var flatten))
             using (Tools.BorrowPathWriter(v1, out var w))
-
             {
                 w.MoveTo(10, 10);
                 w.DrawCurve(new float[]

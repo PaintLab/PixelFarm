@@ -79,7 +79,7 @@ namespace LayoutFarm.TextEditing
             _owner.ClientLayerBubbleUpInvalidateArea(clientInvalidatedArea);
         }
 
-        public int DefaultLineHeight => DefaultRunStyle.ReqFont.LineSpacingInPixels;
+        public int DefaultLineHeight => DefaultRunStyle.ResolvedFont.LineSpacingInPixels;
 
         internal void NotifyContentSizeChanged() => ContentSizeChanged?.Invoke(this, EventArgs.Empty);
 
@@ -227,7 +227,7 @@ namespace LayoutFarm.TextEditing
             int enter_canvasY = d.OriginY;
 
             Rectangle currentClip = d.CurrentClipRect;
-            Color prev_colorHint = d.TextBackgroundColorHint; 
+            Color prev_colorHint = d.TextBackgroundColorHint;
 
 
             for (int i = 0; i < j; ++i)

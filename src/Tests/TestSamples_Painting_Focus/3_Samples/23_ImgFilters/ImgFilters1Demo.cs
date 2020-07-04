@@ -80,7 +80,7 @@ namespace PixelFarm.CpuBlit.ImgFilterDemo
         double _rotationDeg;//rotation angle in degree
         public ImgFilter1Demo()
         {
-            _orgImg = MemBitmap.LoadBitmap("../Data/spheres.png");
+            _orgImg = MemBitmapExt.LoadBitmap("../Data/spheres.png");
             _imgW = _orgImg.Width;
             _imgH = _orgImg.Height;
 

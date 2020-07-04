@@ -290,7 +290,7 @@ namespace LayoutFarm.UI
         }
 
 #if DEBUG
-
+        bool _dbugEnableDebugMark = true;
         dbugHitChainPhase _dbugHitChainPhase;
 #endif
 
@@ -349,11 +349,12 @@ namespace LayoutFarm.UI
                             return false;
                         }
                         _currentMouseDown = listener;
+
                         listener.ListenMouseDown(e1);
 
                         //------------------------------------------------------- 
                         //auto begin monitor mouse press 
-                        _mousePressMonitor.AddMousePressInformation(e);
+                        _mousePressMonitor.AddMousePressInformation(e1);
                         _mousePressMonitor.SetMonitoredElement(listener);
                         //------------------------------------------------------- 
                         bool cancelMouseBubbling = e1.CancelBubbling;
@@ -471,6 +472,16 @@ namespace LayoutFarm.UI
                 {
                     //please ensure=> no local var/pararmeter capture inside lambda
                     _mouseMoveFoundSomeHit = true;
+
+#if DEBUG
+                    if (_dbugEnableDebugMark && e.Ctrl && e1.X <= 10 && e1.Y <= 10)
+                    {
+                        //show dbug info                          
+                        listener.dbugDevWriteInfo();
+                    }
+#endif
+
+
 
                     bool _bubble = true; //temp fix
                     if (_latestMouseActive != listener && !_mouseMoveFoundLastMouseActive)

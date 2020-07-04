@@ -10,11 +10,7 @@ namespace BitmapBufferEx
     {
         public abstract RectD TransformBounds(RectD r1);
         public abstract PointD Transform(PointD p);
-        public abstract MatrixTransform Inverse
-        {
-            get;
-        }
-
+        public abstract MatrixTransform Inverse { get; }
     }
     public class MatrixTransform : GeneralTransform
     {
@@ -75,7 +71,7 @@ namespace BitmapBufferEx
 
     }
 
-    struct RectInt32
+    readonly struct RectInt32
     {
         public RectInt32(int left, int top, int width, int height)
         {
@@ -84,22 +80,19 @@ namespace BitmapBufferEx
             this.Width = width;
             this.Height = height;
         }
-        public int Left { get; private set; }
-        public int Top { get; private set; }
-        public int Width { get; private set; }
-        public int Height { get; private set; }
-        public int X { get { return this.Left; } }
-        public int Y { get { return this.Top; } }
-        public int Bottom { get { return Y + Height; } }
-        public int Right { get { return Left + Width; } }
-        public bool IsEmpty
-        {
-            get
-            {
-                //TODO: eval once
-                return (this.Left | this.Top | this.Width | this.Height) == 0;
-            }
-        }
+        public readonly int Left;
+        public readonly int Top;
+        public readonly int Width;
+        public readonly int Height;
+
+        public int X => this.Left;
+        public int Y => this.Top;
+        public int Bottom => Y + Height;
+        public int Right => Left + Width;
+
+        //TODO: eval once
+        public bool IsEmpty => (this.Left | this.Top | this.Width | this.Height) == 0;
+
         private bool IntersectsWithInclusive(RectInt32 r)
         {
             return !((Left > r.Right) || (Right < r.Left) ||
@@ -137,14 +130,14 @@ namespace BitmapBufferEx
         ///	and another Rectangle.
         /// </remarks>
 
-        public void Intersect(RectInt32 rect)
-        {
-            this = RectInt32.Intersect(this, rect);
-        }
+        //public void Intersect(RectInt32 rect)
+        //{
+        //    this = RectInt32.Intersect(this, rect);
+        //}
 
     }
 
-    public struct RectD
+    public readonly struct RectD
     {
         public RectD(double left, double top, double width, double height)
         {
@@ -161,14 +154,14 @@ namespace BitmapBufferEx
             this.Width = size.Width;
             this.Height = size.Height;
         }
-        public double Left { get; private set; }
-        public double Top { get; private set; }
-        public double Width { get; private set; }
-        public double Height { get; private set; }
-        public double X { get { return this.Left; } }
-        public double Y { get { return this.Top; } }
-        public double Bottom { get { return Y + Height; } }
-        public double Right { get { return Left + Width; } }
+        public readonly double Left;
+        public readonly double Top;
+        public readonly double Width;
+        public readonly double Height;
+        public double X => this.Left;
+        public double Y => this.Top;
+        public double Bottom => Y + Height;
+        public double Right => Left + Width;
         public bool IsEmpty
         {
             get
@@ -212,13 +205,13 @@ namespace BitmapBufferEx
         ///	and another Rectangle.
         /// </remarks>
 
-        public void Intersect(RectD rect)
-        {
-            this = RectD.Intersect(this, rect);
-        }
+        //public void Intersect(RectD rect)
+        //{
+        //    this = RectD.Intersect(this, rect);
+        //}
 
     }
-    
+
     public struct PointD
     {
         public double X;
@@ -229,7 +222,7 @@ namespace BitmapBufferEx
             this.Y = y;
         }
     }
-    public struct SizeD
+    public readonly struct SizeD
     {
         public SizeD(int w, int h)
         {
@@ -241,67 +234,51 @@ namespace BitmapBufferEx
             this.Width = w;
             this.Height = h;
         }
-        public double Width { get; private set; }
-        public double Height { get; private set; }
+        public readonly double Width;
+        public readonly double Height;
     }
-    public struct ColorInt
+
+    public readonly struct ColorInt
     {
         //see https://github.com/PaintLab/PixelFarm/issues/12
         //we store color as 'straight alpha'
-        byte _r, _g, _b, _a;
 
-        public byte R => _r;
-        public byte G => _g;
-        public byte B => _b;
-        public byte A => _a;
+        public readonly byte R;
+        public readonly byte G;
+        public readonly byte B;
+        public readonly byte A;
+        public ColorInt(byte a, byte r, byte g, byte b)
+        {
+            A = a;
+            R = r;
+            G = g;
+            B = b;
+        }
 
-        public static ColorInt CreateNew(ColorInt oldColor, byte a)
-        {
-            ColorInt c = new ColorInt();
-            c._r = oldColor._r;
-            c._g = oldColor._g;
-            c._b = oldColor._b;
-            c._a = a;
-            return c;
-        }
-        public static ColorInt FromArgb(byte a, byte r, byte g, byte b)
-        {
-            ColorInt c = new ColorInt();
-            c._r = r;
-            c._g = g;
-            c._b = b;
-            c._a = a;
-            return c;
-        }
-        public static ColorInt FromArgb(int argb)
-        {
-            ColorInt c = new ColorInt();
-            c._a = (byte)((argb >> 24));
-            c._r = (byte)((argb >> 16) & 0xff);
-            c._g = (byte)((argb >> 8) & 0xff);
-            c._b = (byte)((argb >> 0) & 0xff);
+        public static ColorInt CreateNew(ColorInt oldColor, byte a) => new ColorInt(a, oldColor.R, oldColor.G, oldColor.B);
 
-            return c;
-        }
-        public static bool operator ==(ColorInt c1, ColorInt c2)
-        {
-            return (uint)((c1._a << 24) | (c1._r << 16) | (c1._g << 8) | (c1._b)) ==
-                   (uint)((c2._a << 24) | (c2._r << 16) | (c2._g << 8) | (c2._b));
-        }
-        public static bool operator !=(ColorInt c1, ColorInt c2)
-        {
-            return (uint)((c1._a << 24) | (c1._r << 16) | (c1._g << 8) | (c1._b)) !=
-                  (uint)((c2._a << 24) | (c2._r << 16) | (c2._g << 8) | (c2._b));
-        }
+        public static ColorInt FromArgb(byte a, byte r, byte g, byte b) => new ColorInt(a, r, g, b);
+
+        public static ColorInt FromArgb(int argb) => new ColorInt(
+            (byte)((argb >> 24) & 0xff),
+            (byte)((argb >> 16) & 0xff),
+            (byte)((argb >> 8) & 0xff),
+            (byte)((argb >> 0) & 0xff));
+
+        int ToInt32() => (A << 24) | (R << 16) | (G << 8) | (B);
+
+        public static bool operator ==(ColorInt c1, ColorInt c2) => c1.ToInt32() == c2.ToInt32();
+
+        public static bool operator !=(ColorInt c1, ColorInt c2) => c1.ToInt32() != c2.ToInt32();
+
         public override bool Equals(object obj)
         {
-            if (obj is ColorInt)
+            if (obj is ColorInt c)
             {
-                ColorInt c = (ColorInt)obj;
-                return c._a == _a &&
-                    c._b == _b &&
-                    c._r == _r &&
-                    c._g == _g;
+                return c.A == A &&
+                    c.B == B &&
+                    c.R == R &&
+                    c.G == G;
             }
             return false;
         }
@@ -319,14 +296,14 @@ namespace BitmapBufferEx
         public int ToPreMultAlphaColor()
         {
             //see more at https://github.com/PaintLab/PixelFarm/issues/12
-            if (_a == 0) return 0; //for premultiplied alpha => this return (0,0,0,0) NOT (r,g,b,0)
+            if (A == 0) return 0; //for premultiplied alpha => this return (0,0,0,0) NOT (r,g,b,0)
             //
-            int a = _a + 1; // Add one to use mul and cheap bit shift for multiplicaltion
+            int a = A + 1; // Add one to use mul and cheap bit shift for multiplicaltion
 
-            return (_a << 24)
-             | ((byte)((_r * a) >> 8) << 16)
-             | ((byte)((_g * a) >> 8) << 8)
-             | ((byte)((_b * a) >> 8));
+            return (A << 24)
+             | ((byte)((R * a) >> 8) << 16)
+             | ((byte)((G * a) >> 8) << 8)
+             | ((byte)((B * a) >> 8));
         }
         /// <summary>
         /// check if this color is equals on another compare on RGB only, not alpha
@@ -335,12 +312,12 @@ namespace BitmapBufferEx
         /// <returns></returns>
         public bool EqualsOnRGB(ref ColorInt c2)
         {
-            return (uint)((_r << 16) | (_g << 8) | (_b)) ==
-                (uint)((c2._r << 16) | (c2._g << 8) | (c2._b));
+            return (uint)((R << 16) | (G << 8) | (B)) ==
+                (uint)((c2.R << 16) | (c2.G << 8) | (c2.B));
         }
         public bool EqualsOnRGB(int c2_r, int c2_g, int c2_b)
         {
-            return (uint)((_r << 16) | (_g << 8) | (_b)) ==
+            return (uint)((R << 16) | (G << 8) | (B)) ==
                 (uint)((c2_r << 16) | (c2_g << 8) | (c2_b));
         }
     }
@@ -368,15 +345,15 @@ namespace BitmapBufferEx
                 Pixels = IntPtr.Zero;
             }
         }
-        public bool IsBufferOwner { get; private set; }
-        public int PixelWidth { get; private set; }
-        public int PixelHeight { get; private set; }
-        public int LenInBytes { get { return _lenInBytes; } }
+        public bool IsBufferOwner { get; }
+        public int PixelWidth { get; }
+        public int PixelHeight { get; }
+        public int LenInBytes => _lenInBytes;
 
         /// <summary>
         /// pre-multiplied alpha color pixels
         /// </summary>
         public IntPtr Pixels { get; private set; }
-        public bool IsEmpty { get { return Pixels == null; } }
+        public bool IsEmpty => Pixels == null;
     }
 }

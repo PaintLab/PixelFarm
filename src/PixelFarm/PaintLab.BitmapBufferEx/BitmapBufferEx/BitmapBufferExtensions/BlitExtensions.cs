@@ -162,8 +162,8 @@ namespace BitmapBufferEx
                 int dpw = destContext.Width;
                 int dph = destContext.Height;
 
-                RectInt32 intersect = new RectInt32(0, 0, dpw, dph);
-                intersect.Intersect(new RectInt32(dstX, dstY, dstW, dstH));
+                RectInt32 intersect = RectInt32.Intersect(new RectInt32(0, 0, dpw, dph), new RectInt32(dstX, dstY, dstW, dstH));
+
                 if (intersect.IsEmpty)
                 {
                     return;
@@ -274,8 +274,8 @@ namespace BitmapBufferEx
                 int dpw = destContext.Width;
                 int dph = destContext.Height;
 
-                RectD intersect = new RectD(0, 0, dpw, dph);
-                intersect.Intersect(destRect);
+                RectD intersect = RectD.Intersect(new RectD(0, 0, dpw, dph), destRect);
+
                 if (intersect.IsEmpty)
                 {
                     return;
@@ -524,8 +524,8 @@ namespace BitmapBufferEx
                     int dstW = srcW;
 
 
-                    RectInt32 intersect = new RectInt32(0, 0, dpw, dstContextH);
-                    intersect.Intersect(new RectInt32(dstX, dstY, dstW, dstH));
+                    RectInt32 intersect = RectInt32.Intersect(new RectInt32(0, 0, dpw, dstContextH), new RectInt32(dstX, dstY, dstW, dstH));
+
                     if (intersect.IsEmpty)
                     {
                         return;
@@ -680,9 +680,8 @@ namespace BitmapBufferEx
                     int dpw = destContext.Width;
                     int dstContextH = destContext.Height;
 
-                    RectInt32 intersect = new RectInt32(0, 0, dpw, dstContextH);
 
-                    intersect.Intersect(new RectInt32(dstX, dstY, dstW, dstH));
+                    RectInt32 intersect = RectInt32.Intersect(new RectInt32(0, 0, dpw, dstContextH), new RectInt32(dstX, dstY, dstW, dstH));
                     if (intersect.IsEmpty)
                     {
                         return;
@@ -933,8 +932,8 @@ namespace BitmapBufferEx
             int dw = (int)destRect.Width;
             int dh = (int)destRect.Height;
 
-            RectD intersect = new RectD(0, 0, dpw, dph);
-            intersect.Intersect(destRect);
+            RectD intersect = RectD.Intersect(new RectD(0, 0, dpw, dph), destRect);
+
             if (intersect.IsEmpty)
             {
                 return;
@@ -1109,7 +1108,7 @@ namespace BitmapBufferEx
                     RectD destRect = new RectD(0, 0, destWidth, destHeight);
                     RectD bounds = transform.TransformBounds(sourceRect);
 
-                    bounds.Intersect(destRect);
+                    bounds = RectD.Intersect(bounds, destRect);
 
                     int startX = (int)bounds.Left;
                     int startY = (int)bounds.Top;

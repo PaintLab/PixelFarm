@@ -3,5 +3,5 @@
   <set texture_kind="stencil_lcd">
     <size>16,18,34</size>
     <script_lang lang="Latin" hint="none"></script_lang>     
-  </set>
+  </set> 
 </typeface_builder_config>

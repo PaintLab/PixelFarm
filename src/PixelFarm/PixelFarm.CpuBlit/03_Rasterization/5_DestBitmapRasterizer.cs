@@ -16,6 +16,7 @@
 
 using System;
 using PixelFarm.Drawing;
+
 namespace PixelFarm.CpuBlit.Rasterization
 {
     public enum ScanlineRenderMode : byte
@@ -24,11 +25,14 @@ namespace PixelFarm.CpuBlit.Rasterization
         Custom,
         SubPixelLcdEffect
     }
+
+
+
     public partial class ScanlineSubPixelRasterizer
     {
-        //this class design for render 32 bits RGBA  
 
-        TempForwardAccumBuffer _forwardTempBuff = new TempForwardAccumBuffer();
+        //this class was designed for render 32 bits RGBA   
+
         /// grey scale 4, 1/9 lcd lookup table
         /// </summary> 
         static readonly LcdDistributionLut s_g9_3_2_1 = LcdDistributionLut.EasyLut(255, 3, 2, 1);
@@ -55,7 +59,7 @@ namespace PixelFarm.CpuBlit.Rasterization
         /// <summary>
         /// forward grayscale buffer
         /// </summary>
-        TempForwardAccumBuffer _tempForwardAccumBuffer = new TempForwardAccumBuffer();
+
         /// <summary>
         /// single line gray-scale buffer(8 bits) 
         /// </summary>
@@ -107,11 +111,14 @@ namespace PixelFarm.CpuBlit.Rasterization
                     int dest_stride = _destImgStride = dest.Stride;
                     //*** set color before call Blend()
                     _color = color;
-                    byte color_alpha = color.A;
+
                     //---------------------------
                     //3. loop, render single scanline with subpixel rendering 
 
                     byte[] lineBuff = _grayScaleLine.GetInternalBuffer();
+
+                    _grayScaleLine.SetBlendAlpha(color.A);
+                    _grayScaleLine.SetCurrentCovers(scline.GetCovers());
 
                     while (sclineRas.SweepScanline(scline))
                     {
@@ -122,22 +129,22 @@ namespace PixelFarm.CpuBlit.Rasterization
                         //3.3 convert to subpixel value and write to dest buffer 
                         //render solid single scanline 
                         int num_spans = scline.SpanCount;
-                        byte[] covers = scline.GetCovers();
-                        //render each span in the scanline
+
+
+                        //render each span in the scanline 
+
                         for (int i = 1; i <= num_spans; ++i)
                         {
                             ScanlineSpan span = scline.GetSpan(i);
                             if (span.len > 0)
                             {
                                 //positive len  
-                                _grayScaleLine.BlendSolidHSpan(span.x, span.len, color_alpha, covers, span.cover_index);
+                                _grayScaleLine.BlendSolidHSpan(span.x, span.len, span.cover_index);
                             }
                             else
                             {
-                                //fill the line, same coverage area
-                                int x = span.x;
-                                int x2 = (x - span.len - 1);
-                                _grayScaleLine.BlendHL(x, x2, color_alpha, covers[span.cover_index]);
+                                //fill the line, same coverage area                                 
+                                _grayScaleLine.BlendHL(span.x, -span.len, span.cover_index);
                             }
                         }
 
@@ -394,8 +401,10 @@ namespace PixelFarm.CpuBlit.Rasterization
              int srcMaxX)
         {
             //backup
+
             LcdDistributionLut lcdLut = _currentLcdLut;
-            _tempForwardAccumBuffer.Reset();
+
+            var accBuff = new TempForwardAccumBuffer();
 
             //-----------------
             //TODO: review color order here
@@ -427,19 +436,19 @@ namespace PixelFarm.CpuBlit.Rasterization
                     byte write2 = grayScaleLineBuffer[srcIndex + 2];
 
                     //0
-                    _tempForwardAccumBuffer.WriteAccumAndReadBack(
+                    accBuff.WriteAccumAndReadBack(
                         lcdLut.TertiaryFromRaw255(write0),
                         lcdLut.SecondaryFromRaw255(write0),
                         lcdLut.PrimaryFromRaw255(write0),
                         out e_0);
                     //1
-                    _tempForwardAccumBuffer.WriteAccumAndReadBack(
+                    accBuff.WriteAccumAndReadBack(
                         lcdLut.TertiaryFromRaw255(write1),
                         lcdLut.SecondaryFromRaw255(write1),
                         lcdLut.PrimaryFromRaw255(write1),
                         out e_1);
                     //2
-                    _tempForwardAccumBuffer.WriteAccumAndReadBack(
+                    accBuff.WriteAccumAndReadBack(
                         lcdLut.TertiaryFromRaw255(write2),
                         lcdLut.SecondaryFromRaw255(write2),
                         lcdLut.PrimaryFromRaw255(write2),
@@ -470,19 +479,19 @@ namespace PixelFarm.CpuBlit.Rasterization
                     byte write2 = grayScaleLineBuffer[srcIndex + 2];
 
                     //0
-                    _tempForwardAccumBuffer.WriteAccumAndReadBack(
+                    accBuff.WriteAccumAndReadBack(
                         lcdLut.TertiaryFromRaw255(write0),
                         lcdLut.SecondaryFromRaw255(write0),
                         lcdLut.PrimaryFromRaw255(write0),
                         out e_0);
                     //1
-                    _tempForwardAccumBuffer.WriteAccumAndReadBack(
+                    accBuff.WriteAccumAndReadBack(
                         lcdLut.TertiaryFromRaw255(write1),
                         lcdLut.SecondaryFromRaw255(write1),
                         lcdLut.PrimaryFromRaw255(write1),
                         out e_1);
                     //2
-                    _tempForwardAccumBuffer.WriteAccumAndReadBack(
+                    accBuff.WriteAccumAndReadBack(
                         lcdLut.TertiaryFromRaw255(write2),
                         lcdLut.SecondaryFromRaw255(write2),
                         lcdLut.PrimaryFromRaw255(write2),
@@ -557,7 +566,7 @@ namespace PixelFarm.CpuBlit.Rasterization
             {
                 //get remaining energy from _forward buffer
                 byte ec_r1, ec_r2, ec_r3, ec_r4;
-                _tempForwardAccumBuffer.ReadRemaining4(out ec_r1, out ec_r2, out ec_r3, out ec_r4);
+                accBuff.ReadRemaining4(out ec_r1, out ec_r2, out ec_r3, out ec_r4);
 
                 //we need 2 pixels,  
                 int remaining_dest = Math.Min((_destImgStride - (destImgIndex + 4)), 5);
@@ -655,7 +664,9 @@ namespace PixelFarm.CpuBlit.Rasterization
         {
             //backup
             LcdDistributionLut lcdLut = _currentLcdLut;
-            _tempForwardAccumBuffer.Reset();
+
+            var accBuff = new TempForwardAccumBuffer();
+
             int srcIndex = 0;
             //start pixel
             int destImgIndex = 0;
@@ -712,19 +723,19 @@ namespace PixelFarm.CpuBlit.Rasterization
                     byte write2 = grayScaleLineBuffer[srcIndex + 2];
 
                     //0
-                    _tempForwardAccumBuffer.WriteAccumAndReadBack(
+                    accBuff.WriteAccumAndReadBack(
                         lcdLut.TertiaryFromRaw255(write0),
                         lcdLut.SecondaryFromRaw255(write0),
                         lcdLut.PrimaryFromRaw255(write0),
                         out e_0);
                     //1
-                    _tempForwardAccumBuffer.WriteAccumAndReadBack(
+                    accBuff.WriteAccumAndReadBack(
                         lcdLut.TertiaryFromRaw255(write1),
                         lcdLut.SecondaryFromRaw255(write1),
                         lcdLut.PrimaryFromRaw255(write1),
                         out e_1);
                     //2
-                    _tempForwardAccumBuffer.WriteAccumAndReadBack(
+                    accBuff.WriteAccumAndReadBack(
                         lcdLut.TertiaryFromRaw255(write2),
                         lcdLut.SecondaryFromRaw255(write2),
                         lcdLut.PrimaryFromRaw255(write2),
@@ -758,7 +769,7 @@ namespace PixelFarm.CpuBlit.Rasterization
             {
                 //get remaining energy from _forward buffer
                 byte ec_r1, ec_r2, ec_r3, ec_r4;
-                _tempForwardAccumBuffer.ReadRemaining4(out ec_r1, out ec_r2, out ec_r3, out ec_r4);
+                accBuff.ReadRemaining4(out ec_r1, out ec_r2, out ec_r3, out ec_r4);
 
                 //we need 2 pixels,  
                 int remaining_dest = Math.Min((srcStride - (destImgIndex + 4)), 5);
@@ -833,7 +844,9 @@ namespace PixelFarm.CpuBlit.Rasterization
         void dbugBlendScanlineInvertBWForGLES2_backup(byte[] destImgBuffer, int destStride, int y, int srcW, int srcStride, byte[] grayScaleLineBuffer)
         {
             LcdDistributionLut lcdLut = _currentLcdLut;
-            _tempForwardAccumBuffer.Reset();
+
+            var accBuff = new TempForwardAccumBuffer();
+
             int srcIndex = 0;
             //start pixel
             int destImgIndex = 0;
@@ -868,19 +881,19 @@ namespace PixelFarm.CpuBlit.Rasterization
                     byte write2 = lcdLut.Convert255ToLevel(grayScaleLineBuffer[srcIndex + 2]);
 
                     //0
-                    _tempForwardAccumBuffer.WriteAccumAndReadBack(
+                    accBuff.WriteAccumAndReadBack(
                         lcdLut.TertiaryFromLevel(write0),
                         lcdLut.SecondaryFromLevel(write0),
                         lcdLut.PrimaryFromLevel(write0),
                         out e_0);
                     //1
-                    _tempForwardAccumBuffer.WriteAccumAndReadBack(
+                    accBuff.WriteAccumAndReadBack(
                         lcdLut.TertiaryFromLevel(write1),
                         lcdLut.SecondaryFromLevel(write1),
                         lcdLut.PrimaryFromLevel(write1),
                         out e_1);
                     //2
-                    _tempForwardAccumBuffer.WriteAccumAndReadBack(
+                    accBuff.WriteAccumAndReadBack(
                         lcdLut.TertiaryFromLevel(write2),
                         lcdLut.SecondaryFromLevel(write2),
                         lcdLut.PrimaryFromLevel(write2),
@@ -944,7 +957,7 @@ namespace PixelFarm.CpuBlit.Rasterization
             {
                 //get remaining energy from _forward buffer
                 byte ec_r1, ec_r2, ec_r3, ec_r4;
-                _tempForwardAccumBuffer.ReadRemaining4(out ec_r1, out ec_r2, out ec_r3, out ec_r4);
+                accBuff.ReadRemaining4(out ec_r1, out ec_r2, out ec_r3, out ec_r4);
 
                 //we need 2 pixels,  
                 int remaining_dest = Math.Min((srcStride - (destImgIndex + 4)), 5);
@@ -1179,6 +1192,8 @@ namespace PixelFarm.CpuBlit.Rasterization
 
             int _stride;
             byte[] _line_buffer; //buffer for 8 bits grey scale byte buffer
+            byte _src_alpha;
+            byte[] _covers;
             public SingleLineBuffer()
             {
                 //default
@@ -1199,17 +1214,20 @@ namespace PixelFarm.CpuBlit.Rasterization
                     _line_buffer = new byte[stride8Bits];
                 }
             }
-            public void Clear()
-            {
-                Array.Clear(_line_buffer, 0, _line_buffer.Length);
-            }
-            public byte[] GetInternalBuffer()
-            {
-                return _line_buffer;
-            }
+            public void Clear() => Array.Clear(_line_buffer, 0, _line_buffer.Length);
 
-            public void BlendSolidHSpan(int x, int len, byte src_alpha, byte[] covers, int coversIndex)
+            public byte[] GetInternalBuffer() => _line_buffer;
+
+            public void SetBlendAlpha(byte src_alpha) => _src_alpha = src_alpha;//similar to SetBlendColor(Color c)
+
+            public void SetCurrentCovers(byte[] covers) => _covers = covers;
+
+            public void BlendSolidHSpan(int x, int len, int coversIndex)
             {
+                byte src_alpha = _src_alpha;
+                byte[] covers = _covers;
+
+                //use _src_alpha and _cover
                 //-------------------------------------
                 //reference code:
                 //int colorAlpha = sourceColor.alpha;
@@ -1259,8 +1277,15 @@ namespace PixelFarm.CpuBlit.Rasterization
                 }
             }
 
-            public void BlendHL(int x1, int x2, byte src_alpha, byte cover)
+
+            public void BlendHL(int x1, int len, int coversIndex)
             {
+                //use _src_alpha and _cover
+                byte src_alpha;
+                if ((src_alpha = _src_alpha) == 0) { return; }
+
+                byte cover = _covers[coversIndex];
+
                 //------------------------------------------------- 
                 //reference code:
                 //if (sourceColor.A == 0) { return; }
@@ -1288,10 +1313,6 @@ namespace PixelFarm.CpuBlit.Rasterization
                 ////-------------------------------------------------  
 
 
-
-                if (src_alpha == 0) { return; }
-                //------------------------------------------------- 
-                int len = x2 - x1 + 1;
                 int bufferOffset = x1;
                 byte alpha = (byte)(((int)(src_alpha) * (cover + 1)) >> 8);
                 byte[] buffer = _line_buffer;
@@ -1324,16 +1345,18 @@ namespace PixelFarm.CpuBlit.Rasterization
         /// <summary>
         /// temporary (forward write) accum buffer
         /// </summary>
-        public class TempForwardAccumBuffer
+        struct TempForwardAccumBuffer
         {
             //similar to circular queue.
 
-            byte[] byteBuffer = new byte[5];
-            int writeIndex = 0;
-            public TempForwardAccumBuffer()
-            {
-            }
+            int _b0;
+            int _b1;
+            int _b2;
+            int _b3;
+            int _b4;
 
+            int _writeIndex;
+            
             /// <summary>
             /// expand accumulation data to 5 bytes
             /// </summary>
@@ -1348,74 +1371,64 @@ namespace PixelFarm.CpuBlit.Rasterization
                 //-----------------------------------------------
                 //indeed we can use loop for this,
                 //but in this case we just switch it
-                switch (writeIndex)
+                switch (_writeIndex)
                 {
                     default: throw new NotSupportedException();
                     case 0:
-                        readBack = (byte)(byteBuffer[0] + v0); byteBuffer[0] = 0;//accum-read-reset
-                        byteBuffer[1] += v1; byteBuffer[2] += v2;
-                        byteBuffer[3] += v1; byteBuffer[4] += v0;
-                        writeIndex = 1;
+                        readBack = (byte)Math.Min(255, _b0 + v0); _b0 = 0;//accum-read-reset
+                        _b1 += v1; _b2 += v2;
+                        _b3 += v1; _b4 += v0;
+                        _writeIndex = 1;
 
                         break;
                     case 1:
-                        readBack = (byte)(byteBuffer[1] + v0); byteBuffer[1] = 0;//accum-read-reset
-                        byteBuffer[2] += v1; byteBuffer[3] += v2;
-                        byteBuffer[4] += v1; byteBuffer[0] += v0;
-                        writeIndex = 2;
+                        readBack = (byte)Math.Min(255, _b1 + v0); _b1 = 0;//accum-read-reset
+                        _b2 += v1; _b3 += v2;
+                        _b4 += v1; _b0 += v0;
+                        _writeIndex = 2;
                         break;
                     case 2:
-                        readBack = (byte)(byteBuffer[2] + v0); byteBuffer[2] = 0;//accum-read-reset
-                        byteBuffer[3] += v1; byteBuffer[4] += v2;
-                        byteBuffer[0] += v1; byteBuffer[1] += v0;
-                        writeIndex = 3;
+                        readBack = (byte)Math.Min(255, _b2 + v0); _b2 = 0;//accum-read-reset
+                        _b3 += v1; _b4 += v2;
+                        _b0 += v1; _b1 += v0;
+                        _writeIndex = 3;
                         break;
                     case 3:
-                        readBack = (byte)(byteBuffer[3] + v0); byteBuffer[3] = 0; //accum-read-reset
-                        byteBuffer[4] += v1; byteBuffer[0] += v2;
-                        byteBuffer[1] += v1; byteBuffer[2] += v0;
-                        writeIndex = 4;
+                        readBack = (byte)Math.Min(255, _b3 + v0); _b3 = 0; //accum-read-reset
+                        _b4 += v1; _b0 += v2;
+                        _b1 += v1; _b2 += v0;
+                        _writeIndex = 4;
                         break;
                     case 4:
-                        readBack = (byte)(byteBuffer[4] + v0); byteBuffer[4] = 0; //accum-read-reset
-                        byteBuffer[0] += v1; byteBuffer[1] += v2;
-                        byteBuffer[2] += v1; byteBuffer[3] += v0;
-                        writeIndex = 0;
+                        readBack = (byte)Math.Min(255, _b4 + v0); _b4 = 0; //accum-read-reset
+                        _b0 += v1; _b1 += v2;
+                        _b2 += v1; _b3 += v0;
+                        _writeIndex = 0;
                         break;
                 }
-            }
-            public void Reset()
-            {
-                writeIndex = 0;
-                byteBuffer[0] = byteBuffer[1] = byteBuffer[2] = byteBuffer[3] = byteBuffer[4] = 0;
             }
 
             public void ReadRemaining4(out byte v0, out byte v1, out byte v2, out byte v3)
             {
                 //not clear byte,
                 //not move read index
-                switch (writeIndex)
+                switch (_writeIndex)
                 {
                     default: throw new NotSupportedException();
                     case 0:
-                        v0 = byteBuffer[0]; v1 = byteBuffer[1]; v2 = byteBuffer[2];
-                        v3 = byteBuffer[3];
+                        v0 = (byte)Math.Min(255, _b0); v1 = (byte)Math.Min(255, _b1); v2 = (byte)Math.Min(255, _b2); v3 = (byte)Math.Min(255, _b3);
                         break;
                     case 1:
-                        v0 = byteBuffer[1]; v1 = byteBuffer[2]; v2 = byteBuffer[3];
-                        v3 = byteBuffer[4];
+                        v0 = (byte)Math.Min(255, _b1); v1 = (byte)Math.Min(255, _b2); v2 = (byte)Math.Min(255, _b3); v3 = (byte)Math.Min(255, _b4);
                         break;
                     case 2:
-                        v0 = byteBuffer[2]; v1 = byteBuffer[3]; v2 = byteBuffer[4];
-                        v3 = byteBuffer[0];
+                        v0 = (byte)Math.Min(255, _b2); v1 = (byte)Math.Min(255, _b3); v2 = (byte)Math.Min(255, _b4); v3 = (byte)Math.Min(255, _b0);
                         break;
                     case 3:
-                        v0 = byteBuffer[3]; v1 = byteBuffer[4]; v2 = byteBuffer[0];
-                        v3 = byteBuffer[1];
+                        v0 = (byte)Math.Min(255, _b3); v1 = (byte)Math.Min(255, _b4); v2 = (byte)Math.Min(255, _b0); v3 = (byte)Math.Min(255, _b1);
                         break;
                     case 4:
-                        v0 = byteBuffer[4]; v1 = byteBuffer[0]; v2 = byteBuffer[1];
-                        v3 = byteBuffer[2];
+                        v0 = (byte)Math.Min(255, _b4); v1 = (byte)Math.Min(255, _b0); v2 = (byte)Math.Min(255, _b1); v3 = (byte)Math.Min(255, _b2);
                         break;
                 }
             }
@@ -1429,8 +1442,8 @@ namespace PixelFarm.CpuBlit.Rasterization
     public class DestBitmapRasterizer
     {
 
-        ScanlineSubPixelRasterizer _scSubPixRas = new ScanlineSubPixelRasterizer();
-        ArrayList<Color> _tempSpanColors = new ArrayList<Color>();
+        readonly ScanlineSubPixelRasterizer _scSubPixRas = new ScanlineSubPixelRasterizer();
+        readonly ArrayList<Color> _tempSpanColors = new ArrayList<Color>();
         public DestBitmapRasterizer()
         {
         }
@@ -1447,32 +1460,42 @@ namespace PixelFarm.CpuBlit.Rasterization
             {
                 default:
 
+                    dest.SetBlendColor(color);//set once
+                    dest.SetCovers(scline.GetCovers()); //cover may be changed after call scline.ResetSpans()
+
                     while (sclineRas.SweepScanline(scline))
                     {
 
                         //render solid single scanline
                         int y = scline.Y;
                         int num_spans = scline.SpanCount;
-                        byte[] covers = scline.GetCovers();
-                        //render each span in the scanline
+                        //render each span in the scanline 
+
+                        //TODO: inside the inner loop, y is not changed
+                        //so we can set y once for every SweepScanline()
+
                         for (int i = 1; i <= num_spans; ++i)
                         {
                             ScanlineSpan span = scline.GetSpan(i);
                             if (span.len > 0)
                             {
                                 //positive len 
-                                dest.BlendSolidHSpan(span.x, y, span.len, color, covers, span.cover_index);
+                                dest.BlendSolidHSpan(span.x, y, span.len, span.cover_index);
                             }
                             else
                             {
                                 //fill the line, same coverage area
-                                int x = span.x;
-                                int x2 = (x - span.len - 1);
-                                dest.BlendHL(x, y, x2, color, covers[span.cover_index]);
+                                //int x = span.x;
+                                //int x2 = (x - span.len - 1);
+                                //dest.BlendHL(x, y, x2, color, covers[span.cover_index]);
+                                //TODO: review here again
+                                dest.BlendHL(span.x, y, span.x - span.len - 1, span.cover_index);
                             }
                         }
-
                     }
+
+
+
                     break;
                 case ScanlineRenderMode.SubPixelLcdEffect:
                     _scSubPixRas.RenderScanlines(dest, sclineRas, scline, color);
@@ -1625,16 +1648,15 @@ namespace PixelFarm.CpuBlit.Rasterization
 
 
         //look up table 
-        byte[] _primary;
-        byte[] _secondary;
-        byte[] _tertiary;
+        readonly byte[] _primary;
+        readonly byte[] _secondary;
+        readonly byte[] _tertiary;
 
-        byte[] _primary_255;
-        byte[] _secondary_255;
-        byte[] _tertiary_255;
+        readonly byte[] _primary_255;
+        readonly byte[] _secondary_255;
+        readonly byte[] _tertiary_255;
 
-
-        int _nLevel;
+        readonly int _nLevel;
         public LcdDistributionLut(byte grayLevel, double prim, double second, double tert)
         {
             _nLevel = grayLevel;

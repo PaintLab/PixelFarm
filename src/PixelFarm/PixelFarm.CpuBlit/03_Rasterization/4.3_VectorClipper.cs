@@ -233,8 +233,7 @@ namespace PixelFarm.CpuBlit.Rasterization
                 }
                 else
                 {
-                    _ras.DrawLine(_x1, _y1,
-                             x2, y2);
+                    _ras.DrawLine(_x1, _y1, x2, y2);
                 }
                 _x1 = x2;
                 _y1 = y2;
@@ -243,7 +242,7 @@ namespace PixelFarm.CpuBlit.Rasterization
 
             static int MulDiv(int a, int b, int c)
             {
-                return AggMath.iround_f((float)a * (float)b / (float)c);
+                return AggMathRound.iround_f((float)a * (float)b / (float)c);
             }
         }
     }

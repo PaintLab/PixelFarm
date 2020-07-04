@@ -220,6 +220,7 @@ namespace PixelFarm.DrawingGL
 
             }
         }
+
         protected static unsafe void AssignVertice5_4(
              in PixelFarm.CpuBlit.VertexProcessing.Quad2f quad,
              in PixelFarm.CpuBlit.VertexProcessing.Quad2f srcRect,
@@ -551,6 +552,8 @@ namespace PixelFarm.DrawingGL
     /// </summary>
     sealed class BGRAImageTextureShader : SimpleRectTextureShader
     {
+        ShaderUniformVar2 _offset;
+        bool _hasSomeOffset = false;
 
         public BGRAImageTextureShader(ShaderSharedResource shareRes)
             : base(shareRes)
@@ -560,11 +563,12 @@ namespace PixelFarm.DrawingGL
                 attribute vec4 a_position;
                 attribute vec2 a_texCoord;
                 uniform vec2 u_ortho_offset;
+                uniform vec2 u_offset;     
                 uniform mat4 u_mvpMatrix;                  
                 varying vec2 v_texCoord;
                 void main()
                 {
-                    gl_Position = u_mvpMatrix* (a_position+ vec4(u_ortho_offset,0,0));
+                    gl_Position = u_mvpMatrix* (a_position+ vec4(u_offset+u_ortho_offset,0,0));
                     v_texCoord =  a_texCoord;
                  }	 
                 ";
@@ -584,6 +588,42 @@ namespace PixelFarm.DrawingGL
                 ";
             BuildProgram(vs, fs);
         }
+        protected override void OnProgramBuilt()
+        {
+            base.OnProgramBuilt();
+            _offset = _shaderProgram.GetUniform2("u_offset");
+        }
+        protected override void SetVarsBeforeRender()
+        {
+            if (_hasSomeOffset)
+            {
+                _offset.SetValue(0, 0);
+                _hasSomeOffset = false;
+            }
+            base.SetVarsBeforeRender();
+        }
+        public void DrawSubImages(GLBitmap glBmp, VertexBufferObject vbo, int elemCount, float x, float y)
+        {
+            SetCurrent();
+            CheckViewMatrix();
+            LoadGLBitmap(glBmp);
+            //
+            _offset.SetValue(x, y);
+            _hasSomeOffset = true;
+            //-------------------------------------------------------------------------------------          
+            //each vertex has 5 element (x,y,z,u,v), //interleave data
+            //(x,y,z) 3d location 
+            //(u,v) 2d texture coord  
+
+            vbo.Bind();
+            a_position.LoadLatest(5, 0);
+            a_texCoord.LoadLatest(5, 3 * 4);
+
+            GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
+
+            vbo.UnBind();
+
+        }
     }
 
 
@@ -593,6 +633,8 @@ namespace PixelFarm.DrawingGL
     /// </summary>
     sealed class RGBATextureShader : SimpleRectTextureShader
     {
+        ShaderUniformVar2 _offset;
+        bool _hasSomeOffset = false;
         public RGBATextureShader(ShaderSharedResource shareRes)
             : base(shareRes)
         {
@@ -601,11 +643,12 @@ namespace PixelFarm.DrawingGL
                 attribute vec4 a_position;
                 attribute vec2 a_texCoord;
                 uniform vec2 u_ortho_offset;
+                uniform vec2 u_offset;     
                 uniform mat4 u_mvpMatrix; 
                 varying vec2 v_texCoord;
                 void main()
                 {
-                    gl_Position = u_mvpMatrix* (a_position+ vec4(u_ortho_offset,0,0));
+                    gl_Position = u_mvpMatrix* (a_position+ vec4(u_offset+u_ortho_offset,0,0));
                     v_texCoord =  a_texCoord;
                  }	 
                 ";
@@ -620,6 +663,42 @@ namespace PixelFarm.DrawingGL
                       }
                 ";
             BuildProgram(vs, fs);
+        }
+        protected override void OnProgramBuilt()
+        {
+            base.OnProgramBuilt();
+            _offset = _shaderProgram.GetUniform2("u_offset");
+        }
+        protected override void SetVarsBeforeRender()
+        {
+            base.SetVarsBeforeRender();
+            if (_hasSomeOffset)
+            {
+                _offset.SetValue(0, 0);
+                _hasSomeOffset = false;
+            }
+        }
+        public void DrawSubImages(GLBitmap glBmp, VertexBufferObject vbo, int elemCount, float x, float y)
+        {
+            SetCurrent();
+            CheckViewMatrix();
+            LoadGLBitmap(glBmp);
+            //
+            _offset.SetValue(x, y);
+            _hasSomeOffset = true;
+            //-------------------------------------------------------------------------------------          
+            //each vertex has 5 element (x,y,z,u,v), //interleave data
+            //(x,y,z) 3d location 
+            //(u,v) 2d texture coord  
+
+            vbo.Bind();
+            a_position.LoadLatest(5, 0);
+            a_texCoord.LoadLatest(5, 3 * 4);
+
+            GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
+
+            vbo.UnBind();
+
         }
     }
 
@@ -1727,15 +1806,15 @@ namespace PixelFarm.DrawingGL
 
             unsafe
             {
-                float* srcDestList = stackalloc float[6];
+                float* srcDestList = stackalloc float[]
                 {
-                    srcDestList[0] = srcLeft;
-                    srcDestList[1] = srcTop;
-                    srcDestList[2] = srcW;
-                    srcDestList[3] = srcH;
-                    srcDestList[4] = targetLeft;
-                    srcDestList[5] = targetTop;
-                }
+                    srcLeft,
+                    srcTop,
+                    srcW,
+                    srcH,
+                    targetLeft,
+                    targetTop
+                };
                 shader.UnsafeDrawSubImages(srcDestList, 6, 1);
             }
         }
@@ -1749,15 +1828,16 @@ namespace PixelFarm.DrawingGL
 
             unsafe
             {
-                float* srcDestList = stackalloc float[6];
+                float* srcDestList = stackalloc float[]
                 {
-                    srcDestList[0] = srcLeft;
-                    srcDestList[1] = srcTop;
-                    srcDestList[2] = srcW;
-                    srcDestList[3] = srcH;
-                    srcDestList[4] = targetLeft;
-                    srcDestList[5] = targetTop;
-                }
+                    srcLeft,
+                    srcTop,
+                    srcW,
+                    srcH,
+                    targetLeft,
+                    targetTop
+                };
+
                 shader.LoadGLBitmap(bmp);
                 shader.UnsafeDrawSubImages(srcDestList, 6, scale);
             }

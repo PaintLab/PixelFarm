@@ -2,7 +2,7 @@
 
 namespace LayoutFarm.TextEditing
 {
-    public struct CharLocation
+    public readonly struct CharLocation
     {
         /// <summary>
         /// pixel offset relative to current run

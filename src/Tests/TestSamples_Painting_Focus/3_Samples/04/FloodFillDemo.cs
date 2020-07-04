@@ -123,16 +123,16 @@ namespace PixelFarm.CpuBlit.Sample_FloodFill
             _magicWand = new MagicWand(_tolerance);
 
             //
-            //_lionPng = MemBitmap.LoadBitmap("../Data/lion1_v2_2.png");
-            //_lionPng =  MemBitmap.LoadBitmap("../Data/lion1_v2_4_1.png");
-            _lionPng = MemBitmap.LoadBitmap("../Data/lion1.png");
-            //_lionPng =  MemBitmap.LoadBitmap("../Data/lion_1_v3_2.png");
-            //_lionPng = MemBitmap.LoadBitmap("../Data/glyph_a.png");
-            _starsPng = MemBitmap.LoadBitmap("../Data/stars.png");
-            _test_glyphs = MemBitmap.LoadBitmap("../Data/test_glyphs.png");
-            _rect01 = MemBitmap.LoadBitmap("../Data/rect01.png");
-            //_v_shape =  MemBitmap.LoadBitmap("../Data/shape_v.png");
-            //_v_shape = MemBitmap.LoadBitmap("../Data/shape_v3.png");
+            //_lionPng = MemBitmapExtensions.LoadBitmap("../Data/lion1_v2_2.png");
+            //_lionPng =  MemBitmapExtensions.LoadBitmap("../Data/lion1_v2_4_1.png");
+            _lionPng = MemBitmapExt.LoadBitmap("../Data/lion1.png");
+            //_lionPng =  MemBitmapExtensions.LoadBitmap("../Data/lion_1_v3_2.png");
+            //_lionPng = MemBitmapExtensions.LoadBitmap("../Data/glyph_a.png");
+            _starsPng = MemBitmapExt.LoadBitmap("../Data/stars.png");
+            _test_glyphs = MemBitmapExt.LoadBitmap("../Data/test_glyphs.png");
+            _rect01 = MemBitmapExt.LoadBitmap("../Data/rect01.png");
+            //_v_shape =  MemBitmapExtensions.LoadBitmap("../Data/shape_v.png");
+            //_v_shape = MemBitmapExtensions.LoadBitmap("../Data/shape_v3.png");
             _bmpToFillOn = _defaultImg;
 
             OutlineReconstruction = true;

@@ -5,7 +5,7 @@ using PixelFarm.Drawing;
 namespace LayoutFarm.RenderBoxes
 {
 #if DEBUG
-    public struct dbugLayoutInfo
+    public readonly struct dbugLayoutInfo
     {
         public readonly int dbugLayerId;
         public dbugLayoutInfo(int dbugLayerId) => this.dbugLayerId = dbugLayerId;
@@ -15,7 +15,7 @@ namespace LayoutFarm.RenderBoxes
     {
         RenderElement ParentRenderElement { get; }
         void AdjustLocation(ref int px, ref int py);
-        
+
 #if DEBUG
         string dbugGetLinkInfo();
 #endif

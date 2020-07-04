@@ -165,10 +165,7 @@ namespace burningmime.curves
         /// <summary>
         /// Gets a read-only view of the current curves collection.
         /// </summary>
-        public ReadOnlyCollection<CubicBezier> Curves
-        {
-            get { return _curvesView; }
-        }
+        public ReadOnlyCollection<CubicBezier> Curves => _curvesView;
 
         /// <summary>
         /// Gets the position of a point on the spline that's close to the desired point along the spline. For example, if u = 0.5, then a point
@@ -269,7 +266,7 @@ namespace burningmime.curves
         /// <summary>
         /// Point at which to sample the spline.
         /// </summary>
-        public struct SamplePos
+        public readonly struct SamplePos
         {
             /// <summary>
             /// Index of sampled curve in the spline curves array.

@@ -15,7 +15,7 @@ namespace PaintLabResTool
         {
 
 
-            PixelFarm.CpuBlit.MemBitmapExtensions.DefaultMemBitmapIO = new PixelFarm.Drawing.WinGdi.GdiBitmapIO();
+            PixelFarm.CpuBlit.MemBitmapExt.DefaultMemBitmapIO = new PixelFarm.Drawing.WinGdi.GdiBitmapIO();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

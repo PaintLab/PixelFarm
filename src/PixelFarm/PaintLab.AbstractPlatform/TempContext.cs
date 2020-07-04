@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace LayoutFarm
 {
-    public struct TempContext<T> : IDisposable
+    public readonly struct TempContext<T> : IDisposable
     {
         internal readonly T _tool;
         internal TempContext(out T tool)
