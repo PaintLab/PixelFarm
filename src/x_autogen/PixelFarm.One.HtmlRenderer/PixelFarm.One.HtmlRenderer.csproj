@@ -1031,9 +1031,10 @@
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\EngBreakingEngine.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\LineSegments\BreakingParameters.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\LineSegments\ILineSegments.cs" />
+    <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\ScriptTagsAndLanguageSystemTags\OpenFontBitPosInfo.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\ScriptTagsAndLanguageSystemTags\ScriptLangInfo.cs" />
-    <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\ScriptTagsAndLanguageSystemTags\UnicodeLangBits.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\ScriptTagsAndLanguageSystemTags\UnicodeRangeFinder.cs" />
+    <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\ScriptTagsAndLanguageSystemTags\UnicodeRangeInfo.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\BaseDirection.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Collections\BidiChain.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Collections\BidiLink.cs" />
@@ -1058,12 +1059,13 @@
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\RunAgent.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Text\UnicodeAgent.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Text\UnicodeLocator.cs" />
+    <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\TextBuffer.cs" />
+    <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\UnicodeInfo\Unicode13RangeInfoList.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\WordKind.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\WordVisitor.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextFlow\Dom\EditableTextBlockLayoutEngine.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextFlow\Dom\EditableTextLine.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextFlow\Dom\IRun.cs" />
-    <Compile Include="D:\projects\Typography\Typography.TextFlow\Dom\TextBuffer.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextFlow\Dom\TextRun.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextFlow\Simple\SmallLine.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextFlow\TextLexer\TextLexer.cs" />

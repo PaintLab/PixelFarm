@@ -87,16 +87,19 @@ namespace PixelFarm.DrawingGL
 
             //TODO: temp fix, 
             var myAlternativeTypefaceSelector = new MyAlternativeTypefaceSelector();
+           
             {
-                var preferTypefaceList = new MyAlternativeTypefaceSelector.PreferTypefaceList();
-                preferTypefaceList.AddTypefaceName("Source Sans Pro");
-                preferTypefaceList.AddTypefaceName("Sarabun");
-                myAlternativeTypefaceSelector.SetPreferTypefaces(ScriptTagDefs.Latin, preferTypefaceList);
-            }
-            {
-                var preferTypefaceList = new MyAlternativeTypefaceSelector.PreferTypefaceList();
-                preferTypefaceList.AddTypefaceName("Twitter Color Emoji");
-                myAlternativeTypefaceSelector.SetPerferEmoji(preferTypefaceList);
+                var preferTypefaces = new PixelFarm.Drawing.MyAlternativeTypefaceSelector.PreferTypefaceList();
+                preferTypefaces.AddTypefaceName("Source Sans Pro");
+                preferTypefaces.AddTypefaceName("Sarabun");
+
+                myAlternativeTypefaceSelector.SetPreferTypefaces(
+                     new[]{Typography.TextBreak.Unicode13RangeInfoList.C0_Controls_and_Basic_Latin,
+                               Typography.TextBreak.Unicode13RangeInfoList.C1_Controls_and_Latin_1_Supplement,
+                               Typography.TextBreak.Unicode13RangeInfoList.Latin_Extended_A,
+                               Typography.TextBreak.Unicode13RangeInfoList.Latin_Extended_B,
+                     },
+                    preferTypefaces);
             }
             AlternativeTypefaceSelector = myAlternativeTypefaceSelector;
         }
