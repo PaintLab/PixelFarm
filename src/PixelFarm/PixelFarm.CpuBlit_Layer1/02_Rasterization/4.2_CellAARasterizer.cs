@@ -116,7 +116,9 @@ namespace PixelFarm.CpuBlit.Rasterization
             public CellAABlob(CellAARasterizer aaRas)
             {
                 _cellAARas = aaRas;
+#if DEBUG
                 _dbugLockSortCell = false;
+#endif
             }
             public int MinX => _cellAARas.MinX;
             public int MinY => _cellAARas.MinY;
