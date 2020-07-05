@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>73f1b81d-99a6-412e-ab6e-db399d32e2bf</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>PixelFarm.DrawingGL_SH</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)EsUtils\ES2Utils.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EsUtils\ES3Utils.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EsUtils\GeometryUtils.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EsUtils\MiniShaderProgram.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GLShader\ColorFillShaderBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GLShader\FilterEffectShaders.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GLShader\GradientShaders.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GLShader\ShaderBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GLShader\SignedDistanceFieldShader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GLShader\SimpleRectTextureShader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GLShader\SmoothLineShader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GLShader\SolidColorFillShader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GLTexture\FrameBuffer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GLTexture\GLBitmap.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RenderSuface\GLGradientColorProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RenderSuface\GLRenderSurface.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RenderSuface\ImageFillStyle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RenderSuface\InternalGraphicsPath.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RenderSuface\ShaderSharedResource.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RenderSuface\SmoothMode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RenderSuface\VertexBufferObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RenderSuface\VertexPositionColor.cs" />
+  </ItemGroup>
+</Project>

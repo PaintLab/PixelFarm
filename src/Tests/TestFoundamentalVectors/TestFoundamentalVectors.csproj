@@ -10,7 +10,7 @@
     <AssemblyName>TestFoundamentalVectors</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-	  <LangVersion>8.0</LangVersion>
+    <LangVersion>8.0</LangVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -23,6 +23,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -74,10 +75,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Vectors\PixelFarm.Vectors.csproj">
-      <Project>{680463ff-7656-4b1c-853c-a820dc59bc87}</Project>
-      <Name>PixelFarm.Vectors</Name>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.BasicVisualElements\PixelFarm.BasicVisualElements.csproj">
+      <Project>{cb83e3b5-e8b9-4ac4-ba6c-b4764e815e6b}</Project>
+      <Name>PixelFarm.BasicVisualElements</Name>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="..\..\PixelFarm\PixelFarm.Vectors_Utils_SH\PixelFarm.Vectors_Utils_SH.projitems" Label="Shared" />
+  <Import Project="..\..\PixelFarm\PixelFarm.Vectors_SH\PixelFarm.Vectors_SH.projitems" Label="Shared" />
+  <Import Project="..\..\PixelFarm\BackEnd.Tesselate_SH\BackEnd.Tesselate_SH.projitems" Label="Shared" />
+  <Import Project="..\..\PixelFarm\BackEnd.Triangulation\Triangulation.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

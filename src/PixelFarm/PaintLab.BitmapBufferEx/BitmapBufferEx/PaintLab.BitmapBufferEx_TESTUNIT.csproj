@@ -11,7 +11,7 @@
     <AssemblyName>BackEnd.BitmapBufferEx</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-	  <LangVersion>8.0</LangVersion>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,22 +36,22 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\PixelFarm.DrawingCore\MemMx.cs">
+    <Compile Include="..\..\PixelFarm.Painter_Layer1_SH\MemBitmap.cs">
+      <Link>MemBitmap.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm.Painter_Layer1_SH\MemMx.cs">
       <Link>MemMx.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm.DrawingCore\NativeMemMx.cs">
-      <Link>NativeMemMx.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm.Vectors\3_Transform\1_Affine.cs">
+    <Compile Include="..\..\PixelFarm.Vectors_SH\3_Transform\1_Affine.cs">
       <Link>00_Porting\1_Affine.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm.Vectors\3_Transform\2_Bilinear.cs">
+    <Compile Include="..\..\PixelFarm.Vectors_SH\3_Transform\2_Bilinear.cs">
       <Link>00_Porting\2_Bilinear.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm.Vectors\3_Transform\3_Perspective.cs">
+    <Compile Include="..\..\PixelFarm.Vectors_SH\3_Transform\3_Perspective.cs">
       <Link>00_Porting\3_Perspective.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm.Vectors\3_Transform\4_SimulEqGeneral.cs">
+    <Compile Include="..\..\PixelFarm.Vectors_SH\3_Transform\4_SimulEqGeneral.cs">
       <Link>00_Porting\4_SimulEqGeneral.cs</Link>
     </Compile>
     <Compile Include="BitmapBuffer.cs" />
@@ -74,14 +74,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm.PrimitiveDrawing\PixelFarm.PrimitiveDrawing.csproj">
-      <Project>{112196ba-8717-4435-baf1-5014c2e05cfd}</Project>
-      <Name>PixelFarm.PrimitiveDrawing</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm.PrimitiveGeo\PixelFarm.PrimitiveGeo.csproj">
-      <Project>{b951ff5b-d7a0-4259-880d-cb7a0c001956}</Project>
-      <Name>PixelFarm.PrimitiveGeo</Name>
+    <ProjectReference Include="..\..\PixelFarm.BasicVisualElements\PixelFarm.BasicVisualElements.csproj">
+      <Project>{cb83e3b5-e8b9-4ac4-ba6c-b4764e815e6b}</Project>
+      <Name>PixelFarm.BasicVisualElements</Name>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="..\..\PixelFarm.CpuBlit_Layer1\PixelFarm.CpuBlit_Layer1_SH.projitems" Label="Shared" />
+  <Import Project="..\..\PixelFarm.Painter_Layer1_SH\PixelFarm.Painter_Layer1_SH.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

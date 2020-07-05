@@ -11,7 +11,7 @@
     <AssemblyName>Test_CpuBlitCoreRasterizer</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-	  <LangVersion>8.0</LangVersion>
+    <LangVersion>8.0</LangVersion>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -39,111 +39,26 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\03_Rasterization\0_ScanlineSpan.cs">
-      <Link>03_Rasterization\0_ScanlineSpan.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Painter_Layer1_SH\MemBitmap.cs">
+      <Link>MemBitmap.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\03_Rasterization\1_Scanline.cs">
-      <Link>03_Rasterization\1_Scanline.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\03_Rasterization\2_ScanlinePacked8.cs">
-      <Link>03_Rasterization\2_ScanlinePacked8.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\03_Rasterization\3_ScanlineUnpacked8.cs">
-      <Link>03_Rasterization\3_ScanlineUnpacked8.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\03_Rasterization\4.1_ScanlineRasterizer.cs">
-      <Link>03_Rasterization\4.1_ScanlineRasterizer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\03_Rasterization\4.2_CellAARasterizer.cs">
-      <Link>03_Rasterization\4.2_CellAARasterizer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\03_Rasterization\4.3_VectorClipper.cs">
-      <Link>03_Rasterization\4.3_VectorClipper.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\03_Rasterization\5_DestBitmapRasterizer.cs">
-      <Link>03_Rasterization\5_DestBitmapRasterizer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\03_Rasterization\AggMathRound.cs">
-      <Link>03_Rasterization\AggMathRound.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\03_Rasterization\SubPixConst.cs">
-      <Link>03_Rasterization\SubPixConst.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_fragmentprocessing\0_ISpanGenerator.cs">
-      <Link>04_FragmentProcessing\0_ISpanGenerator.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\04_FragmentProcessing\IGammaFunction.cs">
-      <Link>04_FragmentProcessing\IGammaFunction.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\BitmapBlenderBase.cs">
-      <Link>05_PixelProcessing\BitmapBlenderBase.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\IBitmapBlender.cs">
-      <Link>05_PixelProcessing\IBitmapBlender.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\PixelBlender32.cs">
-      <Link>05_PixelProcessing\PixelBlender32.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.CpuBlit\05_PixelProcessing\PixelBlenderBGRA.cs">
-      <Link>05_PixelProcessing\PixelBlenderBGRA.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\FillingRule.cs">
-      <Link>01_From_DrawingCore\FillingRule.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\MemMx.cs">
-      <Link>01_From_DrawingCore\MemMx.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\NativeMemMx.cs">
-      <Link>01_From_DrawingCore\NativeMemMx.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\VertexStore.cs">
-      <Link>01_From_DrawingCore\VertexStore.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\CpuBlit\IBitmapSrc.cs">
-      <Link>01_From_Painter\IBitmapSrc.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\CpuBlit\MemBitmap.cs">
-      <Link>01_From_Painter\MemBitmap.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\CpuBlit\TempMemPtr.cs">
-      <Link>01_From_Painter\TempMemPtr.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\Drawing.Internal\CO.cs">
-      <Link>01_From_Painter\CO.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Painter\Drawing\ColorEx.cs">
-      <Link>01_From_Painter\ColorEx.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\AffineMat.cs">
-      <Link>01_From_PrimitiveDrawing\AffineMat.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\BitmapBufferFormat.cs">
-      <Link>01_From_PrimitiveDrawing\BitmapBufferFormat.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\Color.cs">
-      <Link>01_From_PrimitiveDrawing\Color.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\ExtensionAttribute.cs">
-      <Link>PORT\ExtensionAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\Image.cs">
-      <Link>01_From_PrimitiveDrawing\Image.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\ICoordTransformer.cs">
-      <Link>01_From_PrimitiveGeo\ICoordTransformer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\2_geometry\Collections.cs">
-      <Link>01_From_Vectors\Collections.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\2_Geometry\Q1Rect.cs">
-      <Link>01_From_Vectors\Q1Rect.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Vectors\5_Clipper\ClipLiangBarsky.cs">
-      <Link>01_From_Vectors\ClipLiangBarsky.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Painter_Layer1_SH\MemMx.cs">
+      <Link>MemMx.cs</Link>
     </Compile>
     <Compile Include="PORT\Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\DepCtrls\DepCtrl_PixelFarm_Vectors\DepCtrl_PixelFarm_Vectors.csproj">
+      <Project>{8073ac27-be12-4efd-a030-a97beb390ca1}</Project>
+      <Name>DepCtrl_PixelFarm_Vectors</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.BasicVisualElements\PixelFarm.BasicVisualElements.csproj">
+      <Project>{cb83e3b5-e8b9-4ac4-ba6c-b4764e815e6b}</Project>
+      <Name>PixelFarm.BasicVisualElements</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="..\..\PixelFarm\PixelFarm.CpuBlit_Layer1\PixelFarm.CpuBlit_Layer1_SH.projitems" Label="Shared" />
+  <Import Project="..\..\PixelFarm\PixelFarm.Painter_Layer1_SH\PixelFarm.Painter_Layer1_SH.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
