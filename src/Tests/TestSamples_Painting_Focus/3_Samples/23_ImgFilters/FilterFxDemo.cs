@@ -145,11 +145,7 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
 
             int m_radius = this.BlurRadius;
             //create new expaned bounds
-            var boundRect = new PixelFarm.CpuBlit.VertexProcessing.Q1Rect(
-                (int)b_left - m_radius, 
-                (int)b_bottom - m_radius,
-                (int)b_right + m_radius, 
-                (int)b_top + m_radius); 
+
 
             // Create a new pixel renderer and attach it to the main one as a child image. 
             // It returns true if the attachment succeeded. It fails if the rectangle 
@@ -158,10 +154,17 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
             //create filter specfication
             //it will be resolve later by the platform similar to request font
             //------------------ 
-            
 
-            if (boundRect.Clip(new PixelFarm.CpuBlit.VertexProcessing.Q1Rect(0, 0, p.Width - 1, p.Height - 1)))
+            if (PixelFarm.CpuBlit.VertexProcessing.Q1Rect.Clip(new PixelFarm.CpuBlit.VertexProcessing.Q1Rect(
+                (int)b_left - m_radius,
+                (int)b_bottom - m_radius,
+                (int)b_right + m_radius,
+                (int)b_top + m_radius),
+                new PixelFarm.CpuBlit.VertexProcessing.Q1Rect(0, 0, p.Width - 1, p.Height - 1),
+                out PixelFarm.CpuBlit.VertexProcessing.Q1Rect boundRect
+                ))
             {
+
                 //check if intersect  
                 Rectangle prevClip = p.ClipBox;
                 p.ClipBox = new Rectangle(boundRect.Left, boundRect.Top, boundRect.Width, boundRect.Height);
@@ -224,8 +227,7 @@ namespace PixelFarm.CpuBlit.Sample_Blur2
                 //store back
                 p.ClipBox = prevClip;
             }
-
-
+            
             p.FillColor = Drawing.Color.FromArgb(0.8f, 0.6f, 0.9f, 0.7f);
             // Render the shape itself
             ////------------------
