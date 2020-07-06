@@ -11,7 +11,7 @@
     <AssemblyName>PixelFarm.One.HtmlRenderer</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-	  <LangVersion>8.0</LangVersion>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -48,17 +48,9 @@
       <Project>{1ec4200d-e955-4617-9558-b859bb6b5af2}</Project>
       <Name>BackEnd.SharpZipLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\BackEnd.Tesselate\BackEnd.Tesselate.csproj">
-      <Project>{ae37de1f-22f7-49ee-8732-fc6bc8dc58d9}</Project>
-      <Name>BackEnd.Tesselate</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\BackEnd.TreeCollection\BackEnd.TreeCollection.csproj">
       <Project>{39475dd4-6793-454f-8c48-06452f42c300}</Project>
       <Name>BackEnd.TreeCollection</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\BackEnd.Triangulation\BackEnd.Triangulation.csproj">
-      <Project>{c5e5802d-6a45-4fe9-bae7-5f0ae91d72c1}</Project>
-      <Name>BackEnd.Triangulation</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\LayoutFarm.YourBasicCustomWidgets.csproj">
       <Project>{6317f5f0-bc4b-4bfd-b3c0-73c05c2aa11e}</Project>

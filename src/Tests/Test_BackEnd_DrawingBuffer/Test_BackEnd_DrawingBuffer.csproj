@@ -10,7 +10,7 @@
     <AssemblyName>Test_BackEnd_DrawingBuffer</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-	  <LangVersion>8.0</LangVersion>
+    <LangVersion>8.0</LangVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -42,11 +42,11 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\MemMx.cs">
-      <Link>MemMx.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Painter_Layer1_SH\MemBitmap.cs">
+      <Link>MemBitmap.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCore\NativeMemMx.cs">
-      <Link>NativeMemMx.cs</Link>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Painter_Layer1_SH\MemMx.cs">
+      <Link>MemMx.cs</Link>
     </Compile>
     <Compile Include="BlitDemo\Particle.cs" />
     <Compile Include="BlitDemo\HslColor.cs" />
@@ -125,14 +125,12 @@
       <Project>{5eb9544f-51e1-42cc-abfd-b9afba6a2a0d}</Project>
       <Name>PaintLab.BitmapBufferEx_TESTUNIT</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.PrimitiveDrawing\PixelFarm.PrimitiveDrawing.csproj">
-      <Project>{112196ba-8717-4435-baf1-5014c2e05cfd}</Project>
-      <Name>PixelFarm.PrimitiveDrawing</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.PrimitiveGeo\PixelFarm.PrimitiveGeo.csproj">
-      <Project>{b951ff5b-d7a0-4259-880d-cb7a0c001956}</Project>
-      <Name>PixelFarm.PrimitiveGeo</Name>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.BasicVisualElements\PixelFarm.BasicVisualElements.csproj">
+      <Project>{cb83e3b5-e8b9-4ac4-ba6c-b4764e815e6b}</Project>
+      <Name>PixelFarm.BasicVisualElements</Name>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="..\..\PixelFarm\PixelFarm.Painter_Layer1_SH\PixelFarm.Painter_Layer1_SH.projitems" Label="Shared" />
+  <Import Project="..\..\PixelFarm\PixelFarm.CpuBlit_Layer1\PixelFarm.CpuBlit_Layer1_SH.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

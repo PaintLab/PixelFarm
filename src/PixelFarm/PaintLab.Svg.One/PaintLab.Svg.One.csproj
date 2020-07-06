@@ -11,8 +11,8 @@
     <AssemblyName>PaintLab.Svg.One</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-	  <LangVersion>8.0</LangVersion>
-	  <Deterministic>true</Deterministic>
+    <LangVersion>8.0</LangVersion>
+    <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -166,8 +166,8 @@
     <Compile Include="..\paintlab.weblexer\XmlLexer_debug.cs">
       <Link>0_REF_PaintLab.WebLexer\XmlLexer_debug.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.drawingcore\ExtensionAttribute.cs">
-      <Link>0_REF_PaintLab.WebDom\Net20\ExtensionAttribute.cs</Link>
+    <Compile Include="..\PixelFarm.BasicVisualElements_SH\ExtensionAttribute.cs">
+      <Link>ExtensionAttribute.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -177,5 +177,6 @@
       <Name>PixelFarm.One.HtmlRenderer</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

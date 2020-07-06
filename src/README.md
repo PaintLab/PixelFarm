@@ -3,6 +3,7 @@ PixelFarm/src
 
 This folder contains a Main project solution file(_MiniDev.sln_)
 
+**DepCtrls**: contains _Dependency-Controled sub projects_ 
 
 **PixelFarm** : contains PixelFarm sub projects
 
@@ -25,13 +26,16 @@ Because it is easy to do _dependency analysis_.
 
 ---
  
-![px_proj_part1](https://user-images.githubusercontent.com/7447159/78972144-43da0200-7b37-11ea-8288-c7bb3d4b706b.png)
+![main01](https://user-images.githubusercontent.com/7447159/86544753-d120cd00-bf53-11ea-8739-706f048d0f0e.png)
 
-_part1_
+_solution explorer view_
 
 
 
 **0.1 DevTests** :  contains tests and examples
+
+**0.2_Dev_DepControlUnits:** contains projects that are designed to depend on each other in multiple aspects, I use these projects to control the 'dependency' of each class. This is quite complex but essential for me to check and analyze                            
+ 
 
 **0.9 WebDocuments**: contains modules that are needed by PaintLab.Svg, we shared the source with HtmlRender project.
 
@@ -41,7 +45,7 @@ _part1_
 
 
 
-**2.0_Shaped_Images:** about shapes, geometry, tesselation, and image codecs
+**2.0_Shapes:** about shapes, geometry, tesselation
 
 **2.1_Core:** contains drawing core, how to render an individual pixel to a bitmap's memory. 
 
@@ -57,8 +61,6 @@ _part1_
 
 ---
 
-![px_proj_part2](https://user-images.githubusercontent.com/7447159/77893733-83366200-729e-11ea-85d1-6aff03eca45b.png)
-_part2_ 
  
  **4.0_Specific_Drawing:** specific platform drawing, as describe above,
         PixelFarm.Drawing contains only Software Rendering part.

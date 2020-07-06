@@ -11,8 +11,8 @@
     <AssemblyName>PixelFarm.Drawing.GLES</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-	  <LangVersion>8.0</LangVersion>
-	  <TargetFrameworkProfile />
+    <LangVersion>8.0</LangVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,72 +39,6 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\EsUtils\ES2Utils.cs">
-      <Link>0_REF_DrawingGL\EsUtils\ES2Utils.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\EsUtils\ES3Utils.cs">
-      <Link>0_REF_DrawingGL\EsUtils\ES3Utils.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\EsUtils\GeometryUtils.cs">
-      <Link>0_REF_DrawingGL\EsUtils\GeometryUtils.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\EsUtils\MiniShaderProgram.cs">
-      <Link>0_REF_DrawingGL\EsUtils\MiniShaderProgram.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLShader\ColorFillShaderBase.cs">
-      <Link>0_REF_DrawingGL\GLShader\ColorFillShaderBase.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLShader\FilterEffectShaders.cs">
-      <Link>0_REF_DrawingGL\GLShader\FilterEffectShaders.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLShader\GradientShaders.cs">
-      <Link>0_REF_DrawingGL\GLShader\GradientShaders.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLShader\ShaderBase.cs">
-      <Link>0_REF_DrawingGL\GLShader\ShaderBase.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLShader\SignedDistanceFieldShader.cs">
-      <Link>0_REF_DrawingGL\GLShader\SignedDistanceFieldShader.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLShader\SimpleRectTextureShader.cs">
-      <Link>0_REF_DrawingGL\GLShader\SimpleRectTextureShader.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLShader\SmoothLineShader.cs">
-      <Link>0_REF_DrawingGL\GLShader\SmoothLineShader.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLShader\SolidColorFillShader.cs">
-      <Link>0_REF_DrawingGL\GLShader\SolidColorFillShader.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLTexture\FrameBuffer.cs">
-      <Link>0_REF_DrawingGL\GLTexture\FrameBuffer.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLTexture\GLBitmap.cs">
-      <Link>0_REF_DrawingGL\GLTexture\GLBitmap.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\RenderSuface\GLGradientColorProvider.cs">
-      <Link>0_REF_DrawingGL\RenderSurface\GLGradientColorProvider.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\RenderSuface\GLRenderSurface.cs">
-      <Link>0_REF_DrawingGL\RenderSurface\GLRenderSurface.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\RenderSuface\ImageFillStyle.cs">
-      <Link>0_REF_DrawingGL\RenderSurface\ImageFillStyle.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\RenderSuface\InternalGraphicsPath.cs">
-      <Link>0_REF_DrawingGL\RenderSurface\InternalGraphicsPath.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\RenderSuface\ShaderSharedResource.cs">
-      <Link>0_REF_DrawingGL\RenderSurface\ShaderSharedResource.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\RenderSuface\SmoothMode.cs">
-      <Link>0_REF_DrawingGL\RenderSurface\SmoothMode.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\RenderSuface\VertexBufferObject.cs">
-      <Link>0_REF_DrawingGL\RenderSurface\VertexBufferObject.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\RenderSuface\VertexPositionColor.cs">
-      <Link>0_REF_DrawingGL\RenderSurface\VertexPositionColor.cs</Link>
-    </Compile>
     <Compile Include="0_Start\GLES2Platform.cs" />
     <Compile Include="BitmapAtlasPainter\MySimpleGLBitmapAtlasManager.cs" />
     <Compile Include="BitmapAtlasPainter\BitmapAtlasPainter.cs" />
@@ -144,6 +78,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
+  <Import Project="..\PixelFarm.DrawingGL_SH\PixelFarm.DrawingGL_SH.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
