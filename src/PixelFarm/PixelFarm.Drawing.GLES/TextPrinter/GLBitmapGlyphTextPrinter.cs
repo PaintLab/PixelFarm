@@ -995,13 +995,14 @@ namespace PixelFarm.DrawingGL
             //check if we have a mix stencil and color glyph or not
 
             FormattedGlyphPlanSeq latestFmtGlyphPlanSeq = null;
+            int prefix_whitespaceCount = 0;
 
             _uniqueResolvedFonts.Clear();
             _uniqueResolvedFonts.Add(resolvedFont.FontKey, resolvedFont);
 
             _fmtGlyphPlanSeqs.Clear();
 
-            int prefix_whitespaceCount = 0;
+
 
 
             int count = _lineSegs.Count;
@@ -1101,14 +1102,12 @@ namespace PixelFarm.DrawingGL
                 {
                     PrefixWhitespaceCount = (ushort)prefix_whitespaceCount//***
                 };
+                prefix_whitespaceCount = 0;//reset 
 
                 formattedGlyphPlanSeq.SetData(seq, resolvedFont);
 
-                //add to temp location 
 
                 _fmtGlyphPlanSeqs.Add(latestFmtGlyphPlanSeq = formattedGlyphPlanSeq);
-
-                prefix_whitespaceCount = 0;//reset 
             }
 
             //-------------             
