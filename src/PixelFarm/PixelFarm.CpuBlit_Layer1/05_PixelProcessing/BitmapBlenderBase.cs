@@ -259,18 +259,18 @@ namespace PixelFarm.CpuBlit.PixelProcessing
             }
         }
 
-        public void CopyFrom(IBitmapSrc sourceImage, Q1Rect sourceImageRect, int destXOffset, int destYOffset)
+        public void CopyFrom(IBitmapSrc srcimg, Q1Rect srcImgRect, int destXOffset, int destYOffset)
         {
 
-            if (Q1Rect.IntersectRectangles(sourceImage.GetBounds(), sourceImageRect, out Q1Rect clippedSourceImageRect))
+            if (Q1Rect.IntersectRectangles(srcimg.GetBounds(), srcImgRect, out Q1Rect clipped_srcRect))
             {
-                Q1Rect destImageRect = clippedSourceImageRect.CreateNewFromOffset(destXOffset, destYOffset);
+                Q1Rect dstImgRect = clipped_srcRect.CreateNewFromOffset(destXOffset, destYOffset);
 
-                if (Q1Rect.IntersectRectangles(destImageRect, GetBounds(), out Q1Rect clippedDestImageRect))
+                if (Q1Rect.IntersectRectangles(dstImgRect, GetBounds(), out Q1Rect clipped_dstRect))
                 {
                     // we need to make sure the source is also clipped to the dest. So, we'll copy this back to source and offset it.
-                    clippedSourceImageRect = clippedDestImageRect.CreateNewFromOffset(-destXOffset, -destYOffset);
-                    CopyFromNoClipping(sourceImage, clippedSourceImageRect, destXOffset, destYOffset);
+                    clipped_srcRect = clipped_dstRect.CreateNewFromOffset(-destXOffset, -destYOffset);
+                    CopyFromNoClipping(srcimg, clipped_srcRect, destXOffset, destYOffset);
                 }
             }
         }
