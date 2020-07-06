@@ -5,7 +5,7 @@ using PixelFarm.Drawing;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.Rasterization;
 using PixelFarm.CpuBlit.PixelProcessing;
-
+using PixelFarm.Drawing.Internal;
 
 public static class Program
 {
@@ -49,6 +49,19 @@ public static class Program
             //8. the content inside membitmap is just color image buffer
             //   you can copy it to other image object (eg SkImage, Gdi+ image etc)
 
+            using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(membitmap.Width, membitmap.Height))
+            {
+                IntPtr mem_ptr = membitmap.GetRawBufferHead();
+                System.Drawing.Imaging.BitmapData bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+                unsafe
+                {
+                    MemMx.memcpy((byte*)bmpdata.Scan0, (byte*)mem_ptr, membitmap.Width * membitmap.Height * 4);
+                }
+                bmp.UnlockBits(bmpdata);
+                bmp.Save("test01.png");
+
+            }
         }
 
     }
