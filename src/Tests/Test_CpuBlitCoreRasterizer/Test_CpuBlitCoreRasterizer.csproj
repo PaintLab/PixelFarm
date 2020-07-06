@@ -51,10 +51,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\DepCtrls\DepCtrl_PixelFarm_Vectors\DepCtrl_PixelFarm_Vectors.csproj">
-      <Project>{8073ac27-be12-4efd-a030-a97beb390ca1}</Project>
-      <Name>DepCtrl_PixelFarm_Vectors</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.BasicVisualElements\PixelFarm.BasicVisualElements.csproj">
       <Project>{cb83e3b5-e8b9-4ac4-ba6c-b4764e815e6b}</Project>
       <Name>PixelFarm.BasicVisualElements</Name>
