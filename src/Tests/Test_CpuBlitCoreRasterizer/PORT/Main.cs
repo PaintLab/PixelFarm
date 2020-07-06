@@ -49,6 +49,8 @@ public static class Program
             //8. the content inside membitmap is just color image buffer
             //   you can copy it to other image object (eg SkImage, Gdi+ image etc)
 
+
+            //... example ...
             using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(membitmap.Width, membitmap.Height))
             {
                 IntPtr mem_ptr = membitmap.GetRawBufferHead();
@@ -60,7 +62,6 @@ public static class Program
                 }
                 bmp.UnlockBits(bmpdata);
                 bmp.Save("test01.png");
-
             }
         }
 
