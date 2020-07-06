@@ -381,8 +381,6 @@ namespace PixelFarm.CpuBlit
             // TODO: <BUG> make this do rotation and scalling
 
             Q1Rect sourceBounds = new Q1Rect((int)destX, (int)destY, (int)destX + source.Width, (int)destY + source.Height);
-            //sourceBounds.Offset((int)destX, (int)destY);
-
             Q1Rect destBounds = _destBitmapBlender.GetBounds();
             if (!Q1Rect.DoIntersect(sourceBounds, destBounds))
             {
@@ -616,10 +614,8 @@ namespace PixelFarm.CpuBlit
             public int Width => _w;
             public int Height => _h;
             public int Stride => _w << 2; //stride = w /4 , we use <<2 
-            public int BytesBetweenPixelsInclusive
-            {
-                get { throw new NotSupportedException(); }
-            }
+
+            public int BytesBetweenPixelsInclusive => throw new NotSupportedException();
 
             public Q1Rect GetBounds() => new Q1Rect(_x, _y, _x + _w, _y + _h);
             public int GetBufferOffsetXY32(int x, int y)
@@ -627,18 +623,10 @@ namespace PixelFarm.CpuBlit
                 //goto row
                 return ((_y + y) * _orgSrcW) + _x + x;
             }
-            //public int GetByteBufferOffsetXY(int x, int y)
-            //{
-            //    throw new NotImplementedException();
-            //}
-            public TempMemPtr GetBufferPtr()
-            {
-                return _src.GetBufferPtr();
-            }
-            //public int[] GetOrgInt32Buffer()
-            //{
-            //    return _src.GetOrgInt32Buffer();
-            //}
+
+            public TempMemPtr GetBufferPtr() => _src.GetBufferPtr();
+
+
             public Color GetPixel(int x, int y)
             {
                 //TODO: not support here
