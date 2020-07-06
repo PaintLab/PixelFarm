@@ -87,7 +87,7 @@ namespace PixelFarm.DrawingGL
 
             //TODO: temp fix, 
             var myAlternativeTypefaceSelector = new MyAlternativeTypefaceSelector();
-           
+
             {
                 var preferTypefaces = new PixelFarm.Drawing.MyAlternativeTypefaceSelector.PreferTypefaceList();
                 preferTypefaces.AddTypefaceName("Source Sans Pro");
@@ -468,9 +468,9 @@ namespace PixelFarm.DrawingGL
                 _vboBuilder.Clear();
             }
         }
-#endif    
+#endif
 
-        GLRenderVxFormattedString _reusableFmtString = new GLRenderVxFormattedString();
+        readonly GLRenderVxFormattedString _reusableFmtString = new GLRenderVxFormattedString();
         public void DrawString(char[] buffer, int startAt, int len, double left, double top)
         {
             //for internal use
@@ -1114,8 +1114,10 @@ namespace PixelFarm.DrawingGL
             //-------------             
             //a fmtGlyphPlanSeqs may contains glyph from  more than 1 font,
             //now, create a overlapped strip for each 
+#if DEBUG
+            if (vxFmtStr._strips.Count > 0) { throw new NotSupportedException(); }
+#endif
 
-            vxFmtStr._strips.Clear();
 
             float spanHeight = 0;
             float spanWidth = 0;
@@ -1137,7 +1139,6 @@ namespace PixelFarm.DrawingGL
 
                 SameFontTextStrip sameFontTextStrip = new SameFontTextStrip
                 {
-                    SpanHeight = 30,
                     ResolvedFont = resolvedFont1
                 };
 
