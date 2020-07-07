@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
-using Typography.OpenFont;
+
 
 namespace PixelFarm.DrawingGL
 {
@@ -180,6 +180,11 @@ namespace PixelFarm.DrawingGL
     /// </summary>
     class SameFontTextStrip
     {
+        //our _vbo is used with 1 font texture
+        //so if a text-strip use multiple font 
+        //we need to separate it into multiple SameFontTextStrip.
+
+
         public SameFontTextStrip() { }
         public DrawingGL.VertexBufferObject _vbo;
 
