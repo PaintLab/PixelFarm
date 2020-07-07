@@ -25,6 +25,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 
 
         OpenFontTextService _textServices;
+        TextServiceClient _txtClient;
         BitmapFontManager<MemBitmap> _bmpFontMx;
         SimpleBitmapAtlas _fontAtlas;
         RequestFont _font;
@@ -43,7 +44,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             //1. create a text service (or get it from a singleton class)       
 
             _textServices = new OpenFontTextService();
-
+            _txtClient = _textServices.CreateNewServiceClient();
             //2. create manager
             _bmpFontMx = new BitmapFontManager<MemBitmap>(
                 _textServices,
@@ -85,7 +86,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             //with specific request font
 
             ResolvedFont font = _textServices.ResolveFont(_font);
-            GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(textBufferSpan, _font);
+            GlyphPlanSequence glyphPlanSeq = _txtClient.CreateGlyphPlanSeq(textBufferSpan, _font);
 
             float scale = 1;// _fontAtlas.TargetTextureScale;
             int recommendLineSpacing = (int)font.LineSpacingInPixels;

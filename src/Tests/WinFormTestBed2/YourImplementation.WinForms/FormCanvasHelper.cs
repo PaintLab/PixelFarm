@@ -134,7 +134,7 @@ namespace LayoutFarm.UI
                         openFontTextService.SvgBmpBuilder = PaintLab.SvgBuilderHelper.ParseAndRenderSvg;
 
                         GlobalTextService.TextService2 = openFontTextService; 
-                        textService = openFontTextService;
+                        textService = openFontTextService.CreateNewServiceClient();
                     }
                     break;
             }

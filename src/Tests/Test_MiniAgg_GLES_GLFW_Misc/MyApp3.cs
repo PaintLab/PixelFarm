@@ -153,13 +153,13 @@ namespace TestGlfw
             //4. Typography TextService             
             OpenFontTextService textService = new OpenFontTextService();
             textService.LoadFontsFromFolder("Fonts");
-          
-            GlobalTextService.TextService = textService;
+            TextServiceClient serviceClient = textService.CreateNewServiceClient();
+            GlobalTextService.TextService = serviceClient;
             //---------------------------------------------------------------------------
 
             //PART2: root graphics
             Size primScreenSize = UIPlatform.CurrentPlatform.GetPrimaryMonitorSize();
-            s_myRootGfx = new MyRootGraphic(primScreenSize.Width, primScreenSize.Height, textService);
+            s_myRootGfx = new MyRootGraphic(primScreenSize.Width, primScreenSize.Height, serviceClient);
             s_viewroot = new GraphicsViewRoot(primScreenSize.Width, primScreenSize.Height);
             MyGlfwTopWindowBridge bridge1 = new MyGlfwTopWindowBridge(s_myRootGfx, s_myRootGfx.TopWinEventPortal);
             ((MyGlfwTopWindowBridge.GlfwEventBridge)(form.WindowEventListener)).SetWindowBridge(bridge1);
