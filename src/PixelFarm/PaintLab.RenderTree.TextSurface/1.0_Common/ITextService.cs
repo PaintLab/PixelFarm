@@ -3,8 +3,8 @@
 using System;
 using System.Collections.Generic;
 
-using PixelFarm.Drawing; 
-using Typography.TextBreak; 
+using PixelFarm.Drawing;
+using Typography.TextBreak;
 
 namespace LayoutFarm
 {
@@ -25,16 +25,20 @@ namespace LayoutFarm
 
     class AdvanceTextServiceImpl : IAdvanceTextService
     {
-        readonly OpenFontTextService _textService;
-        public AdvanceTextServiceImpl(OpenFontTextService textService) => _textService = textService;
+       
+        readonly TextServiceClient _txtClient;
+        public AdvanceTextServiceImpl(OpenFontTextService textService)
+        {
+            _txtClient = textService.CreateNewServiceClient();
+        }
 
         public bool SupportsWordBreak => true;
 
-        public void BreakToLineSegments(in TextBufferSpan textBufferSpan, WordVisitor visitor) => _textService.BreakToLineSegments(textBufferSpan, visitor);
+        public void BreakToLineSegments(in TextBufferSpan textBufferSpan, WordVisitor visitor) => _txtClient.BreakToLineSegments(textBufferSpan, visitor);
 
         public void CalculateUserCharGlyphAdvancePos(in TextBufferSpan textBufferSpan, RequestFont font, ref TextSpanMeasureResult measureResult)
         {
-            _textService.CalculateUserCharGlyphAdvancePos(textBufferSpan, font, ref measureResult);
+            _txtClient.CalculateUserCharGlyphAdvancePos(textBufferSpan, font, ref measureResult);
         }
 
         public void CalculateUserCharGlyphAdvancePos(in TextBufferSpan textBufferSpan,
@@ -42,7 +46,7 @@ namespace LayoutFarm
             RequestFont font,
             ref TextSpanMeasureResult measureResult)
         {
-            _textService.CalculateUserCharGlyphAdvancePos(textBufferSpan,
+            _txtClient.CalculateUserCharGlyphAdvancePos(textBufferSpan,
                 lineSegs,
                 font,
                 ref measureResult);
