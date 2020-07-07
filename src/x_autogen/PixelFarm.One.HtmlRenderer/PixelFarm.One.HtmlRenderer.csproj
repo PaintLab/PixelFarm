@@ -915,6 +915,7 @@
     <Compile Include="D:\projects\Typography\Typography.GlyphLayout\GlyphSubstitution.cs" />
     <Compile Include="D:\projects\Typography\Typography.GlyphLayout\MeasureStringBox.cs" />
     <Compile Include="D:\projects\Typography\Typography.GlyphLayout\PixelScaleLayoutExtensions.cs" />
+    <Compile Include="D:\projects\Typography\Typography.GlyphLayout\ScriptLang.cs" />
     <Compile Include="D:\projects\Typography\Typography.GlyphLayout\UserCharToGlyphIndexMap.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\AdditionalInfo\AdobeGlyphList.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\AdditionalInfo\AdobeGlyphListForNewFont.cs" />
@@ -927,7 +928,6 @@
     <Compile Include="D:\projects\Typography\Typography.OpenFont\IGlyphTranslator.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\IO\ByteOrderSwappingBinaryReader.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\OpenFontReader.cs" />
-    <Compile Include="D:\projects\Typography\Typography.OpenFont\ScriptLang.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.AdvancedLayout\AttachmentListTable.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.AdvancedLayout\Base.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.AdvancedLayout\ClassDefTable.cs" />
