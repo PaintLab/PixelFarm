@@ -1083,6 +1083,20 @@ namespace PixelFarm.DrawingGL
 
 
                 _textServices.CurrentScriptLang = new ScriptLang(spBreakInfo.ScriptTag, spBreakInfo.LangTag);
+
+                //in some text context (+typeface)=>user can disable gsub, gpos
+                //this is an example
+                if (line_seg.WordKind == WordKind.Tab || line_seg.WordKind == WordKind.Number ||
+                       (spBreakInfo.UnicodeRange == Unicode13RangeInfoList.C0_Controls_and_Basic_Latin))
+                {
+                    _textServices.EnableGpos = false;
+                    _textServices.EnableGsub = false;
+                }
+                else
+                {
+                    _textServices.EnableGpos = true;
+                    _textServices.EnableGsub = true;
+                }
                 //layout glyphs in each context
                 GlyphPlanSequence seq = _textServices.CreateGlyphPlanSeq(buff, curTypeface, reqFont.SizeInPoints);
                 seq.IsRightToLeft = spBreakInfo.RightToLeft;
