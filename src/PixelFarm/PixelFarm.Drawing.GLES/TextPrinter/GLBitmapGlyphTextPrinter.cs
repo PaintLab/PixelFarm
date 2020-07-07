@@ -34,7 +34,7 @@ namespace PixelFarm.DrawingGL
         GLBitmap _glBmp;
 
         ResolvedFont _resolvedFont;
-        readonly OpenFontTextService _textServices;
+        readonly TextServiceClient _txtClient;
         readonly TextureCoordVboBuilder _vboBuilder = new TextureCoordVboBuilder();
 
 
@@ -61,7 +61,8 @@ namespace PixelFarm.DrawingGL
             //create text printer for use with canvas painter           
             _painter = painter;
             _pcx = painter.Core;
-            _textServices = textServices;
+
+            _txtClient = textServices.CreateNewServiceClient();
 
             //_currentTextureKind = TextureKind.Msdf; 
             //_currentTextureKind = TextureKind.StencilGreyScale;
@@ -169,7 +170,7 @@ namespace PixelFarm.DrawingGL
             {
                 return;
             }
-            ChangeFont(_textServices.ResolveFont(font));
+            ChangeFont(_txtClient.ResolveFont(font));
         }
         public void LoadFontAtlas(string fontTextureInfoFile, string atlasImgFilename)
         {
@@ -244,7 +245,7 @@ namespace PixelFarm.DrawingGL
         public void MeasureString(char[] buffer, int startAt, int len, out int w, out int h)
         {
             var textBufferSpan = new TextBufferSpan(buffer, startAt, len);
-            Size s = _textServices.MeasureString(textBufferSpan, _painter.CurrentFont);
+            Size s = _txtClient.MeasureString(textBufferSpan, _painter.CurrentFont);
             w = s.Width;
             h = s.Height;
         }
@@ -272,7 +273,7 @@ namespace PixelFarm.DrawingGL
             //check each split segment
 
 
-            GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(textBufferSpan, _resolvedFont);
+            GlyphPlanSequence glyphPlanSeq = _txtClient.CreateGlyphPlanSeq(textBufferSpan, _resolvedFont);
             //-----------------
 
             _vboBuilder.Clear();
@@ -978,7 +979,7 @@ namespace PixelFarm.DrawingGL
             var buffSpan = new TextBufferSpan(buffer, startAt, len);
 
             RequestFont reqFont = _painter.CurrentFont; //init with default 
-            ResolvedFont resolvedFont = _textServices.ResolveFont(reqFont);
+            ResolvedFont resolvedFont = _txtClient.ResolveFont(reqFont);
             //Typeface defaultTypeface = resolvedFont.Typeface;
             Typeface curTypeface = resolvedFont.Typeface;
 
@@ -986,7 +987,7 @@ namespace PixelFarm.DrawingGL
 
             _lineSegs.Clear();
             _textPrinterWordVisitor.SetLineSegmentList(_lineSegs);
-            _textServices.BreakToLineSegments(buffSpan, _textPrinterWordVisitor);
+            _txtClient.BreakToLineSegments(buffSpan, _textPrinterWordVisitor);
             _textPrinterWordVisitor.SetLineSegmentList(null);
             //typeface may not have a glyph for some char
             //eg eng font + emoji
@@ -1062,7 +1063,7 @@ namespace PixelFarm.DrawingGL
                         AlternativeTypefaceSelector.LatestTypeface = curTypeface;
                     }
 
-                    if (_textServices.TryGetAlternativeTypefaceFromCodepoint(codepoint, AlternativeTypefaceSelector, out Typeface alternative))
+                    if (_txtClient.TryGetAlternativeTypefaceFromCodepoint(codepoint, AlternativeTypefaceSelector, out Typeface alternative))
                     {
                         //change to another
                         //create local resolved font
@@ -1082,23 +1083,23 @@ namespace PixelFarm.DrawingGL
                 }
 
 
-                _textServices.CurrentScriptLang = new ScriptLang(spBreakInfo.ScriptTag, spBreakInfo.LangTag);
+                _txtClient.CurrentScriptLang = new ScriptLang(spBreakInfo.ScriptTag, spBreakInfo.LangTag);
 
                 //in some text context (+typeface)=>user can disable gsub, gpos
                 //this is an example
                 if (line_seg.WordKind == WordKind.Tab || line_seg.WordKind == WordKind.Number ||
                        (spBreakInfo.UnicodeRange == Unicode13RangeInfoList.C0_Controls_and_Basic_Latin))
                 {
-                    _textServices.EnableGpos = false;
-                    _textServices.EnableGsub = false;
+                    _txtClient.EnableGpos = false;
+                    _txtClient.EnableGsub = false;
                 }
                 else
                 {
-                    _textServices.EnableGpos = true;
-                    _textServices.EnableGsub = true;
+                    _txtClient.EnableGpos = true;
+                    _txtClient.EnableGsub = true;
                 }
                 //layout glyphs in each context
-                GlyphPlanSequence seq = _textServices.CreateGlyphPlanSeq(buff, curTypeface, reqFont.SizeInPoints);
+                GlyphPlanSequence seq = _txtClient.CreateGlyphPlanSeq(buff, curTypeface, reqFont.SizeInPoints);
                 seq.IsRightToLeft = spBreakInfo.RightToLeft;
 
                 //calculate font key => get resolved font
