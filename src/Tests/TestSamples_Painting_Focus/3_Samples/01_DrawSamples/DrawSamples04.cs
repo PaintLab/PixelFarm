@@ -24,6 +24,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
 
         OpenFontTextService _textServices;
+        TextServiceClient _txtClient;
         BitmapFontManager<MemBitmap> _bmpFontMx;
         SimpleBitmapAtlas _fontAtlas;
         RequestFont _font;
@@ -37,7 +38,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
             //1. create a text service (or get it from a singleton class)       
 
             _textServices = new OpenFontTextService();
-
+            _txtClient = _textServices.CreateNewServiceClient();
             //2. create manager
             _bmpFontMx = new BitmapFontManager<MemBitmap>(
                 _textServices,
@@ -84,7 +85,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
             //ask text service to parse user input char buffer and create a glyph-plan-sequence (list of glyph-plan) 
             //with specific request font
-            GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(textBufferSpan, _font);
+            GlyphPlanSequence glyphPlanSeq = _txtClient.CreateGlyphPlanSeq(textBufferSpan, _font);
 
             ResolvedFont resolvedFont = _textServices.ResolveFont(_font);
             Typeface typeface = resolvedFont.Typeface;
