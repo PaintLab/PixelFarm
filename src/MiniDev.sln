@@ -264,6 +264,7 @@ Global
 		PixelFarm\PixelFarm.CpuBlit_Layer1\PixelFarm.CpuBlit_Layer1_SH.projitems*{41db6088-6555-4b36-95f3-de1d417fef70}*SharedItemsImports = 4
 		PixelFarm\PixelFarm.Drawing.GdiPlus_SH\PixelFarm.Drawing.GdiPlus_SH.projitems*{4677024b-a1ab-4a8f-a074-70ff8f0e55da}*SharedItemsImports = 13
 		PixelFarm\BackEnd.Triangulation\Triangulation.projitems*{4f435da3-706a-4e6d-ae29-e1e95bd6f68a}*SharedItemsImports = 13
+		PixelFarm\BackEnd.BurningMineCurve_SH\BackEnd.BurningMineCurve_SH.projitems*{51d63482-5697-4b16-8401-506965624657}*SharedItemsImports = 4
 		PixelFarm\BackEnd.Tesselate_SH\BackEnd.Tesselate_SH.projitems*{51d63482-5697-4b16-8401-506965624657}*SharedItemsImports = 4
 		PixelFarm\BackEnd.Triangulation\Triangulation.projitems*{51d63482-5697-4b16-8401-506965624657}*SharedItemsImports = 4
 		PixelFarm\PixelFarm.BasicVisualElements_SH\PixelFarm.BasicVisualElements_SH.projitems*{51d63482-5697-4b16-8401-506965624657}*SharedItemsImports = 4

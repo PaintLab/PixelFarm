@@ -31,6 +31,14 @@
     <DefineConstants> TRACE; PIXEL_FARM; PIXEL_FARM_NET20; NET20; MINIMAL; GLES; WIN32; GL_ENABLE; SHARPZIPLIB;</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\..\PixelFarm\BackEnd.BurningMineCurve_SH\CubicBezier.cs" Link="PixelFarm\BackEnd.BurningMineCurve_SH\CubicBezier.cs" />
+    <Compile Include="..\..\PixelFarm\BackEnd.BurningMineCurve_SH\CurveBuilder.cs" Link="PixelFarm\BackEnd.BurningMineCurve_SH\CurveBuilder.cs" />
+    <Compile Include="..\..\PixelFarm\BackEnd.BurningMineCurve_SH\CurveFit.cs" Link="PixelFarm\BackEnd.BurningMineCurve_SH\CurveFit.cs" />
+    <Compile Include="..\..\PixelFarm\BackEnd.BurningMineCurve_SH\CurveFitBase.cs" Link="PixelFarm\BackEnd.BurningMineCurve_SH\CurveFitBase.cs" />
+    <Compile Include="..\..\PixelFarm\BackEnd.BurningMineCurve_SH\CurvePreprocess.cs" Link="PixelFarm\BackEnd.BurningMineCurve_SH\CurvePreprocess.cs" />
+    <Compile Include="..\..\PixelFarm\BackEnd.BurningMineCurve_SH\Spline.cs" Link="PixelFarm\BackEnd.BurningMineCurve_SH\Spline.cs" />
+    <Compile Include="..\..\PixelFarm\BackEnd.BurningMineCurve_SH\SplineBuilder.cs" Link="PixelFarm\BackEnd.BurningMineCurve_SH\SplineBuilder.cs" />
+    <Compile Include="..\..\PixelFarm\BackEnd.BurningMineCurve_SH\VectorHelper.cs" Link="PixelFarm\BackEnd.BurningMineCurve_SH\VectorHelper.cs" />
     <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Color\ColorBgra.cs" Link="PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Color\ColorBgra.cs" />
     <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Color\HsvColor.cs" Link="PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Color\HsvColor.cs" />
     <Compile Include="..\..\PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Color\RgbColor.cs" Link="PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Color\RgbColor.cs" />
@@ -1055,6 +1063,7 @@
     <Compile Include="..\..\..\..\Typography\Typography.TextServices\Utils\CRC32.cs" Link="Typography\Typography.TextServices\Utils\CRC32.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="PixelFarm\BackEnd.BurningMineCurve_SH" />
     <Folder Include="PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Color" />
     <Folder Include="PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core" />
     <Folder Include="PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\PixelOps" />
