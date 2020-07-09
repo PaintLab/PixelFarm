@@ -13,6 +13,7 @@ using PixelFarm.CpuBlit.BitmapAtlas;
 
 using Typography.OpenFont;
 using Typography.TextLayout;
+using Typography.TextServices;
 
 using Mini;
 namespace PixelFarm.CpuBlit.Sample_Draw

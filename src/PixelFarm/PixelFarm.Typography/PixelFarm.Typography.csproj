@@ -11,8 +11,8 @@
     <AssemblyName>PixelFarm.Typography</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-	  <LangVersion>8.0</LangVersion>
-	  <TargetFrameworkProfile />
+    <LangVersion>8.0</LangVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,60 +42,6 @@
     <Compile Include="..\..\..\..\Typography\Build\N20\Typography.OpenFont\System.Numerics.ForNet20.cs">
       <Link>System.Numerics.ForNet20.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1_General\FontStyleExtensions.cs">
-      <Link>1_General\FontStyleExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1_General\LineSegmentsAndWordVisitors.cs">
-      <Link>1_General\LineSegmentsAndWordVisitors.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1_General\OpenFontTextService.cs">
-      <Link>1_General\OpenFontTextService.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1_General\OpenFontTextService_Part2.cs">
-      <Link>1_General\OpenFontTextService_Part2.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1_General\ResolvedFonts.cs">
-      <Link>1_General\ResolvedFonts.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1_General\VxsTextPrinter.cs">
-      <Link>1_General\VxsTextPrinter.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\2_CpuBlit_BitmapAtlas\AggGlyphTextureGen.cs">
-      <Link>2_CpuBlit_BitmapAtlas\AggGlyphTextureGen.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\2_CpuBlit_BitmapAtlas\BitmapFontMx.cs">
-      <Link>2_CpuBlit_BitmapAtlas\BitmapFontMx.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\2_CpuBlit_BitmapAtlas\FontAtlasTextPrinter.cs">
-      <Link>2_CpuBlit_BitmapAtlas\FontAtlasTextPrinter.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\2_CpuBlit_BitmapAtlas\GlyphBitmapStore.cs">
-      <Link>2_CpuBlit_BitmapAtlas\GlyphBitmapStore.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\2_CpuBlit_BitmapAtlas\GlyphTextureBitmapGenerator.cs">
-      <Link>2_CpuBlit_BitmapAtlas\GlyphTextureBitmapGenerator.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_Typography_Contours\GlyphMeshCollection.cs">
-      <Link>3_Typograhy_Contours\GlyphMeshCollection.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_Typography_Contours\GlyphMeshStore.cs">
-      <Link>3_Typograhy_Contours\GlyphMeshStore.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_Typography_Contours\GlyphOutlineBuilderBase.cs">
-      <Link>3_Typograhy_Contours\GlyphOutlineBuilderBase.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_Typography_Contours\GlyphPathBuilder.cs">
-      <Link>3_Typograhy_Contours\GlyphPathBuilder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_Typography_Contours\GlyphTranslatorToVxs.cs">
-      <Link>3_Typograhy_Contours\GlyphTranslatorToVxs.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\3_Typography_Contours\TextPrinterBase.cs">
-      <Link>3_Typograhy_Contours\TextPrinterBase.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\4_PixelFarm_Contours\GlyphOutlineAnalyzer.cs">
-      <Link>4_PixelFarm_Contours\GlyphOutlineAnalyzer.cs</Link>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -109,5 +55,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
+  <Import Project="..\..\..\..\Typography\PixelFarm.Typography\PixelFarm.Typography_SH.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

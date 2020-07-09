@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using PixelFarm.Drawing;
-
+using Typography.TextBreak;
 
 namespace LayoutFarm.TextEditing
 {

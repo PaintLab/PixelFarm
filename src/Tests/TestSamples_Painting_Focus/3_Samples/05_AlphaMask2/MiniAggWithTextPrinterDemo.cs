@@ -3,6 +3,7 @@
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.BitmapAtlas;
 using Typography.Contours;
+using Typography.TextServices;
 using Mini;
 namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 {
@@ -17,7 +18,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         VxsTextPrinter _vxsTextPrinter;
 
         TextPrinterBase _printer;
-        OpenFontTextService _openFontTextServices;
+         OpenFontTextService _openFontTextServices;
 
         public MiniAggWithTextPrinterDemo()
         {

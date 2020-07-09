@@ -146,7 +146,7 @@ namespace LayoutFarm.UI
 
                         if (PixelFarm.Drawing.GLES2.GLES2Platform.TextService == null)
                         {
-                            PixelFarm.Drawing.GLES2.GLES2Platform.TextService = (PixelFarm.Drawing.OpenFontTextService)GlobalTextService.TextService;
+                            PixelFarm.Drawing.GLES2.GLES2Platform.TextService = (Typography.TextServices.OpenFontTextService)GlobalTextService.TextService;
                         }
 
                         if (PixelFarm.Drawing.GLES2.GLES2Platform.TextService != null)
