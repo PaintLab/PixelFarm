@@ -150,10 +150,10 @@ namespace TestGlfw
             Typography.TextBreak.CustomBreakerBuilder.Setup(new Typography.TextBreak.IcuSimpleTextFileDictionaryProvider() { DataDir = icu_datadir });
 
             //---------------------------------------------------------------------------
-            //4. Typography TextService             
-            OpenFontTextService textService = new OpenFontTextService();
+            //4. Typography TextService           
+            Typography.TextServices.OpenFontTextService textService = new Typography.TextServices.OpenFontTextService();
             textService.LoadFontsFromFolder("Fonts");
-            TextServiceClient serviceClient = textService.CreateNewServiceClient();
+            Typography.TextServices.TextServiceClient serviceClient = textService.CreateNewServiceClient();
             GlobalTextService.TextService = serviceClient;
             //---------------------------------------------------------------------------
 

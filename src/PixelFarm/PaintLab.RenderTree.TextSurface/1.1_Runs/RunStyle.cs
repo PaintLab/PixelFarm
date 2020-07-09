@@ -3,7 +3,7 @@
 
 using PixelFarm.Drawing;
 using Typography.TextBreak;
-
+using Typography.TextServices;
 namespace LayoutFarm.TextEditing
 {
     public class RunStyle

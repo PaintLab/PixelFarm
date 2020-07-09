@@ -9,6 +9,7 @@ using PixelFarm.Drawing;
 using Typography.TextLayout;
 using Typography.OpenFont;
 using Typography.TextBreak;
+using Typography.TextServices;
 using Typography.FontManagement;
 using Typography.OpenFont.Extensions;
 
@@ -90,11 +91,12 @@ namespace PixelFarm.DrawingGL
             var myAlternativeTypefaceSelector = new MyAlternativeTypefaceSelector();
 
             {
-                var preferTypefaces = new PixelFarm.Drawing.MyAlternativeTypefaceSelector.PreferTypefaceList();
+                var preferTypefaces = new Typography.TextServices.PreferredTypefaceList();
                 preferTypefaces.AddTypefaceName("Source Sans Pro");
                 preferTypefaces.AddTypefaceName("Sarabun");
 
-                myAlternativeTypefaceSelector.SetPreferTypefaces(
+
+                myAlternativeTypefaceSelector.SetPreferredTypefaces(
                      new[]{Typography.TextBreak.Unicode13RangeInfoList.C0_Controls_and_Basic_Latin,
                                Typography.TextBreak.Unicode13RangeInfoList.C1_Controls_and_Latin_1_Supplement,
                                Typography.TextBreak.Unicode13RangeInfoList.Latin_Extended_A,
@@ -957,15 +959,16 @@ namespace PixelFarm.DrawingGL
             int typefaceKey = TypefaceExtensions.GetCustomTypefaceKey(typeface);
             if (typefaceKey == 0)
             {
-                //calculate and cache
-                TypefaceExtensions.SetCustomTypefaceKey(typeface,
-                    typefaceKey = RequestFont.CalculateTypefaceKey(typeface.Name));
+                throw new System.NotSupportedException();
+                ////calculate and cache
+                //TypefaceExtensions.SetCustomTypefaceKey(typeface,
+                //    typefaceKey = RequestFont.CalculateTypefaceKey(typeface.Name));
             }
 
             int key = RequestFont.CalculateFontKey(typefaceKey, sizeInPoint, style);
             if (!_localResolvedFonts.TryGetValue(key, out ResolvedFont found))
             {
-                return _localResolvedFonts[key] = new ResolvedFont(typeface, sizeInPoint, style, key);
+                return _localResolvedFonts[key] = new ResolvedFont(typeface, sizeInPoint, key);
             }
             return found;
         }

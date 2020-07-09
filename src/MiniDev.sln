@@ -241,6 +241,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DepCtrl_Painter_Layer1", "D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DepCtrl_PixelFarm_Painter_With_TextSupport", "DepCtrls\DepCtrl_PixelFarm_Painter_With_TextSupport\DepCtrl_PixelFarm_Painter_With_TextSupport.csproj", "{C8C4EB0F-C324-4E11-832C-C701CF3E5D27}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PixelFarm.Typography_SH", "..\..\Typography\PixelFarm.Typography\PixelFarm.Typography_SH.shproj", "{EC0BD041-5BA5-409D-8FC6-AA9F2A6F862B}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		PixelFarm\BackEnd.Triangulation\Triangulation.projitems*{06d5a76f-92d0-46a4-9ba9-86c65b631535}*SharedItemsImports = 4
@@ -322,6 +324,8 @@ Global
 		PixelFarm\PaintLab.AppHost\PaintLab.AppHost.projitems*{e906647b-3216-4cc1-b849-dd249f6737f4}*SharedItemsImports = 4
 		PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\MiniOpenTK_Core1.projitems*{e9a5d738-bc13-4909-94d8-d7a13d7068ff}*SharedItemsImports = 4
 		PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\MiniOpenTK_Core2.projitems*{e9a5d738-bc13-4909-94d8-d7a13d7068ff}*SharedItemsImports = 4
+		..\..\Typography\PixelFarm.Typography\PixelFarm.Typography_SH.projitems*{ec0bd041-5ba5-409d-8fc6-aa9f2a6f862b}*SharedItemsImports = 13
+		..\..\Typography\PixelFarm.Typography\PixelFarm.Typography_SH.projitems*{ec1307c6-309f-43ea-bfcc-5219e2f5a103}*SharedItemsImports = 4
 		PixelFarm\PaintLab.AppHost\PaintLab.AppHost.projitems*{f45871bd-806e-487a-a0b3-1e95853f693b}*SharedItemsImports = 13
 		PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\MiniOpenTK_Core1.projitems*{f5a89623-87b9-42a3-a58c-abee7c9bbca2}*SharedItemsImports = 4
 		PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\MiniOpenTK_Core2.projitems*{f5a89623-87b9-42a3-a58c-abee7c9bbca2}*SharedItemsImports = 4
@@ -9668,6 +9672,7 @@ Global
 		{CB83E3B5-E8B9-4AC4-BA6C-B4764E815E6B} = {5591DAAB-4897-472C-A408-7FCDD50DCEA0}
 		{2EF3FF2B-BF9C-47F6-9EC6-1DC75B18CA67} = {20AC18A6-5250-4307-B341-EC3A463750EA}
 		{C8C4EB0F-C324-4E11-832C-C701CF3E5D27} = {20AC18A6-5250-4307-B341-EC3A463750EA}
+		{EC0BD041-5BA5-409D-8FC6-AA9F2A6F862B} = {C1FD503F-59E2-4016-8AEA-831AC3231430}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AD5DF903-2497-45EE-B3DC-1FAF5DA8F05C}

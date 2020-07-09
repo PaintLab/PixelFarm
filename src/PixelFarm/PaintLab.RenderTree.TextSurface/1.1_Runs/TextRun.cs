@@ -2,7 +2,11 @@
 
 using System;
 using System.Text;
+using Typography.TextServices;
+using Typography.TextBreak;
+
 using PixelFarm.Drawing;
+
 namespace LayoutFarm.TextEditing
 {
 
@@ -143,18 +147,18 @@ namespace LayoutFarm.TextEditing
 
                     //BreakToLineSegs(textBufferSpan);
                 }
-                _content_unparsed = false; 
+                _content_unparsed = false;
                 RunStyle.CalculateUserCharGlyphAdvancePos(textBufferSpan, _lineSegs, ref measureResult);
             }
             else
             {
-                RunStyle.CalculateUserCharGlyphAdvancePos(textBufferSpan, ref measureResult); 
-            } 
+                RunStyle.CalculateUserCharGlyphAdvancePos(textBufferSpan, ref measureResult);
+            }
             SetSize(measureResult.outputTotalW, measureResult.lineHeight);
 
             InvalidateGraphics();
         }
-         
+
 
         protected void AdjustClientBounds(ref Rectangle bounds)
         {

@@ -15,6 +15,8 @@
 
 using System;
 using System.Collections.Generic;
+using Typography.TextBreak;
+using Typography.TextServices;
 using Win32;
 
 namespace PixelFarm.Drawing.WinGdi
@@ -131,7 +133,7 @@ namespace PixelFarm.Drawing.WinGdi
             return _painter;
         }
 
-        internal OpenFontTextService OpenFontTextService => _openFontTextServices;
+        internal Typography.TextServices.OpenFontTextService OpenFontTextService => _openFontTextServices;
 
 #if DEBUG
         public void dbugTestDrawText()
@@ -885,7 +887,7 @@ namespace PixelFarm.Drawing.WinGdi
     //text and font
     partial class GdiPlusRenderSurface
     {
-        ResolvedFont _resolvedFont;
+        Typography.TextServices.ResolvedFont _resolvedFont;
         RequestFont _currentTextFont = null;
         Color _mycurrentTextColor = Color.Black;
 
@@ -1004,7 +1006,7 @@ namespace PixelFarm.Drawing.WinGdi
             _win32MemDc.MeasureTextSize(str, startAt, len, out w, out h);
         }
 
-        public ResolvedFont CurrentResolvedFont
+        public Typography.TextServices.ResolvedFont CurrentResolvedFont
         {
             get => _resolvedFont;
             set

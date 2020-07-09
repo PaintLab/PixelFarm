@@ -7,7 +7,7 @@ using PixelFarm.Drawing;
 
 using PixelFarm.CpuBlit.PixelProcessing;
 using PixelFarm.CpuBlit.BitmapAtlas;
-
+using Typography.TextServices;
 using Typography.TextLayout;
 
 using Mini;
