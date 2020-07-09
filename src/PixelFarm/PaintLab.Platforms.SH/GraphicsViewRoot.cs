@@ -146,9 +146,9 @@ namespace LayoutFarm.UI
 
                         if (PixelFarm.Drawing.GLES2.GLES2Platform.TextService == null)
                         {
-                            PixelFarm.Drawing.GLES2.GLES2Platform.TextService = (Typography.TextServices.OpenFontTextService)GlobalTextService.TextService;
+                            PixelFarm.Drawing.GLES2.GLES2Platform.TextService = GlobalTextService.TextService2;
                         }
-
+                        
                         if (PixelFarm.Drawing.GLES2.GLES2Platform.TextService != null)
                         {
                             var printer = new GLBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);
