@@ -106,7 +106,7 @@ namespace PixelFarm.DrawingGL
             }
             AlternativeTypefaceSelector = myAlternativeTypefaceSelector;
         }
-
+        public TextServiceClient TextClient => _txtClient;
         void ChangeFont(SameFontTextStrip s)
         {
             ResolvedFont r_font = s.ResolvedFont;
