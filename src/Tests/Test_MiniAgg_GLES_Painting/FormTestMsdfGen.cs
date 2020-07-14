@@ -11,7 +11,7 @@ using PixelFarm.CpuBlit.VertexProcessing;
 using Msdfgen;
 
 using Typography.OpenFont;
-using Typography.Contours;
+using Typography.OpenFont.Contours;
 
 namespace Mini
 {

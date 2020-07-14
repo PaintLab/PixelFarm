@@ -9,6 +9,7 @@ using PixelFarm.CpuBlit;
 
 using PixelFarm.Contours;
 using Typography.OpenFont;
+using Typography.OpenFont.Contours;
 using PixelFarm.CpuBlit.VertexProcessing;
 
 
@@ -18,8 +19,8 @@ namespace Test_WinForm_TessGlyph
     {
 
         Typeface _typeface;
-        Typography.Contours.GlyphTranslatorToVxs _tovxs;
-        Typography.Contours.GlyphOutlineBuilder _glyphPathBuilder;
+        GlyphTranslatorToVxs _tovxs;
+        GlyphOutlineBuilder _glyphPathBuilder;
         TessTool _tessTool;
 
         public FormTess()
@@ -49,8 +50,8 @@ namespace Test_WinForm_TessGlyph
                 _typeface = reader.Read(fs);
             }
 
-            _tovxs = new Typography.Contours.GlyphTranslatorToVxs();
-            _glyphPathBuilder = new Typography.Contours.GlyphOutlineBuilder(_typeface);
+            _tovxs = new GlyphTranslatorToVxs();
+            _glyphPathBuilder = new GlyphOutlineBuilder(_typeface);
             //
             _tessTool = new TessTool();
         }
@@ -138,7 +139,7 @@ namespace Test_WinForm_TessGlyph
             //
             float fontSizeInPts = 300;
             _glyphPathBuilder.BuildFromGlyphIndex(typeface.GetGlyphIndex(selectedChar), fontSizeInPts);
-            
+
             var prevColor = painter.StrokeColor;
             painter.StrokeColor = Color.Black;
             using (Tools.BorrowVxs(out var v1))

@@ -24,8 +24,8 @@ namespace PixelFarm
     public class GlyphDemo : DemoBase
     {
         Typeface _typeface;
-        Typography.Contours.GlyphTranslatorToVxs _tovxs;
-        Typography.Contours.GlyphOutlineBuilder _glyphPathBuilder;
+        Typography.OpenFont.Contours.GlyphTranslatorToVxs _tovxs;
+        Typography.OpenFont.Contours.GlyphOutlineBuilder _glyphPathBuilder;
         TessTool _tessTool;
         public GlyphDemo()
         {
@@ -38,8 +38,8 @@ namespace PixelFarm
                 _typeface = reader.Read(fs);
             }
 
-            _tovxs = new Typography.Contours.GlyphTranslatorToVxs();
-            _glyphPathBuilder = new Typography.Contours.GlyphOutlineBuilder(_typeface);
+            _tovxs = new Typography.OpenFont.Contours.GlyphTranslatorToVxs();
+            _glyphPathBuilder = new Typography.OpenFont.Contours.GlyphOutlineBuilder(_typeface);
             //
             _tessTool = new TessTool();
         }

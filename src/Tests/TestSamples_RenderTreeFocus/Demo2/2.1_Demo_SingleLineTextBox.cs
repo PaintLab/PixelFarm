@@ -8,9 +8,10 @@ namespace LayoutFarm
         protected override void OnStart(AppHost host)
         {
             //simple textbox
-            var textbox = new LayoutFarm.CustomWidgets.TextBox(100, 30, false);
+            var reqFont = new PixelFarm.Drawing.RequestFont("Sarabun", 18);
+            var textbox = new LayoutFarm.CustomWidgets.TextBox(200, 30, false);
             var textSpanStyle = new TextEditing.TextSpanStyle() {
-                ReqFont = new PixelFarm.Drawing.RequestFont("tahoma", 18),
+                ReqFont = reqFont,
                 FontColor = new PixelFarm.Drawing.Color(255, 0, 0)
             };
             //test with various font style             
@@ -22,9 +23,9 @@ namespace LayoutFarm
 
             //--------------
             //mask text box
-            var maskTextBox = new LayoutFarm.CustomWidgets.MaskTextBox(100, 30);
+            var maskTextBox = new LayoutFarm.CustomWidgets.MaskTextBox(200, 30);
             var textSpanStyle2 = new TextEditing.TextSpanStyle() {
-                ReqFont = new PixelFarm.Drawing.RequestFont("tahoma", 18),
+                ReqFont = reqFont,
                 FontColor = PixelFarm.Drawing.Color.Black
             };
 

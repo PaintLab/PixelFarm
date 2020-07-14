@@ -63,7 +63,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaintLab.RenderTree.TextSur
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5.1_YourImplementation", "5.1_YourImplementation", "{8BE95464-61A5-4C0A-99F8-DA6E32C52B78}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.2_Production", "2.2_Production", "{1FFAB66A-292D-402A-9505-35FA36942F4B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.3_Production", "2.3_Production", "{1FFAB66A-292D-402A-9505-35FA36942F4B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.0_Supportive_Modules", "1.0_Supportive_Modules", "{40520F7C-15E7-446F-8C15-E38A93A7B4B9}"
 EndProject
@@ -197,7 +197,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneralResources", "x_resou
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test_CpuBlitCoreRasterizer", "Tests\Test_CpuBlitCoreRasterizer\Test_CpuBlitCoreRasterizer.csproj", "{570B752C-A8D5-4C97-B8F5-6070757CE5AD}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0.2_Dev_DepControlUnits", "0.2_Dev_DepControlUnits", "{20AC18A6-5250-4307-B341-EC3A463750EA}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.2_Dev_DepControlUnits", "2.2_Dev_DepControlUnits", "{20AC18A6-5250-4307-B341-EC3A463750EA}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PixelFarm.DrawingGL_SH", "PixelFarm\PixelFarm.DrawingGL_SH\PixelFarm.DrawingGL_SH.shproj", "{73F1B81D-99A6-412E-AB6E-DB399D32E2BF}"
 EndProject
@@ -239,9 +239,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.BasicVisualElemen
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DepCtrl_Painter_Layer1", "DepCtrls\DepCtrl_Painter_Layer1\DepCtrl_Painter_Layer1.csproj", "{2EF3FF2B-BF9C-47F6-9EC6-1DC75B18CA67}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DepCtrl_PixelFarm_Painter_With_TextSupport", "DepCtrls\DepCtrl_PixelFarm_Painter_With_TextSupport\DepCtrl_PixelFarm_Painter_With_TextSupport.csproj", "{C8C4EB0F-C324-4E11-832C-C701CF3E5D27}"
-EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PixelFarm.Typography_SH", "..\..\Typography\PixelFarm.Typography\PixelFarm.Typography_SH.shproj", "{EC0BD041-5BA5-409D-8FC6-AA9F2A6F862B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DepCtrl_Painter_Layer1_With_TextSupport", "DepCtrls\DepCtrl_Painter_Layer1_With_TextSupport\DepCtrl_Painter_Layer1_With_TextSupport.csproj", "{C8C4EB0F-C324-4E11-832C-C701CF3E5D27}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -9670,10 +9670,10 @@ Global
 		{CCCCD3D9-E573-416D-8313-6942C1F85718} = {20AC18A6-5250-4307-B341-EC3A463750EA}
 		{80D9DA2C-B25E-4A77-B4D1-CBA8DDBF76BF} = {AC10C2FA-8476-4818-ABFF-2E83739B8A57}
 		{25083F08-8CE3-4623-94B9-E3364EFC72B6} = {20AC18A6-5250-4307-B341-EC3A463750EA}
-		{CB83E3B5-E8B9-4AC4-BA6C-B4764E815E6B} = {5591DAAB-4897-472C-A408-7FCDD50DCEA0}
+		{CB83E3B5-E8B9-4AC4-BA6C-B4764E815E6B} = {20AC18A6-5250-4307-B341-EC3A463750EA}
 		{2EF3FF2B-BF9C-47F6-9EC6-1DC75B18CA67} = {20AC18A6-5250-4307-B341-EC3A463750EA}
-		{C8C4EB0F-C324-4E11-832C-C701CF3E5D27} = {20AC18A6-5250-4307-B341-EC3A463750EA}
 		{EC0BD041-5BA5-409D-8FC6-AA9F2A6F862B} = {C1FD503F-59E2-4016-8AEA-831AC3231430}
+		{C8C4EB0F-C324-4E11-832C-C701CF3E5D27} = {20AC18A6-5250-4307-B341-EC3A463750EA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AD5DF903-2497-45EE-B3DC-1FAF5DA8F05C}

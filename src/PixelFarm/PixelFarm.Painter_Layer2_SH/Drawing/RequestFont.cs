@@ -43,13 +43,11 @@ namespace PixelFarm.Drawing
         Others = 1 << 4
     }
 
-
-
     /// <summary>
     /// user-request font specification
     /// </summary>
     public sealed class RequestFont
-    { 
+    {
 
         //each platform/canvas has its own representation of this Font 
         //this is just a request for specficic font presentation at a time
@@ -174,14 +172,14 @@ namespace PixelFarm.Drawing
         {
             return InternalFontKey.CalculateGetHasCode(
                 InternalFontKey.RegisterFontName(typefaceName),
-                fontSizeInPts.GetHashCode(),
+                fontSizeInPts,
                 style.GetHashCode());
         }
         public static int CalculateFontKey(int typefaceFontKey, float fontSizeInPts, FontStyle style)
         {
             return InternalFontKey.CalculateGetHasCode(
                 typefaceFontKey,
-                fontSizeInPts.GetHashCode(),
+                fontSizeInPts,
                 style.GetHashCode());
         }
 

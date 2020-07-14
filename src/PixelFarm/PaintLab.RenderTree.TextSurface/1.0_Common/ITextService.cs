@@ -5,7 +5,8 @@ using System.Collections.Generic;
 
 using PixelFarm.Drawing;
 using Typography.TextBreak;
-using Typography.TextServices;
+using Typography.TextLayout;
+using Typography.Text;
 
 namespace LayoutFarm
 {
@@ -13,20 +14,20 @@ namespace LayoutFarm
     public interface IAdvanceTextService
     {
         bool SupportsWordBreak { get; }
-        void CalculateUserCharGlyphAdvancePos(in TextBufferSpan textBufferSpan,
+        void CalculateUserCharGlyphAdvancePos(in Typography.Text.TextBufferSpan textBufferSpan,
                 RequestFont font,
                 ref TextSpanMeasureResult result);
 
-        void BreakToLineSegments(in TextBufferSpan textBufferSpan, WordVisitor wordVisitor);
-
-        void CalculateUserCharGlyphAdvancePos(in TextBufferSpan textBufferSpan, ILineSegmentList lineSegs,
+        void CalculateUserCharGlyphAdvancePos(in Typography.Text.TextBufferSpan textBufferSpan, ILineSegmentList lineSegs,
               RequestFont font,
               ref TextSpanMeasureResult result);
+
+        void BreakToLineSegments(in Typography.Text.TextBufferSpan textBufferSpan, WordVisitor wordVisitor);
     }
 
     class AdvanceTextServiceImpl : IAdvanceTextService
     {
-       
+
         readonly TextServiceClient _txtClient;
         public AdvanceTextServiceImpl(OpenFontTextService textService)
         {
@@ -35,14 +36,14 @@ namespace LayoutFarm
 
         public bool SupportsWordBreak => true;
 
-        public void BreakToLineSegments(in TextBufferSpan textBufferSpan, WordVisitor visitor) => _txtClient.BreakToLineSegments(textBufferSpan, visitor);
+        public void BreakToLineSegments(in Typography.Text.TextBufferSpan textBufferSpan, WordVisitor visitor) => _txtClient.BreakToLineSegments(textBufferSpan, visitor);
 
-        public void CalculateUserCharGlyphAdvancePos(in TextBufferSpan textBufferSpan, RequestFont font, ref TextSpanMeasureResult measureResult)
+        public void CalculateUserCharGlyphAdvancePos(in Typography.Text.TextBufferSpan textBufferSpan, RequestFont font, ref TextSpanMeasureResult measureResult)
         {
             _txtClient.CalculateUserCharGlyphAdvancePos(textBufferSpan, font, ref measureResult);
         }
 
-        public void CalculateUserCharGlyphAdvancePos(in TextBufferSpan textBufferSpan,
+        public void CalculateUserCharGlyphAdvancePos(in Typography.Text.TextBufferSpan textBufferSpan,
             ILineSegmentList lineSegs,
             RequestFont font,
             ref TextSpanMeasureResult measureResult)

@@ -46,8 +46,7 @@ namespace LayoutFarm.TextEditing
         List<TextLineBox> _lines = new List<TextLineBox>();
         ITextFlowLayerOwner _owner;
 
-        public TextFlowLayer(ITextFlowLayerOwner owner,
-            RunStyle defaultSpanStyle)
+        public TextFlowLayer(ITextFlowLayerOwner owner, RunStyle defaultSpanStyle)
         {
             _owner = owner;
 
