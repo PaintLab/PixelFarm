@@ -54,7 +54,8 @@ namespace LayoutFarm.TextEditing
         }
         //
         internal Size MeasureString(in PixelFarm.Drawing.TextBufferSpan textBufferSpan)
-        {             
+        {
+
             return GlobalTextService.TextService.MeasureString(textBufferSpan, ReqFont);
         }
 
