@@ -2,8 +2,8 @@
 
 using PixelFarm.Drawing;
 using PixelFarm.CpuBlit.BitmapAtlas;
-using Typography.Contours;
-using Typography.TextServices;
+
+using Typography.Text;
 using Mini;
 namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 {
@@ -15,10 +15,10 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 
         bool _fontAtlasPrinterReady;
         FontAtlasTextPrinter _fontAtlasTextPrinter;
-        VxsTextPrinter _vxsTextPrinter;
+        VxsTextSpanPrinter _vxsTextPrinter;
 
-        TextPrinterBase _printer;
-         OpenFontTextService _openFontTextServices;
+        AbstractTextSpanPrinter _printer;
+        OpenFontTextService _openFontTextServices;
 
         public MiniAggWithTextPrinterDemo()
         {
@@ -48,7 +48,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             {
                 _useFontAtlas = value;
                 _printer = (_useFontAtlas) ?
-                    (TextPrinterBase)_fontAtlasTextPrinter :
+                    (AbstractTextSpanPrinter)_fontAtlasTextPrinter :
                     _vxsTextPrinter;
                 this.InvalidateGraphics();
             }
@@ -88,11 +88,11 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             if (_vxsTextPrinter == null)
             {
                 _openFontTextServices = new OpenFontTextService();
-                _vxsTextPrinter = new VxsTextPrinter(p, _openFontTextServices);
+                _vxsTextPrinter = new VxsTextSpanPrinter(p, _openFontTextServices.CreateNewServiceClient());
             }
 
             _printer = (_useFontAtlas) ?
-                    (TextPrinterBase)_fontAtlasTextPrinter :
+                    (AbstractTextSpanPrinter)_fontAtlasTextPrinter :
                     _vxsTextPrinter;
 
             _fontAtlasPrinterReady = true;

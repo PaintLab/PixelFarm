@@ -1,6 +1,7 @@
 ﻿//MIT, 2017-present, WinterDev 
 using System;
 using Mini;
+
 namespace PixelFarm.CpuBlit.Sample_AADemoTest4
 {
 
@@ -351,10 +352,10 @@ namespace PixelFarm.CpuBlit.Sample_AADemoTest4
                 Typography.OpenFont.Typeface typeface = reader.Read(fs);
 
 
-                var builder = new Typography.Contours.GlyphOutlineBuilder(typeface);
+                var builder = new Typography.OpenFont.Contours.GlyphOutlineBuilder(typeface);
                 builder.BuildFromGlyphIndex((ushort)typeface.GetGlyphIndex('C'), 24);
 
-                Typography.Contours.GlyphTranslatorToVxs tovxs = new Typography.Contours.GlyphTranslatorToVxs();
+                var tovxs = new Typography.OpenFont.Contours.GlyphTranslatorToVxs();
                 builder.ReadShapes(tovxs);
 
                 using (Tools.BorrowVxs(out var vxs))

@@ -14,8 +14,8 @@ using PixelFarm.CpuBlit.VertexProcessing;
 using PixelFarm.Drawing;
 //
 using Typography.OpenFont;
-using Typography.Contours;
-using Typography.FontManagement;
+using Typography.OpenFont.Contours;
+ 
 
 
 using Mini;

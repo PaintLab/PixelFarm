@@ -9,7 +9,7 @@ namespace PixelFarm.Drawing.GLES2
     public static class GLES2Platform
     {
 
-        public static Typography.TextServices.OpenFontTextService TextService { get; set; }
+        public static Typography.Text.OpenFontTextService TextService { get; set; }
         public static void SetInstalledTypefaceProvider(IInstalledTypefaceProvider provider)
         {
             GLES2PlatformFontMx.SetInstalledTypefaceProvider(provider);

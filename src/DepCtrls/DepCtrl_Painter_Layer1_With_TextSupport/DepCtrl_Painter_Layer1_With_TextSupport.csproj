@@ -7,8 +7,8 @@
     <ProjectGuid>{C8C4EB0F-C324-4E11-832C-C701CF3E5D27}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DepCtrl_PixelFarm_Painter_With_TextSupport</RootNamespace>
-    <AssemblyName>DepCtrl_PixelFarm_Painter_With_TextSupport</AssemblyName>
+    <RootNamespace>DepCtrl_Painter_Layer1_With_TextSupport</RootNamespace>
+    <AssemblyName>DepCtrl_Painter_Layer1_With_TextSupport</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <LangVersion>8.0</LangVersion>

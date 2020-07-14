@@ -8,9 +8,10 @@ using System.Text;
 
 using Typography.FontManagement;
 using Typography.OpenFont;
+using Typography.OpenFont.Contours;
 using Typography.OpenFont.Extensions;
-using Typography.Contours;
-using Typography.TextBreak;
+using Typography.Text;
+using Typography.TextLayout;
 
 namespace PixelFarm.Drawing.WinGdi
 {

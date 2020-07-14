@@ -2,7 +2,8 @@
 
 using System;
 using System.Text;
-using Typography.TextServices;
+using Typography.Text;
+using Typography.TextLayout;
 using Typography.TextBreak;
 
 using PixelFarm.Drawing;
@@ -112,7 +113,7 @@ namespace LayoutFarm.TextEditing
         public override void UpdateRunWidth()
         {
             //***
-            var textBufferSpan = new TextBufferSpan(_mybuffer);
+            var textBufferSpan = new Typography.Text.TextBufferSpan(_mybuffer);
 
             //TODO: review here, 
             //1. if mybuffer lenght is not changed,we don't need to alloc new array?
@@ -211,7 +212,7 @@ namespace LayoutFarm.TextEditing
                 }
             }
 
-            return MeasureString(new TextBufferSpan(_mybuffer, 0, length));
+            return MeasureString(new PixelFarm.Drawing.TextBufferSpan(_mybuffer, 0, length));
         }
 
         public override CopyRun Copy(int startIndex, int length) => (startIndex > -1 && length > 0) ? MakeCopy(startIndex, length) : null;

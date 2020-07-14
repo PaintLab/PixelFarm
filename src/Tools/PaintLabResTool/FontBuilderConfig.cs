@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 
 using Typography.OpenFont;
-using Typography.Contours;
+using Typography.OpenFont.Contours;
 using PixelFarm.CpuBlit.BitmapAtlas;
 
 
