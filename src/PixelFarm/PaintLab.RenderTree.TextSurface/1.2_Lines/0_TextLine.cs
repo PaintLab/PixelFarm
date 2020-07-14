@@ -33,7 +33,7 @@ namespace LayoutFarm.TextEditing
         int _cacheCharCount;
 
         // 
-        const int LINE_CONTENT_ARRANGED = 1 << (1 - 1); 
+        const int LINE_CONTENT_ARRANGED = 1 << (1 - 1);
         const int LOCAL_SUSPEND_LINE_REARRANGE = 1 << (3 - 1);
         const int END_WITH_LINE_BREAK = 1 << (4 - 1);
 
@@ -55,7 +55,7 @@ namespace LayoutFarm.TextEditing
             OverlappedBottom = 3; //test only
         }
 
-        
+
         internal void ClientRunInvalidateGraphics(Run clientRun)
         {
             //bubble-up invalidated area from client
@@ -313,9 +313,9 @@ namespace LayoutFarm.TextEditing
                    _actualLineWidth + ",H:" + _actualLineHeight + "}";
             }
         }
- 
+
         internal bool dbugHasOwner => _textFlowLayer != null;
- 
+
 #endif
         //internal bool IsLocalSuspendLineRearrange => (_lineFlags & LOCAL_SUSPEND_LINE_REARRANGE) != 0;
         //internal void InvalidateLineLayout()

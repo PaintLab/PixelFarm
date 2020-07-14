@@ -9,8 +9,7 @@ using PixelFarm.Drawing;
 using Typography.TextLayout;
 using Typography.OpenFont;
 using Typography.TextBreak;
-using Typography.TextServices;
-using Typography.FontManagement;
+using Typography.Text;
 using Typography.OpenFont.Extensions;
 
 namespace PixelFarm.DrawingGL
@@ -83,15 +82,16 @@ namespace PixelFarm.DrawingGL
             TextDrawingTechnique = GlyphTexturePrinterDrawingTechnique.Stencil; //default
             UseVBO = true;
 
-            TextBaseline = TextBaseline.Top;
+            TextBaseline = PixelFarm.Drawing.TextBaseline.Top;
             //TextBaseline = TextBaseline.Alphabetic;
             //TextBaseline = TextBaseline.Bottom; 
 
-            //TODO: temp fix, 
-            var myAlternativeTypefaceSelector = new MyAlternativeTypefaceSelector();
 
+            //TODO: temp fix, 
+            //...
+            var myAlternativeTypefaceSelector = new AlternativeTypefaceSelector();
             {
-                var preferTypefaces = new Typography.TextServices.PreferredTypefaceList();
+                var preferTypefaces = new Typography.FontManagement.PreferredTypefaceList();
                 preferTypefaces.AddTypefaceName("Source Sans Pro");
                 preferTypefaces.AddTypefaceName("Sarabun");
 
@@ -104,7 +104,19 @@ namespace PixelFarm.DrawingGL
                      },
                     preferTypefaces);
             }
+            {
+                var preferTypefaces = new Typography.FontManagement.PreferredTypefaceList();
+                preferTypefaces.AddTypefaceName("Twitter Color Emoji");
+                myAlternativeTypefaceSelector.SetPerferredEmoji(preferTypefaces);
+            }
+
             AlternativeTypefaceSelector = myAlternativeTypefaceSelector;
+        }
+
+        public AlternativeTypefaceSelector AlternativeTypefaceSelector
+        {
+            get => _txtClient.AlternativeTypefaceSelector;
+            set => _txtClient.AlternativeTypefaceSelector = value;
         }
 
         void ChangeFont(SameFontTextStrip s)
@@ -225,10 +237,6 @@ namespace PixelFarm.DrawingGL
             //TODO: implementation here
         }
 
-        public TextBaseline TextBaseline { get; set; }
-
-
-
         public void Dispose()
         {
             if (_myGLBitmapFontMx != null)
@@ -244,17 +252,8 @@ namespace PixelFarm.DrawingGL
                 _glBmp = null;
             }
         }
-        public void MeasureString(char[] buffer, int startAt, int len, out int w, out int h)
-        {
-            var textBufferSpan = new TextBufferSpan(buffer, startAt, len);
-            Size s = _txtClient.MeasureString(textBufferSpan, _painter.CurrentFont);
-            w = s.Width;
-            h = s.Height;
-        }
 
-        readonly TextPrinterLineSegmentList<TextPrinterLineSegment> _lineSegs = new TextPrinterLineSegmentList<TextPrinterLineSegment>();
-        readonly TextPrinterWordVisitor _textPrinterWordVisitor = new TextPrinterWordVisitor();
-
+        public PixelFarm.Drawing.TextBaseline TextBaseline { get; set; }
 
 #if DEBUG
         void dbugInnerDrawI18NStringNO_WordPlate(char[] buffer, int startAt, int len, double left, double top)
@@ -265,7 +264,7 @@ namespace PixelFarm.DrawingGL
             //and choose a proper typeface for each part
             //-----------------
 
-            var textBufferSpan = new TextBufferSpan(buffer, startAt, len);
+            var textBufferSpan = new Typography.Text.TextBufferSpan(buffer, startAt, len);
 
             //_textPrinterLineSegs.Clear();
             //_textPrinterWordVisitor.SetLineSegmentList(_textPrinterLineSegs);
@@ -367,13 +366,13 @@ namespace PixelFarm.DrawingGL
                 switch (TextBaseline)
                 {
                     default:
-                    case TextBaseline.Alphabetic:
+                    case PixelFarm.Drawing.TextBaseline.Alphabetic:
                         //nothing todo
                         break;
-                    case TextBaseline.Top:
+                    case PixelFarm.Drawing.TextBaseline.Top:
                         g_top += _descending;
                         break;
-                    case TextBaseline.Bottom:
+                    case PixelFarm.Drawing.TextBaseline.Bottom:
 
                         break;
                 }
@@ -498,13 +497,13 @@ namespace PixelFarm.DrawingGL
             float base_offset = 0;
             switch (TextBaseline)
             {
-                case TextBaseline.Alphabetic:
+                case PixelFarm.Drawing.TextBaseline.Alphabetic:
                     //base_offset = -(vxFmtStr.SpanHeight + vxFmtStr.DescendingInPx);
                     break;
-                case TextBaseline.Top:
+                case PixelFarm.Drawing.TextBaseline.Top:
                     base_offset = vxFmtStr.DescendingInPx;
                     break;
-                case TextBaseline.Bottom:
+                case PixelFarm.Drawing.TextBaseline.Bottom:
                     base_offset = -vxFmtStr.SpanHeight;
                     break;
             }
@@ -802,7 +801,7 @@ namespace PixelFarm.DrawingGL
 #endif
 
 
-        void CreateTextCoords(SameFontTextStrip txtStrip, List<FormattedGlyphPlanSeq> seqs)
+        void CreateTextCoords(SameFontTextStrip txtStrip, FormattedGlyphPlanList seqs)
         {
             int top = 0;//simulate top
             int left = 0;//simulate left
@@ -943,35 +942,10 @@ namespace PixelFarm.DrawingGL
             _vboBuilder.Clear();
         }
 
-        public AlternativeTypefaceSelector AlternativeTypefaceSelector { get; set; }
 
 
+        readonly FormattedGlyphPlanList _fmtGlyphPlans = new FormattedGlyphPlanList();
         readonly Dictionary<int, ResolvedFont> _uniqueResolvedFonts = new Dictionary<int, ResolvedFont>();
-        readonly Dictionary<int, ResolvedFont> _localResolvedFonts = new Dictionary<int, ResolvedFont>();
-
-        readonly List<FormattedGlyphPlanSeq> _fmtGlyphPlanSeqs = new List<FormattedGlyphPlanSeq>();
-
-        ResolvedFont LocalResolveFont(Typeface typeface, float sizeInPoint, FontStyle style)
-        {
-            //find local resolved font cache
-
-            //check if we have a cache key or not
-            int typefaceKey = TypefaceExtensions.GetCustomTypefaceKey(typeface);
-            if (typefaceKey == 0)
-            {
-                throw new System.NotSupportedException();
-                ////calculate and cache
-                //TypefaceExtensions.SetCustomTypefaceKey(typeface,
-                //    typefaceKey = RequestFont.CalculateTypefaceKey(typeface.Name));
-            }
-
-            int key = RequestFont.CalculateFontKey(typefaceKey, sizeInPoint, style);
-            if (!_localResolvedFonts.TryGetValue(key, out ResolvedFont found))
-            {
-                return _localResolvedFonts[key] = new ResolvedFont(typeface, sizeInPoint, key);
-            }
-            return found;
-        }
 
         public void PrepareStringForRenderVx(GLRenderVxFormattedString vxFmtStr, char[] buffer, int startAt, int len)
         {
@@ -979,156 +953,33 @@ namespace PixelFarm.DrawingGL
             //since it may contains glyph from multiple font (eg. eng, emoji etc.)
             //see VxsTextPrinter 
 
-            var buffSpan = new TextBufferSpan(buffer, startAt, len);
+            var buffSpan = new Typography.Text.TextBufferSpan(buffer, startAt, len);
 
             RequestFont reqFont = _painter.CurrentFont; //init with default 
             ResolvedFont resolvedFont = _txtClient.ResolveFont(reqFont);
-            //Typeface defaultTypeface = resolvedFont.Typeface;
+
             Typeface curTypeface = resolvedFont.Typeface;
 
-            bool needRightToLeftArr = false;
-
-            _lineSegs.Clear();
-            _textPrinterWordVisitor.SetLineSegmentList(_lineSegs);
-            _txtClient.BreakToLineSegments(buffSpan, _textPrinterWordVisitor);
-            _textPrinterWordVisitor.SetLineSegmentList(null);
-            //typeface may not have a glyph for some char
-            //eg eng font + emoji
-
-
-            //check if we have a mix stencil and color glyph or not
-
-            FormattedGlyphPlanSeq latestFmtGlyphPlanSeq = null;
-            int prefix_whitespaceCount = 0;
-
+            _fmtGlyphPlans.Clear();
             _uniqueResolvedFonts.Clear();
             _uniqueResolvedFonts.Add(resolvedFont.FontKey, resolvedFont);
 
-            _fmtGlyphPlanSeqs.Clear();
+            _txtClient.SetCurrentFont(curTypeface, _fontSizeInPoints, PositionTechnique.OpenFont);
+            _txtClient.PrepareFormattedStringList(buffer, startAt, len, _fmtGlyphPlans);
 
+            bool needRightToLeftArr = _fmtGlyphPlans.IsRightToLeftDirection;
 
-
-
-            int count = _lineSegs.Count;
-            for (int i = 0; i < count; ++i)
+            int j = _fmtGlyphPlans.Count;
+            for (int n = 0; n < j; ++n)
             {
-                TextPrinterLineSegment line_seg = _lineSegs.GetLineSegment(i);
-                //find a proper font for each segment
-                //so we need to check 
-                SpanBreakInfo spBreakInfo = line_seg.BreakInfo;
-                if (line_seg.WordKind == WordKind.Whitespace)
-                {
-                    if (latestFmtGlyphPlanSeq == null)
-                    {
-                        prefix_whitespaceCount += line_seg.Length;
-                    }
-                    else
-                    {
-                        latestFmtGlyphPlanSeq.PostfixWhitespaceCount += line_seg.Length;
-                    }
-                    continue; //***
-                }
-                //--------------
-
-                if (spBreakInfo.RightToLeft)
-                {
-                    needRightToLeftArr = true;
-                }
-
-                TextBufferSpan buff = new TextBufferSpan(buffer, line_seg.StartAt, line_seg.Length);
-
-                //each line segment may have different unicode range 
-                //and the current typeface may not support that range
-                //so we need to ensure that we get a proper typeface,
-                //if not => alternative typeface
-
-                ushort sample_glyphIndex = 0;
-                char sample_char = buffer[line_seg.StartAt];
-                int codepoint = sample_char;
-
-                if (line_seg.Length > 1 && line_seg.WordKind == WordKind.SurrogatePair)
-                {
-                    sample_glyphIndex = curTypeface.GetGlyphIndex(codepoint = char.ConvertToUtf32(sample_char, buffer[line_seg.StartAt + 1]));
-                }
-                else
-                {
-                    sample_glyphIndex = curTypeface.GetGlyphIndex(codepoint);
-                }
-
-                //------------
-
-                if (sample_glyphIndex == 0)
-                {
-                    //not found then => find other typeface                    
-                    //we need more information about line seg layout
-                    if (AlternativeTypefaceSelector != null)
-                    {
-                        AlternativeTypefaceSelector.LatestTypeface = curTypeface;
-                    }
-
-                    if (_txtClient.TryGetAlternativeTypefaceFromCodepoint(codepoint, AlternativeTypefaceSelector, out Typeface alternative))
-                    {
-                        //change to another
-                        //create local resolved font
-                        curTypeface = alternative;
-                        resolvedFont = LocalResolveFont(curTypeface, _fontSizeInPoints, FontStyle.Regular);
-                    }
-                    else
-                    {
-#if DEBUG
-                        if (sample_char >= 0 && sample_char < 255)
-                        {
-
-
-                        }
-#endif
-                    }
-                }
-
-
-                _txtClient.CurrentScriptLang = new ScriptLang(spBreakInfo.ScriptTag, spBreakInfo.LangTag);
-
-                //in some text context (+typeface)=>user can disable gsub, gpos
-                //this is an example
-                if (line_seg.WordKind == WordKind.Tab || line_seg.WordKind == WordKind.Number ||
-                       (spBreakInfo.UnicodeRange == Unicode13RangeInfoList.C0_Controls_and_Basic_Latin))
-                {
-                    _txtClient.EnableGpos = false;
-                    _txtClient.EnableGsub = false;
-                }
-                else
-                {
-                    _txtClient.EnableGpos = true;
-                    _txtClient.EnableGsub = true;
-                }
-                //layout glyphs in each context
-                GlyphPlanSequence seq = _txtClient.CreateGlyphPlanSeq(buff, curTypeface, reqFont.SizeInPoints);
-                seq.IsRightToLeft = spBreakInfo.RightToLeft;
-
-                //calculate font key => get resolved font
-
-
+                FormattedGlyphPlanSeq formattedGlyphPlanSeq = _fmtGlyphPlans[n];
+                resolvedFont = formattedGlyphPlanSeq.ResolvedFont;
                 if (!_uniqueResolvedFonts.ContainsKey(resolvedFont.FontKey))
                 {
                     _uniqueResolvedFonts.Add(resolvedFont.FontKey, resolvedFont);
                 }
-
-                //----------------
-                //create an object that hold more information about GlyphPlanSequence
-
-                FormattedGlyphPlanSeq formattedGlyphPlanSeq = new FormattedGlyphPlanSeq
-                {
-                    PrefixWhitespaceCount = (ushort)prefix_whitespaceCount//***
-                };
-                prefix_whitespaceCount = 0;//reset 
-
-                formattedGlyphPlanSeq.SetData(seq, resolvedFont);
-
-
-                _fmtGlyphPlanSeqs.Add(latestFmtGlyphPlanSeq = formattedGlyphPlanSeq);
             }
 
-            //-------------             
             //a fmtGlyphPlanSeqs may contains glyph from  more than 1 font,
             //now, create a overlapped strip for each 
 #if DEBUG
@@ -1168,7 +1019,7 @@ namespace PixelFarm.DrawingGL
 
 
                 //** 
-                CreateTextCoords(sameFontTextStrip, _fmtGlyphPlanSeqs);
+                CreateTextCoords(sameFontTextStrip, _fmtGlyphPlans);
                 //**
                 //use max size of height and descending ?
                 descendingInPx = sameFontTextStrip.DescendingInPx;
@@ -1178,9 +1029,6 @@ namespace PixelFarm.DrawingGL
                 spanWidth = sameFontTextStrip.Width;//same width for all strip                 
                 vxFmtStr._strips.Add(sameFontTextStrip);
             }
-
-
-
 
             //adjust addition vertical height
 
@@ -1215,20 +1063,9 @@ namespace PixelFarm.DrawingGL
                 //TODO: review here again   
                 _painter.TryCreateWordStrip(vxFmtStr);
             }
-
-            ClearTempFormattedGlyphPlanSeqList();
-
+            _uniqueResolvedFonts.Clear();
             //restore prev typeface & settings
         }
-
-
-
-        void ClearTempFormattedGlyphPlanSeqList()
-        {
-            _uniqueResolvedFonts.Clear();
-            _fmtGlyphPlanSeqs.Clear();
-        }
-
 
         /// <summary>
         /// helper struct for summarize glyph mixed mode

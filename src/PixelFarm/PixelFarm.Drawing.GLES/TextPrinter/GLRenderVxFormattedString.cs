@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
-using Typography.TextServices;
+using Typography.Text;
 
 namespace PixelFarm.DrawingGL
 {

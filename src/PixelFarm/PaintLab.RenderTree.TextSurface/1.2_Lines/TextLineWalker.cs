@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using PixelFarm.Drawing;
-using Typography.TextBreak;
+using Typography.TextLayout;
 
 namespace LayoutFarm.TextEditing
 {
@@ -440,7 +440,7 @@ namespace LayoutFarm.TextEditing
                 return;
             }
 
-            using (var copyContext = new TempTextLineCopyContext(_currentLine, out TextBufferSpan textBufferSpan))
+            using (var copyContext = new TempTextLineCopyContext(_currentLine, out Typography.Text.TextBufferSpan textBufferSpan))
             {
                 _lineSegs.Clear();
                 _wordVisitor.SetLineSegmentList(_lineSegs);

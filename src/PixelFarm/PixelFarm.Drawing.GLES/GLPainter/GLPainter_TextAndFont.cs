@@ -6,7 +6,7 @@ using PixelFarm.Drawing;
 
 namespace PixelFarm.DrawingGL
 {
-    public interface IGLTextPrinter : ITextPrinter
+    public interface IGLTextPrinter
     {
         /// <summary>
         /// render from RenderVxFormattedString object to specific pos
@@ -16,6 +16,11 @@ namespace PixelFarm.DrawingGL
         /// <param name="top"></param>
         void DrawString(GLRenderVxFormattedString renderVx, double left, double top);
         void PrepareStringForRenderVx(GLRenderVxFormattedString renderVx, char[] text, int startAt, int len);
+        void ChangeFont(RequestFont font);
+        void ChangeFillColor(Color fillColor);
+        void ChangeStrokeColor(Color strokColor);
+        TextBaseline TextBaseline { get; set; }
+        void DrawString(char[] text, int startAt, int len, double left, double top);
     }
 
     partial class GLPainter
@@ -95,7 +100,8 @@ namespace PixelFarm.DrawingGL
         }
         public override void DrawString(string text, double left, double top)
         {
-            _textPrinter?.DrawString(text, left, top);
+            char[] buff = text.ToCharArray();
+            _textPrinter?.DrawString(buff, 0, buff.Length, left, top);
         }
         public override RenderVxFormattedString CreateRenderVx(string textspan)
         {

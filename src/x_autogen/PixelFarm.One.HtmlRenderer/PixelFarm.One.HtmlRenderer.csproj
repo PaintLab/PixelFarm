@@ -40,6 +40,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.BurningMineCurve_SH\CubicBezier.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.BurningMineCurve_SH\CurveBuilder.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.BurningMineCurve_SH\CurveFit.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.BurningMineCurve_SH\CurveFitBase.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.BurningMineCurve_SH\CurvePreprocess.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.BurningMineCurve_SH\Spline.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.BurningMineCurve_SH\SplineBuilder.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.BurningMineCurve_SH\VectorHelper.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Color\ColorBgra.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Color\HsvColor.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\BackEnd.PaintFx\PdnSharedProject\01_Core\Color\RgbColor.cs" />
@@ -891,14 +899,14 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\7_BitmapAtlas\SimpleBitmapAtlas.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\7_BitmapAtlas\SimpleBitmapAtlasBuilder.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Typography\..\..\..\..\Typography\Build\N20\Typography.OpenFont\System.Numerics.ForNet20.cs" />
+    <Compile Include="D:\projects\Typography\PixelFarm.Typography\1_General\AlternativeTypefaceSelector.cs" />
     <Compile Include="D:\projects\Typography\PixelFarm.Typography\1_General\FontStyleExtensions.cs" />
-    <Compile Include="D:\projects\Typography\PixelFarm.Typography\1_General\LineSegmentsAndWordVisitors.cs" />
     <Compile Include="D:\projects\Typography\PixelFarm.Typography\1_General\MultiLayerGlyphTx.cs" />
     <Compile Include="D:\projects\Typography\PixelFarm.Typography\1_General\OpenFontTextService.cs" />
     <Compile Include="D:\projects\Typography\PixelFarm.Typography\1_General\OpenFontTextService_Part2.cs" />
     <Compile Include="D:\projects\Typography\PixelFarm.Typography\1_General\SvgBmpBuilderReq.cs" />
     <Compile Include="D:\projects\Typography\PixelFarm.Typography\1_General\TextServiceClient.cs" />
-    <Compile Include="D:\projects\Typography\PixelFarm.Typography\1_General\VxsTextPrinter.cs" />
+    <Compile Include="D:\projects\Typography\PixelFarm.Typography\1_General\VxsTextSpanPrinter.cs" />
     <Compile Include="D:\projects\Typography\PixelFarm.Typography\2_CpuBlit_BitmapAtlas\AggGlyphTextureGen.cs" />
     <Compile Include="D:\projects\Typography\PixelFarm.Typography\2_CpuBlit_BitmapAtlas\BitmapFontMx.cs" />
     <Compile Include="D:\projects\Typography\PixelFarm.Typography\2_CpuBlit_BitmapAtlas\FontAtlasTextPrinter.cs" />
@@ -906,14 +914,10 @@
     <Compile Include="D:\projects\Typography\PixelFarm.Typography\2_CpuBlit_BitmapAtlas\GlyphTextureBitmapGenerator.cs" />
     <Compile Include="D:\projects\Typography\PixelFarm.Typography\3_Typography_Contours\GlyphMeshCollection.cs" />
     <Compile Include="D:\projects\Typography\PixelFarm.Typography\3_Typography_Contours\GlyphMeshStore.cs" />
+    <Compile Include="D:\projects\Typography\PixelFarm.Typography\3_Typography_Contours\GlyphOutlineAnalyzer.cs" />
     <Compile Include="D:\projects\Typography\PixelFarm.Typography\3_Typography_Contours\GlyphOutlineBuilderBase.cs" />
     <Compile Include="D:\projects\Typography\PixelFarm.Typography\3_Typography_Contours\GlyphPathBuilder.cs" />
     <Compile Include="D:\projects\Typography\PixelFarm.Typography\3_Typography_Contours\GlyphTranslatorToVxs.cs" />
-    <Compile Include="D:\projects\Typography\PixelFarm.Typography\3_Typography_Contours\TextPrinterBase.cs" />
-    <Compile Include="D:\projects\Typography\PixelFarm.Typography\4_Typography01\FormattedGlyphPlanSeq.cs" />
-    <Compile Include="D:\projects\Typography\PixelFarm.Typography\4_Typography01\MyAlternativeTypefaceSelector.cs" />
-    <Compile Include="D:\projects\Typography\PixelFarm.Typography\4_Typography01\ResolvedFonts.cs" />
-    <Compile Include="D:\projects\Typography\PixelFarm.Typography\5_PixelFarm_Contours\GlyphOutlineAnalyzer.cs" />
     <Compile Include="D:\projects\Typography\Typography.GlyphLayout\GlyphIndexList.cs" />
     <Compile Include="D:\projects\Typography\Typography.GlyphLayout\GlyphLayout.cs" />
     <Compile Include="D:\projects\Typography\Typography.GlyphLayout\GlyphSetPosition.cs" />
@@ -1009,6 +1013,7 @@
     <Compile Include="D:\projects\Typography\Typography.OpenFont\WebFont\WoffReader.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\BidiBreakEngine.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\BreakingEngine.cs" />
+    <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\BreakingParameters.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\CustomBreaker.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\CustomBreakerBuilder.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\CustomDict.cs" />
@@ -1018,12 +1023,11 @@
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\LaoDictionaryBreakingEngine.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\DictionaryBasedBreakingEngine\ThaiDictionaryBreakingEngine.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\EngBreakingEngine.cs" />
-    <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\LineSegments\BreakingParameters.cs" />
-    <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\LineSegments\ILineSegments.cs" />
-    <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\ScriptTagsAndLanguageSystemTags\OpenFontBitPosInfo.cs" />
-    <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\ScriptTagsAndLanguageSystemTags\ScriptLangInfo.cs" />
-    <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\ScriptTagsAndLanguageSystemTags\UnicodeRangeFinder.cs" />
-    <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\ScriptTagsAndLanguageSystemTags\UnicodeRangeInfo.cs" />
+    <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\ScriptAndUnicodeInfo\LangCodes.cs" />
+    <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\ScriptAndUnicodeInfo\ScriptLangInfo.cs" />
+    <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\ScriptAndUnicodeInfo\Unicode13RangeInfoList.cs" />
+    <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\ScriptAndUnicodeInfo\UnicodeRangeFinder.cs" />
+    <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\ScriptAndUnicodeInfo\UnicodeRangeInfo.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\BaseDirection.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Collections\BidiChain.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Collections\BidiLink.cs" />
@@ -1048,20 +1052,22 @@
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\RunAgent.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Text\UnicodeAgent.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\SheenBidi\Text\UnicodeLocator.cs" />
-    <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\TextBuffer.cs" />
-    <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\UnicodeInfo\Unicode13RangeInfoList.cs" />
+    <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\SpanBreakInfo.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\WordKind.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\WordVisitor.cs" />
-    <Compile Include="D:\projects\Typography\Typography.TextFlow\Dom\EditableTextBlockLayoutEngine.cs" />
-    <Compile Include="D:\projects\Typography\Typography.TextFlow\Dom\EditableTextLine.cs" />
-    <Compile Include="D:\projects\Typography\Typography.TextFlow\Dom\IRun.cs" />
-    <Compile Include="D:\projects\Typography\Typography.TextFlow\Dom\TextRun.cs" />
-    <Compile Include="D:\projects\Typography\Typography.TextFlow\Simple\SmallLine.cs" />
-    <Compile Include="D:\projects\Typography\Typography.TextFlow\TextLexer\TextLexer.cs" />
+    <Compile Include="D:\projects\Typography\Typography.TextServices\AbstractTextSpanPrinter.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextServices\FontStoreAndManagment\FontManagement.cs" />
-    <Compile Include="D:\projects\Typography\Typography.TextServices\IcuData\LangCodes.cs" />
-    <Compile Include="D:\projects\Typography\Typography.TextServices\TextServices.cs" />
-    <Compile Include="D:\projects\Typography\Typography.TextServices\Utils\CRC32.cs" />
+    <Compile Include="D:\projects\Typography\Typography.TextServices\FontStoreAndManagment\OpenFontBitPosInfo.cs" />
+    <Compile Include="D:\projects\Typography\Typography.TextServices\FontStoreAndManagment\OpenFontUnicodeUtilExtensions.cs" />
+    <Compile Include="D:\projects\Typography\Typography.TextServices\MeasureStringArgs.cs" />
+    <Compile Include="D:\projects\Typography\Typography.TextServices\ResolvedFonts.cs" />
+    <Compile Include="D:\projects\Typography\Typography.TextServices\TextBaseline.cs" />
+    <Compile Include="D:\projects\Typography\Typography.TextServices\TextBufferSpan.cs" />
+    <Compile Include="D:\projects\Typography\Typography.TextServices\TextLayout\CRC32.cs" />
+    <Compile Include="D:\projects\Typography\Typography.TextServices\TextLayout\FormattedGlyphPlanSeq.cs" />
+    <Compile Include="D:\projects\Typography\Typography.TextServices\TextLayout\GlyphPlanCache.cs" />
+    <Compile Include="D:\projects\Typography\Typography.TextServices\TextLayout\LineSegmentsAndWordVisitors.cs" />
+    <Compile Include="D:\projects\Typography\Typography.TextServices\VirtualTextSpanPrinter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

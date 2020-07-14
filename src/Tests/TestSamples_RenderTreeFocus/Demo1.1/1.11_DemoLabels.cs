@@ -68,15 +68,14 @@ namespace LayoutFarm
             host.AddChild(background_box);
 
             //PixelFarm.Drawing.RequestFont font = new PixelFarm.Drawing.RequestFont("Source Sans Pro", 20);
-            PixelFarm.Drawing.RequestFont font = new PixelFarm.Drawing.RequestFont("Source Sans Pro", 20);
+            var font = new PixelFarm.Drawing.RequestFont("Source Sans Pro", 20);
             {
                 Label label = new Label();
                 label.TextColor = PixelFarm.Drawing.Color.Black;
                 label.SetLocation(10, 20);
                 label.SetFont(font);
-                label.Text = "A";
+                label.Text = "XY";
                 host.AddChild(label);
-
             }
             {
                 Label label = new Label();

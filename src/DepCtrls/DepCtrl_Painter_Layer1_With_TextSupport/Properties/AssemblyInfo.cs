@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("DepCtrl_PixelFarm_Drawing_TextSupport")]
+[assembly: AssemblyTitle("DepCtrl_Painter_Layer1_With_TextSupport")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("DepCtrl_PixelFarm_Drawing_TextSupport")]
+[assembly: AssemblyProduct("DepCtrl_Painter_Layer1_With_TextSupport")]
 [assembly: AssemblyCopyright("MIT")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

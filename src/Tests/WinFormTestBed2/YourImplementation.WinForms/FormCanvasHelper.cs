@@ -130,7 +130,7 @@ namespace LayoutFarm.UI
                 case InnerViewportKind.AggOnGLES:
                 case InnerViewportKind.GLES:
                     {
-                        var openFontTextService = new Typography.TextServices.OpenFontTextService();
+                        var openFontTextService = new Typography.Text.OpenFontTextService();
                         openFontTextService.SvgBmpBuilder = PaintLab.SvgBuilderHelper.ParseAndRenderSvg;
 
                         GlobalTextService.TextService2 = openFontTextService;

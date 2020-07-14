@@ -3,7 +3,8 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
-using Typography.TextBreak;
+using Typography.TextLayout; 
+
 namespace LayoutFarm.TextEditing
 {
 
@@ -362,8 +363,8 @@ namespace LayoutFarm.TextEditing
         }
 
         //use pool?
-        TextPrinterWordVisitor _wordVisitor = new TextPrinterWordVisitor();
-        TextPrinterLineSegmentList<TextPrinterLineSegment> _lineSegs = new TextPrinterLineSegmentList<TextPrinterLineSegment>();
+        readonly TextPrinterWordVisitor _wordVisitor = new TextPrinterWordVisitor();
+        readonly TextPrinterLineSegmentList<TextPrinterLineSegment> _lineSegs = new TextPrinterLineSegmentList<TextPrinterLineSegment>();
 
         Size MeasureCopyRunLength(CopyRun copyRun)
         {
@@ -373,7 +374,7 @@ namespace LayoutFarm.TextEditing
             char[] mybuffer = copyRun.RawContent;
             if (txServices.SupportsWordBreak)
             {
-                var textBufferSpan = new TextBufferSpan(mybuffer);
+                var textBufferSpan = new Typography.Text.TextBufferSpan(mybuffer);
 
                 _lineSegs.Clear();
                 _wordVisitor.SetLineSegmentList(_lineSegs);
@@ -392,7 +393,7 @@ namespace LayoutFarm.TextEditing
             {
 
 
-                var textBufferSpan = new TextBufferSpan(mybuffer);
+                var textBufferSpan = new Typography.Text.TextBufferSpan(mybuffer);
 
                 var result = new TextSpanMeasureResult();
                 result.outputXAdvances = new int[mybuffer.Length];
