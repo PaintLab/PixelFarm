@@ -43,6 +43,54 @@ namespace PixelFarm.Drawing
         Others = 1 << 4
     }
 
+    public enum NewCssFontStyle
+    {
+        //https://www.w3.org/TR/css-fonts-3/#propdef-font-style
+        Regular,
+        Italic,
+        Oblique
+    }
+
+
+    public enum RequestFontWeight : ushort
+    {
+        Custom = 0, //my extension
+
+        //https://docs.microsoft.com/en-us/typography/opentype/spec/os2
+
+        Thin = 100,
+        ExtraLight = 200,
+        UltraLight = 200, //= ExtraLight
+        Light = 300,
+        Normal = 400,
+        Medium = 500,
+        SemiBold = 600,
+        DemiBold = 600, //= SemiBold
+        Bold = 700,
+        ExtraBold = 800,
+        UltraBold = 800,//= ExtraBold
+        Black = 900,
+        Heavy = 900,//=Black
+    }
+
+    public enum RequestFontWidthClass : ushort
+    {
+        Custom = 0,//my extension
+
+        //https://docs.microsoft.com/en-us/typography/opentype/spec/os2
+
+        UltraCondensed = 1,
+        ExtraCondensed = 2,
+        Condensed = 3,
+        SemiCondensed = 4,
+        Normal = 5,
+        Medium = 5,//=Normal
+        SemiExpanded = 6,
+        Expanded = 7,
+        ExtraExpanded = 8,
+        UltraExpanded = 9
+    }
+
     /// <summary>
     /// user-request font specification
     /// </summary>
@@ -64,16 +112,16 @@ namespace PixelFarm.Drawing
             /// font's face name
             /// </summary>
             public string Name { get; private set; }
-            public OldFontStyle Style { get; private set; }
+            public NewCssFontStyle Style { get; private set; }
 
             public bool FromTypefaceFile { get; private set; }
             public string UserInputTypefaceFile { get; private set; }
 
-            public Choice(string facename, float fontSizeInPts, OldFontStyle style = OldFontStyle.Regular)
+            public Choice(string facename, float fontSizeInPts, NewCssFontStyle style = NewCssFontStyle.Regular)
                 : this(facename, Len.Pt(fontSizeInPts), style)
             {
             }
-            public Choice(string facename, Len fontSize, OldFontStyle style = OldFontStyle.Regular)
+            public Choice(string facename, Len fontSize, NewCssFontStyle style = NewCssFontStyle.Regular)
             {
                 Name = facename; //primary typeface name
                 Size = fontSize; //store user font size here 
@@ -139,23 +187,67 @@ namespace PixelFarm.Drawing
         public string Name { get; private set; }
         public OldFontStyle Style { get; private set; }
 
+
+        public NewCssFontStyle NewStyle { get; private set; }
         public bool FromTypefaceFile { get; private set; }
         public string UserInputTypefaceFile { get; private set; }
 
-        Choice[] _otherChoices;
+        List<Choice> _otherChoices;
 
-        public RequestFont(string facename, float fontSizeInPts, OldFontStyle style = OldFontStyle.Regular, Choice[] otherChoices = null)
-            : this(facename, Len.Pt(fontSizeInPts), style, otherChoices)
+        public RequestFont(string fontFamily, float fontSizeInPts, NewCssFontStyle cssFontStyle = NewCssFontStyle.Regular)
+            : this(fontFamily, Len.Pt(fontSizeInPts), cssFontStyle)
         {
 
         }
-        public RequestFont(string facename, Len fontSize, OldFontStyle style = OldFontStyle.Regular, Choice[] otherChoices = null)
+
+        public RequestFont(string fontFamily, Len fontSize, NewCssFontStyle cssFontStyle = NewCssFontStyle.Regular)
         {
-            Name = facename; //primary typeface name
+            //ctor of the RequestFont supports CSS's style font-family
+            //font-family: Red/Black, sans-serif;
+
+            //font-family: "Lucida" Grande, sans-serif
+            //font-family: Ahem!, sans-serif
+            //font-family: test@foo, sans-serif
+            //font-family: #POUND, sans-serif
+            //font-family: Hawaii 5-0, sans-serif
+
+            //*** the first one will be primary font
+            //and the other will be our choice
+
+            //see https://www.w3.org/TR/css-fonts-3/ 
+
+
+
+            //<family-name>
+            //    The name of a font family of choice such as Helvetica or Verdana in the previous example. 
+            //<generic-family>
+            //    The following generic family keywords are defined: ‘serif’, ‘sans-serif’, ‘cursive’, ‘fantasy’, and ‘monospace’.
+            //    These keywords can be used as a general fallback mechanism when an author's desired font choices are not available.
+            //    As keywords, they must not be quoted.
+            //    Authors are encouraged to append a generic font family as a last alternative for improved robustness. 
+
             Size = fontSize; //store user font size here 
             SizeInPoints = fontSize.ToPoints();
-            Style = style;
-            _otherChoices = otherChoices;
+
+            //parse the font family name
+            //TODO: use CSS parse code?
+            string[] splitedNames = fontFamily.Split(',');
+
+#if DEBUG
+            if (splitedNames.Length == 0) { throw new NotSupportedException(); }
+#endif
+
+            Name = splitedNames[0].Trim(); //case sensitive***
+            if (splitedNames.Length > 1)
+            {
+                _otherChoices = new List<Choice>();
+                for (int i = 1; i < splitedNames.Length; ++i)
+                {
+                    string name = splitedNames[i].Trim(); //case sensitive here***
+                    if (name.Length == 0) { continue; }
+                    _otherChoices.Add(new Choice(name, fontSize));
+                }
+            }
         }
 
         private RequestFont(Len fontSize)
@@ -165,9 +257,47 @@ namespace PixelFarm.Drawing
         }
 
 
-        public int OtherChoicesCount => (_otherChoices != null) ? _otherChoices.Length : 0;
+
+        public ushort WeightClass { get; set; } //Typograghy Weight class
+        public ushort WidthClass { get; set; } = 5; //Typography Width-Class
+
+        public void AddOtherChoices(params Choice[] choices)
+        {
+            AddOtherChoices((IEnumerable<Choice>)choices);
+        }
+        public void AddOtherChoices(IEnumerable<Choice> choices)
+        {
+            if (choices == null) return;
+
+            //
+            if (_otherChoices == null)
+            {
+                _otherChoices = new List<Choice>();
+            }
+
+            foreach (Choice ch in choices)
+            {
+                _otherChoices.Add(ch);
+            }
+        }
+
+        public int OtherChoicesCount => (_otherChoices != null) ? _otherChoices.Count : 0;
         public Choice GetOtherChoice(int index) => _otherChoices[index];
 
+        public static int CalculateFontKey(string typefaceName, float fontSizeInPts, NewCssFontStyle style)
+        {
+            return InternalFontKey.CalculateGetHasCode(
+                InternalFontKey.RegisterFontName(typefaceName),
+                fontSizeInPts,
+                style.GetHashCode());
+        }
+        public static int CalculateFontKey(int typefaceFontKey, float fontSizeInPts, NewCssFontStyle style)
+        {
+            return InternalFontKey.CalculateGetHasCode(
+                typefaceFontKey,
+                fontSizeInPts,
+                style.GetHashCode());
+        }
         public static int CalculateFontKey(string typefaceName, float fontSizeInPts, OldFontStyle style)
         {
             return InternalFontKey.CalculateGetHasCode(
@@ -182,7 +312,6 @@ namespace PixelFarm.Drawing
                 fontSizeInPts,
                 style.GetHashCode());
         }
-
 
         int _fontKey;
         public int FontKey => (_fontKey != 0) ? _fontKey : (_fontKey = CalculateFontKey(Name, SizeInPoints, Style));
@@ -220,13 +349,13 @@ namespace PixelFarm.Drawing
         /// </summary>
         /// <param name="path">path to typeface file</param>
         /// <returns></returns>
-        public static RequestFont FromFile(string path, Len len, Choice[] otherChoices = null)
+        public static RequestFont FromFile(string path, Len len)
         {
             //the system will search for the typeface file and try loading it 
             RequestFont reqFont = new RequestFont(len);
             reqFont.FromTypefaceFile = true;
             reqFont.UserInputTypefaceFile = path;
-            reqFont._otherChoices = otherChoices;
+
             //path to typeface file may be relative path
             return reqFont;
         }
