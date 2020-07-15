@@ -143,12 +143,7 @@ namespace LayoutFarm.UI
                         _glPainter = new GLPainter();
                         _glPainter.BindToPainterCore(_pcx);
 
-
-                        if (PixelFarm.Drawing.GLES2.GLES2Platform.TextService == null)
-                        {
-                            PixelFarm.Drawing.GLES2.GLES2Platform.TextService = GlobalTextService.TextService2;
-                        }
-                        
+ 
                         if (PixelFarm.Drawing.GLES2.GLES2Platform.TextService != null)
                         {
                             var printer = new GLBitmapGlyphTextPrinter(_glPainter, PixelFarm.Drawing.GLES2.GLES2Platform.TextService);

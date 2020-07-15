@@ -361,10 +361,7 @@ namespace PixelFarm.Drawing.WinGdi
         public Gdi32TextService()
         {
         }
-        //public ResolvedFontBase ResolveFont(RequestFont f)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        
         public float MeasureWhitespace(RequestFont f)
         {
             return WinGdiTextService.MeasureWhitespace(f);

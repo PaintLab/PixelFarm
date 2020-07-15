@@ -40,10 +40,6 @@ namespace LayoutFarm.TextEditing
 
         protected Size MeasureString(in TextBufferSpan textBufferSpan) => _runStyle.MeasureString(textBufferSpan);
 
-        protected bool SupportWordBreak => _runStyle.SupportsWordBreak;
-
-      
-       
         public RunStyle RunStyle => _runStyle;
         //
         public virtual void SetStyle(RunStyle runStyle) => _runStyle = runStyle;
