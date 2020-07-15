@@ -937,6 +937,7 @@
     <Compile Include="D:\projects\Typography\Typography.OpenFont\IGlyphTranslator.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\IO\ByteOrderSwappingBinaryReader.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\OpenFontReader.cs" />
+    <Compile Include="D:\projects\Typography\Typography.OpenFont\PreviewFontInfo.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.AdvancedLayout\AttachmentListTable.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.AdvancedLayout\Base.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.AdvancedLayout\ClassDefTable.cs" />
