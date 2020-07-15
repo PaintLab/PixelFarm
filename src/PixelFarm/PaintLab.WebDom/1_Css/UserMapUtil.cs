@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 
 using LayoutFarm.Css;
-using PixelFarm.Drawing;
+
 
 namespace LayoutFarm.WebDom
 {
@@ -321,20 +321,20 @@ namespace LayoutFarm.WebDom
         {
             return _cssBackgroundRepeatMap.GetStringFromValue(backgrounRepeat);
         }
-        public static string ToHexColor(this Color color)
+        public static string ToHexColor(this PixelFarm.Drawing.Color color)
         {
             return string.Concat("#", color.R.ToString("X"), color.G.ToString("X"), color.B.ToString("X"));
         }
-        public static string ToCssStringValue(this CssFontStyle fontstyle)
+        public static string ToCssStringValue(this LayoutFarm.Css.CssFontStyle fontstyle)
         {
             return _cssFontStyleMap.GetStringFromValue(fontstyle);
         }
-        public static CssFontStyle GetFontStyle(WebDom.CssCodeValueExpression value)
+        public static LayoutFarm.Css.CssFontStyle GetFontStyle(WebDom.CssCodeValueExpression value)
         {
-            return (CssFontStyle)EvaluateIntPropertyValueFromString(
+            return (LayoutFarm.Css.CssFontStyle)EvaluateIntPropertyValueFromString(
               _cssFontStyleMap,
               WebDom.CssValueEvaluatedAs.FontStyle,
-              CssFontStyle.Normal,
+              LayoutFarm.Css.CssFontStyle.Normal,
               value);
         }
         public static string ToCssStringValue(this CssFontVariant fontVariant)
@@ -490,7 +490,7 @@ namespace LayoutFarm.WebDom
             }
             return value.GetCacheCssLength();
         }
-        public static Color AsColor(WebDom.CssCodeValueExpression value)
+        public static PixelFarm.Drawing.Color AsColor(WebDom.CssCodeValueExpression value)
         {
             if (value.EvaluatedAs != WebDom.CssValueEvaluatedAs.Color)
             {
@@ -500,7 +500,7 @@ namespace LayoutFarm.WebDom
                 }
                 else
                 {
-                    Color actualColor = LayoutFarm.WebDom.Parser.CssValueParser.ParseCssColor(value.GetTranslatedStringValue());
+                    PixelFarm.Drawing.Color actualColor = LayoutFarm.WebDom.Parser.CssValueParser.ParseCssColor(value.GetTranslatedStringValue());
                     value.SetColorValue(actualColor);
                     return actualColor;
                 }
@@ -1044,7 +1044,7 @@ namespace LayoutFarm.WebDom
             0xFFECE9D8,	/* 173 - MenuBar */
             0xFF316AC5,	/* 174 - MenuHighlight */
         };
-        static Dictionary<string, Color> colorsByName = new Dictionary<string, Color>();
+        static Dictionary<string, PixelFarm.Drawing.Color> colorsByName = new Dictionary<string, PixelFarm.Drawing.Color>();
         static KnownColors()
         {
             int j = argbValues.Length;
@@ -1053,28 +1053,27 @@ namespace LayoutFarm.WebDom
                 string colorName = GetName(i).ToUpper();
                 colorsByName[colorName] = FromKnownColor((KnownColor)i);
             }
-            colorsByName["NONE"] = Color.Empty;
+            colorsByName["NONE"] = PixelFarm.Drawing.Color.Empty;
         }
 
-        public static Color FromKnownColor(string colorName)
+        public static PixelFarm.Drawing.Color FromKnownColor(string colorName)
         {
             colorName = colorName.ToUpper();
-            Color c;
-            if (!colorsByName.TryGetValue(colorName.ToUpper(), out c))
+            if (!colorsByName.TryGetValue(colorName.ToUpper(), out PixelFarm.Drawing.Color c))
             {
-                return Color.Black;
+                return PixelFarm.Drawing.Color.Black;
             }
             return c;
         }
-        public static Color FromKnownColor(KnownColor kc)
+        public static PixelFarm.Drawing.Color FromKnownColor(KnownColor kc)
         {
             int index = (int)kc;
             if (index < 0 || index > argbValues.Length)
             {
-                return Color.Black;
+                return PixelFarm.Drawing.Color.Black;
             }
             uint colorValue = argbValues[index];
-            return new Color((byte)(colorValue >> 24),
+            return new PixelFarm.Drawing.Color((byte)(colorValue >> 24),
                      (byte)((colorValue >> 16) & 0xFF),
                      (byte)((colorValue >> 8) & 0xFF),
                      (byte)(colorValue & 0xFF));

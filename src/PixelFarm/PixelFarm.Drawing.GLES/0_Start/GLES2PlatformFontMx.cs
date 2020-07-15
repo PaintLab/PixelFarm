@@ -19,9 +19,9 @@ namespace PixelFarm.Drawing
             s_installedTypefaceProvider = fontLoader;
         }
 
-        public static InstalledTypeface GetInstalledFont(string fontName, Typography.FontManagement.TypefaceStyle style)
+        public static InstalledTypeface GetInstalledFont(string fontName, Typography.FontManagement.TypefaceStyle style, RequestFontWeight weightClass)
         {
-            return s_installedTypefaceProvider.GetInstalledTypeface(fontName, style);
+            return s_installedTypefaceProvider.GetInstalledTypeface(fontName, style, (ushort)weightClass);
         }
 
         public static void AddTextureFontInfo(string fontname, string fontMapFile, string textureBitmapFile)
