@@ -5,7 +5,7 @@ using PixelFarm.Drawing;
 using Typography.TextBreak;
 using Typography.TextLayout;
 using Typography.Text;
-using System;
+
 
 namespace LayoutFarm.TextEditing
 {

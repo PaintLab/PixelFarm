@@ -43,6 +43,44 @@ namespace PixelFarm.Drawing
         Others = 1 << 4
     }
 
+    public enum RequestFontWeight
+    {
+        Custom = 0, //my extension
+
+        //https://docs.microsoft.com/en-us/typography/opentype/spec/os2
+
+        Thin = 100,
+        ExtraLight = 200,
+        UltraLight = 200, //= ExtraLight
+        Light = 300,
+        Normal = 400,
+        Medium = 500,
+        SemiBold = 600,
+        DemiBold = 600, //= SemiBold
+        Bold = 700,
+        ExtraBold = 800,
+        UltraBold = 800,//= ExtraBold
+        Black = 900,
+        Heavy = 900,//=Black
+    }
+    public enum RequestFontWidthClass
+    {
+        Custom = 0,//my extension
+
+        //https://docs.microsoft.com/en-us/typography/opentype/spec/os2
+
+        UltraCondensed = 1,
+        ExtraCondensed = 2,
+        Condensed = 3,
+        SemiCondensed = 4,
+        Normal = 5,
+        Medium = 5,//=Normal
+        SemiExpanded = 6,
+        Expanded = 7,
+        ExtraExpanded = 8,
+        UltraExpanded = 9
+    }
+
     /// <summary>
     /// user-request font specification
     /// </summary>
@@ -142,20 +180,52 @@ namespace PixelFarm.Drawing
         public bool FromTypefaceFile { get; private set; }
         public string UserInputTypefaceFile { get; private set; }
 
-        Choice[] _otherChoices;
+        List<Choice> _otherChoices;
 
-        public RequestFont(string facename, float fontSizeInPts, FontStyle style = FontStyle.Regular, Choice[] otherChoices = null)
-            : this(facename, Len.Pt(fontSizeInPts), style, otherChoices)
+        public RequestFont(string fontFamily, float fontSizeInPts)
+            : this(fontFamily, Len.Pt(fontSizeInPts))
         {
 
         }
-        public RequestFont(string facename, Len fontSize, FontStyle style = FontStyle.Regular, Choice[] otherChoices = null)
+
+        public RequestFont(string fontFamily, Len fontSize)
         {
-            Name = facename; //primary typeface name
+            //ctor of the RequestFont supports CSS's style font-family
+            //font-family: Red/Black, sans-serif;
+
+            //font-family: "Lucida" Grande, sans-serif
+            //font-family: Ahem!, sans-serif
+            //font-family: test@foo, sans-serif
+            //font-family: #POUND, sans-serif
+            //font-family: Hawaii 5-0, sans-serif
+
+            //*** the first one will be primary font
+            //and the other will be our choice
+
+            //see https://www.w3.org/TR/css-fonts-3/ 
+
             Size = fontSize; //store user font size here 
             SizeInPoints = fontSize.ToPoints();
-            Style = style;
-            _otherChoices = otherChoices;
+
+            //parse the font family name
+            //TODO: use CSS parse code?
+            string[] splitedNames = fontFamily.Split(',');
+
+#if DEBUG
+            if (splitedNames.Length == 0) { throw new NotSupportedException(); }
+#endif
+
+            Name = splitedNames[0].Trim(); //case sensitive***
+            if (splitedNames.Length > 1)
+            {
+                _otherChoices = new List<Choice>();
+                for (int i = 1; i < splitedNames.Length; ++i)
+                {
+                    string name = splitedNames[i].Trim();
+                    if (name.Length == 0) { continue; }
+                    _otherChoices.Add(new Choice(splitedNames[i], fontSize));
+                }
+            }
         }
 
         private RequestFont(Len fontSize)
@@ -165,7 +235,27 @@ namespace PixelFarm.Drawing
         }
 
 
-        public int OtherChoicesCount => (_otherChoices != null) ? _otherChoices.Length : 0;
+
+        public ushort WeightClass { get; set; } //Typograghy Weight class
+        public ushort WidthClass { get; set; } = 5; //Typography Width-Class
+
+        public void AddOtherChoices(IEnumerable<Choice> choices)
+        {
+            if (choices == null) return;
+
+            //
+            if (_otherChoices == null)
+            {
+                _otherChoices = new List<Choice>();
+            }
+
+            foreach (Choice ch in choices)
+            {
+                _otherChoices.Add(ch);
+            }
+        }
+
+        public int OtherChoicesCount => (_otherChoices != null) ? _otherChoices.Count : 0;
         public Choice GetOtherChoice(int index) => _otherChoices[index];
 
         public static int CalculateFontKey(string typefaceName, float fontSizeInPts, FontStyle style)
