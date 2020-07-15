@@ -79,7 +79,7 @@ namespace PixelFarm.Drawing
         public abstract FontGlyph GetGlyphByIndex(ushort glyphIndex);
         public abstract FontGlyph GetGlyph(char c);
         public abstract FontFace FontFace { get; }
-        public abstract FontStyle FontStyle { get; }
+        public abstract OldFontStyle FontStyle { get; }
         public abstract string FontName { get; }
 
 

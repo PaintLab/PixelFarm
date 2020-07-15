@@ -33,7 +33,7 @@ namespace PixelFarm.Drawing
 {
 
     [Flags]
-    public enum FontStyle : byte
+    public enum OldFontStyle : byte
     {
         Regular = 0,
         Bold = 1,
@@ -64,16 +64,16 @@ namespace PixelFarm.Drawing
             /// font's face name
             /// </summary>
             public string Name { get; private set; }
-            public FontStyle Style { get; private set; }
+            public OldFontStyle Style { get; private set; }
 
             public bool FromTypefaceFile { get; private set; }
             public string UserInputTypefaceFile { get; private set; }
 
-            public Choice(string facename, float fontSizeInPts, FontStyle style = FontStyle.Regular)
+            public Choice(string facename, float fontSizeInPts, OldFontStyle style = OldFontStyle.Regular)
                 : this(facename, Len.Pt(fontSizeInPts), style)
             {
             }
-            public Choice(string facename, Len fontSize, FontStyle style = FontStyle.Regular)
+            public Choice(string facename, Len fontSize, OldFontStyle style = OldFontStyle.Regular)
             {
                 Name = facename; //primary typeface name
                 Size = fontSize; //store user font size here 
@@ -137,19 +137,19 @@ namespace PixelFarm.Drawing
         public Len Size { get; }
 
         public string Name { get; private set; }
-        public FontStyle Style { get; private set; }
+        public OldFontStyle Style { get; private set; }
 
         public bool FromTypefaceFile { get; private set; }
         public string UserInputTypefaceFile { get; private set; }
 
         Choice[] _otherChoices;
 
-        public RequestFont(string facename, float fontSizeInPts, FontStyle style = FontStyle.Regular, Choice[] otherChoices = null)
+        public RequestFont(string facename, float fontSizeInPts, OldFontStyle style = OldFontStyle.Regular, Choice[] otherChoices = null)
             : this(facename, Len.Pt(fontSizeInPts), style, otherChoices)
         {
 
         }
-        public RequestFont(string facename, Len fontSize, FontStyle style = FontStyle.Regular, Choice[] otherChoices = null)
+        public RequestFont(string facename, Len fontSize, OldFontStyle style = OldFontStyle.Regular, Choice[] otherChoices = null)
         {
             Name = facename; //primary typeface name
             Size = fontSize; //store user font size here 
@@ -168,14 +168,14 @@ namespace PixelFarm.Drawing
         public int OtherChoicesCount => (_otherChoices != null) ? _otherChoices.Length : 0;
         public Choice GetOtherChoice(int index) => _otherChoices[index];
 
-        public static int CalculateFontKey(string typefaceName, float fontSizeInPts, FontStyle style)
+        public static int CalculateFontKey(string typefaceName, float fontSizeInPts, OldFontStyle style)
         {
             return InternalFontKey.CalculateGetHasCode(
                 InternalFontKey.RegisterFontName(typefaceName),
                 fontSizeInPts,
                 style.GetHashCode());
         }
-        public static int CalculateFontKey(int typefaceFontKey, float fontSizeInPts, FontStyle style)
+        public static int CalculateFontKey(int typefaceFontKey, float fontSizeInPts, OldFontStyle style)
         {
             return InternalFontKey.CalculateGetHasCode(
                 typefaceFontKey,
