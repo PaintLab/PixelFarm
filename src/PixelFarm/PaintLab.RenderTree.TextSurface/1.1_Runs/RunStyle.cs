@@ -5,6 +5,7 @@ using PixelFarm.Drawing;
 using Typography.TextBreak;
 using Typography.TextLayout;
 using Typography.Text;
+using System;
 
 namespace LayoutFarm.TextEditing
 {
@@ -18,61 +19,41 @@ namespace LayoutFarm.TextEditing
         public byte ContentHAlign;
         public Color FontColor { get; set; }
 
-        RequestFont _reqFont;
+        public RequestFont ReqFont { get; set; }
+
         ResolvedFont _resolvedFont;
-        public RequestFont ReqFont
+        public ResolvedFont GetResolvedFont()
         {
-            get => _reqFont;
-            set
+            if (_resolvedFont != null)
             {
-                _reqFont = value;
-                _resolvedFont = null;
+                return _resolvedFont;
             }
-        }
-        public ResolvedFont ResolvedFont
-        {
-            get
+            else if (ReqFont != null)
             {
-                if (_resolvedFont != null)
-                {
-                    return _resolvedFont;
-                }
-                else if (_reqFont != null)
-                {
-                    return _resolvedFont = GlobalTextService.TextService2.ResolveFont(_reqFont);
-                }
-                else
-                {
-                    return null;
-                }
+                return _resolvedFont = GlobalTextService.TxClient.ResolveFont(ReqFont);
             }
-            set
+            else
             {
-                _resolvedFont = value;
-                _reqFont = null;
+                return null;
             }
         }
         //
         internal Size MeasureString(in PixelFarm.Drawing.TextBufferSpan textBufferSpan)
         {
-
-            return GlobalTextService.TextService.MeasureString(textBufferSpan, ReqFont);
+            return GlobalTextService.TxClient.MeasureString(textBufferSpan, GetResolvedFont());
         }
 
-        internal float MeasureBlankLineHeight()
-        {
-            return GlobalTextService.TextService.MeasureBlankLineHeight(ReqFont);
-        }
+        internal float MeasureBlankLineHeight() => GetResolvedFont().LineSpacingInPixels;
 
-        public bool SupportsWordBreak => GlobalTextService.AdvanceTextService.SupportsWordBreak;
 
-        public void BreakToLineSegments(in Typography.Text.TextBufferSpan textBufferSpan, WordVisitor wordVisitor) => GlobalTextService.AdvanceTextService.BreakToLineSegments(textBufferSpan, wordVisitor);
+        public void BreakToLineSegments(in Typography.Text.TextBufferSpan textBufferSpan, WordVisitor wordVisitor)
+            => GlobalTextService.TxClient.BreakToLineSegments(textBufferSpan, wordVisitor);
 
         public void CalculateUserCharGlyphAdvancePos(
             in Typography.Text.TextBufferSpan textBufferSpan,
             ref TextSpanMeasureResult measureResult)
         {
-            GlobalTextService.AdvanceTextService.CalculateUserCharGlyphAdvancePos(
+            GlobalTextService.TxClient.CalculateUserCharGlyphAdvancePos(
                     textBufferSpan,
                     ReqFont,
                     ref measureResult);
@@ -82,7 +63,7 @@ namespace LayoutFarm.TextEditing
             ILineSegmentList lineSegs,
             ref TextSpanMeasureResult measureResult)
         {
-            GlobalTextService.AdvanceTextService.CalculateUserCharGlyphAdvancePos(
+            GlobalTextService.TxClient.CalculateUserCharGlyphAdvancePos(
                 textBufferSpan,
                 lineSegs,
                 ReqFont,

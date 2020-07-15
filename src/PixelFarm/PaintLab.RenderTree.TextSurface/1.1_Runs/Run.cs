@@ -38,11 +38,7 @@ namespace LayoutFarm.TextEditing
 
         protected float MeasureLineHeight() => _runStyle.MeasureBlankLineHeight();
 
-        protected Size MeasureString(in TextBufferSpan textBufferSpan) => _runStyle.MeasureString(textBufferSpan);
-
-        protected bool SupportWordBreak => _runStyle.SupportsWordBreak;
-
-      
+        protected Size MeasureString(in TextBufferSpan textBufferSpan) => _runStyle.MeasureString(textBufferSpan);            
        
         public RunStyle RunStyle => _runStyle;
         //

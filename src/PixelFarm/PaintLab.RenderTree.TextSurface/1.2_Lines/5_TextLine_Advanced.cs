@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
-using Typography.TextLayout; 
+using Typography.TextLayout;
 
 namespace LayoutFarm.TextEditing
 {
@@ -369,41 +369,24 @@ namespace LayoutFarm.TextEditing
         Size MeasureCopyRunLength(CopyRun copyRun)
         {
 
-            IAdvanceTextService txServices = GlobalTextService.AdvanceTextService;
+            Typography.Text.TextServiceClient txtclient = GlobalTextService.TxClient;
 
             char[] mybuffer = copyRun.RawContent;
-            if (txServices.SupportsWordBreak)
-            {
-                var textBufferSpan = new Typography.Text.TextBufferSpan(mybuffer);
 
-                _lineSegs.Clear();
-                _wordVisitor.SetLineSegmentList(_lineSegs);
-                txServices.BreakToLineSegments(textBufferSpan, _wordVisitor);
+            var textBufferSpan = new Typography.Text.TextBufferSpan(mybuffer);
 
-                var result = new TextSpanMeasureResult();
-                result.outputXAdvances = new int[mybuffer.Length];
+            _lineSegs.Clear();
+            _wordVisitor.SetLineSegmentList(_lineSegs);
+            txtclient.BreakToLineSegments(textBufferSpan, _wordVisitor);
 
-                txServices.CalculateUserCharGlyphAdvancePos(textBufferSpan, _lineSegs,
-                    DefaultRunStyle.ReqFont,
-                    ref result);
+            var result = new TextSpanMeasureResult();
+            result.outputXAdvances = new int[mybuffer.Length];
 
-                return new Size(result.outputTotalW, result.lineHeight);
-            }
-            else
-            {
+            txtclient.CalculateUserCharGlyphAdvancePos(textBufferSpan, _lineSegs,
+                DefaultRunStyle.ReqFont,
+                ref result);
 
-
-                var textBufferSpan = new Typography.Text.TextBufferSpan(mybuffer);
-
-                var result = new TextSpanMeasureResult();
-                result.outputXAdvances = new int[mybuffer.Length];
-
-                txServices.CalculateUserCharGlyphAdvancePos(textBufferSpan,
-                    DefaultRunStyle.ReqFont,
-                    ref result);
-
-                return new Size(result.outputTotalW, result.lineHeight);
-            }
+            return new Size(result.outputTotalW, result.lineHeight);
 
         }
         internal SelectionRangeInfo Split(VisualSelectionRange selectionRange)

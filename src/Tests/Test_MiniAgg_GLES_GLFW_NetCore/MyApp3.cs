@@ -58,6 +58,7 @@ namespace TestGlfw
         }
 
     }
+
     class dbugMySprite : RenderElement
     {
         VgVisualElement _renderVx;
@@ -65,15 +66,24 @@ namespace TestGlfw
         {
             _renderVx = VgVisualDocHelper.CreateVgVisualDocFromFile(@"lion.svg").VgRootElem;
         }
+
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
-
             using (Tools.More.BorrowVgPaintArgs(d.GetPainter(), out var paintArgs))
             {
                 _renderVx.Paint(paintArgs);
             }
             //d.FillRectangle(Color.Blue, 0, 0, 50, 50);
         }
+        //protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
+        //{
+
+        //    using (Tools.More.BorrowVgPaintArgs(d.GetPainter(), out var paintArgs))
+        //    {
+        //        _renderVx.Paint(paintArgs);
+        //    }
+        //    //d.FillRectangle(Color.Blue, 0, 0, 50, 50);
+        //}
 
     }
 #endif
@@ -171,16 +181,13 @@ namespace TestGlfw
 
             //---------------------------------------------------------------------------
             //4. Typography TextService             
-            OpenFontTextService textService = new OpenFontTextService();
+            var textService = new Typography.Text.OpenFontTextService();
             textService.LoadFontsFromFolder("Fonts");
-            
-            GlobalTextService.TextService = textService;
-            //---------------------------------------------------------------------------
 
 
             //PART2: root graphics
             Size primScreenSize = UIPlatform.CurrentPlatform.GetPrimaryMonitorSize();
-            s_myRootGfx = new MyRootGraphic(primScreenSize.Width, primScreenSize.Height, textService);
+            s_myRootGfx = new MyRootGraphic(primScreenSize.Width, primScreenSize.Height);
             s_viewroot = new GraphicsViewRoot(primScreenSize.Width, primScreenSize.Height);
             MyGlfwTopWindowBridge bridge1 = new MyGlfwTopWindowBridge(s_myRootGfx, s_myRootGfx.TopWinEventPortal);
             ((MyGlfwTopWindowBridge.GlfwEventBridge)(form.WindowEventListener)).SetWindowBridge(bridge1);
@@ -224,7 +231,7 @@ namespace TestGlfw
             s_myRootGfx.AddChild(bgBox.GetPrimaryRenderElement());
 
             //----------------------
-            dbugMySprite sprite = new dbugMySprite( 200, 300);
+            dbugMySprite sprite = new dbugMySprite(200, 300);
             dbugMyBoxUI boxUI = new dbugMyBoxUI();
             boxUI.SetRenderElement(sprite);
             sprite.SetController(boxUI);

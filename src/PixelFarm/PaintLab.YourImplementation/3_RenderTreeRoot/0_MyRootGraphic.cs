@@ -22,25 +22,18 @@ namespace LayoutFarm.UI
         RenderBoxBase _primaryContainerElement;
 
         RequestFont _defaultTextEditFont; //TODO: review here
-        ITextService _textService;
+
         GraphicsTimerTask _gfxTimerTask;
 
         Func<PixelFarm.Drawing.GLES2.MyGLDrawBoard> _getDrawboard; //
 
-        public MyRootGraphic(
-            int width, int height,
-            ITextService textService)
+        public MyRootGraphic(int width, int height)
             : base(width, height)
         {
-            _textService = textService;
+
             _gfxTimerTaskMx = new GraphicsTimerTaskManager(this);
             _defaultTextEditFont = MyFontSettings.DefaultRootGraphicsFont;
 
-            if (textService != null)
-            {
-                //precalculate whitespace face for a default font
-                textService.MeasureWhitespace(_defaultTextEditFont);
-            }
 #if DEBUG
             dbugCurrentGlobalVRoot = this;
             dbug_Init(null, null, null);
@@ -113,7 +106,7 @@ namespace LayoutFarm.UI
             }
 
         }
-       
+
 
         public ITopWindowEventRoot TopWinEventPortal => _topWindowEventRoot;
 
@@ -137,7 +130,6 @@ namespace LayoutFarm.UI
             EventQueueSystem.CentralEventQueue.InvokeEventQueue();
         }
         public override RequestFont DefaultTextEditFontInfo => _defaultTextEditFont;
-        // 
 
 
         public override void ManageRenderElementRequests()
@@ -185,7 +177,7 @@ namespace LayoutFarm.UI
                 //so we ask for some drawboard to handle these requests 
 
                 PixelFarm.Drawing.GLES2.MyGLDrawBoard drawboard = _getDrawboard();
-                 
+
                 drawboard.PrepareWordStrips(_fmtList);
 
                 _fmtList.Clear();

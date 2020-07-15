@@ -129,32 +129,27 @@ namespace LayoutFarm.TextEditing
             var measureResult = new TextSpanMeasureResult();
             measureResult.outputXAdvances = _outputUserCharAdvances;
 
-            if (SupportWordBreak)
+
+            if (_content_unparsed)
             {
-                if (_content_unparsed)
+                //parse the content first 
+                if (_lineSegs == null) { _lineSegs = new TextPrinterLineSegmentList<TextPrinterLineSegment>(); }
+                _lineSegs.Clear();
+                //
+                if (s_wordVistor == null)
                 {
-                    //parse the content first 
-                    if (_lineSegs == null) { _lineSegs = new TextPrinterLineSegmentList<TextPrinterLineSegment>(); }
-                    _lineSegs.Clear();
-                    //
-                    if (s_wordVistor == null)
-                    {
-                        s_wordVistor = new TextPrinterWordVisitor();
-                    }
-
-                    s_wordVistor.SetLineSegmentList(_lineSegs);
-                    RunStyle.BreakToLineSegments(textBufferSpan, s_wordVistor);
-                    s_wordVistor.SetLineSegmentList(null);
-
-                    //BreakToLineSegs(textBufferSpan);
+                    s_wordVistor = new TextPrinterWordVisitor();
                 }
-                _content_unparsed = false;
-                RunStyle.CalculateUserCharGlyphAdvancePos(textBufferSpan, _lineSegs, ref measureResult);
+
+                s_wordVistor.SetLineSegmentList(_lineSegs);
+                RunStyle.BreakToLineSegments(textBufferSpan, s_wordVistor);
+                s_wordVistor.SetLineSegmentList(null);
+
+                //BreakToLineSegs(textBufferSpan);
             }
-            else
-            {
-                RunStyle.CalculateUserCharGlyphAdvancePos(textBufferSpan, ref measureResult);
-            }
+            _content_unparsed = false;
+            RunStyle.CalculateUserCharGlyphAdvancePos(textBufferSpan, _lineSegs, ref measureResult);
+
             SetSize(measureResult.outputTotalW, measureResult.lineHeight);
 
             InvalidateGraphics();
