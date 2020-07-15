@@ -356,12 +356,12 @@ namespace PixelFarm.Drawing.WinGdi
         }
     }
 
-    class Gdi32TextService : ITextService
+    class Gdi32TextService
     {
         public Gdi32TextService()
         {
         }
-        
+
         public float MeasureWhitespace(RequestFont f)
         {
             return WinGdiTextService.MeasureWhitespace(f);

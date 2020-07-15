@@ -118,13 +118,13 @@ namespace LayoutFarm.UI
             InitWinform();
             IInstalledTypefaceProvider fontLoader = YourImplementation.CommonTextServiceSetup.FontLoader;
             //2. 
-            ITextService textService = null;
+             
 
             switch (internalViewportKind)
             {
                 default:
                     //gdi, gdi on gles
-                    textService = PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.GetTextService();
+                    
 
                     break;
                 case InnerViewportKind.PureAgg:
@@ -136,9 +136,7 @@ namespace LayoutFarm.UI
 
                         PixelFarm.Drawing.GLES2.GLES2Platform.TextService = openFontTextService;
 
-                        GlobalTextService.TxtClient = openFontTextService.CreateNewServiceClient();
-
-                        textService = GlobalTextService.TxtClient;
+                        GlobalTextService.TxtClient = openFontTextService.CreateNewServiceClient(); 
 
                     }
                     break;
