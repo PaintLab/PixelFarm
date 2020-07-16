@@ -937,6 +937,7 @@
     <Compile Include="D:\projects\Typography\Typography.OpenFont\IGlyphTranslator.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\IO\ByteOrderSwappingBinaryReader.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\OpenFontReader.cs" />
+    <Compile Include="D:\projects\Typography\Typography.OpenFont\PreviewFontInfo.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.AdvancedLayout\AttachmentListTable.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.AdvancedLayout\Base.cs" />
     <Compile Include="D:\projects\Typography\Typography.OpenFont\Tables.AdvancedLayout\ClassDefTable.cs" />
@@ -1057,6 +1058,8 @@
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\WordVisitor.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextServices\AbstractTextSpanPrinter.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextServices\FontStoreAndManagment\FontManagement.cs" />
+    <Compile Include="D:\projects\Typography\Typography.TextServices\FontStoreAndManagment\InstalledTypeface.cs" />
+    <Compile Include="D:\projects\Typography\Typography.TextServices\FontStoreAndManagment\InstalledTypefaceCollection.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextServices\FontStoreAndManagment\OpenFontBitPosInfo.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextServices\FontStoreAndManagment\OpenFontUnicodeUtilExtensions.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextServices\MeasureStringArgs.cs" />

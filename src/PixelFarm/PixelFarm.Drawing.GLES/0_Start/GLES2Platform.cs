@@ -14,9 +14,9 @@ namespace PixelFarm.Drawing.GLES2
         {
             GLES2PlatformFontMx.SetInstalledTypefaceProvider(provider);
         }
-        public static InstalledTypeface GetInstalledFont(string fontName, Typography.FontManagement.TypefaceStyle style)
+        public static InstalledTypeface GetInstalledFont(string fontName, Typography.FontManagement.TypefaceStyle style, RequestFontWeight weight)
         {
-            return GLES2PlatformFontMx.GetInstalledFont(fontName, style);
+            return GLES2PlatformFontMx.GetInstalledFont(fontName, style, weight);
         }
 
 #if __MOBILE__

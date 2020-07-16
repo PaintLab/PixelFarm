@@ -39,7 +39,7 @@ namespace LayoutFarm.TextEditing
                 }
                 else if (_reqFont != null)
                 {
-                    return _resolvedFont = GlobalTextService.TextService2.ResolveFont(_reqFont);
+                    return _resolvedFont = GlobalTextService.TxtClient.ResolveFont(_reqFont);
                 }
                 else
                 {
@@ -54,24 +54,25 @@ namespace LayoutFarm.TextEditing
         }
         //
         internal Size MeasureString(in PixelFarm.Drawing.TextBufferSpan textBufferSpan)
-        {             
-            return GlobalTextService.TextService.MeasureString(textBufferSpan, ReqFont);
+        {
+            return GlobalTextService.TxtClient.MeasureString(textBufferSpan, ReqFont);
         }
 
         internal float MeasureBlankLineHeight()
         {
-            return GlobalTextService.TextService.MeasureBlankLineHeight(ReqFont);
+            return GlobalTextService.TxtClient.MeasureBlankLineHeight(ReqFont);
         }
 
-        public bool SupportsWordBreak => GlobalTextService.AdvanceTextService.SupportsWordBreak;
+       
 
-        public void BreakToLineSegments(in Typography.Text.TextBufferSpan textBufferSpan, WordVisitor wordVisitor) => GlobalTextService.AdvanceTextService.BreakToLineSegments(textBufferSpan, wordVisitor);
+        public void BreakToLineSegments(in Typography.Text.TextBufferSpan textBufferSpan, WordVisitor wordVisitor) 
+            => GlobalTextService.TxtClient.BreakToLineSegments(textBufferSpan, wordVisitor);
 
         public void CalculateUserCharGlyphAdvancePos(
             in Typography.Text.TextBufferSpan textBufferSpan,
             ref TextSpanMeasureResult measureResult)
         {
-            GlobalTextService.AdvanceTextService.CalculateUserCharGlyphAdvancePos(
+            GlobalTextService.TxtClient.CalculateUserCharGlyphAdvancePos(
                     textBufferSpan,
                     ReqFont,
                     ref measureResult);
@@ -81,7 +82,7 @@ namespace LayoutFarm.TextEditing
             ILineSegmentList lineSegs,
             ref TextSpanMeasureResult measureResult)
         {
-            GlobalTextService.AdvanceTextService.CalculateUserCharGlyphAdvancePos(
+            GlobalTextService.TxtClient.CalculateUserCharGlyphAdvancePos(
                 textBufferSpan,
                 lineSegs,
                 ReqFont,
