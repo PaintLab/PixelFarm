@@ -246,8 +246,8 @@ namespace PixelFarm.Drawing.WinGdi
         NativeTextWin32.FontABC[] _charAbcWidths;
 
         IntPtr _hfont;
-        FontStyle _fontStyle;
-        public WinGdiFont(WinGdiFontFace fontFace, float sizeInPoints, FontStyle style)
+        OldFontStyle _fontStyle;
+        public WinGdiFont(WinGdiFontFace fontFace, float sizeInPoints, OldFontStyle style)
         {
 
             _fontFace = fontFace;
@@ -296,9 +296,9 @@ namespace PixelFarm.Drawing.WinGdi
         }
         //
         public override string FontName => _fontFace.Name;
-        public override FontStyle FontStyle => _fontStyle;
+        public override OldFontStyle FontStyle => _fontStyle;
         //
-        static IntPtr InitFont(string fontName, float emHeight, FontStyle style)
+        static IntPtr InitFont(string fontName, float emHeight, OldFontStyle style)
         {
             //see: MSDN, LOGFONT structure
             //https://msdn.microsoft.com/en-us/library/windows/desktop/dd145037(v=vs.85).aspx
@@ -309,12 +309,12 @@ namespace PixelFarm.Drawing.WinGdi
             logFont.lfQuality = 0;//default
 
             MyWin32.LOGFONT_FontWeight weight =
-                ((style & FontStyle.Bold) == FontStyle.Bold) ?
+                ((style & OldFontStyle.Bold) == OldFontStyle.Bold) ?
                 MyWin32.LOGFONT_FontWeight.FW_BOLD :
                 MyWin32.LOGFONT_FontWeight.FW_REGULAR;
             logFont.lfWeight = (int)weight;
             //
-            logFont.lfItalic = (byte)(((style & FontStyle.Italic) == FontStyle.Italic) ? 1 : 0);
+            logFont.lfItalic = (byte)(((style & OldFontStyle.Italic) == OldFontStyle.Italic) ? 1 : 0);
             return MyWin32.CreateFontIndirect(ref logFont);
         }
         //
@@ -356,15 +356,12 @@ namespace PixelFarm.Drawing.WinGdi
         }
     }
 
-    class Gdi32TextService : ITextService
+    class Gdi32TextService
     {
         public Gdi32TextService()
         {
         }
-        //public ResolvedFontBase ResolveFont(RequestFont f)
-        //{
-        //    throw new NotImplementedException();
-        //}
+
         public float MeasureWhitespace(RequestFont f)
         {
             return WinGdiTextService.MeasureWhitespace(f);
@@ -468,15 +465,15 @@ namespace PixelFarm.Drawing.WinGdi
     class WinGdiFontFace : FontFace
     {
         FontFace _nopenTypeFontFace;
-        FontStyle _style;
+        OldFontStyle _style;
         static IInstalledTypefaceProvider s_installedTypefaceProvider;
 
         public WinGdiFontFace(RequestFont f)
         {
-            _style = f.Style;
+           
             //resolve
 
-            InstalledTypeface foundInstalledFont = s_installedTypefaceProvider.GetInstalledTypeface(f.Name, ConvToInstalledFontStyle(_style));
+            InstalledTypeface foundInstalledFont = s_installedTypefaceProvider.GetInstalledTypeface(f.Name, ConvToInstalledFontStyle(f.NewStyle), 400);
             //TODO: review 
             if (foundInstalledFont == null)
             {
@@ -485,19 +482,12 @@ namespace PixelFarm.Drawing.WinGdi
             }
             _nopenTypeFontFace = OpenFontLoader.LoadFont(foundInstalledFont.FontPath);
         }
-        static Typography.FontManagement.TypefaceStyle ConvToInstalledFontStyle(FontStyle style)
+        static Typography.FontManagement.TypefaceStyle ConvToInstalledFontStyle(NewCssFontStyle style)
         {
             Typography.FontManagement.TypefaceStyle installedStyle = Typography.FontManagement.TypefaceStyle.Regular;//regular
             switch (style)
             {
-                default: break;
-                case FontStyle.Bold:
-                    installedStyle = Typography.FontManagement.TypefaceStyle.Bold;
-                    break;
-                case FontStyle.Italic:
-                    installedStyle = Typography.FontManagement.TypefaceStyle.Italic;
-                    break;
-                case FontStyle.Bold | FontStyle.Italic:
+                case NewCssFontStyle.Italic:
                     installedStyle = Typography.FontManagement.TypefaceStyle.Italic;
                     break;
             }
@@ -588,7 +578,7 @@ namespace PixelFarm.Drawing.WinGdi
         protected override void OnDispose() { }
         public override ActualFont GetFontAtPointSize(float pointSize)
         {
-            return new NOpenFont(this, pointSize, FontStyle.Regular);
+            return new NOpenFont(this, pointSize, OldFontStyle.Regular);
         }
         public Typeface Typeface => _typeface;
 
@@ -614,14 +604,14 @@ namespace PixelFarm.Drawing.WinGdi
     {
         NOpenFontFace _ownerFace;
         readonly float _sizeInPoints;
-        readonly FontStyle _style;
+        readonly OldFontStyle _style;
         readonly Typeface _typeFace;
         readonly float _scale;
         readonly Dictionary<uint, VertexStore> _glyphVxs = new Dictionary<uint, VertexStore>();
 
         float _recommendLineSpacing;
 
-        public NOpenFont(NOpenFontFace ownerFace, float sizeInPoints, FontStyle style)
+        public NOpenFont(NOpenFontFace ownerFace, float sizeInPoints, OldFontStyle style)
         {
             _ownerFace = ownerFace;
             _sizeInPoints = sizeInPoints;
@@ -648,7 +638,7 @@ namespace PixelFarm.Drawing.WinGdi
 
         public override string FontName => _typeFace.Name;
 
-        public override FontStyle FontStyle => _style;
+        public override OldFontStyle FontStyle => _style;
 
         public override FontGlyph GetGlyph(char c) => GetGlyphByIndex(_typeFace.GetGlyphIndex(c));
 

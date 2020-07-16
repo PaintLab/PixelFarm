@@ -118,13 +118,14 @@ namespace LayoutFarm.UI
             InitWinform();
             IInstalledTypefaceProvider fontLoader = YourImplementation.CommonTextServiceSetup.FontLoader;
             //2. 
-            ITextService textService = null;
+             
 
             switch (internalViewportKind)
             {
                 default:
                     //gdi, gdi on gles
-                    textService = PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.GetTextService();
+                    
+
                     break;
                 case InnerViewportKind.PureAgg:
                 case InnerViewportKind.AggOnGLES:
@@ -133,8 +134,10 @@ namespace LayoutFarm.UI
                         var openFontTextService = new Typography.Text.OpenFontTextService();
                         openFontTextService.SvgBmpBuilder = PaintLab.SvgBuilderHelper.ParseAndRenderSvg;
 
-                        GlobalTextService.TextService2 = openFontTextService;
-                        textService = openFontTextService.CreateNewServiceClient();
+                        PixelFarm.Drawing.GLES2.GLES2Platform.TextService = openFontTextService;
+
+                        GlobalTextService.TxtClient = openFontTextService.CreateNewServiceClient(); 
+
                     }
                     break;
             }
@@ -147,9 +150,9 @@ namespace LayoutFarm.UI
             w = screenClientAreaRect.Width;
             h = screenClientAreaRect.Height;
 
-            GlobalTextService.TextService = textService;
 
-            MyRootGraphic myRootGfx = new MyRootGraphic(w, h, textService);
+
+            MyRootGraphic myRootGfx = new MyRootGraphic(w, h);
 
             //4. create event bridge that will bridge from native window event to root graphics
             AbstractTopWindowBridge bridge = GetTopWindowBridge(internalViewportKind, myRootGfx, myRootGfx.TopWinEventPortal);

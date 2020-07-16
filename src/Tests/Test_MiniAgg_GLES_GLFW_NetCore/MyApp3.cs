@@ -171,16 +171,17 @@ namespace TestGlfw
 
             //---------------------------------------------------------------------------
             //4. Typography TextService             
-            OpenFontTextService textService = new OpenFontTextService();
+            Typography.Text.OpenFontTextService textService = new Typography.Text.OpenFontTextService();
             textService.LoadFontsFromFolder("Fonts");
-            
-            GlobalTextService.TextService = textService;
+
+            GlobalTextService.TxtClient = textService.CreateNewServiceClient();
+            GlobalTextService.TextService = GlobalTextService.TxtClient;
             //---------------------------------------------------------------------------
 
 
             //PART2: root graphics
             Size primScreenSize = UIPlatform.CurrentPlatform.GetPrimaryMonitorSize();
-            s_myRootGfx = new MyRootGraphic(primScreenSize.Width, primScreenSize.Height, textService);
+            s_myRootGfx = new MyRootGraphic(primScreenSize.Width, primScreenSize.Height);
             s_viewroot = new GraphicsViewRoot(primScreenSize.Width, primScreenSize.Height);
             MyGlfwTopWindowBridge bridge1 = new MyGlfwTopWindowBridge(s_myRootGfx, s_myRootGfx.TopWinEventPortal);
             ((MyGlfwTopWindowBridge.GlfwEventBridge)(form.WindowEventListener)).SetWindowBridge(bridge1);
@@ -224,7 +225,7 @@ namespace TestGlfw
             s_myRootGfx.AddChild(bgBox.GetPrimaryRenderElement());
 
             //----------------------
-            dbugMySprite sprite = new dbugMySprite( 200, 300);
+            dbugMySprite sprite = new dbugMySprite(200, 300);
             dbugMyBoxUI boxUI = new dbugMyBoxUI();
             boxUI.SetRenderElement(sprite);
             sprite.SetController(boxUI);
