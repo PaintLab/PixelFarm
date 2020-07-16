@@ -964,7 +964,7 @@ namespace PixelFarm.DrawingGL
             _uniqueResolvedFonts.Clear();
             _uniqueResolvedFonts.Add(resolvedFont.FontKey, resolvedFont);
 
-            _txtClient.SetCurrentFont(curTypeface, _fontSizeInPoints, PositionTechnique.OpenFont);
+            _txtClient.SetCurrentFont(curTypeface, _fontSizeInPoints, _txtClient.CurrentScriptLang);
             _txtClient.PrepareFormattedStringList(buffer, startAt, len, _fmtGlyphPlans);
 
             bool needRightToLeftArr = _fmtGlyphPlans.IsRightToLeftDirection;
