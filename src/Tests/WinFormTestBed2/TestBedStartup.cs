@@ -27,70 +27,67 @@ namespace YourImplementation
                 }
                 s_intalledTypefaces = new InstalledTypefaceCollection();
                 s_intalledTypefaces.SetFontNameDuplicatedHandler((existing, newone) => FontNameDuplicatedDecision.Skip);
-                s_intalledTypefaces.SetFontNotFoundHandler((a, b, c) =>
+
+                s_intalledTypefaces.SetFontNotFoundHandler((InstalledTypefaceCollection collection,
+                    string fontName,
+                    TypefaceStyle style,
+                    ushort weightClass,
+                    InstalledTypeface available,
+                    List<InstalledTypeface> availableList) =>
                 {
+                    //This is application specific ***
+                    //
+                    switch (fontName.ToUpper())
+                    {
+                        default:
+                            {
+
+                            }
+                            break;
+                        case "SANS-SERIF":
+                            {
+                                //temp fix
+                                InstalledTypeface ss = collection.GetInstalledTypeface("Microsoft Sans Serif", TypefaceStyle.Regular, (ushort)RequestFontWeight.Normal);
+                                if (ss != null)
+                                {
+                                    return ss;
+                                }
+                            }
+                            break;
+                        case "SERIF":
+                            {
+                                //temp fix
+                                InstalledTypeface ss = collection.GetInstalledTypeface("Palatino linotype", TypefaceStyle.Regular, (ushort)RequestFontWeight.Normal);
+                                if (ss != null)
+                                {
+                                    return ss;
+                                }
+                            }
+                            break;
+                        case "TAHOMA":
+                            {
+                                switch (style)
+                                {
+                                    case TypefaceStyle.Italic:
+                                        {
+                                            InstalledTypeface anotherCandidate = collection.GetInstalledTypeface(fontName, TypefaceStyle.Italic, (ushort)RequestFontWeight.Normal);
+                                            if (anotherCandidate != null)
+                                            {
+                                                return anotherCandidate;
+                                            }
+                                        }
+                                        break;
+                                }
+                            }
+                            break;
+                        case "MONOSPACE":
+                            //use Courier New
+                            return collection.GetInstalledTypeface("Courier New", TypefaceStyle.Regular, (ushort)RequestFontWeight.Normal);
+                        case "HELVETICA":
+                            return collection.GetInstalledTypeface("Arial", TypefaceStyle.Regular, (ushort)RequestFontWeight.Normal);
+                    }
                     return null;
                 });
-                //s_intalledTypefaces.SetFontNotFoundHandler((InstalledTypefaceCollection collection,
-                //    string fontName,
-                //    TypefaceStyle style,
-                //    ushort weightClass,
-                //    InstalledTypeface available,
-                //    List<InstalledTypeface> availableList) =>
-                //{
-                //    //This is application specific ***
-                //    //
-                //    switch (fontName.ToUpper())
-                //    {
-                //        default:
-                //            {
-
-                //            }
-                //            break;
-                //        case "SANS-SERIF":
-                //            {
-                //                //temp fix
-                //                InstalledTypeface ss = collection.GetInstalledTypeface("Microsoft Sans Serif", TypefaceStyle.Regular, (ushort)RequestFontWeight.Normal);
-                //                if (ss != null)
-                //                {
-                //                    return ss;
-                //                }
-                //            }
-                //            break;
-                //        case "SERIF":
-                //            {
-                //                //temp fix
-                //                InstalledTypeface ss = collection.GetInstalledTypeface("Palatino linotype", TypefaceStyle.Regular, (ushort)RequestFontWeight.Normal);
-                //                if (ss != null)
-                //                {
-                //                    return ss;
-                //                }
-                //            }
-                //            break;
-                //        case "TAHOMA":
-                //            {
-                //                switch (style)
-                //                {
-                //                    case TypefaceStyle.Italic:
-                //                    {
-                //                            InstalledTypeface anotherCandidate = collection.GetInstalledTypeface(fontName, TypefaceStyle.Italic, (ushort)RequestFontWeight.Normal);
-                //                            if (anotherCandidate != null)
-                //                            {
-                //                                return anotherCandidate;
-                //                            }
-                //                        }
-                //                        break;
-                //                }
-                //            }
-                //            break;
-                //        case "MONOSPACE":
-                //            //use Courier New
-                //            return collection.GetInstalledTypeface("Courier New", TypefaceStyle.Regular, (ushort)RequestFontWeight.Normal);
-                //        case "HELVETICA":
-                //            return collection.GetInstalledTypeface("Arial", TypefaceStyle.Regular, (ushort)RequestFontWeight.Normal);
-                //    }
-                //    return null;
-                //});
 
 
                 //if you don't want to load entire system fonts
