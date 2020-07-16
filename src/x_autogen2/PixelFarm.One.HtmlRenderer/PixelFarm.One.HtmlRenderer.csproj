@@ -3094,6 +3094,9 @@
     <Compile Include="..\..\..\..\Typography\Typography.TextServices\FontStoreAndManagment\FontManagement.cs">
       <Link>Typography\Typography.TextServices\FontStoreAndManagment\FontManagement.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextServices\FontStoreAndManagment\FontManagement2.cs">
+      <Link>Typography\Typography.TextServices\FontStoreAndManagment\FontManagement2.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\..\Typography\Typography.TextServices\FontStoreAndManagment\OpenFontBitPosInfo.cs">
       <Link>Typography\Typography.TextServices\FontStoreAndManagment\OpenFontBitPosInfo.cs</Link>
     </Compile>

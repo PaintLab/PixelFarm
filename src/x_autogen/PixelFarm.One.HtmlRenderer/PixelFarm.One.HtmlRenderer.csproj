@@ -1058,6 +1058,7 @@
     <Compile Include="D:\projects\Typography\Typography.TextBreak\Typography.TextBreak\WordVisitor.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextServices\AbstractTextSpanPrinter.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextServices\FontStoreAndManagment\FontManagement.cs" />
+    <Compile Include="D:\projects\Typography\Typography.TextServices\FontStoreAndManagment\FontManagement2.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextServices\FontStoreAndManagment\OpenFontBitPosInfo.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextServices\FontStoreAndManagment\OpenFontUnicodeUtilExtensions.cs" />
     <Compile Include="D:\projects\Typography\Typography.TextServices\MeasureStringArgs.cs" />
