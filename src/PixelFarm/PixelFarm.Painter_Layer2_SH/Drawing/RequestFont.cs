@@ -187,7 +187,7 @@ namespace PixelFarm.Drawing
         public Len Size { get; }
 
         public string Name { get; private set; }
-        public OldFontStyle Style { get; private set; }
+    
 
 
         public NewCssFontStyle NewStyle { get; private set; }
@@ -250,6 +250,8 @@ namespace PixelFarm.Drawing
                     _otherChoices.Add(new Choice(name, fontSize));
                 }
             }
+
+            NewStyle = cssFontStyle;
         }
 
         private RequestFont(Len fontSize)
@@ -298,23 +300,23 @@ namespace PixelFarm.Drawing
                 fontSizeInPts,
                 style.GetHashCode());
         }
-        public static int CalculateFontKey(string typefaceName, float fontSizeInPts, OldFontStyle style)
-        {
-            return InternalFontKey.CalculateGetHasCode(
-                InternalFontKey.RegisterFontName(typefaceName),
-                fontSizeInPts,
-                style.GetHashCode());
-        }
-        public static int CalculateFontKey(int typefaceFontKey, float fontSizeInPts, OldFontStyle style)
-        {
-            return InternalFontKey.CalculateGetHasCode(
-                typefaceFontKey,
-                fontSizeInPts,
-                style.GetHashCode());
-        }
+        //public static int CalculateFontKey(string typefaceName, float fontSizeInPts, OldFontStyle style)
+        //{
+        //    return InternalFontKey.CalculateGetHasCode(
+        //        InternalFontKey.RegisterFontName(typefaceName),
+        //        fontSizeInPts,
+        //        style.GetHashCode());
+        //}
+        //public static int CalculateFontKey(int typefaceFontKey, float fontSizeInPts, OldFontStyle style)
+        //{
+        //    return InternalFontKey.CalculateGetHasCode(
+        //        typefaceFontKey,
+        //        fontSizeInPts,
+        //        style.GetHashCode());
+        //}
 
         int _fontKey;
-        public int FontKey => (_fontKey != 0) ? _fontKey : (_fontKey = CalculateFontKey(Name, SizeInPoints, Style));
+        public int FontKey => (_fontKey != 0) ? _fontKey : (_fontKey = CalculateFontKey(Name, SizeInPoints, NewStyle));
 
         //------------------ 
         //caching ...
@@ -367,7 +369,7 @@ namespace PixelFarm.Drawing
 #if DEBUG
         public override string ToString()
         {
-            return Name + "," + SizeInPoints + "," + Style;
+            return Name + "," + SizeInPoints + "," + NewStyle;
         }
 #endif
     }

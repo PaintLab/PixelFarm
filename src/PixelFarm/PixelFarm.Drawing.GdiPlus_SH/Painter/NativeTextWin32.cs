@@ -470,7 +470,7 @@ namespace PixelFarm.Drawing.WinGdi
 
         public WinGdiFontFace(RequestFont f)
         {
-            _style = f.Style;
+           
             //resolve
 
             InstalledTypeface foundInstalledFont = s_installedTypefaceProvider.GetInstalledTypeface(f.Name, ConvToInstalledFontStyle(f.NewStyle), 400);
