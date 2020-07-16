@@ -291,21 +291,7 @@ namespace PixelFarm.Drawing
                 fontSizeInPts,
                 style.GetHashCode());
         }
-        //public static int CalculateFontKey(string typefaceName, float fontSizeInPts, OldFontStyle style)
-        //{
-        //    return InternalFontKey.CalculateGetHasCode(
-        //        InternalFontKey.RegisterFontName(typefaceName),
-        //        fontSizeInPts,
-        //        style.GetHashCode());
-        //}
-        //public static int CalculateFontKey(int typefaceFontKey, float fontSizeInPts, OldFontStyle style)
-        //{
-        //    return InternalFontKey.CalculateGetHasCode(
-        //        typefaceFontKey,
-        //        fontSizeInPts,
-        //        style.GetHashCode());
-        //}
-
+       
         int _fontKey;
         public int FontKey => (_fontKey != 0) ? _fontKey : (_fontKey = CalculateFontKey(Name, SizeInPoints, NewStyle));
 
