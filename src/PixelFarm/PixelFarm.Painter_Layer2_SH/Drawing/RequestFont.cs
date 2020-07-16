@@ -175,6 +175,8 @@ namespace PixelFarm.Drawing
             {
                 return ch._resolvedFont2 as T;
             }
+            public ushort WeightClass { get; set; } = 400; //400= regular
+            public ushort WidthClass { get; set; } = 5; //Typography Width-Class
 
         }
 
@@ -256,9 +258,7 @@ namespace PixelFarm.Drawing
             SizeInPoints = fontSize.ToPoints();
         }
 
-
-
-        public ushort WeightClass { get; set; } //Typograghy Weight class
+        public ushort WeightClass { get; set; } = 400; //400= regular
         public ushort WidthClass { get; set; } = 5; //Typography Width-Class
 
         public void AddOtherChoices(params Choice[] choices)
