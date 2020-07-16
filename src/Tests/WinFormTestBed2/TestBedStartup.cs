@@ -7,7 +7,7 @@ using LayoutFarm.UI;
 
 namespace YourImplementation
 {
-    using LayoutFarm.Css;
+    using PixelFarm.Drawing;
     using Typography.FontManagement;
 
     public static class TestBedStartup
@@ -26,13 +26,14 @@ namespace YourImplementation
                     return;
                 }
                 s_intalledTypefaces = new InstalledTypefaceCollection();
-                //s_intalledTypefaces.SetFontNameDuplicatedHandler((existing, newone) => FontNameDuplicatedDecision.Skip);
+                s_intalledTypefaces.SetFontNameDuplicatedHandler((existing, newone) => FontNameDuplicatedDecision.Skip);
+
                 s_intalledTypefaces.SetFontNotFoundHandler((InstalledTypefaceCollection collection,
-                        string fontName,
-                        TypefaceStyle style,
-                        ushort weightClass,
-                        InstalledTypeface available,
-                        List<InstalledTypeface> availableList) =>
+                    string fontName,
+                    TypefaceStyle style,
+                    ushort weightClass,
+                    InstalledTypeface available,
+                    List<InstalledTypeface> availableList) =>
                 {
                     //This is application specific ***
                     //
@@ -46,7 +47,7 @@ namespace YourImplementation
                         case "SANS-SERIF":
                             {
                                 //temp fix
-                                InstalledTypeface ss = collection.GetInstalledTypeface("Microsoft Sans Serif", TypefaceStyle.Regular, (ushort)PixelFarm.Drawing.RequestFontWeight.Normal); //400= regu
+                                InstalledTypeface ss = collection.GetInstalledTypeface("Microsoft Sans Serif", TypefaceStyle.Regular, (ushort)RequestFontWeight.Normal);
                                 if (ss != null)
                                 {
                                     return ss;
@@ -56,7 +57,7 @@ namespace YourImplementation
                         case "SERIF":
                             {
                                 //temp fix
-                                InstalledTypeface ss = collection.GetInstalledTypeface("Palatino linotype", TypefaceStyle.Regular, (ushort)PixelFarm.Drawing.RequestFontWeight.Normal);
+                                InstalledTypeface ss = collection.GetInstalledTypeface("Palatino linotype", TypefaceStyle.Regular, (ushort)RequestFontWeight.Normal);
                                 if (ss != null)
                                 {
                                     return ss;
@@ -69,7 +70,7 @@ namespace YourImplementation
                                 {
                                     case TypefaceStyle.Italic:
                                         {
-                                            InstalledTypeface anotherCandidate = collection.GetInstalledTypeface(fontName, TypefaceStyle.Regular, (ushort)PixelFarm.Drawing.RequestFontWeight.Normal);
+                                            InstalledTypeface anotherCandidate = collection.GetInstalledTypeface(fontName, TypefaceStyle.Italic, (ushort)RequestFontWeight.Normal);
                                             if (anotherCandidate != null)
                                             {
                                                 return anotherCandidate;
@@ -81,9 +82,9 @@ namespace YourImplementation
                             break;
                         case "MONOSPACE":
                             //use Courier New
-                            return collection.GetInstalledTypeface("Courier New", TypefaceStyle.Regular, (ushort)PixelFarm.Drawing.RequestFontWeight.Normal);
+                            return collection.GetInstalledTypeface("Courier New", TypefaceStyle.Regular, (ushort)RequestFontWeight.Normal);
                         case "HELVETICA":
-                            return collection.GetInstalledTypeface("Arial", TypefaceStyle.Regular, (ushort)PixelFarm.Drawing.RequestFontWeight.Normal);
+                            return collection.GetInstalledTypeface("Arial", TypefaceStyle.Regular, (ushort)RequestFontWeight.Normal);
                     }
                     return null;
                 });

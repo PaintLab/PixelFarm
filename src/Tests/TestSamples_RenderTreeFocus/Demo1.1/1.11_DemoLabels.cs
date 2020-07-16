@@ -77,14 +77,14 @@ namespace LayoutFarm
                 label.Text = "XY";
                 host.AddChild(label);
             }
-            //{
-            //    Label label = new Label();
-            //    label.TextColor = PixelFarm.Drawing.Color.Black;
-            //    label.SetFont(font);
-            //    label.Text = "A12345";
-            //    label.SetLocation(30, 20);
-            //    host.AddChild(label);
-            //}
+            {
+                Label label = new Label();
+                label.TextColor = PixelFarm.Drawing.Color.Black;
+                label.SetFont(font);
+                label.Text = "A12345";
+                label.SetLocation(30, 20);
+                host.AddChild(label);
+            }
 
         }
     }

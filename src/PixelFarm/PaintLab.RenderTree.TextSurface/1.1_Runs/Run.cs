@@ -38,8 +38,8 @@ namespace LayoutFarm.TextEditing
 
         protected float MeasureLineHeight() => _runStyle.MeasureBlankLineHeight();
 
-        protected Size MeasureString(in TextBufferSpan textBufferSpan) => _runStyle.MeasureString(textBufferSpan);            
-       
+        protected Size MeasureString(in TextBufferSpan textBufferSpan) => _runStyle.MeasureString(textBufferSpan);
+
         public RunStyle RunStyle => _runStyle;
         //
         public virtual void SetStyle(RunStyle runStyle) => _runStyle = runStyle;

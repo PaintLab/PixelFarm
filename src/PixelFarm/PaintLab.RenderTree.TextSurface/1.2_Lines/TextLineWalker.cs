@@ -444,7 +444,7 @@ namespace LayoutFarm.TextEditing
             {
                 _lineSegs.Clear();
                 _wordVisitor.SetLineSegmentList(_lineSegs);
-                GlobalTextService.TxClient.BreakToLineSegments(textBufferSpan, _wordVisitor);
+                GlobalTextService.TxtClient.BreakToLineSegments(textBufferSpan, _wordVisitor);
 
                 if (_lineSegs.Count == 0)
                 {

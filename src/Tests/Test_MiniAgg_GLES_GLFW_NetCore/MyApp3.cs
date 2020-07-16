@@ -58,7 +58,6 @@ namespace TestGlfw
         }
 
     }
-
     class dbugMySprite : RenderElement
     {
         VgVisualElement _renderVx;
@@ -66,24 +65,15 @@ namespace TestGlfw
         {
             _renderVx = VgVisualDocHelper.CreateVgVisualDocFromFile(@"lion.svg").VgRootElem;
         }
-
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
+
             using (Tools.More.BorrowVgPaintArgs(d.GetPainter(), out var paintArgs))
             {
                 _renderVx.Paint(paintArgs);
             }
             //d.FillRectangle(Color.Blue, 0, 0, 50, 50);
         }
-        //protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
-        //{
-
-        //    using (Tools.More.BorrowVgPaintArgs(d.GetPainter(), out var paintArgs))
-        //    {
-        //        _renderVx.Paint(paintArgs);
-        //    }
-        //    //d.FillRectangle(Color.Blue, 0, 0, 50, 50);
-        //}
 
     }
 #endif
@@ -181,8 +171,12 @@ namespace TestGlfw
 
             //---------------------------------------------------------------------------
             //4. Typography TextService             
-            var textService = new Typography.Text.OpenFontTextService();
+            Typography.Text.OpenFontTextService textService = new Typography.Text.OpenFontTextService();
             textService.LoadFontsFromFolder("Fonts");
+
+            GlobalTextService.TxtClient = textService.CreateNewServiceClient();
+            GlobalTextService.TextService = GlobalTextService.TxtClient;
+            //---------------------------------------------------------------------------
 
 
             //PART2: root graphics

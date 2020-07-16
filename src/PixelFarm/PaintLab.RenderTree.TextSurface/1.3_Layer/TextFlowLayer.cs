@@ -78,7 +78,7 @@ namespace LayoutFarm.TextEditing
             _owner.ClientLayerBubbleUpInvalidateArea(clientInvalidatedArea);
         }
 
-        public int DefaultLineHeight => DefaultRunStyle.GetResolvedFont().LineSpacingInPixels;
+        public int DefaultLineHeight => DefaultRunStyle.ResolvedFont.LineSpacingInPixels;
 
         internal void NotifyContentSizeChanged() => ContentSizeChanged?.Invoke(this, EventArgs.Empty);
 

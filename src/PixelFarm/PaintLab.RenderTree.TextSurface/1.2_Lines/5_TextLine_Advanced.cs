@@ -369,24 +369,41 @@ namespace LayoutFarm.TextEditing
         Size MeasureCopyRunLength(CopyRun copyRun)
         {
 
-            Typography.Text.TextServiceClient txtclient = GlobalTextService.TxClient;
+            //IAdvanceTextService txServices = GlobalTextService.AdvanceTextService;
 
             char[] mybuffer = copyRun.RawContent;
-
+            //if (txServices.SupportsWordBreak)
+            //{
             var textBufferSpan = new Typography.Text.TextBufferSpan(mybuffer);
 
             _lineSegs.Clear();
             _wordVisitor.SetLineSegmentList(_lineSegs);
-            txtclient.BreakToLineSegments(textBufferSpan, _wordVisitor);
+            GlobalTextService.TxtClient.BreakToLineSegments(textBufferSpan, _wordVisitor);
 
             var result = new TextSpanMeasureResult();
             result.outputXAdvances = new int[mybuffer.Length];
 
-            txtclient.CalculateUserCharGlyphAdvancePos(textBufferSpan, _lineSegs,
+            GlobalTextService.TxtClient.CalculateUserCharGlyphAdvancePos(textBufferSpan, _lineSegs,
                 DefaultRunStyle.ReqFont,
                 ref result);
 
             return new Size(result.outputTotalW, result.lineHeight);
+            //}
+            //else
+            //{
+
+
+            //    var textBufferSpan = new Typography.Text.TextBufferSpan(mybuffer);
+
+            //    var result = new TextSpanMeasureResult();
+            //    result.outputXAdvances = new int[mybuffer.Length];
+
+            //    txServices.CalculateUserCharGlyphAdvancePos(textBufferSpan,
+            //        DefaultRunStyle.ReqFont,
+            //        ref result);
+
+            //    return new Size(result.outputTotalW, result.lineHeight);
+            //}
 
         }
         internal SelectionRangeInfo Split(VisualSelectionRange selectionRange)

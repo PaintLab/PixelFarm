@@ -154,7 +154,7 @@ namespace TestGlfw
             Typography.Text.OpenFontTextService textService = new Typography.Text.OpenFontTextService();
             textService.LoadFontsFromFolder("Fonts");
             Typography.Text.TextServiceClient serviceClient = textService.CreateNewServiceClient();
-            GlobalTextService.TxClient = serviceClient;
+            GlobalTextService.TextService = serviceClient;
             //---------------------------------------------------------------------------
 
             //PART2: root graphics

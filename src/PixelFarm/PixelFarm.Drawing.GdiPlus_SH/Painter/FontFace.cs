@@ -54,6 +54,17 @@ namespace PixelFarm.Drawing
         public VertexStore flattenVxs;
         //----------------------------
     }
+
+    [Flags]
+    public enum OldFontStyle : byte
+    {
+        Regular = 0,
+        Bold = 1,
+        Italic = 1 << 1,
+        Underline = 1 << 2,
+        Strikeout = 1 << 3,
+        Others = 1 << 4
+    }
     /// <summary>
     /// specific fontface + size + style
     /// </summary>
@@ -79,7 +90,7 @@ namespace PixelFarm.Drawing
         public abstract FontGlyph GetGlyphByIndex(ushort glyphIndex);
         public abstract FontGlyph GetGlyph(char c);
         public abstract FontFace FontFace { get; }
-        public abstract CssFontStyle FontStyle { get; }
+        public abstract OldFontStyle FontStyle { get; }
         public abstract string FontName { get; }
 
 

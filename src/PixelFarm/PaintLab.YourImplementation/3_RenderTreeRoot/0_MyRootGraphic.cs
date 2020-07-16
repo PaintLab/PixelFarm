@@ -27,13 +27,15 @@ namespace LayoutFarm.UI
 
         Func<PixelFarm.Drawing.GLES2.MyGLDrawBoard> _getDrawboard; //
 
-        public MyRootGraphic(int width, int height)
+        public MyRootGraphic(
+            int width, int height)
             : base(width, height)
         {
-
+            
             _gfxTimerTaskMx = new GraphicsTimerTaskManager(this);
             _defaultTextEditFont = MyFontSettings.DefaultRootGraphicsFont;
 
+          
 #if DEBUG
             dbugCurrentGlobalVRoot = this;
             dbug_Init(null, null, null);
@@ -130,6 +132,7 @@ namespace LayoutFarm.UI
             EventQueueSystem.CentralEventQueue.InvokeEventQueue();
         }
         public override RequestFont DefaultTextEditFontInfo => _defaultTextEditFont;
+        // 
 
 
         public override void ManageRenderElementRequests()

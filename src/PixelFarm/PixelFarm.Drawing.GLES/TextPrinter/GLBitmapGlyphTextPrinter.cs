@@ -1004,7 +1004,6 @@ namespace PixelFarm.DrawingGL
 #endif
 
                 Typeface typeface = resolvedFont1.Typeface;
-                
 
                 SameFontTextStrip sameFontTextStrip = new SameFontTextStrip
                 {
