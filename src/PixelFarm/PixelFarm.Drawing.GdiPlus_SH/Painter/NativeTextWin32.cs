@@ -473,7 +473,7 @@ namespace PixelFarm.Drawing.WinGdi
             _style = f.Style;
             //resolve
 
-            InstalledTypeface foundInstalledFont = s_installedTypefaceProvider.GetInstalledTypeface(f.Name, ConvToInstalledFontStyle(_style));
+            InstalledTypeface foundInstalledFont = s_installedTypefaceProvider.GetInstalledTypeface(f.Name, ConvToInstalledFontStyle(f.NewStyle), 400);
             //TODO: review 
             if (foundInstalledFont == null)
             {
@@ -482,19 +482,12 @@ namespace PixelFarm.Drawing.WinGdi
             }
             _nopenTypeFontFace = OpenFontLoader.LoadFont(foundInstalledFont.FontPath);
         }
-        static Typography.FontManagement.TypefaceStyle ConvToInstalledFontStyle(OldFontStyle style)
+        static Typography.FontManagement.TypefaceStyle ConvToInstalledFontStyle(NewCssFontStyle style)
         {
             Typography.FontManagement.TypefaceStyle installedStyle = Typography.FontManagement.TypefaceStyle.Regular;//regular
             switch (style)
             {
-                default: break;
-                case OldFontStyle.Bold:
-                    installedStyle = Typography.FontManagement.TypefaceStyle.Bold;
-                    break;
-                case OldFontStyle.Italic:
-                    installedStyle = Typography.FontManagement.TypefaceStyle.Italic;
-                    break;
-                case OldFontStyle.Bold | OldFontStyle.Italic:
+                case NewCssFontStyle.Italic:
                     installedStyle = Typography.FontManagement.TypefaceStyle.Italic;
                     break;
             }
