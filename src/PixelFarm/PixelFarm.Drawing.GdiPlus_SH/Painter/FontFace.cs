@@ -123,12 +123,12 @@ namespace PixelFarm.Drawing
         static Dictionary<int, ActualFont> s_actualFonts = new Dictionary<int, ActualFont>();
         public static ActualFont GetCacheActualFont(RequestFont r)
         {
-            s_actualFonts.TryGetValue(r.FontKey, out ActualFont font);
+            s_actualFonts.TryGetValue(r.GetReqKey(), out ActualFont font);
             return font;
         }
         public static void SetCacheActualFont(RequestFont r, ActualFont a)
         {
-            s_actualFonts[r.FontKey] = a;
+            s_actualFonts[r.GetReqKey()] = a;
         }
     }
 }

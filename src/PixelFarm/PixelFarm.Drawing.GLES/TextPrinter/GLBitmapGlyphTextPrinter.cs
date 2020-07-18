@@ -1,16 +1,17 @@
 ﻿//MIT, 2016-present, WinterDev
 using System;
 using System.Collections.Generic;
-//
+using System.IO;
+
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.BitmapAtlas;
 using PixelFarm.Drawing;
 
-using Typography.TextLayout;
 using Typography.OpenFont;
-using Typography.TextBreak;
-using Typography.Text;
 using Typography.OpenFont.Extensions;
+using Typography.Text;
+using Typography.TextBreak;
+using Typography.TextLayout;
 
 namespace PixelFarm.DrawingGL
 {
@@ -27,16 +28,16 @@ namespace PixelFarm.DrawingGL
     public class GLBitmapGlyphTextPrinter : IGLTextPrinter, IDisposable
     {
 
-        MySimpleGLBitmapFontManager _myGLBitmapFontMx;
-        SimpleBitmapAtlas _fontAtlas;
-        GLPainterCore _pcx;
-        GLPainter _painter;
-        GLBitmap _glBmp;
 
-        ResolvedFont _resolvedFont;
+        readonly GLPainterCore _pcx;
+        readonly GLPainter _painter;
         readonly TextServiceClient _txtClient;
         readonly TextureCoordVboBuilder _vboBuilder = new TextureCoordVboBuilder();
 
+        MySimpleGLBitmapFontManager _myGLBitmapFontMx;
+        SimpleBitmapAtlas _fontAtlas;
+        GLBitmap _glBmp;
+        ResolvedFont _resolvedFont;
 
 
         float _px_scale = 1;
@@ -69,6 +70,33 @@ namespace PixelFarm.DrawingGL
 
             _myGLBitmapFontMx = new MySimpleGLBitmapFontManager(textServices);
 
+            //--------
+            //load preview of pre-built texture font
+            //temp fix, TODO: review this again
+            string[] maybeTextureInfoFiles = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.tx_info");
+            if (maybeTextureInfoFiles.Length > 0)
+            {
+                for (int i = 0; i < maybeTextureInfoFiles.Length; ++i)
+                {
+                    //try read
+                    using (FileStream fs = new FileStream(maybeTextureInfoFiles[i], FileMode.Open))
+                    {
+                        try
+                        {
+                            _myGLBitmapFontMx.LoadBitmapAtlasPreview(fs);
+
+
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
+                    }
+                }
+            }
+
+
+
             //LoadFontAtlas("tahoma_set1.multisize_fontAtlas", "tahoma_set1.multisize_fontAtlas.png");
 
             //test textures...
@@ -76,7 +104,7 @@ namespace PixelFarm.DrawingGL
             //GlyphPosPixelSnapX = GlyphPosPixelSnapKind.Integer;
             //GlyphPosPixelSnapY = GlyphPosPixelSnapKind.Integer;
             //**
-            ChangeFont(painter.CurrentFont);
+            //ChangeFont(painter.CurrentFont);
             //
             //TextDrawingTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering; //default 
             TextDrawingTechnique = GlyphTexturePrinterDrawingTechnique.Stencil; //default
@@ -91,7 +119,7 @@ namespace PixelFarm.DrawingGL
             //...
             var myAlternativeTypefaceSelector = new AlternativeTypefaceSelector();
             {
-                var preferTypefaces = new Typography.FontManagement.PreferredTypefaceList();
+                var preferTypefaces = new Typography.FontCollections.PreferredTypefaceList();
                 preferTypefaces.AddTypefaceName("Source Sans Pro");
                 preferTypefaces.AddTypefaceName("Sarabun");
 
@@ -105,7 +133,7 @@ namespace PixelFarm.DrawingGL
                     preferTypefaces);
             }
             {
-                var preferTypefaces = new Typography.FontManagement.PreferredTypefaceList();
+                var preferTypefaces = new Typography.FontCollections.PreferredTypefaceList();
                 preferTypefaces.AddTypefaceName("Twitter Color Emoji");
                 myAlternativeTypefaceSelector.SetPerferredEmoji(preferTypefaces);
             }
@@ -131,12 +159,11 @@ namespace PixelFarm.DrawingGL
             _descending = r_font.DescentInPixels;
             _lineSpacingInPx = r_font.LineSpacingInPixels;
 
-            _fontAtlas = _myGLBitmapFontMx.GetFontAtlas(r_font, out _glBmp);
+            UnicodeRangeInfo unicodeRng = s.BreakInfo.UnicodeRange;
+            _fontAtlas = _myGLBitmapFontMx.GetFontAtlas(r_font, unicodeRng.StartCodepoint, unicodeRng.EndCodepoint, out _glBmp);
         }
         void ChangeFont(FormattedGlyphPlanSeq s)
         {
-
-            //_resolvedFont = font;
             ResolvedFont r_font = s.ResolvedFont;
 #if DEBUG
             if (r_font == null) { throw new NotSupportedException(); }
@@ -150,12 +177,13 @@ namespace PixelFarm.DrawingGL
             _descending = r_font.DescentInPixels;
             _lineSpacingInPx = r_font.LineSpacingInPixels; //typeface.CalculateMaxLineClipHeight() * _px_scale;
 
-            _fontAtlas = _myGLBitmapFontMx.GetFontAtlas(r_font, out _glBmp);
-
+            UnicodeRangeInfo unicodeRng = s.BreakInfo.UnicodeRange;
+            _fontAtlas = _myGLBitmapFontMx.GetFontAtlas(r_font, unicodeRng.StartCodepoint, unicodeRng.EndCodepoint, out _glBmp);
         }
-        public void ChangeFont(ResolvedFont font)
+
+        public void ChangeFont(ResolvedFont font, int startCodepoint, int endCodepoint)
         {
-            if (_resolvedFont != null && font != null && _resolvedFont.FontKey == font.FontKey)
+            if (_resolvedFont != null && font != null && GlobalTextService.TxtClient.Eq(_resolvedFont, font))
             {
                 return;
             }
@@ -167,7 +195,6 @@ namespace PixelFarm.DrawingGL
 #endif
 
             _resolvedFont = font;
-
             _fontSizeInPoints = font.SizeInPoints;
             _px_scale = font.GetScaleToPixelFromPointInSize();
             _white_space_width = font.WhitespaceWidth;
@@ -176,40 +203,46 @@ namespace PixelFarm.DrawingGL
             _lineSpacingInPx = font.LineSpacingInPixels;
 
             //-------
-            _fontAtlas = _myGLBitmapFontMx.GetFontAtlas(font, out _glBmp);
+            _fontAtlas = _myGLBitmapFontMx.GetFontAtlas(font, startCodepoint, endCodepoint, out _glBmp);
         }
+
         public void ChangeFont(RequestFont font)
         {
-            if (_resolvedFont != null && font != null && _resolvedFont.FontKey == font.FontKey)
+            //check if request font is diff from current _resolvedFont
+            if (_resolvedFont != null && font != null && GlobalTextService.TxtClient.Eq(_resolvedFont, font))
             {
                 return;
             }
-            ChangeFont(_txtClient.ResolveFont(font));
+            //
+            ChangeFont(_txtClient.ResolveFont(font), 0, 0);
         }
-        public void LoadFontAtlas(string fontTextureInfoFile, string atlasImgFilename)
-        {
-            //TODO: extension method
-            if (PixelFarm.Platforms.StorageService.Provider.DataExists(fontTextureInfoFile) &&
-                PixelFarm.Platforms.StorageService.Provider.DataExists(atlasImgFilename))
-            {
-                using (System.IO.Stream fontTextureInfoStream = PixelFarm.Platforms.StorageService.Provider.ReadDataStream(fontTextureInfoFile))
-                using (System.IO.Stream fontTextureImgStream = PixelFarm.Platforms.StorageService.Provider.ReadDataStream(atlasImgFilename))
-                {
-                    try
-                    {
-                        BitmapAtlasFile fontAtlas = new BitmapAtlasFile();
-                        fontAtlas.Read(fontTextureInfoStream);
-                        SimpleBitmapAtlas[] resultAtlases = fontAtlas.AtlasList.ToArray();
-                        _myGLBitmapFontMx.AddSimpleFontAtlas(resultAtlases, fontTextureImgStream);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw ex;
-                    }
-                }
-            }
 
-        }
+
+
+        //public void LoadFontAtlas(string fontTextureInfoFile, string atlasImgFilename)
+        //{
+        //    //TODO: extension method
+        //    if (PixelFarm.Platforms.StorageService.Provider.DataExists(fontTextureInfoFile) &&
+        //        PixelFarm.Platforms.StorageService.Provider.DataExists(atlasImgFilename))
+        //    {
+        //        using (System.IO.Stream fontTextureInfoStream = PixelFarm.Platforms.StorageService.Provider.ReadDataStream(fontTextureInfoFile))
+        //        using (System.IO.Stream fontTextureImgStream = PixelFarm.Platforms.StorageService.Provider.ReadDataStream(atlasImgFilename))
+        //        {
+        //            try
+        //            {
+        //                BitmapAtlasFile fontAtlas = new BitmapAtlasFile();
+        //                fontAtlas.Read(fontTextureInfoStream);
+        //                SimpleBitmapAtlas[] resultAtlases = fontAtlas.AtlasList.ToArray();
+        //                _myGLBitmapFontMx.AddSimpleFontAtlas(resultAtlases, fontTextureImgStream);
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                throw ex;
+        //            }
+        //        }
+        //    }
+
+        //}
         public bool UseVBO { get; set; }
 
         GlyphTexturePrinterDrawingTechnique _drawingTech;
@@ -288,10 +321,10 @@ namespace PixelFarm.DrawingGL
             //TODO:
             //if (x,y) is left top
             //we need to adjust y again      
+            SimpleBitmapAtlas f_atlas = _fontAtlas;
 
-            float scaleFromTexture = _resolvedFont.SizeInPoints / _fontAtlas.OriginalFontSizePts;
-
-            TextureKind textureKind = _fontAtlas.TextureKind;
+            const float scaleFromTexture = 1;// _resolvedFont.SizeInPoints / f_atlas.OriginalFontSizePts;
+            TextureKind textureKind = f_atlas.TextureKind;
 
             float g_left = 0;
             float g_top = 0;
@@ -339,7 +372,7 @@ namespace PixelFarm.DrawingGL
             for (int i = 0; i < seqLen; ++i)
             {
                 UnscaledGlyphPlan glyph = glyphPlanSeq[i];
-                if (!_fontAtlas.TryGetItem(glyph.glyphIndex, out AtlasItem atlasItem))
+                if (!f_atlas.TryGetItem(glyph.glyphIndex, out AtlasItem atlasItem))
                 {
                     //if no glyph data, we should render a missing glyph ***
                     continue;
@@ -852,7 +885,6 @@ namespace PixelFarm.DrawingGL
                 bool isTargetFont = sq.ResolvedFont.Typeface == expectedTypeface;
 
                 //if this seq use another font=> just calculate entire advance with
-
                 ChangeFont(sq);
 
 
@@ -945,7 +977,18 @@ namespace PixelFarm.DrawingGL
 
 
         readonly FormattedGlyphPlanList _fmtGlyphPlans = new FormattedGlyphPlanList();
-        readonly Dictionary<int, ResolvedFont> _uniqueResolvedFonts = new Dictionary<int, ResolvedFont>();
+        readonly Dictionary<SpanFormattedInfo, SpanFormattedInfo> _uniqueResolvedFonts = new Dictionary<SpanFormattedInfo, SpanFormattedInfo>();
+
+        readonly struct SpanFormattedInfo
+        {
+            public readonly ResolvedFont resolvedFont;
+            public readonly SpanBreakInfo breakInfo;
+            public SpanFormattedInfo(ResolvedFont resolvedFont, SpanBreakInfo breakInfo)
+            {
+                this.resolvedFont = resolvedFont;
+                this.breakInfo = breakInfo;
+            }
+        }
 
         public void PrepareStringForRenderVx(GLRenderVxFormattedString vxFmtStr, char[] buffer, int startAt, int len)
         {
@@ -956,13 +999,15 @@ namespace PixelFarm.DrawingGL
             var buffSpan = new Typography.Text.TextBufferSpan(buffer, startAt, len);
 
             RequestFont reqFont = _painter.CurrentFont; //init with default 
+
             ResolvedFont resolvedFont = _txtClient.ResolveFont(reqFont);
+            //
 
             Typeface curTypeface = resolvedFont.Typeface;
-
             _fmtGlyphPlans.Clear();
             _uniqueResolvedFonts.Clear();
-            _uniqueResolvedFonts.Add(resolvedFont.FontKey, resolvedFont);
+
+            //resolved font has information about typeface, size 
 
             _txtClient.SetCurrentFont(curTypeface, _fontSizeInPoints, _txtClient.CurrentScriptLang);
             _txtClient.PrepareFormattedStringList(buffer, startAt, len, _fmtGlyphPlans);
@@ -972,11 +1017,12 @@ namespace PixelFarm.DrawingGL
             int j = _fmtGlyphPlans.Count;
             for (int n = 0; n < j; ++n)
             {
-                FormattedGlyphPlanSeq formattedGlyphPlanSeq = _fmtGlyphPlans[n];
-                resolvedFont = formattedGlyphPlanSeq.ResolvedFont;
-                if (!_uniqueResolvedFonts.ContainsKey(resolvedFont.FontKey))
+                //each part may contains diff unicode range
+                FormattedGlyphPlanSeq fmt_seq = _fmtGlyphPlans[n];
+                SpanFormattedInfo spFmt = new SpanFormattedInfo(fmt_seq.ResolvedFont, fmt_seq.BreakInfo);
+                if (!_uniqueResolvedFonts.ContainsKey(spFmt))
                 {
-                    _uniqueResolvedFonts.Add(resolvedFont.FontKey, resolvedFont);
+                    _uniqueResolvedFonts.Add(spFmt, spFmt);
                 }
             }
 
@@ -997,20 +1043,20 @@ namespace PixelFarm.DrawingGL
             foreach (var kv in _uniqueResolvedFonts)
             {
                 //once for each typeface***
-                ResolvedFont resolvedFont1 = kv.Value;
+                SpanFormattedInfo spFmt = kv.Value;
 
 #if DEBUG
-                if (resolvedFont1 == null) { throw new NotSupportedException(); }
+                if (spFmt.resolvedFont == null) { throw new NotSupportedException(); }
 #endif
 
-                Typeface typeface = resolvedFont1.Typeface;
+                Typeface typeface = spFmt.resolvedFont.Typeface;
 
+                //TODO: review here again, use pool
                 SameFontTextStrip sameFontTextStrip = new SameFontTextStrip
                 {
-                    ResolvedFont = resolvedFont1
+                    ResolvedFont = spFmt.resolvedFont,
+                    BreakInfo = spFmt.breakInfo
                 };
-
-
 
                 //assign ColorGlyphOnTransparentBG and update mix mode state
                 mixModeSummary.AddGlyphMixMode(

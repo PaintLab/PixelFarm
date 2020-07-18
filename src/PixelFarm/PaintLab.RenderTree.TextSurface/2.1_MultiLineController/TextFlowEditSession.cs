@@ -370,7 +370,7 @@ namespace LayoutFarm.TextEditing
                 //CharIndex--;
             }
         }
-        public void DoFormatSelection(TextSpanStyle textStyle, NewCssFontStyle toggleFontStyle)
+        public void DoFormatSelection(TextSpanStyle textStyle, RequestFontStyle toggleFontStyle)
         {
             ////int startLineNum = _textLineWriter.LineNumber;
             ////int startCharIndex = _textLineWriter.CharIndex;

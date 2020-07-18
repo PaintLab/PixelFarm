@@ -378,12 +378,12 @@ namespace LayoutFarm.TextEditing
 
             _lineSegs.Clear();
             _wordVisitor.SetLineSegmentList(_lineSegs);
-            GlobalTextService.TxtClient.BreakToLineSegments(textBufferSpan, _wordVisitor);
+            Typography.Text.GlobalTextService.TxtClient.BreakToLineSegments(textBufferSpan, _wordVisitor);
 
             var result = new TextSpanMeasureResult();
             result.outputXAdvances = new int[mybuffer.Length];
 
-            GlobalTextService.TxtClient.CalculateUserCharGlyphAdvancePos(textBufferSpan, _lineSegs,
+            Typography.Text.GlobalTextService.TxtClient.CalculateUserCharGlyphAdvancePos(textBufferSpan, _lineSegs,
                 DefaultRunStyle.ReqFont,
                 ref result);
 

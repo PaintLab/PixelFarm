@@ -4,7 +4,7 @@
 using System;
 using System.Windows.Forms;
 using PixelFarm.Drawing;
-using Typography.FontManagement;
+using Typography.FontCollections;
 using LayoutFarm.UI.ForImplementator;
 
 namespace LayoutFarm.UI
@@ -136,7 +136,7 @@ namespace LayoutFarm.UI
 
                         PixelFarm.Drawing.GLES2.GLES2Platform.TextService = openFontTextService;
 
-                        GlobalTextService.TxtClient = openFontTextService.CreateNewServiceClient(); 
+                        Typography.Text.GlobalTextService.TxtClient = openFontTextService.CreateNewServiceClient(); 
 
                     }
                     break;

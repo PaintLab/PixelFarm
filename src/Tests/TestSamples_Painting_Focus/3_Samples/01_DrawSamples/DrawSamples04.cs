@@ -49,7 +49,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
             //3.  
             _font = new RequestFont("tahoma", 10);
-            _fontAtlas = _bmpFontMx.GetFontAtlas(_font, out _fontBmp);
+            _fontAtlas = _bmpFontMx.GetFontAtlas(_textServices.ResolveFont(_font), _font.StartCodePoint, _font.EndCodePoint, out _fontBmp);
 
 
             //----------

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 using Typography.Text;
+using Typography.TextBreak;
 
 namespace PixelFarm.DrawingGL
 {
@@ -223,6 +224,7 @@ namespace PixelFarm.DrawingGL
         }
 
         public ResolvedFont ResolvedFont { get; set; }
+        public SpanBreakInfo BreakInfo { get; set; }
     }
 
 

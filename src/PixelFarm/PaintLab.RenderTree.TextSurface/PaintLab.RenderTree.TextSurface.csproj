@@ -11,8 +11,8 @@
     <AssemblyName>PaintLab.RenderTree.TextSurface</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-	  <LangVersion>8.0</LangVersion>
-	  <TargetFrameworkProfile />
+    <LangVersion>8.0</LangVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -37,7 +37,6 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="1.0_Common\ITextService.cs" />
     <Compile Include="1.1_Runs\Run.cs" />
     <Compile Include="1.1_Runs\CharLocation.cs" />
     <Compile Include="1.1_Runs\TextRun.cs" />

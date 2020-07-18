@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 using Typography.OpenFont;
-using Typography.FontManagement;
+using Typography.FontCollections;
 namespace PixelFarm.Drawing
 {
     //cross-platform font mx***

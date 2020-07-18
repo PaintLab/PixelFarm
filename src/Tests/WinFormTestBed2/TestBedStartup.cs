@@ -8,7 +8,7 @@ using LayoutFarm.UI;
 namespace YourImplementation
 {
     using PixelFarm.Drawing;
-    using Typography.FontManagement;
+    using Typography.FontCollections;
 
     public static class TestBedStartup
     {
