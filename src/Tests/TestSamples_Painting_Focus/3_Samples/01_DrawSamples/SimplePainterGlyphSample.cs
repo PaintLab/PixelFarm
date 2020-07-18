@@ -26,7 +26,7 @@ namespace PixelFarm.CpuBlit.SimplePainter
 
             ////------------
             //var win32InstalledFont = new PixelFarm.Drawing.WinGdi.InstallFontsProviderWin32();
-            //InstalledFontCollection collection = new InstalledFontCollection();
+            //InstalledFontCollections collection = new InstalledFontCollections();
             //collection.LoadInstalledFont(win32InstalledFont.GetInstalledFontIter());
             ////test 
             //InstalledFont installedFont = collection.GetFont(fontName, InstalledFontStyle.Regular);
