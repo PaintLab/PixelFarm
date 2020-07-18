@@ -1,5 +1,5 @@
 ﻿//MIT, 2017-present, WinterDev
-using Typography.FontManagement;
+using Typography.FontCollections;
 
 namespace YourImplementation
 {
