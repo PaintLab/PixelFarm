@@ -10,16 +10,11 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
 
     class MySimpleGLBitmapAtlasManager : BitmapAtlasManager<GLBitmap>
     {
-        public MySimpleGLBitmapAtlasManager(TextureKind textureKind) 
+        //create new one 
+        //load to glbmp  
+        public MySimpleGLBitmapAtlasManager(TextureKind textureKind)
+            : base(atlas => new GLBitmap(atlas.MainBitmap, false) { IsYFlipped = false })
         {
-            SetLoadNewBmpDel(atlas =>
-            {
-                //create new one 
-                //load to glbmp  
-                GLBitmap found = new GLBitmap(atlas.MainBitmap, false);
-                found.IsYFlipped = false;
-                return found;
-            });
         }
     }
 }

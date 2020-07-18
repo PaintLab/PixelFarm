@@ -305,7 +305,7 @@ namespace LayoutFarm.CustomWidgets
                     _listItemText.RequestFont = _font;
                     //TODO: review how to find 
 
-                    int blankLineHeight = (int)GlobalTextService.TxtClient.MeasureBlankLineHeight(_font);
+                    int blankLineHeight = (int)Typography.Text.GlobalTextService.TxtClient.MeasureBlankLineHeight(_font);
                     _listItemText.SetHeight(blankLineHeight);
                     renderE.SetHeight(blankLineHeight);
                 }

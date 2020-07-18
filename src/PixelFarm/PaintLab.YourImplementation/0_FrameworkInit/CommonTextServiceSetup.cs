@@ -2,7 +2,7 @@
 
 using System.IO;
 using System.Collections.Generic;
-using Typography.FontManagement;
+using Typography.FontCollections;
 
 namespace YourImplementation
 {

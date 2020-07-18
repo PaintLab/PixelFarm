@@ -8,7 +8,7 @@ namespace PixelFarm.DrawingGL
 {
     class MySimpleGLBitmapFontManager : BitmapFontManager<GLBitmap>
     {
-        Dictionary<MemBitmap, GLBitmap> _sharedGlyphImgs = new Dictionary<MemBitmap, GLBitmap>();
+        readonly Dictionary<MemBitmap, GLBitmap> _sharedGlyphImgs = new Dictionary<MemBitmap, GLBitmap>();
 
         public MySimpleGLBitmapFontManager(Typography.Text.OpenFontTextService textServices)
             : base(textServices)

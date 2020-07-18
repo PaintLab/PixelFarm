@@ -80,9 +80,6 @@
     <Compile Include="..\PaintLab.RenderTree.TextSurface\1.0_Common\DoubleBufferCustomRenderBox.cs">
       <Link>0_REF_PaintLab.RenderTree.TextSurface\1.0_Common\DoubleBufferCustomRenderBox.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.0_Common\ITextService.cs">
-      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.0_Common\ITextService.cs</Link>
-    </Compile>
     <Compile Include="..\PaintLab.RenderTree.TextSurface\1.0_Common\PlainTextDocumentHelper.cs">
       <Link>0_REF_PaintLab.RenderTree.TextSurface\1.0_Common\PlainTextDocumentHelper.cs</Link>
     </Compile>

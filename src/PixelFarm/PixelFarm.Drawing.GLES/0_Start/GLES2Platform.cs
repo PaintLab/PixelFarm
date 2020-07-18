@@ -1,7 +1,7 @@
 ﻿//BSD, 2014-present, WinterDev
 
 
-using Typography.FontManagement;
+using Typography.FontCollections;
 
 namespace PixelFarm.Drawing.GLES2
 {
@@ -14,7 +14,7 @@ namespace PixelFarm.Drawing.GLES2
         {
             GLES2PlatformFontMx.SetInstalledTypefaceProvider(provider);
         }
-        public static InstalledTypeface GetInstalledFont(string fontName, Typography.FontManagement.TypefaceStyle style, RequestFontWeight weight)
+        public static InstalledTypeface GetInstalledFont(string fontName, TypefaceStyle style, RequestFontWeight weight)
         {
             return GLES2PlatformFontMx.GetInstalledFont(fontName, style, weight);
         }

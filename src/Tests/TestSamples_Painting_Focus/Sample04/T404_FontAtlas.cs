@@ -51,18 +51,18 @@ namespace OpenTkEssTest
             glyphTextureGen.MsdfGenVersion = 3;
 
             //2. generate the glyphs             
-
-            SimpleBitmapAtlasBuilder atlasBuilder = glyphTextureGen.CreateTextureFontFromBuildDetail(
-                _typeface,
-                reqFont.SizeInPoints,
-                TextureKind.Msdf,
-                GlyphTextureCustomConfigs.TryGetGlyphTextureBuildDetail(
-                    GlobalTextService.TxtClient.ResolveFont(reqFont), false, false)
+            var atlasBuilder = new SimpleBitmapAtlasBuilder();
+            glyphTextureGen.CreateTextureFontFromBuildDetail(
+                     atlasBuilder,
+                     _typeface,
+                     reqFont.SizeInPoints,
+                     TextureKind.Msdf,
+                     GlyphTextureCustomConfigs.TryGetGlyphTextureBuildDetail(
+                         Typography.Text.GlobalTextService.TxtClient.ResolveFont(reqFont), false, false)
             );
 
             //3. set information before write to font-info
-            atlasBuilder.FontFilename = reqFont.Name;//TODO: review here, check if we need 'filename' or 'fontname'
-            atlasBuilder.FontKey = reqFont.FontKey;
+
             atlasBuilder.SpaceCompactOption = SimpleBitmapAtlasBuilder.CompactOption.ArrangeByHeight;
 
             //4. merge all glyph in the builder into a single image
