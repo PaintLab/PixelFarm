@@ -1,6 +1,6 @@
 ﻿//BSD, 2014-present, WinterDev 
 
-using Typography.FontManagement;
+using Typography.FontCollections;
 namespace PixelFarm.Drawing.WinGdi
 {
     public static class WinGdiPlusPlatform

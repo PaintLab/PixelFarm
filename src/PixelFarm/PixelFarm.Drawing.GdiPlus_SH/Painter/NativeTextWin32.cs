@@ -6,7 +6,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Text;
 
-using Typography.FontManagement;
+using Typography.FontCollections;
 using Typography.OpenFont;
 using Typography.OpenFont.Contours;
 using Typography.OpenFont.Extensions;
@@ -439,9 +439,8 @@ namespace PixelFarm.Drawing.WinGdi
             //-----
             //need to create a new one
             //get register font or create the new one
-            int key = f.FontKey;
-            WinGdiFont found;
-            if (!s_registerFonts.TryGetValue(key, out found))
+            int key = f.GetReqKey();
+            if (!s_registerFonts.TryGetValue(key, out WinGdiFont found))
             {
                 //create the new one and register                  
                 //create fontface
@@ -470,10 +469,10 @@ namespace PixelFarm.Drawing.WinGdi
 
         public WinGdiFontFace(RequestFont f)
         {
-           
+
             //resolve
 
-            InstalledTypeface foundInstalledFont = s_installedTypefaceProvider.GetInstalledTypeface(f.Name, ConvToInstalledFontStyle(f.NewStyle), 400);
+            InstalledTypeface foundInstalledFont = s_installedTypefaceProvider.GetInstalledTypeface(f.Name, ConvToInstalledFontStyle(f.Style), 400);
             //TODO: review 
             if (foundInstalledFont == null)
             {
@@ -482,13 +481,13 @@ namespace PixelFarm.Drawing.WinGdi
             }
             _nopenTypeFontFace = OpenFontLoader.LoadFont(foundInstalledFont.FontPath);
         }
-        static Typography.FontManagement.TypefaceStyle ConvToInstalledFontStyle(NewCssFontStyle style)
+        static Typography.FontCollections.TypefaceStyle ConvToInstalledFontStyle(RequestFontStyle style)
         {
-            Typography.FontManagement.TypefaceStyle installedStyle = Typography.FontManagement.TypefaceStyle.Regular;//regular
+            Typography.FontCollections.TypefaceStyle installedStyle = Typography.FontCollections.TypefaceStyle.Regular;//regular
             switch (style)
             {
-                case NewCssFontStyle.Italic:
-                    installedStyle = Typography.FontManagement.TypefaceStyle.Italic;
+                case RequestFontStyle.Italic:
+                    installedStyle = Typography.FontCollections.TypefaceStyle.Italic;
                     break;
             }
             return installedStyle;
