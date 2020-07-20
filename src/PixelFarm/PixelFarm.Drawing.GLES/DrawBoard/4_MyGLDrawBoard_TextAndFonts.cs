@@ -47,7 +47,7 @@ namespace PixelFarm.Drawing.GLES2
                 _gpuPainter.TextPrinter.PrepareStringForRenderVx(fmtstr, buffer, 0, buffer.Length);
                 if (!fmtstr.Delay)
                 {
-                    fmtstr.ReleaseIntermediateStructures2();
+                    fmtstr.ReleaseIntermediateStructures();
                 }
                 return fmtstr;
             }

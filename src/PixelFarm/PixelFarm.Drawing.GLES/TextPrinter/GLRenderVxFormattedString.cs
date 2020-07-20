@@ -45,7 +45,7 @@ namespace PixelFarm.DrawingGL
                 OwnerPlate = null;
             }
         }
-        
+
         internal void ClearData()
         {
             WordPlateLeft = WordPlateTop = 0;
@@ -123,22 +123,18 @@ namespace PixelFarm.DrawingGL
             }
             if (_sh_vertexList == null)
             {
-                //_sh_vertexList = new ArrayList<float>();
-                //_sh_indexList = new ArrayList<ushort>();
 
                 _sh_vertexList = (s_vertextListPool.Count > 0) ? s_vertextListPool.Dequeue() : new ArrayList<float>();
                 _sh_indexList = (s_indexListPool.Count > 0) ? s_indexListPool.Dequeue() : new ArrayList<ushort>();
             }
         }
+
         internal void ReleaseIntermediateStructures()
         {
-            //_sh_vertexList = null;
-            //_sh_indexList = null;
-
-        }
-        internal void ReleaseIntermediateStructures2()
-        {
-
+            if (GlyphMixMode == GLRenderVxFormattedStringGlyphMixMode.MixedStencilAndColorGlyphs)
+            {
+                return;
+            }
             if (_sh_vertexList != null)
             {
                 _sh_vertexList.Clear();
@@ -152,7 +148,7 @@ namespace PixelFarm.DrawingGL
                 _sh_indexList = null;
             }
 
-            //_strips?.Clear();
+            _strips?.Clear();
 
         }
 #if DEBUG

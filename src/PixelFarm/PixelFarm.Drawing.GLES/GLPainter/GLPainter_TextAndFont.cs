@@ -114,7 +114,7 @@ namespace PixelFarm.DrawingGL
                 fmtstr.dbugText = textspan;
 #endif
                 _textPrinter?.PrepareStringForRenderVx(fmtstr, buffer, 0, buffer.Length);
-                fmtstr.ReleaseIntermediateStructures2();
+                fmtstr.ReleaseIntermediateStructures();
                 return fmtstr;
             }
             else
@@ -135,7 +135,7 @@ namespace PixelFarm.DrawingGL
                 fmtstr.dbugText = new string(textspanBuff, startAt, len);
 #endif
                 _textPrinter?.PrepareStringForRenderVx(fmtstr, textspanBuff, startAt, len);
-                fmtstr.ReleaseIntermediateStructures2();
+                fmtstr.ReleaseIntermediateStructures();
                 return fmtstr;
             }
             else
