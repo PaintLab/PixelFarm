@@ -109,12 +109,13 @@ namespace PixelFarm.DrawingGL
             if (_textPrinter != null)
             {
                 char[] buffer = textspan.ToCharArray();
-                var renderVxFmtStr = new GLRenderVxFormattedString();
+                var fmtstr = new GLRenderVxFormattedString();
 #if DEBUG
-                renderVxFmtStr.dbugText = textspan;
+                fmtstr.dbugText = textspan;
 #endif
-                _textPrinter?.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
-                return renderVxFmtStr;
+                _textPrinter?.PrepareStringForRenderVx(fmtstr, buffer, 0, buffer.Length);
+                fmtstr.ReleaseIntermediateStructures2();
+                return fmtstr;
             }
             else
             {
@@ -129,12 +130,13 @@ namespace PixelFarm.DrawingGL
         {
             if (_textPrinter != null)
             {
-                var renderVxFmtStr = new GLRenderVxFormattedString();
+                var fmtstr = new GLRenderVxFormattedString();
 #if DEBUG
-                renderVxFmtStr.dbugText = new string(textspanBuff, startAt, len);
+                fmtstr.dbugText = new string(textspanBuff, startAt, len);
 #endif
-                _textPrinter?.PrepareStringForRenderVx(renderVxFmtStr, textspanBuff, startAt, len);
-                return renderVxFmtStr;
+                _textPrinter?.PrepareStringForRenderVx(fmtstr, textspanBuff, startAt, len);
+                fmtstr.ReleaseIntermediateStructures2();
+                return fmtstr;
             }
             else
             {

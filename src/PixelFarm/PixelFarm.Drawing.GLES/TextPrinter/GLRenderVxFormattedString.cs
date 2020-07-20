@@ -45,6 +45,7 @@ namespace PixelFarm.DrawingGL
                 OwnerPlate = null;
             }
         }
+        
         internal void ClearData()
         {
             WordPlateLeft = WordPlateTop = 0;
@@ -57,7 +58,18 @@ namespace PixelFarm.DrawingGL
 
             DisposeVbo();
 
-
+            if (_sh_vertexList != null)
+            {
+                _sh_vertexList.Clear();
+                s_vertextListPool.Enqueue(_sh_vertexList);
+                _sh_vertexList = null;
+            }
+            if (_sh_indexList != null)
+            {
+                _sh_indexList.Clear();
+                s_indexListPool.Enqueue(_sh_indexList);
+                _sh_indexList = null;
+            }
             _strips?.Clear();
             _strips = null;
         }
@@ -111,15 +123,37 @@ namespace PixelFarm.DrawingGL
             }
             if (_sh_vertexList == null)
             {
-                _sh_vertexList = new ArrayList<float>();
-                _sh_indexList = new ArrayList<ushort>();
+                //_sh_vertexList = new ArrayList<float>();
+                //_sh_indexList = new ArrayList<ushort>();
+
+                _sh_vertexList = (s_vertextListPool.Count > 0) ? s_vertextListPool.Dequeue() : new ArrayList<float>();
+                _sh_indexList = (s_indexListPool.Count > 0) ? s_indexListPool.Dequeue() : new ArrayList<ushort>();
             }
         }
         internal void ReleaseIntermediateStructures()
         {
-            _sh_vertexList = null;
-            _sh_indexList = null;
-            //_strips = null;
+            //_sh_vertexList = null;
+            //_sh_indexList = null;
+
+        }
+        internal void ReleaseIntermediateStructures2()
+        {
+
+            if (_sh_vertexList != null)
+            {
+                _sh_vertexList.Clear();
+                s_vertextListPool.Enqueue(_sh_vertexList);
+                _sh_vertexList = null;
+            }
+            if (_sh_indexList != null)
+            {
+                _sh_indexList.Clear();
+                s_indexListPool.Enqueue(_sh_indexList);
+                _sh_indexList = null;
+            }
+
+            //_strips?.Clear();
+
         }
 #if DEBUG
         public string dbugText;
@@ -134,8 +168,8 @@ namespace PixelFarm.DrawingGL
         public override string dbugName => "GL";
 #endif
 
-        static Queue<ArrayList<float>> s_vertextListPool = new Queue<ArrayList<float>>();
-        static Queue<ArrayList<short>> s_indexListPool = new Queue<ArrayList<short>>();
+        readonly static Queue<ArrayList<float>> s_vertextListPool = new Queue<ArrayList<float>>();
+        readonly static Queue<ArrayList<ushort>> s_indexListPool = new Queue<ArrayList<ushort>>();
 
 
     }
