@@ -1,6 +1,7 @@
 ﻿//MIT, 2016-present, WinterDev
 using System;
 using System.Collections.Generic;
+using PixelFarm.CpuBlit;
 using PixelFarm.Drawing;
 using Typography.Text;
 using Typography.TextBreak;
@@ -20,7 +21,9 @@ namespace PixelFarm.DrawingGL
     /// </summary>
     public class GLRenderVxFormattedString : PixelFarm.Drawing.RenderVxFormattedString
     {
-        internal List<SameFontTextStrip> _strips = new List<SameFontTextStrip>();
+        List<SameFontTextStrip> _strips;
+        internal ArrayList<float> _sh_vertexList;
+        internal ArrayList<ushort> _sh_indexList;
 
         internal GLRenderVxFormattedString()
         {
@@ -42,7 +45,8 @@ namespace PixelFarm.DrawingGL
                 OwnerPlate = null;
             }
         }
-        internal void Reuse()
+
+        internal void ClearData()
         {
             WordPlateLeft = WordPlateTop = 0;
             ClearOwnerPlate();
@@ -51,38 +55,110 @@ namespace PixelFarm.DrawingGL
             Delay = false;
             UseWithWordPlate = true;
             GlyphMixMode = GLRenderVxFormattedStringGlyphMixMode.Unknown;
-            int j = _strips.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                _strips[i].DisposeVbo();
-            }
 
-            _strips.Clear();
+            DisposeVbo();
+
+            if (_sh_vertexList != null)
+            {
+                _sh_vertexList.Clear();
+                s_vertextListPool.Push(_sh_vertexList);
+                _sh_vertexList = null;
+            }
+            if (_sh_indexList != null)
+            {
+                _sh_indexList.Clear();
+                s_indexListPool.Push(_sh_indexList);
+                _sh_indexList = null;
+            }
+            _strips?.Clear();
+            _strips = null;
         }
 
-        public void DisposeVbo()
+        internal void DisposeVbo()
         {
             //dispose only its vbo
             //preserve coord data
-            foreach (SameFontTextStrip s in _strips)
+            if (_strips != null)
             {
-                s.DisposeVbo();
+                int j = _strips.Count;
+                for (int i = 0; i < j; ++i)
+                {
+                    _strips[i].DisposeVbo();
+                }
             }
         }
 
         public override void Dispose()
         {
-            //no use this any more
-            //VertexCoords = null;
-            //IndexArray = null;
-
-            ClearOwnerPlate();
-            DisposeVbo();
-            _strips.Clear();
-
+            ClearData();
             base.Dispose();
         }
 
+
+        internal SameFontTextStrip AppendNewStrip()
+        {
+            var newstrip = (s_textStripPool.Count > 0) ? s_textStripPool.Pop() : new SameFontTextStrip();
+            //get buffer from pool 
+            _strips.Add(newstrip);
+            return newstrip;
+        }
+
+        internal int StripCount => (_strips == null) ? 0 : _strips.Count;
+        internal SameFontTextStrip this[int index] => _strips[index];
+
+        internal void ApplyAdditionalVerticalOffset(int maxStripHeight)
+        {
+            int j = _strips.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                SameFontTextStrip s = _strips[i];
+                s.AdditionalVerticalOffset = maxStripHeight - s.SpanHeight;
+            }
+        }
+        internal void PrepareIntermediateStructures()
+        {
+            if (_strips == null)
+            {
+                _strips = (s_sameFontTextStripListPool.Count > 0) ? s_sameFontTextStripListPool.Pop() : new List<SameFontTextStrip>();
+            }
+            if (_sh_vertexList == null)
+            {
+                _sh_vertexList = (s_vertextListPool.Count > 0) ? s_vertextListPool.Pop() : new ArrayList<float>();
+                _sh_indexList = (s_indexListPool.Count > 0) ? s_indexListPool.Pop() : new ArrayList<ushort>();
+            }
+        }
+
+        internal void ReleaseIntermediateStructures()
+        {
+            if (GlyphMixMode == GLRenderVxFormattedStringGlyphMixMode.MixedStencilAndColorGlyphs)
+            {
+                return;
+            }
+            if (_sh_vertexList != null)
+            {
+                _sh_vertexList.Clear();
+                s_vertextListPool.Push(_sh_vertexList);
+                _sh_vertexList = null;
+            }
+            if (_sh_indexList != null)
+            {
+                _sh_indexList.Clear();
+                s_indexListPool.Push(_sh_indexList);
+                _sh_indexList = null;
+            }
+
+            if (_strips != null)
+            {
+                int j = _strips.Count;
+                for (int i = 0; i < j; ++i)
+                {
+                    _strips[i].Reset();
+                }
+                _strips.Clear();
+            }
+
+
+        }
 #if DEBUG
         public string dbugText;
         public override string ToString()
@@ -96,6 +172,11 @@ namespace PixelFarm.DrawingGL
         public override string dbugName => "GL";
 #endif
 
+        readonly static Stack<ArrayList<float>> s_vertextListPool = new Stack<ArrayList<float>>();
+        readonly static Stack<ArrayList<ushort>> s_indexListPool = new Stack<ArrayList<ushort>>();
+        readonly static Stack<SameFontTextStrip> s_textStripPool = new Stack<SameFontTextStrip>();
+        readonly static Stack<List<SameFontTextStrip>> s_sameFontTextStripListPool = new Stack<List<SameFontTextStrip>>();
+
     }
     public class GLRenderVxFormattedStringSpan
     {
@@ -108,6 +189,7 @@ namespace PixelFarm.DrawingGL
         public float[] VertexCoords { get; set; }
         public ushort[] IndexArray { get; set; }
         public int IndexArrayCount { get; set; }
+
         public ushort WordPlateLeft { get; set; }
         public ushort WordPlateTop { get; set; }
 
@@ -183,15 +265,18 @@ namespace PixelFarm.DrawingGL
     {
         //our _vbo is used with 1 font texture
         //so if a text-strip use multiple font 
-        //we need to separate it into multiple SameFontTextStrip.
+        //we need to separate it into multiple SameFontTextStrip
+#if DEBUG
+        public SameFontTextStrip()
+        {
 
-
-        public SameFontTextStrip() { }
+        }
+#endif
         public DrawingGL.VertexBufferObject _vbo;
 
-        public float[] VertexCoords { get; set; }
-        public ushort[] IndexArray { get; set; }
-        public int IndexArrayCount { get; set; }
+        public ArrayListSpan<float> VertexCoords { get; set; }
+        public ArrayListSpan<ushort> IndexArray { get; set; }
+        public int IndexArrayCount => IndexArray.Count;
 
         public float Width { get; set; }
         public int SpanHeight { get; set; }
@@ -205,8 +290,9 @@ namespace PixelFarm.DrawingGL
             {
                 return _vbo;
             }
+
             _vbo = new VertexBufferObject();
-            _vbo.CreateBuffers(this.VertexCoords, this.IndexArray);
+            _vbo.CreateBuffers(VertexCoords, IndexArray);
             return _vbo;
         }
 
@@ -225,6 +311,17 @@ namespace PixelFarm.DrawingGL
 
         public ResolvedFont ResolvedFont { get; set; }
         public SpanBreakInfo BreakInfo { get; set; }
+        public void Reset()
+        {
+            DisposeVbo();
+            Width = 0;
+            SpanHeight = DescendingInPx = AdditionalVerticalOffset = 0;
+            ColorGlyphOnTransparentBG = false;
+            VertexCoords = ArrayListSpan<float>.Empty;
+            IndexArray = ArrayListSpan<ushort>.Empty;
+            ResolvedFont = null;
+            BreakInfo = null;
+        }
     }
 
 

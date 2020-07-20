@@ -34,18 +34,22 @@ namespace PixelFarm.Drawing.GLES2
 #endif
             }
             //create blank render vx
-            var renderVxFmtStr = new DrawingGL.GLRenderVxFormattedString();
-            renderVxFmtStr.Delay = delay;
+            var fmtstr = new DrawingGL.GLRenderVxFormattedString();
+            fmtstr.Delay = delay;
 #if DEBUG
-            renderVxFmtStr.dbugText = new string(buffer, startAt, len);
+            fmtstr.dbugText = new string(buffer, startAt, len);
 #endif
             if (_gpuPainter.TextPrinter != null)
             {
                 //we create
                 //1. texture coords for this string
                 //2. (if not delay) => an image for this string  inside a larger img texture
-                _gpuPainter.TextPrinter.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
-                return renderVxFmtStr;
+                _gpuPainter.TextPrinter.PrepareStringForRenderVx(fmtstr, buffer, 0, buffer.Length);
+                if (!fmtstr.Delay)
+                {
+                    fmtstr.ReleaseIntermediateStructures();
+                }
+                return fmtstr;
             }
             else
             {

@@ -134,6 +134,9 @@ namespace PixelFarm.DrawingGL
             return cache;
         }
 
+        readonly ArrayList<float> _vertexList = new ArrayList<float>();
+        readonly ArrayList<ushort> _indexList = new ArrayList<ushort>();
+
         /// <summary>
         /// we do NOT store vxs
         /// </summary>
@@ -183,7 +186,9 @@ namespace PixelFarm.DrawingGL
                             GLBitmap glbmp = dashPattBmpCache.glBmp;
                             SimpleBitmapAtlas simpleBmpAtlas = dashPattBmpCache.Atlas;
 
-                            _vboBuilder.Clear();
+                            _vertexList.Clear();
+                            _indexList.Clear();
+                            _vboBuilder.SetArrayLists(_vertexList, _indexList);
                             _vboBuilder.SetTextureInfo(glbmp.Width, glbmp.Height, false, RenderSurfaceOriginKind.LeftTop);
 
                             ushort patNo = 0;
