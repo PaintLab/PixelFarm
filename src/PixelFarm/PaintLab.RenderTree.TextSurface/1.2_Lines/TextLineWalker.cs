@@ -794,7 +794,11 @@ namespace LayoutFarm.TextEditing
         //
         int InternalCharIndex => caret_char_index;
         //
-        public void SetCurrentCharStepRight() => SetCurrentCharIndex(InternalCharIndex + 1);
+        public void SetCurrentCharStepRight()
+        {
+            SetCurrentCharIndex(InternalCharIndex + 1);
+            
+        }
 
         public void SetCurrentCharStepLeft() => SetCurrentCharIndex(InternalCharIndex - 1);
 
@@ -853,64 +857,7 @@ namespace LayoutFarm.TextEditing
                 } while (MoveToNextTextRun());
                 caret_char_index = _rCharOffset + _currentTextRun.CharacterCount;
                 _caretXPos = _rPixelOffset + _currentTextRun.Width;
-                return;
-
-                //                int diff = newCharIndexPointTo - caret_char_index;
-                //                switch (diff)
-                //                {
-                //                    case 0:
-                //                        {
-                //                            return;
-                //                        }
-
-                //                    default:
-                //                        {
-                //                            if (diff > 0)
-                //                            {
-                //                                do
-                //                                {
-                //                                    if (_rCharOffset + _currentTextRun.CharacterCount >= newCharIndexPointTo)
-                //                                    {
-                //                                        caret_char_index = newCharIndexPointTo;
-                //                                        _caretXPos = _rPixelOffset + _currentTextRun.GetRunWidth(caret_char_index - _rCharOffset);
-                //#if DEBUG
-                //                                        if (dbugTextManRecorder != null)
-                //                                        {
-                //                                            dbugTextManRecorder.EndContext();
-                //                                        }
-                //#endif
-
-                //                                        return;
-                //                                    }
-                //                                    //
-                //                                } while (MoveToNextTextRun());
-                //                                caret_char_index = _rCharOffset + _currentTextRun.CharacterCount;
-                //                                _caretXPos = _rPixelOffset + _currentTextRun.Width;
-                //                                return;
-                //                            }
-                //                            else
-                //                            {
-                //                                do
-                //                                {
-                //                                    if (_rCharOffset - 1 < newCharIndexPointTo)
-                //                                    {
-                //                                        caret_char_index = newCharIndexPointTo;
-                //                                        _caretXPos = _rPixelOffset + _currentTextRun.GetRunWidth(caret_char_index - _rCharOffset);
-                //#if DEBUG
-                //                                        if (dbugTextManRecorder != null)
-                //                                        {
-                //                                            dbugTextManRecorder.EndContext();
-                //                                        }
-                //#endif
-                //                                        return;
-                //                                    }
-                //                                } while (MoveToPreviousTextRun());
-                //                                caret_char_index = 0;
-                //                                _caretXPos = 0;
-                //                            }
-                //                        }
-                //                        break;
-                //                }
+                return; 
             }
 #if DEBUG
             if (dbugTextManRecorder != null)
