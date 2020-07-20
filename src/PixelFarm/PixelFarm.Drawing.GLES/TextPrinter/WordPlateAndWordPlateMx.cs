@@ -184,7 +184,7 @@ namespace PixelFarm.DrawingGL
 
             return previewY + renderVxFormattedString.SpanHeight < _plateHeight;
         }
-        public bool CreateWordStrip(GLPainter painter, GLRenderVxFormattedString renderVxFormattedString)
+        public bool CreateWordStrip(GLPainter painter, GLRenderVxFormattedString fmtstr)
         {
             //--------------
             //create stencil text buffer                  
@@ -199,7 +199,7 @@ namespace PixelFarm.DrawingGL
             }
 
 
-            float width = renderVxFormattedString.Width;
+            float width = fmtstr.Width;
 
             if (_currentX + width > _plateWidth)
             {
@@ -207,21 +207,21 @@ namespace PixelFarm.DrawingGL
                 _currentY += _currentLineHeightMax + INTERLINE_SPACE;//interspace =4 px
                 _currentX = 0;
                 //new line
-                _currentLineHeightMax = (int)Math.Ceiling(renderVxFormattedString.SpanHeight);
+                _currentLineHeightMax = (int)Math.Ceiling(fmtstr.SpanHeight);
             }
 
             //on current line
             //check available height
-            if (_currentY + renderVxFormattedString.SpanHeight > _plateHeight)
+            if (_currentY + fmtstr.SpanHeight > _plateHeight)
             {
                 _full = true;
                 return false;
             }
             //---------------------------------- 
 
-            if (renderVxFormattedString.SpanHeight > _currentLineHeightMax)
+            if (fmtstr.SpanHeight > _currentLineHeightMax)
             {
-                _currentLineHeightMax = (int)Math.Ceiling(renderVxFormattedString.SpanHeight);
+                _currentLineHeightMax = (int)Math.Ceiling(fmtstr.SpanHeight);
             }
 
 
@@ -233,12 +233,12 @@ namespace PixelFarm.DrawingGL
             painter.TextBgColorHint = Color.Black;
             painter.FontFillColor = Color.White;
             painter.PreparingWordStrip = true;
-            renderVxFormattedString.UseWithWordPlate = false;
+            fmtstr.UseWithWordPlate = false;
 
 
             GLBitmapGlyphTextPrinter textPrinter = (GLBitmapGlyphTextPrinter)painter.TextPrinter;
 
-            switch (renderVxFormattedString.GlyphMixMode)
+            switch (fmtstr.GlyphMixMode)
             {
                 case GLRenderVxFormattedStringGlyphMixMode.OnlyColorGlyphs:
                     {
@@ -256,30 +256,30 @@ namespace PixelFarm.DrawingGL
             //use special mode of the GLBitmapGlyphTextPrinter
             //-----------
             textPrinter.WordPlateCreatingMode = true; //turn on platemode
-            textPrinter.DrawString(renderVxFormattedString, _currentX, _currentY);
+            textPrinter.DrawString(fmtstr, _currentX, _currentY);
             textPrinter.WordPlateCreatingMode = false;//switch back
             //-----------
-            renderVxFormattedString.UseWithWordPlate = true;//restore
+            fmtstr.UseWithWordPlate = true;//restore
             painter.FontFillColor = prevColor;//restore
             painter.TextBgColorHint = prevTextBgHint;//restore
             painter.PreparingWordStrip = prevPreparingWordStrip;
             painter.TextPrinterDrawingTechnique = prevTextDrawing;//restore
             //in this case we can dispose vbo inside renderVx
             //(we can recreate that vbo later)
-            renderVxFormattedString.DisposeVbo();
+            fmtstr.DisposeVbo();
 
-            renderVxFormattedString.OwnerPlate = this;
-            renderVxFormattedString.WordPlateLeft = (ushort)_currentX;
-            renderVxFormattedString.WordPlateTop = (ushort)_currentY;
-            renderVxFormattedString.UseWithWordPlate = true;
+            fmtstr.OwnerPlate = this;
+            fmtstr.WordPlateLeft = (ushort)_currentX;
+            fmtstr.WordPlateTop = (ushort)_currentY;
+            fmtstr.UseWithWordPlate = true;
 
 #if DEBUG
             dbugUsedCount++;
 #endif
-            _wordStrips.Add(renderVxFormattedString, true);
+            _wordStrips.Add(fmtstr, true);
             //--------
 
-            _currentX += (int)Math.Ceiling(renderVxFormattedString.Width) + INTERWORD_SPACE; //interspace x 1px
+            _currentX += (int)Math.Ceiling(fmtstr.Width) + INTERWORD_SPACE; //interspace x 1px
 
 #if DEBUG
             //dbugSaveBackBuffer("dbug_test1.png");
