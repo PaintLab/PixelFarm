@@ -39,6 +39,8 @@ namespace PixelFarm.CpuBlit
         { 
             internalArr = listSpan._arrList.UnsafeInternalArray;
         }
+
+        public static readonly ArrayListSpan<T> Empty = new ArrayListSpan<T>();
 #if DEBUG
         public override string ToString()
         {
