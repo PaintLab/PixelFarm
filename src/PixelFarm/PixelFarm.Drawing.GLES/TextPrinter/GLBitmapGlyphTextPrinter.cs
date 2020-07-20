@@ -842,9 +842,7 @@ namespace PixelFarm.DrawingGL
         static int _dbugCount;
 #endif
 
-        ArrayList<float> _sh_vertexList = new ArrayList<float>();
-        ArrayList<ushort> _sh_indexList = new ArrayList<ushort>();
-
+      
         void CreateTextCoords(SameFontTextStrip txtStrip, FormattedGlyphPlanList seqs)
         {
             int top = 0;//simulate top
@@ -993,6 +991,9 @@ namespace PixelFarm.DrawingGL
             }
         }
 
+        internal ArrayList<float> _sh_vertexList;
+        internal ArrayList<ushort> _sh_indexList;
+
         public void PrepareStringForRenderVx(GLRenderVxFormattedString vxFmtStr, char[] buffer, int startAt, int len)
         {
             //we need to parse string 
@@ -1046,13 +1047,13 @@ namespace PixelFarm.DrawingGL
 
 
             //use pool?
-            _sh_indexList = new ArrayList<ushort>();
-            _sh_vertexList = new ArrayList<float>();
+            _sh_indexList = vxFmtStr._sh_indexList;
+            _sh_vertexList = vxFmtStr._sh_vertexList; 
 
-            foreach (var kv in _uniqueResolvedFonts)
+            foreach (SpanFormattedInfo spFmt in _uniqueResolvedFonts.Keys)
             {
                 //once for each typeface***
-                SpanFormattedInfo spFmt = kv.Key;
+                //SpanFormattedInfo spFmt = kv.Key;
 
 #if DEBUG
                 if (spFmt.resolvedFont == null) { throw new NotSupportedException(); }

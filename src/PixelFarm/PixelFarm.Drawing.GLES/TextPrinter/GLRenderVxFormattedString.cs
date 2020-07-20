@@ -22,6 +22,9 @@ namespace PixelFarm.DrawingGL
     public class GLRenderVxFormattedString : PixelFarm.Drawing.RenderVxFormattedString
     {
         List<SameFontTextStrip> _strips = new List<SameFontTextStrip>();
+        internal ArrayList<float> _sh_vertexList = new ArrayList<float>();
+        internal ArrayList<ushort> _sh_indexList = new ArrayList<ushort>();
+
         internal GLRenderVxFormattedString()
         {
 
