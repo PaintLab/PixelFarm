@@ -22,8 +22,8 @@ namespace PixelFarm.DrawingGL
     public class GLRenderVxFormattedString : PixelFarm.Drawing.RenderVxFormattedString
     {
         List<SameFontTextStrip> _strips;
-        internal ArrayList<float> _sh_vertexList;
-        internal ArrayList<ushort> _sh_indexList;
+        internal ArrayList<float> _sh_vertexList; //src buffer for each SameFontTextStrip, 
+        internal ArrayList<ushort> _sh_indexList; //src buffer for each SameFontTextStrip
 
         internal GLRenderVxFormattedString()
         {
@@ -58,6 +58,7 @@ namespace PixelFarm.DrawingGL
 
             DisposeVbo();
 
+
             if (_sh_vertexList != null)
             {
                 _sh_vertexList.Clear();
@@ -70,10 +71,20 @@ namespace PixelFarm.DrawingGL
                 s_indexListPool.Push(_sh_indexList);
                 _sh_indexList = null;
             }
-            _strips?.Clear();
-            _strips = null;
-        }
 
+            if (_strips != null)
+            {
+                int j = _strips.Count;
+                for (int i = 0; i < j; ++i)
+                {
+                    SameFontTextStrip s = _strips[i];
+                    s.Reset();
+                    s_textStripPool.Push(s);
+                }
+                _strips.Clear();
+                _strips = null;
+            }
+        }
         internal void DisposeVbo()
         {
             //dispose only its vbo
@@ -155,10 +166,10 @@ namespace PixelFarm.DrawingGL
                     _strips[i].Reset();
                 }
                 _strips.Clear();
+                _strips = null;
             }
-
-
         }
+
 #if DEBUG
         public string dbugText;
         public override string ToString()
