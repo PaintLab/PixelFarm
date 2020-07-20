@@ -843,7 +843,7 @@ namespace PixelFarm.DrawingGL
 #endif
 
 
-        void CreateTextCoords(SameFontTextStrip txtStrip, FormattedGlyphPlanList seqs)
+        void CreateTextCoords(SameFontTextStrip txtStrip)
         {
             int top = 0;//simulate top
             int left = 0;//simulate left
@@ -867,7 +867,7 @@ namespace PixelFarm.DrawingGL
             int ascentd_px = (int)expected_resolvedFont.AscentInPixels;// (int)(expectedTypeface.Ascender * px_scale);
             txtStrip.DescendingInPx = descend_px;// (short)(expectedTypeface.Descender * px_scale);  //expectedFont.DescentInPixels;
 
-            int count = seqs.Count;
+            int count = _fmtGlyphPlans.Count;
             float g_left = 0;
             float g_top = 0;
 
@@ -890,7 +890,7 @@ namespace PixelFarm.DrawingGL
 
             for (int s = 0; s < count; ++s)
             {
-                FormattedGlyphPlanSeq sq = seqs[s];
+                FormattedGlyphPlanSeq sq = _fmtGlyphPlans[s];
                 bool isTargetFont = sq.ResolvedFont.Typeface == expectedTypeface;
 
                 //if this seq use another font=> just calculate entire advance with
@@ -1076,7 +1076,7 @@ namespace PixelFarm.DrawingGL
                 int sh_index_begin = _sh_indexList.Count;
                 int sh_vertex_begin = _sh_vertexList.Count;
 
-                CreateTextCoords(sameFontTextStrip, _fmtGlyphPlans);
+                CreateTextCoords(sameFontTextStrip);
                 //**
                 //use max size of height and descending ?
                 descendingInPx = sameFontTextStrip.DescendingInPx;
