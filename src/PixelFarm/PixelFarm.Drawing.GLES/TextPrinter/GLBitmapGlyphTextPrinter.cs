@@ -844,6 +844,7 @@ namespace PixelFarm.DrawingGL
 
         ArrayList<float> _sh_vertexList = new ArrayList<float>();
         ArrayList<ushort> _sh_indexList = new ArrayList<ushort>();
+
         void CreateTextCoords(SameFontTextStrip txtStrip, FormattedGlyphPlanList seqs)
         {
             int top = 0;//simulate top
@@ -1040,9 +1041,14 @@ namespace PixelFarm.DrawingGL
             int descendingInPx = 0;
             int maxStripHeight = 0;
 
+
             GlyphMixModeSummary mixModeSummary = new GlyphMixModeSummary();//light-weight state helper
 
-          
+
+            //use pool?
+            _sh_indexList = new ArrayList<ushort>();
+            _sh_vertexList = new ArrayList<float>();
+
             foreach (var kv in _uniqueResolvedFonts)
             {
                 //once for each typeface***
@@ -1064,9 +1070,10 @@ namespace PixelFarm.DrawingGL
                     sameFontTextStrip.ColorGlyphOnTransparentBG =
                             (typeface.HasSvgTable() || typeface.IsBitmapFont || typeface.HasColorTable()));
 
-                //** 
-                _sh_indexList = new ArrayList<ushort>();
-                _sh_vertexList = new ArrayList<float>();
+                //**                  
+                int sh_index_begin = _sh_indexList.Count;
+                int sh_vertex_begin = _sh_vertexList.Count;
+
                 CreateTextCoords(sameFontTextStrip, _fmtGlyphPlans);
                 //**
                 //use max size of height and descending ?
@@ -1076,8 +1083,8 @@ namespace PixelFarm.DrawingGL
 
                 spanWidth = sameFontTextStrip.Width;//same width for all strip                 
 
-                sameFontTextStrip.IndexArray = _sh_indexList.CreateSpan(0, _sh_indexList.Length);
-                sameFontTextStrip.VertexCoords = _sh_vertexList.CreateSpan(0, _sh_vertexList.Length);
+                sameFontTextStrip.IndexArray = _sh_indexList.CreateSpan(sh_index_begin, _sh_indexList.Length - sh_index_begin);
+                sameFontTextStrip.VertexCoords = _sh_vertexList.CreateSpan(sh_vertex_begin, _sh_vertexList.Length - sh_vertex_begin);
             }
 
             //adjust addition vertical height

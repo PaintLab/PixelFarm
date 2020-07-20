@@ -1853,21 +1853,29 @@ namespace PixelFarm.DrawingGL
         bool _bmpYFlipped;
         RenderSurfaceOriginKind _pcxOrgKind;
 
-        internal ArrayList<float> _vertexList;
-        internal ArrayList<ushort> _indexList;
+        ArrayList<float> _vertexList;
+        ArrayList<ushort> _indexList;
+
+        int _v_startIndex;
+        int _i_startIndex;
 
         ushort _indexCount = 0;
+
         public TextureCoordVboBuilder()
         {
-
         }
-
         public void SetArrayLists(ArrayList<float> vertexList, ArrayList<ushort> indexlist)
         {
+            _v_startIndex = vertexList.Count;
+            _i_startIndex = indexlist.Count;
+
             _indexCount = 0;//***
             _vertexList = vertexList;
             _indexList = indexlist;
         }
+        public ArrayListSpan<float> CreateVertextListSpan() => new ArrayListSpan<float>(_vertexList, _v_startIndex, _vertexList.Count - _v_startIndex);
+        public ArrayListSpan<ushort> CreateIndexListSpan() => new ArrayListSpan<ushort>(_indexList, _i_startIndex, _indexList.Count - _i_startIndex);
+
         public void SetTextureInfo(int width, int height, bool isYFlipped, RenderSurfaceOriginKind pcxOrgKind)
         {
             _orgBmpW = width;

@@ -137,12 +137,12 @@ namespace PixelFarm.DrawingGL
                 throw new NotSupportedException();
             }
 
-            CpuBlit.ArrayListSpan<float>.UnsafeGetInternalArr(vertexBuffer, out int v_beginAt, out int v_len, out float[] v_arr);
-            CpuBlit.ArrayListSpan<ushort>.UnsafeGetInternalArr(indexBuffer, out int i_beginAt, out int i_len, out ushort[] i_arr);
+            CpuBlit.ArrayListSpan<float>.UnsafeGetInternalArr(vertexBuffer, out float[] v_arr);
+            CpuBlit.ArrayListSpan<ushort>.UnsafeGetInternalArr(indexBuffer, out ushort[] i_arr);
 
             if (v_arr != null)
             {
-                if (v_len == 0)
+                if (vertexBuffer.len == 0)
                 {
 
 #if DEBUG
@@ -154,15 +154,17 @@ namespace PixelFarm.DrawingGL
 #endif
                     return;
                 }
+
+
                 //1.
                 GL.GenBuffers(1, out _vertexBufferId);
                 GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferId);
                 unsafe
                 {
-                    fixed (void* vertDataPtr = &v_arr[v_beginAt])
+                    fixed (void* vertDataPtr = &v_arr[vertexBuffer.beginAt])
                     {
                         GL.BufferData(BufferTarget.ArrayBuffer,
-                         new IntPtr(v_len * 4), //size in byte
+                         new IntPtr(vertexBuffer.len * 4), //size in byte
                          new IntPtr(vertDataPtr),
                          BufferUsage.StaticDraw);   //this version we use static draw
                     }
@@ -181,10 +183,10 @@ namespace PixelFarm.DrawingGL
                 GL.BindBuffer(BufferTarget.ElementArrayBuffer, _indexBufferId);
                 unsafe
                 {
-                    fixed (void* indexDataPtr = &i_arr[i_beginAt])
+                    fixed (void* indexDataPtr = &i_arr[indexBuffer.beginAt])
                     {
                         GL.BufferData(BufferTarget.ElementArrayBuffer,
-                            new IntPtr(i_len * 2),
+                            new IntPtr(indexBuffer.len * 2),
                             new IntPtr(indexDataPtr),
                             BufferUsage.StaticDraw);   //this version we use static draw
                     }

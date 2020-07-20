@@ -1,6 +1,8 @@
 ﻿//MIT, 2016-present, WinterDev
 
 using OpenTK.Graphics.ES20;
+using System;
+
 namespace PixelFarm.DrawingGL
 {
     abstract class SimpleRectTextureShader : ColorFillShaderBase
@@ -119,8 +121,9 @@ namespace PixelFarm.DrawingGL
 
         public void DrawWithVBO(TextureCoordVboBuilder vboBuilder)
         {
-            float[] vboList = vboBuilder._vertexList.UnsafeInternalArray;
-            ushort[] indexList = vboBuilder._indexList.UnsafeInternalArray;
+
+            CpuBlit.ArrayListSpan<float> vertexListSpan = vboBuilder.CreateVertextListSpan();
+            CpuBlit.ArrayListSpan<ushort> indexListSpan = vboBuilder.CreateIndexListSpan();
 
             SetCurrent();
             CheckViewMatrix();
@@ -128,13 +131,20 @@ namespace PixelFarm.DrawingGL
             //-------------------------------------------------------------------------------------       
             unsafe
             {
-                fixed (float* imgVertices = &vboList[0])
+                CpuBlit.ArrayListSpan<float>.UnsafeGetInternalArr(vertexListSpan, out float[] vertexArr);
+                CpuBlit.ArrayListSpan<ushort>.UnsafeGetInternalArr(indexListSpan, out ushort[] indexArr);
+
+                fixed (float* imgVertices = &vertexArr[vertexListSpan.beginAt])
                 {
                     a_position.UnsafeLoadMixedV3f(imgVertices, 5);
                     a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
                 }
+                fixed (ushort* indexVertices = &indexArr[indexListSpan.beginAt])
+                {
+                    GL.DrawElements(PrimitiveType.TriangleStrip, indexListSpan.len, DrawElementsType.UnsignedShort, (IntPtr)indexVertices);
+                }
             }
-            GL.DrawElements(BeginMode.TriangleStrip, vboBuilder._indexList.Count, DrawElementsType.UnsignedShort, indexList);
+
         }
 
         public void Render(GLBitmap bmp, float left, float top, float w, float h)
@@ -1032,11 +1042,14 @@ namespace PixelFarm.DrawingGL
         /// <param name="indexList"></param>
         public void DrawSubImages(GLBitmap glBmp, TextureCoordVboBuilder vboBuilder)
         {
-            if (vboBuilder._vertexList.Length == 0) { return; }
+            CpuBlit.ArrayListSpan<float> vertextListSpan = vboBuilder.CreateVertextListSpan();
+
+            if (vertextListSpan.Count == 0) { return; }
+
+            CpuBlit.ArrayListSpan<ushort> indexListSpan = vboBuilder.CreateIndexListSpan();
 
             SetCurrent();
             CheckViewMatrix();
-
             LoadGLBitmap(glBmp);
 
             if (_hasSomeOffset)
@@ -1047,40 +1060,45 @@ namespace PixelFarm.DrawingGL
             // ------------------------------------------------------------------------------------- 
             unsafe
             {
-                float[] vboList = vboBuilder._vertexList.UnsafeInternalArray; //***
-                fixed (float* imgVertices = &vboList[0])
+                CpuBlit.ArrayListSpan<float>.UnsafeGetInternalArr(vertextListSpan, out float[] v_arr);
+                CpuBlit.ArrayListSpan<ushort>.UnsafeGetInternalArr(indexListSpan, out ushort[] i_arr);
+
+                fixed (float* imgVertices = &v_arr[vertextListSpan.beginAt])
                 {
                     a_position.UnsafeLoadMixedV3f(imgVertices, 5);
                     a_texCoord.UnsafeLoadMixedV2f(imgVertices + 3, 5);
                 }
-            }
 
-            //SHARED ARRAY 
-            ushort[] indexList = vboBuilder._indexList.UnsafeInternalArray; //***
-            int count1 = vboBuilder._indexList.Count; //***
 
+                //SHARED ARRAY  
 #if DEBUG
-            System.Diagnostics.Debug.WriteLine("lcd3steps:");
+                System.Diagnostics.Debug.WriteLine("lcd3steps:");
 #endif
 
-            //version 1
-            //0. B , yellow  result
-            GL.ColorMask(false, false, true, false);
-            SetCompo(ColorCompo.C0);
-            GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, indexList);
+                fixed (ushort* indexArrPtr = &i_arr[indexListSpan.beginAt])
+                {
+                    //version 1
+                    //0. B , yellow  result
+                    GL.ColorMask(false, false, true, false);
+                    SetCompo(ColorCompo.C0);
 
-            //1. G , magenta result
-            GL.ColorMask(false, true, false, false);
-            SetCompo(ColorCompo.C1);
-            GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, indexList);
+                    GL.DrawElements(PrimitiveType.TriangleStrip, indexListSpan.len, DrawElementsType.UnsignedShort, (IntPtr)indexArrPtr);
 
-            //2. R , cyan result 
-            GL.ColorMask(true, false, false, false);//     
-            SetCompo(ColorCompo.C2);
-            GL.DrawElements(BeginMode.TriangleStrip, count1, DrawElementsType.UnsignedShort, indexList);
+                    //1. G , magenta result
+                    GL.ColorMask(false, true, false, false);
+                    SetCompo(ColorCompo.C1);
+                    GL.DrawElements(PrimitiveType.TriangleStrip, indexListSpan.len, DrawElementsType.UnsignedShort, (IntPtr)indexArrPtr);
 
-            //restore
-            GL.ColorMask(true, true, true, true);
+                    //2. R , cyan result 
+                    GL.ColorMask(true, false, false, false);//     
+                    SetCompo(ColorCompo.C2);
+                    GL.DrawElements(PrimitiveType.TriangleStrip, indexListSpan.len, DrawElementsType.UnsignedShort, (IntPtr)indexArrPtr);
+
+                    //restore
+                    GL.ColorMask(true, true, true, true);
+                }
+
+            }
         }
 
         public void DrawSubImage(float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)

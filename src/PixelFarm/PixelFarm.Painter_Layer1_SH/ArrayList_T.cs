@@ -24,9 +24,9 @@ namespace PixelFarm.CpuBlit
     public readonly struct ArrayListSpan<T>
     {
         internal readonly ArrayList<T> _arrList;
-        internal readonly int beginAt;
-        internal readonly int len;
-        internal ArrayListSpan(ArrayList<T> arrList, int beginAt, int len)
+        public readonly int beginAt;
+        public readonly int len;
+        public ArrayListSpan(ArrayList<T> arrList, int beginAt, int len)
         {
             this._arrList = arrList;
             this.beginAt = beginAt;
@@ -35,16 +35,17 @@ namespace PixelFarm.CpuBlit
 
         public int Count => len;
 
-        public static void UnsafeGetInternalArr(ArrayListSpan<T> listSpan, out int beginAt, out int len, out T[] internalArr)
-        {
-            beginAt = listSpan.beginAt;
-            len = listSpan.len;
+        public static void UnsafeGetInternalArr(in ArrayListSpan<T> listSpan, out T[] internalArr)
+        { 
             internalArr = listSpan._arrList.UnsafeInternalArray;
         }
-
-
+#if DEBUG
+        public override string ToString()
+        {
+            return beginAt + "," + len;
+        }
+#endif
     }
-
 
     public sealed class ArrayList<T>
     {
