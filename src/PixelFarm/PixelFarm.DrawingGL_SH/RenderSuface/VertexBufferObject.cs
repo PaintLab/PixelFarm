@@ -6,7 +6,7 @@
 using System;
 using System.Collections.Generic;
 using OpenTK.Graphics.ES20;
-using Tesselate;
+
 
 namespace PixelFarm.DrawingGL
 {
