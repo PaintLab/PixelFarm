@@ -25,12 +25,12 @@ namespace LayoutFarm.TextEditing
 
         int[] _outputUserCharAdvances = null;//TODO: review here-> change this to caret stop position
         bool _content_unparsed;
-        TextPrinterLineSegmentList<TextPrinterLineSegment> _lineSegs;
+        LineSegmentList<LineSegment> _lineSegs;
         RenderVxFormattedString _renderVxFormattedString;
 
 
         [ThreadStatic]
-        static TextPrinterWordVisitor s_wordVistor;
+        static LayoutWordVisitor s_wordVistor;
 
 
         public TextRun(RunStyle runstyle, char[] copyBuffer)
@@ -133,12 +133,12 @@ namespace LayoutFarm.TextEditing
             if (_content_unparsed)
             {
                 //parse the content first 
-                if (_lineSegs == null) { _lineSegs = new TextPrinterLineSegmentList<TextPrinterLineSegment>(); }
+                if (_lineSegs == null) { _lineSegs = new LineSegmentList<LineSegment>(); }
                 _lineSegs.Clear();
                 //
                 if (s_wordVistor == null)
                 {
-                    s_wordVistor = new TextPrinterWordVisitor();
+                    s_wordVistor = new LayoutWordVisitor();
                 }
 
                 s_wordVistor.SetLineSegmentList(_lineSegs);

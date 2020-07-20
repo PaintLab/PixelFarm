@@ -428,8 +428,8 @@ namespace LayoutFarm.TextEditing
         }
 
 
-        readonly TextPrinterWordVisitor _wordVisitor = new TextPrinterWordVisitor();
-        readonly TextPrinterLineSegmentList<TextPrinterLineSegment> _lineSegs = new TextPrinterLineSegmentList<TextPrinterLineSegment>();
+        readonly LayoutWordVisitor _wordVisitor = new LayoutWordVisitor();
+        readonly LineSegmentList<LineSegment> _lineSegs = new LineSegmentList<LineSegment>();
 
         public void FindCurrentHitWord(out int startAt, out int len)
         {
@@ -456,7 +456,7 @@ namespace LayoutFarm.TextEditing
                 int segcount = _lineSegs.Count;
                 for (int i = 0; i < segcount; ++i)
                 {
-                    TextPrinterLineSegment seg = _lineSegs.GetLineSegment(i);
+                    LineSegment seg = _lineSegs.GetLineSegment(i);
                     if (seg.StartAt + seg.Length >= caret_char_index)
                     {
                         //stop at this segment

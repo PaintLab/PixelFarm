@@ -233,10 +233,14 @@ namespace LayoutFarm.TextEditing
             }
 
             int charCount = 0;
-            foreach (Run r in _runs)
+
+            var linkNode = _runs.First;
+            while (linkNode != null)
             {
-                charCount += r.CharacterCount;
+                charCount += linkNode.Value.CharacterCount;
+                linkNode = linkNode.Next;
             }
+
 
             _validCharCount = true;
             return _cacheCharCount = charCount;
@@ -244,10 +248,13 @@ namespace LayoutFarm.TextEditing
         }
         public IEnumerable<Run> GetRunIter()
         {
-            foreach (Run r in _runs)
+            var linkNode = _runs.First;
+            while (linkNode != null)
             {
-                yield return r;
+                yield return linkNode.Value;
+                linkNode = linkNode.Next;
             }
+             
         }
 
         //

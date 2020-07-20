@@ -363,8 +363,8 @@ namespace LayoutFarm.TextEditing
         }
 
         //use pool?
-        readonly TextPrinterWordVisitor _wordVisitor = new TextPrinterWordVisitor();
-        readonly TextPrinterLineSegmentList<TextPrinterLineSegment> _lineSegs = new TextPrinterLineSegmentList<TextPrinterLineSegment>();
+        readonly LayoutWordVisitor _wordVisitor = new LayoutWordVisitor();
+        readonly LineSegmentList<LineSegment> _lineSegs = new LineSegmentList<LineSegment>();
 
         Size MeasureCopyRunLength(CopyRun copyRun)
         {
