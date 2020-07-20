@@ -119,7 +119,7 @@ namespace PixelFarm.DrawingGL
 
         public void DrawWithVBO(TextureCoordVboBuilder vboBuilder)
         {
-            float[] vboList = vboBuilder._buffer.UnsafeInternalArray;
+            float[] vboList = vboBuilder._vertexList.UnsafeInternalArray;
             ushort[] indexList = vboBuilder._indexList.UnsafeInternalArray;
 
             SetCurrent();
@@ -1032,7 +1032,7 @@ namespace PixelFarm.DrawingGL
         /// <param name="indexList"></param>
         public void DrawSubImages(GLBitmap glBmp, TextureCoordVboBuilder vboBuilder)
         {
-            if (vboBuilder._buffer.Length == 0) { return; }
+            if (vboBuilder._vertexList.Length == 0) { return; }
 
             SetCurrent();
             CheckViewMatrix();
@@ -1047,7 +1047,7 @@ namespace PixelFarm.DrawingGL
             // ------------------------------------------------------------------------------------- 
             unsafe
             {
-                float[] vboList = vboBuilder._buffer.UnsafeInternalArray; //***
+                float[] vboList = vboBuilder._vertexList.UnsafeInternalArray; //***
                 fixed (float* imgVertices = &vboList[0])
                 {
                     a_position.UnsafeLoadMixedV3f(imgVertices, 5);

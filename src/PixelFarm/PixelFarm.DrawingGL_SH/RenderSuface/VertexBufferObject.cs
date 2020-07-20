@@ -50,29 +50,23 @@ namespace PixelFarm.DrawingGL
         static int dbugTotalId = 0;
 #endif
 
-        //public VertexBufferObject CreateClone()
-        //{
-        //    VertexBufferObject newclone = new VertexBufferObject();
-        //    newclone.CreateBuffers(_vertextBuffer, _indexBuffer);
-        //    return newclone;
-        //}
-        //float[] _vertextBuffer;
-        //ushort[] _indexBuffer;
         /// <summary>
-        /// set up vertex data, we don't store the vertex array,or index array here
+        /// we copy data from array to mem, we don't store the vertex array,or index array here
         /// </summary>
-        public void CreateBuffers(float[] vertextBuffer, ushort[] indexBuffer)
+        /// <param name="vertexBuffer"></param>
+        /// <param name="vertexBufferLen"></param>
+        /// <param name="indexBuffer"></param>
+        /// <param name="indexBufferLen"></param>
+        public void CreateBuffers(float[] vertexBuffer, int vertexBufferLen, ushort[] indexBuffer, int indexBufferLen)
         {
             if (_hasData)
             {
                 throw new NotSupportedException();
             }
-            //_vertextBuffer = vertextBuffer;
-            //_indexBuffer = indexBuffer;
-            //
-            if (vertextBuffer != null)
+
+            if (vertexBuffer != null)
             {
-                if (vertextBuffer.Length == 0)
+                if (vertexBuffer.Length == 0)
                 {
 
 #if DEBUG
@@ -89,10 +83,10 @@ namespace PixelFarm.DrawingGL
                 GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferId);
                 unsafe
                 {
-                    fixed (void* vertDataPtr = &vertextBuffer[0])
+                    fixed (void* vertDataPtr = &vertexBuffer[0])
                     {
                         GL.BufferData(BufferTarget.ArrayBuffer,
-                         new IntPtr(vertextBuffer.Length * 4), //size in byte
+                         new IntPtr(vertexBufferLen * 4), //size in byte
                          new IntPtr(vertDataPtr),
                          BufferUsage.StaticDraw);   //this version we use static draw
                     }
@@ -115,7 +109,7 @@ namespace PixelFarm.DrawingGL
                     fixed (void* indexDataPtr = &indexBuffer[0])
                     {
                         GL.BufferData(BufferTarget.ElementArrayBuffer,
-                            new IntPtr(indexBuffer.Length * 2),
+                            new IntPtr(indexBufferLen * 2),
                             new IntPtr(indexDataPtr),
                             BufferUsage.StaticDraw);   //this version we use static draw
                     }
@@ -126,6 +120,83 @@ namespace PixelFarm.DrawingGL
 
             _hasData = true;
         }
+        /// <summary>
+        /// set up vertex data, we don't store the vertex array,or index array here
+        /// </summary>
+        public void CreateBuffers(float[] vertexBuffer, ushort[] indexBuffer)
+        {
+            CreateBuffers(
+                   vertexBuffer, (vertexBuffer != null) ? vertexBuffer.Length : 0,
+                   indexBuffer, (indexBuffer != null) ? indexBuffer.Length : 0);
+        }
+
+        internal void CreateBuffers(CpuBlit.ArrayListSpan<float> vertexBuffer, CpuBlit.ArrayListSpan<ushort> indexBuffer)
+        {
+            if (_hasData)
+            {
+                throw new NotSupportedException();
+            }
+
+            CpuBlit.ArrayListSpan<float>.UnsafeGetInternalArr(vertexBuffer, out int v_beginAt, out int v_len, out float[] v_arr);
+            CpuBlit.ArrayListSpan<ushort>.UnsafeGetInternalArr(indexBuffer, out int i_beginAt, out int i_len, out ushort[] i_arr);
+
+            if (v_arr != null)
+            {
+                if (v_len == 0)
+                {
+
+#if DEBUG
+                    //this can occur,
+                    //eg. when no glyph data 
+                    //
+                    //System.Diagnostics.Debugger.Break();
+                    //System.Diagnostics.Debug.WriteLine("create_buffers?");
+#endif
+                    return;
+                }
+                //1.
+                GL.GenBuffers(1, out _vertexBufferId);
+                GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferId);
+                unsafe
+                {
+                    fixed (void* vertDataPtr = &v_arr[v_beginAt])
+                    {
+                        GL.BufferData(BufferTarget.ArrayBuffer,
+                         new IntPtr(v_len * 4), //size in byte
+                         new IntPtr(vertDataPtr),
+                         BufferUsage.StaticDraw);   //this version we use static draw
+                    }
+                }
+                // IMPORTANT: Unbind from the buffer when we're done with it.
+                GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine("vbo_create=" + _vertexBufferId);
+#endif
+            }
+            //----
+            //2.
+            if (i_arr != null)
+            {
+                GL.GenBuffers(1, out _indexBufferId);
+                GL.BindBuffer(BufferTarget.ElementArrayBuffer, _indexBufferId);
+                unsafe
+                {
+                    fixed (void* indexDataPtr = &i_arr[i_beginAt])
+                    {
+                        GL.BufferData(BufferTarget.ElementArrayBuffer,
+                            new IntPtr(i_len * 2),
+                            new IntPtr(indexDataPtr),
+                            BufferUsage.StaticDraw);   //this version we use static draw
+                    }
+                }
+                // IMPORTANT: Unbind from the buffer when we're done with it.
+                GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
+            }
+
+            _hasData = true;
+        }
+
+
         public void Dispose()
         {
             Clear();

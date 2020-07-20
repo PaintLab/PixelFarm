@@ -18,8 +18,34 @@
 //          http://www.antigrain.com
 //---------------------------------------------------------------------------- 
 
+
 namespace PixelFarm.CpuBlit
 {
+    public readonly struct ArrayListSpan<T>
+    {
+        internal readonly ArrayList<T> _arrList;
+        internal readonly int beginAt;
+        internal readonly int len;
+        internal ArrayListSpan(ArrayList<T> arrList, int beginAt, int len)
+        {
+            this._arrList = arrList;
+            this.beginAt = beginAt;
+            this.len = len;
+        }
+
+        public int Count => len;
+
+        public static void UnsafeGetInternalArr(ArrayListSpan<T> listSpan, out int beginAt, out int len, out T[] internalArr)
+        {
+            beginAt = listSpan.beginAt;
+            len = listSpan.len;
+            internalArr = listSpan._arrList.UnsafeInternalArray;
+        }
+
+
+    }
+
+
     public sealed class ArrayList<T>
     {
         int _currentSize;
@@ -175,5 +201,8 @@ namespace PixelFarm.CpuBlit
         }
         //
         public int Length => _currentSize;
+
+        //
+        public ArrayListSpan<T> CreateSpan(int beginAt, int len) => new ArrayListSpan<T>(this, beginAt, len);
     }
 }

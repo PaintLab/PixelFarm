@@ -1851,15 +1851,20 @@ namespace PixelFarm.DrawingGL
         int _orgBmpW;
         int _orgBmpH;
         bool _bmpYFlipped;
-
         RenderSurfaceOriginKind _pcxOrgKind;
 
-        internal PixelFarm.CpuBlit.ArrayList<float> _buffer = new CpuBlit.ArrayList<float>();
-        internal PixelFarm.CpuBlit.ArrayList<ushort> _indexList = new CpuBlit.ArrayList<ushort>();
+        internal ArrayList<float> _vertexList;
+        internal ArrayList<ushort> _indexList;
 
         public TextureCoordVboBuilder()
         {
 
+        }
+
+        public void SetArrayLists(ArrayList<float> vertexList, ArrayList<ushort> indexlist)
+        {
+            _vertexList = vertexList;
+            _indexList = indexlist;
         }
         public void SetTextureInfo(int width, int height, bool isYFlipped, RenderSurfaceOriginKind pcxOrgKind)
         {
@@ -1868,11 +1873,7 @@ namespace PixelFarm.DrawingGL
             _bmpYFlipped = isYFlipped;
             _pcxOrgKind = pcxOrgKind;
         }
-        public void Clear()
-        {
-            _buffer.Clear();
-            _indexList.Clear();
-        }
+
 
         public void WriteRect(
             in PixelFarm.Drawing.Rectangle srcRect,
@@ -1903,15 +1904,15 @@ namespace PixelFarm.DrawingGL
             {
 
                 //add degenerative triangle
-                int buff_count = _buffer.Count;
-                float prev_5 = _buffer[buff_count - 5];
-                float prev_4 = _buffer[buff_count - 4];
-                float prev_3 = _buffer[buff_count - 3];
-                float prev_2 = _buffer[buff_count - 2];
-                float prev_1 = _buffer[buff_count - 1];
+                int buff_count = _vertexList.Count;
+                float prev_5 = _vertexList[buff_count - 5];
+                float prev_4 = _vertexList[buff_count - 4];
+                float prev_3 = _vertexList[buff_count - 3];
+                float prev_2 = _vertexList[buff_count - 2];
+                float prev_1 = _vertexList[buff_count - 1];
 
-                _buffer.Append(prev_5); _buffer.Append(prev_4); _buffer.Append(prev_3);
-                _buffer.Append(prev_2); _buffer.Append(prev_1);
+                _vertexList.Append(prev_5); _vertexList.Append(prev_4); _vertexList.Append(prev_3);
+                _vertexList.Append(prev_2); _vertexList.Append(prev_1);
 
 
                 _indexList.Append((ushort)(indexCount));
@@ -1923,7 +1924,7 @@ namespace PixelFarm.DrawingGL
             //---------
             RectangleF normalizedSrc = srcRect.CreateNormalizedRect(_orgBmpW, _orgBmpH);
             RectangleF target = new RectangleF(targetLeft, targetTop, srcRect.Width, srcRect.Height);
-            WriteToVboStream(_buffer, indexCount > 0,
+            WriteToVboStream(_vertexList, indexCount > 0,
                 normalizedSrc,
                 target,
                 _bmpYFlipped);
@@ -1965,15 +1966,15 @@ namespace PixelFarm.DrawingGL
             {
 
                 //add degenerative triangle
-                int buff_count = _buffer.Count;
-                float prev_5 = _buffer[buff_count - 5];
-                float prev_4 = _buffer[buff_count - 4];
-                float prev_3 = _buffer[buff_count - 3];
-                float prev_2 = _buffer[buff_count - 2];
-                float prev_1 = _buffer[buff_count - 1];
+                int buff_count = _vertexList.Count;
+                float prev_5 = _vertexList[buff_count - 5];
+                float prev_4 = _vertexList[buff_count - 4];
+                float prev_3 = _vertexList[buff_count - 3];
+                float prev_2 = _vertexList[buff_count - 2];
+                float prev_1 = _vertexList[buff_count - 1];
 
-                _buffer.Append(prev_5); _buffer.Append(prev_4); _buffer.Append(prev_3);
-                _buffer.Append(prev_2); _buffer.Append(prev_1);
+                _vertexList.Append(prev_5); _vertexList.Append(prev_4); _vertexList.Append(prev_3);
+                _vertexList.Append(prev_2); _vertexList.Append(prev_1);
 
 
                 _indexList.Append((ushort)(indexCount));
@@ -1996,7 +1997,7 @@ namespace PixelFarm.DrawingGL
 
             RectangleF normalizedSrcRect = srcRect.CreateNormalizedRect(_orgBmpW, _orgBmpH);
 
-            WriteToVboStream(_buffer,
+            WriteToVboStream(_vertexList,
                  indexCount > 0,
                  normalizedSrcRect,
                  quad,
@@ -2017,15 +2018,15 @@ namespace PixelFarm.DrawingGL
             {
 
                 //add degenerative triangle
-                int buff_count = _buffer.Count;
-                float prev_5 = _buffer[buff_count - 5];
-                float prev_4 = _buffer[buff_count - 4];
-                float prev_3 = _buffer[buff_count - 3];
-                float prev_2 = _buffer[buff_count - 2];
-                float prev_1 = _buffer[buff_count - 1];
+                int buff_count = _vertexList.Count;
+                float prev_5 = _vertexList[buff_count - 5];
+                float prev_4 = _vertexList[buff_count - 4];
+                float prev_3 = _vertexList[buff_count - 3];
+                float prev_2 = _vertexList[buff_count - 2];
+                float prev_1 = _vertexList[buff_count - 1];
 
-                _buffer.Append(prev_5); _buffer.Append(prev_4); _buffer.Append(prev_3);
-                _buffer.Append(prev_2); _buffer.Append(prev_1);
+                _vertexList.Append(prev_5); _vertexList.Append(prev_4); _vertexList.Append(prev_3);
+                _vertexList.Append(prev_2); _vertexList.Append(prev_1);
                 _indexList.Append((ushort)(indexCount));
                 _indexList.Append((ushort)(indexCount + 1));
             }

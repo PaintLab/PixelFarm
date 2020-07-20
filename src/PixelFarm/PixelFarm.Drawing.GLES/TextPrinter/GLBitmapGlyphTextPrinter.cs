@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-
+using OpenTK.Platform.Egl;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.BitmapAtlas;
 using PixelFarm.Drawing;
@@ -183,10 +183,15 @@ namespace PixelFarm.DrawingGL
 
         public void ChangeFont(ResolvedFont font, int startCodepoint, int endCodepoint)
         {
-            if (_resolvedFont != null && font != null && GlobalTextService.TxtClient.Eq(_resolvedFont, font))
+            if (_resolvedFont == font ||
+               (_resolvedFont != null && font != null && _resolvedFont.RuntimeResolvedKey == font.RuntimeResolvedKey))
             {
                 return;
             }
+            //if (_resolvedFont != null && font != null && GlobalTextService.TxtClient.Eq(_resolvedFont, font))
+            //{
+            //    return;
+            //}
 #if DEBUG
             //if (font.Name.ToLower().Contains("emoji"))
             //{
@@ -289,6 +294,8 @@ namespace PixelFarm.DrawingGL
         public PixelFarm.Drawing.TextBaseline TextBaseline { get; set; }
 
 #if DEBUG
+        readonly ArrayList<float> _dbugVertexList = new ArrayList<float>();
+        readonly ArrayList<ushort> _dbugIndexList = new ArrayList<ushort>();
         void dbugInnerDrawI18NStringNO_WordPlate(char[] buffer, int startAt, int len, double left, double top)
         {
             //input string may not be only Eng+ Num
@@ -310,7 +317,9 @@ namespace PixelFarm.DrawingGL
             GlyphPlanSequence glyphPlanSeq = _txtClient.CreateGlyphPlanSeq(textBufferSpan, _resolvedFont);
             //-----------------
 
-            _vboBuilder.Clear();
+            _dbugVertexList.Clear();
+            _dbugIndexList.Clear();
+            _vboBuilder.SetArrayLists(_dbugVertexList, _dbugIndexList);
             _vboBuilder.SetTextureInfo(_glBmp.Width, _glBmp.Height, _glBmp.IsYFlipped, _pcx.OriginKind);
 
             //ask text service to parse user input char buffer and create a glyph-plan-sequence (list of glyph-plan) 
@@ -500,7 +509,7 @@ namespace PixelFarm.DrawingGL
                         break;
                 }
 
-                _vboBuilder.Clear();
+
             }
         }
 #endif
@@ -509,11 +518,11 @@ namespace PixelFarm.DrawingGL
         public void DrawString(char[] buffer, int startAt, int len, double left, double top)
         {
             //for internal use
-            _reusableFmtString.Reuse(); //use sure
+            _reusableFmtString.ClearData();
             PrepareStringForRenderVx(_reusableFmtString, buffer, startAt, len);
             DrawString(_reusableFmtString, left, top);
 
-            _reusableFmtString.Reuse(); //clear data
+            _reusableFmtString.ClearData();
         }
 
         public bool WordPlateCreatingMode { get; set; }
@@ -552,14 +561,14 @@ namespace PixelFarm.DrawingGL
                     case GLRenderVxFormattedStringGlyphMixMode.OnlyColorGlyphs:
                         {
                             //all glyph are color
-                            List<SameFontTextStrip> strips = vxFmtStr._strips;
-                            int j = strips.Count;
+
+                            int j = vxFmtStr.StripCount;
                             float start_x = (float)Math.Round(x);
                             float start_y = (float)Math.Floor(y + base_offset);
 
                             for (int n = 0; n < j; ++n)
                             {
-                                SameFontTextStrip s = strips[n];
+                                SameFontTextStrip s = vxFmtStr[n];
 
                                 //change font, bitmap atlas , px_scale
 
@@ -579,8 +588,8 @@ namespace PixelFarm.DrawingGL
                         {
                             //in this mode =>don't draw color bitmap
 
-                            List<SameFontTextStrip> strips = vxFmtStr._strips;
-                            int j = strips.Count;
+
+                            int j = vxFmtStr.StripCount;
                             float start_x = (float)Math.Round(x);
                             float start_y = (float)Math.Floor(y + base_offset);
 
@@ -590,7 +599,7 @@ namespace PixelFarm.DrawingGL
                                     {
                                         for (int n = 0; n < j; ++n)
                                         {
-                                            SameFontTextStrip s = strips[n];
+                                            SameFontTextStrip s = vxFmtStr[n];
                                             if (s.ColorGlyphOnTransparentBG)
                                             {
                                                 continue;
@@ -611,7 +620,7 @@ namespace PixelFarm.DrawingGL
                                     {
                                         for (int n = 0; n < j; ++n)
                                         {
-                                            SameFontTextStrip s = strips[n];
+                                            SameFontTextStrip s = vxFmtStr[n];
 
                                             if (s.ColorGlyphOnTransparentBG)
                                             {
@@ -657,14 +666,14 @@ namespace PixelFarm.DrawingGL
                 {
                     //BUT if it not success => then...
 
-                    List<SameFontTextStrip> strips = vxFmtStr._strips;
-                    int j = strips.Count;
+
+                    int j = vxFmtStr.StripCount;
                     float start_x = (float)Math.Round(x);
                     float start_y = (float)Math.Floor(y + base_offset);
 
                     for (int n = 0; n < j; ++n)
                     {
-                        SameFontTextStrip s = strips[n];
+                        SameFontTextStrip s = vxFmtStr[n];
                         //change font, bitmap atlas , px_scale
                         ChangeFont(s);
 
@@ -711,14 +720,14 @@ namespace PixelFarm.DrawingGL
                                 //not use wordplate
                                 if (_painter.PreparingWordStrip)
                                 {
-                                    List<SameFontTextStrip> strips = vxFmtStr._strips;
-                                    int j = strips.Count;
+
+                                    int j = vxFmtStr.StripCount;
                                     float start_x = (float)Math.Round(x);
                                     float start_y = (float)Math.Floor(y + base_offset);
 
                                     for (int n = 0; n < j; ++n)
                                     {
-                                        SameFontTextStrip s = strips[n];
+                                        SameFontTextStrip s = vxFmtStr[n];
 
                                         //change font, bitmap atlas , px_scale
                                         ChangeFont(s);
@@ -733,8 +742,8 @@ namespace PixelFarm.DrawingGL
                                 }
                                 else
                                 {
-                                    List<SameFontTextStrip> strips = vxFmtStr._strips;
-                                    int j = strips.Count;
+
+                                    int j = vxFmtStr.StripCount;
                                     float start_x = (float)Math.Round(x);
                                     float start_y = (float)Math.Floor(y + base_offset);
                                     float spanHeight = 0;
@@ -742,7 +751,7 @@ namespace PixelFarm.DrawingGL
 
                                     for (int n = 0; n < j; ++n)
                                     {
-                                        SameFontTextStrip s = strips[n];
+                                        SameFontTextStrip s = vxFmtStr[n];
                                         spanHeight = s.SpanHeight;
                                         spanWidth += s.Width;
 
@@ -776,14 +785,14 @@ namespace PixelFarm.DrawingGL
                             {
                                 //can't create at this time
                                 //render with vbo 
-                                List<SameFontTextStrip> strips = vxFmtStr._strips;
-                                int j = strips.Count;
+
+                                int j = vxFmtStr.StripCount;
                                 float start_x = (float)Math.Round(x);
                                 float start_y = (float)Math.Floor(y + base_offset);
 
                                 for (int n = 0; n < j; ++n)
                                 {
-                                    SameFontTextStrip s = strips[n];
+                                    SameFontTextStrip s = vxFmtStr[n];
 
                                     //change font, bitmap atlas , px_scale
                                     ChangeFont(s);
@@ -804,14 +813,14 @@ namespace PixelFarm.DrawingGL
                 if (vxFmtStr.GlyphMixMode == GLRenderVxFormattedStringGlyphMixMode.MixedStencilAndColorGlyphs)
                 {
                     ////draw color pat
-                    List<SameFontTextStrip> strips = vxFmtStr._strips;
-                    int j = strips.Count;
+
+                    int j = vxFmtStr.StripCount;
                     float start_x = (float)Math.Round(x);
                     float start_y = (float)Math.Floor(y + base_offset);
 
                     for (int n = 0; n < j; ++n)
                     {
-                        SameFontTextStrip s = strips[n];
+                        SameFontTextStrip s = vxFmtStr[n];
                         if (s.ColorGlyphOnTransparentBG)
                         {
                             //change font, bitmap atlas , px_scale
@@ -833,7 +842,8 @@ namespace PixelFarm.DrawingGL
         static int _dbugCount;
 #endif
 
-
+        ArrayList<float> _sh_vertexList = new ArrayList<float>();
+        ArrayList<ushort> _sh_indexList = new ArrayList<ushort>();
         void CreateTextCoords(SameFontTextStrip txtStrip, FormattedGlyphPlanList seqs)
         {
             int top = 0;//simulate top
@@ -876,7 +886,7 @@ namespace PixelFarm.DrawingGL
             //we will create a txtstrip for an expected font only
             //for another font, just skip and wait
 
-            _vboBuilder.Clear();//***
+            _vboBuilder.SetArrayLists(_sh_vertexList, _sh_indexList); //set output***
             _vboBuilder.SetTextureInfo(_glBmp.Width, _glBmp.Height, _glBmp.IsYFlipped, _pcx.OriginKind);
 
             for (int s = 0; s < count; ++s)
@@ -886,7 +896,6 @@ namespace PixelFarm.DrawingGL
 
                 //if this seq use another font=> just calculate entire advance with
                 ChangeFont(sq);
-
 
                 px_scale = _px_scale; //init
                 //use current resolve font
@@ -962,25 +971,18 @@ namespace PixelFarm.DrawingGL
             if (hasSomeGlyphs)
             {
                 _vboBuilder.AppendDegenerativeTriangle();
-
-                txtStrip.IndexArrayCount = _vboBuilder._indexList.Count;
-                txtStrip.IndexArray = _vboBuilder._indexList.ToArray();
-                txtStrip.VertexCoords = _vboBuilder._buffer.ToArray();
-
             }
 
             txtStrip.Width = acc_x;
-
-            _vboBuilder.Clear();
         }
 
 
-
         readonly FormattedGlyphPlanList _fmtGlyphPlans = new FormattedGlyphPlanList();
-        readonly Dictionary<SpanFormattedInfo, SpanFormattedInfo> _uniqueResolvedFonts = new Dictionary<SpanFormattedInfo, SpanFormattedInfo>();
+        readonly Dictionary<SpanFormattedInfo, bool> _uniqueResolvedFonts = new Dictionary<SpanFormattedInfo, bool>();
 
         readonly struct SpanFormattedInfo
         {
+            //just intermediate structure
             public readonly ResolvedFont resolvedFont;
             public readonly SpanBreakInfo breakInfo;
             public SpanFormattedInfo(ResolvedFont resolvedFont, SpanBreakInfo breakInfo)
@@ -1022,14 +1024,14 @@ namespace PixelFarm.DrawingGL
                 SpanFormattedInfo spFmt = new SpanFormattedInfo(fmt_seq.ResolvedFont, fmt_seq.BreakInfo);
                 if (!_uniqueResolvedFonts.ContainsKey(spFmt))
                 {
-                    _uniqueResolvedFonts.Add(spFmt, spFmt);
+                    _uniqueResolvedFonts.Add(spFmt, true);
                 }
             }
 
             //a fmtGlyphPlanSeqs may contains glyph from  more than 1 font,
             //now, create a overlapped strip for each 
 #if DEBUG
-            if (vxFmtStr._strips.Count > 0) { throw new NotSupportedException(); }
+            if (vxFmtStr.StripCount > 0) { throw new NotSupportedException(); }
 #endif
 
 
@@ -1038,12 +1040,13 @@ namespace PixelFarm.DrawingGL
             int descendingInPx = 0;
             int maxStripHeight = 0;
 
-            GlyphMixModeSummary mixModeSummary = new GlyphMixModeSummary();
+            GlyphMixModeSummary mixModeSummary = new GlyphMixModeSummary();//light-weight state helper
 
+          
             foreach (var kv in _uniqueResolvedFonts)
             {
                 //once for each typeface***
-                SpanFormattedInfo spFmt = kv.Value;
+                SpanFormattedInfo spFmt = kv.Key;
 
 #if DEBUG
                 if (spFmt.resolvedFont == null) { throw new NotSupportedException(); }
@@ -1052,19 +1055,18 @@ namespace PixelFarm.DrawingGL
                 Typeface typeface = spFmt.resolvedFont.Typeface;
 
                 //TODO: review here again, use pool
-                SameFontTextStrip sameFontTextStrip = new SameFontTextStrip
-                {
-                    ResolvedFont = spFmt.resolvedFont,
-                    BreakInfo = spFmt.breakInfo
-                };
+                SameFontTextStrip sameFontTextStrip = vxFmtStr.AppendNewStrip();
+                sameFontTextStrip.ResolvedFont = spFmt.resolvedFont;
+                sameFontTextStrip.BreakInfo = spFmt.breakInfo;
 
                 //assign ColorGlyphOnTransparentBG and update mix mode state
                 mixModeSummary.AddGlyphMixMode(
                     sameFontTextStrip.ColorGlyphOnTransparentBG =
                             (typeface.HasSvgTable() || typeface.IsBitmapFont || typeface.HasColorTable()));
 
-
                 //** 
+                _sh_indexList = new ArrayList<ushort>();
+                _sh_vertexList = new ArrayList<float>();
                 CreateTextCoords(sameFontTextStrip, _fmtGlyphPlans);
                 //**
                 //use max size of height and descending ?
@@ -1073,27 +1075,20 @@ namespace PixelFarm.DrawingGL
                 maxStripHeight = Math.Max(maxStripHeight, sameFontTextStrip.SpanHeight);
 
                 spanWidth = sameFontTextStrip.Width;//same width for all strip                 
-                vxFmtStr._strips.Add(sameFontTextStrip);
+
+                sameFontTextStrip.IndexArray = _sh_indexList.CreateSpan(0, _sh_indexList.Length);
+                sameFontTextStrip.VertexCoords = _sh_vertexList.CreateSpan(0, _sh_vertexList.Length);
             }
 
             //adjust addition vertical height
 
             spanHeight = maxStripHeight;
-            int stripCount = vxFmtStr._strips.Count;
-            for (int i = 0; i < stripCount; ++i)
-            {
-                SameFontTextStrip sameFontTextStrip = vxFmtStr._strips[i];
-                sameFontTextStrip.AdditionalVerticalOffset = maxStripHeight - sameFontTextStrip.SpanHeight;
-            }
 
-
+            vxFmtStr.ApplyAdditionalVerticalOffset(maxStripHeight);
             vxFmtStr.GlyphMixMode = mixModeSummary.FinalMixMode;
-
             vxFmtStr.SpanHeight = spanHeight;
             vxFmtStr.Width = spanWidth;
             vxFmtStr.DescendingInPx = (short)descendingInPx;
-
-
             //-----------
             //TODO: review here again
 
@@ -1109,7 +1104,9 @@ namespace PixelFarm.DrawingGL
                 //TODO: review here again   
                 _painter.TryCreateWordStrip(vxFmtStr);
             }
+
             _uniqueResolvedFonts.Clear();
+
             //restore prev typeface & settings
         }
 

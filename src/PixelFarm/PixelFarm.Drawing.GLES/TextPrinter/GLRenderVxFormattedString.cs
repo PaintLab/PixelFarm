@@ -1,6 +1,7 @@
 ﻿//MIT, 2016-present, WinterDev
 using System;
 using System.Collections.Generic;
+using PixelFarm.CpuBlit;
 using PixelFarm.Drawing;
 using Typography.Text;
 using Typography.TextBreak;
@@ -20,8 +21,7 @@ namespace PixelFarm.DrawingGL
     /// </summary>
     public class GLRenderVxFormattedString : PixelFarm.Drawing.RenderVxFormattedString
     {
-        internal List<SameFontTextStrip> _strips = new List<SameFontTextStrip>();
-
+        List<SameFontTextStrip> _strips = new List<SameFontTextStrip>();
         internal GLRenderVxFormattedString()
         {
 
@@ -42,7 +42,7 @@ namespace PixelFarm.DrawingGL
                 OwnerPlate = null;
             }
         }
-        internal void Reuse()
+        internal void ClearData()
         {
             WordPlateLeft = WordPlateTop = 0;
             ClearOwnerPlate();
@@ -51,38 +51,48 @@ namespace PixelFarm.DrawingGL
             Delay = false;
             UseWithWordPlate = true;
             GlyphMixMode = GLRenderVxFormattedStringGlyphMixMode.Unknown;
+
+            DisposeVbo();
+            _strips.Clear();
+        }
+
+        internal void DisposeVbo()
+        {
+            //dispose only its vbo
+            //preserve coord data
             int j = _strips.Count;
             for (int i = 0; i < j; ++i)
             {
                 _strips[i].DisposeVbo();
             }
-
-            _strips.Clear();
-        }
-
-        public void DisposeVbo()
-        {
-            //dispose only its vbo
-            //preserve coord data
-            foreach (SameFontTextStrip s in _strips)
-            {
-                s.DisposeVbo();
-            }
         }
 
         public override void Dispose()
         {
-            //no use this any more
-            //VertexCoords = null;
-            //IndexArray = null;
-
-            ClearOwnerPlate();
-            DisposeVbo();
-            _strips.Clear();
-
+            ClearData();
             base.Dispose();
         }
 
+        internal SameFontTextStrip AppendNewStrip()
+        {
+            var newstrip = new SameFontTextStrip();
+            //get buffer from pool 
+            _strips.Add(newstrip);
+            return newstrip;
+        }
+
+        internal int StripCount => _strips.Count;
+        internal SameFontTextStrip this[int index] => _strips[index];
+
+        internal void ApplyAdditionalVerticalOffset(int maxStripHeight)
+        {
+            int j = _strips.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                SameFontTextStrip s = _strips[i];
+                s.AdditionalVerticalOffset = maxStripHeight - s.SpanHeight;
+            }
+        }
 #if DEBUG
         public string dbugText;
         public override string ToString()
@@ -108,6 +118,7 @@ namespace PixelFarm.DrawingGL
         public float[] VertexCoords { get; set; }
         public ushort[] IndexArray { get; set; }
         public int IndexArrayCount { get; set; }
+
         public ushort WordPlateLeft { get; set; }
         public ushort WordPlateTop { get; set; }
 
@@ -186,13 +197,15 @@ namespace PixelFarm.DrawingGL
         //we need to separate it into multiple SameFontTextStrip.
 
 
-        public SameFontTextStrip() { }
+        public SameFontTextStrip()
+        {
+        }
         public DrawingGL.VertexBufferObject _vbo;
 
-        public float[] VertexCoords { get; set; }
-        public ushort[] IndexArray { get; set; }
-        public int IndexArrayCount { get; set; }
 
+        public ArrayListSpan<float> VertexCoords { get; set; }
+        public ArrayListSpan<ushort> IndexArray { get; set; }
+        public int IndexArrayCount => IndexArray.Count;
         public float Width { get; set; }
         public int SpanHeight { get; set; }
         public int DescendingInPx { get; set; }
@@ -205,8 +218,9 @@ namespace PixelFarm.DrawingGL
             {
                 return _vbo;
             }
+
             _vbo = new VertexBufferObject();
-            _vbo.CreateBuffers(this.VertexCoords, this.IndexArray);
+            _vbo.CreateBuffers(VertexCoords, IndexArray);
             return _vbo;
         }
 
