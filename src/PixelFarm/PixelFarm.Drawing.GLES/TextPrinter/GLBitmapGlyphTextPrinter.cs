@@ -842,7 +842,7 @@ namespace PixelFarm.DrawingGL
         static int _dbugCount;
 #endif
 
-      
+
         void CreateTextCoords(SameFontTextStrip txtStrip, FormattedGlyphPlanList seqs)
         {
             int top = 0;//simulate top
@@ -1047,8 +1047,9 @@ namespace PixelFarm.DrawingGL
 
 
             //use pool?
+            vxFmtStr.PrepareIntermediateStructures();
             _sh_indexList = vxFmtStr._sh_indexList;
-            _sh_vertexList = vxFmtStr._sh_vertexList; 
+            _sh_vertexList = vxFmtStr._sh_vertexList;
 
             foreach (SpanFormattedInfo spFmt in _uniqueResolvedFonts.Keys)
             {
@@ -1114,6 +1115,8 @@ namespace PixelFarm.DrawingGL
             }
 
             _uniqueResolvedFonts.Clear();
+            _sh_indexList = null;
+            _sh_vertexList = null;
 
             //restore prev typeface & settings
         }

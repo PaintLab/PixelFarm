@@ -272,6 +272,7 @@ namespace PixelFarm.DrawingGL
             fmtstr.WordPlateLeft = (ushort)_currentX;
             fmtstr.WordPlateTop = (ushort)_currentY;
             fmtstr.UseWithWordPlate = true;
+            fmtstr.ReleaseIntermediateStructures();
 
 #if DEBUG
             dbugUsedCount++;

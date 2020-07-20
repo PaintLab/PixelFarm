@@ -263,6 +263,7 @@ namespace PixelFarm.DrawingGL
                 return false;
 #endif
             }
+
             fmtString.State = RenderVxFormattedString.VxState.Ready;
 
             _drawBoard.ExitCurrentDrawboardBuffer();

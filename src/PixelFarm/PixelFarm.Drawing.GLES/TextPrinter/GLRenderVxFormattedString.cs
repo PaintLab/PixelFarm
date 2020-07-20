@@ -21,9 +21,9 @@ namespace PixelFarm.DrawingGL
     /// </summary>
     public class GLRenderVxFormattedString : PixelFarm.Drawing.RenderVxFormattedString
     {
-        List<SameFontTextStrip> _strips = new List<SameFontTextStrip>();
-        internal ArrayList<float> _sh_vertexList = new ArrayList<float>();
-        internal ArrayList<ushort> _sh_indexList = new ArrayList<ushort>();
+        List<SameFontTextStrip> _strips;
+        internal ArrayList<float> _sh_vertexList;
+        internal ArrayList<ushort> _sh_indexList;
 
         internal GLRenderVxFormattedString()
         {
@@ -56,17 +56,23 @@ namespace PixelFarm.DrawingGL
             GlyphMixMode = GLRenderVxFormattedStringGlyphMixMode.Unknown;
 
             DisposeVbo();
-            _strips.Clear();
+
+
+            _strips?.Clear();
+            _strips = null;
         }
 
         internal void DisposeVbo()
         {
             //dispose only its vbo
             //preserve coord data
-            int j = _strips.Count;
-            for (int i = 0; i < j; ++i)
+            if (_strips != null)
             {
-                _strips[i].DisposeVbo();
+                int j = _strips.Count;
+                for (int i = 0; i < j; ++i)
+                {
+                    _strips[i].DisposeVbo();
+                }
             }
         }
 
@@ -76,6 +82,7 @@ namespace PixelFarm.DrawingGL
             base.Dispose();
         }
 
+
         internal SameFontTextStrip AppendNewStrip()
         {
             var newstrip = new SameFontTextStrip();
@@ -84,7 +91,7 @@ namespace PixelFarm.DrawingGL
             return newstrip;
         }
 
-        internal int StripCount => _strips.Count;
+        internal int StripCount => (_strips == null) ? 0 : _strips.Count;
         internal SameFontTextStrip this[int index] => _strips[index];
 
         internal void ApplyAdditionalVerticalOffset(int maxStripHeight)
@@ -95,6 +102,24 @@ namespace PixelFarm.DrawingGL
                 SameFontTextStrip s = _strips[i];
                 s.AdditionalVerticalOffset = maxStripHeight - s.SpanHeight;
             }
+        }
+        internal void PrepareIntermediateStructures()
+        {
+            if (_strips == null)
+            {
+                _strips = new List<SameFontTextStrip>();
+            }
+            if (_sh_vertexList == null)
+            {
+                _sh_vertexList = new ArrayList<float>();
+                _sh_indexList = new ArrayList<ushort>();
+            }
+        }
+        internal void ReleaseIntermediateStructures()
+        {
+            _sh_vertexList = null;
+            _sh_indexList = null;
+            //_strips = null;
         }
 #if DEBUG
         public string dbugText;
@@ -108,6 +133,10 @@ namespace PixelFarm.DrawingGL
         }
         public override string dbugName => "GL";
 #endif
+
+        static Queue<ArrayList<float>> s_vertextListPool = new Queue<ArrayList<float>>();
+        static Queue<ArrayList<short>> s_indexListPool = new Queue<ArrayList<short>>();
+
 
     }
     public class GLRenderVxFormattedStringSpan
@@ -202,13 +231,14 @@ namespace PixelFarm.DrawingGL
 
         public SameFontTextStrip()
         {
+
         }
         public DrawingGL.VertexBufferObject _vbo;
-
 
         public ArrayListSpan<float> VertexCoords { get; set; }
         public ArrayListSpan<ushort> IndexArray { get; set; }
         public int IndexArrayCount => IndexArray.Count;
+
         public float Width { get; set; }
         public int SpanHeight { get; set; }
         public int DescendingInPx { get; set; }
