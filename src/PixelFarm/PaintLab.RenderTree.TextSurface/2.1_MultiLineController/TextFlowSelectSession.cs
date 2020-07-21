@@ -292,13 +292,18 @@ namespace LayoutFarm.TextEditing
                         bool is_highSurrogate = char.IsHighSurrogate(prevChar);
                         bool is_lowSurrogate = char.IsLowSurrogate(prevChar);
 #endif
-                        
 
-                        while (prevChar != '\0' && tmp_index > 0 && (char.IsLowSurrogate(prevChar) || !CanCaretStopOnThisChar(prevChar)))
+
+                        while (prevChar != '\0' && tmp_index > 0 && !CanCaretStopOnThisChar(prevChar))
                         {
                             _lineEditor.SetCurrentCharStepLeft();
                             prevChar = _lineEditor.PrevChar;
                             tmp_index--;
+                        }
+
+                        if (char.IsLowSurrogate(_lineEditor.CurrentChar))
+                        {
+                            _lineEditor.SetCurrentCharStepLeft();
                         }
                     }
                     else
@@ -312,12 +317,17 @@ namespace LayoutFarm.TextEditing
 #endif
                         int lineCharCount = _lineEditor.CharCount;
                         int tmp_index = charIndex + 1;
-                        while (nextChar != '\0' && tmp_index <= lineCharCount && (char.IsLowSurrogate(nextChar) || !CanCaretStopOnThisChar(nextChar)))
+                        while (nextChar != '\0' && tmp_index <= lineCharCount && !CanCaretStopOnThisChar(nextChar))
                         {
                             _lineEditor.SetCurrentCharStepRight();
                             nextChar = _lineEditor.NextChar;
                             tmp_index++;
                         }
+                        if (char.IsLowSurrogate(_lineEditor.CurrentChar))
+                        {
+                            _lineEditor.SetCurrentCharStepRight();
+                        }
+
                     }
 
                 }

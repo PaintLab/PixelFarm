@@ -492,16 +492,14 @@ namespace LayoutFarm.TextEditing
                     _commandHistoryList.AddDocAction(cmd);
                     _sessionListener?.AddDocAction(cmd);
 
-                    char nextChar = _lineEditor.NextChar;
-
-                    if (nextChar != '\0')
+                    char nextChar = _lineEditor.NextChar; 
+                    
+                    if (char.IsLowSurrogate(nextChar) || !CanCaretStopOnThisChar(nextChar))
                     {
-                        if (!CanCaretStopOnThisChar(nextChar))
-                        {
-                            //TODO: review return range here again
-                            return DoDelete();
-                        }
+                        //TODO: review return range here again
+                        return DoDelete();
                     }
+
                 }
             }
 #if DEBUG

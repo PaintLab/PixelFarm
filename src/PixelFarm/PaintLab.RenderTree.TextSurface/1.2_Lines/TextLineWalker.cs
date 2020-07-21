@@ -125,8 +125,17 @@ namespace LayoutFarm.TextEditing
                 int removeIndex = CurrentTextRunCharIndex;
                 SetCurrentCharStepLeft();
                 char toBeRemovedChar = CurrentChar;
+                int actualRemove = 1;
+                if (char.IsLowSurrogate(toBeRemovedChar))
+                {
+                    if (removeIndex > 0)
+                    {
+                        removeIndex--;
+                        actualRemove++;
+                    }
+                }
 
-                Run.InnerRemove(removingTextRun, removeIndex, 1, false);
+                Run.InnerRemove(removingTextRun, removeIndex, actualRemove, false);
                 if (removingTextRun.CharacterCount == 0)
                 {
                     Run nextRun = removingTextRun.NextRun;
@@ -797,7 +806,18 @@ namespace LayoutFarm.TextEditing
         public void SetCurrentCharStepRight()
         {
             SetCurrentCharIndex(InternalCharIndex + 1);
-            
+            //check current char is surrogate or not
+            char c = CurrentChar;
+#if DEBUG
+            bool is_high_surrogate = char.IsHighSurrogate(c);
+            bool is_low_surrogate = char.IsLowSurrogate(c);
+#endif
+
+            if (char.IsLowSurrogate(c))
+            {
+                //can't stop at this 
+                SetCurrentCharStepRight();
+            }
         }
 
         public void SetCurrentCharStepLeft() => SetCurrentCharIndex(InternalCharIndex - 1);
@@ -857,7 +877,7 @@ namespace LayoutFarm.TextEditing
                 } while (MoveToNextTextRun());
                 caret_char_index = _rCharOffset + _currentTextRun.CharacterCount;
                 _caretXPos = _rPixelOffset + _currentTextRun.Width;
-                return; 
+                return;
             }
 #if DEBUG
             if (dbugTextManRecorder != null)
