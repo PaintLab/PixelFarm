@@ -13,9 +13,7 @@ namespace LayoutFarm.TextEditing
     /// </summary>
     public abstract class Run
     {
-        //bool _validCalSize;
-        //bool _validContentArr;
-
+     
         TextLineBox _ownerTextLine;
         RunStyle _runStyle;
         LinkedListNode<Run> _linkNode;

@@ -138,7 +138,7 @@ namespace LayoutFarm.TextEditing
         }
         internal bool HitTestCore(HitChain hitChain)
         {
-            hitChain.GetTestPoint(out int testX, out int testY);
+            //hitChain.GetTestPoint(out int testX, out int testY);
             if (this.RunCount == 0)
             {
                 return false;
