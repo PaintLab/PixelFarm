@@ -169,7 +169,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter_Layer2_SH\_ESS_LINK_WITH_TY\LenAndLenUnit.cs" Link="PixelFarm\PixelFarm.Painter_Layer2_SH\_ESS_LINK_WITH_TY\LenAndLenUnit.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter_Layer2_SH\_ESS_LINK_WITH_TY\RequestFont.cs" Link="PixelFarm\PixelFarm.Painter_Layer2_SH\_ESS_LINK_WITH_TY\RequestFont.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter_Layer2_SH\_ESS_LINK_WITH_TY\TextBufferSpan.cs" Link="PixelFarm\PixelFarm.Painter_Layer2_SH\_ESS_LINK_WITH_TY\TextBufferSpan.cs" />
-    <Compile Include="..\..\PixelFarm\PixelFarm.Painter_Layer2_SH\_ESS_LINK_WITH_TY\TextSpanMeasureResult.cs" Link="PixelFarm\PixelFarm.Painter_Layer2_SH\_ESS_LINK_WITH_TY\TextSpanMeasureResult.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors_SH\1_VectorMaths\AggMath.cs" Link="PixelFarm\PixelFarm.Vectors_SH\1_VectorMaths\AggMath.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors_SH\1_VectorMaths\AxisAlignedBoundingBox.cs" Link="PixelFarm\PixelFarm.Vectors_SH\1_VectorMaths\AxisAlignedBoundingBox.cs" />
     <Compile Include="..\..\PixelFarm\PixelFarm.Vectors_SH\1_VectorMaths\BezierCurve.cs" Link="PixelFarm\PixelFarm.Vectors_SH\1_VectorMaths\BezierCurve.cs" />

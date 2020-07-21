@@ -49,9 +49,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter_Layer2_SH\_ESS_LINK_WITH_TY\TextBufferSpan.cs">
       <Link>TextBufferSpan.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Painter_Layer2_SH\_ESS_LINK_WITH_TY\TextSpanMeasureResult.cs">
-      <Link>TextSpanMeasureResult.cs</Link>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="..\..\PixelFarm\PixelFarm.BasicVisualElements_SH\PixelFarm.BasicVisualElements_SH.projitems" Label="Shared" />

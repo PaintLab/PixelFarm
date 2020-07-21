@@ -17,7 +17,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Basic\Region.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Basic\RenderVx.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)_ESS_LINK_WITH_TY\TextBufferSpan.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)_ESS_LINK_WITH_TY\TextSpanMeasureResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CpuBlit.VertexProcessing\BoundingRect.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CpuBlit.VertexProcessing\CurveFlattener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CpuBlit.VertexProcessing\LineWalker.cs" />
