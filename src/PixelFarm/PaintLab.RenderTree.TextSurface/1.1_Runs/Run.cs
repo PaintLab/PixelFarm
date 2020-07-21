@@ -147,25 +147,6 @@ namespace LayoutFarm.TextEditing
 
         public void TopDownReCalculateContentSize() => this.UpdateRunWidth();
         protected internal void InvalidateOwnerLineCharCount() => _ownerTextLine?.InvalidateCharCount();
-#if DEBUG
-        //public override string dbug_FullElementDescription()
-        //{
-        //    string user_elem_id = null;
-        //    if (user_elem_id != null)
-        //    {
-        //        return dbug_FixedElementCode + dbug_GetBoundInfo() + " "
-        //            + " i" + dbug_obj_id + "a " + ((EditableRun)this).GetText() + ",(ID " + user_elem_id + ") " + dbug_GetLayoutInfo();
-        //    }
-        //    else
-        //    {
-        //        return dbug_FixedElementCode + dbug_GetBoundInfo() + " "
-        //         + " i" + dbug_obj_id + "a " + ((EditableRun)this).GetText() + " " + dbug_GetLayoutInfo();
-        //    }
-        //}
-        //public override string ToString()
-        //{
-        //    return "[" + this.dbug_obj_id + "]" + GetText();
-        //}
-#endif
+ 
     }
 }

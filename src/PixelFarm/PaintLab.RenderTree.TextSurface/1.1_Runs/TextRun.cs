@@ -2,14 +2,31 @@
 
 using System;
 using System.Text;
-using Typography.Text;
 using Typography.TextLayout;
-using Typography.TextBreak;
 
 using PixelFarm.Drawing;
 
 namespace LayoutFarm.TextEditing
 {
+    static class WordBreakerHelper
+    {
+        [ThreadStatic]
+        static LayoutWordVisitor s_wordVistor;
+
+        public static void BreakToLineSegments(in Typography.Text.TextBufferSpan textBufferSpan, LineSegmentList<LineSegment> outputSegments)
+        {
+
+            if (s_wordVistor == null)
+            {
+                s_wordVistor = new LayoutWordVisitor();
+            }
+
+            s_wordVistor.SetLineSegmentList(outputSegments);
+            Typography.Text.GlobalTextService.TxtClient.BreakToLineSegments(textBufferSpan, s_wordVistor);
+            s_wordVistor.SetLineSegmentList(null);
+        }
+    }
+
 
     public class TextRun : Run, IDisposable
     {
@@ -25,13 +42,9 @@ namespace LayoutFarm.TextEditing
 
         int[] _outputUserCharAdvances = null;//TODO: review here-> change this to caret stop position
         bool _content_unparsed;
+
         LineSegmentList<LineSegment> _lineSegs;
-        RenderVxFormattedString _renderVxFormattedString;
-
-
-        [ThreadStatic]
-        static LayoutWordVisitor s_wordVistor;
-
+        RenderVxFormattedString _renderVxFormattedString; //creatable
 
         public TextRun(RunStyle runstyle, char[] copyBuffer)
             : base(runstyle)
@@ -118,7 +131,13 @@ namespace LayoutFarm.TextEditing
             //TODO: review here, 
             //1. if mybuffer lenght is not changed,we don't need to alloc new array?
 
-            _outputUserCharAdvances = new int[_mybuffer.Length];
+            if (_outputUserCharAdvances == null || _outputUserCharAdvances.Length != _mybuffer.Length)
+            {
+                //sometime we change only font style
+                //so the buffer char_count is not changed
+                _outputUserCharAdvances = new int[_mybuffer.Length];
+            }
+
 
             if (_renderVxFormattedString != null)
             {
@@ -135,17 +154,13 @@ namespace LayoutFarm.TextEditing
                 //parse the content first 
                 if (_lineSegs == null) { _lineSegs = new LineSegmentList<LineSegment>(); }
                 _lineSegs.Clear();
-                //
-                if (s_wordVistor == null)
+
+                WordBreakerHelper.BreakToLineSegments(textBufferSpan, _lineSegs);
+                if (_lineSegs.Count < 2)
                 {
-                    s_wordVistor = new LayoutWordVisitor();
+                    //if we have a small numbers of linesegment
+                    //
                 }
-
-                s_wordVistor.SetLineSegmentList(_lineSegs);
-                RunStyle.BreakToLineSegments(textBufferSpan, s_wordVistor);
-                s_wordVistor.SetLineSegmentList(null);
-
-                //BreakToLineSegs(textBufferSpan);
             }
             _content_unparsed = false;
             RunStyle.CalculateUserCharGlyphAdvancePos(textBufferSpan, _lineSegs, ref measureResult);

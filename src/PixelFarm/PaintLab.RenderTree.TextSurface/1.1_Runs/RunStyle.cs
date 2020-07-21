@@ -61,12 +61,7 @@ namespace LayoutFarm.TextEditing
         internal float MeasureBlankLineHeight()
         {
             return GlobalTextService.TxtClient.MeasureBlankLineHeight(ReqFont);
-        }
-
-       
-
-        public void BreakToLineSegments(in Typography.Text.TextBufferSpan textBufferSpan, WordVisitor wordVisitor) 
-            => GlobalTextService.TxtClient.BreakToLineSegments(textBufferSpan, wordVisitor);
+        } 
 
         public void CalculateUserCharGlyphAdvancePos(
             in Typography.Text.TextBufferSpan textBufferSpan,
