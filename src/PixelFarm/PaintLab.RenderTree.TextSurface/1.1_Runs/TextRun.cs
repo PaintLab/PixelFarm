@@ -374,13 +374,25 @@ namespace LayoutFarm.TextEditing
                 for (int i = 0; i < j; i++)
                 {
                     int charW = _outputUserCharAdvances[i];
+                    if (charW == 0)
+                    {
+                        continue;
+                    }
                     if (accWidth + charW > pixelOffset)
                     {
                         //stop
                         //then decide that if width > char/w => please consider stop at next char
+
                         if (pixelOffset - accWidth > (charW / 2))
                         {
                             //this run is no select 
+                            //but we must check if 
+                            if ((i < j - 1) && (_outputUserCharAdvances[i + 1] == 0))
+                            {
+                                //temp fix for surrogate pair
+                                return new CharLocation(accWidth + charW, i + 2);
+                            }
+
                             return new CharLocation(accWidth + charW, i + 1);
                         }
                         else

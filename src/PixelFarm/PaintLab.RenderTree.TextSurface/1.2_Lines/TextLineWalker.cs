@@ -409,6 +409,10 @@ namespace LayoutFarm.TextEditing
             get { return _i_charIndex; }
             set
             {
+                if ((value % 2) != 0)
+                {
+
+                }
                 _i_charIndex = value;
             }
         }
@@ -747,6 +751,12 @@ namespace LayoutFarm.TextEditing
                     if (_rPixelOffset + thisTextRunPixelLength > xpos)
                     {
                         CharLocation foundLocation = Run.InnerGetCharacterFromPixelOffset(_currentTextRun, xpos - _rPixelOffset);
+#if DEBUG
+                        if ((foundLocation.RunCharIndex % 2) != 0)
+                        {
+
+                        }
+#endif
                         _caretXPos = _rPixelOffset + foundLocation.pixelOffset;
                         caret_char_index = _rCharOffset + foundLocation.RunCharIndex;
 
