@@ -3,7 +3,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using PixelFarm.CpuBlit;
 using PixelFarm.Drawing;
+using Typography.Text;
 using Typography.TextLayout;
 
 namespace LayoutFarm.TextEditing
@@ -328,9 +330,9 @@ namespace LayoutFarm.TextEditing
             this.TextLayer.TopDownReCalculateContentSize();
             EnsureCurrentTextRun();
         }
-        public SelectionRangeInfo SplitSelectedText(VisualSelectionRange selectionRange)
+        public SelectionRangeInfo SplitSelectedText(VisualSelectionRange selectionRange, RunStyle runStyleForNewPart)
         {
-            SelectionRangeInfo newPoints = CurrentLine.Split(selectionRange);
+            SelectionRangeInfo newPoints = CurrentLine.Split(selectionRange, runStyleForNewPart);
             EnsureCurrentTextRun();
             return newPoints;
         }
@@ -439,6 +441,7 @@ namespace LayoutFarm.TextEditing
 
         readonly LayoutWordVisitor _wordVisitor = new LayoutWordVisitor();
         readonly LineSegmentList<LineSegment> _lineSegs = new LineSegmentList<LineSegment>();
+        readonly ArrayList<char> _arrList = new ArrayList<char>();
 
         public void FindCurrentHitWord(out int startAt, out int len)
         {
@@ -449,11 +452,21 @@ namespace LayoutFarm.TextEditing
                 return;
             }
 
-            using (var copyContext = new TempTextLineCopyContext(_currentLine, out Typography.Text.TextBufferSpan textBufferSpan))
+            using (new TextRangeCopyPoolContext<TextFlowWalkerBase>(out TextCopyBuffer output))
             {
+                _currentLine.CopyLineContent(output);
+
                 _lineSegs.Clear();
                 _wordVisitor.SetLineSegmentList(_lineSegs);
-                Typography.Text.GlobalTextService.TxtClient.BreakToLineSegments(textBufferSpan, _wordVisitor);
+
+
+                int content_len = output.Length;
+                _arrList.Clear(content_len);
+                output.CopyTo(_arrList.UnsafeInternalArray);
+
+                Typography.Text.GlobalTextService.TxtClient.BreakToLineSegments(
+                    new Typography.Text.TextBufferSpan(_arrList.UnsafeInternalArray),
+                    _wordVisitor);
 
                 if (_lineSegs.Count == 0)
                 {
@@ -476,6 +489,7 @@ namespace LayoutFarm.TextEditing
                 }
 
             }
+
 
             //?
             startAt = 0;
@@ -541,9 +555,9 @@ namespace LayoutFarm.TextEditing
             caret_char_index = 0;
             _caretXPos = 0;
         }
-        public void CopyContentToStrignBuilder(StringBuilder stBuilder)
+        public void CopyContentToStrignBuilder(TextCopyBuffer output)
         {
-            _textFlowLayer.CopyContentToStringBuilder(stBuilder);
+            _textFlowLayer.CopyContent(output);
         }
         public char PrevChar
         {
@@ -666,7 +680,7 @@ namespace LayoutFarm.TextEditing
             if (_currentTextRun == null)
             {
             }
-#endif      
+#endif
             EditableVisualPointInfo textPointInfo =
                 new EditableVisualPointInfo(_currentLine, caret_char_index, _currentTextRun);
             textPointInfo.SetAdditionVisualInfo(
@@ -996,10 +1010,10 @@ namespace LayoutFarm.TextEditing
         //
         public int CharCount => _currentLine.CharCount();
         //
-        public void CopyLineContent(StringBuilder stBuilder) => _currentLine.CopyLineContent(stBuilder);
+        public void CopyLineContent(TextCopyBuffer output) => _currentLine.CopyLineContent(output);
 
         //
-        public void CopySelectedTextRuns(VisualSelectionRange selectionRange, TextRangeCopy output) => _currentLine.Copy(selectionRange, output);
+        public void CopySelectedTextRuns(VisualSelectionRange selectionRange, TextCopyBuffer output) => _currentLine.Copy(selectionRange, output);
 
         //
         public int LineNumber => _currentLine.LineNumber;

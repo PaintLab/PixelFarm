@@ -669,7 +669,7 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        public void CopyContentToStringBuilder(StringBuilder stBuilder)
+        public void CopyContent(TextCopyBuffer output)
         {
             List<TextLineBox> lines = _lines;
             int j = lines.Count;
@@ -678,9 +678,9 @@ namespace LayoutFarm.TextEditing
                 if (i > 0)
                 {
                     //TODO: review => preserve line ending char or not 
-                    stBuilder.AppendLine();
+                    output.AppendNewLine();
                 }
-                lines[i].CopyLineContent(stBuilder);
+                lines[i].CopyLineContent(output);
             }
         }
 

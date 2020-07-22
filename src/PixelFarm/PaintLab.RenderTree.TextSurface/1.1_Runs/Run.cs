@@ -13,9 +13,9 @@ namespace LayoutFarm.TextEditing
     /// </summary>
     public abstract class Run
     {
-     
+        readonly RunStyle _runStyle;
         TextLineBox _ownerTextLine;
-        RunStyle _runStyle;
+
         LinkedListNode<Run> _linkNode;
 
         int _left;
@@ -27,7 +27,7 @@ namespace LayoutFarm.TextEditing
         internal Run(RunStyle runStyle)
         {
             _runStyle = runStyle;
-            _width = _height = 10;
+            _width = _height = 10;//default
         }
 
         protected RequestFont GetFont() => _runStyle.ReqFont;
@@ -39,9 +39,7 @@ namespace LayoutFarm.TextEditing
         protected Size MeasureString(in TextBufferSpan textBufferSpan) => _runStyle.MeasureString(textBufferSpan);
 
         public RunStyle RunStyle => _runStyle;
-        //
-        public virtual void SetStyle(RunStyle runStyle) => _runStyle = runStyle;
-
+     
         public bool HitTest(Rectangle r) => Bounds.IntersectsWith(r);
 
         public bool HitTest(UpdateArea r) => Bounds.IntersectsWith(r.CurrentRect);
@@ -87,7 +85,9 @@ namespace LayoutFarm.TextEditing
         public abstract int CharacterCount { get; }
         public abstract char GetChar(int index);
         public abstract string GetText();
-        public abstract void WriteTo(StringBuilder stbuilder);
+        public abstract void WriteTo(TextCopyBuffer output);
+        public abstract void WriteTo(TextCopyBuffer output, int start, int len);
+        public abstract void WriteTo(TextCopyBuffer output, int start);
         //--------------------
         //model
         public abstract CharLocation GetCharacterFromPixelOffset(int pixelOffset);
@@ -97,10 +97,17 @@ namespace LayoutFarm.TextEditing
         /// <param name="charOffset"></param>
         /// <returns></returns>
         public abstract int GetRunWidth(int charOffset);
-
+        /// <summary>
+        /// get run with from charOffset to 
+        /// </summary>
+        /// <param name="charOffset"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public abstract int GetRunWidth(int startAtCharOffset, int count);
         ///////////////////////////////////////////////////////////////
         //edit funcs
         internal abstract void InsertAfter(int index, char c);
+        
         internal abstract CopyRun Remove(int startIndex, int length, bool withFreeRun);
 
         internal static CopyRun InnerRemove(Run tt, int startIndex, int length, bool withFreeRun)
@@ -115,13 +122,13 @@ namespace LayoutFarm.TextEditing
         {
             return tt.GetCharacterFromPixelOffset(pixelOffset);
         }
+
         public abstract void UpdateRunWidth();
         ///////////////////////////////////////////////////////////////  
-        public abstract CopyRun CreateCopy();
+      
         public abstract CopyRun LeftCopy(int index);
         public abstract CopyRun Copy(int startIndex, int length);
-        public abstract CopyRun Copy(int startIndex);
-        public abstract void CopyContentToStringBuilder(StringBuilder stBuilder);
+        public abstract CopyRun Copy(int startIndex); 
         //------------------------------
         //owner, neighbor
         /// <summary>
@@ -147,6 +154,6 @@ namespace LayoutFarm.TextEditing
 
         public void TopDownReCalculateContentSize() => this.UpdateRunWidth();
         protected internal void InvalidateOwnerLineCharCount() => _ownerTextLine?.InvalidateCharCount();
- 
+
     }
 }

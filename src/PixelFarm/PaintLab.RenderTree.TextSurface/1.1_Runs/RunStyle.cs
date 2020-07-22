@@ -1,8 +1,5 @@
 ﻿//Apache2, 2014-present, WinterDev
-
-
 using PixelFarm.Drawing;
-using Typography.TextBreak;
 using Typography.TextLayout;
 using Typography.Text;
 
@@ -61,28 +58,9 @@ namespace LayoutFarm.TextEditing
         internal float MeasureBlankLineHeight()
         {
             return GlobalTextService.TxtClient.MeasureBlankLineHeight(ReqFont);
-        } 
-
-        public void CalculateUserCharGlyphAdvancePos(
-            in Typography.Text.TextBufferSpan textBufferSpan,
-            ref TextSpanMeasureResult measureResult)
-        {
-            GlobalTextService.TxtClient.CalculateUserCharGlyphAdvancePos(
-                    textBufferSpan,
-                    ReqFont,
-                    ref measureResult);
         }
 
-        internal void CalculateUserCharGlyphAdvancePos(in Typography.Text.TextBufferSpan textBufferSpan,
-            ILineSegmentList lineSegs,
-            ref TextSpanMeasureResult measureResult)
-        {
-            GlobalTextService.TxtClient.CalculateUserCharGlyphAdvancePos(
-                textBufferSpan,
-                lineSegs,
-                ReqFont,
-                ref measureResult);
-        }
+        
 
     }
 

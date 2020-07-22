@@ -32,7 +32,7 @@ namespace LayoutFarm.TextEditing.Commands
         void DoEnd();
         void DoHome();
         void SplitCurrentLineIntoNewLine();
-        void AddTextRunsToCurrentLine(TextRangeCopy copy);
+        void AddTextRunsToCurrentLine(TextCopyBuffer copy);
         void AddTextRunToCurrentLine(CopyRun copy);
     }
 
@@ -156,9 +156,9 @@ namespace LayoutFarm.TextEditing.Commands
     }
     public class DocActionDeleteRange : DocumentAction
     {
-        TextRangeCopy _deletedTextRuns;
+        TextCopyBuffer _deletedTextRuns;
         readonly int _endCharIndex;
-        public DocActionDeleteRange(TextRangeCopy deletedTextRuns, int startLineNum, int startColumnNum,
+        public DocActionDeleteRange(TextCopyBuffer deletedTextRuns, int startLineNum, int startColumnNum,
             int endLineNum, int endColumnNum)
             : base(startLineNum, startColumnNum)
         {
@@ -191,10 +191,10 @@ namespace LayoutFarm.TextEditing.Commands
     public class DocActionInsertRuns : DocumentAction
     {
         CopyRun _singleInsertTextRun;
-        TextRangeCopy _insertingTextRuns;
+        TextCopyBuffer _insertingTextRuns;
 
         int _endCharIndex;
-        public DocActionInsertRuns(TextRangeCopy insertingTextRuns,
+        public DocActionInsertRuns(TextCopyBuffer insertingTextRuns,
             int startLineNumber, int startCharIndex, int endLineNumber, int endCharIndex)
             : base(startLineNumber, startCharIndex)
         {
@@ -218,7 +218,7 @@ namespace LayoutFarm.TextEditing.Commands
             }
             else
             {
-                _insertingTextRuns.CopyContentToStringBuilder(output);
+                _insertingTextRuns.CopyTo(output);
             }
         }
 

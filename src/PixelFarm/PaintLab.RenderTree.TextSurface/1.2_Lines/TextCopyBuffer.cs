@@ -39,22 +39,25 @@ namespace LayoutFarm.TextEditing
         }
     }
 
-    public class TextRangeCopy
+    public class TextCopyBuffer
     {
 
-        //TODO: review this again
-        //use PlainTextDocument
-        StringBuilder _stbuilder = new StringBuilder();
+        readonly StringBuilder _sb;
+        public TextCopyBuffer()
+        {
+            _sb = new StringBuilder();
+        }
         public void AppendNewLine()
         {
             //push content of current line 
             //into plain doc
-            _stbuilder.AppendLine();
+            _sb.AppendLine();
         }
         public IEnumerable<string> GetLineIter()
         {
             //TODO: review this again
-            using (System.IO.StringReader reader = new System.IO.StringReader(_stbuilder.ToString()))
+
+            using (System.IO.StringReader reader = new System.IO.StringReader(_sb.ToString()))
             {
                 string line = reader.ReadLine();
                 while (line != null)
@@ -64,27 +67,26 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
-        public void CopyContentToStringBuilder(StringBuilder stbuilder)
+
+
+        public bool HasSomeRuns => _sb.Length > 0;
+
+        public void AppendData(char[] buffer, int start, int len) => _sb.Append(buffer, start, len);
+
+        public void Clear() => _sb.Length = 0;
+
+        internal int Length => _sb.Length;
+
+        internal void CopyTo(char[] charBuffer) => _sb.CopyTo(0, charBuffer, 0, _sb.Length);
+        public void CopyTo(StringBuilder stbuilder)
         {
-            char[] buff = new char[_stbuilder.Length];
-            _stbuilder.CopyTo(0, buff, 0, buff.Length);
+            //TODO: review here 
+
+            char[] buff = new char[_sb.Length];
+            _sb.CopyTo(0, buff, 0, buff.Length);
+
             stbuilder.Append(buff);
         }
-
-        public bool HasSomeRuns => _stbuilder.Length > 0;
-
-        /// <summary>
-        /// this will copy content of this run
-        /// </summary>
-        /// <param name="run"></param>
-        public void AppendRun(Run run)
-        {
-            run.WriteTo(_stbuilder);
-        }
-        public void AppendRun(CopyRun run)
-        {
-            _stbuilder.Append(run.RawContent);
-        }
-
+        public override string ToString() => _sb.ToString();
     }
 }

@@ -15,14 +15,17 @@ namespace LayoutFarm.TextEditing
 #endif
     sealed partial class TextLineBox
     {
-        //this class dose not have Painting function
+        //this class does not have Painting function
         //we paint each run at text-layer object
-        //current line runs
+
+
         readonly LinkedList<Run> _runs = new LinkedList<Run>();
+
         /// <summary>
         /// owner layer
         /// </summary>
         TextFlowLayer _textFlowLayer;
+
         int _currentLineNumber;
         int _actualLineHeight;
         int _actualLineWidth;
@@ -254,7 +257,7 @@ namespace LayoutFarm.TextEditing
                 yield return linkNode.Value;
                 linkNode = linkNode.Next;
             }
-             
+
         }
 
         //
@@ -292,17 +295,17 @@ namespace LayoutFarm.TextEditing
 
         internal void ValidateContentArrangement() => _lineFlags |= LINE_CONTENT_ARRANGED;
 
-        public static void InnerCopyLineContent(TextLineBox line, StringBuilder stBuilder)
+        public static void InnerCopyLineContent(TextLineBox line, TextCopyBuffer output)
         {
-            line.CopyLineContent(stBuilder);
+            line.CopyLineContent(output);
         }
-        public void CopyLineContent(StringBuilder stBuilder)
+        public void CopyLineContent(TextCopyBuffer output)
         {
             LinkedListNode<Run> curNode = this.First;
             while (curNode != null)
             {
                 Run v = curNode.Value;
-                v.CopyContentToStringBuilder(stBuilder);
+                v.WriteTo(output);
                 curNode = curNode.Next;
             }
             //not include line-end char?

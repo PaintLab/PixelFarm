@@ -5,6 +5,8 @@ using System.Text;
 using Typography.TextLayout;
 
 using PixelFarm.Drawing;
+using Typography.Text;
+using PixelFarm.CpuBlit.VertexProcessing;
 
 namespace LayoutFarm.TextEditing
 {
@@ -13,25 +15,25 @@ namespace LayoutFarm.TextEditing
         [ThreadStatic]
         static LayoutWordVisitor s_wordVistor;
 
-        public static void BreakToLineSegments(in Typography.Text.TextBufferSpan textBufferSpan, LineSegmentList<LineSegment> outputSegments)
-        {
 
+        public static void BreakToLineSegments(in Typography.Text.TextBufferSpan textBufferSpan, LineSegmentList<LineSegment> lineSegs)
+        {
+            //helper class for textrun
             if (s_wordVistor == null)
             {
                 s_wordVistor = new LayoutWordVisitor();
             }
 
-            s_wordVistor.SetLineSegmentList(outputSegments);
+            s_wordVistor.SetLineSegmentList(lineSegs);
             Typography.Text.GlobalTextService.TxtClient.BreakToLineSegments(textBufferSpan, s_wordVistor);
             s_wordVistor.SetLineSegmentList(null);
         }
     }
 
 
+
     public class TextRun : Run, IDisposable
     {
-        //text run is a collection of words that has the same presentation format (font, style, color, etc).
-        //a run may contain multiple words
 
 #if DEBUG
         char[] _dbugmybuffer;
@@ -40,15 +42,14 @@ namespace LayoutFarm.TextEditing
         char[] _mybuffer;
 #endif
 
-        int[] _outputUserCharAdvances = null;//TODO: review here-> change this to caret stop position
-        bool _content_unparsed;
+        int[] _outputUserCharAdvances = null;
+        RenderVxFormattedString _renderVxFormattedString; //re-creatable from original content
+        bool _content_Parsed;//
 
-        LineSegmentList<LineSegment> _lineSegs;
-        RenderVxFormattedString _renderVxFormattedString; //creatable
-
-        public TextRun(RunStyle runstyle, char[] copyBuffer)
+        internal TextRun(RunStyle runstyle, char[] copyBuffer)
             : base(runstyle)
         {
+
 #if DEBUG
             if (copyBuffer.Length == 0)
             {
@@ -60,6 +61,7 @@ namespace LayoutFarm.TextEditing
             SetNewContent(copyBuffer);
             UpdateRunWidth();
         }
+
         public bool DelayFormattedString { get; set; }
         public void Dispose()
         {
@@ -68,9 +70,12 @@ namespace LayoutFarm.TextEditing
                 _renderVxFormattedString.Dispose();
                 _renderVxFormattedString = null;
             }
+            _content_Parsed = false;
         }
 
         //each editable run has it own (dynamic) char buffer 
+
+
         void SetNewContent(char[] newbuffer)
         {
 #if DEBUG
@@ -78,32 +83,28 @@ namespace LayoutFarm.TextEditing
 #else
             _mybuffer = newbuffer;
 #endif
-
-            _content_unparsed = true;
-
+            _content_Parsed = false;
             _renderVxFormattedString?.Dispose(); //clear old _renderVxFormattedString
             _renderVxFormattedString = null;
         }
-        public override CopyRun CreateCopy()
-        {
-            char[] copyBuffer = new char[_mybuffer.Length];
-            Array.Copy(_mybuffer, copyBuffer, copyBuffer.Length);
-            return new CopyRun(copyBuffer);
-        }
-        public override void WriteTo(StringBuilder stbuilder) => stbuilder.Append(_mybuffer);
 
-        public override CopyRun Copy(int startIndex)
+        public override void WriteTo(TextCopyBuffer output) => output.AppendData(_mybuffer, 0, _mybuffer.Length);
+        public override void WriteTo(TextCopyBuffer output, int start, int len)
         {
-            int length = _mybuffer.Length - startIndex;
-            if (startIndex > -1 && length > 0)
+            if (len > 0)
             {
-                return MakeCopy(startIndex, length);
-            }
-            else
-            {
-                return null;
+                output.AppendData(_mybuffer, start, len);
             }
         }
+        public override void WriteTo(TextCopyBuffer output, int start)
+        {
+            int len = _mybuffer.Length - start;
+            if (len > 0)
+            {
+                output.AppendData(_mybuffer, start, len);
+            }
+        }
+
         CopyRun MakeCopy(int sourceIndex, int length)
         {
             if (length > 0)
@@ -119,17 +120,58 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        public override int GetRunWidth(int charOffset) => CalculateDrawingStringSize(charOffset).Width;
+        public override int GetRunWidth(int charOffset)
+        {
+            if (!_content_Parsed)
+            {
+                UpdateRunWidth();
+            }
 
+            //the content is parsed ***
+            if (_mybuffer.Length == charOffset)
+            {
+                return this.Width;
+            }
+            else
+            {
+                //ca
+                int total = 0;
+                if (_outputUserCharAdvances != null)
+                {
+                    for (int i = 0; i < charOffset; ++i)
+                    {
+                        total += _outputUserCharAdvances[i];
+                    }
+                }
+                return total;
+            }
+        }
+        public override int GetRunWidth(int startAtCharOffset, int count)
+        {
+            if (!_content_Parsed)
+            {
+                UpdateRunWidth();
+            }
+            int total = 0;
+            if (_outputUserCharAdvances != null)
+            {
+                for (int i = startAtCharOffset; i < count; ++i)
+                {
+                    total += _outputUserCharAdvances[i];
+                }
+            }
+            return total;
+        }
         public override string GetText() => new string(_mybuffer);
+
 
         public override void UpdateRunWidth()
         {
-            //***
-            var textBufferSpan = new Typography.Text.TextBufferSpan(_mybuffer);
-
+            //1 check if we need to recalculate all?
             //TODO: review here, 
             //1. if mybuffer lenght is not changed,we don't need to alloc new array?
+
+            if (_content_Parsed) { return; }
 
             if (_outputUserCharAdvances == null || _outputUserCharAdvances.Length != _mybuffer.Length)
             {
@@ -138,32 +180,22 @@ namespace LayoutFarm.TextEditing
                 _outputUserCharAdvances = new int[_mybuffer.Length];
             }
 
-
             if (_renderVxFormattedString != null)
             {
                 _renderVxFormattedString.Dispose();
                 _renderVxFormattedString = null;
             }
 
+
             var measureResult = new TextSpanMeasureResult();
             measureResult.outputXAdvances = _outputUserCharAdvances;
 
+            GlobalTextService.TxtClient.CalculateUserCharGlyphAdvancePos(
+               new Typography.Text.TextBufferSpan(_mybuffer),
+               RunStyle.ReqFont,
+               ref measureResult);
 
-            if (_content_unparsed)
-            {
-                //parse the content first 
-                if (_lineSegs == null) { _lineSegs = new LineSegmentList<LineSegment>(); }
-                _lineSegs.Clear();
-
-                WordBreakerHelper.BreakToLineSegments(textBufferSpan, _lineSegs);
-                if (_lineSegs.Count < 2)
-                {
-                    //if we have a small numbers of linesegment
-                    //
-                }
-            }
-            _content_unparsed = false;
-            RunStyle.CalculateUserCharGlyphAdvancePos(textBufferSpan, _lineSegs, ref measureResult);
+            _content_Parsed = true;
 
             SetSize(measureResult.outputTotalW, measureResult.lineHeight);
 
@@ -180,53 +212,36 @@ namespace LayoutFarm.TextEditing
         }
         public override char GetChar(int index) => _mybuffer[index];
 
-        public override void CopyContentToStringBuilder(StringBuilder stBuilder) => stBuilder.Append(_mybuffer);
-
         public override int CharacterCount => _mybuffer.Length;
 
-        public override void SetStyle(RunStyle runstyle)
-        {
-            //TODO: review this again
-            //update style may affect the 'visual' layout of the span
-            //the span may expand large or shrink down
-            //so we invalidate graphics area pre and post
+        //public override void SetStyle(RunStyle runstyle)
+        //{
+        //    //TODO: review this again
+        //    //update style may affect the 'visual' layout of the span
+        //    //the span may expand large or shrink down
+        //    //so we invalidate graphics area pre and post
 
-            //TODO: review here***
-            this.InvalidateGraphics();
-            base.SetStyle(runstyle);
-            this.InvalidateGraphics();
-            UpdateRunWidth();
-        }
-        Size CalculateDrawingStringSize(int length)
-        {
-            if (!_content_unparsed)
-            {
-                //the content is parsed ***
+        //    //TODO: review here***
+        //    this.InvalidateGraphics();
+        //    base.SetStyle(runstyle);
+        //    this.InvalidateGraphics();
+        //    UpdateRunWidth();
+        //}
 
-                if (_mybuffer.Length == length)
-                {
-                    return this.Size;
-                }
-                else
-                {
-                    //ca
-                    int total = 0;
-                    if (_outputUserCharAdvances != null)
-                    {
-                        for (int i = 0; i < length; ++i)
-                        {
-                            total += _outputUserCharAdvances[i];
-                        }
-                    }
-                    return new Size(total, MeasureLineHeightInt32());
-                }
-            }
-
-            return MeasureString(new PixelFarm.Drawing.TextBufferSpan(_mybuffer, 0, length));
-        }
 
         public override CopyRun Copy(int startIndex, int length) => (startIndex > -1 && length > 0) ? MakeCopy(startIndex, length) : null;
-
+        public override CopyRun Copy(int startIndex)
+        {
+            int length = _mybuffer.Length - startIndex;
+            if (startIndex > -1 && length > 0)
+            {
+                return MakeCopy(startIndex, length);
+            }
+            else
+            {
+                return null;
+            }
+        }
         const int SAME_FONT_SAME_TEXT_COLOR = 0;
         const int SAME_FONT_DIFF_TEXT_COLOR = 1;
         const int DIFF_FONT_SAME_TEXT_COLOR = 2;
@@ -266,11 +281,6 @@ namespace LayoutFarm.TextEditing
 
         void DrawText(DrawBoard d)
         {
-
-            //d.DrawText(_mybuffer,
-            //     new Rectangle(0, 0, bWidth, bHeight),
-            //     style.ContentHAlign);
-
             if (_renderVxFormattedString == null)
             {
                 _renderVxFormattedString = d.CreateFormattedString(_mybuffer, 0, _mybuffer.Length, DelayFormattedString);
@@ -450,7 +460,7 @@ namespace LayoutFarm.TextEditing
                 InvalidateOwnerLineCharCount();
                 UpdateRunWidth();
             }
-            return withFreeRun ? freeRun : null;
+            return freeRun;
         }
 
 #if DEBUG

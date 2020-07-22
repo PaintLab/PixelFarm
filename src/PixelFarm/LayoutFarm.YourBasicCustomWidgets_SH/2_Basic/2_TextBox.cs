@@ -8,7 +8,6 @@ using PixelFarm.Drawing;
 using LayoutFarm.TextEditing;
 using LayoutFarm.UI;
 
-using Typography.Text;
 namespace LayoutFarm.CustomWidgets
 {
     public abstract class TextBoxBase : AbstractRectUI
@@ -252,9 +251,9 @@ namespace LayoutFarm.CustomWidgets
         /// write all lines into stbuilder
         /// </summary>
         /// <param name="stbuilder"></param>
-        public void CopyContentTo(StringBuilder stBuilder)
+        public void CopyContentTo(TextCopyBuffer output)
         {
-            _textEditRenderElement.CopyContentToStringBuilder(stBuilder);
+            _textEditRenderElement.CopyContentToStringBuilder(output);
         }
 #if DEBUG
         public override void SetLocation(int left, int top)
@@ -262,24 +261,6 @@ namespace LayoutFarm.CustomWidgets
             base.SetLocation(left, top);
         }
 #endif
-
-        RunStyle _runStyle;
-        RunStyle GetDefaultRunStyle()
-        {
-            if (_runStyle == null)
-            {
-                return _runStyle = new RunStyle()
-                {
-                    FontColor = DefaultSpanStyle.FontColor,
-                    ReqFont = DefaultSpanStyle.ReqFont,
-                    ContentHAlign = DefaultSpanStyle.ContentHAlign,
-                };
-            }
-            else
-            {
-                return _runStyle;
-            }
-        }
 
 
         public override void SetText(IEnumerable<string> lines)
@@ -294,22 +275,22 @@ namespace LayoutFarm.CustomWidgets
                 if (_textEditRenderElement != null)
                 {
                     //TODO, use string builder pool
-                    using (StringBuilderPool<TextBox>.GetFreeStringBuilder(out StringBuilder sb))
+                    using (new TextRangeCopyPoolContext<TextBox>(out TextCopyBuffer output))
                     {
-                        CopyContentTo(sb);
-                        return sb.ToString();
+                        CopyContentTo(output);
+                        return output.ToString();
                     }
-
                 }
                 else
                 {
                     //TODO, use string builder pool
-                    using (StringBuilderPool<TextBox>.GetFreeStringBuilder(out StringBuilder sb))
+                    using (new StringBuilderPoolContext<TextBox>(out StringBuilder sb))
                     {
                         bool passFirstLine = false;
                         foreach (PlainTextLine line in _doc)
                         {
                             if (passFirstLine) { sb.AppendLine(); }
+
                             line.CopyText(sb);
                             passFirstLine = true;
                         }
@@ -353,7 +334,7 @@ namespace LayoutFarm.CustomWidgets
                     _textEditRenderElement.SplitCurrentLineToNewLine();
                 }
 
-                 
+
                 _textEditRenderElement.AddTextLine(line);
                 lineCount++;
             }
@@ -423,31 +404,12 @@ namespace LayoutFarm.CustomWidgets
         {
             _textEditRenderElement?.ReplaceCurrentTextRunContent(nBackspaces, newstr);
         }
-
-        public void CopyCurrentLine(StringBuilder stbuilder)
-        {
-            _textEditRenderElement.CopyCurrentLine(stbuilder);
-        }
-
-        //public void FormatCurrentSelection(TextSpanStyle spanStyle)
-        //{
-        //    //TODO: reimplement text-model again
-        //    _textEditRenderElement.TextLayerController.DoFormatSelection(spanStyle);
-
-        //}
-        //public void FormatCurrentSelection(TextSpanStyle spanStyle, FontStyle toggleFontStyle)
-        //{
-        //    //TODO: reimplement text-model again
-        //    _textEditRenderElement.TextLayerController.DoFormatSelection(spanStyle, toggleFontStyle);
-        //}
-
-
     }
 
 
     public sealed class MaskTextBox : TextBoxBase
     {
-        List<char> _actualUserInputText = new List<char>();
+        readonly List<char> _actualUserInputText = new List<char>();
         int _keydownCharIndex = 0;
 
         public MaskTextBox(int width, int height)

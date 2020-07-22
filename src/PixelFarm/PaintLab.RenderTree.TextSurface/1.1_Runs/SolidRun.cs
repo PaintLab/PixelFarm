@@ -45,8 +45,31 @@ namespace LayoutFarm.TextEditing
 
         public string RawText { get; set; }
 
-        public override CopyRun CreateCopy() => MakeTextRun(0, _mybuffer.Length);
-
+        public override void WriteTo(TextCopyBuffer output) => output.AppendData(_mybuffer, 0, _mybuffer.Length);
+        public override void WriteTo(TextCopyBuffer output, int start)
+        {
+            if (start == 0)
+            {
+                //ENTIRE
+                int length = _mybuffer.Length - start;
+                if (start > -1 && length > 0)
+                {
+                    output.AppendData(_mybuffer, start, length);
+                }
+            }
+        }
+        public override void WriteTo(TextCopyBuffer output, int start, int len)
+        {
+            if (start == 0)
+            {
+                //ENTIRE
+                int length = _mybuffer.Length - start;
+                if (start > -1 && length > 0)
+                {
+                    output.AppendData(_mybuffer, start, len);
+                }
+            }
+        }
         public override CopyRun Copy(int startIndex)
         {
             if (startIndex == 0)
@@ -77,9 +100,13 @@ namespace LayoutFarm.TextEditing
         }
 
         public override int GetRunWidth(int charOffset) => CalculateDrawingStringSize(_mybuffer, charOffset).Width;
+        public override int GetRunWidth(int startAtCharOffset, int count)
+        {
+            return MeasureString(new TextBufferSpan(_mybuffer, startAtCharOffset, count)).Width;
+        }
         public override string GetText() => new string(_mybuffer);
 
-        public override void WriteTo(StringBuilder stbuilder) => stbuilder.Append(_mybuffer);
+
 
         public override void UpdateRunWidth()
         {
@@ -87,8 +114,6 @@ namespace LayoutFarm.TextEditing
             SetSize(size.Width, size.Height);
         }
         public override char GetChar(int index) => _mybuffer[index];
-
-        public override void CopyContentToStringBuilder(StringBuilder stBuilder) => stBuilder.Append(RawText);
 
         public override int CharacterCount => (_mybuffer.Length == 0) ? 0 : 1;
 

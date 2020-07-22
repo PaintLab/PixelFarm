@@ -721,8 +721,8 @@
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\4_TextLine_ArrangeAndResizingMechanism.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\4_TextLine_ArrangeAndResizingMechanism.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\5_TextLine_Advanced.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\5_TextLine_Advanced.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\debugActivityRecorder.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\debugActivityRecorder.cs" />
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\TextCopyBuffer.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\TextCopyBuffer.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\TextLineWalker.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\TextLineWalker.cs" />
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\TextRangeCopy.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\TextRangeCopy.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.3_Layer\ITextFlowOwner.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\1.3_Layer\ITextFlowOwner.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.3_Layer\RunVisitor.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\1.3_Layer\RunVisitor.cs" />
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.3_Layer\TextFlowLayer.cs" Link="PixelFarm\PaintLab.RenderTree.TextSurface\1.3_Layer\TextFlowLayer.cs" />

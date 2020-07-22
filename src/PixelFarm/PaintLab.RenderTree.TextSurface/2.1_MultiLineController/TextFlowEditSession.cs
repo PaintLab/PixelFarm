@@ -175,7 +175,7 @@ namespace LayoutFarm.TextEditing
 
             if (_selectionRange.IsOnTheSameLine)
             {
-                var tobeDeleteTextRuns = new TextRangeCopy();
+                var tobeDeleteTextRuns = new TextCopyBuffer();
                 _lineEditor.CopySelectedTextRuns(_selectionRange, tobeDeleteTextRuns);
 
                 if (tobeDeleteTextRuns.HasSomeRuns)
@@ -198,7 +198,7 @@ namespace LayoutFarm.TextEditing
                 int startPointLindId = startPoint.LineId;
                 int startPointCharIndex = startPoint.LineCharIndex;
 
-                var tobeDeleteTextRuns = new TextRangeCopy();
+                var tobeDeleteTextRuns = new TextCopyBuffer();
                 _lineEditor.CopySelectedTextRuns(_selectionRange, tobeDeleteTextRuns);
 
                 if (tobeDeleteTextRuns != null && tobeDeleteTextRuns.HasSomeRuns)
@@ -234,15 +234,25 @@ namespace LayoutFarm.TextEditing
 
 
         public Run LatestHitRun => _textLayer.LatestHitRun;
-        void SplitSelectedText()
+        void SplitSelectedText(TextSpanStyle textStyle)
         {
 
             if (_selectionRange == null) return;
-            //
-            SelectionRangeInfo selRangeInfo = _lineEditor.SplitSelectedText(_selectionRange);
+
+            RunStyle runstyle = new RunStyle()
+            {
+                ReqFont = textStyle.ReqFont,
+                FontColor = textStyle.FontColor,
+                ContentHAlign = textStyle.ContentHAlign
+            };
+
+            SelectionRangeInfo selRangeInfo = _lineEditor.SplitSelectedText(_selectionRange, runstyle);
             //add startPointInfo and EndPoint info to current selection range
             _selectionRange.StartPoint = selRangeInfo.start;
             _selectionRange.EndPoint = selRangeInfo.end;
+
+            _updateJustCurrentLine = _selectionRange.IsOnTheSameLine;
+            CancelSelect();
         }
 
         public void DoTabOverSelectedRange()
@@ -347,86 +357,65 @@ namespace LayoutFarm.TextEditing
         {
             //int startLineNum = _textLineWriter.LineNumber;
             //int startCharIndex = _textLineWriter.CharIndex;
-            SplitSelectedText();
-            VisualSelectionRange selRange = SelectionRange;
-            if (selRange != null)
-            {
-                RunStyle runstyle = new RunStyle()
-                {
-                    ReqFont = textStyle.ReqFont,
-                    FontColor = textStyle.FontColor,
-                    ContentHAlign = textStyle.ContentHAlign
-                };
-
-                foreach (Run r in selRange.GetPrintableTextRunIter())
-                {
-                    r.SetStyle(runstyle);
-                }
-
-                _updateJustCurrentLine = _selectionRange.IsOnTheSameLine;
-                CancelSelect();
-                //?
-                //CharIndex++;
-                //CharIndex--;
-            }
+            SplitSelectedText(textStyle);
         }
-        public void DoFormatSelection(TextSpanStyle textStyle, RequestFontStyle toggleFontStyle)
-        {
-            ////int startLineNum = _textLineWriter.LineNumber;
-            ////int startCharIndex = _textLineWriter.CharIndex;
-            //SplitSelectedText();
-            //VisualSelectionRange selRange = SelectionRange;
-            //if (selRange != null)
-            //{
-            //    foreach (EditableRun r in selRange.GetPrintableTextRunIter())
-            //    {
-            //        RunStyle existingStyle = r.SpanStyle;
-            //        switch (toggleFontStyle)
-            //        {
-            //            case FontStyle.Bold:
-            //                if ((existingStyle.ReqFont.Style & FontStyle.Bold) != 0)
-            //                {
-            //                    //change to normal
-            //                    RequestFont existingFont = existingStyle.ReqFont;
-            //                    RequestFont newReqFont = new RequestFont(
-            //                        existingFont.Name, existingFont.SizeInPoints,
-            //                        existingStyle.ReqFont.Style & ~FontStyle.Bold); //clear bold
+        //public void DoFormatSelection(TextSpanStyle textStyle, RequestFontStyle toggleFontStyle)
+        //{
+        //    ////int startLineNum = _textLineWriter.LineNumber;
+        //    ////int startCharIndex = _textLineWriter.CharIndex;
+        //    //SplitSelectedText();
+        //    //VisualSelectionRange selRange = SelectionRange;
+        //    //if (selRange != null)
+        //    //{
+        //    //    foreach (EditableRun r in selRange.GetPrintableTextRunIter())
+        //    //    {
+        //    //        RunStyle existingStyle = r.SpanStyle;
+        //    //        switch (toggleFontStyle)
+        //    //        {
+        //    //            case FontStyle.Bold:
+        //    //                if ((existingStyle.ReqFont.Style & FontStyle.Bold) != 0)
+        //    //                {
+        //    //                    //change to normal
+        //    //                    RequestFont existingFont = existingStyle.ReqFont;
+        //    //                    RequestFont newReqFont = new RequestFont(
+        //    //                        existingFont.Name, existingFont.SizeInPoints,
+        //    //                        existingStyle.ReqFont.Style & ~FontStyle.Bold); //clear bold
 
-            //                    RunStyle textStyle2 = new RunStyle();
-            //                    textStyle2.ReqFont = newReqFont;
-            //                    textStyle2.ContentHAlign = textStyle.ContentHAlign;
-            //                    textStyle2.FontColor = textStyle.FontColor;
-            //                    r.SetStyle(textStyle2);
-            //                    continue;//go next***
-            //                }
-            //                break;
-            //            case FontStyle.Italic:
-            //                if ((existingStyle.ReqFont.Style & FontStyle.Italic) != 0)
-            //                {
-            //                    //change to normal
-            //                    RequestFont existingFont = existingStyle.ReqFont;
-            //                    RequestFont newReqFont = new RequestFont(
-            //                        existingFont.Name, existingFont.SizeInPoints,
-            //                        existingStyle.ReqFont.Style & ~FontStyle.Italic); //clear italic
+        //    //                    RunStyle textStyle2 = new RunStyle();
+        //    //                    textStyle2.ReqFont = newReqFont;
+        //    //                    textStyle2.ContentHAlign = textStyle.ContentHAlign;
+        //    //                    textStyle2.FontColor = textStyle.FontColor;
+        //    //                    r.SetStyle(textStyle2);
+        //    //                    continue;//go next***
+        //    //                }
+        //    //                break;
+        //    //            case FontStyle.Italic:
+        //    //                if ((existingStyle.ReqFont.Style & FontStyle.Italic) != 0)
+        //    //                {
+        //    //                    //change to normal
+        //    //                    RequestFont existingFont = existingStyle.ReqFont;
+        //    //                    RequestFont newReqFont = new RequestFont(
+        //    //                        existingFont.Name, existingFont.SizeInPoints,
+        //    //                        existingStyle.ReqFont.Style & ~FontStyle.Italic); //clear italic
 
-            //                    TextSpanStyle textStyle2 = new TextSpanStyle();
-            //                    textStyle2.ReqFont = newReqFont;
-            //                    textStyle2.ContentHAlign = textStyle.ContentHAlign;
-            //                    textStyle2.FontColor = textStyle.FontColor;
-            //                    r.SetStyle(textStyle2);
-            //                    continue;//go next***
-            //                }
-            //                break;
-            //        }
-            //        r.SetStyle(textStyle);
-            //    }
-            //    _updateJustCurrentLine = _selectionRange.IsOnTheSameLine;
-            //    CancelSelect();
-            //    //?
-            //    //CharIndex++;
-            //    //CharIndex--;
-            //}
-        }
+        //    //                    TextSpanStyle textStyle2 = new TextSpanStyle();
+        //    //                    textStyle2.ReqFont = newReqFont;
+        //    //                    textStyle2.ContentHAlign = textStyle.ContentHAlign;
+        //    //                    textStyle2.FontColor = textStyle.FontColor;
+        //    //                    r.SetStyle(textStyle2);
+        //    //                    continue;//go next***
+        //    //                }
+        //    //                break;
+        //    //        }
+        //    //        r.SetStyle(textStyle);
+        //    //    }
+        //    //    _updateJustCurrentLine = _selectionRange.IsOnTheSameLine;
+        //    //    CancelSelect();
+        //    //    //?
+        //    //    //CharIndex++;
+        //    //    //CharIndex--;
+        //    //}
+        //}
 
         public void AddMarkerSpan(VisualMarkerSelectionRange markerRange)
         {
@@ -492,8 +481,8 @@ namespace LayoutFarm.TextEditing
                     _commandHistoryList.AddDocAction(cmd);
                     _sessionListener?.AddDocAction(cmd);
 
-                    char nextChar = _lineEditor.NextChar; 
-                    
+                    char nextChar = _lineEditor.NextChar;
+
                     if (char.IsLowSurrogate(nextChar) || !CanCaretStopOnThisChar(nextChar))
                     {
                         //TODO: review return range here again
@@ -623,7 +612,7 @@ namespace LayoutFarm.TextEditing
                 lineCount++;
             }
         }
-        public void AddTextRunsToCurrentLine(TextRangeCopy copyRange)
+        public void AddTextRunsToCurrentLine(TextCopyBuffer output)
         {
             VisualSelectionRangeSnapShot removedRange = RemoveSelectedText();
             int startLineNum = _lineEditor.LineNumber;
@@ -631,10 +620,10 @@ namespace LayoutFarm.TextEditing
             bool isRecordingHx = EnableUndoHistoryRecording;
             EnableUndoHistoryRecording = false;
 
-            if (copyRange.HasSomeRuns)
+            if (output.HasSomeRuns)
             {
                 bool hasFirstLine = false;
-                foreach (string line in copyRange.GetLineIter())
+                foreach (string line in output.GetLineIter())
                 {
                     if (hasFirstLine)
                     {
@@ -647,7 +636,7 @@ namespace LayoutFarm.TextEditing
             }
 
             EnableUndoHistoryRecording = isRecordingHx;
-            var cmd = new DocActionInsertRuns(copyRange, startLineNum, startCharIndex,
+            var cmd = new DocActionInsertRuns(output, startLineNum, startCharIndex,
                     _lineEditor.LineNumber, _lineEditor.CharIndex);
             _commandHistoryList.AddDocAction(cmd);
             _sessionListener?.AddDocAction(cmd);
@@ -681,27 +670,7 @@ namespace LayoutFarm.TextEditing
             //
             NotifyContentSizeChanged();
         }
-        public void AddTextRunToCurrentLine(Run run)
-        {
-            _updateJustCurrentLine = true;
-            VisualSelectionRangeSnapShot removedRange = RemoveSelectedText();
-            int startLineNum = _lineEditor.LineNumber;
-            int startCharIndex = _lineEditor.CharIndex;
-            bool isRecordingHx = EnableUndoHistoryRecording;
-            EnableUndoHistoryRecording = false;
-            _lineEditor.AddTextSpan(run);
-
-
-            EnableUndoHistoryRecording = isRecordingHx;
-            var cmd = new DocActionInsertRuns(run.CreateCopy(), startLineNum, startCharIndex,
-                    _lineEditor.LineNumber, _lineEditor.CharIndex);
-            _commandHistoryList.AddDocAction(cmd);
-            _sessionListener?.AddDocAction(cmd);
-
-            _updateJustCurrentLine = false;
-            //
-            NotifyContentSizeChanged();
-        }
+        
         public void Clear()
         {
             //1.

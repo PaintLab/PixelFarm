@@ -1,85 +1,97 @@
 ﻿//Apache2, 2014-present, WinterDev
 
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace LayoutFarm.TextEditing
 {
-    public static class StringBuilderPool<T>
+    static class ObjectPool<I, T>
     {
         [System.ThreadStatic]
-        static Stack<StringBuilder> s_stringBuilderPool;
+        static Stack<I> s_pool;
 
-        public static StringBuilder GetFreeStringBuilder()
+        static Func<I> s_newInstance;
+        static Action<I> s_reset;
+
+        public static void SetDelegates(Func<I> newInstance, Action<I> reset)
         {
-            if (s_stringBuilderPool == null)
+            s_newInstance = newInstance;
+            s_reset = reset;
+        }
+
+        public static I GetFreeInstance()
+        {
+            if (s_pool == null)
             {
-                s_stringBuilderPool = new Stack<StringBuilder>();
+                s_pool = new Stack<I>();
             }
 
-            if (s_stringBuilderPool.Count > 0)
+            if (s_pool.Count > 0)
             {
-                return s_stringBuilderPool.Pop();
+                return s_pool.Pop();
             }
             else
             {
-                return new StringBuilder();
+                return s_newInstance();
             }
         }
-        public static void ReleaseStringBuilder(StringBuilder stBuilder)
+        public static void ReleaseInstance(I output)
         {
-            stBuilder.Length = 0;
-            s_stringBuilderPool.Push(stBuilder);
-        }
-
-
-        public static StringBuilderPoolContext<T> GetFreeStringBuilder(out StringBuilder stbuilder)
-        {
-            return new StringBuilderPoolContext<T>(out stbuilder);
+            s_reset(output);
+            s_pool.Push(output);
         }
     }
 
     public struct StringBuilderPoolContext<T> : System.IDisposable
     {
         StringBuilder _cacheStBuilder;
+        static StringBuilderPoolContext()
+        {
+            //once
+            ObjectPool<StringBuilder, T>.SetDelegates(
+                () => new StringBuilder(),
+                 sb => sb.Length = 0
+                );
+        }
         public StringBuilderPoolContext(out StringBuilder stbuilder)
         {
-            _cacheStBuilder = stbuilder = StringBuilderPool<T>.GetFreeStringBuilder();
+            _cacheStBuilder = stbuilder = ObjectPool<StringBuilder, T>.GetFreeInstance();
         }
         public void Dispose()
         {
             if (_cacheStBuilder != null)
             {
-                StringBuilderPool<T>.ReleaseStringBuilder(_cacheStBuilder);
+                ObjectPool<StringBuilder, T>.ReleaseInstance(_cacheStBuilder);
                 _cacheStBuilder = null;
             }
         }
     }
 
-    struct TempTextLineCopyContext : System.IDisposable
+    public struct TextRangeCopyPoolContext<T> : System.IDisposable
     {
-        class StringBuilderPoolOwner { } //temp class for our private string builder
+        TextCopyBuffer _copyBuffer;
 
-        StringBuilder _tempStBuilder;
-        public TempTextLineCopyContext(TextLineBox textline, out Typography.Text.TextBufferSpan buffSpan)
+        static TextRangeCopyPoolContext()
         {
-            _tempStBuilder = StringBuilderPool<StringBuilderPoolOwner>.GetFreeStringBuilder();
-            textline.CopyLineContent(_tempStBuilder);
-
-            int len = _tempStBuilder.Length;
-            char[] charBuffer = new char[len];
-            _tempStBuilder.CopyTo(0, charBuffer, 0, len);
-            buffSpan = new Typography.Text.TextBufferSpan(charBuffer);
+            //once
+            ObjectPool<TextCopyBuffer, T>.SetDelegates(
+                () => new TextCopyBuffer(),
+                 rngCpy => rngCpy.Clear()
+                );
+        }
+        public TextRangeCopyPoolContext(out TextCopyBuffer output)
+        {
+            _copyBuffer = output = ObjectPool<TextCopyBuffer, T>.GetFreeInstance();
         }
         public void Dispose()
         {
-            if (_tempStBuilder != null)
+            if (_copyBuffer != null)
             {
-                StringBuilderPool<StringBuilderPoolOwner>.ReleaseStringBuilder(_tempStBuilder);
-                _tempStBuilder = null;
+                ObjectPool<TextCopyBuffer, T>.ReleaseInstance(_copyBuffer);
+                _copyBuffer = null;
             }
         }
-    }
-
+    } 
 
 }

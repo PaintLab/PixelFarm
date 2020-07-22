@@ -31,7 +31,7 @@ namespace LayoutFarm.TextEditing
         }
 
         public Run CurrentTextRun => _lineEditor.GetCurrentTextRun();
-        public void CopyAllToPlainText(StringBuilder output)
+        public void CopyAllToPlainText(TextCopyBuffer output)
         {
             _lineEditor.CopyContentToStrignBuilder(output);
         }
@@ -43,9 +43,9 @@ namespace LayoutFarm.TextEditing
                 _selectionRange.SwapIfUnOrder();
                 if (_selectionRange.IsOnTheSameLine)
                 {
-                    var copyRuns = new TextRangeCopy();
+                    var copyRuns = new TextCopyBuffer();
                     _lineEditor.CopySelectedTextRuns(_selectionRange, copyRuns);
-                    copyRuns.CopyContentToStringBuilder(stBuilder);
+                    copyRuns.CopyTo(stBuilder);
 
                 }
                 else
@@ -53,17 +53,17 @@ namespace LayoutFarm.TextEditing
                     VisualPointInfo startPoint = _selectionRange.StartPoint;
                     CurrentLineNumber = startPoint.LineId;
                     _lineEditor.SetCurrentCharIndex(startPoint.LineCharIndex);
-                    var copyRuns = new TextRangeCopy();
+                    var copyRuns = new TextCopyBuffer();
                     _lineEditor.CopySelectedTextRuns(_selectionRange, copyRuns);
-                    copyRuns.CopyContentToStringBuilder(stBuilder);
+                    copyRuns.CopyTo(stBuilder);
                 }
             }
         }
-        public void CopyCurrentLine(StringBuilder output)
+        public void CopyCurrentLine(TextCopyBuffer output)
         {
             _lineEditor.CopyLineContent(output);
         }
-        public void CopyLine(int lineNum, StringBuilder output)
+        public void CopyLine(int lineNum, TextCopyBuffer output)
         {
             if (_lineEditor.LineNumber == lineNum)
             {

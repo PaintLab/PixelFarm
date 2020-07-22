@@ -384,11 +384,7 @@ namespace PixelFarm.Drawing.WinGdi
 
         public float MeasureBlankLineHeight(RequestFont f) => WinGdiTextService.MeasureBlankLineHeight(f);
 
-        public ILineSegmentList BreakToLineSegments(in TextBufferSpan textBufferSpan)
-        {
-            return null;
-            throw new NotImplementedException();
-        }
+       
         public void CalculateUserCharGlyphAdvancePos(in TextBufferSpan textBufferSpan,
             ILineSegmentList lineSegs,
             RequestFont font,

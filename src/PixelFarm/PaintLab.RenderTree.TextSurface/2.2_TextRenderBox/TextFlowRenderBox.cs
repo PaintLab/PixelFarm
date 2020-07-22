@@ -741,26 +741,23 @@ namespace LayoutFarm.TextEditing
         {
             _editSession.ReplaceCurrentLineTextRun(textRuns);
         }
-        public void CopyCurrentLine(StringBuilder output)
+        public void CopyCurrentLine(TextCopyBuffer output)
         {
             _editSession.CopyCurrentLine(output);
         }
-        public void CopyLine(int lineNum, StringBuilder output)
+        public void CopyLine(int lineNum, TextCopyBuffer output)
         {
             _editSession.CopyLine(lineNum, output);
         }
-        public void CopyContentToStringBuilder(StringBuilder stBuilder)
+        public void CopyContentToStringBuilder(TextCopyBuffer output)
         {
-            _editSession.CopyAllToPlainText(stBuilder);
+            _editSession.CopyAllToPlainText(output);
         }
         public void SplitCurrentLineToNewLine()
         {
             _editSession.SplitCurrentLineIntoNewLine();
         }
-        public void AddTextRun(Run textspan)
-        {
-            _editSession.AddTextRunToCurrentLine(textspan);
-        }
+        
         public void AddTextRun(char[] buffer)
         {
             _editSession.AddTextRunToCurrentLine(buffer);
