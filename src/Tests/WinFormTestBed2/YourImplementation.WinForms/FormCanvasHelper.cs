@@ -118,13 +118,13 @@ namespace LayoutFarm.UI
             InitWinform();
             IInstalledTypefaceProvider fontLoader = YourImplementation.CommonTextServiceSetup.FontLoader;
             //2. 
-             
+
 
             switch (internalViewportKind)
             {
                 default:
                     //gdi, gdi on gles
-                    
+
 
                     break;
                 case InnerViewportKind.PureAgg:
@@ -136,8 +136,30 @@ namespace LayoutFarm.UI
 
                         PixelFarm.Drawing.GLES2.GLES2Platform.TextService = openFontTextService;
 
-                        Typography.Text.GlobalTextService.TxtClient = openFontTextService.CreateNewServiceClient(); 
+                        Typography.Text.GlobalTextService.TxtClient = openFontTextService.CreateNewServiceClient();
+                        {
+                            var myAlternativeTypefaceSelector = new Typography.Text.AlternativeTypefaceSelector();
+                            {
+                                var preferTypefaces = new Typography.FontCollections.PreferredTypefaceList();
+                                preferTypefaces.AddTypefaceName("Source Sans Pro");
+                                preferTypefaces.AddTypefaceName("Sarabun");
 
+
+                                myAlternativeTypefaceSelector.SetPreferredTypefaces(
+                                     new[]{Typography.TextBreak.Unicode13RangeInfoList.C0_Controls_and_Basic_Latin,
+                                       Typography.TextBreak.Unicode13RangeInfoList.C1_Controls_and_Latin_1_Supplement,
+                                       Typography.TextBreak.Unicode13RangeInfoList.Latin_Extended_A,
+                                       Typography.TextBreak.Unicode13RangeInfoList.Latin_Extended_B,
+                                     },
+                                    preferTypefaces);
+                            }
+                            {
+                                var preferTypefaces = new Typography.FontCollections.PreferredTypefaceList();
+                                preferTypefaces.AddTypefaceName("Twitter Color Emoji");
+                                myAlternativeTypefaceSelector.SetPerferredEmoji(preferTypefaces);
+                            }
+                            Typography.Text.GlobalTextService.TxtClient.AlternativeTypefaceSelector = myAlternativeTypefaceSelector;
+                        }
                     }
                     break;
             }
