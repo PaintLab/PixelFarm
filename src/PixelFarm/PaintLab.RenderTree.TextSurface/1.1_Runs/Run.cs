@@ -36,7 +36,7 @@ namespace LayoutFarm.TextEditing
 
         protected float MeasureLineHeight() => _runStyle.MeasureBlankLineHeight();
 
-        protected Size MeasureString(in PixelFarm.Drawing.TextBufferSpan textBufferSpan) => _runStyle.MeasureString(textBufferSpan);
+        protected Size MeasureString(in Typography.Text.TextBufferSpan textBufferSpan) => _runStyle.MeasureString(textBufferSpan);
 
         public RunStyle RunStyle => _runStyle;
 
@@ -104,13 +104,13 @@ namespace LayoutFarm.TextEditing
         /// <param name="count"></param>
         /// <returns></returns>
         public abstract int GetRunWidth(int startAtCharOffset, int count);
-         
+
         internal static CharLocation InnerGetCharacterFromPixelOffset(Run tt, int pixelOffset)
         {
             return tt.GetCharacterFromPixelOffset(pixelOffset);
         }
         public abstract void UpdateRunWidth();
-       
+
         public abstract CharSpan LeftCopy(int index);
         public abstract CharSpan Copy(int startIndex, int length);
         public abstract CharSpan Copy(int startIndex);

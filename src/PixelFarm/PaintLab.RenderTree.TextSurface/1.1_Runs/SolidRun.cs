@@ -55,7 +55,7 @@ namespace LayoutFarm.TextEditing
         public override int GetRunWidth(int charOffset) => CalculateDrawingStringSize(0, charOffset).Width;
         public override int GetRunWidth(int startAtCharOffset, int count)
         {
-            return MeasureString(new PixelFarm.Drawing.TextBufferSpan(_mybuffer.UnsafeInternalCharArr, _mybuffer.beginAt + startAtCharOffset, count)).Width;
+            return MeasureString(new Typography.Text.TextBufferSpan(_mybuffer.UnsafeInternalCharArr, _mybuffer.beginAt + startAtCharOffset, count)).Width;
         }
 
         public override string GetText() => _mybuffer.GetString();
@@ -69,7 +69,7 @@ namespace LayoutFarm.TextEditing
 
         public override int CharacterCount => _mybuffer.len;
 
-        Size CalculateDrawingStringSize(int start, int length) => MeasureString(new PixelFarm.Drawing.TextBufferSpan(_mybuffer.UnsafeInternalCharArr, _mybuffer.beginAt + start, length));
+        Size CalculateDrawingStringSize(int start, int length) => MeasureString(new Typography.Text.TextBufferSpan(_mybuffer.UnsafeInternalCharArr, _mybuffer.beginAt + start, length));
  
         const int SAME_FONT_SAME_TEXT_COLOR = 0;
         const int SAME_FONT_DIFF_TEXT_COLOR = 1;

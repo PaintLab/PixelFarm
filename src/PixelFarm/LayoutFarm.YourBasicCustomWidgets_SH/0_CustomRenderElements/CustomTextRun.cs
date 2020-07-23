@@ -78,7 +78,7 @@ namespace LayoutFarm.CustomWidgets
                     //similar to size change
                     //for gfx-invalidation, we need a size before change and after change 
 
-                    var textBufferSpan = new TextBufferSpan(_textBuffer);
+                    var textBufferSpan = new Typography.Text.TextBufferSpan(_textBuffer);
                     Size newSize = Typography.Text.GlobalTextService.TxtClient.MeasureString(textBufferSpan, _font);//just measure
                     int newW = Width;
                     int newH = Height;
@@ -255,7 +255,7 @@ namespace LayoutFarm.CustomWidgets
                     {
                         int newW = this.Width;
                         int newH = this.Height;
-                        var buff = new TextBufferSpan(_textBuffer);
+                        var buff = new Typography.Text.TextBufferSpan(_textBuffer);
                         Size size = Typography.Text.GlobalTextService.TxtClient.MeasureString(buff, _font);
                         if (!this.HasSpecificWidth)
                         {

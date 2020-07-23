@@ -49,7 +49,7 @@ namespace LayoutFarm.TextEditing
             }
         }
         //
-        internal Size MeasureString(in PixelFarm.Drawing.TextBufferSpan textBufferSpan)
+        internal Size MeasureString(in Typography.Text.TextBufferSpan textBufferSpan)
         {
             return GlobalTextService.TxtClient.MeasureString(textBufferSpan, ReqFont);
         }
