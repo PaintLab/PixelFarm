@@ -1,12 +1,10 @@
 ﻿//Apache2, 2014-present, WinterDev
 
 using System;
-using System.Text;
 using Typography.TextLayout;
 
 using PixelFarm.Drawing;
 using Typography.Text;
-using PixelFarm.CpuBlit.VertexProcessing;
 
 namespace LayoutFarm.TextEditing
 {
@@ -14,7 +12,6 @@ namespace LayoutFarm.TextEditing
     {
         [ThreadStatic]
         static LayoutWordVisitor s_wordVistor;
-
 
         public static void BreakToLineSegments(in Typography.Text.TextBufferSpan textBufferSpan, LineSegmentList<LineSegment> lineSegs)
         {
@@ -42,7 +39,8 @@ namespace LayoutFarm.TextEditing
         char[] _mybuffer;
 #endif
 
-        int[] _outputUserCharAdvances = null;
+        int[] _charAdvances = null;
+
         RenderVxFormattedString _renderVxFormattedString; //re-creatable from original content
         bool _content_Parsed;//
 
@@ -136,11 +134,11 @@ namespace LayoutFarm.TextEditing
             {
                 //ca
                 int total = 0;
-                if (_outputUserCharAdvances != null)
+                if (_charAdvances != null)
                 {
                     for (int i = 0; i < charOffset; ++i)
                     {
-                        total += _outputUserCharAdvances[i];
+                        total += _charAdvances[i];
                     }
                 }
                 return total;
@@ -153,11 +151,11 @@ namespace LayoutFarm.TextEditing
                 UpdateRunWidth();
             }
             int total = 0;
-            if (_outputUserCharAdvances != null)
+            if (_charAdvances != null)
             {
                 for (int i = startAtCharOffset; i < count; ++i)
                 {
-                    total += _outputUserCharAdvances[i];
+                    total += _charAdvances[i];
                 }
             }
             return total;
@@ -173,11 +171,11 @@ namespace LayoutFarm.TextEditing
 
             if (_content_Parsed) { return; }
 
-            if (_outputUserCharAdvances == null || _outputUserCharAdvances.Length != _mybuffer.Length)
+            if (_charAdvances == null || _charAdvances.Length != _mybuffer.Length)
             {
                 //sometime we change only font style
                 //so the buffer char_count is not changed
-                _outputUserCharAdvances = new int[_mybuffer.Length];
+                _charAdvances = new int[_mybuffer.Length];
             }
 
             if (_renderVxFormattedString != null)
@@ -188,7 +186,7 @@ namespace LayoutFarm.TextEditing
 
 
             var measureResult = new TextSpanMeasureResult();
-            measureResult.outputXAdvances = _outputUserCharAdvances;
+            measureResult.outputXAdvances = _charAdvances;
 
             GlobalTextService.TxtClient.CalculateUserCharGlyphAdvancePos(
                new Typography.Text.TextBufferSpan(_mybuffer),
@@ -369,11 +367,11 @@ namespace LayoutFarm.TextEditing
         {
             if (pixelOffset < Width)
             {
-                int j = _outputUserCharAdvances.Length;
+                int j = _charAdvances.Length;
                 int accWidth = 0; //accummulate width
                 for (int i = 0; i < j; i++)
                 {
-                    int charW = _outputUserCharAdvances[i];
+                    int charW = _charAdvances[i];
                     if (charW == 0)
                     {
                         continue;
@@ -387,7 +385,7 @@ namespace LayoutFarm.TextEditing
                         {
                             //this run is no select 
                             //but we must check if 
-                            if ((i < j - 1) && (_outputUserCharAdvances[i + 1] == 0))
+                            if ((i < j - 1) && (_charAdvances[i + 1] == 0))
                             {
                                 //temp fix for surrogate pair
                                 return new CharLocation(accWidth + charW, i + 2);
