@@ -122,8 +122,8 @@ namespace PixelFarm.DrawingGL
         public void DrawWithVBO(TextureCoordVboBuilder vboBuilder)
         {
 
-            CpuBlit.ArrayListSpan<float> vertexListSpan = vboBuilder.CreateVertextListSpan();
-            CpuBlit.ArrayListSpan<ushort> indexListSpan = vboBuilder.CreateIndexListSpan();
+            CpuBlit.ArrayListSegment<float> vertexListSpan = vboBuilder.CreateVertextListSpan();
+            CpuBlit.ArrayListSegment<ushort> indexListSpan = vboBuilder.CreateIndexListSpan();
 
             SetCurrent();
             CheckViewMatrix();
@@ -131,8 +131,8 @@ namespace PixelFarm.DrawingGL
             //-------------------------------------------------------------------------------------       
             unsafe
             {
-                CpuBlit.ArrayListSpan<float>.UnsafeGetInternalArr(vertexListSpan, out float[] vertexArr);
-                CpuBlit.ArrayListSpan<ushort>.UnsafeGetInternalArr(indexListSpan, out ushort[] indexArr);
+                CpuBlit.ArrayListSegment<float>.UnsafeGetInternalArr(vertexListSpan, out float[] vertexArr);
+                CpuBlit.ArrayListSegment<ushort>.UnsafeGetInternalArr(indexListSpan, out ushort[] indexArr);
 
                 fixed (float* imgVertices = &vertexArr[vertexListSpan.beginAt])
                 {
@@ -1042,11 +1042,11 @@ namespace PixelFarm.DrawingGL
         /// <param name="indexList"></param>
         public void DrawSubImages(GLBitmap glBmp, TextureCoordVboBuilder vboBuilder)
         {
-            CpuBlit.ArrayListSpan<float> vertextListSpan = vboBuilder.CreateVertextListSpan();
+            CpuBlit.ArrayListSegment<float> vertextListSpan = vboBuilder.CreateVertextListSpan();
 
             if (vertextListSpan.Count == 0) { return; }
 
-            CpuBlit.ArrayListSpan<ushort> indexListSpan = vboBuilder.CreateIndexListSpan();
+            CpuBlit.ArrayListSegment<ushort> indexListSpan = vboBuilder.CreateIndexListSpan();
 
             SetCurrent();
             CheckViewMatrix();
@@ -1060,8 +1060,8 @@ namespace PixelFarm.DrawingGL
             // ------------------------------------------------------------------------------------- 
             unsafe
             {
-                CpuBlit.ArrayListSpan<float>.UnsafeGetInternalArr(vertextListSpan, out float[] v_arr);
-                CpuBlit.ArrayListSpan<ushort>.UnsafeGetInternalArr(indexListSpan, out ushort[] i_arr);
+                CpuBlit.ArrayListSegment<float>.UnsafeGetInternalArr(vertextListSpan, out float[] v_arr);
+                CpuBlit.ArrayListSegment<ushort>.UnsafeGetInternalArr(indexListSpan, out ushort[] i_arr);
 
                 fixed (float* imgVertices = &v_arr[vertextListSpan.beginAt])
                 {

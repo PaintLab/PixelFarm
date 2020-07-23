@@ -285,8 +285,8 @@ namespace PixelFarm.DrawingGL
 #endif
         public DrawingGL.VertexBufferObject _vbo;
 
-        public ArrayListSpan<float> VertexCoords { get; set; }
-        public ArrayListSpan<ushort> IndexArray { get; set; }
+        public ArrayListSegment<float> VertexCoords { get; set; }
+        public ArrayListSegment<ushort> IndexArray { get; set; }
         public int IndexArrayCount => IndexArray.Count;
 
         public float Width { get; set; }
@@ -328,8 +328,8 @@ namespace PixelFarm.DrawingGL
             Width = 0;
             SpanHeight = DescendingInPx = AdditionalVerticalOffset = 0;
             ColorGlyphOnTransparentBG = false;
-            VertexCoords = ArrayListSpan<float>.Empty;
-            IndexArray = ArrayListSpan<ushort>.Empty;
+            VertexCoords = ArrayListSegment<float>.Empty;
+            IndexArray = ArrayListSegment<ushort>.Empty;
             ResolvedFont = null;
             BreakInfo = null;
         }

@@ -378,10 +378,13 @@ namespace Mini
                         Typography.OpenFont.Typeface typeface = atlasProj.GetTypeface(config.FontFilename);
 
                         //TODO: add other font styles 
-                        RequestFont reqFont = new RequestFont(typeface.Name, builderTask.Size, FontStyle.Regular);
+                        RequestFont reqFont = new RequestFont(typeface.Name, builderTask.Size);
 
+                        string random_suffix = Guid.NewGuid().ToString().Substring(0, 7);
+                        string textureName = typeface.Name.ToLower() + "_" + random_suffix + ".info";
+                        string output_imgFilename = textureName + ".png";
 
-                        string textureName = typeface.Name.ToLower() + "_" + reqFont.FontKey;
+                        
                         string outputDir = Path.GetDirectoryName(atlasProj.OutputFilename);
                         FontAtlasBuilderHelper builderHelper = new FontAtlasBuilderHelper();
 
@@ -392,8 +395,7 @@ namespace Mini
                             typeface,
                             builderTask.Size,
                             builderTask.TextureKind,
-                            builderTask.TextureBuildDetails.ToArray(),
-                            reqFont.FontKey
+                            builderTask.TextureBuildDetails.ToArray()
                             );
                     }
                 }

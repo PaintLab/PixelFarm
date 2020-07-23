@@ -2,7 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
+
 using PixelFarm.CpuBlit;
 using PixelFarm.Drawing;
 using Typography.Text;

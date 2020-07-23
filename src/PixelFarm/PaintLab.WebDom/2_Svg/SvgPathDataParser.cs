@@ -343,7 +343,7 @@ namespace PaintLab.Svg
         }
 
 
-        struct NumberLexerAccum
+        ref struct NumberLexerAccum
         {
             int _intgerAccumValue;
             short _integer_partCount;

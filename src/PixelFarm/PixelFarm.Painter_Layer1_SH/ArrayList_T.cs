@@ -21,12 +21,12 @@
 
 namespace PixelFarm.CpuBlit
 {
-    public readonly struct ArrayListSpan<T>
+    public readonly struct ArrayListSegment<T>
     {
         internal readonly ArrayList<T> _arrList;
         public readonly int beginAt;
         public readonly int len;
-        public ArrayListSpan(ArrayList<T> arrList, int beginAt, int len)
+        public ArrayListSegment(ArrayList<T> arrList, int beginAt, int len)
         {
             this._arrList = arrList;
             this.beginAt = beginAt;
@@ -35,12 +35,12 @@ namespace PixelFarm.CpuBlit
 
         public int Count => len;
 
-        public static void UnsafeGetInternalArr(in ArrayListSpan<T> listSpan, out T[] internalArr)
+        public static void UnsafeGetInternalArr(in ArrayListSegment<T> listSpan, out T[] internalArr)
         {
             internalArr = listSpan._arrList.UnsafeInternalArray;
         }
 
-        public static readonly ArrayListSpan<T> Empty = new ArrayListSpan<T>();
+        public static readonly ArrayListSegment<T> Empty = new ArrayListSegment<T>();
 #if DEBUG
         public override string ToString()
         {
@@ -223,6 +223,6 @@ namespace PixelFarm.CpuBlit
         public int Length => _currentSize;
 
         //
-        public ArrayListSpan<T> CreateSpan(int beginAt, int len) => new ArrayListSpan<T>(this, beginAt, len);
+        public ArrayListSegment<T> CreateSpan(int beginAt, int len) => new ArrayListSegment<T>(this, beginAt, len);
     }
 }
