@@ -918,7 +918,7 @@ namespace LayoutFarm.TextEditing
             if (_editSession.SelectionRange != null)
             {
                 VisualSelectionRange visualSelectionRange = _editSession.SelectionRange;
-                visualSelectionRange.SwapIfUnOrder();
+                visualSelectionRange.Normalize();
                 if (visualSelectionRange.IsValid && !visualSelectionRange.IsOnTheSameLine)
                 {
                     InvalidateGraphicOfCurrentSelectionArea();

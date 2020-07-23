@@ -53,6 +53,7 @@
     <Compile Include="1.2_Lines\4_TextLine_ArrangeAndResizingMechanism.cs" />
     <Compile Include="1.2_Lines\5_TextLine_Advanced.cs" />
     <Compile Include="1.2_Lines\debugActivityRecorder.cs" />
+    <Compile Include="1.2_Lines\RunListPool.cs" />
     <Compile Include="1.2_Lines\TextLineWalker.cs" />
     <Compile Include="1.2_Lines\TextCopyBuffer.cs" />
     <Compile Include="1.3_Layer\TextFlowLayer.cs" />

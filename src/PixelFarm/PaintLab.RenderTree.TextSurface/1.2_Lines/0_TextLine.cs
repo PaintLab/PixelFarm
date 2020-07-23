@@ -46,7 +46,9 @@ namespace LayoutFarm.TextEditing
         internal TextLineBox(TextFlowLayer textFlowLayer)
         {
             _textFlowLayer = textFlowLayer;
+
             _actualLineHeight = textFlowLayer.DefaultLineHeight; //we start with default line height
+            //
 #if DEBUG
             this.dbugLineId = dbugLineTotalCount;
             dbugLineTotalCount++;
@@ -103,16 +105,7 @@ namespace LayoutFarm.TextEditing
                 acc_charCount += r.CharacterCount;
                 r = r.NextRun;
             }
-            //foreach (Run r in _runs)
-            //{
-            //    if (r.CharacterCount + acc_charCount >= charIndex)
-            //    {
-            //        //found at this run
-            //        return xoffset + r.GetRunWidth(charIndex - acc_charCount);
-            //    }
-            //    xoffset += r.Width;
-            //    acc_charCount += r.CharacterCount;
-            //}
+
             return 0;//?
         }
         public void TextLineReCalculateActualLineSize()
@@ -140,7 +133,7 @@ namespace LayoutFarm.TextEditing
         }
         internal bool HitTestCore(HitChain hitChain)
         {
-            //hitChain.GetTestPoint(out int testX, out int testY);
+
             if (this.RunCount == 0)
             {
                 return false;
@@ -256,7 +249,6 @@ namespace LayoutFarm.TextEditing
                 yield return linkNode.Value;
                 linkNode = linkNode.Next;
             }
-
         }
 
         //
@@ -294,10 +286,10 @@ namespace LayoutFarm.TextEditing
 
         internal void ValidateContentArrangement() => _lineFlags |= LINE_CONTENT_ARRANGED;
 
-        public static void InnerCopyLineContent(TextLineBox line, TextCopyBuffer output)
-        {
-            line.CopyLineContent(output);
-        }
+        //public static void InnerCopyLineContent(TextLineBox line, TextCopyBuffer output)
+        //{
+        //    line.CopyLineContent(output);
+        //}
         public void CopyLineContent(TextCopyBuffer output)
         {
             LinkedListNode<Run> curNode = this.First;
@@ -326,11 +318,6 @@ namespace LayoutFarm.TextEditing
         internal bool dbugHasOwner => _textFlowLayer != null;
 
 #endif
-        //internal bool IsLocalSuspendLineRearrange => (_lineFlags & LOCAL_SUSPEND_LINE_REARRANGE) != 0;
-        //internal void InvalidateLineLayout()
-        //{
-        //    _lineFlags &= ~LINE_SIZE_VALID;
-        //    _lineFlags &= ~LINE_CONTENT_ARRANGED;
-        //}
+
     }
 }

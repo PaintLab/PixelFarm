@@ -76,7 +76,7 @@ namespace LayoutFarm.TextEditing
         //
         public bool IsOnTheSameLine => _startPoint.LineId == _endPoint.LineId;
         //
-        public void SwapIfUnOrder()
+        public void Normalize()
         {
             if (IsOnTheSameLine)
             {

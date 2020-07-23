@@ -729,6 +729,7 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\1.2_Lines\4_TextLine_ArrangeAndResizingMechanism.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\1.2_Lines\5_TextLine_Advanced.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\1.2_Lines\debugActivityRecorder.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\1.2_Lines\RunListPool.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\1.2_Lines\TextCopyBuffer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\1.2_Lines\TextLineWalker.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\1.3_Layer\ITextFlowOwner.cs" />

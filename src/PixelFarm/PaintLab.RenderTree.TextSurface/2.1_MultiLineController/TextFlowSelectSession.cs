@@ -40,7 +40,7 @@ namespace LayoutFarm.TextEditing
         {
             if (_selectionRange != null)
             {
-                _selectionRange.SwapIfUnOrder();
+                _selectionRange.Normalize();
                 if (_selectionRange.IsOnTheSameLine)
                 {
                     var copyRuns = new TextCopyBuffer();

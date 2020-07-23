@@ -162,7 +162,7 @@ namespace LayoutFarm.TextEditing
 #endif
                 return VisualSelectionRangeSnapShot.Empty;
             }
-            _selectionRange.SwapIfUnOrder();
+            _selectionRange.Normalize();
 
             VisualSelectionRangeSnapShot selSnapshot = _selectionRange.GetSelectionRangeSnapshot();
             VisualPointInfo startPoint = _selectionRange.StartPoint;
