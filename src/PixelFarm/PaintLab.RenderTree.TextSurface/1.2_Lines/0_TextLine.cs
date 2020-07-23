@@ -6,6 +6,7 @@ using System.Collections.Generic;
  
 using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
+using Typography.Text;
 
 namespace LayoutFarm.TextEditing
 {

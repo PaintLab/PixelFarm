@@ -44,7 +44,7 @@ namespace PixelFarm.Drawing.GLES2
                 //we create
                 //1. texture coords for this string
                 //2. (if not delay) => an image for this string  inside a larger img texture
-                _gpuPainter.TextPrinter.PrepareStringForRenderVx(fmtstr, buffer, 0, buffer.Length);
+                _gpuPainter.TextPrinter.PrepareStringForRenderVx(fmtstr, buffer, startAt, len);
                 if (!fmtstr.Delay)
                 {
                     fmtstr.ReleaseIntermediateStructures();

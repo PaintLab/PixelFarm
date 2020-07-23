@@ -136,18 +136,24 @@ namespace LayoutFarm.TextEditing
                         actualRemove++;
                     }
                 }
-
-                Run.InnerRemove(removingTextRun, removeIndex, actualRemove, false);
-                if (removingTextRun.CharacterCount == 0)
+                if (removingTextRun is TextRun textRun)
                 {
-                    Run nextRun = removingTextRun.NextRun;
-                    CurrentLine.Remove(removingTextRun);
-                    SetCurrentTextRun(nextRun);
-                    EnsureCurrentTextRun();
+                    TextRunModifier mod = new TextRunModifier(CurrentLine.CharSource);
+                    mod.Remove(textRun, removeIndex, actualRemove, false);
+                    //Run.InnerRemove(removingTextRun, removeIndex, actualRemove, false);
 
+                    if (removingTextRun.CharacterCount == 0)
+                    {
+                        Run nextRun = removingTextRun.NextRun;
+                        CurrentLine.Remove(removingTextRun);
+                        SetCurrentTextRun(nextRun);
+                        EnsureCurrentTextRun();
+
+                    }
+                    CurrentLine.TextLineReCalculateActualLineSize();
+                    CurrentLine.RefreshInlineArrange();
                 }
-                CurrentLine.TextLineReCalculateActualLineSize();
-                CurrentLine.RefreshInlineArrange();
+
                 return toBeRemovedChar;
             }
         }
@@ -179,22 +185,23 @@ namespace LayoutFarm.TextEditing
                 //
 
                 //1. new 
-                var run = new TextRun(this.CurrentSpanStyle, new char[] { c });
+                TextRun run = CurrentLine.CreateTextRun(c);
                 CurrentLine.AddLast(run);
                 SetCurrentTextRun(run);
             }
             else
             {
-                Run run = CurrentTextRun;
-                if (run != null)
+
+                if (CurrentTextRun is TextRun run)
                 {
                     if (run.IsInsertable)
                     {
-                        run.InsertAfter(CurrentTextRunCharIndex, c);
+                        TextRunModifier modifier = new TextRunModifier(CurrentLine);
+                        modifier.InsertAfter(run, CurrentTextRunCharIndex, c);
                     }
                     else
                     {
-                        AddTextSpan(new TextRun(CurrentSpanStyle, new char[] { c }));
+                        AddTextSpan(CurrentLine.CreateTextRun(c));
                         return;
                     }
                 }
@@ -210,12 +217,11 @@ namespace LayoutFarm.TextEditing
         }
         public void AddTextSpan(string textspan)
         {
-            AddTextSpan(new TextRun(CurrentSpanStyle, textspan.ToCharArray()));
+            AddTextSpan(CurrentLine.CreateTextRun(textspan));
         }
         public void AddTextSpan(char[] textspan)
         {
-
-            AddTextSpan(new TextRun(CurrentSpanStyle, textspan));
+            AddTextSpan(CurrentLine.CreateTextRun(textspan));
         }
         public void AddTextSpan(Run textRun)
         {
@@ -311,18 +317,24 @@ namespace LayoutFarm.TextEditing
                 }
                 else
                 {
-                    CopyRun rightSplitedPart = Run.InnerRemove(currentRun,
-                        CurrentTextRunCharIndex + 1, true);
-                    if (rightSplitedPart != null)
+                    if (currentRun is TextRun textrun)
                     {
-                        CurrentLine.AddAfter(currentRun, rightSplitedPart);
+                        TextRunModifier modifier = new TextRunModifier(CurrentLine);
+                        CharSpan rightPart = modifier.Remove(textrun, CurrentTextRunCharIndex + 1, true);
+
+                        if (rightPart.len > 0)
+                        {
+                            CurrentLine.AddAfter(currentRun, rightPart);
+                        }
+
+                        CurrentLine.AddLineBreakAfter(currentRun);
+                        if (currentRun.CharacterCount == 0)
+                        {
+                            CurrentLine.Remove(currentRun);
+                        }
                     }
 
-                    CurrentLine.AddLineBreakAfter(currentRun);
-                    if (currentRun.CharacterCount == 0)
-                    {
-                        CurrentLine.Remove(currentRun);
-                    }
+
                 }
             }
 

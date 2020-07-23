@@ -2,7 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-
+using Typography.Text;
 namespace LayoutFarm.TextEditing
 {
 
@@ -165,21 +165,26 @@ namespace LayoutFarm.TextEditing
                 if (startPoint.Run == endPoint.Run)
                 {
                     Run removedRun = startPoint.Run;
-                    Run.InnerRemove(removedRun,
-                                    startPoint.RunLocalSelectedIndex,
-                                    endPoint.LineCharIndex - startPoint.LineCharIndex, false);
-                    if (removedRun.CharacterCount == 0)
+                    if (removedRun is TextRun textrun)
                     {
-                        if (startPoint.LineId == _currentLineNumber)
+                        TextRunModifier mod = new TextRunModifier(CharSource);
+                        mod.Remove(textrun,
+                                   startPoint.RunLocalSelectedIndex,
+                                   endPoint.LineCharIndex - startPoint.LineCharIndex, false);
+                        if (removedRun.CharacterCount == 0)
                         {
-                            this.Remove(removedRun);
-                        }
-                        else
-                        {
-                            TextLineBox line = _textFlowLayer.GetTextLine(startPoint.LineId);
-                            line.Remove(removedRun);
+                            if (startPoint.LineId == _currentLineNumber)
+                            {
+                                this.Remove(removedRun);
+                            }
+                            else
+                            {
+                                TextLineBox line = _textFlowLayer.GetTextLine(startPoint.LineId);
+                                line.Remove(removedRun);
+                            }
                         }
                     }
+
                 }
                 else
                 {

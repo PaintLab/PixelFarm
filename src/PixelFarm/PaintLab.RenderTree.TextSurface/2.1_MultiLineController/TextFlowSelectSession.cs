@@ -3,10 +3,11 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-
-using PixelFarm.Drawing;
-using LayoutFarm.TextEditing.Commands;
 using System.Text;
+
+using LayoutFarm.TextEditing.Commands;
+using PixelFarm.Drawing;
+using Typography.Text;
 
 namespace LayoutFarm.TextEditing
 {

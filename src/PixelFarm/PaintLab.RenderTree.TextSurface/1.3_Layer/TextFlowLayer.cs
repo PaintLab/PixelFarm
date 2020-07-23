@@ -2,9 +2,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
+using Typography.Text;
+
 namespace LayoutFarm.TextEditing
 {
     class TextMarkerLayer
@@ -45,6 +46,7 @@ namespace LayoutFarm.TextEditing
         //TODO: use linked-list or tree for lines??
         readonly List<TextLineBox> _lines = new List<TextLineBox>();
         readonly ITextFlowLayerOwner _owner;
+        internal readonly CharSource _charSource = new CharSource();
 
         public TextFlowLayer(ITextFlowLayerOwner owner, RunStyle defaultSpanStyle)
         {

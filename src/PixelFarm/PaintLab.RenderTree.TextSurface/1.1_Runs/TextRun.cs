@@ -7,36 +7,181 @@ using Typography.Text;
 using Typography.TextLayout;
 
 namespace LayoutFarm.TextEditing
-{ 
+{
+
+    struct TextRunModifier
+    {
+        //each editable run has it own (dynamic) char buffer  
+        readonly CharSource _charSource;
+        public TextRunModifier(CharSource charSource)
+        {
+            _charSource = charSource;
+        }
+        public TextRunModifier(TextLineBox textlineBox)
+        {
+            _charSource = textlineBox.CharSource;
+        }
+        internal void InsertAfter(TextRun run, int index, char c)
+        {
+            CharSpan _mybuffer = run._mybuffer;
+            int oldLexLength = _mybuffer.Count;
+            //
+            if (index > -1 && index < _mybuffer.Count - 1)
+            {
+                //split to 2 parts
+                //left-new-right
+
+                int startAt = _charSource.LatestLen;
+                _charSource.CopyAndAppend(_mybuffer.beginAt, index + 1);
+                _charSource.Append(c);
+                _charSource.CopyAndAppend(_mybuffer.beginAt + index + 1, oldLexLength - index - 1);
+
+                run.SetNewContent(new CharSpan(_charSource, startAt, _charSource.LatestLen - startAt));
+                run.InvalidateOwnerLineCharCount();
+                run.UpdateRunWidth();
+            }
+            else if (index == -1)
+            {
+                int startAt = _charSource.LatestLen;
+                //after -1 => first part
+                _charSource.Append(c);
+                //other part
+                _charSource.CopyAndAppend(_mybuffer.beginAt, oldLexLength);
+
+                run.SetNewContent(new CharSpan(_charSource, startAt, _charSource.LatestLen - startAt));
+                run.InvalidateOwnerLineCharCount();
+                run.UpdateRunWidth();
+            }
+            else if (index == oldLexLength - 1)
+            {
+                int startAt = _charSource.LatestLen;
+                if (_mybuffer.beginAt + oldLexLength == startAt)
+                {
+                    //append last
+                    //check a special case
+                    _charSource.Append(c);
+                    run.SetNewContent(new CharSpan(_charSource, _mybuffer.beginAt, _mybuffer.len + 1));
+                }
+                else
+                {
+                    _charSource.CopyAndAppend(_mybuffer.beginAt, oldLexLength);
+                    _charSource.Append(c);
+                    run.SetNewContent(new CharSpan(_charSource, startAt, _charSource.LatestLen - startAt));
+                }
+                run.InvalidateOwnerLineCharCount();
+                run.UpdateRunWidth();
+            }
+            else
+            {
+                throw new NotSupportedException();
+            }
+        }
+
+        internal CharSpan Remove(TextRun run, int startIndex, bool withFreeRun)
+        {
+            CharSpan _mybuffer = run._mybuffer;
+            if (startIndex > -1 && _mybuffer.len > 0)
+            {
+                int oldLexLength = _mybuffer.Count;
+
+                //copy of right part
+                CharSpan rightpart = new CharSpan(_charSource, _mybuffer.beginAt + startIndex, oldLexLength - startIndex);
+
+
+                //new span for left part
+                //it is ok the use the same rgn
+                CharSpan leftpart = new CharSpan(_charSource, _mybuffer.beginAt, startIndex);
+
+                run.SetNewContent(leftpart);//replace 
+                run.InvalidateOwnerLineCharCount();
+                run.UpdateRunWidth();
+
+                //char[] newBuff = new char[oldLexLength - length];
+                //if (withFreeRun)
+                //{
+                //    freeRun = MakeCopy(startIndex, length);
+                //}
+                //if (startIndex > 0)
+                //{
+                //    Array.Copy(_mybuffer, 0, newBuff, 0, startIndex);
+                //}
+
+                //Array.Copy(_mybuffer, startIndex + length, newBuff, startIndex, oldLexLength - startIndex - length);
+                //SetNewContent(newBuff);
+                //InvalidateOwnerLineCharCount();
+                //UpdateRunWidth();
+
+                return rightpart;
+            }
+            return new CharSpan();//empty 
+        }
+        internal CharSpan Remove(TextRun run, int startIndex, int len, bool withFreeRun)
+        {
+            CharSpan _mybuffer = run._mybuffer;
+            if (startIndex > -1 && _mybuffer.len > 0)
+            {
+                int oldLexLength = _mybuffer.Count;
+
+                //copy of right part
+                int right_startAt = startIndex + len;
+
+                CharSpan rightpart = new CharSpan(_charSource, _mybuffer.beginAt + right_startAt, oldLexLength - right_startAt);
+
+                //new span for left part
+                //it is ok the use the same rgn
+                CharSpan leftpart = new CharSpan(_charSource, _mybuffer.beginAt, startIndex);
+
+
+                //then merge 2 part togather
+                if (rightpart.len > 0 && leftpart.len > 0)
+                {
+                    int begin = _charSource.LatestLen;
+                    _charSource.Append(leftpart);
+                    _charSource.Append(rightpart);
+
+                    run.SetNewContent(new CharSpan(_charSource, begin, _charSource.LatestLen - begin));
+                }
+                else if (rightpart.len > 0)
+                {
+                    //only right part
+                    run.SetNewContent(rightpart);//replace 
+                }
+                else if (leftpart.len > 0)
+                {
+                    //only left part
+                    run.SetNewContent(leftpart);//replace 
+                }
+                else
+                {
+                    //empty span
+                    run.SetNewContent(new CharSpan(_charSource, 0, 0));
+                }
+
+                run.InvalidateOwnerLineCharCount();
+                run.UpdateRunWidth();
+                return rightpart;
+            }
+            return new CharSpan();//empty 
+        }
+    }
+
 
     public class TextRun : Run, IDisposable
     {
 
-#if DEBUG
-        char[] _dbugmybuffer;
-        char[] _mybuffer => _dbugmybuffer;
-#else
-        char[] _mybuffer;
-#endif
-
+        internal CharSpan _mybuffer;
         int[] _charAdvances = null;
-
         RenderVxFormattedString _renderVxFormattedString; //re-creatable from original content
+
         bool _content_Parsed;//
 
-        internal TextRun(RunStyle runstyle, char[] copyBuffer)
+        internal TextRun(RunStyle runstyle, CharSpan copyBuffer)
             : base(runstyle)
         {
-
-#if DEBUG
-            if (copyBuffer.Length == 0)
-            {
-
-            }
-#endif
             //we need font info (in style) for evaluating the size fo this span
             //without font info we can't measure the size of this span 
-            SetNewContent(copyBuffer);
+
+            _mybuffer = copyBuffer;
             UpdateRunWidth();
         }
 
@@ -50,36 +195,32 @@ namespace LayoutFarm.TextEditing
             }
             _content_Parsed = false;
         }
-
-        //each editable run has it own (dynamic) char buffer 
-
-
-        void SetNewContent(char[] newbuffer)
+        internal void SetNewContent(CharSpan newSpan)
         {
-#if DEBUG
-            _dbugmybuffer = newbuffer;
-#else
-            _mybuffer = newbuffer;
-#endif
+            _mybuffer = newSpan;
             _content_Parsed = false;
-            _renderVxFormattedString?.Dispose(); //clear old _renderVxFormattedString
+            _renderVxFormattedString?.Dispose();
             _renderVxFormattedString = null;
+
         }
 
-        public override void WriteTo(TextCopyBuffer output) => output.AppendData(_mybuffer, 0, _mybuffer.Length);
+        public override void WriteTo(TextCopyBuffer output)
+        {
+            _mybuffer.WriteTo(output);
+        }
         public override void WriteTo(TextCopyBuffer output, int start, int len)
         {
             if (len > 0)
             {
-                output.AppendData(_mybuffer, start, len);
+                _mybuffer.WriteTo(output, start, len);
             }
         }
         public override void WriteTo(TextCopyBuffer output, int start)
         {
-            int len = _mybuffer.Length - start;
+            int len = _mybuffer.Count - start;
             if (len > 0)
             {
-                output.AppendData(_mybuffer, start, len);
+                _mybuffer.WriteTo(output, start, len);
             }
         }
 
@@ -89,7 +230,7 @@ namespace LayoutFarm.TextEditing
             {
                 //CopyRun newTextRun = null;
                 char[] newContent = new char[length];
-                Array.Copy(_mybuffer, sourceIndex, newContent, 0, length);
+                _mybuffer.Copy(newContent, sourceIndex, length);
                 return new CopyRun(newContent);
             }
             else
@@ -106,7 +247,7 @@ namespace LayoutFarm.TextEditing
             }
 
             //the content is parsed ***
-            if (_mybuffer.Length == charOffset)
+            if (_mybuffer.Count == charOffset)
             {
                 return this.Width;
             }
@@ -140,8 +281,8 @@ namespace LayoutFarm.TextEditing
             }
             return total;
         }
-        public override string GetText() => new string(_mybuffer);
 
+        public override string GetText() => _mybuffer.GetString();
 
         public override void UpdateRunWidth()
         {
@@ -151,11 +292,11 @@ namespace LayoutFarm.TextEditing
 
             if (_content_Parsed) { return; }
 
-            if (_charAdvances == null || _charAdvances.Length != _mybuffer.Length)
+            if (_charAdvances == null || _charAdvances.Length != _mybuffer.Count)
             {
                 //sometime we change only font style
                 //so the buffer char_count is not changed
-                _charAdvances = new int[_mybuffer.Length];
+                _charAdvances = new int[_mybuffer.Count];
             }
 
             if (_renderVxFormattedString != null)
@@ -169,7 +310,7 @@ namespace LayoutFarm.TextEditing
             measureResult.outputXAdvances = _charAdvances;
 
             GlobalTextService.TxtClient.CalculateUserCharGlyphAdvancePos(
-               new Typography.Text.TextBufferSpan(_mybuffer),
+               _mybuffer.GetTextBufferSpan(),
                RunStyle.ReqFont,
                ref measureResult);
 
@@ -188,9 +329,9 @@ namespace LayoutFarm.TextEditing
                 bounds.Offset(0, this.OwnerLine.Top);
             }
         }
-        public override char GetChar(int index) => _mybuffer[index];
+        public override char GetChar(int index) => _mybuffer.GetUtf16Char(index);
 
-        public override int CharacterCount => _mybuffer.Length;
+        public override int CharacterCount => _mybuffer.Count;
 
         //public override void SetStyle(RunStyle runstyle)
         //{
@@ -210,7 +351,7 @@ namespace LayoutFarm.TextEditing
         public override CopyRun Copy(int startIndex, int length) => (startIndex > -1 && length > 0) ? MakeCopy(startIndex, length) : null;
         public override CopyRun Copy(int startIndex)
         {
-            int length = _mybuffer.Length - startIndex;
+            int length = _mybuffer.len - startIndex;
             if (startIndex > -1 && length > 0)
             {
                 return MakeCopy(startIndex, length);
@@ -261,7 +402,11 @@ namespace LayoutFarm.TextEditing
         {
             if (_renderVxFormattedString == null)
             {
-                _renderVxFormattedString = d.CreateFormattedString(_mybuffer, 0, _mybuffer.Length, DelayFormattedString);
+                _renderVxFormattedString = d.CreateFormattedString(
+                    _mybuffer.UnsafeInternalCharArr,
+                    _mybuffer.beginAt,
+                    _mybuffer.Count,
+                    DelayFormattedString);
             }
 
             switch (_renderVxFormattedString.State)
@@ -394,70 +539,17 @@ namespace LayoutFarm.TextEditing
                 return new CharLocation(0, 1);
             }
         }
-        //-------------------------------------------
-        //
-        internal override bool IsInsertable => true;
-        //
+
         public override CopyRun LeftCopy(int index) => (index > 0) ? MakeCopy(0, index) : null;
 
-        internal override void InsertAfter(int index, char c)
-        {
-            int oldLexLength = _mybuffer.Length;
-            char[] newBuff = new char[oldLexLength + 1];
-            if (index > -1 && index < _mybuffer.Length - 1)
-            {
-                Array.Copy(_mybuffer, newBuff, index + 1);
-                newBuff[index + 1] = c;
-                Array.Copy(_mybuffer, index + 1, newBuff, index + 2, oldLexLength - index - 1);
-            }
-            else if (index == -1)
-            {
-                newBuff[0] = c;
-                Array.Copy(_mybuffer, 0, newBuff, 1, _mybuffer.Length);
-            }
-            else if (index == oldLexLength - 1)
-            {
-                Array.Copy(_mybuffer, newBuff, oldLexLength);
-                newBuff[oldLexLength] = c;
-            }
-            else
-            {
-                throw new NotSupportedException();
-            }
 
-            SetNewContent(newBuff);
-            InvalidateOwnerLineCharCount();
-            UpdateRunWidth();
-        }
-        internal override CopyRun Remove(int startIndex, int length, bool withFreeRun)
-        {
-            CopyRun freeRun = null;
-            if (startIndex > -1 && length > 0)
-            {
-                int oldLexLength = _mybuffer.Length;
-                char[] newBuff = new char[oldLexLength - length];
-                if (withFreeRun)
-                {
-                    freeRun = MakeCopy(startIndex, length);
-                }
-                if (startIndex > 0)
-                {
-                    Array.Copy(_mybuffer, 0, newBuff, 0, startIndex);
-                }
 
-                Array.Copy(_mybuffer, startIndex + length, newBuff, startIndex, oldLexLength - startIndex - length);
-                SetNewContent(newBuff);
-                InvalidateOwnerLineCharCount();
-                UpdateRunWidth();
-            }
-            return freeRun;
-        }
 
+        internal override bool IsInsertable => true;
+
+        //
 #if DEBUG
-        public override string ToString()
-        {
-            return new string(_mybuffer);
-        }
+        public override string ToString() => _mybuffer.GetString();
 #endif
 
     }

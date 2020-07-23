@@ -2,8 +2,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using PixelFarm.Drawing;
+
 
 namespace LayoutFarm.TextEditing
 {
@@ -39,7 +39,7 @@ namespace LayoutFarm.TextEditing
         protected Size MeasureString(in TextBufferSpan textBufferSpan) => _runStyle.MeasureString(textBufferSpan);
 
         public RunStyle RunStyle => _runStyle;
-     
+
         public bool HitTest(Rectangle r) => Bounds.IntersectsWith(r);
 
         public bool HitTest(UpdateArea r) => Bounds.IntersectsWith(r.CurrentRect);
@@ -85,9 +85,9 @@ namespace LayoutFarm.TextEditing
         public abstract int CharacterCount { get; }
         public abstract char GetChar(int index);
         public abstract string GetText();
-        public abstract void WriteTo(TextCopyBuffer output);
-        public abstract void WriteTo(TextCopyBuffer output, int start, int len);
-        public abstract void WriteTo(TextCopyBuffer output, int start);
+        public abstract void WriteTo(Typography.Text.TextCopyBuffer output);
+        public abstract void WriteTo(Typography.Text.TextCopyBuffer output, int start, int len);
+        public abstract void WriteTo(Typography.Text.TextCopyBuffer output, int start);
         //--------------------
         //model
         public abstract CharLocation GetCharacterFromPixelOffset(int pixelOffset);
@@ -105,19 +105,20 @@ namespace LayoutFarm.TextEditing
         /// <returns></returns>
         public abstract int GetRunWidth(int startAtCharOffset, int count);
         ///////////////////////////////////////////////////////////////
-        //edit funcs
-        internal abstract void InsertAfter(int index, char c);
-        
-        internal abstract CopyRun Remove(int startIndex, int length, bool withFreeRun);
+        ////edit funcs
+        //internal abstract void InsertAfter(int index, char c);
 
-        internal static CopyRun InnerRemove(Run tt, int startIndex, int length, bool withFreeRun)
-        {
-            return tt.Remove(startIndex, length, withFreeRun);
-        }
-        internal static CopyRun InnerRemove(Run tt, int startIndex, bool withFreeRun)
-        {
-            return tt.Remove(startIndex, tt.CharacterCount - (startIndex), withFreeRun);
-        }
+        //internal abstract CopyRun Remove(int startIndex, int length, bool withFreeRun);
+
+        //internal static CopyRun InnerRemove(Run tt, int startIndex, int length, bool withFreeRun)
+        //{
+        //    return tt.Remove(startIndex, length, withFreeRun);
+        //}
+        //internal static CopyRun InnerRemove(Run tt, int startIndex, bool withFreeRun)
+        //{
+        //    return tt.Remove(startIndex, tt.CharacterCount - (startIndex), withFreeRun);
+        //}
+
         internal static CharLocation InnerGetCharacterFromPixelOffset(Run tt, int pixelOffset)
         {
             return tt.GetCharacterFromPixelOffset(pixelOffset);
@@ -125,10 +126,10 @@ namespace LayoutFarm.TextEditing
 
         public abstract void UpdateRunWidth();
         ///////////////////////////////////////////////////////////////  
-      
+
         public abstract CopyRun LeftCopy(int index);
         public abstract CopyRun Copy(int startIndex, int length);
-        public abstract CopyRun Copy(int startIndex); 
+        public abstract CopyRun Copy(int startIndex);
         //------------------------------
         //owner, neighbor
         /// <summary>

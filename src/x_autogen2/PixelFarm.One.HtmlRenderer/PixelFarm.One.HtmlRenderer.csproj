@@ -2617,6 +2617,9 @@
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1_General\AlternativeTypefaceSelector.cs">
       <Link>Typography\PixelFarm.Typography\1_General\AlternativeTypefaceSelector.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1_General\CharSourceAndCharSpan.cs">
+      <Link>Typography\PixelFarm.Typography\1_General\CharSourceAndCharSpan.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1_General\FontStyleExtensions.cs">
       <Link>Typography\PixelFarm.Typography\1_General\FontStyleExtensions.cs</Link>
     </Compile>

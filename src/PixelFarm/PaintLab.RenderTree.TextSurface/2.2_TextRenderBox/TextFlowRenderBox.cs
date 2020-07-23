@@ -6,6 +6,7 @@ using System.Text;
 
 using LayoutFarm.UI;
 using PixelFarm.Drawing;
+using Typography.Text;
 
 namespace LayoutFarm.TextEditing
 {

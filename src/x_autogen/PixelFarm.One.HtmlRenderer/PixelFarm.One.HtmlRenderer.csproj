@@ -899,6 +899,7 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\7_BitmapAtlas\SimpleBitmapAtlasBuilder.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Typography\..\..\..\..\Typography\Build\N20\Typography.OpenFont\System.Numerics.ForNet20.cs" />
     <Compile Include="D:\projects\Typography\PixelFarm.Typography\1_General\AlternativeTypefaceSelector.cs" />
+    <Compile Include="D:\projects\Typography\PixelFarm.Typography\1_General\CharSourceAndCharSpan.cs" />
     <Compile Include="D:\projects\Typography\PixelFarm.Typography\1_General\FontStyleExtensions.cs" />
     <Compile Include="D:\projects\Typography\PixelFarm.Typography\1_General\MultiLayerGlyphTx.cs" />
     <Compile Include="D:\projects\Typography\PixelFarm.Typography\1_General\OpenFontTextService.cs" />

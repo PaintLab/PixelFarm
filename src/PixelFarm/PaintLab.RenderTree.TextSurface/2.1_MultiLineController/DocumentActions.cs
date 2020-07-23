@@ -2,7 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-
+using Typography.Text;
 namespace LayoutFarm.TextEditing.Commands
 {
     public enum DocumentActionName

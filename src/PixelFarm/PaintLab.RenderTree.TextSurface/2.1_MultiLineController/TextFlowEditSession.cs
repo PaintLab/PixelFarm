@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using LayoutFarm.TextEditing.Commands;
+using Typography.Text;
 
 namespace LayoutFarm.TextEditing
 {
@@ -252,6 +253,8 @@ namespace LayoutFarm.TextEditing
             CancelSelect();
         }
 
+        static readonly char[] s_tabspaces = "    ".ToCharArray();
+
         public void DoTabOverSelectedRange()
         {
             //eg. user press 'Tab' key over selected range
@@ -272,7 +275,7 @@ namespace LayoutFarm.TextEditing
                 while (line.LineNumber <= end_line.LineNumber)
                 {
                     //TODO, review here...
-                    var whitespace = new TextRun(runstyle, "    ".ToCharArray());
+                    TextRun whitespace = line.CreateTextRun(s_tabspaces);
                     line.AddFirst(whitespace);
                     line.TextLineReCalculateActualLineSize();
                     line.RefreshInlineArrange();
@@ -544,11 +547,12 @@ namespace LayoutFarm.TextEditing
         {
             _lineEditor.ReplaceCurrentLine(runs);
         }
-        public void ReplaceCurrentLine(string singleLine)
-        {
-            var textrun = new TextRun(_lineEditor.CurrentSpanStyle, singleLine.ToCharArray());
-            _lineEditor.ReplaceCurrentLine(new Run[] { textrun });
-        }
+        //public void ReplaceCurrentLine(string singleLine)
+        //{
+        //    //var textrun = new TextRun(_lineEditor.CurrentSpanStyle, singleLine.ToCharArray());
+            
+        //    //_lineEditor.ReplaceCurrentLine(new Run[] { textrun });
+        //}
         public void ReplaceLocalContent(int nBackSpace, string content)
         {
             if (content != null)

@@ -1,9 +1,27 @@
 ﻿//Apache2, 2014-present, WinterDev
-
+using Typography.Text;
 namespace LayoutFarm.TextEditing
 {
     partial class TextLineBox
     {
+        //each textline has a special
+
+        internal CharSource CharSource => _textFlowLayer._charSource;
+
+        public TextRun CreateTextRun(char c)
+        {
+            return new TextRun(DefaultRunStyle, CharSource.NewSpan(c));
+        }
+        public TextRun CreateTextRun(char[] charbuff)
+        {
+            return new TextRun(DefaultRunStyle, CharSource.NewSpan(charbuff));
+        }
+        public TextRun CreateTextRun(string text)
+        {
+            return new TextRun(DefaultRunStyle, CharSource.NewSpan(text));
+        }
+
+
         public void AddLast(Run v)
         {
             AddNormalRunToLast(v);
@@ -22,19 +40,28 @@ namespace LayoutFarm.TextEditing
         }
 
         RunStyle DefaultRunStyle => _textFlowLayer.DefaultRunStyle;
+
         public Run AddBefore(Run beforeVisRun, CopyRun v)
         {
-            var newRun = new TextRun(DefaultRunStyle, v.RawContent);
+            var newRun = CreateTextRun(v.RawContent);
             AddBefore(beforeVisRun, newRun);
             return newRun;
         }
+
         public void AddBefore(Run beforeVisRun, Run v)
         {
             AddNormalRunBefore(beforeVisRun, v);
         }
+
         public TextRun AddAfter(Run afterVisRun, CopyRun v)
         {
-            var newRun = new TextRun(DefaultRunStyle, v.RawContent);
+            var newRun = CreateTextRun(v.RawContent);
+            AddAfter(afterVisRun, newRun);
+            return newRun;
+        }
+        public TextRun AddAfter(Run afterVisRun, CharSpan v)
+        {
+            var newRun = new TextRun(DefaultRunStyle, v);
             AddAfter(afterVisRun, newRun);
             return newRun;
         }
@@ -42,6 +69,6 @@ namespace LayoutFarm.TextEditing
         {
             AddNormalRunAfter(afterVisRun, v);
         }
-        
+
     }
 }

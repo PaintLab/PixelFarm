@@ -7,6 +7,7 @@ using PixelFarm.Drawing;
 
 using LayoutFarm.TextEditing;
 using LayoutFarm.UI;
+ 
 
 namespace LayoutFarm.CustomWidgets
 {
@@ -251,7 +252,7 @@ namespace LayoutFarm.CustomWidgets
         /// write all lines into stbuilder
         /// </summary>
         /// <param name="stbuilder"></param>
-        public void CopyContentTo(TextCopyBuffer output)
+        public void CopyContentTo(Typography.Text.TextCopyBuffer output)
         {
             _textEditRenderElement.CopyContentToStringBuilder(output);
         }
@@ -275,7 +276,7 @@ namespace LayoutFarm.CustomWidgets
                 if (_textEditRenderElement != null)
                 {
                     //TODO, use string builder pool
-                    using (new TextRangeCopyPoolContext<TextBox>(out TextCopyBuffer output))
+                    using (new TextRangeCopyPoolContext<TextBox>(out Typography.Text.TextCopyBuffer output))
                     {
                         CopyContentTo(output);
                         return output.ToString();

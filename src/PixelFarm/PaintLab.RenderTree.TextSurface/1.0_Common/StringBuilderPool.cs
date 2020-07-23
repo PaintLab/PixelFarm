@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Typography.Text;
 
 namespace LayoutFarm.TextEditing
 {
@@ -92,6 +93,6 @@ namespace LayoutFarm.TextEditing
                 _copyBuffer = null;
             }
         }
-    } 
+    }
 
 }
