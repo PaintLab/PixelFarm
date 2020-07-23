@@ -2,9 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-
-using PixelFarm.Drawing;
 using LayoutFarm.TextEditing.Commands;
 
 namespace LayoutFarm.TextEditing
@@ -332,27 +329,7 @@ namespace LayoutFarm.TextEditing
             NotifyContentSizeChanged();
 
         }
-        //public TextSpanStyle GetFirstTextStyleInSelectedRange()
-        //{
-        //    //TODO: review here again
-        //    throw new NotSupportedException();
-        //    //VisualSelectionRange selRange = SelectionRange;
-        //    //if (selRange != null)
-        //    //{
-        //    //    if (_selectionRange.StartPoint.Run != null)
-        //    //    {
-        //    //        return _selectionRange.StartPoint.Run.SpanStyle;
-        //    //    }
-        //    //    else
-        //    //    {
-        //    //        return TextSpanStyle.Empty;
-        //    //    }
-        //    //}
-        //    //else
-        //    //{
-        //    //    return TextSpanStyle.Empty;
-        //    //}
-        //}
+
         public void DoFormatSelection(TextSpanStyle textStyle)
         {
             //int startLineNum = _textLineWriter.LineNumber;
@@ -670,7 +647,7 @@ namespace LayoutFarm.TextEditing
             //
             NotifyContentSizeChanged();
         }
-        
+
         public void Clear()
         {
             //1.
