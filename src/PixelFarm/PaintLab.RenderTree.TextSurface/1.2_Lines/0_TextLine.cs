@@ -15,10 +15,9 @@ namespace LayoutFarm.TextEditing
 #endif
     sealed partial class TextLineBox
     {
+
         //this class does not have Painting function
         //we paint each run at text-layer object
-
-
         readonly LinkedList<Run> _runs = new LinkedList<Run>();
 
         /// <summary>

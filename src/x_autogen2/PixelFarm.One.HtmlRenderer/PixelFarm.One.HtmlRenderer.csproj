@@ -1000,9 +1000,6 @@
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter_Layer2_SH\Drawing\DrawBoard.cs">
       <Link>PixelFarm\PixelFarm.Painter_Layer2_SH\Drawing\DrawBoard.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Painter_Layer2_SH\Drawing\ITextPrinter.cs">
-      <Link>PixelFarm\PixelFarm.Painter_Layer2_SH\Drawing\ITextPrinter.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Painter_Layer2_SH\Drawing\Painter.cs">
       <Link>PixelFarm\PixelFarm.Painter_Layer2_SH\Drawing\Painter.cs</Link>
     </Compile>
