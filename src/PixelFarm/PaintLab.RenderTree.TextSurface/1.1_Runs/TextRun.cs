@@ -9,7 +9,7 @@ using Typography.TextLayout;
 namespace LayoutFarm.TextEditing
 {
 
-    struct TextRunModifier
+    ref struct TextRunModifier
     {
         //each editable run has it own (dynamic) char buffer  
         readonly CharSource _charSource;
@@ -224,20 +224,7 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        CopyRun MakeCopy(int sourceIndex, int length)
-        {
-            if (length > 0)
-            {
-                //CopyRun newTextRun = null;
-                char[] newContent = new char[length];
-                _mybuffer.Copy(newContent, sourceIndex, length);
-                return new CopyRun(newContent);
-            }
-            else
-            {
-                throw new Exception("string must be null or zero length");
-            }
-        }
+
 
         public override int GetRunWidth(int charOffset)
         {
@@ -348,19 +335,7 @@ namespace LayoutFarm.TextEditing
         //}
 
 
-        public override CopyRun Copy(int startIndex, int length) => (startIndex > -1 && length > 0) ? MakeCopy(startIndex, length) : null;
-        public override CopyRun Copy(int startIndex)
-        {
-            int length = _mybuffer.len - startIndex;
-            if (startIndex > -1 && length > 0)
-            {
-                return MakeCopy(startIndex, length);
-            }
-            else
-            {
-                return null;
-            }
-        }
+
         const int SAME_FONT_SAME_TEXT_COLOR = 0;
         const int SAME_FONT_DIFF_TEXT_COLOR = 1;
         const int DIFF_FONT_SAME_TEXT_COLOR = 2;
@@ -540,12 +515,14 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        public override CopyRun LeftCopy(int index) => (index > 0) ? MakeCopy(0, index) : null;
-
-
 
 
         internal override bool IsInsertable => true;
+
+
+        public override CharSpan Copy(int startIndex) => _mybuffer.MakeSubSpan(startIndex);
+        public override CharSpan Copy(int startIndex, int length) => _mybuffer.MakeSubSpan(startIndex, length);
+        public override CharSpan LeftCopy(int index) => _mybuffer.MakeLeftSubSpan(index);
 
         //
 #if DEBUG

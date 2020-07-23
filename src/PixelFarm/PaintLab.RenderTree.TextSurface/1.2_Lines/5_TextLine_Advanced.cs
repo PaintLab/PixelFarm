@@ -357,12 +357,12 @@ namespace LayoutFarm.TextEditing
             {
                 Run toBeCutTextRun = startPoint.Run;
 
-                CopyRun leftPart = toBeCutTextRun.LeftCopy(startPoint.RunLocalSelectedIndex);
-                CopyRun middlePart = toBeCutTextRun.Copy(startPoint.RunLocalSelectedIndex, endPoint.LineCharIndex - startPoint.LineCharIndex);
-                CopyRun rightPart = toBeCutTextRun.Copy(endPoint.RunLocalSelectedIndex);
+                CharSpan leftPart = toBeCutTextRun.LeftCopy(startPoint.RunLocalSelectedIndex);
+                CharSpan middlePart = toBeCutTextRun.Copy(startPoint.RunLocalSelectedIndex, endPoint.LineCharIndex - startPoint.LineCharIndex);
+                CharSpan rightPart = toBeCutTextRun.Copy(endPoint.RunLocalSelectedIndex);
 
                 int middlePartLen = 0;
-                if (rightPart != null)
+                if (rightPart.len > 0)
                 {
                     middlePartLen = toBeCutTextRun.GetRunWidth(startPoint.RunLocalSelectedIndex, endPoint.LineCharIndex - startPoint.LineCharIndex);
                 }
@@ -378,7 +378,7 @@ namespace LayoutFarm.TextEditing
 
                 line.LocalSuspendLineReArrange();
 
-                if (leftPart != null)
+                if (leftPart.len > 0)
                 {
                     Run leftRun = line.AddBefore(toBeCutTextRun, leftPart);
                     newStartRangePointInfo = CreateTextPointInfo(
@@ -401,7 +401,7 @@ namespace LayoutFarm.TextEditing
                             startPoint.LineCharIndex,
                             startPoint.X,
                             prevTxtRun,
-                            startPoint.TextRunCharOffset - leftPart.CharacterCount,
+                            startPoint.TextRunCharOffset - leftPart.len,
                             startPoint.TextRunPixelOffset - prevTxtRun.Width);
                     }
                     else
@@ -416,7 +416,7 @@ namespace LayoutFarm.TextEditing
                     }
                 }
 
-                if (rightPart != null)
+                if (rightPart.len > 0)
                 {
 #if DEBUG
                     Run rightRun =
@@ -429,7 +429,7 @@ namespace LayoutFarm.TextEditing
                             endPoint.LineCharIndex,
                             endPoint.X,
                             null,///??
-                            startPoint.TextRunCharOffset + middlePart.CharacterCount,
+                            startPoint.TextRunCharOffset + middlePart.len,
                             startPoint.TextRunPixelOffset + middlePartLen);
                 }
                 else
@@ -457,7 +457,7 @@ namespace LayoutFarm.TextEditing
                     }
                 }
 
-                if (middlePart != null)
+                if (middlePart.len > 0)
                 {
                     line.AddAfter(toBeCutTextRun, middlePart);
                 }
@@ -485,7 +485,7 @@ namespace LayoutFarm.TextEditing
                 return new SelectionRangeInfo(newStartPoint, workingLine.Split(endPoint));
             }
         }
-
+ 
         internal EditableVisualPointInfo Split(EditableVisualPointInfo pointInfo)
         {
             if (pointInfo.LineId != _currentLineNumber)
@@ -506,15 +506,17 @@ namespace LayoutFarm.TextEditing
             }
 
             this.LocalSuspendLineReArrange();
-            EditableVisualPointInfo result = null;
 
-            CopyRun leftPart = tobeCutRun.LeftCopy(pointInfo.RunLocalSelectedIndex);
-            CopyRun rightPart = tobeCutRun.Copy(pointInfo.RunLocalSelectedIndex);
 
-            if (leftPart != null)
+            CharSpan leftPart = tobeCutRun.LeftCopy(pointInfo.RunLocalSelectedIndex);
+            CharSpan rightPart = tobeCutRun.Copy(pointInfo.RunLocalSelectedIndex);
+
+            EditableVisualPointInfo result;
+            if (leftPart.len > 0)
             {
                 Run leftRun = AddBefore(tobeCutRun, leftPart);
-                if (rightPart != null)
+
+                if (rightPart.len > 0)
                 {
                     this.AddAfter(tobeCutRun, rightPart);
                 }
@@ -529,7 +531,7 @@ namespace LayoutFarm.TextEditing
             }
             else
             {
-                if (rightPart != null)
+                if (rightPart.len > 0)
                 {
                     this.AddAfter(tobeCutRun, rightPart);
                 }

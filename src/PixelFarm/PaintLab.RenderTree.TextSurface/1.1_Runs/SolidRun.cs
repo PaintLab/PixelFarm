@@ -1,8 +1,8 @@
 ﻿//Apache2, 2014-present, WinterDev
 
-using System; 
+using System;
 using PixelFarm.Drawing;
- 
+using Typography.Text;
 
 namespace LayoutFarm.TextEditing
 {
@@ -10,51 +10,33 @@ namespace LayoutFarm.TextEditing
     {
         //TODO: review here=> who should store/handle this handle? , owner TextBox or this run?
         Action<SolidRun, DrawBoard, UpdateArea> _externalCustomDraw;
-        char[] _mybuffer;
+        CharSpan _mybuffer;
 
-        public SolidRun(char[] copyBuffer, RunStyle style)
+        public SolidRun(CharSpan copyBuffer, RunStyle style)
             : base(style)
         {
             //check line break? 
-
             _mybuffer = copyBuffer;
             UpdateRunWidth();
         }
 
-        public SolidRun(string str, RunStyle style)
-            : base(style)
-        {
-
-            if (str != null && str.Length > 0)
-            {
-                _mybuffer = str.ToCharArray();
-                if (_mybuffer.Length == 1 && _mybuffer[0] == '\n')
-                {
-                    //this.IsLineBreak = true;
-                    throw new NotSupportedException();
-                }
-                UpdateRunWidth();
-            }
-            else
-            {
-                throw new Exception("string must be null or zero length");
-            }
-        }
         public void SetCustomExternalDraw(Action<SolidRun, DrawBoard, UpdateArea> externalCustomDraw) => _externalCustomDraw = externalCustomDraw;
         public RenderElement ExternalRenderElement { get; set; }
 
-        public string RawText { get; set; }
+        public string RawText { get; set; } //TODO: review here
 
-        public override void WriteTo(Typography.Text.TextCopyBuffer output) => output.AppendData(_mybuffer, 0, _mybuffer.Length);
+        public override void WriteTo(Typography.Text.TextCopyBuffer output)
+        {
+            _mybuffer.WriteTo(output);
+        }
         public override void WriteTo(Typography.Text.TextCopyBuffer output, int start)
         {
             if (start == 0)
             {
-                //ENTIRE
-                int length = _mybuffer.Length - start;
+                int length = _mybuffer.Count - start;
                 if (start > -1 && length > 0)
                 {
-                    output.AppendData(_mybuffer, start, length);
+                    output.AppendData(_mybuffer.UnsafeInternalCharArr, _mybuffer.beginAt + start, length);
                 }
             }
         }
@@ -62,65 +44,33 @@ namespace LayoutFarm.TextEditing
         {
             if (start == 0)
             {
-                //ENTIRE
-                int length = _mybuffer.Length - start;
+                int length = _mybuffer.Count - start;
                 if (start > -1 && length > 0)
                 {
-                    output.AppendData(_mybuffer, start, len);
+                    output.AppendData(_mybuffer.UnsafeInternalCharArr, start, len);
                 }
             }
         }
-        public override CopyRun Copy(int startIndex)
-        {
-            if (startIndex == 0)
-            {
-                int length = _mybuffer.Length - startIndex;
-                if (startIndex > -1 && length > 0)
-                {
-                    return MakeTextRun(startIndex, length);
-                }
-            }
-            return null;
-        }
-        CopyRun MakeTextRun(int sourceIndex, int length)
-        {
-            if (length > 0)
-            {
-                sourceIndex = 0;
-                length = _mybuffer.Length;
 
-                char[] newContent = new char[length];
-                Array.Copy(_mybuffer, sourceIndex, newContent, 0, length);
-                return new CopyRun(newContent) { RunKind = RunKind.Solid };
-            }
-            else
-            {
-                throw new Exception("string must be null or zero length");
-            }
-        }
-
-        public override int GetRunWidth(int charOffset) => CalculateDrawingStringSize(_mybuffer, charOffset).Width;
+        public override int GetRunWidth(int charOffset) => CalculateDrawingStringSize(0, charOffset).Width;
         public override int GetRunWidth(int startAtCharOffset, int count)
         {
-            return MeasureString(new TextBufferSpan(_mybuffer, startAtCharOffset, count)).Width;
+            return MeasureString(new PixelFarm.Drawing.TextBufferSpan(_mybuffer.UnsafeInternalCharArr, _mybuffer.beginAt + startAtCharOffset, count)).Width;
         }
-        public override string GetText() => new string(_mybuffer);
 
-
+        public override string GetText() => _mybuffer.GetString();
 
         public override void UpdateRunWidth()
         {
-            Size size = CalculateDrawingStringSize(_mybuffer, _mybuffer.Length);
+            Size size = CalculateDrawingStringSize(0, _mybuffer.len);
             SetSize(size.Width, size.Height);
         }
-        public override char GetChar(int index) => _mybuffer[index];
+        public override char GetChar(int index) => _mybuffer.GetUtf16Char(index);
 
-        public override int CharacterCount => (_mybuffer.Length == 0) ? 0 : 1;
+        public override int CharacterCount => _mybuffer.len;
 
-        Size CalculateDrawingStringSize(char[] buffer, int length) => MeasureString(new TextBufferSpan(buffer, 0, length));
-
-        public override CopyRun Copy(int startIndex, int length) => (startIndex > -1 && length > 0) ? MakeTextRun(startIndex, length) : null;
-
+        Size CalculateDrawingStringSize(int start, int length) => MeasureString(new PixelFarm.Drawing.TextBufferSpan(_mybuffer.UnsafeInternalCharArr, _mybuffer.beginAt + start, length));
+ 
         const int SAME_FONT_SAME_TEXT_COLOR = 0;
         const int SAME_FONT_DIFF_TEXT_COLOR = 1;
         const int DIFF_FONT_SAME_TEXT_COLOR = 2;
@@ -183,46 +133,48 @@ namespace LayoutFarm.TextEditing
             //{
             //TODO: review here, we don't need to do this
 
+
+            //TODO: /...
             RunStyle style = this.RunStyle;
             switch (EvaluateFontAndTextColor(d, style))
             {
                 case DIFF_FONT_SAME_TEXT_COLOR:
                     {
-                        var prevFont = d.CurrentFont;
-                        d.CurrentFont = style.ReqFont;
-                        d.DrawText(_mybuffer,
-                           new Rectangle(0, 0, bWidth, bHeight),
-                           style.ContentHAlign);
-                        d.CurrentFont = prevFont;
+                        //var prevFont = d.CurrentFont;
+                        //d.CurrentFont = style.ReqFont;
+                        //d.DrawText(_mybuffer,
+                        //   new Rectangle(0, 0, bWidth, bHeight),
+                        //   style.ContentHAlign);
+                        //d.CurrentFont = prevFont;
                     }
                     break;
                 case DIFF_FONT_DIFF_TEXT_COLOR:
                     {
-                        var prevFont = d.CurrentFont;
-                        var prevColor = d.CurrentTextColor;
-                        d.CurrentFont = style.ReqFont;
-                        d.CurrentTextColor = style.FontColor;
-                        d.DrawText(_mybuffer,
-                           new Rectangle(0, 0, bWidth, bHeight),
-                           style.ContentHAlign);
-                        d.CurrentFont = prevFont;
-                        d.CurrentTextColor = prevColor;
+                        //var prevFont = d.CurrentFont;
+                        //var prevColor = d.CurrentTextColor;
+                        //d.CurrentFont = style.ReqFont;
+                        //d.CurrentTextColor = style.FontColor;
+                        //d.DrawText(_mybuffer,
+                        //   new Rectangle(0, 0, bWidth, bHeight),
+                        //   style.ContentHAlign);
+                        //d.CurrentFont = prevFont;
+                        //d.CurrentTextColor = prevColor;
                     }
                     break;
                 case SAME_FONT_DIFF_TEXT_COLOR:
                     {
-                        var prevColor = d.CurrentTextColor;
-                        d.DrawText(_mybuffer,
-                            new Rectangle(0, 0, bWidth, bHeight),
-                            style.ContentHAlign);
-                        d.CurrentTextColor = prevColor;
+                        //var prevColor = d.CurrentTextColor;
+                        //d.DrawText(_mybuffer,
+                        //    new Rectangle(0, 0, bWidth, bHeight),
+                        //    style.ContentHAlign);
+                        //d.CurrentTextColor = prevColor;
                     }
                     break;
                 default:
                     {
-                        d.DrawText(_mybuffer,
-                           new Rectangle(0, 0, bWidth, bHeight),
-                           style.ContentHAlign);
+                        //d.DrawText(_mybuffer,
+                        //   new Rectangle(0, 0, bWidth, bHeight),
+                        //   style.ContentHAlign);
                     }
                     break;
             }
@@ -242,89 +194,152 @@ namespace LayoutFarm.TextEditing
                 return new CharLocation(0, 1);
             }
         }
-        //-------------------------------------------
-        //
-        internal override bool IsInsertable => false;
-        //
-        public override CopyRun LeftCopy(int index)
+
+        public override CharSpan Copy(int startIndex)
+        {
+            if (startIndex == 0)
+            {
+
+                int length = _mybuffer.Count - startIndex;
+                if (startIndex > -1 && length > 0)
+                {
+                    return _mybuffer.MakeSubSpan(startIndex, length);
+                }
+            }
+            return new CharSpan();//empty
+        }
+        public override CharSpan Copy(int startIndex, int length)
+        {
+            return _mybuffer.MakeSubSpan(startIndex, length);
+        }
+        public override CharSpan LeftCopy(int index)
         {
             if (index == 0)
             {
-                return null;
+                return new CharSpan();//empty
             }
 
             if (index > -1)
             {
-                return MakeTextRun(0, _mybuffer.Length);
+                return _mybuffer.MakeLeftSubSpan(index);
             }
             else
             {
-                return null;
+                return new CharSpan();//empty
             }
         }
-    //    internal override void InsertAfter(int index, char c)
-    //    {
-    //        //TODO: review here
-    //        //solid text run should not be editable
-    //        int oldLexLength = _mybuffer.Length;
-    //        char[] newBuff = new char[oldLexLength + 1];
-    //        if (index > -1 && index < _mybuffer.Length - 1)
-    //        {
-    //            Array.Copy(_mybuffer, newBuff, index + 1);
-    //            newBuff[index + 1] = c;
-    //            Array.Copy(_mybuffer, index + 1, newBuff, index + 2, oldLexLength - index - 1);
-    //        }
-    //        else if (index == -1)
-    //        {
-    //            newBuff[0] = c;
-    //            Array.Copy(_mybuffer, 0, newBuff, 1, _mybuffer.Length);
-    //        }
-    //        else if (index == oldLexLength - 1)
-    //        {
-    //            Array.Copy(_mybuffer, newBuff, oldLexLength);
-    //            newBuff[oldLexLength] = c;
-    //        }
-    //        else
-    //        {
-    //            throw new NotSupportedException();
-    //        }
-    //        _mybuffer = newBuff;
-    //        InvalidateOwnerLineCharCount();
-    //        UpdateRunWidth();
-    //    }
+        //public override CopyRun Copy(int startIndex)
+        //{
+        //    if (startIndex == 0)
+        //    {
+        //        int length = _mybuffer.Length - startIndex;
+        //        if (startIndex > -1 && length > 0)
+        //        {
+        //            return MakeTextRun(startIndex, length);
+        //        }
+        //    }
+        //    return null;
+        //}
+        //CopyRun MakeTextRun(int sourceIndex, int length)
+        //{
+        //    if (length > 0)
+        //    {
+        //        sourceIndex = 0;
+        //        length = _mybuffer.Length;
 
-    //    internal override CopyRun Remove(int startIndex, int length, bool withFreeRun)
-    //    {
-    //        if (startIndex == _mybuffer.Length)
-    //        {
-    //            //at the end
-    //            return null;
-    //        }
+        //        char[] newContent = new char[length];
+        //        Array.Copy(_mybuffer, sourceIndex, newContent, 0, length);
+        //        return new CopyRun(newContent) { RunKind = RunKind.Solid };
+        //    }
+        //    else
+        //    {
+        //        throw new Exception("string must be null or zero length");
+        //    }
+        //}
 
-    //        //
-    //        startIndex = 0; //***
-    //        length = _mybuffer.Length;
-    //        CopyRun freeRun = null;
-    //        if (startIndex > -1 && length > 0)
-    //        {
-    //            int oldLexLength = _mybuffer.Length;
-    //            char[] newBuff = new char[oldLexLength - length];
-    //            if (withFreeRun)
-    //            {
-    //                freeRun = MakeTextRun(startIndex, length);
-    //            }
-    //            if (startIndex > 0)
-    //            {
-    //                Array.Copy(_mybuffer, 0, newBuff, 0, startIndex);
-    //            }
+        //-------------------------------------------
+        //
+        internal override bool IsInsertable => false;
+        //
+        //    public override CopyRun LeftCopy(int index)
+        //    {
+        //        if (index == 0)
+        //        {
+        //            return null;
+        //        }
 
-    //            Array.Copy(_mybuffer, startIndex + length, newBuff, startIndex, oldLexLength - startIndex - length);
-    //            _mybuffer = newBuff;
-    //            InvalidateOwnerLineCharCount();
-    //            UpdateRunWidth();
-    //        }
+        //        if (index > -1)
+        //        {
+        //            return MakeTextRun(0, _mybuffer.Length);
+        //        }
+        //        else
+        //        {
+        //            return null;
+        //        }
+        //    }
+        ////    internal override void InsertAfter(int index, char c)
+        //    {
+        //        //TODO: review here
+        //        //solid text run should not be editable
+        //        int oldLexLength = _mybuffer.Length;
+        //        char[] newBuff = new char[oldLexLength + 1];
+        //        if (index > -1 && index < _mybuffer.Length - 1)
+        //        {
+        //            Array.Copy(_mybuffer, newBuff, index + 1);
+        //            newBuff[index + 1] = c;
+        //            Array.Copy(_mybuffer, index + 1, newBuff, index + 2, oldLexLength - index - 1);
+        //        }
+        //        else if (index == -1)
+        //        {
+        //            newBuff[0] = c;
+        //            Array.Copy(_mybuffer, 0, newBuff, 1, _mybuffer.Length);
+        //        }
+        //        else if (index == oldLexLength - 1)
+        //        {
+        //            Array.Copy(_mybuffer, newBuff, oldLexLength);
+        //            newBuff[oldLexLength] = c;
+        //        }
+        //        else
+        //        {
+        //            throw new NotSupportedException();
+        //        }
+        //        _mybuffer = newBuff;
+        //        InvalidateOwnerLineCharCount();
+        //        UpdateRunWidth();
+        //    }
 
-    //        return withFreeRun ? freeRun : null;
-    //    }
+        //    internal override CopyRun Remove(int startIndex, int length, bool withFreeRun)
+        //    {
+        //        if (startIndex == _mybuffer.Length)
+        //        {
+        //            //at the end
+        //            return null;
+        //        }
+
+        //        //
+        //        startIndex = 0; //***
+        //        length = _mybuffer.Length;
+        //        CopyRun freeRun = null;
+        //        if (startIndex > -1 && length > 0)
+        //        {
+        //            int oldLexLength = _mybuffer.Length;
+        //            char[] newBuff = new char[oldLexLength - length];
+        //            if (withFreeRun)
+        //            {
+        //                freeRun = MakeTextRun(startIndex, length);
+        //            }
+        //            if (startIndex > 0)
+        //            {
+        //                Array.Copy(_mybuffer, 0, newBuff, 0, startIndex);
+        //            }
+
+        //            Array.Copy(_mybuffer, startIndex + length, newBuff, startIndex, oldLexLength - startIndex - length);
+        //            _mybuffer = newBuff;
+        //            InvalidateOwnerLineCharCount();
+        //            UpdateRunWidth();
+        //        }
+
+        //        return withFreeRun ? freeRun : null;
+        //    }
     }
 }

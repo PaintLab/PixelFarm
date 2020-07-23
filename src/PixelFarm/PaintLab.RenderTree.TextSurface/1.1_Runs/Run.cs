@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
-
+using Typography.Text;
 
 namespace LayoutFarm.TextEditing
 {
@@ -36,7 +36,7 @@ namespace LayoutFarm.TextEditing
 
         protected float MeasureLineHeight() => _runStyle.MeasureBlankLineHeight();
 
-        protected Size MeasureString(in TextBufferSpan textBufferSpan) => _runStyle.MeasureString(textBufferSpan);
+        protected Size MeasureString(in PixelFarm.Drawing.TextBufferSpan textBufferSpan) => _runStyle.MeasureString(textBufferSpan);
 
         public RunStyle RunStyle => _runStyle;
 
@@ -104,33 +104,18 @@ namespace LayoutFarm.TextEditing
         /// <param name="count"></param>
         /// <returns></returns>
         public abstract int GetRunWidth(int startAtCharOffset, int count);
-        ///////////////////////////////////////////////////////////////
-        ////edit funcs
-        //internal abstract void InsertAfter(int index, char c);
-
-        //internal abstract CopyRun Remove(int startIndex, int length, bool withFreeRun);
-
-        //internal static CopyRun InnerRemove(Run tt, int startIndex, int length, bool withFreeRun)
-        //{
-        //    return tt.Remove(startIndex, length, withFreeRun);
-        //}
-        //internal static CopyRun InnerRemove(Run tt, int startIndex, bool withFreeRun)
-        //{
-        //    return tt.Remove(startIndex, tt.CharacterCount - (startIndex), withFreeRun);
-        //}
-
+         
         internal static CharLocation InnerGetCharacterFromPixelOffset(Run tt, int pixelOffset)
         {
             return tt.GetCharacterFromPixelOffset(pixelOffset);
         }
-
         public abstract void UpdateRunWidth();
-        ///////////////////////////////////////////////////////////////  
+       
+        public abstract CharSpan LeftCopy(int index);
+        public abstract CharSpan Copy(int startIndex, int length);
+        public abstract CharSpan Copy(int startIndex);
 
-        public abstract CopyRun LeftCopy(int index);
-        public abstract CopyRun Copy(int startIndex, int length);
-        public abstract CopyRun Copy(int startIndex);
-        //------------------------------
+        ////------------------------------
         //owner, neighbor
         /// <summary>
         /// next run

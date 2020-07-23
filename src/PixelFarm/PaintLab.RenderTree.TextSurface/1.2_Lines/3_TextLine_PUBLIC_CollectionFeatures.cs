@@ -41,9 +41,9 @@ namespace LayoutFarm.TextEditing
 
         RunStyle DefaultRunStyle => _textFlowLayer.DefaultRunStyle;
 
-        public Run AddBefore(Run beforeVisRun, CopyRun v)
+        public Run AddBefore(Run beforeVisRun, CharSpan v)
         {
-            var newRun = CreateTextRun(v.RawContent);
+            var newRun = new TextRun(DefaultRunStyle, v);
             AddBefore(beforeVisRun, newRun);
             return newRun;
         }

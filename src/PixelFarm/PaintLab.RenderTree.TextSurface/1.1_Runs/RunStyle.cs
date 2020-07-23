@@ -1,6 +1,5 @@
 ﻿//Apache2, 2014-present, WinterDev
 using PixelFarm.Drawing;
-using Typography.TextLayout;
 using Typography.Text;
 
 namespace LayoutFarm.TextEditing
@@ -59,9 +58,6 @@ namespace LayoutFarm.TextEditing
         {
             return GlobalTextService.TxtClient.MeasureBlankLineHeight(ReqFont);
         }
-
-        
-
     }
 
 }

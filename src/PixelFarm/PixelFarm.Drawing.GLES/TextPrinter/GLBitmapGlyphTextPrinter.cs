@@ -1124,7 +1124,7 @@ namespace PixelFarm.DrawingGL
         /// <summary>
         /// helper struct for summarize glyph mixed mode
         /// </summary>
-        struct GlyphMixModeSummary
+        ref struct GlyphMixModeSummary
         {
             public GLRenderVxFormattedStringGlyphMixMode FinalMixMode { get; private set; }
             public void AddGlyphMixMode(bool colorGlyphOnTransparentBG)
