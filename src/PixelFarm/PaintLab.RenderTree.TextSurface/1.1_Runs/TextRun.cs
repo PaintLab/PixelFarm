@@ -1,33 +1,13 @@
 ﻿//Apache2, 2014-present, WinterDev
 
 using System;
+//using PixelFarm.Drawing;
+
+using Typography.Text;
 using Typography.TextLayout;
 
-using PixelFarm.Drawing;
-using Typography.Text;
-
 namespace LayoutFarm.TextEditing
-{
-    static class WordBreakerHelper
-    {
-        [ThreadStatic]
-        static LayoutWordVisitor s_wordVistor;
-
-        public static void BreakToLineSegments(in Typography.Text.TextBufferSpan textBufferSpan, LineSegmentList<LineSegment> lineSegs)
-        {
-            //helper class for textrun
-            if (s_wordVistor == null)
-            {
-                s_wordVistor = new LayoutWordVisitor();
-            }
-
-            s_wordVistor.SetLineSegmentList(lineSegs);
-            Typography.Text.GlobalTextService.TxtClient.BreakToLineSegments(textBufferSpan, s_wordVistor);
-            s_wordVistor.SetLineSegmentList(null);
-        }
-    }
-
-
+{ 
 
     public class TextRun : Run, IDisposable
     {

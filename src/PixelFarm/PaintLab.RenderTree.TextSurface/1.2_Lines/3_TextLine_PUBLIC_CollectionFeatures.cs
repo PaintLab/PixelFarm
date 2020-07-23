@@ -20,42 +20,28 @@ namespace LayoutFarm.TextEditing
         {
             AddNormalRunToFirst(v);
         }
-        public RunStyle DefaultRunStyle => _textFlowLayer.DefaultRunStyle;
-        public Run AddBefore(Run beforeVisualElement, CopyRun v)
+
+        RunStyle DefaultRunStyle => _textFlowLayer.DefaultRunStyle;
+        public Run AddBefore(Run beforeVisRun, CopyRun v)
         {
             var newRun = new TextRun(DefaultRunStyle, v.RawContent);
-            AddBefore(beforeVisualElement, newRun);
+            AddBefore(beforeVisRun, newRun);
             return newRun;
         }
-        public void AddBefore(Run beforeVisualElement, Run v)
+        public void AddBefore(Run beforeVisRun, Run v)
         {
-            AddNormalRunBefore(beforeVisualElement, v);
+            AddNormalRunBefore(beforeVisRun, v);
         }
-        public TextRun AddAfter(Run afterVisualElement, CopyRun v)
+        public TextRun AddAfter(Run afterVisRun, CopyRun v)
         {
             var newRun = new TextRun(DefaultRunStyle, v.RawContent);
-            AddAfter(afterVisualElement, newRun);
+            AddAfter(afterVisRun, newRun);
             return newRun;
         }
-        public void AddAfter(Run afterVisualElement, Run v)
+        public void AddAfter(Run afterVisRun, Run v)
         {
-            AddNormalRunAfter(afterVisualElement, v);
+            AddNormalRunAfter(afterVisRun, v);
         }
-        internal void UnsafeAddLast(Run run)
-        {
-            run.SetLinkNode(_runs.AddLast(run), this);
-        }
-        internal void UnsafeAddFirst(Run run)
-        {
-            run.SetLinkNode(_runs.AddFirst(run), this);
-        }
-        internal void UnsafeAddAfter(Run after, Run run)
-        {
-            run.SetLinkNode(_runs.AddAfter(GetLineLinkNode(after), run), this);
-        }
-        internal void UnsafeRemoveVisualElement(Run v)
-        {
-            _runs.Remove(GetLineLinkNode(v));
-        }
+        
     }
 }

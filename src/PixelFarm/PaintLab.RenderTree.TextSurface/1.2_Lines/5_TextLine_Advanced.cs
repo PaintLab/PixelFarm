@@ -339,8 +339,6 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-
-
         internal SelectionRangeInfo Split(VisualSelectionRange selectionRange, RunStyle runStyleForNewPart)
         {
             //TODO: review runStyleForNewPart again// 
@@ -660,10 +658,10 @@ namespace LayoutFarm.TextEditing
             //}
         }
 
-        static EditableVisualPointInfo CreateTextPointInfo(
-              int lineId, int lineCharIndex, int caretPixelX,
-              Run onRun,
-              int textRunCharOffset, int textRunPixelOffset)
+        EditableVisualPointInfo CreateTextPointInfo(
+            int lineId, int lineCharIndex, int caretPixelX,
+            Run onRun,
+            int textRunCharOffset, int textRunPixelOffset)
         {
             EditableVisualPointInfo textPointInfo = new EditableVisualPointInfo(this, lineCharIndex, onRun);
             textPointInfo.SetAdditionVisualInfo(textRunCharOffset, caretPixelX, textRunPixelOffset);

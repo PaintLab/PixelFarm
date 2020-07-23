@@ -6,15 +6,15 @@ namespace LayoutFarm.TextEditing
 {
     partial class TextLineBox
     {
+        static LinkedListNode<Run> GetLineLinkNode(Run ve) => ve.LinkNode;
+
         void AddNormalRunToLast(Run v) => v.SetLinkNode(_runs.AddLast(v), this);
 
         void AddNormalRunToFirst(Run v) => v.SetLinkNode(_runs.AddFirst(v), this);
 
-        static LinkedListNode<Run> GetLineLinkNode(Run ve) => ve.LinkNode;
+        void AddNormalRunBefore(Run beforeVisRun, Run v) => v.SetLinkNode(_runs.AddBefore(GetLineLinkNode(beforeVisRun), v), this);
 
-        void AddNormalRunBefore(Run beforeVisualElement, Run v) => v.SetLinkNode(_runs.AddBefore(GetLineLinkNode(beforeVisualElement), v), this);
-
-        void AddNormalRunAfter(Run afterVisualElement, Run v) => v.SetLinkNode(_runs.AddAfter(GetLineLinkNode(afterVisualElement), v), this);
+        void AddNormalRunAfter(Run afterVisRun, Run v) => v.SetLinkNode(_runs.AddAfter(GetLineLinkNode(afterVisRun), v), this);
 
         public void Clear()
         {

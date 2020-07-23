@@ -29,7 +29,7 @@ namespace LayoutFarm.TextEditing
 
         }
 
-        public RunStyle CurrentSpanStyle => TextLayer.DefaultRunStyle;
+
 
         public void Clear()
         {
@@ -327,7 +327,7 @@ namespace LayoutFarm.TextEditing
             }
 
 
-            this.TextLayer.TopDownReCalculateContentSize();
+            _textFlowLayer.TopDownReCalculateContentSize();
             EnsureCurrentTextRun();
         }
         public SelectionRangeInfo SplitSelectedText(VisualSelectionRange selectionRange, RunStyle runStyleForNewPart)
@@ -350,7 +350,7 @@ namespace LayoutFarm.TextEditing
         public debugActivityRecorder dbugTextManRecorder;
 #endif
 
-        TextFlowLayer _textFlowLayer;
+        private protected TextFlowLayer _textFlowLayer;
         TextLineBox _currentLine;
         int _currentLineY = 0;
         //Run _run1_x;
@@ -402,6 +402,7 @@ namespace LayoutFarm.TextEditing
             }
         }
 
+        public RunStyle CurrentSpanStyle => _textFlowLayer.DefaultRunStyle;
 #if DEBUG
         int _i_charIndex;
         int caret_char_index
@@ -1006,11 +1007,11 @@ namespace LayoutFarm.TextEditing
         //
         public bool IsOnEndOfLine => caret_char_index == _currentLine.CharCount();
         //
-        internal TextLineBox GetTextLine(int lineId) => TextLayer.GetTextLine(lineId);
+        internal TextLineBox GetTextLine(int lineId) => _textFlowLayer.GetTextLine(lineId);
         //
-        internal TextLineBox GetTextLineAtPos(int y) => TextLayer.GetTextLineAtPos(y);
+        internal TextLineBox GetTextLineAtPos(int y) => _textFlowLayer.GetTextLineAtPos(y);
         //
-        public int LineCount => TextLayer.LineCount;
+        public int LineCount => _textFlowLayer.LineCount;
         //
         public bool HasNextLine => _currentLine.Next != null;
         //
@@ -1035,6 +1036,5 @@ namespace LayoutFarm.TextEditing
         //
         public Rectangle LineArea => _currentLine.ActualLineArea;
 
-        internal TextFlowLayer TextLayer => _currentLine.OwnerFlowLayer;
     }
 }

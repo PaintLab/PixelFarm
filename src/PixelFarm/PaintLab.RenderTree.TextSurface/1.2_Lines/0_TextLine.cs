@@ -3,7 +3,7 @@
 using System;
 using System.Diagnostics;
 using System.Collections.Generic;
-using System.Text;
+ 
 using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
 
@@ -25,7 +25,7 @@ namespace LayoutFarm.TextEditing
         /// </summary>
         TextFlowLayer _textFlowLayer;
 
-        int _currentLineNumber;
+        int _currentLineNumber; //relative to its ownerFlowLayer
         int _actualLineHeight;
         int _actualLineWidth;
         int _lineTop;
@@ -34,7 +34,7 @@ namespace LayoutFarm.TextEditing
         bool _validCharCount = false;
         int _cacheCharCount;
 
-        // 
+        //_lineFlags
         const int LINE_CONTENT_ARRANGED = 1 << (1 - 1);
         const int LOCAL_SUSPEND_LINE_REARRANGE = 1 << (3 - 1);
         const int END_WITH_LINE_BREAK = 1 << (4 - 1);
@@ -58,8 +58,10 @@ namespace LayoutFarm.TextEditing
             OverlappedTop = 3; //test only
             OverlappedBottom = 3; //test only
         }
-
-
+        /// <summary>
+        /// primary text baseline 
+        /// </summary>
+        public ushort Baseline { get; set; }
         internal void ClientRunInvalidateGraphics(Run clientRun)
         {
             //bubble-up invalidated area from client
@@ -72,20 +74,32 @@ namespace LayoutFarm.TextEditing
         internal byte OverlappedTop { get; set; }
         internal byte OverlappedBottom { get; set; }
 
+        /// <summary>
+        /// detach from owner line
+        /// </summary>
         internal void RemoveOwnerFlowLayer() => _textFlowLayer = null;
+        internal bool HasOwnerFlowLayer => _textFlowLayer != null;
 
+        /// <summary>
+        /// number of run in this line
+        /// </summary>
         public int RunCount => _runs.Count;
 
         /// <summary>
         /// first run node
         /// </summary>
         public LinkedListNode<Run> First => _runs.First;
-        //
+
+        /// <summary>
+        /// first run
+        /// </summary>
+        public Run FirstRun => _runs.First?.Value;
+
         /// <summary>
         /// last run node
         /// </summary>
         public LinkedListNode<Run> Last => _runs.Last;
-        //  
+
         internal Run LastRun => _runs.Last?.Value;
 
         public float GetXOffsetAtCharIndex(int charIndex)
@@ -133,14 +147,9 @@ namespace LayoutFarm.TextEditing
         }
         internal bool HitTestCore(HitChain hitChain)
         {
-
-            if (this.RunCount == 0)
+            LinkedListNode<Run> cnode = this.First;
+            if (cnode != null)
             {
-                return false;
-            }
-            else
-            {
-                LinkedListNode<Run> cnode = this.First;
                 int curLineTop = _lineTop;
                 hitChain.OffsetTestPoint(0, -curLineTop);
                 while (cnode != null)
@@ -153,11 +162,11 @@ namespace LayoutFarm.TextEditing
                     cnode = cnode.Next;
                 }
                 hitChain.OffsetTestPoint(0, curLineTop);
-                return false;
             }
+            return false;
         }
 
-        public TextFlowLayer OwnerFlowLayer => _textFlowLayer;
+        TextFlowLayer OwnerFlowLayer => _textFlowLayer;
         //
         public bool EndWithLineBreak
         {
@@ -280,16 +289,10 @@ namespace LayoutFarm.TextEditing
 
         public TextLineBox Prev => (_currentLineNumber > 0) ? _textFlowLayer.GetTextLine(_currentLineNumber - 1) : null;
 
-        public Run FirstRun => _runs.First?.Value;
-
         public bool NeedArrange => (_lineFlags & LINE_CONTENT_ARRANGED) == 0;
 
         internal void ValidateContentArrangement() => _lineFlags |= LINE_CONTENT_ARRANGED;
 
-        //public static void InnerCopyLineContent(TextLineBox line, TextCopyBuffer output)
-        //{
-        //    line.CopyLineContent(output);
-        //}
         public void CopyLineContent(TextCopyBuffer output)
         {
             LinkedListNode<Run> curNode = this.First;

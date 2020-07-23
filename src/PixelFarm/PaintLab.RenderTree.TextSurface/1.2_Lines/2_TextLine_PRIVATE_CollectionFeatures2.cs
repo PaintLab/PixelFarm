@@ -3,8 +3,7 @@
 using System;
 using System.Collections.Generic;
 namespace LayoutFarm.TextEditing
-{
-   
+{  
 
     partial class TextLineBox
     {
@@ -159,13 +158,13 @@ namespace LayoutFarm.TextEditing
                 output.AddLast(r);
             }
         }
-        public void ReplaceAll(IEnumerable<Run> textRuns)
+        public void ReplaceAll(IEnumerable<Run> runs)
         {
             this.Clear();
             this.LocalSuspendLineReArrange();
-            if (textRuns != null)
+            if (runs != null)
             {
-                foreach (Run r in textRuns)
+                foreach (Run r in runs)
                 {
                     this.AddLast(r);
                 }
