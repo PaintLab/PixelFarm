@@ -1,7 +1,7 @@
 ﻿//Apache2, 2014-present, WinterDev
 
 using System;
-//using PixelFarm.Drawing;
+using PixelFarm.Drawing;
 
 using Typography.Text;
 using Typography.TextLayout;
