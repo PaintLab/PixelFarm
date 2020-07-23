@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using OpenTK.Platform.Egl;
 using PixelFarm.CpuBlit;
 using PixelFarm.CpuBlit.BitmapAtlas;
 using PixelFarm.Drawing;
