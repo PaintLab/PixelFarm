@@ -56,9 +56,7 @@ namespace LayoutFarm.TextEditing
         public override int GetRunWidth(int startAtCharOffset, int count)
         {
             return MeasureString(new Typography.Text.TextBufferSpan(_mybuffer.UnsafeInternalCharArr, _mybuffer.beginAt + startAtCharOffset, count)).Width;
-        }
-
-        public override string GetText() => _mybuffer.GetString();
+        } 
 
         public override void UpdateRunWidth()
         {

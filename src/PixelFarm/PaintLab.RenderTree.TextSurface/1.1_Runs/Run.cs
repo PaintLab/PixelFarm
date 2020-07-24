@@ -23,24 +23,17 @@ namespace LayoutFarm.TextEditing
         int _width;
         int _height;
 
-
         internal Run(RunStyle runStyle)
         {
             _runStyle = runStyle;
             _width = _height = 10;//default
         }
 
-        protected RequestFont GetFont() => _runStyle.ReqFont;
-
-        protected int MeasureLineHeightInt32() => (int)Math.Round(_runStyle.MeasureBlankLineHeight());
-
-        protected float MeasureLineHeight() => _runStyle.MeasureBlankLineHeight();
+        protected RequestFont GetFont() => _runStyle.ReqFont; 
 
         protected Size MeasureString(in Typography.Text.TextBufferSpan textBufferSpan) => _runStyle.MeasureString(textBufferSpan);
 
         public RunStyle RunStyle => _runStyle;
-
-        public bool HitTest(Rectangle r) => Bounds.IntersectsWith(r);
 
         public bool HitTest(UpdateArea r) => Bounds.IntersectsWith(r.CurrentRect);
 
@@ -83,8 +76,9 @@ namespace LayoutFarm.TextEditing
 
         internal abstract bool IsInsertable { get; }
         public abstract int CharacterCount { get; }
-        public abstract char GetChar(int index);
-        public abstract string GetText();
+        
+        public abstract char GetChar(int index); 
+
         public abstract void WriteTo(Typography.Text.TextCopyBuffer output);
         public abstract void WriteTo(Typography.Text.TextCopyBuffer output, int start, int len);
         public abstract void WriteTo(Typography.Text.TextCopyBuffer output, int start);

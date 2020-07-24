@@ -167,8 +167,7 @@ namespace LayoutFarm.TextEditing
                     Run removedRun = startPoint.Run;
                     if (removedRun is TextRun textrun)
                     {
-                        TextRunModifier mod = new TextRunModifier(CharSource);
-                        mod.Remove(textrun,
+                        textrun.Remove(
                                    startPoint.RunLocalSelectedIndex,
                                    endPoint.LineCharIndex - startPoint.LineCharIndex, false);
                         if (removedRun.CharacterCount == 0)

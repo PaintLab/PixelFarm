@@ -138,8 +138,8 @@ namespace LayoutFarm.TextEditing
                 }
                 if (removingTextRun is TextRun textRun)
                 {
-                    TextRunModifier mod = new TextRunModifier(CurrentLine.CharSource);
-                    mod.Remove(textRun, removeIndex, actualRemove, false);
+
+                    textRun.Remove(removeIndex, actualRemove, false);
                     //Run.InnerRemove(removingTextRun, removeIndex, actualRemove, false);
 
                     if (removingTextRun.CharacterCount == 0)
@@ -196,8 +196,7 @@ namespace LayoutFarm.TextEditing
                 {
                     if (run.IsInsertable)
                     {
-                        TextRunModifier modifier = new TextRunModifier(CurrentLine);
-                        modifier.InsertAfter(run, CurrentTextRunCharIndex, c);
+                        run.InsertAfter(CurrentTextRunCharIndex, c);
                     }
                     else
                     {
@@ -319,8 +318,8 @@ namespace LayoutFarm.TextEditing
                 {
                     if (currentRun is TextRun textrun)
                     {
-                        TextRunModifier modifier = new TextRunModifier(CurrentLine);
-                        CharSpan rightPart = modifier.Remove(textrun, CurrentTextRunCharIndex + 1, true);
+
+                        CharSpan rightPart = textrun.Remove(CurrentTextRunCharIndex + 1, true);
 
                         if (rightPart.len > 0)
                         {

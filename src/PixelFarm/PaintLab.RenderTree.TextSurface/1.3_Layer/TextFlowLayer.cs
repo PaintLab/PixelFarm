@@ -568,6 +568,7 @@ namespace LayoutFarm.TextEditing
 
         internal TextLineBox GetTextLineAtPos(int y)
         {
+            //TODO: review this again
             List<TextLineBox> lines = _lines;
             if (lines != null)
             {
@@ -595,8 +596,8 @@ namespace LayoutFarm.TextEditing
                 }
                 else
                 {
-                    //vary, 
-                    //TODO: use HeightTree?
+                    //TODO: if lines is not overlapped
+                    //we can use binary search 
 
                     int j = lines.Count;
                     for (int i = 0; i < j; ++i)
