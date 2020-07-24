@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
+using LayoutFarm.TextEditing;
 namespace LayoutFarm
 {
     [DemoNote("2.6 Demo_MultiLineText_WithSuggestionPopupWin")]
@@ -148,7 +149,7 @@ namespace LayoutFarm
             //-------------------------------------------------------------------------
             //sample parse ...
             //In this example  all country name start with Captial letter so ...
-            string currentTextSpanText = _textbox.CurrentTextSpan.GetText().ToUpper();
+            string currentTextSpanText = _textbox.CurrentTextSpan.GetUpperString();
             //analyze content
             var textBuffer = currentTextSpanText.ToCharArray();
             var results = new List<LayoutFarm.Composers.TextSplitBounds>();

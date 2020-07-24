@@ -11,13 +11,13 @@ namespace LayoutFarm.TextEditing
     public class TextRun : Run, IDisposable
     {
 
-        internal CharSpan _mybuffer;
+        internal CharBufferSegment _mybuffer;
         int[] _charAdvances = null;
         RenderVxFormattedString _renderVxFormattedString; //re-creatable from original content
 
         bool _content_Parsed;//
 
-        internal TextRun(RunStyle runstyle, CharSpan copyBuffer)
+        internal TextRun(RunStyle runstyle, CharBufferSegment copyBuffer)
             : base(runstyle)
         {
             //we need font info (in style) for evaluating the size fo this span
@@ -26,7 +26,15 @@ namespace LayoutFarm.TextEditing
             _mybuffer = copyBuffer;
             UpdateRunWidth();
         }
+        internal TextRun(RunStyle runstyle, CharSpan newSpan)
+            : base(runstyle)
+        {
+            //we need font info (in style) for evaluating the size fo this span
+            //without font info we can't measure the size of this span 
 
+            _mybuffer = new CharBufferSegment(newSpan.UnsafeInternalCharSource, newSpan.beginAt, newSpan.len);
+            UpdateRunWidth();
+        }
         public bool DelayFormattedString { get; set; }
         public void Dispose()
         {
@@ -39,13 +47,18 @@ namespace LayoutFarm.TextEditing
         }
         internal void SetNewContent(CharSpan newSpan)
         {
-            _mybuffer = newSpan;
+            _mybuffer = new CharBufferSegment(newSpan.UnsafeInternalCharSource, newSpan.beginAt, newSpan.len);
             _content_Parsed = false;
             _renderVxFormattedString?.Dispose();
             _renderVxFormattedString = null;
-
         }
-
+        internal void SetNewContent(CharBufferSegment newsegment)
+        {
+            _mybuffer = newsegment;
+            _content_Parsed = false;
+            _renderVxFormattedString?.Dispose();
+            _renderVxFormattedString = null;
+        }
         public override void WriteTo(TextCopyBuffer output)
         {
             _mybuffer.WriteTo(output);
@@ -65,8 +78,6 @@ namespace LayoutFarm.TextEditing
                 _mybuffer.WriteTo(output, start, len);
             }
         }
-
-
 
         public override int GetRunWidth(int charOffset)
         {
@@ -494,12 +505,12 @@ namespace LayoutFarm.TextEditing
                 else if (leftpart.len > 0)
                 {
                     //only left part
-                   SetNewContent(leftpart);//replace 
+                    SetNewContent(leftpart);//replace 
                 }
                 else
                 {
                     //empty span
-                   SetNewContent(new CharSpan(charSource, 0, 0));
+                    SetNewContent(new CharSpan(charSource, 0, 0));
                 }
 
                 InvalidateOwnerLineCharCount();
@@ -510,7 +521,7 @@ namespace LayoutFarm.TextEditing
         }
         //
 #if DEBUG
-        public override string ToString() => _mybuffer.GetString();
+        public override string ToString() => _mybuffer.dbugGetString();
 #endif
 
     }

@@ -10,9 +10,9 @@ namespace LayoutFarm.TextEditing
     {
         //TODO: review here=> who should store/handle this handle? , owner TextBox or this run?
         Action<SolidRun, DrawBoard, UpdateArea> _externalCustomDraw;
-        CharSpan _mybuffer;
+        CharBufferSegment _mybuffer;
 
-        public SolidRun(CharSpan copyBuffer, RunStyle style)
+        public SolidRun(CharBufferSegment copyBuffer, RunStyle style)
             : base(style)
         {
             //check line break? 

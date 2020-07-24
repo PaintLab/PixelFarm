@@ -29,7 +29,7 @@ namespace LayoutFarm.TextEditing
             _width = _height = 10;//default
         }
 
-        protected RequestFont GetFont() => _runStyle.ReqFont; 
+        protected RequestFont GetFont() => _runStyle.ReqFont;
 
         protected Size MeasureString(in Typography.Text.TextBufferSpan textBufferSpan) => _runStyle.MeasureString(textBufferSpan);
 
@@ -76,8 +76,8 @@ namespace LayoutFarm.TextEditing
 
         internal abstract bool IsInsertable { get; }
         public abstract int CharacterCount { get; }
-        
-        public abstract char GetChar(int index); 
+
+        public abstract char GetChar(int index);
 
         public abstract void WriteTo(Typography.Text.TextCopyBuffer output);
         public abstract void WriteTo(Typography.Text.TextCopyBuffer output, int start, int len);
@@ -135,5 +135,24 @@ namespace LayoutFarm.TextEditing
         public void TopDownReCalculateContentSize() => this.UpdateRunWidth();
         protected internal void InvalidateOwnerLineCharCount() => _ownerTextLine?.InvalidateCharCount();
 
+    }
+
+    public static class RunExtensions
+    {
+        [ThreadStatic]
+        static Typography.Text.TextCopyBuffer s_copyBuffer;
+        public static string GetUpperString(this Run textRun)
+        {
+            if (s_copyBuffer != null)
+            {
+                s_copyBuffer = new TextCopyBuffer();
+            }
+            else
+            {
+                s_copyBuffer.Clear();
+            }
+            textRun.WriteTo(s_copyBuffer);
+            return s_copyBuffer.ToString().ToUpper();
+        }
     }
 }
