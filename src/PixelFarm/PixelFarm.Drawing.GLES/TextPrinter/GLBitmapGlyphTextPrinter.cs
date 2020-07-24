@@ -887,84 +887,97 @@ namespace PixelFarm.DrawingGL
             _vboBuilder.SetArrayLists(_sh_vertexList, _sh_indexList); //set output***
             _vboBuilder.SetTextureInfo(_glBmp.Width, _glBmp.Height, _glBmp.IsYFlipped, _pcx.OriginKind);
 
-            for (int s = 0; s < count; ++s)
+            if (_fmtGlyphPlans.Count > 0)
             {
-                FormattedGlyphPlanSeq sq = _fmtGlyphPlans[s];
-                bool isTargetFont = sq.ResolvedFont.Typeface == expectedTypeface;
 
-                //if this seq use another font=> just calculate entire advance with
-                ChangeFont(sq);
-
-                px_scale = _px_scale; //init
-                //use current resolve font
-                bottom = (float)top + _ascending - _descending;
-                each_white_spaceW = _white_space_width;
-
-                if (sq.PrefixWhitespaceCount > 0)
+                FormattedGlyphPlanSeq sq = _fmtGlyphPlans.GetFirst();
+                while (sq != null)
                 {
-                    acc_x += each_white_spaceW * sq.PrefixWhitespaceCount;
-                }
 
 
-                //create temp buffer span that describe the part of a whole char buffer 
-                //ask text service to parse user input char buffer and create a glyph-plan-sequence (list of glyph-plan) 
-                //with specific request font   
-                GlyphPlanSequence glyphPlanSeq = sq.Seq;
-                int seqLen = glyphPlanSeq.Count;
-                for (int i = 0; i < seqLen; ++i)
-                {
-                    UnscaledGlyphPlan glyphPlan = glyphPlanSeq[i];
-                    if (!isTargetFont)
+                    bool isTargetFont = sq.ResolvedFont.Typeface == expectedTypeface;
+
+                    //if this seq use another font=> just calculate entire advance with
+                    ChangeFont(sq);
+
+                    px_scale = _px_scale; //init
+                                          //use current resolve font
+                    bottom = (float)top + _ascending - _descending;
+                    each_white_spaceW = _white_space_width;
+
+                    if (sq.PrefixWhitespaceCount > 0)
                     {
-                        //not the target
-                        //find only advance and go next
+                        acc_x += each_white_spaceW * sq.PrefixWhitespaceCount;
+                    }
+
+
+                    //create temp buffer span that describe the part of a whole char buffer 
+                    //ask text service to parse user input char buffer and create a glyph-plan-sequence (list of glyph-plan) 
+                    //with specific request font   
+                    GlyphPlanSequence glyphPlanSeq = sq.Seq;
+                    int seqLen = glyphPlanSeq.Count;
+                    for (int i = 0; i < seqLen; ++i)
+                    {
+                        UnscaledGlyphPlan glyphPlan = glyphPlanSeq[i];
+                        if (!isTargetFont)
+                        {
+                            //not the target
+                            //find only advance and go next
+                            acc_x += (float)Math.Round(glyphPlan.AdvanceX * px_scale);
+                            continue;//***
+                        }
+
+                        if (!_fontAtlas.TryGetItem(glyphPlan.glyphIndex, out AtlasItem atlasItem))
+                        {
+                            //if no glyph data, we should render a missing glyph ***
+                            continue;
+                        }
+
+                        //--------------------------------------
+                        //TODO: review precise height in float
+                        //--------------------------------------   
+
+                        var srcRect = new Rectangle(atlasItem.Left, atlasItem.Top, atlasItem.Width, atlasItem.Height);
+
+                        //offset length from 'base-line'
+                        float x_offset = acc_x + (float)Math.Round(glyphPlan.OffsetX * px_scale - atlasItem.TextureXOffset);
+                        float y_offset = acc_y + (float)Math.Round(glyphPlan.OffsetY * px_scale - atlasItem.TextureYOffset) + srcRect.Height; //***
+
+                        //NOTE:
+                        // -glyphData.TextureXOffset => restore to original pos
+                        // -glyphData.TextureYOffset => restore to original pos 
+                        //--------------------------              
+
+                        g_left = (float)(left + x_offset);
+                        g_top = (float)(bottom - y_offset); //***
+
                         acc_x += (float)Math.Round(glyphPlan.AdvanceX * px_scale);
-                        continue;//***
+                        g_top = (float)Math.Floor(g_top);//adjust to integer num ***  
+
+                        hasSomeGlyphs = true;
+                        _vboBuilder.WriteRect(srcRect, g_left, g_top, scaleFromTexture);
+
                     }
 
-                    if (!_fontAtlas.TryGetItem(glyphPlan.glyphIndex, out AtlasItem atlasItem))
+                    //
+                    if (sq.PostfixWhitespaceCount > 0)
                     {
-                        //if no glyph data, we should render a missing glyph ***
-                        continue;
+                        //***
+                        if (isTargetFont)
+                        {
+                            _vboBuilder.AppendDegenerativeTriangle();
+                        }
+                        acc_x += each_white_spaceW * sq.PostfixWhitespaceCount;
                     }
 
-                    //--------------------------------------
-                    //TODO: review precise height in float
-                    //--------------------------------------   
-
-                    var srcRect = new Rectangle(atlasItem.Left, atlasItem.Top, atlasItem.Width, atlasItem.Height);
-
-                    //offset length from 'base-line'
-                    float x_offset = acc_x + (float)Math.Round(glyphPlan.OffsetX * px_scale - atlasItem.TextureXOffset);
-                    float y_offset = acc_y + (float)Math.Round(glyphPlan.OffsetY * px_scale - atlasItem.TextureYOffset) + srcRect.Height; //***
-
-                    //NOTE:
-                    // -glyphData.TextureXOffset => restore to original pos
-                    // -glyphData.TextureYOffset => restore to original pos 
-                    //--------------------------              
-
-                    g_left = (float)(left + x_offset);
-                    g_top = (float)(bottom - y_offset); //***
-
-                    acc_x += (float)Math.Round(glyphPlan.AdvanceX * px_scale);
-                    g_top = (float)Math.Floor(g_top);//adjust to integer num ***  
-
-                    hasSomeGlyphs = true;
-                    _vboBuilder.WriteRect(srcRect, g_left, g_top, scaleFromTexture);
-
+                    //------------
+                    //
+                    sq = sq.Next;
                 }
 
-                //
-                if (sq.PostfixWhitespaceCount > 0)
-                {
-                    //***
-                    if (isTargetFont)
-                    {
-                        _vboBuilder.AppendDegenerativeTriangle();
-                    }
-                    acc_x += each_white_spaceW * sq.PostfixWhitespaceCount;
-                }
             }
+
+
 
             if (hasSomeGlyphs)
             {
@@ -975,7 +988,7 @@ namespace PixelFarm.DrawingGL
         }
 
 
-        readonly FormattedGlyphPlanList _fmtGlyphPlans = new FormattedGlyphPlanList();
+        readonly FormattedGlyphPlanSeqPool _fmtGlyphPlans = new FormattedGlyphPlanSeqPool();
         readonly Dictionary<SpanFormattedInfo, bool> _uniqueResolvedFonts = new Dictionary<SpanFormattedInfo, bool>();
 
         readonly struct SpanFormattedInfo
@@ -993,40 +1006,20 @@ namespace PixelFarm.DrawingGL
         internal ArrayList<float> _sh_vertexList;
         internal ArrayList<ushort> _sh_indexList;
 
-        public void PrepareStringForRenderVx(GLRenderVxFormattedString vxFmtStr, char[] buffer, int startAt, int len)
+        void PrepareStringForRenderVx(GLRenderVxFormattedString vxFmtStr, FormattedGlyphPlanSeq fmt_seq)
         {
-            //we need to parse string 
-            //since it may contains glyph from multiple font (eg. eng, emoji etc.)
-            //see VxsTextPrinter 
 
-            var buffSpan = new Typography.Text.TextBufferSpan(buffer, startAt, len);
-
-            RequestFont reqFont = _painter.CurrentFont; //init with default 
-
-            ResolvedFont resolvedFont = _txtClient.ResolveFont(reqFont);
-            //
-
-            Typeface curTypeface = resolvedFont.Typeface;
-            _fmtGlyphPlans.Clear();
             _uniqueResolvedFonts.Clear();
 
-            //resolved font has information about typeface, size 
-
-            _txtClient.SetCurrentFont(curTypeface, _fontSizeInPoints, _txtClient.CurrentScriptLang);
-            _txtClient.PrepareFormattedStringList(buffer, startAt, len, _fmtGlyphPlans);
-
-            bool needRightToLeftArr = _fmtGlyphPlans.IsRightToLeftDirection;
-
-            int j = _fmtGlyphPlans.Count;
-            for (int n = 0; n < j; ++n)
+            while (fmt_seq != null)
             {
-                //each part may contains diff unicode range
-                FormattedGlyphPlanSeq fmt_seq = _fmtGlyphPlans[n];
                 SpanFormattedInfo spFmt = new SpanFormattedInfo(fmt_seq.ResolvedFont, fmt_seq.BreakInfo);
                 if (!_uniqueResolvedFonts.ContainsKey(spFmt))
                 {
                     _uniqueResolvedFonts.Add(spFmt, true);
                 }
+                //
+                fmt_seq = fmt_seq.Next;
             }
 
             //a fmtGlyphPlanSeqs may contains glyph from  more than 1 font,
@@ -1043,7 +1036,6 @@ namespace PixelFarm.DrawingGL
 
 
             GlyphMixModeSummary mixModeSummary = new GlyphMixModeSummary();//light-weight state helper
-
 
             //use pool?
             vxFmtStr.PrepareIntermediateStructures();
@@ -1113,11 +1105,41 @@ namespace PixelFarm.DrawingGL
                 _painter.TryCreateWordStrip(vxFmtStr);
             }
 
+            //contains chain 
             _uniqueResolvedFonts.Clear();
+
             _sh_indexList = null;
             _sh_vertexList = null;
+        }
+        public void PrepareStringForRenderVx(GLRenderVxFormattedString vxFmtStr, IFormattedGlyphPlanList fmtGlyphPlans)
+        {
+            if (!(fmtGlyphPlans is FormattedGlyphPlanListHolder fmtHolder)) { return; }
 
-            //restore prev typeface & settings
+            PrepareStringForRenderVx(vxFmtStr, fmtHolder._chainFmtGlyphPlans);
+        }
+        public void PrepareStringForRenderVx(GLRenderVxFormattedString vxFmtStr, char[] buffer, int startAt, int len)
+        {
+            //we need to parse string 
+            //since it may contains glyph from multiple font (eg. eng, emoji etc.)
+            //see VxsTextPrinter  
+
+
+
+
+            //resolved font has information about typeface, size  
+            _txtClient.SetCurrentFont(
+                _txtClient.ResolveFont(_painter.CurrentFont).Typeface,
+                _fontSizeInPoints,
+                _txtClient.CurrentScriptLang);
+
+            _fmtGlyphPlans.Clear(); //reuse 
+            _txtClient.PrepareFormattedStringList(buffer, startAt, len, _fmtGlyphPlans);
+
+            if (_fmtGlyphPlans.Count > 0)
+            {
+                PrepareStringForRenderVx(vxFmtStr, _fmtGlyphPlans.GetFirst());
+            }
+
         }
 
         /// <summary>

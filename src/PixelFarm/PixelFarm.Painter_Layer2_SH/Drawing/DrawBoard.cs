@@ -227,7 +227,6 @@ namespace PixelFarm.Drawing
         public abstract bool IsGpuDrawBoard { get; }
         public abstract void BlitFrom(DrawBoard src, float srcX, float srcY, float srcW, float srcH, float dstX, float dstY);
         public abstract ImageBinder GetInternalBitmapProvider();
-
     }
 
     public enum TextDrawingTech : byte
@@ -312,15 +311,15 @@ namespace PixelFarm.Drawing
             internal SmoothingModeState(DrawBoard drawBoard, SmoothingMode state)
             {
                 _latestSmoothMode = state;
-                _drawBoard = drawBoard;
+                _drawBoard = drawBoard; 
+
             }
             public void Dispose()
             {
                 _drawBoard.SmoothingMode = _latestSmoothMode;
             }
         }
-        //--------------------------------------------------
-
+        
         public struct StrokeState : System.IDisposable
         {
             readonly DrawBoard _d;

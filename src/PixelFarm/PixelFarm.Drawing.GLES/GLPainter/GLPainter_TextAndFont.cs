@@ -16,6 +16,7 @@ namespace PixelFarm.DrawingGL
         /// <param name="top"></param>
         void DrawString(GLRenderVxFormattedString renderVx, double left, double top);
         void PrepareStringForRenderVx(GLRenderVxFormattedString renderVx, char[] text, int startAt, int len);
+        void PrepareStringForRenderVx(GLRenderVxFormattedString renderVx, IFormattedGlyphPlanList formattedGlyphPlans);
         void ChangeFont(RequestFont font);
         void ChangeFillColor(Color fillColor);
         void ChangeStrokeColor(Color strokColor);
@@ -114,6 +115,24 @@ namespace PixelFarm.DrawingGL
                 fmtstr.dbugText = textspan;
 #endif
                 _textPrinter?.PrepareStringForRenderVx(fmtstr, buffer, 0, buffer.Length);
+                fmtstr.ReleaseIntermediateStructures();
+                return fmtstr;
+            }
+            else
+            {
+#if DEBUG
+                throw new NotSupportedException();
+#else
+                return null;
+#endif
+            }
+        }
+        public override RenderVxFormattedString CreateRenderVx(IFormattedGlyphPlanList formattedGlyphPlans)
+        {
+            if (_textPrinter != null)
+            {
+                var fmtstr = new GLRenderVxFormattedString();
+                _textPrinter?.PrepareStringForRenderVx(fmtstr, formattedGlyphPlans);
                 fmtstr.ReleaseIntermediateStructures();
                 return fmtstr;
             }
