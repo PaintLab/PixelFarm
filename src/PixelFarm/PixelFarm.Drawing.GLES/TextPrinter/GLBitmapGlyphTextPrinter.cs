@@ -159,7 +159,14 @@ namespace PixelFarm.DrawingGL
             _lineSpacingInPx = r_font.LineSpacingInPixels;
 
             UnicodeRangeInfo unicodeRng = s.BreakInfo.UnicodeRange;
-            _fontAtlas = _myGLBitmapFontMx.GetFontAtlas(r_font, unicodeRng.StartCodepoint, unicodeRng.EndCodepoint, out _glBmp);
+            if (unicodeRng == null)
+            { //temp fix
+                _fontAtlas = _myGLBitmapFontMx.GetFontAtlas(r_font, 0, 255, out _glBmp);
+            }
+            else
+            {
+                _fontAtlas = _myGLBitmapFontMx.GetFontAtlas(r_font, unicodeRng.StartCodepoint, unicodeRng.EndCodepoint, out _glBmp);
+            }
         }
         void ChangeFont(FormattedGlyphPlanSeq s)
         {
@@ -177,7 +184,16 @@ namespace PixelFarm.DrawingGL
             _lineSpacingInPx = r_font.LineSpacingInPixels; //typeface.CalculateMaxLineClipHeight() * _px_scale;
 
             UnicodeRangeInfo unicodeRng = s.BreakInfo.UnicodeRange;
-            _fontAtlas = _myGLBitmapFontMx.GetFontAtlas(r_font, unicodeRng.StartCodepoint, unicodeRng.EndCodepoint, out _glBmp);
+            if (unicodeRng == null)
+            {
+                //temp fix
+                _fontAtlas = _myGLBitmapFontMx.GetFontAtlas(r_font, 0, 255, out _glBmp);
+            }
+            else
+            {
+                _fontAtlas = _myGLBitmapFontMx.GetFontAtlas(r_font, unicodeRng.StartCodepoint, unicodeRng.EndCodepoint, out _glBmp);
+            }
+
         }
 
         public void ChangeFont(ResolvedFont font, int startCodepoint, int endCodepoint)
@@ -850,6 +866,8 @@ namespace PixelFarm.DrawingGL
             //change font once 
             ResolvedFont expected_resolvedFont = txtStrip.ResolvedFont;
             Typeface expectedTypeface = expected_resolvedFont.Typeface;
+            SpanBreakInfo expectedBreakInfo = txtStrip.BreakInfo;
+
 #if DEBUG
             if (expectedTypeface == null) { throw new NotSupportedException(); }
 #endif
@@ -895,7 +913,8 @@ namespace PixelFarm.DrawingGL
                 {
 
 
-                    bool isTargetFont = sq.ResolvedFont.Typeface == expectedTypeface;
+                    bool isTargetFont = sq.ResolvedFont.Typeface == expectedTypeface &&
+                                         sq.BreakInfo == expectedBreakInfo;
 
                     //if this seq use another font=> just calculate entire advance with
                     ChangeFont(sq);
@@ -1013,6 +1032,7 @@ namespace PixelFarm.DrawingGL
 
             while (fmt_seq != null)
             {
+                //find unique atlas
                 SpanFormattedInfo spFmt = new SpanFormattedInfo(fmt_seq.ResolvedFont, fmt_seq.BreakInfo);
                 if (!_uniqueResolvedFonts.ContainsKey(spFmt))
                 {
