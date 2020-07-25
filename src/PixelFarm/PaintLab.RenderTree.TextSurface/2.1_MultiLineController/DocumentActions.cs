@@ -27,7 +27,7 @@ namespace LayoutFarm.TextEditing.Commands
 
         void TryMoveCaretTo(int charIndex, bool backward = false);
         bool DoBackspace();
-        void AddCharToCurrentLine(char c);
+        void AddCharToCurrentLine(int c);
         VisualSelectionRangeSnapShot DoDelete();
         void DoEnd();
         void DoHome();
@@ -63,14 +63,14 @@ namespace LayoutFarm.TextEditing.Commands
 
     public class DocActionCharTyping : DocumentAction
     {
-        readonly char _c;
-        public DocActionCharTyping(char c, int lineNumber, int charIndex)
+        readonly int _c;
+        public DocActionCharTyping(int c, int lineNumber, int charIndex)
             : base(lineNumber, charIndex)
         {
             _c = c;
         }
         public override ChangeRegion ChangeRegion => ChangeRegion.Line;
-        public char Char => _c;
+        public int Char => _c;
         public override DocumentActionName Name => DocumentActionName.CharTyping;
         public override void InvokeUndo(ITextFlowEditSession editSess)
         {
@@ -132,13 +132,13 @@ namespace LayoutFarm.TextEditing.Commands
 
     public class DocActionDeleteChar : DocumentAction
     {
-        readonly char _c;
-        public DocActionDeleteChar(char c, int lineNumber, int editSess)
+        readonly int _c;
+        public DocActionDeleteChar(int c, int lineNumber, int editSess)
             : base(lineNumber, editSess)
         {
             _c = c;
         }
-        public char Char => _c;
+        public int Char => _c;
         public override ChangeRegion ChangeRegion => ChangeRegion.Line;
         public override DocumentActionName Name => DocumentActionName.DeleteChar;
         public override void InvokeUndo(ITextFlowEditSession editSess)

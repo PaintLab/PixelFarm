@@ -56,19 +56,19 @@ namespace LayoutFarm.TextEditing
         public override int GetRunWidth(int startAtCharOffset, int count)
         {
             return MeasureString(new Typography.Text.TextBufferSpan(_mybuffer.UnsafeInternalCharArr, _mybuffer.beginAt + startAtCharOffset, count)).Width;
-        } 
+        }
 
         public override void UpdateRunWidth()
         {
             Size size = CalculateDrawingStringSize(0, _mybuffer.len);
             SetSize(size.Width, size.Height);
         }
-        public override char GetChar(int index) => _mybuffer.GetUtf16Char(index);
+        public override int GetChar(int index) => _mybuffer.GetUtf32Char(index);
 
         public override int CharacterCount => _mybuffer.len;
 
         Size CalculateDrawingStringSize(int start, int length) => MeasureString(new Typography.Text.TextBufferSpan(_mybuffer.UnsafeInternalCharArr, _mybuffer.beginAt + start, length));
- 
+
         const int SAME_FONT_SAME_TEXT_COLOR = 0;
         const int SAME_FONT_DIFF_TEXT_COLOR = 1;
         const int DIFF_FONT_SAME_TEXT_COLOR = 2;

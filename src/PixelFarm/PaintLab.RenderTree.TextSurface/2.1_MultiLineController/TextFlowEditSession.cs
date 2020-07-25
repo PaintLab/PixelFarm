@@ -12,7 +12,7 @@ namespace LayoutFarm.TextEditing
         public TextFlowEditSessionListener()
         {
         }
-        internal void AddCharacterToCurrentLine(char c, int lineNumber, int charIndex)
+        internal void AddCharacterToCurrentLine(int c, int lineNumber, int charIndex)
         {
             AddDocAction(new DocActionCharTyping(c, lineNumber, charIndex));
         }
@@ -71,7 +71,7 @@ namespace LayoutFarm.TextEditing
             set => _enableUndoHistoryRecording = value;
         }
         // 
-        public void AddCharToCurrentLine(char c)
+        public void AddCharToCurrentLine(int c)
         {
             _updateJustCurrentLine = true;
             bool passRemoveSelectedText = false;
@@ -441,7 +441,7 @@ namespace LayoutFarm.TextEditing
             {
                 _updateJustCurrentLine = true;
 
-                char deletedChar = _lineEditor.DoDeleteOneChar();
+                int deletedChar = _lineEditor.DoDeleteOneChar();
                 if (deletedChar == '\0')
                 {
                     //end of this line
@@ -461,9 +461,9 @@ namespace LayoutFarm.TextEditing
                     _commandHistoryList.AddDocAction(cmd);
                     _sessionListener?.AddDocAction(cmd);
 
-                    char nextChar = _lineEditor.NextChar;
+                    int nextChar = _lineEditor.NextChar;
 
-                    if (char.IsLowSurrogate(nextChar) || !CanCaretStopOnThisChar(nextChar))
+                    if (!CanCaretStopOnThisChar(nextChar))
                     {
                         //TODO: review return range here again
                         return DoDelete();
@@ -503,7 +503,7 @@ namespace LayoutFarm.TextEditing
             {
                 _updateJustCurrentLine = true;
 
-                char deletedChar = _lineEditor.DoBackspaceOneChar();
+                int deletedChar = _lineEditor.DoBackspaceOneChar();
                 if (deletedChar == '\0')
                 {
                     //end of current line 
@@ -550,7 +550,7 @@ namespace LayoutFarm.TextEditing
         //public void ReplaceCurrentLine(string singleLine)
         //{
         //    //var textrun = new TextRun(_lineEditor.CurrentSpanStyle, singleLine.ToCharArray());
-            
+
         //    //_lineEditor.ReplaceCurrentLine(new Run[] { textrun });
         //}
         public void ReplaceLocalContent(int nBackSpace, string content)

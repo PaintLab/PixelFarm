@@ -209,6 +209,7 @@ namespace PixelFarm.Drawing
         /// <param name="buffer"></param>
         /// <returns></returns>
         public abstract RenderVxFormattedString CreateFormattedString(char[] buffer, int startAt, int len, bool delay);
+        public abstract RenderVxFormattedString CreateFormattedString(int[] buffer, int startAt, int len, bool delay);
 
         public abstract void DrawRenderVx(RenderVx renderVx, float x, float y);
         public abstract void Dispose();

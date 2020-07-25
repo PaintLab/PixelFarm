@@ -167,7 +167,7 @@ namespace LayoutFarm.TextEditing
                 bounds.Offset(0, this.OwnerLine.Top);
             }
         }
-        public override char GetChar(int index) => _mybuffer.GetUtf16Char(index);
+        public override int GetChar(int index) => _mybuffer.GetUtf16Char(index);
 
         public override int CharacterCount => _mybuffer.Count;
 
@@ -376,7 +376,7 @@ namespace LayoutFarm.TextEditing
         public override CharSpan LeftCopy(int index) => _mybuffer.MakeLeftSubSpan(index);
 
         //-----------------------------------------------------
-        public void InsertAfter(int index, char c)
+        public void InsertAfter(int index, int c)
         {
             CharSource charSource = _mybuffer.UnsafeInternalCharSource;
             int oldLexLength = _mybuffer.Count;

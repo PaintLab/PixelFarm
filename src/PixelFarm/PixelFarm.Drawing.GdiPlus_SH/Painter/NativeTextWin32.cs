@@ -179,7 +179,7 @@ namespace PixelFarm.Drawing.WinGdi
 
 
                 byte[] encoding = s_en.GetBytes(
-                    textBufferSpan.GetRawCharBuffer(),
+                    textBufferSpan.GetRawUtf16Buffer(),
                     textBufferSpan.start,
                     len);
                 NativeTextWin32.FontABC[] abcWidths = winfont.GetInteralABCArray();
@@ -368,11 +368,11 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public PixelFarm.Drawing.Size MeasureString(in TextBufferSpan textBufferSpan, RequestFont font)
         {
-            return WinGdiTextService.MeasureString(textBufferSpan.GetRawCharBuffer(), textBufferSpan.start, textBufferSpan.len, font);
+            return WinGdiTextService.MeasureString(textBufferSpan.GetRawUtf16Buffer(), textBufferSpan.start, textBufferSpan.len, font);
         }
         public void MeasureString(in TextBufferSpan textBufferSpan, RequestFont font, int maxWidth, out int charFit, out int charFitWidth)
         {
-            WinGdiTextService.MeasureString(textBufferSpan.GetRawCharBuffer(), textBufferSpan.start, textBufferSpan.len, font, maxWidth, out charFit, out charFitWidth);
+            WinGdiTextService.MeasureString(textBufferSpan.GetRawUtf16Buffer(), textBufferSpan.start, textBufferSpan.len, font, maxWidth, out charFit, out charFitWidth);
         }
 
         public void CalculateUserCharGlyphAdvancePos(in TextBufferSpan textBufferSpan,

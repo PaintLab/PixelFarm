@@ -8,7 +8,7 @@ namespace LayoutFarm.TextEditing
 
         internal CharSource CharSource => _textFlowLayer._charSource;
 
-        public TextRun CreateTextRun(char c)
+        public TextRun CreateTextRun(int c)
         {
             //new char is add to internal char buffer
             return new TextRun(DefaultRunStyle, CharSource.NewSpan(c));
@@ -16,6 +16,7 @@ namespace LayoutFarm.TextEditing
         public TextRun CreateTextRun(char[] charbuff)
         {
             //new char is add to internal char buffer
+            
             return new TextRun(DefaultRunStyle, CharSource.NewSpan(charbuff));
         }
         public TextRun CreateTextRun(string text)

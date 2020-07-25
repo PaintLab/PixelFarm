@@ -1141,10 +1141,27 @@ namespace PixelFarm.DrawingGL
         {
             //we need to parse string 
             //since it may contains glyph from multiple font (eg. eng, emoji etc.)
-            //see VxsTextPrinter  
+            //see VxsTextPrinter   
 
+            //resolved font has information about typeface, size  
+            _txtClient.SetCurrentFont(
+                _txtClient.ResolveFont(_painter.CurrentFont).Typeface,
+                _fontSizeInPoints,
+                _txtClient.CurrentScriptLang);
 
+            _fmtGlyphPlans.Clear(); //reuse 
+            _txtClient.PrepareFormattedStringList(buffer, startAt, len, _fmtGlyphPlans);
 
+            if (_fmtGlyphPlans.Count > 0)
+            {
+                PrepareStringForRenderVx(vxFmtStr, _fmtGlyphPlans.GetFirst());
+            }
+        }
+        public void PrepareStringForRenderVx(GLRenderVxFormattedString vxFmtStr, int[] buffer, int startAt, int len)
+        {
+            //we need to parse string 
+            //since it may contains glyph from multiple font (eg. eng, emoji etc.)
+            //see VxsTextPrinter   
 
             //resolved font has information about typeface, size  
             _txtClient.SetCurrentFont(
@@ -1161,7 +1178,6 @@ namespace PixelFarm.DrawingGL
             }
 
         }
-
         /// <summary>
         /// helper struct for summarize glyph mixed mode
         /// </summary>

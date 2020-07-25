@@ -16,6 +16,7 @@ namespace PixelFarm.DrawingGL
         /// <param name="top"></param>
         void DrawString(GLRenderVxFormattedString renderVx, double left, double top);
         void PrepareStringForRenderVx(GLRenderVxFormattedString renderVx, char[] text, int startAt, int len);
+        void PrepareStringForRenderVx(GLRenderVxFormattedString renderVx, int[] text, int startAt, int len);
         void PrepareStringForRenderVx(GLRenderVxFormattedString renderVx, IFormattedGlyphPlanList formattedGlyphPlans);
         void ChangeFont(RequestFont font);
         void ChangeFillColor(Color fillColor);

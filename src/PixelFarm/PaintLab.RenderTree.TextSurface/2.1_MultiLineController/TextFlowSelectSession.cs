@@ -286,12 +286,12 @@ namespace LayoutFarm.TextEditing
                     if (backward)
                     {
                         //move caret backward
-                        char prevChar = _lineEditor.PrevChar;
+                        int prevChar = _lineEditor.PrevChar;
                         int tmp_index = charIndex;
 #if DEBUG
-                        UnicodeCategory unicodeCat = char.GetUnicodeCategory(prevChar);
-                        bool is_highSurrogate = char.IsHighSurrogate(prevChar);
-                        bool is_lowSurrogate = char.IsLowSurrogate(prevChar);
+                        //UnicodeCategory unicodeCat = char.GetUnicodeCategory(prevChar);
+                        //bool is_highSurrogate = char.IsHighSurrogate(prevChar);
+                        //bool is_lowSurrogate = char.IsLowSurrogate(prevChar);
 #endif
 
 
@@ -302,20 +302,21 @@ namespace LayoutFarm.TextEditing
                             tmp_index--;
                         }
 
-                        if (char.IsLowSurrogate(_lineEditor.CurrentChar))
-                        {
-                            _lineEditor.SetCurrentCharStepLeft();
-                        }
+                        //if (char.IsLowSurrogate(_lineEditor.CurrentChar))
+                        //{
+                        //    _lineEditor.SetCurrentCharStepLeft();
+                        //}
                     }
                     else
                     {
-                        char nextChar = _lineEditor.NextChar;
+                        int nextChar = _lineEditor.NextChar;
 
-#if DEBUG
-                        UnicodeCategory unicodeCat = char.GetUnicodeCategory(nextChar);
-                        bool is_highSurrogate = char.IsHighSurrogate(nextChar);
-                        bool is_lowSurrogate = char.IsLowSurrogate(nextChar);
-#endif
+                        //#if DEBUG
+                        //                        UnicodeCategory unicodeCat = char.GetUnicodeCategory(nextChar);
+                        //                        bool is_highSurrogate = char.IsHighSurrogate(nextChar);
+                        //                        bool is_lowSurrogate = char.IsLowSurrogate(nextChar);
+                        //#endif
+
                         int lineCharCount = _lineEditor.CharCount;
                         int tmp_index = charIndex + 1;
                         while (nextChar != '\0' && tmp_index <= lineCharCount && !CanCaretStopOnThisChar(nextChar))
@@ -324,11 +325,11 @@ namespace LayoutFarm.TextEditing
                             nextChar = _lineEditor.NextChar;
                             tmp_index++;
                         }
-                        if (char.IsLowSurrogate(_lineEditor.CurrentChar))
-                        {
-                            _lineEditor.SetCurrentCharStepRight();
-                        }
 
+                        //if (char.IsLowSurrogate(_lineEditor.CurrentChar))
+                        //{
+                        //    _lineEditor.SetCurrentCharStepRight();
+                        //} 
                     }
 
                 }
@@ -444,9 +445,17 @@ namespace LayoutFarm.TextEditing
         {
             s_CaretCanStopOnThisChar = caretCanStopOnThisCharDel;
         }
-        internal static bool CanCaretStopOnThisChar(char c)
+        internal static bool CanCaretStopOnThisChar(int c)
         {
-            UnicodeCategory unicodeCatg = char.GetUnicodeCategory(c);
+            char upper = (char)(c >> 16);
+            char lower = (char)c;
+
+            if (char.IsHighSurrogate((char)upper))
+            {
+                return false;
+            }
+
+            UnicodeCategory unicodeCatg = char.GetUnicodeCategory(lower);
             switch (unicodeCatg)
             {
 
@@ -465,7 +474,7 @@ namespace LayoutFarm.TextEditing
 
                     if (s_CaretCanStopOnThisChar != null)
                     {
-                        return s_CaretCanStopOnThisChar(c);
+                        return s_CaretCanStopOnThisChar(lower);
                     }
                     break;
                 case UnicodeCategory.NonSpacingMark:

@@ -109,7 +109,7 @@ namespace LayoutFarm.TextEditing
             TextLineBox.InnerDoJoinWithNextLine(this.CurrentLine);
             EnsureCurrentTextRun();
         }
-        char BackSpaceOneChar()
+        int BackSpaceOneChar()
         {
             if (CurrentTextRun == null)
             {
@@ -126,16 +126,18 @@ namespace LayoutFarm.TextEditing
                 Run removingTextRun = CurrentTextRun;
                 int removeIndex = CurrentTextRunCharIndex;
                 SetCurrentCharStepLeft();
-                char toBeRemovedChar = CurrentChar;
+                int toBeRemovedChar = CurrentChar;
                 int actualRemove = 1;
-                if (char.IsLowSurrogate(toBeRemovedChar))
-                {
-                    if (removeIndex > 0)
-                    {
-                        removeIndex--;
-                        actualRemove++;
-                    }
-                }
+
+                //if (char.IsLowSurrogate(toBeRemovedChar))
+                //{
+                //    if (removeIndex > 0)
+                //    {
+                //        removeIndex--;
+                //        actualRemove++;
+                //    }
+                //}
+
                 if (removingTextRun is TextRun textRun)
                 {
 
@@ -160,7 +162,7 @@ namespace LayoutFarm.TextEditing
 
         public Run GetCurrentTextRun() => CurrentLine.IsBlankLine ? null : CurrentTextRun;
 
-        public bool CanAcceptThisChar(char c)
+        public bool CanAcceptThisChar(int c)
         {
             //TODO: review here, enable this feature or not
             //some char can't be a start char on blank line
@@ -171,7 +173,7 @@ namespace LayoutFarm.TextEditing
             }
             return true;
         }
-        public void AddCharacter(char c)
+        public void AddCharacter(int c)
         {
             if (CurrentLine.IsBlankLine)
             {
@@ -284,9 +286,9 @@ namespace LayoutFarm.TextEditing
             EnsureCurrentTextRun(charIndex);
         }
 
-        public char DoBackspaceOneChar() => BackSpaceOneChar();
+        public int DoBackspaceOneChar() => BackSpaceOneChar();
 
-        public char DoDeleteOneChar()
+        public int DoDeleteOneChar()
         {
             if (CharIndex < CurrentLine.CharCount())
             {
@@ -575,7 +577,7 @@ namespace LayoutFarm.TextEditing
         {
             _textFlowLayer.CopyContent(output);
         }
-        public char PrevChar
+        public int PrevChar
         {
             get
             {
@@ -608,7 +610,7 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
-        public char NextChar
+        public int NextChar
         {
             get
             {
@@ -706,7 +708,7 @@ namespace LayoutFarm.TextEditing
 
         public Point CaretPosition => new Point(_caretXPos, _currentLineY);
 
-        public char CurrentChar
+        public int CurrentChar
         {
             get
             {
@@ -843,17 +845,17 @@ namespace LayoutFarm.TextEditing
         {
             SetCurrentCharIndex(InternalCharIndex + 1);
             //check current char is surrogate or not
-            char c = CurrentChar;
-#if DEBUG
-            bool is_high_surrogate = char.IsHighSurrogate(c);
-            bool is_low_surrogate = char.IsLowSurrogate(c);
-#endif
+            //int c = CurrentChar;
+//#if DEBUG
+//            bool is_high_surrogate = char.IsHighSurrogate(c);
+//            bool is_low_surrogate = char.IsLowSurrogate(c);
+//#endif
 
-            if (char.IsLowSurrogate(c))
-            {
-                //can't stop at this 
-                SetCurrentCharStepRight();
-            }
+//            if (char.IsLowSurrogate(c))
+//            {
+//                //can't stop at this 
+//                SetCurrentCharStepRight();
+//            }
         }
 
         public void SetCurrentCharStepLeft() => SetCurrentCharIndex(InternalCharIndex - 1);

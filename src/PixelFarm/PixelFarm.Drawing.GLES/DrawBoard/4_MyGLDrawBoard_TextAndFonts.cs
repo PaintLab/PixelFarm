@@ -25,6 +25,41 @@ namespace PixelFarm.Drawing.GLES2
                 _gpuPainter.TextPrinter?.ChangeFillColor(value);
             }
         }
+        public override RenderVxFormattedString CreateFormattedString(int[] buffer, int startAt, int len, bool delay)
+        {
+            if (_gpuPainter.TextPrinter == null)
+            {
+#if DEBUG
+                throw new System.Exception("no text printer");
+#endif
+            }
+            //create blank render vx
+            var fmtstr = new DrawingGL.GLRenderVxFormattedString();
+            fmtstr.Delay = delay;
+#if DEBUG
+            //fmtstr.dbugText = new string(buffer, startAt, len);
+#endif
+            if (_gpuPainter.TextPrinter != null)
+            {
+                //we create
+                //1. texture coords for this string
+                //2. (if not delay) => an image for this string  inside a larger img texture
+                _gpuPainter.TextPrinter.PrepareStringForRenderVx(fmtstr, buffer, startAt, len);
+                if (!fmtstr.Delay)
+                {
+                    fmtstr.ReleaseIntermediateStructures();
+                }
+                return fmtstr;
+            }
+            else
+            {
+#if DEBUG
+                throw new System.NotSupportedException();
+#else
+                return null;
+#endif
+            }
+        }
         public override RenderVxFormattedString CreateFormattedString(char[] buffer, int startAt, int len, bool delay)
         {
             if (_gpuPainter.TextPrinter == null)

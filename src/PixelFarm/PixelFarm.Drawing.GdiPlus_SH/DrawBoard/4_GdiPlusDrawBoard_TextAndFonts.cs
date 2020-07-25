@@ -18,6 +18,10 @@ namespace PixelFarm.Drawing.WinGdi
 {
     partial class GdiPlusDrawBoard
     {
+        public override RenderVxFormattedString CreateFormattedString(int[] buffer, int startAt, int len, bool delay)
+        {
+            throw new System.NotImplementedException();
+        }
         public override RenderVxFormattedString CreateFormattedString(char[] buffer, int startAt, int len, bool delay)
         {
             //TODO: review here

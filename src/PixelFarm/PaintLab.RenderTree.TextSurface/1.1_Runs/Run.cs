@@ -77,7 +77,7 @@ namespace LayoutFarm.TextEditing
         internal abstract bool IsInsertable { get; }
         public abstract int CharacterCount { get; }
 
-        public abstract char GetChar(int index);
+        public abstract int GetChar(int index);
 
         public abstract void WriteTo(Typography.Text.TextCopyBuffer output);
         public abstract void WriteTo(Typography.Text.TextCopyBuffer output, int start, int len);
@@ -130,9 +130,7 @@ namespace LayoutFarm.TextEditing
             _linkNode = linkNode;
             _ownerTextLine = owner;
             owner.InvalidateCharCount();
-        }
-
-        public void TopDownReCalculateContentSize() => this.UpdateRunWidth();
+        } 
         protected internal void InvalidateOwnerLineCharCount() => _ownerTextLine?.InvalidateCharCount();
 
     }
