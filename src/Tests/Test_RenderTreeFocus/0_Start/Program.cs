@@ -1,11 +1,8 @@
 ﻿//Apache2, 2014-present, WinterDev
 
-using PixelFarm.Drawing;
+
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Typography.Text;
-using Typography.TextBreak;
 namespace TestGraphicPackage2
 {
     static class Program
@@ -88,7 +85,7 @@ namespace TestGraphicPackage2
             ushort trail = (ushort)(0xDC00 + (utf32_x1 & 0x3FF));
 
             //compute back
-            int codepoint_x= (lead << 10) + trail + SURROGATE_OFFSET;
+            int codepoint_x = (lead << 10) + trail + SURROGATE_OFFSET;
             //UTF32 codepoint = (lead << 10) + trail + SURROGATE_OFFSET;
 
 
@@ -99,13 +96,13 @@ namespace TestGraphicPackage2
 
             int[] utf32 = GetUtf32Buffer(msg, out int utf32Len);
 
-            buff = new TextBufferSpan(utf32, 0, utf32Len);
-            //buff = new TextBufferSpan(msg_buffer);
+            //buff = new TextBufferSpan(utf32, 0, utf32Len);
+            buff = new TextBufferSpan(msg_buffer);
             Typography.TextLayout.LayoutWordVisitor visitor = new Typography.TextLayout.LayoutWordVisitor();
 
             var line_segs = new Typography.TextLayout.LineSegmentList<Typography.TextLayout.LineSegment>();
             visitor.SetLineSegmentList(line_segs);
-
+            
             //mew text service
             var openFontTextService = new Typography.Text.OpenFontTextService();
             Typography.Text.GlobalTextService.TxtClient = openFontTextService.CreateNewServiceClient();
