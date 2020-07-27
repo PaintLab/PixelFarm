@@ -43,7 +43,7 @@ namespace TestGraphicPackage2
         static void dbugTestBreak()
         {
 
-            string msg = "heこん😁";
+            string msg = "aBこん😁";
             TextBufferSpan buff;
             char[] msg_buffer = msg.ToCharArray();
 
