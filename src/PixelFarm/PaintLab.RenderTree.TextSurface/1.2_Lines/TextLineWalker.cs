@@ -224,11 +224,14 @@ namespace LayoutFarm.TextEditing
         {
             AddTextSpan(CurrentLine.CreateTextRun(textspan));
         }
-        public void AddTextSpan(TextBufferSpan textspan)
+        public void AddTextSpan(ArraySegment<char> textspan)
         {
             AddTextSpan(CurrentLine.CreateTextRun(textspan));
         }
-
+        public void AddTextSpan(ArraySegment<int> textspan)
+        {
+            AddTextSpan(CurrentLine.CreateTextRun(textspan));
+        }
         public void AddTextSpan(Run textRun)
         {
             if (CurrentLine.IsBlankLine)

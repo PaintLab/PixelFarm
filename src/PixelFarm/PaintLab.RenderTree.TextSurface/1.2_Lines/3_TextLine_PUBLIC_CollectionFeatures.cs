@@ -1,4 +1,5 @@
 ﻿//Apache2, 2014-present, WinterDev
+using System;
 using Typography.Text;
 namespace LayoutFarm.TextEditing
 {
@@ -27,7 +28,14 @@ namespace LayoutFarm.TextEditing
         {
             return new TextRun(DefaultRunStyle, CharSource.NewSegment(textspan));
         }
-
+        public TextRun CreateTextRun(ArraySegment<int> textspan)
+        {
+            return new TextRun(DefaultRunStyle, CharSource.NewSegment(textspan));
+        }
+        public TextRun CreateTextRun(ArraySegment<char> textspan)
+        {
+            return new TextRun(DefaultRunStyle, CharSource.NewSegment(textspan));
+        }
         public void AddLast(Run v)
         {
             AddNormalRunToLast(v);

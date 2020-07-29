@@ -605,15 +605,23 @@ namespace LayoutFarm.TextEditing
             if (output.HasSomeRuns)
             {
                 bool hasFirstLine = false;
-                InputReader textbuffReader = output.GetReader();
-                while (textbuffReader.Readline(out int begin, out int end, out InputReader.LineEnd endLineWith))
+                InputReader reader = output.GetReader();
+                while (reader.Readline(out int begin, out int end, out InputReader.LineEnd endLineWith))
                 {
                     if (hasFirstLine)
                     {
                         _lineEditor.SplitToNewLine();
                         CurrentLineNumber++;
                     }
-                    _lineEditor.AddTextSpan(textbuffReader.GetBufferSpan(begin, end - begin));
+                    if (reader.IsUtf32Buffer)
+                    {
+                        _lineEditor.AddTextSpan(reader.GetUtf32Segment(begin, end - begin));
+                    }
+                    else
+                    {
+                        _lineEditor.AddTextSpan(reader.GetUtf16Segment(begin, end - begin));
+                    }
+                    
                     hasFirstLine = true;
                 }
 
