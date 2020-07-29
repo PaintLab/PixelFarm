@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using LayoutFarm.TextEditing.Commands;
 using Typography.Text;
+using Typography.TextBreak;
 
 namespace LayoutFarm.TextEditing
 {
@@ -604,16 +605,18 @@ namespace LayoutFarm.TextEditing
             if (output.HasSomeRuns)
             {
                 bool hasFirstLine = false;
-                foreach (string line in output.GetLineIter())
+                InputReader textbuffReader = output.GetReader();
+                while (textbuffReader.Readline(out int begin, out int end, out InputReader.LineEnd endLineWith))
                 {
                     if (hasFirstLine)
                     {
                         _lineEditor.SplitToNewLine();
                         CurrentLineNumber++;
                     }
-                    _lineEditor.AddTextSpan(line);
+                    _lineEditor.AddTextSpan(textbuffReader.GetBufferSpan(begin, end - begin));
                     hasFirstLine = true;
                 }
+
             }
 
             EnableUndoHistoryRecording = isRecordingHx;

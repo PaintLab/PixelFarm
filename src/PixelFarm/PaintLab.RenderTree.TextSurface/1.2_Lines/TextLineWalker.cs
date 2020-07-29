@@ -224,6 +224,11 @@ namespace LayoutFarm.TextEditing
         {
             AddTextSpan(CurrentLine.CreateTextRun(textspan));
         }
+        public void AddTextSpan(TextBufferSpan textspan)
+        {
+            AddTextSpan(CurrentLine.CreateTextRun(textspan));
+        }
+         
         public void AddTextSpan(Run textRun)
         {
             if (CurrentLine.IsBlankLine)
@@ -459,7 +464,8 @@ namespace LayoutFarm.TextEditing
 
         readonly LayoutWordVisitor _wordVisitor = new LayoutWordVisitor();
         readonly LineSegmentList<LineSegment> _lineSegs = new LineSegmentList<LineSegment>();
-        readonly ArrayList<char> _arrList = new ArrayList<char>();
+        readonly ArrayList<char> _utf16ArrList = new ArrayList<char>();
+        readonly ArrayList<int> _utf32ArrList = new ArrayList<int>();
 
         public void FindCurrentHitWord(out int startAt, out int len)
         {
@@ -472,6 +478,9 @@ namespace LayoutFarm.TextEditing
 
             using (new TextRangeCopyPoolContext<TextFlowWalkerBase>(out TextCopyBuffer output))
             {
+                //copy to int32 arr list
+                output.BackupKind = TextCopyBuffer.BackupBufferKind.Utf32ArrayList;
+
                 _currentLine.CopyLineContent(output);
 
                 _lineSegs.Clear();
@@ -479,11 +488,15 @@ namespace LayoutFarm.TextEditing
 
 
                 int content_len = output.Length;
-                _arrList.Clear(content_len);
-                output.CopyTo(_arrList.UnsafeInternalArray);
+                _utf16ArrList.Clear(content_len);
+                //output.CopyTo(_arrList.UnsafeInternalArray);
+                _utf32ArrList.AdjustSize(content_len);
+
+                output.CopyTo(_utf32ArrList);
 
                 Typography.Text.GlobalTextService.TxtClient.BreakToLineSegments(
-                    new Typography.Text.TextBufferSpan(_arrList.UnsafeInternalArray),
+                    new Typography.Text.TextBufferSpan(_utf32ArrList.UnsafeInternalArray,
+                    0, _utf32ArrList.Length),
                     _wordVisitor);
 
                 if (_lineSegs.Count == 0)
@@ -846,16 +859,16 @@ namespace LayoutFarm.TextEditing
             SetCurrentCharIndex(InternalCharIndex + 1);
             //check current char is surrogate or not
             //int c = CurrentChar;
-//#if DEBUG
-//            bool is_high_surrogate = char.IsHighSurrogate(c);
-//            bool is_low_surrogate = char.IsLowSurrogate(c);
-//#endif
+            //#if DEBUG
+            //            bool is_high_surrogate = char.IsHighSurrogate(c);
+            //            bool is_low_surrogate = char.IsLowSurrogate(c);
+            //#endif
 
-//            if (char.IsLowSurrogate(c))
-//            {
-//                //can't stop at this 
-//                SetCurrentCharStepRight();
-//            }
+            //            if (char.IsLowSurrogate(c))
+            //            {
+            //                //can't stop at this 
+            //                SetCurrentCharStepRight();
+            //            }
         }
 
         public void SetCurrentCharStepLeft() => SetCurrentCharIndex(InternalCharIndex - 1);

@@ -1,6 +1,7 @@
 ﻿//Apache2, 2014-present, WinterDev
 
 
+using PixelFarm.Contours;
 using System;
 using Typography.Text;
 namespace TestGraphicPackage2
@@ -43,9 +44,24 @@ namespace TestGraphicPackage2
         static void dbugTestBreak()
         {
 
-            string msg = "aBこん😁";
+
+
+
+            //string msg = "aBこん😁";
+            //string msg = "1😁";
+            string msg = "1😁\r\n\r\n\r\nxyz";
+
+            //System.IO.StringReader rre = new System.IO.StringReader(msg);
+
+            //string ln = rre.ReadLine();
+            //while (ln != null)
+            //{
+            //    ln = rre.ReadLine();
+            //}
+
+
             TextBufferSpan buff;
-            char[] msg_buffer = msg.ToCharArray();
+            char[] utf16 = msg.ToCharArray();
 
             char[] x1 = "😁".ToCharArray();
             int utf32_x1 = char.ConvertToUtf32(x1[0], x1[1]);
@@ -95,18 +111,29 @@ namespace TestGraphicPackage2
 
 
             int[] utf32 = GetUtf32Buffer(msg, out int utf32Len);
+            var reader = new Typography.TextBreak.InputReader(utf32, 0, utf32Len);
+            //var reader = new Typography.TextBreak.InputReader(utf16);
 
-            //buff = new TextBufferSpan(utf32, 0, utf32Len);
-            buff = new TextBufferSpan(msg_buffer);
-            Typography.TextLayout.LayoutWordVisitor visitor = new Typography.TextLayout.LayoutWordVisitor();
+            while (reader.Readline(
+                out int begin,
+                out int end,
+                out Typography.TextBreak.InputReader.LineEnd endlineWith))
+            {
+                System.Diagnostics.Debug.WriteLine(begin + "," + end);
+            }
 
-            var line_segs = new Typography.TextLayout.LineSegmentList<Typography.TextLayout.LineSegment>();
-            visitor.SetLineSegmentList(line_segs);
-            
-            //mew text service
-            var openFontTextService = new Typography.Text.OpenFontTextService();
-            Typography.Text.GlobalTextService.TxtClient = openFontTextService.CreateNewServiceClient();
-            Typography.Text.GlobalTextService.TxtClient.BreakToLineSegments(buff, visitor);
+
+            //buff = new TextBufferSpan(utf32, 1, utf32Len - 1);
+            ////buff = new TextBufferSpan(msg_buffer, 1, 2);
+            //Typography.TextLayout.LayoutWordVisitor visitor = new Typography.TextLayout.LayoutWordVisitor();
+
+            //var line_segs = new Typography.TextLayout.LineSegmentList<Typography.TextLayout.LineSegment>();
+            //visitor.SetLineSegmentList(line_segs);
+
+            ////mew text service
+            //var openFontTextService = new Typography.Text.OpenFontTextService();
+            //Typography.Text.GlobalTextService.TxtClient = openFontTextService.CreateNewServiceClient();
+            //Typography.Text.GlobalTextService.TxtClient.BreakToLineSegments(buff, visitor);
 
         }
         static int[] GetUtf32Buffer(string str, out int output_i)

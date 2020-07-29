@@ -16,15 +16,17 @@ namespace LayoutFarm.TextEditing
         public TextRun CreateTextRun(char[] charbuff)
         {
             //new char is add to internal char buffer
-            
-            return new TextRun(DefaultRunStyle, CharSource.NewSpan(charbuff));
+            return new TextRun(DefaultRunStyle, CharSource.NewSpan(charbuff, 0, charbuff.Length));
         }
         public TextRun CreateTextRun(string text)
         {
             //new char is add to internal char buffer
             return new TextRun(DefaultRunStyle, CharSource.NewSpan(text));
         }
-
+        public TextRun CreateTextRun(TextBufferSpan textspan)
+        {
+            return new TextRun(DefaultRunStyle, CharSource.NewSegment(textspan));
+        }
 
         public void AddLast(Run v)
         {
