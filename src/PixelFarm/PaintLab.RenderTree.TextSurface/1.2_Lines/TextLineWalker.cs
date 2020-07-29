@@ -228,7 +228,7 @@ namespace LayoutFarm.TextEditing
         {
             AddTextSpan(CurrentLine.CreateTextRun(textspan));
         }
-         
+
         public void AddTextSpan(Run textRun)
         {
             if (CurrentLine.IsBlankLine)
@@ -489,6 +489,7 @@ namespace LayoutFarm.TextEditing
 
                 int content_len = output.Length;
                 _utf16ArrList.Clear(content_len);
+                _utf32ArrList.Clear(content_len);
                 //output.CopyTo(_arrList.UnsafeInternalArray);
                 _utf32ArrList.AdjustSize(content_len);
 
@@ -950,7 +951,9 @@ namespace LayoutFarm.TextEditing
 #endif
             if (newCharIndexPointTo < 0 || newCharIndexPointTo > _currentLine.CharCount())
             {
-                throw new NotSupportedException("index out of range");
+                System.Diagnostics.Debugger.Break();
+                return;
+                // throw new NotSupportedException("index out of range");
             }
 
 
