@@ -152,7 +152,7 @@ namespace PixelFarm.DrawingGL
 #if DEBUG
             if (r_font == null) { throw new NotSupportedException(); }
 #endif
-            _px_scale = r_font.GetScaleToPixelFromPointInSize();
+            _px_scale = r_font.GetScaleToPixelFromPointUnit();
             _white_space_width = r_font.WhitespaceWidth;
             _ascending = r_font.AscentInPixels;
             _descending = r_font.DescentInPixels;
@@ -176,7 +176,7 @@ namespace PixelFarm.DrawingGL
 #endif
             Typeface typeface = r_font.Typeface;
             _fontSizeInPoints = r_font.SizeInPoints;
-            _px_scale = r_font.GetScaleToPixelFromPointInSize();
+            _px_scale = r_font.GetScaleToPixelFromPointUnit();
 
             _white_space_width = r_font.WhitespaceWidth;//(int)Math.Round(typeface.GetWhitespaceWidth() * _px_scale);
             _ascending = r_font.AscentInPixels;
@@ -216,7 +216,7 @@ namespace PixelFarm.DrawingGL
 
             _resolvedFont = font;
             _fontSizeInPoints = font.SizeInPoints;
-            _px_scale = font.GetScaleToPixelFromPointInSize();
+            _px_scale = font.GetScaleToPixelFromPointUnit();
             _white_space_width = font.WhitespaceWidth;
             _ascending = font.AscentInPixels;
             _descending = font.DescentInPixels;
@@ -874,7 +874,7 @@ namespace PixelFarm.DrawingGL
 
             ChangeFont(txtStrip);
 
-            float px_scale = expected_resolvedFont.GetScaleToPixelFromPointInSize();
+            float px_scale = expected_resolvedFont.GetScaleToPixelFromPointUnit();
 
             //TODO: review here, rounding error*** 
             txtStrip.SpanHeight = expected_resolvedFont.LineSpacingInPixels;// (int)Math.Round(expectedTypeface.CalculateMaxLineClipHeight() * px_scale);// expectedFont.LineSpacingInPixels;
