@@ -292,6 +292,7 @@ namespace PixelFarm.DrawingGL
         public float Width { get; set; }
         public int SpanHeight { get; set; }
         public int DescendingInPx { get; set; }
+        public int SpanDescendingInPx { get; set; }
         public int AdditionalVerticalOffset { get; set; }
         public bool ColorGlyphOnTransparentBG { get; set; }
 
@@ -326,7 +327,7 @@ namespace PixelFarm.DrawingGL
         {
             DisposeVbo();
             Width = 0;
-            SpanHeight = DescendingInPx = AdditionalVerticalOffset = 0;
+            SpanHeight = DescendingInPx = AdditionalVerticalOffset = SpanDescendingInPx = 0;
             ColorGlyphOnTransparentBG = false;
             VertexCoords = ArrayListSegment<float>.Empty;
             IndexArray = ArrayListSegment<ushort>.Empty;

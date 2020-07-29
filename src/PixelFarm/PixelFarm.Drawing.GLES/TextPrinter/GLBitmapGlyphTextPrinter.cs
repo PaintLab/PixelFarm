@@ -558,7 +558,10 @@ namespace PixelFarm.DrawingGL
                     //base_offset = -(vxFmtStr.SpanHeight + vxFmtStr.DescendingInPx);
                     break;
                 case PixelFarm.Drawing.TextBaseline.Top:
-                    base_offset = vxFmtStr.DescendingInPx;
+
+                    //base_offset = vxFmtStr.DescendingInPx;                    
+                    //base_offset += 10; 
+                    base_offset -= vxFmtStr.DescendingInPx; 
                     break;
                 case PixelFarm.Drawing.TextBaseline.Bottom:
                     base_offset = -vxFmtStr.SpanHeight;
@@ -607,6 +610,7 @@ namespace PixelFarm.DrawingGL
                             int j = vxFmtStr.StripCount;
                             float start_x = (float)Math.Round(x);
                             float start_y = (float)Math.Floor(y + base_offset);
+
 
                             switch (TextDrawingTechnique)
                             {
@@ -883,6 +887,7 @@ namespace PixelFarm.DrawingGL
             int descend_px = (int)expected_resolvedFont.DescentInPixels;// (int)(expectedTypeface.Descender * px_scale);
             int ascentd_px = (int)expected_resolvedFont.AscentInPixels;// (int)(expectedTypeface.Ascender * px_scale);
             txtStrip.DescendingInPx = descend_px;// (short)(expectedTypeface.Descender * px_scale);  //expectedFont.DescentInPixels;
+            txtStrip.SpanDescendingInPx = (int)expected_resolvedFont.UsDescendingInPixels;
 
             int count = _fmtGlyphPlans.Count;
             float g_left = 0;
@@ -1052,6 +1057,7 @@ namespace PixelFarm.DrawingGL
             float spanHeight = 0;
             float spanWidth = 0;
             int descendingInPx = 0;
+            int spanDescendingInPx = 0;
             int maxStripHeight = 0;
 
 
@@ -1091,6 +1097,7 @@ namespace PixelFarm.DrawingGL
                 //**
                 //use max size of height and descending ?
                 descendingInPx = sameFontTextStrip.DescendingInPx;
+                spanDescendingInPx = sameFontTextStrip.SpanDescendingInPx;
 
                 maxStripHeight = Math.Max(maxStripHeight, sameFontTextStrip.SpanHeight);
 
@@ -1109,6 +1116,8 @@ namespace PixelFarm.DrawingGL
             vxFmtStr.SpanHeight = spanHeight;
             vxFmtStr.Width = spanWidth;
             vxFmtStr.DescendingInPx = (short)descendingInPx;
+            vxFmtStr.SpanDescendingInPx = (short)spanDescendingInPx;
+
             //-----------
             //TODO: review here again
 
