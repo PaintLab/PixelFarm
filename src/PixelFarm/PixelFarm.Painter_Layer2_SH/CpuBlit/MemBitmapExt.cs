@@ -609,24 +609,6 @@ namespace PixelFarm.CpuBlit
             MemBitmapIO.OutputImageFormat outputFormat = MemBitmapIO.OutputImageFormat.Default, object saveParameters = null)
         {
             DefaultMemBitmapIO.SaveImage(source, output, outputFormat, saveParameters);
-
-            ////save image with default parameter 
-            //if (outputFormat == MemBitmapIO.OutputImageFormat.Default)
-            //{
-            //    string ext = System.IO.Path.GetExtension(filename).ToLower();
-            //    switch (ext)
-            //    {
-            //        case ".png":
-            //            outputFormat = MemBitmapIO.OutputImageFormat.Png;
-            //            break;
-            //        case ".jpg":
-            //        case ".jpeg":
-            //            outputFormat = MemBitmapIO.OutputImageFormat.Jpeg;
-            //            break;
-            //    }
-            //}
-
-            //DefaultMemBitmapIO.SaveImage(source, filename, outputFormat, saveParameters);
         }
     }
 
