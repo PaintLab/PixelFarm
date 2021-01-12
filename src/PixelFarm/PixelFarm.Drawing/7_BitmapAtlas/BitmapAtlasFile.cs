@@ -48,6 +48,7 @@ namespace PixelFarm.CpuBlit.BitmapAtlas
                     switch (objKind)
                     {
                         default: throw new NotSupportedException();
+                      
                         case ObjectKind.OverviewMultiSizeFontInfo:
                             listCount = reader.ReadUInt16();
                             break;

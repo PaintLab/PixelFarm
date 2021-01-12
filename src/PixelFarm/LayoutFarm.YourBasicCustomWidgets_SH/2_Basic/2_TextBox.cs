@@ -7,7 +7,7 @@ using PixelFarm.Drawing;
 
 using LayoutFarm.TextEditing;
 using LayoutFarm.UI;
- 
+
 
 namespace LayoutFarm.CustomWidgets
 {
@@ -255,6 +255,11 @@ namespace LayoutFarm.CustomWidgets
         public void CopyContentTo(Typography.Text.TextCopyBuffer output)
         {
             _textEditRenderElement.CopyContentToStringBuilder(output);
+        }
+        public void CopyCurrentLine(Typography.Text.TextCopyBuffer output)
+        {
+            //TODO
+            throw new NotSupportedException();
         }
 #if DEBUG
         public override void SetLocation(int left, int top)

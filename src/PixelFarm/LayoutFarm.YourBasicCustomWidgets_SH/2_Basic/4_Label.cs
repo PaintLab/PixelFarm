@@ -52,7 +52,7 @@ namespace LayoutFarm.CustomWidgets
                 t_run.SetLocation(this.Left, this.Top);
                 t_run.SetController(this);
                 t_run.TransparentForMouseEvents = this.TransparentForMouseEvents;
-
+                t_run.MayOverlapOther = this.MayOverlapOther;
                 //
                 if (_font != null)
                 {
@@ -102,8 +102,8 @@ namespace LayoutFarm.CustomWidgets
             if (_myTextRun != null)
             {
                 _myTextRun.RequestFont = font;
-            } 
-            
+            }
+
         }
         //
         public override RenderElement CurrentPrimaryRenderElement => _myTextRun;
@@ -133,6 +133,19 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
+        bool _mayOverlapOther;
+        public bool MayOverlapOther
+        {
+            get => _mayOverlapOther;
+            set
+            {
+                _mayOverlapOther = value;
+                if (_myTextRun != null)
+                {
+                    _myTextRun.MayOverlapOther = value;
+                }
+            }
+        }
 
 
         /// <summary>

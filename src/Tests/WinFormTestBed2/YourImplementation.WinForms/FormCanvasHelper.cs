@@ -185,20 +185,29 @@ namespace LayoutFarm.UI
             landingControl.Controls.Add(actualWinUI);
 
 
-            //so we create abstraction of actual UI
+            //so we create abstraction of actual UI            
             IGpuOpenGLSurfaceView viewAbstraction = actualWinUI.CreateWindowWrapper(bridge);
+            //all GL funcs are loaded.
 
             var viewRoot = view_root = new GraphicsViewRoot(
                 screenClientAreaRect.Width,
                 screenClientAreaRect.Height);
-
+#if DEBUG
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
+#endif            
             view_root.InitRootGraphics(
                 myRootGfx,
                 myRootGfx.TopWinEventPortal,
                 internalViewportKind,
                 viewAbstraction,
                 bridge);
-
+            //all shaders are compiled(or loaded from cache)
+            //see 'EnableProgramBinaryCache'
+#if DEBUG
+            sw.Stop();
+            long ms0 = sw.ElapsedMilliseconds;
+#endif
             //TODO: review here again
             myRootGfx.SetDrawboardReqDelegate(view_root.GetDrawBoard);
             //------
@@ -209,6 +218,7 @@ namespace LayoutFarm.UI
 
             //
             Form ownerForm = landingControl.FindForm();
+            
             if (ownerForm != null)
             {
                 ownerForm.FormClosing += (s, e) =>

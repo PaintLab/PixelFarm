@@ -8,7 +8,15 @@ namespace OpenTK.Graphics.ES20
     {
         public void LoadAll()
         {
+#if DEBUG
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
+#endif
             GLDelInit.LoadAll();
+#if DEBUG
+            sw.Stop();
+            long ms1 = sw.ElapsedMilliseconds;
+#endif
         }
         public static partial class Amd
         {

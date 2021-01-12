@@ -36,7 +36,10 @@ namespace LayoutFarm.TextEditing
         {
             _lineEditor.CopyContentToStrignBuilder(output);
         }
-
+        public void CopySelectedTextToPlainText(TextCopyBuffer output)
+        {
+            //TODO: review here!
+        }
         public void CopySelectedTextToPlainText(StringBuilder stBuilder)
         {
             if (_selectionRange != null)
@@ -351,6 +354,12 @@ namespace LayoutFarm.TextEditing
                 _dbugActivityRecorder.EndContext();
             }
 #endif
+        }
+
+        public void ReplaceCurrentLine(string newlineContent)
+        {
+            //temp fix
+            throw new NotSupportedException();
         }
         public void DoHome()
         {

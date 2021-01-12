@@ -10,6 +10,10 @@ namespace LayoutFarm
         Box _primaryContainer;
         AppHost _appHost;
 
+        public SmartApp()
+        {
+
+        }
         protected AppHost AppHost => _appHost;
         protected sealed override void OnStart(AppHost host)
         {
@@ -29,7 +33,7 @@ namespace LayoutFarm
                 if (_primaryContainer != null)
                 {
                     _primaryContainer.Visible = value;
-                }                
+                }
             }
         }
 

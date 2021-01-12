@@ -96,7 +96,17 @@ namespace OpenTK.Platform.Windows
 
         internal static IntPtr GetAddress(string function_string)
         {
-            IntPtr address = Wgl.GetProcAddress(function_string);
+            IntPtr address = IntPtr.Zero;
+            //if (!function_string.StartsWith("wgl"))
+            //{
+            //    address = Functions.GetProcAddress(WinFactory.OpenGLHandle, function_string);
+            //    return address;
+            //}
+            //else
+            //{
+
+            //}
+            address = Wgl.GetProcAddress(function_string);
             if (!IsValid(address))
             {
                 address = Functions.GetProcAddress(WinFactory.OpenGLHandle, function_string);

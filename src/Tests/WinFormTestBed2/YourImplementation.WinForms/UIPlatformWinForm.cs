@@ -211,7 +211,8 @@ namespace LayoutFarm.UI
             if (System.Windows.Forms.Clipboard.GetImage() is System.Drawing.Bitmap bmp)
             {
                 MemBitmap memBmp = new MemBitmap(bmp.Width, bmp.Height);
-                BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(bmp, memBmp);
+
+                PixelFarm.CpuBlit.BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(bmp, memBmp);
                 return memBmp;
             }
             return null;
@@ -224,7 +225,7 @@ namespace LayoutFarm.UI
                 System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(memBmp.Width, memBmp.Height);
                 using (TempMemPtr tmp = MemBitmap.GetBufferPtr(memBmp))
                 {
-                    BitmapHelper.CopyToGdiPlusBitmapSameSize(tmp.Ptr, bmp);
+                    PixelFarm.CpuBlit.BitmapHelper.CopyToGdiPlusBitmapSameSize(tmp.Ptr, bmp);
                 }
             }
         }

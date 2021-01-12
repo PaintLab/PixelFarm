@@ -5383,6 +5383,7 @@ namespace OpenTK.Graphics.ES30
         }
         public static void LoadAll()
         {
+            
             AssignDelegate(out Delegates.glBeginPerfMonitorAMD, "glBeginPerfMonitorAMD");
             AssignDelegate(out Delegates.glDeletePerfMonitorsAMD, "glDeletePerfMonitorsAMD");
             AssignDelegate(out Delegates.glEndPerfMonitorAMD, "glEndPerfMonitorAMD");
