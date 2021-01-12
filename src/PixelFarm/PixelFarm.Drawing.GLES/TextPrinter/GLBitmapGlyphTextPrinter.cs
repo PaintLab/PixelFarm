@@ -38,7 +38,6 @@ namespace PixelFarm.DrawingGL
         GLBitmap _glBmp;
         ResolvedFont _resolvedFont;
 
-
         float _px_scale = 1;
         int _white_space_width;
         float _ascending;
@@ -63,7 +62,6 @@ namespace PixelFarm.DrawingGL
             _pcx = painter.Core;
 
             _txtClient = textServices.CreateNewServiceClient();
-
             //_currentTextureKind = TextureKind.Msdf; 
             //_currentTextureKind = TextureKind.StencilGreyScale;
 
@@ -72,6 +70,7 @@ namespace PixelFarm.DrawingGL
             //--------
             //load preview of pre-built texture font
             //temp fix, TODO: review this again
+
             string[] maybeTextureInfoFiles = textServices.GetCacheFontTextureFilenames();
             if (maybeTextureInfoFiles.Length > 0)
             {

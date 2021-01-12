@@ -1,8 +1,9 @@
 ﻿//Apache2, 2014-present, WinterDev
 
 using System;
-using PixelFarm.CpuBlit;
 using System.IO;
+
+using PixelFarm.CpuBlit;
 using MemMx = PixelFarm.Drawing.Internal.MemMx;
 namespace PixelFarm.Drawing.WinGdi
 {

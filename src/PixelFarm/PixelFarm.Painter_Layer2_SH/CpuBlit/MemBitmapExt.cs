@@ -140,14 +140,14 @@ namespace PixelFarm.CpuBlit
             return copyBmp;
         }
 
-        /// <summary>
-        /// swap from gles ARGB to ABGR (Gdi)
-        /// </summary>
-        /// <param name="src"></param>
-        public static void SwapArgbToAbgr(this MemBitmap src)
-        {
-            //TODO:
-        }
+        ///// <summary>
+        ///// swap from gles ARGB to ABGR (Gdi)
+        ///// </summary>
+        ///// <param name="src"></param>
+        //public static void SwapArgbToAbgr(this MemBitmap src)
+        //{
+        //    //TODO:
+        //}
         //public static void InvertColor(this MemBitmap memBmp)
         //{
         //    //temp fix
