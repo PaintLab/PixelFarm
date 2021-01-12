@@ -72,19 +72,18 @@ namespace PixelFarm.DrawingGL
             //--------
             //load preview of pre-built texture font
             //temp fix, TODO: review this again
-            string[] maybeTextureInfoFiles = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.tx_info");
+            string[] maybeTextureInfoFiles = textServices.GetCacheFontTextureFilenames();
             if (maybeTextureInfoFiles.Length > 0)
             {
                 for (int i = 0; i < maybeTextureInfoFiles.Length; ++i)
                 {
                     //try read
-                    using (FileStream fs = new FileStream(maybeTextureInfoFiles[i], FileMode.Open))
+                    using (Stream s = textServices.GetFontTextureStream(maybeTextureInfoFiles[i]))
                     {
                         try
                         {
-                            _myGLBitmapFontMx.LoadBitmapAtlasPreview(fs);
-
-
+                            //try load from specific stream
+                            _myGLBitmapFontMx.LoadBitmapAtlasPreview(s);
                         }
                         catch (Exception ex)
                         {
@@ -236,33 +235,6 @@ namespace PixelFarm.DrawingGL
             //
             ChangeFont(_txtClient.ResolveFont(font), 0, 0);
         }
-
-
-
-        //public void LoadFontAtlas(string fontTextureInfoFile, string atlasImgFilename)
-        //{
-        //    //TODO: extension method
-        //    if (PixelFarm.Platforms.StorageService.Provider.DataExists(fontTextureInfoFile) &&
-        //        PixelFarm.Platforms.StorageService.Provider.DataExists(atlasImgFilename))
-        //    {
-        //        using (System.IO.Stream fontTextureInfoStream = PixelFarm.Platforms.StorageService.Provider.ReadDataStream(fontTextureInfoFile))
-        //        using (System.IO.Stream fontTextureImgStream = PixelFarm.Platforms.StorageService.Provider.ReadDataStream(atlasImgFilename))
-        //        {
-        //            try
-        //            {
-        //                BitmapAtlasFile fontAtlas = new BitmapAtlasFile();
-        //                fontAtlas.Read(fontTextureInfoStream);
-        //                SimpleBitmapAtlas[] resultAtlases = fontAtlas.AtlasList.ToArray();
-        //                _myGLBitmapFontMx.AddSimpleFontAtlas(resultAtlases, fontTextureImgStream);
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                throw ex;
-        //            }
-        //        }
-        //    }
-
-        //}
         public bool UseVBO { get; set; }
 
         GlyphTexturePrinterDrawingTechnique _drawingTech;
@@ -561,7 +533,7 @@ namespace PixelFarm.DrawingGL
 
                     //base_offset = vxFmtStr.DescendingInPx;                    
                     //base_offset += 10; 
-                    base_offset -= vxFmtStr.DescendingInPx; 
+                    base_offset -= vxFmtStr.DescendingInPx;
                     break;
                 case PixelFarm.Drawing.TextBaseline.Bottom:
                     base_offset = -vxFmtStr.SpanHeight;
