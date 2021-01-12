@@ -71,13 +71,14 @@ namespace PixelFarm.DrawingGL
             //load preview of pre-built texture font
             //temp fix, TODO: review this again
 
-            string[] maybeTextureInfoFiles = textServices.GetCacheFontTextureFilenames();
+
+            string[] maybeTextureInfoFiles = GetCacheFontTextureFilenames();
             if (maybeTextureInfoFiles.Length > 0)
             {
                 for (int i = 0; i < maybeTextureInfoFiles.Length; ++i)
                 {
                     //try read
-                    using (Stream s = textServices.GetFontTextureStream(maybeTextureInfoFiles[i]))
+                    using (Stream s = PixelFarm.Platforms.StorageService.Provider.ReadDataStream(maybeTextureInfoFiles[i]))
                     {
                         try
                         {
@@ -91,8 +92,6 @@ namespace PixelFarm.DrawingGL
                     }
                 }
             }
-
-
 
             //LoadFontAtlas("tahoma_set1.multisize_fontAtlas", "tahoma_set1.multisize_fontAtlas.png");
 
@@ -137,7 +136,18 @@ namespace PixelFarm.DrawingGL
 
             AlternativeTypefaceSelector = myAlternativeTypefaceSelector;
         }
-
+        static string[] GetCacheFontTextureFilenames()
+        {
+            List<string> alldirs = new List<string>();
+            foreach (string s in PixelFarm.Platforms.StorageService.Provider.GetDataNameList(""))
+            {
+                if (System.IO.Path.GetExtension(s) == ".tx_info")
+                {
+                    alldirs.Add(s);
+                }
+            }
+            return alldirs.ToArray();
+        }
         public AlternativeTypefaceSelector AlternativeTypefaceSelector
         {
             get => _txtClient.AlternativeTypefaceSelector;
