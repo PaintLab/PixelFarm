@@ -116,8 +116,9 @@ namespace Mini
         {
             if (listBox3.SelectedItem is string atlasFile)
             {
-                string file = Path.GetFileNameWithoutExtension(atlasFile);
-                TestLoadBitmapAtlas(file);
+                string dir = Path.GetDirectoryName(atlasFile);
+                string filename = Path.GetFileNameWithoutExtension(atlasFile);
+                TestLoadBitmapAtlas(dir + "\\" + filename);
             }
         }
 
@@ -267,7 +268,7 @@ namespace Mini
 
             _totalAtlasImg = LoadBmp(atlas_file + ".png");
             //-----
-            int count = _bitmapAtlas.ImgUrlDict.Count;
+            //int count = _bitmapAtlas.ImgUrlDict.Count;
             listBox2.Items.Clear();
 
             foreach (var kv in _bitmapAtlas.ImgUrlDict)

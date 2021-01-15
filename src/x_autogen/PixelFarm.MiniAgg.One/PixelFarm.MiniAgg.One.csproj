@@ -162,7 +162,6 @@
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\PixelFarm.Painter_Layer2_SH\Drawing\Brushes_Pens.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\PixelFarm.Painter_Layer2_SH\Drawing\ClipingTechnique.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\PixelFarm.Painter_Layer2_SH\Drawing\DrawBoard.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\PixelFarm.Painter_Layer2_SH\Drawing\ITextPrinter.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\PixelFarm.Painter_Layer2_SH\Drawing\Painter.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\PixelFarm.Painter_Layer2_SH\Drawing\TextBaseline.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\PixelFarm.Painter_Layer2_SH\ForNet20.cs" />
@@ -170,8 +169,6 @@
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\PixelFarm.Painter_Layer2_SH\_ESS_LINK_WITH_TY\ImageBinder.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\PixelFarm.Painter_Layer2_SH\_ESS_LINK_WITH_TY\LenAndLenUnit.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\PixelFarm.Painter_Layer2_SH\_ESS_LINK_WITH_TY\RequestFont.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\PixelFarm.Painter_Layer2_SH\_ESS_LINK_WITH_TY\TextBufferSpan.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\PixelFarm.Painter_Layer2_SH\_ESS_LINK_WITH_TY\TextSpanMeasureResult.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\PixelFarm.Vectors_SH\1_VectorMaths\AggMath.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\PixelFarm.Vectors_SH\1_VectorMaths\AxisAlignedBoundingBox.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\PixelFarm.Vectors_SH\1_VectorMaths\BezierCurve.cs" />

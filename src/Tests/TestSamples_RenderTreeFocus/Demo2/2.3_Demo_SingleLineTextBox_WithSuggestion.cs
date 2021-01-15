@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
+using LayoutFarm.TextEditing;
+
 namespace LayoutFarm
 {
     [DemoNote("2.3 SingleLineText_WithSuggestion")]
@@ -91,6 +93,8 @@ namespace LayoutFarm
             return new string(buffer, bound.startIndex, bound.length);
         }
 
+
+
         string _currentLocalText = null;
         void UpdateSuggestionList()
         {
@@ -105,7 +109,11 @@ namespace LayoutFarm
             //-------------------------------------------------------------------------
             //simple parse ...
             //In this example  all country name start with Captial letter so ...
-            string currentTextSpanText = _textbox.CurrentTextSpan.GetText().ToUpper();
+
+
+
+            string currentTextSpanText = _textbox.CurrentTextSpan.GetUpperString();
+
             //analyze content
             char[] textBuffer = currentTextSpanText.ToCharArray();
             var results = new List<LayoutFarm.Composers.TextSplitBounds>();

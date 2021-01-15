@@ -34,7 +34,10 @@ using System.Text;
 namespace PixelFarm.Drawing
 {
 
+    public interface IFormattedGlyphPlanList
+    {
 
+    }
     public enum RequestFontStyle
     {
         //https://www.w3.org/TR/css-fonts-3/#propdef-font-style
@@ -239,7 +242,6 @@ namespace PixelFarm.Drawing
         public RequestFont(string fontFamily, float fontSizeInPts, ushort fontWeight = 400, RequestFontStyle cssFontStyle = RequestFontStyle.Regular)
             : this(fontFamily, Len.Pt(fontSizeInPts), fontWeight, cssFontStyle)
         {
-
         }
 
         public RequestFont(string fontFamily, Len fontSize, ushort fontWeight = 400, RequestFontStyle cssFontStyle = RequestFontStyle.Regular)

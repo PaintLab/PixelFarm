@@ -130,15 +130,15 @@ namespace PixelFarm.DrawingGL
                    indexBuffer, (indexBuffer != null) ? indexBuffer.Length : 0);
         }
 
-        internal void CreateBuffers(CpuBlit.ArrayListSpan<float> vertexBuffer, CpuBlit.ArrayListSpan<ushort> indexBuffer)
+        internal void CreateBuffers(CpuBlit.ArrayListSegment<float> vertexBuffer, CpuBlit.ArrayListSegment<ushort> indexBuffer)
         {
             if (_hasData)
             {
                 throw new NotSupportedException();
             }
 
-            CpuBlit.ArrayListSpan<float>.UnsafeGetInternalArr(vertexBuffer, out float[] v_arr);
-            CpuBlit.ArrayListSpan<ushort>.UnsafeGetInternalArr(indexBuffer, out ushort[] i_arr);
+            CpuBlit.ArrayListSegment<float>.UnsafeGetInternalArr(vertexBuffer, out float[] v_arr);
+            CpuBlit.ArrayListSegment<ushort>.UnsafeGetInternalArr(indexBuffer, out ushort[] i_arr);
 
             if (v_arr != null)
             {

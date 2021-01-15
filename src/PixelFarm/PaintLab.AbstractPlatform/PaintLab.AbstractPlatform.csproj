@@ -134,11 +134,14 @@
     <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\debugActivityRecorder.cs">
       <Link>0_REF_PaintLab.RenderTree.TextSurface\1.2_Lines\debugActivityRecorder.cs</Link>
     </Compile>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\RunListPool.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.2_Lines\RunListPool.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\TextCopyBuffer.cs">
+      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.2_Lines\TextCopyBuffer.cs</Link>
+    </Compile>
     <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\TextLineWalker.cs">
       <Link>0_REF_PaintLab.RenderTree.TextSurface\1.2_Lines\TextLineWalker.cs</Link>
-    </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\TextRangeCopy.cs">
-      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.2_Lines\TextRangeCopy.cs</Link>
     </Compile>
     <Compile Include="..\PaintLab.RenderTree.TextSurface\1.3_Layer\ITextFlowOwner.cs">
       <Link>0_REF_PaintLab.RenderTree.TextSurface\1.3_Layers\ITextFlowOwner.cs</Link>

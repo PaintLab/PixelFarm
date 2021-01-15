@@ -360,7 +360,6 @@
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\PixelFarm.Painter_Layer2_SH\Drawing\Brushes_Pens.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\PixelFarm.Painter_Layer2_SH\Drawing\ClipingTechnique.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\PixelFarm.Painter_Layer2_SH\Drawing\DrawBoard.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\PixelFarm.Painter_Layer2_SH\Drawing\ITextPrinter.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\PixelFarm.Painter_Layer2_SH\Drawing\Painter.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\PixelFarm.Painter_Layer2_SH\Drawing\TextBaseline.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\PixelFarm.Painter_Layer2_SH\ForNet20.cs" />
@@ -368,8 +367,6 @@
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\PixelFarm.Painter_Layer2_SH\_ESS_LINK_WITH_TY\ImageBinder.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\PixelFarm.Painter_Layer2_SH\_ESS_LINK_WITH_TY\LenAndLenUnit.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\PixelFarm.Painter_Layer2_SH\_ESS_LINK_WITH_TY\RequestFont.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\PixelFarm.Painter_Layer2_SH\_ESS_LINK_WITH_TY\TextBufferSpan.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\PixelFarm\PixelFarm.Painter_Layer2_SH\_ESS_LINK_WITH_TY\TextSpanMeasureResult.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\PixelFarm.Vectors_SH\1_VectorMaths\AggMath.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\PixelFarm.Vectors_SH\1_VectorMaths\AxisAlignedBoundingBox.cs" />
     <Compile Include="D:\projects\PixelFarm\src\PixelFarm\PixelFarm.Vectors_SH\1_VectorMaths\BezierCurve.cs" />
@@ -731,8 +728,9 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\1.2_Lines\4_TextLine_ArrangeAndResizingMechanism.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\1.2_Lines\5_TextLine_Advanced.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\1.2_Lines\debugActivityRecorder.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\1.2_Lines\RunListPool.cs" />
+    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\1.2_Lines\TextCopyBuffer.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\1.2_Lines\TextLineWalker.cs" />
-    <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\1.2_Lines\TextRangeCopy.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\1.3_Layer\ITextFlowOwner.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\1.3_Layer\RunVisitor.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PaintLab.AbstractPlatform\..\PaintLab.RenderTree.TextSurface\1.3_Layer\TextFlowLayer.cs" />
@@ -900,6 +898,7 @@
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing\7_BitmapAtlas\SimpleBitmapAtlasBuilder.cs" />
     <Compile Include="D:\projects\PixelFarm\src\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Typography\..\..\..\..\Typography\Build\N20\Typography.OpenFont\System.Numerics.ForNet20.cs" />
     <Compile Include="D:\projects\Typography\PixelFarm.Typography\1_General\AlternativeTypefaceSelector.cs" />
+    <Compile Include="D:\projects\Typography\PixelFarm.Typography\1_General\CharSourceAndCharSpan.cs" />
     <Compile Include="D:\projects\Typography\PixelFarm.Typography\1_General\FontStyleExtensions.cs" />
     <Compile Include="D:\projects\Typography\PixelFarm.Typography\1_General\MultiLayerGlyphTx.cs" />
     <Compile Include="D:\projects\Typography\PixelFarm.Typography\1_General\OpenFontTextService.cs" />

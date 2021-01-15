@@ -4653,8 +4653,8 @@ namespace OpenTK.Graphics.ES20
             del = (funcPtr == IntPtr.Zero) ? default(T) : (T)(object)(Marshal.GetDelegateForFunctionPointer(funcPtr, typeof(T)));
         }
         public static void LoadAll()
-        {   
-            
+        {
+           
             AssignDelegate(out Delegates.glBeginPerfMonitorAMD, "glBeginPerfMonitorAMD");
             AssignDelegate(out Delegates.glDeletePerfMonitorsAMD, "glDeletePerfMonitorsAMD");
             AssignDelegate(out Delegates.glEndPerfMonitorAMD, "glEndPerfMonitorAMD");

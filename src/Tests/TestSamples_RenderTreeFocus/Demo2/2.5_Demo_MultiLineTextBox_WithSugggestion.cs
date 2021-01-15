@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
+using LayoutFarm.TextEditing;
 namespace LayoutFarm
 {
     [DemoNote("2.5 MultiLineText_WithSuggestion")]
@@ -131,7 +132,7 @@ namespace LayoutFarm
             //int startAt, len;
             //textbox.FindCurrentUnderlyingWord(out startAt, out len);
 
-            string currentTextSpanText = currentSpan.GetText().ToUpper();
+            string currentTextSpanText = currentSpan.GetUpperString();
             //analyze content
             char[] textBuffer = currentTextSpanText.ToCharArray();
             _textSplitBoundsList.Clear();

@@ -9,6 +9,7 @@ using PixelFarm.CpuBlit.BitmapAtlas;
 using PixelFarm.Drawing;
 
 using PaintLab;
+using Typography.OpenFont;
 
 namespace Mini
 {
@@ -142,6 +143,7 @@ namespace Mini
             List<AtlasItemSourceFile> fileList = atlasProj.Items;
             //1. create builder
             var bmpAtlasBuilder = new SimpleBitmapAtlasBuilder();
+            bmpAtlasBuilder.SpaceCompactOption = SimpleBitmapAtlasBuilder.CompactOption.ArrangeByHeight;
 
             ushort index = 0;
             Dictionary<string, ushort> imgDic = new Dictionary<string, ushort>();
@@ -160,12 +162,13 @@ namespace Mini
                     //4. get information about it 
                     atlasItem = new BitmapAtlasItemSource(itemBmp.Width, itemBmp.Height);
                     atlasItem.SetImageBuffer(MemBitmap.CopyImgBuffer(itemBmp));
+               
                 }
 
                 atlasItem.UniqueInt16Name = index;
                 //5. add to builder                
                 bmpAtlasBuilder.AddItemSource(atlasItem);
-
+                
                 //get relative filename
                 string imgPath = "//" + f.Link;
                 imgDic.Add(imgPath, index);
@@ -378,11 +381,15 @@ namespace Mini
                         Typography.OpenFont.Typeface typeface = atlasProj.GetTypeface(config.FontFilename);
 
                         //TODO: add other font styles 
-                        RequestFont reqFont = new RequestFont(typeface.Name, builderTask.Size, FontStyle.Regular);
+                        RequestFont reqFont = new RequestFont(typeface.Name, builderTask.Size);
+
+                        string random_suffix = Guid.NewGuid().ToString().Substring(0, 7);
+                        string textureName = typeface.Name.ToLower() + "_" + random_suffix + ".info";
+                        string output_imgFilename = textureName + ".png";
 
 
-                        string textureName = typeface.Name.ToLower() + "_" + reqFont.FontKey;
                         string outputDir = Path.GetDirectoryName(atlasProj.OutputFilename);
+
                         FontAtlasBuilderHelper builderHelper = new FontAtlasBuilderHelper();
 
                         builderHelper.TextureInfoFilename = outputDir + Path.DirectorySeparatorChar + textureName;
@@ -392,8 +399,7 @@ namespace Mini
                             typeface,
                             builderTask.Size,
                             builderTask.TextureKind,
-                            builderTask.TextureBuildDetails.ToArray(),
-                            reqFont.FontKey
+                            builderTask.TextureBuildDetails.ToArray()
                             );
                     }
                 }
@@ -482,4 +488,69 @@ namespace Mini
         }
     }
 
+    struct FontAtlasBuilderHelper
+    {
+        public string TextureInfoFilename { get; set; }
+        public string OutputImgFilename { get; set; }
+
+#if DEBUG
+        public long dbugBuildTimeMillisec { get; set; }
+#endif
+        public void Build(
+            GlyphTextureBitmapGenerator glyphTextureGen,
+            Typeface typeface, float fontSizeInPoints,
+            TextureKind textureKind,
+            GlyphTextureBuildDetail[] buildDetails)
+        {
+#if DEBUG
+            //overall, glyph atlas generation time
+            System.Diagnostics.Stopwatch dbugStopWatch = new System.Diagnostics.Stopwatch();
+            dbugStopWatch.Start();
+#endif
+            var atlasBuilder = new SimpleBitmapAtlasBuilder();
+            glyphTextureGen.CreateTextureFontFromBuildDetail(
+                atlasBuilder,
+                typeface,
+                fontSizeInPoints,
+                textureKind,
+                buildDetails);
+
+            //3. set information before write to font-info
+            atlasBuilder.SpaceCompactOption = SimpleBitmapAtlasBuilder.CompactOption.ArrangeByHeight;
+            atlasBuilder.SetAtlasFontInfo(typeface.Name, fontSizeInPoints);
+
+            //4. merge all glyph in the builder into a single image
+            using (MemBitmap totalGlyphsImg = atlasBuilder.BuildSingleImage(true))
+            {
+
+                if (TextureInfoFilename == null)
+                {
+                    //use random suffix
+                    string random_suffix = Guid.NewGuid().ToString().Substring(0, 7);
+                    string textureName = typeface.Name.ToLower() + "_" + random_suffix + ".info";
+                    string output_imgFilename = textureName + ".png";
+
+                    TextureInfoFilename = textureName;
+                    OutputImgFilename = output_imgFilename;
+                }
+
+
+                //5. save atlas info to disk
+                using (FileStream fs = new FileStream(TextureInfoFilename, FileMode.Create))
+                {
+                    atlasBuilder.SaveAtlasInfo(fs);
+                }
+
+                //6. save total-glyph-image to disk
+                totalGlyphsImg.SaveImage(OutputImgFilename);
+            }
+
+#if DEBUG
+            dbugStopWatch.Stop();
+            dbugBuildTimeMillisec = dbugStopWatch.ElapsedMilliseconds;
+#endif
+
+        }
+
+    }
 }

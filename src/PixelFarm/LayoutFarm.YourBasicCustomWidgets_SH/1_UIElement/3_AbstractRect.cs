@@ -90,7 +90,7 @@ namespace LayoutFarm.UI
         public VerticalAlignment VerticalAlignment { get; set; }
 
 
-       
+
         public int CalculatedMinWidth { get; protected set; }
         public int CalculatedMinHeight { get; protected set; }
 
@@ -99,12 +99,12 @@ namespace LayoutFarm.UI
 
         public event EventHandler<ViewportChangedEventArgs> ViewportChanged;//TODO: review this*** => use event queue?
 
-        
+
         protected void RaiseViewportChanged()
         {
             if (ViewportChanged != null)
             {
-              
+
                 using (Temp<ViewportChangedEventArgs>.Borrow(out ViewportChangedEventArgs changedEventArgs))
                 {
                     changedEventArgs.Kind = ViewportChangedEventArgs.ChangeKind.Location;
@@ -117,7 +117,7 @@ namespace LayoutFarm.UI
         {
             if (ViewportChanged != null)
             {
-              
+
                 using (Temp<ViewportChangedEventArgs>.Borrow(out ViewportChangedEventArgs changedEventArgs))
                 {
                     changedEventArgs.Kind = ViewportChangedEventArgs.ChangeKind.LayoutDone;

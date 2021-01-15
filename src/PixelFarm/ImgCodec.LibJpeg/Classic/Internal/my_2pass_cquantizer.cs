@@ -129,7 +129,7 @@ namespace BitMiracle.LibJpeg.Classic.Internal
             pass2_no_dither_quantizer
         }
 
-        private const int MAXNUMCOLORS = (JpegConstants.MAXJSAMPLE+1); /* maximum size of colormap */
+        private const int MAXNUMCOLORS = (JpegConstants.MAXJSAMPLE + 1); /* maximum size of colormap */
 
         /* These will do the right thing for either R,G,B or B,G,R color order,
         * but you may not like the results for other color orders.
@@ -139,12 +139,12 @@ namespace BitMiracle.LibJpeg.Classic.Internal
         private const int HIST_C2_BITS = 5;     /* bits of precision in B/R histogram */
 
         /* Number of elements along histogram axes. */
-        private const int HIST_C0_ELEMS = (1<<HIST_C0_BITS);
-        private const int HIST_C1_ELEMS = (1<<HIST_C1_BITS);
-        private const int HIST_C2_ELEMS = (1<<HIST_C2_BITS);
+        private const int HIST_C0_ELEMS = (1 << HIST_C0_BITS);
+        private const int HIST_C1_ELEMS = (1 << HIST_C1_BITS);
+        private const int HIST_C2_ELEMS = (1 << HIST_C2_BITS);
 
         /* These are the amounts to shift an input value to get a histogram index. */
-        private const int C0_SHIFT = (JpegConstants.BITS_IN_JSAMPLE-HIST_C0_BITS);
+        private const int C0_SHIFT = (JpegConstants.BITS_IN_JSAMPLE - HIST_C0_BITS);
         private const int C1_SHIFT = (JpegConstants.BITS_IN_JSAMPLE - HIST_C1_BITS);
         private const int C2_SHIFT = (JpegConstants.BITS_IN_JSAMPLE - HIST_C2_BITS);
 
@@ -153,13 +153,13 @@ namespace BitMiracle.LibJpeg.Classic.Internal
         private const int B_SCALE = 1;       /* and B by this much */
 
         /* log2(histogram cells in update box) for each axis; this can be adjusted */
-        private const int BOX_C0_LOG = (HIST_C0_BITS-3);
-        private const int BOX_C1_LOG = (HIST_C1_BITS-3);
-        private const int BOX_C2_LOG = (HIST_C2_BITS-3);
+        private const int BOX_C0_LOG = (HIST_C0_BITS - 3);
+        private const int BOX_C1_LOG = (HIST_C1_BITS - 3);
+        private const int BOX_C2_LOG = (HIST_C2_BITS - 3);
 
-        private const int BOX_C0_ELEMS = (1<<BOX_C0_LOG); /* # of hist cells in update box */
-        private const int BOX_C1_ELEMS = (1<<BOX_C1_LOG);
-        private const int BOX_C2_ELEMS = (1<<BOX_C2_LOG);
+        private const int BOX_C0_ELEMS = (1 << BOX_C0_LOG); /* # of hist cells in update box */
+        private const int BOX_C1_ELEMS = (1 << BOX_C1_LOG);
+        private const int BOX_C2_ELEMS = (1 << BOX_C2_LOG);
 
         private const int BOX_C0_SHIFT = (C0_SHIFT + BOX_C0_LOG);
         private const int BOX_C1_SHIFT = (C1_SHIFT + BOX_C1_LOG);
@@ -177,7 +177,7 @@ namespace BitMiracle.LibJpeg.Classic.Internal
 
         /* Variables for accumulating image statistics */
         private ushort[][] m_histogram;     /* pointer to the histogram */
-        
+
         private bool m_needs_zeroed;      /* true if next pass must zero histogram */
 
         /* Variables for Floyd-Steinberg dithering */
@@ -443,7 +443,7 @@ namespace BitMiracle.LibJpeg.Classic.Internal
                     cur0 = m_error_limiter[JpegConstants.MAXJSAMPLE + cur0];
                     cur1 = m_error_limiter[JpegConstants.MAXJSAMPLE + cur1];
                     cur2 = m_error_limiter[JpegConstants.MAXJSAMPLE + cur2];
-                    
+
                     /* Form pixel value + error, and range-limit to 0..MAXJSAMPLE.
                      * The maximum error is +- MAXJSAMPLE (or less with error limiting);
                      * this sets the required size of the range_limit array.
@@ -466,7 +466,7 @@ namespace BitMiracle.LibJpeg.Classic.Internal
 
                     /* Now emit the colormap index for this cell */
                     int pixcode = m_histogram[hRow][hColumn] - 1;
-                    output_buf[out_row + row][outputPixelIndex] = (byte) pixcode;
+                    output_buf[out_row + row][outputPixelIndex] = (byte)pixcode;
 
                     /* Compute representation error for this pixel */
                     cur0 -= m_cinfo.m_colormap[0][pixcode];
@@ -480,7 +480,7 @@ namespace BitMiracle.LibJpeg.Classic.Internal
                     int bnexterr = cur0;    /* Process component 0 */
                     int delta = cur0 * 2;
                     cur0 += delta;      /* form error * 3 */
-                    m_fserrors[errorIndex] = (short) (bpreverr0 + cur0);
+                    m_fserrors[errorIndex] = (short)(bpreverr0 + cur0);
                     cur0 += delta;      /* form error * 5 */
                     bpreverr0 = belowerr0 + cur0;
                     belowerr0 = bnexterr;
@@ -488,7 +488,7 @@ namespace BitMiracle.LibJpeg.Classic.Internal
                     bnexterr = cur1;    /* Process component 1 */
                     delta = cur1 * 2;
                     cur1 += delta;      /* form error * 3 */
-                    m_fserrors[errorIndex + 1] = (short) (bpreverr1 + cur1);
+                    m_fserrors[errorIndex + 1] = (short)(bpreverr1 + cur1);
                     cur1 += delta;      /* form error * 5 */
                     bpreverr1 = belowerr1 + cur1;
                     belowerr1 = bnexterr;
@@ -496,7 +496,7 @@ namespace BitMiracle.LibJpeg.Classic.Internal
                     bnexterr = cur2;    /* Process component 2 */
                     delta = cur2 * 2;
                     cur2 += delta;      /* form error * 3 */
-                    m_fserrors[errorIndex + 2] = (short) (bpreverr2 + cur2);
+                    m_fserrors[errorIndex + 2] = (short)(bpreverr2 + cur2);
                     cur2 += delta;      /* form error * 5 */
                     bpreverr2 = belowerr2 + cur2;
                     belowerr2 = bnexterr;
@@ -515,9 +515,9 @@ namespace BitMiracle.LibJpeg.Classic.Internal
                  * final fserrors[] entry.  Note we need not unload belowerrN because
                  * it is for the dummy column before or after the actual array.
                  */
-                m_fserrors[errorIndex] = (short) bpreverr0; /* unload prev errs into array */
-                m_fserrors[errorIndex + 1] = (short) bpreverr1;
-                m_fserrors[errorIndex + 2] = (short) bpreverr2;
+                m_fserrors[errorIndex] = (short)bpreverr0; /* unload prev errs into array */
+                m_fserrors[errorIndex + 1] = (short)bpreverr1;
+                m_fserrors[errorIndex + 2] = (short)bpreverr2;
             }
         }
 
@@ -996,7 +996,7 @@ namespace BitMiracle.LibJpeg.Classic.Internal
         /// </summary>
         private void init_error_limit()
         {
-            m_error_limiter = new int [JpegConstants.MAXJSAMPLE * 2 + 1];
+            m_error_limiter = new int[JpegConstants.MAXJSAMPLE * 2 + 1];
             int tableOffset = JpegConstants.MAXJSAMPLE;
 
             const int STEPSIZE = ((JpegConstants.MAXJSAMPLE + 1) / 16);
@@ -1006,14 +1006,14 @@ namespace BitMiracle.LibJpeg.Classic.Internal
             int input = 0;
             for (; input < STEPSIZE; input++, output++)
             {
-                m_error_limiter[tableOffset + input] = output; 
+                m_error_limiter[tableOffset + input] = output;
                 m_error_limiter[tableOffset - input] = -output;
             }
 
             /* Map errors 1:2 up to +- 3*MAXJSAMPLE/16 */
-            for (; input < STEPSIZE*3; input++)
+            for (; input < STEPSIZE * 3; input++)
             {
-                m_error_limiter[tableOffset + input] = output; 
+                m_error_limiter[tableOffset + input] = output;
                 m_error_limiter[tableOffset - input] = -output;
                 output += (input & 1) != 0 ? 1 : 0;
             }
@@ -1021,7 +1021,7 @@ namespace BitMiracle.LibJpeg.Classic.Internal
             /* Clamp the rest to final output value (which is (MAXJSAMPLE+1)/8) */
             for (; input <= JpegConstants.MAXJSAMPLE; input++)
             {
-                m_error_limiter[tableOffset + input] = output; 
+                m_error_limiter[tableOffset + input] = output;
                 m_error_limiter[tableOffset - input] = -output;
             }
         }
@@ -1234,7 +1234,7 @@ namespace BitMiracle.LibJpeg.Classic.Internal
             for (int i = 0; i < m_cinfo.m_actual_number_of_colors; i++)
             {
                 if (mindist[i] <= minmaxdist)
-                    colorlist[ncolors++] = (byte) i;
+                    colorlist[ncolors++] = (byte)i;
             }
 
             return ncolors;
@@ -1272,14 +1272,14 @@ namespace BitMiracle.LibJpeg.Classic.Internal
             for (int i = 0; i < numcolors; i++)
             {
                 int icolor = colorlist[i];
-                
+
                 /* Compute (square of) distance from minc0/c1/c2 to this color */
                 int inc0 = (minc0 - m_cinfo.m_colormap[0][icolor]) * R_SCALE;
                 int dist0 = inc0 * inc0;
 
                 int inc1 = (minc1 - m_cinfo.m_colormap[1][icolor]) * G_SCALE;
                 dist0 += inc1 * inc1;
-                
+
                 int inc2 = (minc2 - m_cinfo.m_colormap[2][icolor]) * B_SCALE;
                 dist0 += inc2 * inc2;
 
@@ -1287,7 +1287,7 @@ namespace BitMiracle.LibJpeg.Classic.Internal
                 inc0 = inc0 * (2 * STEP_C0) + STEP_C0 * STEP_C0;
                 inc1 = inc1 * (2 * STEP_C1) + STEP_C1 * STEP_C1;
                 inc2 = inc2 * (2 * STEP_C2) + STEP_C2 * STEP_C2;
-                
+
                 /* Now loop over all cells in box, updating distance per Thomas method */
                 bestIndex = 0;
                 int colorIndex = 0;
@@ -1305,9 +1305,9 @@ namespace BitMiracle.LibJpeg.Classic.Internal
                             if (dist2 < bestdist[bestIndex])
                             {
                                 bestdist[bestIndex] = dist2;
-                                bestcolor[colorIndex] = (byte) icolor;
+                                bestcolor[colorIndex] = (byte)icolor;
                             }
-                            
+
                             dist2 += xx2;
                             xx2 += 2 * STEP_C2 * STEP_C2;
                             bestIndex++;
@@ -1368,7 +1368,7 @@ namespace BitMiracle.LibJpeg.Classic.Internal
                     int histogramIndex = (c1 + ic1) * HIST_C2_ELEMS + c2;
                     for (int ic2 = 0; ic2 < BOX_C2_ELEMS; ic2++)
                     {
-                        m_histogram[c0 + ic0][histogramIndex] = (ushort) ((int)bestcolor[bestcolorIndex] + 1);
+                        m_histogram[c0 + ic0][histogramIndex] = (ushort)((int)bestcolor[bestcolorIndex] + 1);
                         histogramIndex++;
                         bestcolorIndex++;
                     }

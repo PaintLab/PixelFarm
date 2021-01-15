@@ -36,36 +36,19 @@ namespace LayoutFarm.TextEditing
 
         public int X => _caretXPos;
 
-        public int TextRunPixelOffset => _onTextRunPixelOffset;
-
-        //#if DEBUG
-        //        public override string ToString()
-        //        {
-        //            if (_copyRun == null)
-        //            {
-        //                return "null " + " ,local[" + RunLocalSelectedIndex + "]";
-        //            }
-        //            else
-        //            {
-        //                return _copyRun.ToString() + " ,local[" + RunLocalSelectedIndex + "]";
-        //            }
-        //        }
-        //#endif
-
+        public int TextRunPixelOffset => _onTextRunPixelOffset; 
     }
 
 
 
     public class EditableVisualPointInfo : VisualPointInfo
     {
-        TextLineBox _line;
-        Run _hitRun;
+        readonly TextLineBox _line;
+        readonly Run _hitRun;
         internal EditableVisualPointInfo(TextLineBox line, int index, Run hitRun)
             : base(index)
         {
-            if (index < 0)
-            {
-            }
+
             _line = line;
             _hitRun = hitRun;
         }

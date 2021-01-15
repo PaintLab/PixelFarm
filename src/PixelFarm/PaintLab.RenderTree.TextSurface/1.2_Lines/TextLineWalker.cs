@@ -2,8 +2,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
+
+using PixelFarm.CpuBlit;
 using PixelFarm.Drawing;
+using Typography.Text;
 using Typography.TextLayout;
 
 namespace LayoutFarm.TextEditing
@@ -27,7 +29,7 @@ namespace LayoutFarm.TextEditing
 
         }
 
-        public RunStyle CurrentSpanStyle => TextLayer.DefaultRunStyle;
+
 
         public void Clear()
         {
@@ -107,7 +109,7 @@ namespace LayoutFarm.TextEditing
             TextLineBox.InnerDoJoinWithNextLine(this.CurrentLine);
             EnsureCurrentTextRun();
         }
-        char BackSpaceOneChar()
+        int BackSpaceOneChar()
         {
             if (CurrentTextRun == null)
             {
@@ -124,26 +126,43 @@ namespace LayoutFarm.TextEditing
                 Run removingTextRun = CurrentTextRun;
                 int removeIndex = CurrentTextRunCharIndex;
                 SetCurrentCharStepLeft();
-                char toBeRemovedChar = CurrentChar;
+                int toBeRemovedChar = CurrentChar;
+                int actualRemove = 1;
 
-                Run.InnerRemove(removingTextRun, removeIndex, 1, false);
-                if (removingTextRun.CharacterCount == 0)
+                //if (char.IsLowSurrogate(toBeRemovedChar))
+                //{
+                //    if (removeIndex > 0)
+                //    {
+                //        removeIndex--;
+                //        actualRemove++;
+                //    }
+                //}
+
+                if (removingTextRun is TextRun textRun)
                 {
-                    Run nextRun = removingTextRun.NextRun;
-                    CurrentLine.Remove(removingTextRun);
-                    SetCurrentTextRun(nextRun);
-                    EnsureCurrentTextRun();
 
+                    textRun.Remove(removeIndex, actualRemove, false);
+                    //Run.InnerRemove(removingTextRun, removeIndex, actualRemove, false);
+
+                    if (removingTextRun.CharacterCount == 0)
+                    {
+                        Run nextRun = removingTextRun.NextRun;
+                        CurrentLine.Remove(removingTextRun);
+                        SetCurrentTextRun(nextRun);
+                        EnsureCurrentTextRun();
+
+                    }
+                    CurrentLine.TextLineReCalculateActualLineSize();
+                    CurrentLine.RefreshInlineArrange();
                 }
-                CurrentLine.TextLineReCalculateActualLineSize();
-                CurrentLine.RefreshInlineArrange();
+
                 return toBeRemovedChar;
             }
         }
 
         public Run GetCurrentTextRun() => CurrentLine.IsBlankLine ? null : CurrentTextRun;
 
-        public bool CanAcceptThisChar(char c)
+        public bool CanAcceptThisChar(int c)
         {
             //TODO: review here, enable this feature or not
             //some char can't be a start char on blank line
@@ -154,7 +173,7 @@ namespace LayoutFarm.TextEditing
             }
             return true;
         }
-        public void AddCharacter(char c)
+        public void AddCharacter(int c)
         {
             if (CurrentLine.IsBlankLine)
             {
@@ -168,14 +187,14 @@ namespace LayoutFarm.TextEditing
                 //
 
                 //1. new 
-                var run = new TextRun(this.CurrentSpanStyle, new char[] { c });
+                TextRun run = CurrentLine.CreateTextRun(c);
                 CurrentLine.AddLast(run);
                 SetCurrentTextRun(run);
             }
             else
             {
-                Run run = CurrentTextRun;
-                if (run != null)
+
+                if (CurrentTextRun is TextRun run)
                 {
                     if (run.IsInsertable)
                     {
@@ -183,7 +202,7 @@ namespace LayoutFarm.TextEditing
                     }
                     else
                     {
-                        AddTextSpan(new TextRun(CurrentSpanStyle, new char[] { c }));
+                        AddTextSpan(CurrentLine.CreateTextRun(c));
                         return;
                     }
                 }
@@ -199,12 +218,19 @@ namespace LayoutFarm.TextEditing
         }
         public void AddTextSpan(string textspan)
         {
-            AddTextSpan(new TextRun(CurrentSpanStyle, textspan.ToCharArray()));
+            AddTextSpan(CurrentLine.CreateTextRun(textspan));
         }
         public void AddTextSpan(char[] textspan)
         {
-
-            AddTextSpan(new TextRun(CurrentSpanStyle, textspan));
+            AddTextSpan(CurrentLine.CreateTextRun(textspan));
+        }
+        public void AddTextSpan(ArraySegment<char> textspan)
+        {
+            AddTextSpan(CurrentLine.CreateTextRun(textspan));
+        }
+        public void AddTextSpan(ArraySegment<int> textspan)
+        {
+            AddTextSpan(CurrentLine.CreateTextRun(textspan));
         }
         public void AddTextSpan(Run textRun)
         {
@@ -268,9 +294,9 @@ namespace LayoutFarm.TextEditing
             EnsureCurrentTextRun(charIndex);
         }
 
-        public char DoBackspaceOneChar() => BackSpaceOneChar();
+        public int DoBackspaceOneChar() => BackSpaceOneChar();
 
-        public char DoDeleteOneChar()
+        public int DoDeleteOneChar()
         {
             if (CharIndex < CurrentLine.CharCount())
             {
@@ -300,28 +326,34 @@ namespace LayoutFarm.TextEditing
                 }
                 else
                 {
-                    CopyRun rightSplitedPart = Run.InnerRemove(currentRun,
-                        CurrentTextRunCharIndex + 1, true);
-                    if (rightSplitedPart != null)
+                    if (currentRun is TextRun textrun)
                     {
-                        CurrentLine.AddAfter(currentRun, rightSplitedPart);
+
+                        CharSpan rightPart = textrun.Remove(CurrentTextRunCharIndex + 1, true);
+
+                        if (rightPart.len > 0)
+                        {
+                            CurrentLine.AddAfter(currentRun, rightPart);
+                        }
+
+                        CurrentLine.AddLineBreakAfter(currentRun);
+                        if (currentRun.CharacterCount == 0)
+                        {
+                            CurrentLine.Remove(currentRun);
+                        }
                     }
 
-                    CurrentLine.AddLineBreakAfter(currentRun);
-                    if (currentRun.CharacterCount == 0)
-                    {
-                        CurrentLine.Remove(currentRun);
-                    }
+
                 }
             }
 
 
-            this.TextLayer.TopDownReCalculateContentSize();
+            _textFlowLayer.TopDownReCalculateContentSize();
             EnsureCurrentTextRun();
         }
-        public SelectionRangeInfo SplitSelectedText(VisualSelectionRange selectionRange)
+        public SelectionRangeInfo SplitSelectedText(VisualSelectionRange selectionRange, RunStyle runStyleForNewPart)
         {
-            SelectionRangeInfo newPoints = CurrentLine.Split(selectionRange);
+            SelectionRangeInfo newPoints = CurrentLine.Split(selectionRange, runStyleForNewPart);
             EnsureCurrentTextRun();
             return newPoints;
         }
@@ -339,7 +371,7 @@ namespace LayoutFarm.TextEditing
         public debugActivityRecorder dbugTextManRecorder;
 #endif
 
-        TextFlowLayer _textFlowLayer;
+        private protected TextFlowLayer _textFlowLayer;
         TextLineBox _currentLine;
         int _currentLineY = 0;
         //Run _run1_x;
@@ -391,6 +423,7 @@ namespace LayoutFarm.TextEditing
             }
         }
 
+        public RunStyle CurrentSpanStyle => _textFlowLayer.DefaultRunStyle;
 #if DEBUG
         int _i_charIndex;
         int caret_char_index
@@ -398,6 +431,10 @@ namespace LayoutFarm.TextEditing
             get { return _i_charIndex; }
             set
             {
+                if ((value % 2) != 0)
+                {
+
+                }
                 _i_charIndex = value;
             }
         }
@@ -428,8 +465,10 @@ namespace LayoutFarm.TextEditing
         }
 
 
-        readonly TextPrinterWordVisitor _wordVisitor = new TextPrinterWordVisitor();
-        readonly TextPrinterLineSegmentList<TextPrinterLineSegment> _lineSegs = new TextPrinterLineSegmentList<TextPrinterLineSegment>();
+        readonly LayoutWordVisitor _wordVisitor = new LayoutWordVisitor();
+        readonly LineSegmentList<LineSegment> _lineSegs = new LineSegmentList<LineSegment>();
+        readonly ArrayList<char> _utf16ArrList = new ArrayList<char>();
+        readonly ArrayList<int> _utf32ArrList = new ArrayList<int>();
 
         public void FindCurrentHitWord(out int startAt, out int len)
         {
@@ -440,11 +479,29 @@ namespace LayoutFarm.TextEditing
                 return;
             }
 
-            using (var copyContext = new TempTextLineCopyContext(_currentLine, out Typography.Text.TextBufferSpan textBufferSpan))
+            using (new TextRangeCopyPoolContext<TextFlowWalkerBase>(out TextCopyBuffer output))
             {
+                //copy to int32 arr list
+                output.BackupKind = TextCopyBuffer.BackupBufferKind.Utf32ArrayList;
+
+                _currentLine.CopyLineContent(output);
+
                 _lineSegs.Clear();
                 _wordVisitor.SetLineSegmentList(_lineSegs);
-                Typography.Text.GlobalTextService.TxtClient.BreakToLineSegments(textBufferSpan, _wordVisitor);
+
+
+                int content_len = output.Length;
+                _utf16ArrList.Clear(content_len);
+                _utf32ArrList.Clear(content_len);
+                //output.CopyTo(_arrList.UnsafeInternalArray);
+                _utf32ArrList.AdjustSize(content_len);
+
+                output.CopyTo(_utf32ArrList);
+
+                Typography.Text.GlobalTextService.TxtClient.BreakToLineSegments(
+                    new Typography.Text.TextBufferSpan(_utf32ArrList.UnsafeInternalArray,
+                    0, _utf32ArrList.Length),
+                    _wordVisitor);
 
                 if (_lineSegs.Count == 0)
                 {
@@ -456,7 +513,7 @@ namespace LayoutFarm.TextEditing
                 int segcount = _lineSegs.Count;
                 for (int i = 0; i < segcount; ++i)
                 {
-                    TextPrinterLineSegment seg = _lineSegs.GetLineSegment(i);
+                    LineSegment seg = _lineSegs.GetLineSegment(i);
                     if (seg.StartAt + seg.Length >= caret_char_index)
                     {
                         //stop at this segment
@@ -467,6 +524,7 @@ namespace LayoutFarm.TextEditing
                 }
 
             }
+
 
             //?
             startAt = 0;
@@ -532,11 +590,11 @@ namespace LayoutFarm.TextEditing
             caret_char_index = 0;
             _caretXPos = 0;
         }
-        public void CopyContentToStrignBuilder(StringBuilder stBuilder)
+        public void CopyContentToStrignBuilder(TextCopyBuffer output)
         {
-            _textFlowLayer.CopyContentToStringBuilder(stBuilder);
+            _textFlowLayer.CopyContent(output);
         }
-        public char PrevChar
+        public int PrevChar
         {
             get
             {
@@ -569,7 +627,7 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
-        public char NextChar
+        public int NextChar
         {
             get
             {
@@ -657,7 +715,7 @@ namespace LayoutFarm.TextEditing
             if (_currentTextRun == null)
             {
             }
-#endif      
+#endif
             EditableVisualPointInfo textPointInfo =
                 new EditableVisualPointInfo(_currentLine, caret_char_index, _currentTextRun);
             textPointInfo.SetAdditionVisualInfo(
@@ -667,7 +725,7 @@ namespace LayoutFarm.TextEditing
 
         public Point CaretPosition => new Point(_caretXPos, _currentLineY);
 
-        public char CurrentChar
+        public int CurrentChar
         {
             get
             {
@@ -724,6 +782,12 @@ namespace LayoutFarm.TextEditing
                     if (_rPixelOffset + thisTextRunPixelLength > xpos)
                     {
                         CharLocation foundLocation = Run.InnerGetCharacterFromPixelOffset(_currentTextRun, xpos - _rPixelOffset);
+#if DEBUG
+                        if ((foundLocation.RunCharIndex % 2) != 0)
+                        {
+
+                        }
+#endif
                         _caretXPos = _rPixelOffset + foundLocation.pixelOffset;
                         caret_char_index = _rCharOffset + foundLocation.RunCharIndex;
 
@@ -794,7 +858,22 @@ namespace LayoutFarm.TextEditing
         //
         int InternalCharIndex => caret_char_index;
         //
-        public void SetCurrentCharStepRight() => SetCurrentCharIndex(InternalCharIndex + 1);
+        public void SetCurrentCharStepRight()
+        {
+            SetCurrentCharIndex(InternalCharIndex + 1);
+            //check current char is surrogate or not
+            //int c = CurrentChar;
+            //#if DEBUG
+            //            bool is_high_surrogate = char.IsHighSurrogate(c);
+            //            bool is_low_surrogate = char.IsLowSurrogate(c);
+            //#endif
+
+            //            if (char.IsLowSurrogate(c))
+            //            {
+            //                //can't stop at this 
+            //                SetCurrentCharStepRight();
+            //            }
+        }
 
         public void SetCurrentCharStepLeft() => SetCurrentCharIndex(InternalCharIndex - 1);
 
@@ -854,63 +933,6 @@ namespace LayoutFarm.TextEditing
                 caret_char_index = _rCharOffset + _currentTextRun.CharacterCount;
                 _caretXPos = _rPixelOffset + _currentTextRun.Width;
                 return;
-
-                //                int diff = newCharIndexPointTo - caret_char_index;
-                //                switch (diff)
-                //                {
-                //                    case 0:
-                //                        {
-                //                            return;
-                //                        }
-
-                //                    default:
-                //                        {
-                //                            if (diff > 0)
-                //                            {
-                //                                do
-                //                                {
-                //                                    if (_rCharOffset + _currentTextRun.CharacterCount >= newCharIndexPointTo)
-                //                                    {
-                //                                        caret_char_index = newCharIndexPointTo;
-                //                                        _caretXPos = _rPixelOffset + _currentTextRun.GetRunWidth(caret_char_index - _rCharOffset);
-                //#if DEBUG
-                //                                        if (dbugTextManRecorder != null)
-                //                                        {
-                //                                            dbugTextManRecorder.EndContext();
-                //                                        }
-                //#endif
-
-                //                                        return;
-                //                                    }
-                //                                    //
-                //                                } while (MoveToNextTextRun());
-                //                                caret_char_index = _rCharOffset + _currentTextRun.CharacterCount;
-                //                                _caretXPos = _rPixelOffset + _currentTextRun.Width;
-                //                                return;
-                //                            }
-                //                            else
-                //                            {
-                //                                do
-                //                                {
-                //                                    if (_rCharOffset - 1 < newCharIndexPointTo)
-                //                                    {
-                //                                        caret_char_index = newCharIndexPointTo;
-                //                                        _caretXPos = _rPixelOffset + _currentTextRun.GetRunWidth(caret_char_index - _rCharOffset);
-                //#if DEBUG
-                //                                        if (dbugTextManRecorder != null)
-                //                                        {
-                //                                            dbugTextManRecorder.EndContext();
-                //                                        }
-                //#endif
-                //                                        return;
-                //                                    }
-                //                                } while (MoveToPreviousTextRun());
-                //                                caret_char_index = 0;
-                //                                _caretXPos = 0;
-                //                            }
-                //                        }
-                //                        break;
-                //                }
             }
 #if DEBUG
             if (dbugTextManRecorder != null)
@@ -932,7 +954,9 @@ namespace LayoutFarm.TextEditing
 #endif
             if (newCharIndexPointTo < 0 || newCharIndexPointTo > _currentLine.CharCount())
             {
-                throw new NotSupportedException("index out of range");
+                System.Diagnostics.Debugger.Break();
+                return;
+                // throw new NotSupportedException("index out of range");
             }
 
 
@@ -1015,11 +1039,11 @@ namespace LayoutFarm.TextEditing
         //
         public bool IsOnEndOfLine => caret_char_index == _currentLine.CharCount();
         //
-        internal TextLineBox GetTextLine(int lineId) => TextLayer.GetTextLine(lineId);
+        internal TextLineBox GetTextLine(int lineId) => _textFlowLayer.GetTextLine(lineId);
         //
-        internal TextLineBox GetTextLineAtPos(int y) => TextLayer.GetTextLineAtPos(y);
+        internal TextLineBox GetTextLineAtPos(int y) => _textFlowLayer.GetTextLineAtPos(y);
         //
-        public int LineCount => TextLayer.LineCount;
+        public int LineCount => _textFlowLayer.LineCount;
         //
         public bool HasNextLine => _currentLine.Next != null;
         //
@@ -1029,10 +1053,10 @@ namespace LayoutFarm.TextEditing
         //
         public int CharCount => _currentLine.CharCount();
         //
-        public void CopyLineContent(StringBuilder stBuilder) => _currentLine.CopyLineContent(stBuilder);
+        public void CopyLineContent(TextCopyBuffer output) => _currentLine.CopyLineContent(output);
 
         //
-        public void CopySelectedTextRuns(VisualSelectionRange selectionRange, TextRangeCopy output) => _currentLine.Copy(selectionRange, output);
+        public void CopySelectedTextRuns(VisualSelectionRange selectionRange, TextCopyBuffer output) => _currentLine.Copy(selectionRange, output);
 
         //
         public int LineNumber => _currentLine.LineNumber;
@@ -1044,6 +1068,5 @@ namespace LayoutFarm.TextEditing
         //
         public Rectangle LineArea => _currentLine.ActualLineArea;
 
-        internal TextFlowLayer TextLayer => _currentLine.OwnerFlowLayer;
     }
 }

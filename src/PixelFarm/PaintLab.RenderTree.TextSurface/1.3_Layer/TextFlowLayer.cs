@@ -2,9 +2,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
+using Typography.Text;
+
 namespace LayoutFarm.TextEditing
 {
     class TextMarkerLayer
@@ -43,8 +44,9 @@ namespace LayoutFarm.TextEditing
         public event EventHandler ContentSizeChanged;//TODO: review this field 
 
         //TODO: use linked-list or tree for lines??
-        List<TextLineBox> _lines = new List<TextLineBox>();
-        ITextFlowLayerOwner _owner;
+        readonly List<TextLineBox> _lines = new List<TextLineBox>();
+        readonly ITextFlowLayerOwner _owner;
+        internal readonly CharSource _charSource = new CharSource();
 
         public TextFlowLayer(ITextFlowLayerOwner owner, RunStyle defaultSpanStyle)
         {
@@ -566,6 +568,7 @@ namespace LayoutFarm.TextEditing
 
         internal TextLineBox GetTextLineAtPos(int y)
         {
+            //TODO: review this again
             List<TextLineBox> lines = _lines;
             if (lines != null)
             {
@@ -593,8 +596,8 @@ namespace LayoutFarm.TextEditing
                 }
                 else
                 {
-                    //vary, 
-                    //TODO: use HeightTree?
+                    //TODO: if lines is not overlapped
+                    //we can use binary search 
 
                     int j = lines.Count;
                     for (int i = 0; i < j; ++i)
@@ -669,7 +672,7 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        public void CopyContentToStringBuilder(StringBuilder stBuilder)
+        public void CopyContent(TextCopyBuffer output)
         {
             List<TextLineBox> lines = _lines;
             int j = lines.Count;
@@ -678,9 +681,9 @@ namespace LayoutFarm.TextEditing
                 if (i > 0)
                 {
                     //TODO: review => preserve line ending char or not 
-                    stBuilder.AppendLine();
+                    output.AppendNewLine();
                 }
-                lines[i].CopyLineContent(stBuilder);
+                lines[i].CopyLineContent(output);
             }
         }
 

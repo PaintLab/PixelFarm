@@ -76,7 +76,7 @@ namespace LayoutFarm.TextEditing
         //
         public bool IsOnTheSameLine => _startPoint.LineId == _endPoint.LineId;
         //
-        public void SwapIfUnOrder()
+        public void Normalize()
         {
             if (IsOnTheSameLine)
             {
@@ -183,7 +183,7 @@ namespace LayoutFarm.TextEditing
             if (IsOnTheSameLine)
             {
                 if (lineNo == _startPoint.LineId)
-                { 
+                {
                     clipLeft = TopEnd.X;
                     clipWidth = BottomEnd.X - clipLeft;
 
@@ -193,7 +193,7 @@ namespace LayoutFarm.TextEditing
                 {
                     clipLeft = clipWidth = 0;
                     return ClipRectKind.No;
-                }               
+                }
             }
             else
             {
@@ -395,7 +395,7 @@ namespace LayoutFarm.TextEditing
             if (IsOnTheSameLine)
             {
                 TextLineBox line = _startLocation.line;
-                if (line.OwnerFlowLayer == null)
+                if (!line.HasOwnerFlowLayer)
                 {
                     //this marker should be remove or not
                     return;
@@ -409,7 +409,7 @@ namespace LayoutFarm.TextEditing
                 TextLineBox startLine = _startLocation.line;
                 TextLineBox endLine = _stopLocation.line;
 
-                if (startLine.OwnerFlowLayer == null || endLine.OwnerFlowLayer == null)
+                if (!startLine.HasOwnerFlowLayer || !endLine.HasOwnerFlowLayer)
                 {
                     //this marker should be remove or not
                     return;

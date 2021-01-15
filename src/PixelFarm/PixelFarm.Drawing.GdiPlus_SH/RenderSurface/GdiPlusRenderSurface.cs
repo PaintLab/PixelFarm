@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using Typography.TextBreak;
 using Typography.Text;
 using Win32;
+using PixelFarm.CpuBlit;
 
 namespace PixelFarm.Drawing.WinGdi
 {
@@ -1200,6 +1201,9 @@ namespace PixelFarm.Drawing.WinGdi
             _rendersx.MeasureString(buffer, startAt, len, new Rectangle(), out w, out h);
         }
 
-
+        public void PrepareStringForRenderVx(AggRenderVxFormattedString renderVx, IFormattedGlyphPlanList fmtGlyphPlans)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

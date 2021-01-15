@@ -3,10 +3,11 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-
-using PixelFarm.Drawing;
-using LayoutFarm.TextEditing.Commands;
 using System.Text;
+
+using LayoutFarm.TextEditing.Commands;
+using PixelFarm.Drawing;
+using Typography.Text;
 
 namespace LayoutFarm.TextEditing
 {
@@ -31,21 +32,24 @@ namespace LayoutFarm.TextEditing
         }
 
         public Run CurrentTextRun => _lineEditor.GetCurrentTextRun();
-        public void CopyAllToPlainText(StringBuilder output)
+        public void CopyAllToPlainText(TextCopyBuffer output)
         {
             _lineEditor.CopyContentToStrignBuilder(output);
         }
-
+        public void CopySelectedTextToPlainText(TextCopyBuffer output)
+        {
+            //TODO: review here!
+        }
         public void CopySelectedTextToPlainText(StringBuilder stBuilder)
         {
             if (_selectionRange != null)
             {
-                _selectionRange.SwapIfUnOrder();
+                _selectionRange.Normalize();
                 if (_selectionRange.IsOnTheSameLine)
                 {
-                    var copyRuns = new TextRangeCopy();
+                    var copyRuns = new TextCopyBuffer();
                     _lineEditor.CopySelectedTextRuns(_selectionRange, copyRuns);
-                    copyRuns.CopyContentToStringBuilder(stBuilder);
+                    copyRuns.CopyTo(stBuilder);
 
                 }
                 else
@@ -53,17 +57,17 @@ namespace LayoutFarm.TextEditing
                     VisualPointInfo startPoint = _selectionRange.StartPoint;
                     CurrentLineNumber = startPoint.LineId;
                     _lineEditor.SetCurrentCharIndex(startPoint.LineCharIndex);
-                    var copyRuns = new TextRangeCopy();
+                    var copyRuns = new TextCopyBuffer();
                     _lineEditor.CopySelectedTextRuns(_selectionRange, copyRuns);
-                    copyRuns.CopyContentToStringBuilder(stBuilder);
+                    copyRuns.CopyTo(stBuilder);
                 }
             }
         }
-        public void CopyCurrentLine(StringBuilder output)
+        public void CopyCurrentLine(TextCopyBuffer output)
         {
             _lineEditor.CopyLineContent(output);
         }
-        public void CopyLine(int lineNum, StringBuilder output)
+        public void CopyLine(int lineNum, TextCopyBuffer output)
         {
             if (_lineEditor.LineNumber == lineNum)
             {
@@ -285,39 +289,50 @@ namespace LayoutFarm.TextEditing
                     if (backward)
                     {
                         //move caret backward
-                        char prevChar = _lineEditor.PrevChar;
+                        int prevChar = _lineEditor.PrevChar;
                         int tmp_index = charIndex;
 #if DEBUG
-                        UnicodeCategory unicodeCat = char.GetUnicodeCategory(prevChar);
-                        bool is_highSurrogate = char.IsHighSurrogate(prevChar);
-                        bool is_lowSurrogate = char.IsLowSurrogate(prevChar);
+                        //UnicodeCategory unicodeCat = char.GetUnicodeCategory(prevChar);
+                        //bool is_highSurrogate = char.IsHighSurrogate(prevChar);
+                        //bool is_lowSurrogate = char.IsLowSurrogate(prevChar);
 #endif
-                        
 
-                        while (prevChar != '\0' && tmp_index > 0 && (char.IsLowSurrogate(prevChar) || !CanCaretStopOnThisChar(prevChar)))
+
+                        while (prevChar != '\0' && tmp_index > 0 && !CanCaretStopOnThisChar(prevChar))
                         {
                             _lineEditor.SetCurrentCharStepLeft();
                             prevChar = _lineEditor.PrevChar;
                             tmp_index--;
                         }
+
+                        //if (char.IsLowSurrogate(_lineEditor.CurrentChar))
+                        //{
+                        //    _lineEditor.SetCurrentCharStepLeft();
+                        //}
                     }
                     else
                     {
-                        char nextChar = _lineEditor.NextChar;
+                        int nextChar = _lineEditor.NextChar;
 
-#if DEBUG
-                        UnicodeCategory unicodeCat = char.GetUnicodeCategory(nextChar);
-                        bool is_highSurrogate = char.IsHighSurrogate(nextChar);
-                        bool is_lowSurrogate = char.IsLowSurrogate(nextChar);
-#endif
+                        //#if DEBUG
+                        //                        UnicodeCategory unicodeCat = char.GetUnicodeCategory(nextChar);
+                        //                        bool is_highSurrogate = char.IsHighSurrogate(nextChar);
+                        //                        bool is_lowSurrogate = char.IsLowSurrogate(nextChar);
+                        //#endif
+
                         int lineCharCount = _lineEditor.CharCount;
                         int tmp_index = charIndex + 1;
-                        while (nextChar != '\0' && tmp_index <= lineCharCount && (char.IsLowSurrogate(nextChar) || !CanCaretStopOnThisChar(nextChar)))
+                        while (nextChar != '\0' && tmp_index <= lineCharCount && !CanCaretStopOnThisChar(nextChar))
                         {
                             _lineEditor.SetCurrentCharStepRight();
                             nextChar = _lineEditor.NextChar;
                             tmp_index++;
                         }
+
+                        //if (char.IsLowSurrogate(_lineEditor.CurrentChar))
+                        //{
+                        //    _lineEditor.SetCurrentCharStepRight();
+                        //} 
                     }
 
                 }
@@ -339,6 +354,12 @@ namespace LayoutFarm.TextEditing
                 _dbugActivityRecorder.EndContext();
             }
 #endif
+        }
+
+        public void ReplaceCurrentLine(string newlineContent)
+        {
+            //temp fix
+            throw new NotSupportedException();
         }
         public void DoHome()
         {
@@ -433,9 +454,17 @@ namespace LayoutFarm.TextEditing
         {
             s_CaretCanStopOnThisChar = caretCanStopOnThisCharDel;
         }
-        internal static bool CanCaretStopOnThisChar(char c)
+        internal static bool CanCaretStopOnThisChar(int c)
         {
-            UnicodeCategory unicodeCatg = char.GetUnicodeCategory(c);
+            char upper = (char)(c >> 16);
+            char lower = (char)c;
+
+            if (char.IsHighSurrogate((char)upper))
+            {
+                return false;
+            }
+
+            UnicodeCategory unicodeCatg = char.GetUnicodeCategory(lower);
             switch (unicodeCatg)
             {
 
@@ -454,7 +483,7 @@ namespace LayoutFarm.TextEditing
 
                     if (s_CaretCanStopOnThisChar != null)
                     {
-                        return s_CaretCanStopOnThisChar(c);
+                        return s_CaretCanStopOnThisChar(lower);
                     }
                     break;
                 case UnicodeCategory.NonSpacingMark:

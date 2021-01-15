@@ -53,8 +53,9 @@
     <Compile Include="1.2_Lines\4_TextLine_ArrangeAndResizingMechanism.cs" />
     <Compile Include="1.2_Lines\5_TextLine_Advanced.cs" />
     <Compile Include="1.2_Lines\debugActivityRecorder.cs" />
+    <Compile Include="1.2_Lines\RunListPool.cs" />
     <Compile Include="1.2_Lines\TextLineWalker.cs" />
-    <Compile Include="1.2_Lines\TextRangeCopy.cs" />
+    <Compile Include="1.2_Lines\TextCopyBuffer.cs" />
     <Compile Include="1.3_Layer\TextFlowLayer.cs" />
     <Compile Include="1.3_Layer\ITextFlowOwner.cs" />
     <Compile Include="1.3_Layer\RunVisitor.cs" />
@@ -96,6 +97,9 @@
       <Project>{5278fab9-33f0-40e0-adca-7237ea0e935b}</Project>
       <Name>Typography.One</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="3.0_EditableLine2\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

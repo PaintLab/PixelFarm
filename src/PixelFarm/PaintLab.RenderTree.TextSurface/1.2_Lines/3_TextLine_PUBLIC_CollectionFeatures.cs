@@ -1,9 +1,41 @@
 ﻿//Apache2, 2014-present, WinterDev
-
+using System;
+using Typography.Text;
 namespace LayoutFarm.TextEditing
 {
     partial class TextLineBox
     {
+        //each textline has a special
+
+        internal CharSource CharSource => _textFlowLayer._charSource;
+
+        public TextRun CreateTextRun(int c)
+        {
+            //new char is add to internal char buffer
+            return new TextRun(DefaultRunStyle, CharSource.NewSpan(c));
+        }
+        public TextRun CreateTextRun(char[] charbuff)
+        {
+            //new char is add to internal char buffer
+            return new TextRun(DefaultRunStyle, CharSource.NewSpan(charbuff, 0, charbuff.Length));
+        }
+        public TextRun CreateTextRun(string text)
+        {
+            //new char is add to internal char buffer
+            return new TextRun(DefaultRunStyle, CharSource.NewSpan(text));
+        }
+        public TextRun CreateTextRun(TextBufferSpan textspan)
+        {
+            return new TextRun(DefaultRunStyle, CharSource.NewSegment(textspan));
+        }
+        public TextRun CreateTextRun(ArraySegment<int> textspan)
+        {
+            return new TextRun(DefaultRunStyle, CharSource.NewSegment(textspan));
+        }
+        public TextRun CreateTextRun(ArraySegment<char> textspan)
+        {
+            return new TextRun(DefaultRunStyle, CharSource.NewSegment(textspan));
+        }
         public void AddLast(Run v)
         {
             AddNormalRunToLast(v);
@@ -20,42 +52,37 @@ namespace LayoutFarm.TextEditing
         {
             AddNormalRunToFirst(v);
         }
-        public RunStyle DefaultRunStyle => _textFlowLayer.DefaultRunStyle;
-        public Run AddBefore(Run beforeVisualElement, CopyRun v)
+
+        RunStyle DefaultRunStyle => _textFlowLayer.DefaultRunStyle;
+
+        public Run AddBefore(Run beforeVisRun, CharSpan v)
         {
-            var newRun = new TextRun(DefaultRunStyle, v.RawContent);
-            AddBefore(beforeVisualElement, newRun);
+            var newRun = new TextRun(DefaultRunStyle, v);
+            AddBefore(beforeVisRun, newRun);
             return newRun;
         }
-        public void AddBefore(Run beforeVisualElement, Run v)
+
+        public void AddBefore(Run beforeVisRun, Run v)
         {
-            AddNormalRunBefore(beforeVisualElement, v);
+            AddNormalRunBefore(beforeVisRun, v);
         }
-        public TextRun AddAfter(Run afterVisualElement, CopyRun v)
+
+        public TextRun AddAfter(Run afterVisRun, CopyRun v)
         {
-            var newRun = new TextRun(DefaultRunStyle, v.RawContent);
-            AddAfter(afterVisualElement, newRun);
+            var newRun = CreateTextRun(v.RawContent);
+            AddAfter(afterVisRun, newRun);
             return newRun;
         }
-        public void AddAfter(Run afterVisualElement, Run v)
+        public TextRun AddAfter(Run afterVisRun, CharSpan v)
         {
-            AddNormalRunAfter(afterVisualElement, v);
+            var newRun = new TextRun(DefaultRunStyle, v);
+            AddAfter(afterVisRun, newRun);
+            return newRun;
         }
-        internal void UnsafeAddLast(Run run)
+        public void AddAfter(Run afterVisRun, Run v)
         {
-            run.SetLinkNode(_runs.AddLast(run), this);
+            AddNormalRunAfter(afterVisRun, v);
         }
-        internal void UnsafeAddFirst(Run run)
-        {
-            run.SetLinkNode(_runs.AddFirst(run), this);
-        }
-        internal void UnsafeAddAfter(Run after, Run run)
-        {
-            run.SetLinkNode(_runs.AddAfter(GetLineLinkNode(after), run), this);
-        }
-        internal void UnsafeRemoveVisualElement(Run v)
-        {
-            _runs.Remove(GetLineLinkNode(v));
-        }
+
     }
 }

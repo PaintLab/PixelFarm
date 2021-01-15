@@ -5,9 +5,17 @@ namespace OpenTK.Graphics.ES30 {
  using System.Runtime.InteropServices; 
   public partial class GL{
   public void LoadAll(){
-     GLDelInit.LoadAll();
-}
-public static partial class Amd
+#if DEBUG
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
+#endif
+            GLDelInit.LoadAll();
+#if DEBUG
+            sw.Stop();
+            long ms1 = sw.ElapsedMilliseconds;
+#endif
+        }
+        public static partial class Amd
 {
     /// <summary>[requires: AMD_performance_monitor]</summary>
     /// <param name="monitor"></param>

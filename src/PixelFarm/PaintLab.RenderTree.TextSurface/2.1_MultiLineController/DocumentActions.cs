@@ -2,7 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-
+using Typography.Text;
 namespace LayoutFarm.TextEditing.Commands
 {
     public enum DocumentActionName
@@ -27,12 +27,12 @@ namespace LayoutFarm.TextEditing.Commands
 
         void TryMoveCaretTo(int charIndex, bool backward = false);
         bool DoBackspace();
-        void AddCharToCurrentLine(char c);
+        void AddCharToCurrentLine(int c);
         VisualSelectionRangeSnapShot DoDelete();
         void DoEnd();
         void DoHome();
         void SplitCurrentLineIntoNewLine();
-        void AddTextRunsToCurrentLine(TextRangeCopy copy);
+        void AddTextRunsToCurrentLine(TextCopyBuffer copy);
         void AddTextRunToCurrentLine(CopyRun copy);
     }
 
@@ -63,14 +63,14 @@ namespace LayoutFarm.TextEditing.Commands
 
     public class DocActionCharTyping : DocumentAction
     {
-        readonly char _c;
-        public DocActionCharTyping(char c, int lineNumber, int charIndex)
+        readonly int _c;
+        public DocActionCharTyping(int c, int lineNumber, int charIndex)
             : base(lineNumber, charIndex)
         {
             _c = c;
         }
         public override ChangeRegion ChangeRegion => ChangeRegion.Line;
-        public char Char => _c;
+        public int Char => _c;
         public override DocumentActionName Name => DocumentActionName.CharTyping;
         public override void InvokeUndo(ITextFlowEditSession editSess)
         {
@@ -132,13 +132,13 @@ namespace LayoutFarm.TextEditing.Commands
 
     public class DocActionDeleteChar : DocumentAction
     {
-        readonly char _c;
-        public DocActionDeleteChar(char c, int lineNumber, int editSess)
+        readonly int _c;
+        public DocActionDeleteChar(int c, int lineNumber, int editSess)
             : base(lineNumber, editSess)
         {
             _c = c;
         }
-        public char Char => _c;
+        public int Char => _c;
         public override ChangeRegion ChangeRegion => ChangeRegion.Line;
         public override DocumentActionName Name => DocumentActionName.DeleteChar;
         public override void InvokeUndo(ITextFlowEditSession editSess)
@@ -156,9 +156,9 @@ namespace LayoutFarm.TextEditing.Commands
     }
     public class DocActionDeleteRange : DocumentAction
     {
-        TextRangeCopy _deletedTextRuns;
+        TextCopyBuffer _deletedTextRuns;
         readonly int _endCharIndex;
-        public DocActionDeleteRange(TextRangeCopy deletedTextRuns, int startLineNum, int startColumnNum,
+        public DocActionDeleteRange(TextCopyBuffer deletedTextRuns, int startLineNum, int startColumnNum,
             int endLineNum, int endColumnNum)
             : base(startLineNum, startColumnNum)
         {
@@ -191,10 +191,10 @@ namespace LayoutFarm.TextEditing.Commands
     public class DocActionInsertRuns : DocumentAction
     {
         CopyRun _singleInsertTextRun;
-        TextRangeCopy _insertingTextRuns;
+        TextCopyBuffer _insertingTextRuns;
 
         int _endCharIndex;
-        public DocActionInsertRuns(TextRangeCopy insertingTextRuns,
+        public DocActionInsertRuns(TextCopyBuffer insertingTextRuns,
             int startLineNumber, int startCharIndex, int endLineNumber, int endCharIndex)
             : base(startLineNumber, startCharIndex)
         {
@@ -218,7 +218,7 @@ namespace LayoutFarm.TextEditing.Commands
             }
             else
             {
-                _insertingTextRuns.CopyContentToStringBuilder(output);
+                _insertingTextRuns.CopyTo(output);
             }
         }
 

@@ -78,7 +78,7 @@ namespace LayoutFarm.CustomWidgets
                     //similar to size change
                     //for gfx-invalidation, we need a size before change and after change 
 
-                    var textBufferSpan = new TextBufferSpan(_textBuffer);
+                    var textBufferSpan = new Typography.Text.TextBufferSpan(_textBuffer);
                     Size newSize = Typography.Text.GlobalTextService.TxtClient.MeasureString(textBufferSpan, _font);//just measure
                     int newW = Width;
                     int newH = Height;
@@ -115,6 +115,8 @@ namespace LayoutFarm.CustomWidgets
                 _font = value;
             }
         }
+
+        public bool MayOverlapOther { get; set; }//temp fix
 
         public int PaddingLeft
         {
@@ -255,7 +257,7 @@ namespace LayoutFarm.CustomWidgets
                     {
                         int newW = this.Width;
                         int newH = this.Height;
-                        var buff = new TextBufferSpan(_textBuffer);
+                        var buff = new Typography.Text.TextBufferSpan(_textBuffer);
                         Size size = Typography.Text.GlobalTextService.TxtClient.MeasureString(buff, _font);
                         if (!this.HasSpecificWidth)
                         {
@@ -329,39 +331,44 @@ namespace LayoutFarm.CustomWidgets
                 //in that case, we can hint the text-rendering with host color instead
                 //so we try to check the host color by policy that configure  on this CustomTextRun
 
-                //TODO: if the 
-
+                //TODO: if the  
             }
 
             if (_textBuffer.Length > 2)
             {
-                //for long text ? => configurable? 
-                //use formatted string
-                if (_renderVxFormattedString == null)
+                if (MayOverlapOther && _backColor.A == 0)
                 {
-                    _renderVxFormattedString = d.CreateFormattedString(_textBuffer, 0, _textBuffer.Length, DelayFormattedString);
+                    //transparent
+                    //short text => run
+                    d.DrawText(_textBuffer, _contentLeft, _contentTop);
                 }
-                //-------------
-                switch (_renderVxFormattedString.State)
+                else
                 {
-                    case RenderVxFormattedString.VxState.Ready:
+                    //for long text ? => configurable? 
+                    //use formatted string
+                    if (_renderVxFormattedString == null)
+                    {
+                        _renderVxFormattedString = d.CreateFormattedString(_textBuffer, 0, _textBuffer.Length, DelayFormattedString);
+                    }
+                    //-------------
+                    switch (_renderVxFormattedString.State)
+                    {
+                        case RenderVxFormattedString.VxState.Ready:
 
+                            d.DrawRenderVx(_renderVxFormattedString, _contentLeft, _contentTop);
+                            break;
+                        case RenderVxFormattedString.VxState.NoStrip:
 
+                            //put this to the update queue system
+                            //(TODO: add extension method for this)
 
-                        d.DrawRenderVx(_renderVxFormattedString, _contentLeft, _contentTop);
+                            GlobalRootGraphic.CurrentRootGfx.EnqueueRenderRequest(new RenderBoxes.RenderElementRequest(
+                                  this,
+                                  RenderBoxes.RequestCommand.ProcessFormattedString,
+                                  _renderVxFormattedString));
 
-                        break;
-                    case RenderVxFormattedString.VxState.NoStrip:
-
-                        //put this to the update queue system
-                        //(TODO: add extension method for this)
-
-                        GlobalRootGraphic.CurrentRootGfx.EnqueueRenderRequest(new RenderBoxes.RenderElementRequest(
-                              this,
-                              RenderBoxes.RequestCommand.ProcessFormattedString,
-                              _renderVxFormattedString));
-
-                        break;
+                            break;
+                    }
                 }
             }
             else

@@ -87,12 +87,12 @@ namespace LayoutFarm.TextEditing
         public override void Blur()
         {
             if (_isEditable && !_blurring)
-            { 
+            {
                 _blurring = true;
                 GlobalCaretController.CurrentTextEditBox = null;
                 this.SetCaretVisible(false);
                 _isFocus = false;
-                _blurring = false; 
+                _blurring = false;
             }
         }
 
@@ -294,7 +294,7 @@ namespace LayoutFarm.TextEditing
                         break;
                     case UIKeys.C:
                         {
-                            using (StringBuilderPool<TempTextLineCopyContext>.GetFreeStringBuilder(out StringBuilder stBuilder))
+                            using (new StringBuilderPoolContext<TextEditRenderBox>(out StringBuilder stBuilder))
                             {
                                 _editSession.CopySelectedTextToPlainText(stBuilder);
                                 if (stBuilder != null)
@@ -309,6 +309,7 @@ namespace LayoutFarm.TextEditing
                                     }
                                 }
                             }
+
                         }
                         break;
                     case UIKeys.V:
@@ -330,7 +331,7 @@ namespace LayoutFarm.TextEditing
                             {
                                 InvalidateGraphicOfCurrentSelectionArea();
 
-                                using (StringBuilderPool<TempTextLineCopyContext>.GetFreeStringBuilder(out StringBuilder stBuilder))
+                                using (new StringBuilderPoolContext<TextEditRenderBox>(out StringBuilder stBuilder))
                                 {
                                     _editSession.CopySelectedTextToPlainText(stBuilder);
                                     if (stBuilder != null)
@@ -917,7 +918,7 @@ namespace LayoutFarm.TextEditing
             if (_editSession.SelectionRange != null)
             {
                 VisualSelectionRange visualSelectionRange = _editSession.SelectionRange;
-                visualSelectionRange.SwapIfUnOrder();
+                visualSelectionRange.Normalize();
                 if (visualSelectionRange.IsValid && !visualSelectionRange.IsOnTheSameLine)
                 {
                     InvalidateGraphicOfCurrentSelectionArea();

@@ -1,6 +1,5 @@
 ﻿//MIT, 2019-present, WinterDev
 using System;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace LayoutFarm.TextEditing
@@ -43,6 +42,7 @@ namespace LayoutFarm.TextEditing
         {
             stbuilder.Append(_text);
         }
+      
         public void CopyText(char[] destBuffer, int srcIndex, int srcLen, int dstIndex)
         {
             Array.Copy(_text, srcIndex, destBuffer, dstIndex, srcLen);

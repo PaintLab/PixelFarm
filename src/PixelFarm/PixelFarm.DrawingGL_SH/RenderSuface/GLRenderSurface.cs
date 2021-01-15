@@ -1873,8 +1873,8 @@ namespace PixelFarm.DrawingGL
             _vertexList = vertexList;
             _indexList = indexlist;
         }
-        public ArrayListSpan<float> CreateVertextListSpan() => new ArrayListSpan<float>(_vertexList, _v_startIndex, _vertexList.Count - _v_startIndex);
-        public ArrayListSpan<ushort> CreateIndexListSpan() => new ArrayListSpan<ushort>(_indexList, _i_startIndex, _indexList.Count - _i_startIndex);
+        public ArrayListSegment<float> CreateVertextListSpan() => new ArrayListSegment<float>(_vertexList, _v_startIndex, _vertexList.Count - _v_startIndex);
+        public ArrayListSegment<ushort> CreateIndexListSpan() => new ArrayListSegment<ushort>(_indexList, _i_startIndex, _indexList.Count - _i_startIndex);
 
         public void SetTextureInfo(int width, int height, bool isYFlipped, RenderSurfaceOriginKind pcxOrgKind)
         {
