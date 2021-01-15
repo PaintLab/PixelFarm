@@ -139,7 +139,7 @@ namespace PixelFarm.DrawingGL
         static string[] GetCacheFontTextureFilenames()
         {
             List<string> alldirs = new List<string>();
-            foreach (string s in PixelFarm.Platforms.StorageService.Provider.GetDataNameList(""))
+            foreach (string s in PixelFarm.Platforms.StorageService.Provider.GetDataNameList("."))
             {
                 if (System.IO.Path.GetExtension(s) == ".tx_info")
                 {
