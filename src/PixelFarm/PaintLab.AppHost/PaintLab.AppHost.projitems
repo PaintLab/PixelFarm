@@ -15,6 +15,5 @@
     <Compile Include="$(MSBuildThisFileDirectory)DemoNote.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MyTextBreaker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RelativePathBuilder.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SmartApp.cs" />
   </ItemGroup>
 </Project>
