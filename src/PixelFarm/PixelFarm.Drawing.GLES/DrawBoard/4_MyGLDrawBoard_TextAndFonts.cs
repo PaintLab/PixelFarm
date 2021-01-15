@@ -104,20 +104,29 @@ namespace PixelFarm.Drawing.GLES2
         {
             if (renderVx is DrawingGL.GLRenderVxFormattedString vxFmtStr)
             {
+                DrawingGL.IGLTextPrinter textPrinter = _gpuPainter.TextPrinter;
+                DrawingGL.GlyphTexturePrinterDrawingTechnique prev = textPrinter.TextDrawingTechnique;
+
+                DrawingGL.GlyphTexturePrinterDrawingTechnique cur = DrawingGL.GlyphTexturePrinterDrawingTechnique.Copy;
+                switch (this.TextDrawingTech)
+                {
+                    //temp fix
+                    case TextDrawingTech.LcdSubPix:
+                        cur = DrawingGL.GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering;
+                        break;
+                    case TextDrawingTech.Stencil:
+                        cur = DrawingGL.GlyphTexturePrinterDrawingTechnique.Stencil;
+                        break;
+                    case TextDrawingTech.Copy:
+                        cur = DrawingGL.GlyphTexturePrinterDrawingTechnique.Copy;
+                        break;
+                }
+
+                textPrinter.TextDrawingTechnique = cur;
+                
                 _gpuPainter.TextPrinter.DrawString(vxFmtStr, x, y);
-
-                //if (vxFmtStr.BmpOnTransparentBackground)
-                //{
-                //    DrawingGL.GlyphTexturePrinterDrawingTechnique prevTech = _gpuPainter.TextPrinterDrawingTechnique; //save
-                //    _gpuPainter.TextPrinterDrawingTechnique = DrawingGL.GlyphTexturePrinterDrawingTechnique.Copy;
-                //    _gpuPainter.TextPrinter.DrawString(vxFmtStr, x, y);
-                //    _gpuPainter.TextPrinterDrawingTechnique = prevTech;//restore
-                //}
-                //else
-                //{
-                //    _gpuPainter.TextPrinter.DrawString(vxFmtStr, x, y);
-                //}
-
+                
+                textPrinter.TextDrawingTechnique = prev;//restore
             }
         }
 

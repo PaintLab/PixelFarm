@@ -23,6 +23,11 @@ namespace PixelFarm.DrawingGL
         void ChangeStrokeColor(Color strokColor);
         TextBaseline TextBaseline { get; set; }
         void DrawString(char[] text, int startAt, int len, double left, double top);
+
+        /// <summary>
+        /// text drawing technique
+        /// </summary>
+        GlyphTexturePrinterDrawingTechnique TextDrawingTechnique { get; set; }
     }
 
     partial class GLPainter

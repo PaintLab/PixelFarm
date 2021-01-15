@@ -128,19 +128,20 @@ namespace PixelFarm.Drawing.GLES2
             {
                 //temp fix
                 _textDrawingTechnique = value;
+                GlyphTexturePrinterDrawingTechnique tech = GlyphTexturePrinterDrawingTechnique.Copy;
                 switch (value)
                 {
                     case TextDrawingTech.LcdSubPix:
-                        ((GLBitmapGlyphTextPrinter)_gpuPainter.TextPrinter).TextDrawingTechnique = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering;
+                        tech = GlyphTexturePrinterDrawingTechnique.LcdSubPixelRendering;
                         break;
                     case TextDrawingTech.Stencil:
-                        ((GLBitmapGlyphTextPrinter)_gpuPainter.TextPrinter).TextDrawingTechnique = GlyphTexturePrinterDrawingTechnique.Stencil;
+                        tech = GlyphTexturePrinterDrawingTechnique.Stencil;
                         break;
                     case TextDrawingTech.Copy:
-                        ((GLBitmapGlyphTextPrinter)_gpuPainter.TextPrinter).TextDrawingTechnique = GlyphTexturePrinterDrawingTechnique.Copy;
+                        tech = GlyphTexturePrinterDrawingTechnique.Copy;
                         break;
                 }
-
+                _gpuPainter.TextPrinter.TextDrawingTechnique = tech;
             }
         }
 

@@ -33,7 +33,7 @@ namespace LayoutFarm.TextEditing
 
             defaultRunStyle.ReqFont = GlobalRootGraphic.CurrentRootGfx.DefaultTextEditFontInfo;//TODO: review here
 
-            _textLayer = new TextFlowLayer(this, defaultRunStyle); //presentation
+            _textLayer = new TextFlowLayer(this, defaultRunStyle);
             _textLayer.ContentSizeChanged += (s, e) => OnTextContentSizeChanged();
 
             //
@@ -56,7 +56,7 @@ namespace LayoutFarm.TextEditing
         public Color SelectionBackgroundColor { get; set; } = Color.Yellow;
         void ITextFlowLayerOwner.ClientLayerBubbleUpInvalidateArea(Rectangle clientInvalidatedArea)
         {
-            ////client line send up 
+            //client line send up 
             clientInvalidatedArea.Offset(this.X, this.Y);
             InvalidateParentGraphics(clientInvalidatedArea);
 
@@ -520,7 +520,7 @@ namespace LayoutFarm.TextEditing
         {
             RequestFont enterFont = d.CurrentFont;
             TextDrawingTech prev_text_drawing_tech = d.TextDrawingTech;//backup
-            
+
             d.TextDrawingTech = this.TextDrawingTech;
 
             d.CurrentFont = this.CurrentTextSpanStyle.ReqFont;
@@ -537,13 +537,13 @@ namespace LayoutFarm.TextEditing
             }
 
             //2.1 markers 
-            if (RenderMarkers && _markerLayer != null &&
-                _markerLayer.VisualMarkerCount > 0)
+            if (RenderMarkers && _markerLayer != null && _markerLayer.VisualMarkerCount > 0)
             {
-                foreach (VisualMarkerSelectionRange marker in _markerLayer.VisualMarkers)
+                for (int i = 0; i < _markerLayer.VisualMarkerCount; ++i)
                 {
-                    marker.Draw(d, updateArea);
+                    _markerLayer.VisualMarkers[i].Draw(d, updateArea);
                 }
+
             }
 
             Color prev_hintColor = d.TextBackgroundColorHint;
@@ -580,7 +580,6 @@ namespace LayoutFarm.TextEditing
 #if DEBUG
             //for debug
             //canvas.FillRectangle(Color.Red, 0, 0, 5, 5);
-
 #endif
 
             d.CurrentFont = enterFont;
@@ -758,7 +757,7 @@ namespace LayoutFarm.TextEditing
         {
             _editSession.SplitCurrentLineIntoNewLine();
         }
-        
+
         public void AddTextRun(char[] buffer)
         {
             _editSession.AddTextRunToCurrentLine(buffer);
