@@ -259,16 +259,15 @@ namespace LayoutFarm.CustomWidgets
         public void CopyCurrentLine(Typography.Text.TextCopyBuffer output)
         {
             //TODO
-            throw new NotSupportedException();
+            _textEditRenderElement.CopyCurrentLine(output);
         }
 #if DEBUG
         public override void SetLocation(int left, int top)
         {
+            //for debug
             base.SetLocation(left, top);
         }
 #endif
-
-
         public override void SetText(IEnumerable<string> lines)
         {
             _doc = PlainTextDocumentHelper.CreatePlainTextDocument(lines);
