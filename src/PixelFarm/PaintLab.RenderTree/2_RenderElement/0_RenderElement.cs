@@ -183,6 +183,10 @@ namespace LayoutFarm
                       _propFlags & ~RenderElementConst.MAY_HAS_VIEWPORT;
             }
         }
+
+        /// <summary>
+        /// this element needs pre-render evalution
+        /// </summary>
         public bool NeedPreRenderEval
         {
             get => (_propFlags & RenderElementConst.NEED_PRE_RENDER_EVAL) != 0;
@@ -194,7 +198,7 @@ namespace LayoutFarm
             }
         }
 
-   
+
         public virtual void ChildrenHitTestCore(HitChain hitChain)
         {
         }

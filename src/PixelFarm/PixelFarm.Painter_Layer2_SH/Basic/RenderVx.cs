@@ -15,11 +15,20 @@ namespace PixelFarm.Drawing
         public short SpanDescendingInPx { get; set; }
         public float Width { get; set; }
         public float SpanHeight { get; set; }
-        public VxState State { get; set; } 
+        public VxState State { get; set; }
         public enum VxState : byte
         {
+            /// <summary>
+            /// begin state, strip is not created
+            /// </summary>
             NoStrip,
+            /// <summary>
+            /// waiting for strip
+            /// </summary>
             Waiting,
+            /// <summary>
+            /// strip is ready
+            /// </summary>
             Ready,
         }
 #if DEBUG

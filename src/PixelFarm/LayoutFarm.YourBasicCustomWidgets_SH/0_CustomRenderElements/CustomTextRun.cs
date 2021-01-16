@@ -32,13 +32,9 @@ namespace LayoutFarm.CustomWidgets
             _font = GlobalRootGraphic.CurrentRootGfx.DefaultTextEditFontInfo;
             NeedPreRenderEval = true;
             TextDrawingTech = TextDrawingTech.Stencil;//default
-
         }
-
         public TextDrawingTech TextDrawingTech { get; set; }
         public bool DelayFormattedString { get; set; }
-
-
         public Color TextColor
         {
             get => _textColor;
@@ -65,11 +61,10 @@ namespace LayoutFarm.CustomWidgets
             {
                 //TODO: review here
                 //if input string is null => textBuffer= null               
-                _textBuffer = (value == null) ? null : value.ToCharArray();
-                //reset 
+                _textBuffer = value?.ToCharArray();
+                //reset
                 if (_renderVxFormattedString != null)
                 {
-
                     _renderVxFormattedString.Dispose();
                     _renderVxFormattedString = null;
                     //----------
@@ -78,6 +73,8 @@ namespace LayoutFarm.CustomWidgets
                     //similar to size change
                     //for gfx-invalidation, we need a size before change and after change 
 
+                    //TODO: review here,... 
+                    //use multi-states technique
                     var textBufferSpan = new Typography.Text.TextBufferSpan(_textBuffer);
                     Size newSize = Typography.Text.GlobalTextService.TxtClient.MeasureString(textBufferSpan, _font);//just measure
                     int newW = Width;
@@ -189,99 +186,96 @@ namespace LayoutFarm.CustomWidgets
                 _borderRight =
                 _borderBottom = value;
         }
+
+        const int USE_STRIP_WHEN_LENGTH_MORE_THAN = 2;
         protected override void PreRenderEvaluation(DrawBoard d)
         {
             //in this case we use formatted string
             //do not draw anything on this stage
-            if (_textBuffer != null)
+            if (_textBuffer == null) { return; }
+
+            if (_textBuffer.Length > USE_STRIP_WHEN_LENGTH_MORE_THAN)
             {
-                //for long text ? => configurable? 
-                //use formatted string
-                if (_textBuffer.Length > 2)
+                //for long text =>use formatted string => configurable? 
+
+                if (_renderVxFormattedString == null)
                 {
-                    if (_renderVxFormattedString == null)
-                    {
-                        if (d == null) { return; }
+                    if (d == null) { return; }
 
-                        Color prevColor = d.CurrentTextColor;
-                        RequestFont prevFont = d.CurrentFont;
-                        TextDrawingTech prevTechnique = d.TextDrawingTech;
+                    Color prevColor = d.CurrentTextColor;
+                    RequestFont prevFont = d.CurrentFont;
+                    TextDrawingTech prevTechnique = d.TextDrawingTech;
 
-                        d.CurrentTextColor = _textColor;
-                        d.CurrentFont = _font;
-                        d.TextDrawingTech = this.TextDrawingTech;
+                    d.CurrentTextColor = _textColor;
+                    d.CurrentFont = _font;
+                    d.TextDrawingTech = this.TextDrawingTech;
 
-                        //config delay or not
-                        _renderVxFormattedString = d.CreateFormattedString(_textBuffer, 0, _textBuffer.Length, this.DelayFormattedString);
+                    //create a render-vx formatted string                     
+                    _renderVxFormattedString = d.CreateFormattedString(_textBuffer, 0, _textBuffer.Length, this.DelayFormattedString);
 
-                        d.TextDrawingTech = prevTechnique;
-                        d.CurrentFont = prevFont;
-                        d.CurrentTextColor = prevColor;
-                    }
-
-                    switch (_renderVxFormattedString.State)
-                    {
-                        case RenderVxFormattedString.VxState.Ready:
-                            {
-                                //newsize
-                                //...
-
-                                int newW = this.Width;
-                                int newH = this.Height;
-
-                                if (!this.HasSpecificWidth)
-                                {
-                                    newW = _contentLeft + (int)System.Math.Ceiling(_renderVxFormattedString.Width) + _contentRight;
-                                }
-                                if (!this.HasSpecificHeight)
-                                {
-                                    newH = _contentTop + (int)System.Math.Ceiling(_renderVxFormattedString.SpanHeight) + _contentBottom;
-                                }
-
-                                SuspendGraphicsUpdate();
-                                SetSize(newW, newH);
-                                ResumeGraphicsUpdate();
-
-                                //after set this 
-                                NeedPreRenderEval = false;
-                            }
-                            break;
-                    }
+                    d.TextDrawingTech = prevTechnique;
+                    d.CurrentFont = prevFont;
+                    d.CurrentTextColor = prevColor;
                 }
-                else
+
+                switch (_renderVxFormattedString.State)
                 {
-                    //short content
-                    //but we must update content size
-                    //config delay or not 
-                    if (!this.HasSpecificWidthAndHeight)
-                    {
-                        int newW = this.Width;
-                        int newH = this.Height;
-                        var buff = new Typography.Text.TextBufferSpan(_textBuffer);
-                        Size size = Typography.Text.GlobalTextService.TxtClient.MeasureString(buff, _font);
-                        if (!this.HasSpecificWidth)
+                    case RenderVxFormattedString.VxState.Ready:
                         {
-                            newW = _contentLeft + size.Width + _contentRight;
+                            //newsize
+                            //...
+
+                            int newW = this.Width;
+                            int newH = this.Height;
+
+                            if (!this.HasSpecificWidth)
+                            {
+                                newW = _contentLeft + (int)System.Math.Ceiling(_renderVxFormattedString.Width) + _contentRight;
+                            }
+                            if (!this.HasSpecificHeight)
+                            {
+                                newH = _contentTop + (int)System.Math.Ceiling(_renderVxFormattedString.SpanHeight) + _contentBottom;
+                            }
+
+                            SuspendGraphicsUpdate();
+                            SetSize(newW, newH);
+                            ResumeGraphicsUpdate();
+
+
+                            NeedPreRenderEval = false; //mark as evalution is finish
                         }
-                        if (!this.HasSpecificHeight)
-                        {
-                            newH = _contentTop + size.Height + _contentBottom;
-                        }
-
-                        SuspendGraphicsUpdate();
-                        SetSize(newW, newH);
-                        ResumeGraphicsUpdate();
-
-                        //after set this 
-                        NeedPreRenderEval = false;
-                    }
-
+                        break;
                 }
             }
             else
             {
-                //no content
+                //short content
+                //but we must update content size
+                //config delay or not 
+                if (!this.HasSpecificWidthAndHeight)
+                {
+                    int newW = this.Width;
+                    int newH = this.Height;
+                    var buff = new Typography.Text.TextBufferSpan(_textBuffer);
+                    Size size = Typography.Text.GlobalTextService.TxtClient.MeasureString(buff, _font);
+                    if (!this.HasSpecificWidth)
+                    {
+                        newW = _contentLeft + size.Width + _contentRight;
+                    }
+                    if (!this.HasSpecificHeight)
+                    {
+                        newH = _contentTop + size.Height + _contentBottom;
+                    }
+
+                    SuspendGraphicsUpdate();
+                    SetSize(newW, newH);
+                    ResumeGraphicsUpdate();
+
+                    NeedPreRenderEval = false; //mark as evalution is finish
+                }
+
             }
+
         }
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
@@ -334,7 +328,7 @@ namespace LayoutFarm.CustomWidgets
                 //TODO: if the  
             }
 
-            if (_textBuffer.Length > 2)
+            if (_textBuffer.Length > USE_STRIP_WHEN_LENGTH_MORE_THAN)
             {
                 if (MayOverlapOther && _backColor.A == 0)
                 {
@@ -374,7 +368,6 @@ namespace LayoutFarm.CustomWidgets
             else
             {
 
-                //short text => run
                 d.DrawText(_textBuffer, _contentLeft, _contentTop);
             }
             //

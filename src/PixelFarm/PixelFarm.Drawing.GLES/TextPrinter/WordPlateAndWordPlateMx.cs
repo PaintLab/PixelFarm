@@ -8,17 +8,20 @@ using PixelFarm.Drawing;
 namespace PixelFarm.DrawingGL
 {
 
-
+    /// <summary>
+    /// wordplate manager
+    /// </summary>
     class WordPlateMx
     {
 
-        Dictionary<ushort, WordPlate> _wordPlates = new Dictionary<ushort, WordPlate>();
-        //**dictionay not guarantee sorted id**
-        Queue<WordPlate> _wordPlatesQueue = new Queue<WordPlate>();
+        readonly Dictionary<ushort, WordPlate> _wordPlates = new Dictionary<ushort, WordPlate>();
+        //**dictionay does not guarantee sorted id**
+
+        readonly Queue<WordPlate> _wordPlatesQueue = new Queue<WordPlate>();
         WordPlate _latestPlate;
 
-        int _defaultPlateW = 800;
-        int _defaultPlateH = 600;
+        int _defaultPlateW = 1024;
+        int _defaultPlateH = 1024;
 
         static ushort s_totalPlateId = 0;
 
@@ -58,7 +61,8 @@ namespace PixelFarm.DrawingGL
             }
             return GetNewWordPlate();
         }
-        public WordPlate GetNewWordPlate()
+
+        WordPlate GetNewWordPlate()
         {
             //create new and register  
             if (_wordPlates.Count == MaxPlateCount)
@@ -117,8 +121,8 @@ namespace PixelFarm.DrawingGL
         bool _full;
 
         internal readonly ushort _plateId;
-        Dictionary<GLRenderVxFormattedString, bool> _wordStrips = new Dictionary<GLRenderVxFormattedString, bool>();
         internal Drawing.GLES2.MyGLBackbuffer _backBuffer;
+        readonly Dictionary<GLRenderVxFormattedString, bool> _wordStrips = new Dictionary<GLRenderVxFormattedString, bool>();
 
         public event Action<WordPlate> Cleared;
 
@@ -144,7 +148,13 @@ namespace PixelFarm.DrawingGL
         }
 #endif
 
+        /// <summary>
+        /// inter-line space
+        /// </summary>
         const int INTERLINE_SPACE = 1; //px
+        /// <summary>
+        /// inter-word space
+        /// </summary>
         const int INTERWORD_SPACE = 1; //px
 
         public void Dispose()
@@ -177,9 +187,8 @@ namespace PixelFarm.DrawingGL
 #endif
             if (_currentX + width > _plateWidth)
             {
-                //move to newline                    
+                //move to newline
                 previewY += _currentLineHeightMax + INTERLINE_SPACE;
-
             }
 
             return previewY + renderVxFormattedString.SpanHeight < _plateHeight;
@@ -272,7 +281,7 @@ namespace PixelFarm.DrawingGL
             fmtstr.WordPlateLeft = (ushort)_currentX;
             fmtstr.WordPlateTop = (ushort)_currentY;
             fmtstr.UseWithWordPlate = true;
-            
+
 
 #if DEBUG
             dbugUsedCount++;

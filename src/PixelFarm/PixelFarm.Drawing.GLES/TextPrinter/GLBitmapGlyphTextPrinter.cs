@@ -1118,8 +1118,8 @@ namespace PixelFarm.DrawingGL
             //contains chain 
             _uniqueResolvedFonts.Clear();
 
-            _sh_indexList = null;
-            _sh_vertexList = null;
+            _sh_indexList = null; //reset
+            _sh_vertexList = null;//reset
         }
         public void PrepareStringForRenderVx(GLRenderVxFormattedString vxFmtStr, IFormattedGlyphPlanList fmtGlyphPlans)
         {
