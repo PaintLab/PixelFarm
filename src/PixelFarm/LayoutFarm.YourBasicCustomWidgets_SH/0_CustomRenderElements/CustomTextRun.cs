@@ -75,20 +75,45 @@ namespace LayoutFarm.CustomWidgets
 
                     //TODO: review here,... 
                     //use multi-states technique
-                    var textBufferSpan = new Typography.Text.TextBufferSpan(_textBuffer);
-                    Size newSize = Typography.Text.GlobalTextService.TxtClient.MeasureString(textBufferSpan, _font);//just measure
-                    int newW = Width;
-                    int newH = Height;
-                    if (!this.HasSpecificWidth)
-                    {
-                        newW = _contentLeft + (int)System.Math.Ceiling((float)newSize.Width) + _contentRight;
-                    }
-                    if (!this.HasSpecificHeight)
-                    {
-                        newH = _contentTop + (int)System.Math.Ceiling((float)newSize.Height) + _contentBottom;
-                    }
 
-                    SetSize(newW, newH);
+                    if (_textBuffer == null)
+                    {
+                        int newW = Width;
+                        int newH = Height;
+                        if (!this.HasSpecificWidth)
+                        {
+                            newW = _contentLeft + /*0*/ +_contentRight;
+                        }
+
+                        //TODO: review here
+                        if (!this.HasSpecificHeight)
+                        {
+                            //use current font height
+                            //newH =
+                        }
+                        SetSize(newW, newH);
+                    }
+                    else //if (!this.HasSpecificWidthAndHeight) 
+                    {
+
+                        //evaluate new width or height or both
+
+
+                        //TODO: split into multi-state
+                        var textBufferSpan = new Typography.Text.TextBufferSpan(_textBuffer);
+                        Size newSize = Typography.Text.GlobalTextService.TxtClient.MeasureString(textBufferSpan, _font);//just measure
+                        int newW = Width;
+                        int newH = Height;
+                        if (!this.HasSpecificWidth)
+                        {
+                            newW = _contentLeft + (int)System.Math.Ceiling((float)newSize.Width) + _contentRight;
+                        }
+                        if (!this.HasSpecificHeight)
+                        {
+                            newH = _contentTop + (int)System.Math.Ceiling((float)newSize.Height) + _contentBottom;
+                        }
+                        SetSize(newW, newH);
+                    }
                 }
                 NeedPreRenderEval = true;
             }
@@ -330,7 +355,7 @@ namespace LayoutFarm.CustomWidgets
 
             if (_textBuffer.Length > USE_STRIP_WHEN_LENGTH_MORE_THAN)
             {
-                if (MayOverlapOther && _backColor.A == 0)
+                if (MayOverlapOther && _backColor.A == 0) //configure alpha here**
                 {
                     //transparent
                     //short text => run
@@ -338,8 +363,6 @@ namespace LayoutFarm.CustomWidgets
                 }
                 else
                 {
-                    //for long text ? => configurable? 
-                    //use formatted string
                     if (_renderVxFormattedString == null)
                     {
                         _renderVxFormattedString = d.CreateFormattedString(_textBuffer, 0, _textBuffer.Length, DelayFormattedString);
@@ -348,13 +371,11 @@ namespace LayoutFarm.CustomWidgets
                     switch (_renderVxFormattedString.State)
                     {
                         case RenderVxFormattedString.VxState.Ready:
-
+                            //bitmap strip is ready
                             d.DrawRenderVx(_renderVxFormattedString, _contentLeft, _contentTop);
                             break;
                         case RenderVxFormattedString.VxState.NoStrip:
-
-                            //put this to the update queue system
-                            //(TODO: add extension method for this)
+                            //put this to the update queue system                            
 
                             GlobalRootGraphic.CurrentRootGfx.EnqueueRenderRequest(new RenderBoxes.RenderElementRequest(
                                   this,
@@ -367,7 +388,6 @@ namespace LayoutFarm.CustomWidgets
             }
             else
             {
-
                 d.DrawText(_textBuffer, _contentLeft, _contentTop);
             }
             //
