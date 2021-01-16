@@ -160,8 +160,40 @@ namespace PixelFarm.Drawing.GLES2
             public int prevCanvasOrgY;
             public Rectangle prevClipRect;
             public GLRenderSurface prevGLRenderSurface;
+#if DEBUG
+            public SaveContext() { }
+            public bool dbugIsInPool;
+#endif
         }
 
+        Stack<SaveContext> _saveContextPool = new Stack<SaveContext>();
+        SaveContext GetFreeSaveContext()
+        {
+            if (_saveContextPool.Count == 0) return new SaveContext();
+
+#if DEBUG
+            SaveContext s = _saveContextPool.Pop();
+            if (!s.dbugIsInPool)
+            {
+                throw new NotSupportedException();
+            }
+
+            s.dbugIsInPool = false;
+            return s;
+#else
+            
+return _saveContextPool.Pop();
+#endif
+
+
+        }
+        void ReleaseSaveContext(SaveContext saveContext)
+        {
+#if DEBUG
+            saveContext.dbugIsInPool = true;
+#endif
+            _saveContextPool.Push(saveContext);
+        }
         public override void EnterNewDrawboardBuffer(DrawboardBuffer backbuffer)
         {
 #if DEBUG
@@ -173,7 +205,7 @@ namespace PixelFarm.Drawing.GLES2
 #endif
 
             //save prev context
-            SaveContext prevContext = new SaveContext();
+            SaveContext prevContext = GetFreeSaveContext();
             prevContext.prevClipRect = _currentClipRect;
             prevContext.prevCanvasOrgX = _canvasOriginX;
             prevContext.prevCanvasOrgY = _canvasOriginY;
@@ -222,9 +254,9 @@ namespace PixelFarm.Drawing.GLES2
             _width = _gpuPainter.Width;
             _height = _gpuPainter.Height;
 
-
             _gpuPainter.SetOrigin(_canvasOriginX, _canvasOriginY);
             SetClipRect(_currentClipRect);
+            ReleaseSaveContext(saveContext);
         }
         public override void Dispose()
         {
