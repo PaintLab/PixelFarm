@@ -39,7 +39,8 @@ namespace PixelFarm.DrawingGL
         internal bool Delay { get; set; }
         internal bool UseWithWordPlate { get; set; }
         internal GLRenderVxFormattedStringGlyphMixMode GlyphMixMode { get; set; }
-        internal void ClearOwnerPlate()
+
+        void ClearOwnerPlate()
         {
             if (OwnerPlate != null)
             {
@@ -53,7 +54,7 @@ namespace PixelFarm.DrawingGL
         {
             WordPlateLeft = WordPlateTop = 0;
             ClearOwnerPlate();
-            OwnerPlate = null;
+             
 
             Delay = false;
             UseWithWordPlate = true;
@@ -169,7 +170,9 @@ namespace PixelFarm.DrawingGL
                     _strips[i].Reset();
                 }
                 _strips.Clear();
+                s_sameFontTextStripListPool.Push(_strips);
                 _strips = null;
+
             }
         }
 

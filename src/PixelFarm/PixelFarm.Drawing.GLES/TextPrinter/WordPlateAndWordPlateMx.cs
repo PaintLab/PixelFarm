@@ -28,6 +28,9 @@ namespace PixelFarm.DrawingGL
         public WordPlateMx()
         {
             MaxPlateCount = 20; //*** important!
+#if DEBUG
+            //MaxPlateCount = 3;//temp for test the performance
+#endif
             AutoRemoveOldestPlate = true;
         }
 
@@ -168,7 +171,7 @@ namespace PixelFarm.DrawingGL
             foreach (GLRenderVxFormattedString k in _wordStrips.Keys)
             {
                 //essential!
-                k.ClearOwnerPlate();
+                k.OwnerPlate = null;
             }
             _wordStrips.Clear();
         }
@@ -264,9 +267,9 @@ namespace PixelFarm.DrawingGL
 
             //use special mode of the GLBitmapGlyphTextPrinter
             //-----------
-            textPrinter.WordPlateCreatingMode = true; //turn on platemode
+            textPrinter.IsInWordPlateCreatingMode = true; //turn on platemode
             textPrinter.DrawString(fmtstr, _currentX, _currentY);
-            textPrinter.WordPlateCreatingMode = false;//switch back
+            textPrinter.IsInWordPlateCreatingMode = false;//switch back
             //-----------
             fmtstr.UseWithWordPlate = true;//restore
             painter.FontFillColor = prevColor;//restore

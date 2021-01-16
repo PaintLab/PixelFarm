@@ -521,7 +521,7 @@ namespace PixelFarm.DrawingGL
             _reusableFmtString.ClearData();
         }
 
-        public bool WordPlateCreatingMode { get; set; }
+        internal bool IsInWordPlateCreatingMode { get; set; }
 
         public void DrawString(GLRenderVxFormattedString vxFmtStr, double x, double y)
         {
@@ -531,6 +531,11 @@ namespace PixelFarm.DrawingGL
                 //add this to queue to create                              
                 return;
             }
+
+            //TODO: review here
+            //the following part is a drawing intensive part.
+
+            
 
             float base_offset = 0;
             switch (TextBaseline)
@@ -549,7 +554,7 @@ namespace PixelFarm.DrawingGL
                     break;
             }
 
-            if (WordPlateCreatingMode)
+            if (IsInWordPlateCreatingMode)
             {
                 //on word plate mode
                 //in this version

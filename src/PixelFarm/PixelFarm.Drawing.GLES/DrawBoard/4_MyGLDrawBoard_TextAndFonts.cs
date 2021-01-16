@@ -82,6 +82,7 @@ namespace PixelFarm.Drawing.GLES2
                 _gpuPainter.TextPrinter.PrepareStringForRenderVx(fmtstr, buffer, startAt, len);
                 if (!fmtstr.Delay)
                 {
+                    //because the fmtstr has strip after prepare(
                     fmtstr.ReleaseIntermediateStructures();
                 }
                 return fmtstr;
