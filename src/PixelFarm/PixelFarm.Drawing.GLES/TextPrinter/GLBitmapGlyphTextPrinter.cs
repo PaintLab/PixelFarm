@@ -535,7 +535,7 @@ namespace PixelFarm.DrawingGL
             //TODO: review here
             //the following part is a drawing intensive part.
 
-            
+
 
             float base_offset = 0;
             switch (TextBaseline)
@@ -1051,8 +1051,12 @@ namespace PixelFarm.DrawingGL
 
             //use pool?
             vxFmtStr.PrepareIntermediateStructures();
-            _sh_indexList = vxFmtStr._sh_indexList;
-            _sh_vertexList = vxFmtStr._sh_vertexList;
+
+            //get blank indexList and vertexList from a fmtString,
+            //this text printer will create a data set for it.
+
+            _sh_indexList = vxFmtStr._sh_indexList; //temp, 
+            _sh_vertexList = vxFmtStr._sh_vertexList;//temp, 
 
             foreach (SpanFormattedInfo spFmt in _uniqueResolvedFonts.Keys)
             {

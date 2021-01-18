@@ -39,26 +39,17 @@ namespace PixelFarm.Drawing.GLES2
 #if DEBUG
             //fmtstr.dbugText = new string(buffer, startAt, len);
 #endif
-            if (_gpuPainter.TextPrinter != null)
+
+            //we create
+            //1. texture coords for this string
+            //2. (if not delay) => an image for this string  inside a larger img texture
+            _gpuPainter.TextPrinter.PrepareStringForRenderVx(fmtstr, buffer, startAt, len);
+            if (!fmtstr.Delay)
             {
-                //we create
-                //1. texture coords for this string
-                //2. (if not delay) => an image for this string  inside a larger img texture
-                _gpuPainter.TextPrinter.PrepareStringForRenderVx(fmtstr, buffer, startAt, len);
-                if (!fmtstr.Delay)
-                {
-                    fmtstr.ReleaseIntermediateStructures();
-                }
-                return fmtstr;
+                fmtstr.ReleaseIntermediateStructures();
             }
-            else
-            {
-#if DEBUG
-                throw new System.NotSupportedException();
-#else
-                return null;
-#endif
-            }
+            return fmtstr;
+
         }
         public override RenderVxFormattedString CreateFormattedString(char[] buffer, int startAt, int len, bool delay)
         {
@@ -74,27 +65,17 @@ namespace PixelFarm.Drawing.GLES2
 #if DEBUG
             fmtstr.dbugText = new string(buffer, startAt, len);
 #endif
-            if (_gpuPainter.TextPrinter != null)
+
+            //we create
+            //1. texture coords for this string
+            //2. (if not delay) => an image for this string  inside a larger img texture
+            _gpuPainter.TextPrinter.PrepareStringForRenderVx(fmtstr, buffer, startAt, len);
+            if (!fmtstr.Delay)
             {
-                //we create
-                //1. texture coords for this string
-                //2. (if not delay) => an image for this string  inside a larger img texture
-                _gpuPainter.TextPrinter.PrepareStringForRenderVx(fmtstr, buffer, startAt, len);
-                if (!fmtstr.Delay)
-                {
-                    //because the fmtstr has strip after prepare(
-                    fmtstr.ReleaseIntermediateStructures();
-                }
-                return fmtstr;
+                //because the fmtstr has strip after prepare(
+                fmtstr.ReleaseIntermediateStructures();
             }
-            else
-            {
-#if DEBUG
-                throw new System.NotSupportedException();
-#else
-                return null;
-#endif
-            }
+            return fmtstr;
         }
         public void PrepareWordStrips(System.Collections.Generic.List<DrawingGL.GLRenderVxFormattedString> fmtStringList)
         {
@@ -125,7 +106,7 @@ namespace PixelFarm.Drawing.GLES2
                 textPrinter.TextDrawingTechnique = cur;
 
                 textPrinter.DrawString(vxFmtStr, x, y);
-                
+
                 textPrinter.TextDrawingTechnique = prev;//restore
             }
         }

@@ -22,11 +22,9 @@ namespace PixelFarm.DrawingGL
     public class GLRenderVxFormattedString : PixelFarm.Drawing.RenderVxFormattedString
     {
         List<SameFontTextStrip> _strips;
-        /// <summary>
-        /// shared vertices 
-        /// </summary>
-        internal ArrayList<float> _sh_vertexList; //src buffer for each SameFontTextStrip, 
-        internal ArrayList<ushort> _sh_indexList; //src buffer for each SameFontTextStrip
+
+        internal ArrayList<float> _sh_vertexList; //temp src vertice buffer for each SameFontTextStrip
+        internal ArrayList<ushort> _sh_indexList; //temp src indice buffer for each SameFontTextStrip
 
         internal GLRenderVxFormattedString()
         {
@@ -54,13 +52,13 @@ namespace PixelFarm.DrawingGL
         {
             WordPlateLeft = WordPlateTop = 0;
             ClearOwnerPlate();
-             
+
 
             Delay = false;
             UseWithWordPlate = true;
             GlyphMixMode = GLRenderVxFormattedStringGlyphMixMode.Unknown;
 
-            DisposeVbo();
+            DisposeWordStripsVbo();
 
 
             if (_sh_vertexList != null)
@@ -89,7 +87,10 @@ namespace PixelFarm.DrawingGL
                 _strips = null;
             }
         }
-        internal void DisposeVbo()
+        /// <summary>
+        /// dispose only vbo inside each word-strip
+        /// </summary>
+        internal void DisposeWordStripsVbo()
         {
             //dispose only its vbo
             //preserve coord data
