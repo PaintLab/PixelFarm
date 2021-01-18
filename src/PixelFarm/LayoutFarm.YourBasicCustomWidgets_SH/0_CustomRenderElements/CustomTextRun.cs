@@ -245,6 +245,8 @@ namespace LayoutFarm.CustomWidgets
 
                 switch (_renderVxFormattedString.State)
                 {
+                    default:
+                        break;
                     case RenderVxFormattedString.VxState.Ready:
                         {
                             //newsize

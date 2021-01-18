@@ -17,8 +17,8 @@ namespace LayoutFarm
     }
 
     public static class GlobalRootGraphic
-    {   
-        public static RootGraphic CurrentRootGfx;  
+    {
+        public static RootGraphic CurrentRootGfx;
     }
 
     static class BubbleInvalidater
@@ -272,7 +272,7 @@ namespace LayoutFarm
             this.Width = width;
             this.Height = heigth;
         }
-       
+
         public abstract RequestFont DefaultTextEditFontInfo { get; }
         public abstract IRenderElement TopWindowRenderBox { get; }
         public abstract void AddChild(RenderElement renderE);
@@ -443,8 +443,6 @@ namespace LayoutFarm
         //---
         protected static InvalidateGfxArgs GetInvalidateGfxArgs() => BubbleInvalidater.GetInvalidateGfxArgs();
         protected static void ReleaseInvalidateGfxArgs(InvalidateGfxArgs args) => BubbleInvalidater.ReleaseInvalidateGfxArgs(args);
-
-        protected static void InternalBubbleup(InvalidateGfxArgs args) => BubbleInvalidater.InternalBubbleUpInvalidateGraphicArea(args);
     }
 
 
