@@ -146,7 +146,7 @@ namespace PixelFarm.DrawingGL
 
         internal void ReleaseIntermediateStructures()
         {
-           
+
             if (GlyphMixMode == GLRenderVxFormattedStringGlyphMixMode.MixedStencilAndColorGlyphs)
             {
                 return;
@@ -179,6 +179,7 @@ namespace PixelFarm.DrawingGL
         }
 
 #if DEBUG
+        static int s_sameStrCount;
         static int s_dbugTotalId;
         public readonly int dbugId = ++s_dbugTotalId;
         string _dbugText;
@@ -190,6 +191,15 @@ namespace PixelFarm.DrawingGL
                 if (value == s_latestBugText)
                 {
 
+                    s_sameStrCount++;
+                }
+                else
+                {
+                    if (s_sameStrCount != 0)
+                    {
+
+                    }
+                    s_sameStrCount = 0;
                 }
                 s_latestBugText = _dbugText = value;
             }
