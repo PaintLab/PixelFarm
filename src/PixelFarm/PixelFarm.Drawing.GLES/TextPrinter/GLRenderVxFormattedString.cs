@@ -181,30 +181,8 @@ namespace PixelFarm.DrawingGL
 #if DEBUG
         static int s_sameStrCount;
         static int s_dbugTotalId;
-        public readonly int dbugId = ++s_dbugTotalId;
-        string _dbugText;
-        public string dbugText
-        {
-            get => _dbugText;
-            set
-            {
-                if (value == s_latestBugText)
-                {
-
-                    s_sameStrCount++;
-                }
-                else
-                {
-                    if (s_sameStrCount != 0)
-                    {
-
-                    }
-                    s_sameStrCount = 0;
-                }
-                s_latestBugText = _dbugText = value;
-            }
-        }
-        static string s_latestBugText = null;
+        public readonly int dbugId = ++s_dbugTotalId; 
+        public string dbugText; 
 
         public override string ToString()
         {
