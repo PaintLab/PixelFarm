@@ -21,15 +21,15 @@ namespace PixelFarm.DrawingGL
         WordPlate _latestPlate;
 
         int _defaultPlateW = 1024;
-        int _defaultPlateH = 1024;
+        int _defaultPlateH = 512;
 
         static ushort s_totalPlateId = 0;
 
         public WordPlateMx()
         {
-            MaxPlateCount = 20; //*** important!
+            //MaxPlateCount = 20; //*** important!
 #if DEBUG
-            //MaxPlateCount = 3;//temp for test the performance
+            MaxPlateCount = 3;//temp for test the performance
 #endif
             AutoRemoveOldestPlate = true;
         }
@@ -75,7 +75,7 @@ namespace PixelFarm.DrawingGL
                     //**dictionay not guarantee sorted id**
                     //so we use queue, (TODO: use priority queue) 
                     WordPlate oldest = _wordPlatesQueue.Dequeue();
-                    _wordPlates.Remove(oldest._plateId);
+                    //_wordPlates.Remove(oldest._plateId);
 #if DEBUG
                     if (oldest.dbugUsedCount < 50)
                     {
@@ -84,8 +84,9 @@ namespace PixelFarm.DrawingGL
                     //oldest.dbugSaveBackBuffer("word_plate_" + oldest._plateId + ".png");
 #endif
 
-                    oldest.Dispose();
-                    oldest = null;
+                    oldest.ClearAndReuse();
+                    _wordPlatesQueue.Enqueue(oldest);
+                    return oldest;
                 }
             }
 
@@ -171,11 +172,30 @@ namespace PixelFarm.DrawingGL
             foreach (GLRenderVxFormattedString k in _wordStrips.Keys)
             {
                 //essential!
+                k.State = RenderVxFormattedString.VxState.NoStrip;
                 k.OwnerPlate = null;
             }
             _wordStrips.Clear();
         }
 
+        public void ClearAndReuse()
+        {
+            //clear this word plate nad 
+            _isInitBg = false;//will apint bg again
+            foreach (GLRenderVxFormattedString k in _wordStrips.Keys)
+            {
+                //essential!
+                //k.Delay = true;//***
+                k.IsReset = true;
+                k.State = RenderVxFormattedString.VxState.NoStrip;
+                k.OwnerPlate = null;//remove its parent
+         
+            }
+            _wordStrips.Clear();
+            _full = false;
+            _currentX = _currentY = 0;
+            _currentLineHeightMax = 20;//??
+        }
 
         public bool Full => _full;
 
@@ -278,7 +298,7 @@ namespace PixelFarm.DrawingGL
             painter.TextPrinterDrawingTechnique = prevTextDrawing;//restore
             //in this case we can dispose vbo inside renderVx
             //(we can recreate that vbo later)
-            fmtstr.DisposeVbo();
+            fmtstr.DisposeWordStripsVbo();
 
             fmtstr.OwnerPlate = this;
             fmtstr.WordPlateLeft = (ushort)_currentX;
