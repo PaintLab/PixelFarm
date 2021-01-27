@@ -16,12 +16,21 @@ namespace PixelFarm.DrawingGL
         MixedStencilAndColorGlyphs
     }
 
+    enum GLRenderVxFormattedStringState : byte
+    {
+        S0_Init,
+        S1_VertexList,
+        S2_TextureStrip,
+        S4_Reset
+
+    }
     /// <summary>
     /// texture-based render vx
     /// </summary>
     public class GLRenderVxFormattedString : PixelFarm.Drawing.RenderVxFormattedString
     {
         List<SameFontTextStrip> _strips;
+
 
         internal ArrayList<float> _sh_vertexList; //temp src vertice buffer for each SameFontTextStrip
         internal ArrayList<ushort> _sh_indexList; //temp src indice buffer for each SameFontTextStrip
@@ -30,13 +39,15 @@ namespace PixelFarm.DrawingGL
         {
 
         }
-
         public ushort WordPlateLeft { get; set; }
         public ushort WordPlateTop { get; set; }
+
         internal WordPlate OwnerPlate { get; set; }
-        internal bool Delay { get; set; }
         internal bool UseWithWordPlate { get; set; }
+        internal int CreationCycle { get; set; }
+        internal bool Delay { get; set; }
         internal GLRenderVxFormattedStringGlyphMixMode GlyphMixMode { get; set; }
+        internal GLRenderVxFormattedStringState CreationState { get; set; } //creation state
 
         void ClearOwnerPlate()
         {
@@ -52,7 +63,6 @@ namespace PixelFarm.DrawingGL
         {
             WordPlateLeft = WordPlateTop = 0;
             ClearOwnerPlate();
-
 
             Delay = false;
             UseWithWordPlate = true;
@@ -119,7 +129,29 @@ namespace PixelFarm.DrawingGL
             return newstrip;
         }
 
-        internal int StripCount => (_strips == null) ? 0 : _strips.Count;
+        //internal int StripCount => (_strips == null) ? 0 : _strips.Count;
+
+        internal bool dbugPreparing = false;
+        public override int StripCount
+        {
+            get
+            {
+
+                if (_strips == null)
+                {
+                    if (!dbugPreparing)
+                    {
+
+                    }
+                    return 0;
+                }
+                else
+                {
+                    return _strips.Count;
+                }
+                //return (_strips == null) ? 0 : _strips.Count;
+            }
+        }
         internal SameFontTextStrip this[int index] => _strips[index];
 
         internal void ApplyAdditionalVerticalOffset(int maxStripHeight)
@@ -151,38 +183,43 @@ namespace PixelFarm.DrawingGL
             {
                 return;
             }
-            if (_sh_vertexList != null)
-            {
-                _sh_vertexList.Clear();
-                s_vertextListPool.Push(_sh_vertexList);
-                _sh_vertexList = null;
-            }
-            if (_sh_indexList != null)
-            {
-                _sh_indexList.Clear();
-                s_indexListPool.Push(_sh_indexList);
-                _sh_indexList = null;
-            }
 
-            if (_strips != null)
-            {
-                int j = _strips.Count;
-                for (int i = 0; i < j; ++i)
-                {
-                    _strips[i].Reset();
-                }
-                _strips.Clear();
-                s_sameFontTextStripListPool.Push(_strips);
-                _strips = null;
+            //------------------
+            //state2: strips
+            //if (_strips != null)
+            //{
+            //    int j = _strips.Count;
+            //    for (int i = 0; i < j; ++i)
+            //    {
+            //        _strips[i].Reset();
+            //    }
+            //    _strips.Clear();
+            //    s_sameFontTextStripListPool.Push(_strips);
+            //    _strips = null;
+            //}
+            //------------------
+            //state1: Data 
+            //if (_sh_vertexList != null)
+            //{
+            //    _sh_vertexList.Clear();
+            //    s_vertextListPool.Push(_sh_vertexList);
+            //    _sh_vertexList = null;
+            //}
+            //if (_sh_indexList != null)
+            //{
+            //    _sh_indexList.Clear();
+            //    s_indexListPool.Push(_sh_indexList);
+            //    _sh_indexList = null;
+            //} 
 
-            }
+            CreationState = GLRenderVxFormattedStringState.S4_Reset;
         }
 
 #if DEBUG
         static int s_sameStrCount;
         static int s_dbugTotalId;
-        public readonly int dbugId = ++s_dbugTotalId; 
-        public string dbugText; 
+        public readonly int dbugId = ++s_dbugTotalId;
+        public string dbugText;
 
         public override string ToString()
         {

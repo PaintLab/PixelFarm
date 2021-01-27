@@ -19,6 +19,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
             _buffer = buffer;
         }
+        public override int StripCount => throw new System.NotImplementedException();
         public char[] InternalBuffer => _buffer;
 #if DEBUG
         public override string dbugName => "WinGdi";

@@ -300,10 +300,13 @@ namespace LayoutFarm.CustomWidgets
 
                     NeedPreRenderEval = false; //mark as evalution is finish
                 }
-
             }
-
         }
+
+#if DEBUG
+        int _dbugRecreateCount;
+        System.DateTime _dbugLatestRecreated;
+#endif
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
 #if DEBUG
@@ -369,23 +372,63 @@ namespace LayoutFarm.CustomWidgets
                     {
                         _renderVxFormattedString = d.CreateFormattedString(_textBuffer, 0, _textBuffer.Length, DelayFormattedString);
                     }
-                    //-------------
-                    switch (_renderVxFormattedString.State)
+
+
+                    if (_renderVxFormattedString.IsReset)
                     {
-                        case RenderVxFormattedString.VxState.Ready:
-                            //bitmap strip is ready
-                            d.DrawRenderVx(_renderVxFormattedString, _contentLeft, _contentTop);
-                            break;
-                        case RenderVxFormattedString.VxState.NoStrip:
-                            //put this to the update queue system                            
+                        //1)
+                        //recreate a new one 
 
-                            GlobalRootGraphic.CurrentRootGfx.EnqueueRenderRequest(new RenderBoxes.RenderElementRequest(
-                                  this,
-                                  RenderBoxes.RequestCommand.ProcessFormattedString,
-                                  _renderVxFormattedString));
+                        //_renderVxFormattedString = d.CreateFormattedString(_renderVxFormattedString, _textBuffer, 0, _textBuffer.Length, DelayFormattedString);
+                        //switch (_renderVxFormattedString.State)
+                        //{
+                        //    case RenderVxFormattedString.VxState.Ready:
+                        //        //bitmap strip is ready
+                        //        d.DrawRenderVx(_renderVxFormattedString, _contentLeft, _contentTop);
+                        //        break;
+                        //    case RenderVxFormattedString.VxState.NoStrip:
+                        //        //put this to the update queue system                            
 
-                            break;
+                        //        GlobalRootGraphic.CurrentRootGfx.EnqueueRenderRequest(new RenderBoxes.RenderElementRequest(
+                        //              this,
+                        //              RenderBoxes.RequestCommand.ProcessFormattedString,
+                        //              _renderVxFormattedString));
+
+                        //        break;
+                        //}
+
+
+                        //2) recreate
+                        //d.DrawRenderVx(_renderVxFormattedString, _contentLeft, _contentTop);
+
+
+                        //3) enque
+                        GlobalRootGraphic.CurrentRootGfx.EnqueueRenderRequest(new RenderBoxes.RenderElementRequest(
+                                     this,
+                                     RenderBoxes.RequestCommand.ProcessFormattedString,
+                                     _renderVxFormattedString));
+
                     }
+                    else
+                    {
+                        switch (_renderVxFormattedString.State)
+                        {
+                            case RenderVxFormattedString.VxState.Ready:
+                                //bitmap strip is ready
+                                d.DrawRenderVx(_renderVxFormattedString, _contentLeft, _contentTop);
+                                break;
+                            case RenderVxFormattedString.VxState.NoStrip:
+                                //put this to the update queue system                            
+
+                                GlobalRootGraphic.CurrentRootGfx.EnqueueRenderRequest(new RenderBoxes.RenderElementRequest(
+                                      this,
+                                      RenderBoxes.RequestCommand.ProcessFormattedString,
+                                      _renderVxFormattedString));
+
+                                break;
+                        }
+                    }
+
                 }
             }
             else

@@ -1036,7 +1036,12 @@ namespace PixelFarm.DrawingGL
             //a fmtGlyphPlanSeqs may contains glyph from  more than 1 font,
             //now, create a overlapped strip for each 
 #if DEBUG
-            if (vxFmtStr.StripCount > 0) { throw new NotSupportedException(); }
+            vxFmtStr.dbugPreparing = true;
+            if (vxFmtStr.StripCount > 0)
+            {
+                throw new NotSupportedException();
+            }
+
 #endif
 
 
@@ -1048,10 +1053,9 @@ namespace PixelFarm.DrawingGL
 
 
             GlyphMixModeSummary mixModeSummary = new GlyphMixModeSummary();//light-weight state helper
-
             //use pool?
             vxFmtStr.PrepareIntermediateStructures();
-
+            vxFmtStr.CreationState = GLRenderVxFormattedStringState.S0_Init;
             //get blank indexList and vertexList from a fmtString,
             //this text printer will create a data set for it.
 
@@ -1107,7 +1111,7 @@ namespace PixelFarm.DrawingGL
             vxFmtStr.Width = spanWidth;
             vxFmtStr.DescendingInPx = (short)descendingInPx;
             vxFmtStr.SpanDescendingInPx = (short)spanDescendingInPx;
-
+            vxFmtStr.CreationState = GLRenderVxFormattedStringState.S1_VertexList;
             //-----------
             //TODO: review here again
 
@@ -1129,6 +1133,14 @@ namespace PixelFarm.DrawingGL
 
             _sh_indexList = null; //reset
             _sh_vertexList = null;//reset
+#if DEBUG
+            vxFmtStr.dbugPreparing = false;
+
+#endif
+        }
+        public void RecreateStrip(GLRenderVxFormattedString vxFmtStr)
+        {
+            _painter.TryCreateWordStrip(vxFmtStr);
         }
         public void PrepareStringForRenderVx(GLRenderVxFormattedString vxFmtStr, IFormattedGlyphPlanList fmtGlyphPlans)
         {
@@ -1147,14 +1159,20 @@ namespace PixelFarm.DrawingGL
                 _txtClient.ResolveFont(_painter.CurrentFont).Typeface,
                 _fontSizeInPoints,
                 _txtClient.CurrentScriptLang);
-
-            _fmtGlyphPlans.Clear(); //reuse 
-            _txtClient.PrepareFormattedStringList(buffer, startAt, len, _fmtGlyphPlans);
-
-            if (_fmtGlyphPlans.Count > 0)
+         
+            if (vxFmtStr.IsReset)
             {
-                PrepareStringForRenderVx(vxFmtStr, _fmtGlyphPlans.GetFirst());
+                _painter.TryCreateWordStrip(vxFmtStr);
             }
+            else
+            {
+                _fmtGlyphPlans.Clear(); //reuse 
+                _txtClient.PrepareFormattedStringList(buffer, startAt, len, _fmtGlyphPlans);
+                if (_fmtGlyphPlans.Count > 0)
+                {
+                    PrepareStringForRenderVx(vxFmtStr, _fmtGlyphPlans.GetFirst());
+                }
+            }            
         }
         public void PrepareStringForRenderVx(GLRenderVxFormattedString vxFmtStr, int[] buffer, int startAt, int len)
         {

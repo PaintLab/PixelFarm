@@ -20,6 +20,7 @@ namespace PixelFarm.CpuBlit
         {
         }
         public RenderVxGlyphPlan[] GlyphList { get; set; }
+        public override int StripCount => throw new System.NotImplementedException();
 #if DEBUG
         public string OriginalString { get; set; }
         public override string dbugName => "Agg";

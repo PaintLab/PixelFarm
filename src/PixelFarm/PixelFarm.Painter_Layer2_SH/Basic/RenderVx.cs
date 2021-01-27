@@ -15,7 +15,23 @@ namespace PixelFarm.Drawing
         public short SpanDescendingInPx { get; set; }
         public float Width { get; set; }
         public float SpanHeight { get; set; }
-        public VxState State { get; set; }
+
+        VxState _state;
+        public abstract int StripCount { get; }
+        public VxState State
+        {
+            get => _state;
+            set
+            {
+                if (!this.IsReset && value == VxState.NoStrip)
+                {
+
+                }
+                _state = value;
+            }
+        }
+        public bool IsReset { get; set; }
+         
         public enum VxState : byte
         {
             /// <summary>
@@ -30,6 +46,7 @@ namespace PixelFarm.Drawing
             /// strip is ready
             /// </summary>
             Ready,
+
         }
 #if DEBUG
         public abstract string dbugName { get; }

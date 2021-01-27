@@ -18,6 +18,8 @@ namespace PixelFarm.DrawingGL
         void PrepareStringForRenderVx(GLRenderVxFormattedString renderVx, char[] text, int startAt, int len);
         void PrepareStringForRenderVx(GLRenderVxFormattedString renderVx, int[] text, int startAt, int len);
         void PrepareStringForRenderVx(GLRenderVxFormattedString renderVx, IFormattedGlyphPlanList formattedGlyphPlans);
+        void RecreateStrip(GLRenderVxFormattedString renderVx);
+
         void ChangeFont(RequestFont font);
         void ChangeFillColor(Color fillColor);
         void ChangeStrokeColor(Color strokColor);
@@ -177,19 +179,51 @@ namespace PixelFarm.DrawingGL
             _textPrinter?.DrawString((GLRenderVxFormattedString)renderVx, x, y);
         }
 
+
+        int _creationCycle;
+
         internal void CreateWordStrips(System.Collections.Generic.List<DrawingGL.GLRenderVxFormattedString> fmtStringList)
         {
-
+            //create a set of frm string
             //
+            if (_creationCycle > ushort.MaxValue)
+            {
+                _creationCycle = 0;//reset
+            }
+            _creationCycle++;
+
             int j = fmtStringList.Count;
-            for (int i = 0; i < j; ++i)
+            for (int i = j - 1; i >= 0; --i)
             {
                 //change state before send to the drawboard
                 GLRenderVxFormattedString vxFmtStr = fmtStringList[i];
+
                 vxFmtStr.UseWithWordPlate = true;
                 vxFmtStr.Delay = false;
+                if (vxFmtStr.CreationCycle > 0 && (vxFmtStr.CreationCycle == _creationCycle - 1))
+                {
+                    //TODO: review here
+                    //prevent re-entry
+                    fmtStringList.RemoveAt(i);
+                    continue;
+                }
+                vxFmtStr.CreationCycle = _creationCycle;
             }
+
+#if DEBUG
+            int diff = j - fmtStringList.Count;
+            if (diff > 5)
+            {
+
+            }
+#endif
+
             //
+            j = fmtStringList.Count;//reset  
+            if (j == 0)
+            {
+                return;
+            }
 
 
             RequestFont prevFont = CurrentFont; //save
@@ -215,22 +249,20 @@ namespace PixelFarm.DrawingGL
                     latestWordplate = wordPlate;
                     _drawBoard.EnterNewDrawboardBuffer(wordPlate._backBuffer);
                 }
-
-                //if (vxFmtStr.RequestFont != null)
-                //{
-                //    _drawBoard.CurrentFont = vxFmtStr.RequestFont;
-                //}
-                //else
-                //{
-                //    //use current font 
-                //}
-
-                if (!wordPlate.CreateWordStrip(this, vxFmtStr))
+                if (vxFmtStr.StripCount == 0)
                 {
-                    //we have some error?
-                    throw new NotSupportedException();
+                    char[] orgText = vxFmtStr.dbugText.ToCharArray();
+                    _textPrinter.PrepareStringForRenderVx(vxFmtStr, orgText, 0, orgText.Length);
                 }
-
+                else
+                {
+                    if (!wordPlate.CreateWordStrip(this, vxFmtStr))
+                    {
+                        //we have some error?
+                        throw new NotSupportedException();
+                    }
+                    vxFmtStr.IsReset = false;
+                }
                 vxFmtStr.State = RenderVxFormattedString.VxState.Ready;
             }
             if (latestWordplate != null)
@@ -291,6 +323,8 @@ namespace PixelFarm.DrawingGL
 
             fmtString.State = RenderVxFormattedString.VxState.Ready;
             _drawBoard.ExitCurrentDrawboardBuffer();
+            fmtString.IsReset = false;
+
 #if DEBUG
             dbugsw2.Stop();
             long ms = dbugsw2.ElapsedMilliseconds;
@@ -300,6 +334,7 @@ namespace PixelFarm.DrawingGL
             }
 #endif
             _drawBoard.CurrentFont = backupFont;//restore
+            fmtString.CreationState = GLRenderVxFormattedStringState.S2_TextureStrip;
             return fmtString.OwnerPlate != null;
         }
     }
