@@ -184,9 +184,7 @@ namespace LayoutFarm.UI
                 //so we ask for some drawboard to handle these requests 
 
                 PixelFarm.Drawing.GLES2.MyGLDrawBoard drawboard = _getDrawboard();
-
-                //Rectangle accRect = AccumInvalidateRect;
-
+ 
                 drawboard.PrepareWordStrips(_fmtList);
 
                 _fmtList.Clear();

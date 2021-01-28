@@ -349,15 +349,45 @@ namespace PixelFarm.DrawingGL
         public int AdditionalVerticalOffset { get; set; }
         public bool ColorGlyphOnTransparentBG { get; set; }
 
+
+        static readonly Stack<int> s_sharedIndexBufferStack = new Stack<int>();
+        const int SHARED_INDEX_BUFFER_SIZE = 1024;
+
+        int _sharedIndexBufferId; //use shared index buffer or not
         internal DrawingGL.VertexBufferObject GetVbo()
         {
+            _sharedIndexBufferId = 0;
             if (_vbo != null)
             {
                 return _vbo;
             }
 
+            //for our index list:
+            //our generator generate sequence number 1,2,3,4,5,6....
+            //so we can use shared index-list buffer
+
             _vbo = new VertexBufferObject();
-            _vbo.CreateBuffers(VertexCoords, IndexArray);
+            if (IndexArray.len >= SHARED_INDEX_BUFFER_SIZE)
+            {
+                _vbo.CreateBuffers(VertexCoords, IndexArray);
+            }
+            else
+            {
+                //
+                if (s_sharedIndexBufferStack.Count > 0)
+                {
+                    _sharedIndexBufferId = s_sharedIndexBufferStack.Pop();
+                }
+                else
+                {
+                    //create a new one
+                    _sharedIndexBufferId = SharedVertexBufferStore.GetSharedIndexBuffer(SHARED_INDEX_BUFFER_SIZE);
+                }
+
+                //use a simple index buffer here
+                _vbo.CreateBuffers(VertexCoords, _sharedIndexBufferId, IndexArray.len);
+            }
+
             return _vbo;
         }
 
@@ -371,6 +401,12 @@ namespace PixelFarm.DrawingGL
             {
                 _vbo.Dispose();
                 _vbo = null;
+            }
+
+            if (_sharedIndexBufferId > 0)
+            {
+                s_sharedIndexBufferStack.Push(_sharedIndexBufferId);
+                _sharedIndexBufferId = 0;
             }
         }
 
