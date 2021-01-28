@@ -15,7 +15,7 @@ namespace LayoutFarm.UI
     {
         List<RenderElementRequest> _renderRequestList = new List<RenderElementRequest>();
         GraphicsTimerTaskManager _gfxTimerTaskMx;
-        static object _normalUpdateTask = new object();
+        static readonly object _normalUpdateTask = new object();
         readonly TopWindowEventRoot _topWindowEventRoot;
         readonly TopWindowRenderBox _topWindowRenderBox;
 
@@ -31,11 +31,11 @@ namespace LayoutFarm.UI
             int width, int height)
             : base(width, height)
         {
-            
+
             _gfxTimerTaskMx = new GraphicsTimerTaskManager(this);
             _defaultTextEditFont = MyFontSettings.DefaultRootGraphicsFont;
 
-          
+
 #if DEBUG
             dbugCurrentGlobalVRoot = this;
             dbug_Init(null, null, null);
@@ -86,6 +86,10 @@ namespace LayoutFarm.UI
                     _fmtStrRenderReqList.Add(renderReq);
                     _fmtList.Add(fmtStr);
                     fmtStr.State = RenderVxFormattedString.VxState.Waiting;
+                }
+                else
+                {
+
                 }
             }
             else
@@ -181,13 +185,11 @@ namespace LayoutFarm.UI
 
                 PixelFarm.Drawing.GLES2.MyGLDrawBoard drawboard = _getDrawboard();
 
+                //Rectangle accRect = AccumInvalidateRect;
+
                 drawboard.PrepareWordStrips(_fmtList);
 
                 _fmtList.Clear();
-
-
-                //all should be ready
-                //each render element must be update again
 
                 j = _fmtStrRenderReqList.Count;
                 for (int i = 0; i < j; ++i)

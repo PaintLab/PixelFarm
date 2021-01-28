@@ -197,16 +197,14 @@ namespace PixelFarm.DrawingGL
             {
                 //change state before send to the drawboard
                 GLRenderVxFormattedString vxFmtStr = fmtStringList[i];
-
                 vxFmtStr.UseWithWordPlate = true;
                 vxFmtStr.Delay = false;
-                if (vxFmtStr.CreationCycle > 0 && (vxFmtStr.CreationCycle == _creationCycle - 1))
+                if (vxFmtStr.CreationCycle > 0 && vxFmtStr.CreationCycle == _creationCycle - 1)
                 {
-                    //TODO: review here
-                    //prevent re-entry
-                    fmtStringList.RemoveAt(i);
+                    vxFmtStr.SkipCreation = true;
                     continue;
                 }
+                vxFmtStr.SkipCreation = false;
                 vxFmtStr.CreationCycle = _creationCycle;
             }
 
@@ -232,7 +230,7 @@ namespace PixelFarm.DrawingGL
             for (int i = 0; i < j; ++i)
             {
                 GLRenderVxFormattedString vxFmtStr = fmtStringList[i];
-                if (vxFmtStr.OwnerPlate != null)
+                if (vxFmtStr.OwnerPlate != null || vxFmtStr.SkipCreation)
                 {
                     continue;
                 }

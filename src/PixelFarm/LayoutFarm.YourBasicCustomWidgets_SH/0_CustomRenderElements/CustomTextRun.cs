@@ -375,11 +375,14 @@ namespace LayoutFarm.CustomWidgets
 
                     if (_renderVxFormattedString.IsReset)
                     {
-
-                        GlobalRootGraphic.CurrentRootGfx.EnqueueRenderRequest(new RenderBoxes.RenderElementRequest(
+                        if (_renderVxFormattedString.State != RenderVxFormattedString.VxState.Waiting)
+                        {
+                            GlobalRootGraphic.CurrentRootGfx.EnqueueRenderRequest(new RenderBoxes.RenderElementRequest(
                                      this,
                                      RenderBoxes.RequestCommand.ProcessFormattedString,
                                      _renderVxFormattedString));
+                        }
+
                     }
                     else
                     {
@@ -391,12 +394,13 @@ namespace LayoutFarm.CustomWidgets
                                 break;
                             case RenderVxFormattedString.VxState.NoStrip:
                                 //put this to the update queue system                            
-
-                                GlobalRootGraphic.CurrentRootGfx.EnqueueRenderRequest(new RenderBoxes.RenderElementRequest(
+                                if (_renderVxFormattedString.State != RenderVxFormattedString.VxState.Waiting)
+                                {
+                                    GlobalRootGraphic.CurrentRootGfx.EnqueueRenderRequest(new RenderBoxes.RenderElementRequest(
                                       this,
                                       RenderBoxes.RequestCommand.ProcessFormattedString,
                                       _renderVxFormattedString));
-
+                                }
                                 break;
                         }
                     }

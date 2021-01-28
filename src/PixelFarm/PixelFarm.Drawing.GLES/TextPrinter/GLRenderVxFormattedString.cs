@@ -45,6 +45,7 @@ namespace PixelFarm.DrawingGL
         internal WordPlate OwnerPlate { get; set; }
         internal bool UseWithWordPlate { get; set; }
         internal int CreationCycle { get; set; }
+        internal bool SkipCreation { get; set; }
         internal bool Delay { get; set; }
         internal GLRenderVxFormattedStringGlyphMixMode GlyphMixMode { get; set; }
         internal GLRenderVxFormattedStringState CreationState { get; set; } //creation state
