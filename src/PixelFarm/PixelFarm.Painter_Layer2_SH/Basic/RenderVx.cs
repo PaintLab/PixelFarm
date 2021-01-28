@@ -23,10 +23,10 @@ namespace PixelFarm.Drawing
             get => _state;
             set
             {
-                if (!this.IsReset && value == VxState.NoStrip)
-                {
+                //if (!this.IsReset && value == VxState.NoStrip)
+                //{
 
-                }
+                //}
                 _state = value;
             }
         }

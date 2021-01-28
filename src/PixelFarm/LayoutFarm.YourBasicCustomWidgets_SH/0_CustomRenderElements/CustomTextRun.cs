@@ -373,41 +373,13 @@ namespace LayoutFarm.CustomWidgets
                         _renderVxFormattedString = d.CreateFormattedString(_textBuffer, 0, _textBuffer.Length, DelayFormattedString);
                     }
 
-
                     if (_renderVxFormattedString.IsReset)
                     {
-                        //1)
-                        //recreate a new one 
 
-                        //_renderVxFormattedString = d.CreateFormattedString(_renderVxFormattedString, _textBuffer, 0, _textBuffer.Length, DelayFormattedString);
-                        //switch (_renderVxFormattedString.State)
-                        //{
-                        //    case RenderVxFormattedString.VxState.Ready:
-                        //        //bitmap strip is ready
-                        //        d.DrawRenderVx(_renderVxFormattedString, _contentLeft, _contentTop);
-                        //        break;
-                        //    case RenderVxFormattedString.VxState.NoStrip:
-                        //        //put this to the update queue system                            
-
-                        //        GlobalRootGraphic.CurrentRootGfx.EnqueueRenderRequest(new RenderBoxes.RenderElementRequest(
-                        //              this,
-                        //              RenderBoxes.RequestCommand.ProcessFormattedString,
-                        //              _renderVxFormattedString));
-
-                        //        break;
-                        //}
-
-
-                        //2) recreate
-                        //d.DrawRenderVx(_renderVxFormattedString, _contentLeft, _contentTop);
-
-
-                        //3) enque
                         GlobalRootGraphic.CurrentRootGfx.EnqueueRenderRequest(new RenderBoxes.RenderElementRequest(
                                      this,
                                      RenderBoxes.RequestCommand.ProcessFormattedString,
                                      _renderVxFormattedString));
-
                     }
                     else
                     {

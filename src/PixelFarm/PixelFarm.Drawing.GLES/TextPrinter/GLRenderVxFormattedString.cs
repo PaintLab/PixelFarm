@@ -129,29 +129,32 @@ namespace PixelFarm.DrawingGL
             return newstrip;
         }
 
-        //internal int StripCount => (_strips == null) ? 0 : _strips.Count;
 
+#if DEBUG
         internal bool dbugPreparing = false;
-        public override int StripCount
-        {
-            get
-            {
+#endif
+        public override int StripCount => (_strips == null) ? 0 : _strips.Count;
 
-                if (_strips == null)
-                {
-                    if (!dbugPreparing)
-                    {
+        //{
+        //    get
+        //    {
 
-                    }
-                    return 0;
-                }
-                else
-                {
-                    return _strips.Count;
-                }
-                //return (_strips == null) ? 0 : _strips.Count;
-            }
-        }
+        //        if (_strips == null)
+        //        {
+        //            if (!dbugPreparing)
+        //            {
+
+        //            }
+        //            return 0;
+        //        }
+        //        else
+        //        {
+        //            return _strips.Count;
+        //        }
+        //        //return (_strips == null) ? 0 : _strips.Count;
+        //    }
+        //}
+
         internal SameFontTextStrip this[int index] => _strips[index];
 
         internal void ApplyAdditionalVerticalOffset(int maxStripHeight)

@@ -504,8 +504,6 @@ namespace PixelFarm.DrawingGL
                         _pcx.DrawImagesWithMsdf_VBO(_glBmp, _vboBuilder);
                         break;
                 }
-
-
             }
         }
 #endif
@@ -1041,16 +1039,12 @@ namespace PixelFarm.DrawingGL
             {
                 throw new NotSupportedException();
             }
-
 #endif
-
-
             float spanHeight = 0;
             float spanWidth = 0;
             int descendingInPx = 0;
             int spanDescendingInPx = 0;
             int maxStripHeight = 0;
-
 
             GlyphMixModeSummary mixModeSummary = new GlyphMixModeSummary();//light-weight state helper
             //use pool?
@@ -1159,7 +1153,7 @@ namespace PixelFarm.DrawingGL
                 _txtClient.ResolveFont(_painter.CurrentFont).Typeface,
                 _fontSizeInPoints,
                 _txtClient.CurrentScriptLang);
-         
+
             if (vxFmtStr.IsReset)
             {
                 _painter.TryCreateWordStrip(vxFmtStr);
@@ -1172,7 +1166,7 @@ namespace PixelFarm.DrawingGL
                 {
                     PrepareStringForRenderVx(vxFmtStr, _fmtGlyphPlans.GetFirst());
                 }
-            }            
+            }
         }
         public void PrepareStringForRenderVx(GLRenderVxFormattedString vxFmtStr, int[] buffer, int startAt, int len)
         {

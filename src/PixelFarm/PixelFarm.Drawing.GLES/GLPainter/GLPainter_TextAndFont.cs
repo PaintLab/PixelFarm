@@ -249,20 +249,20 @@ namespace PixelFarm.DrawingGL
                     latestWordplate = wordPlate;
                     _drawBoard.EnterNewDrawboardBuffer(wordPlate._backBuffer);
                 }
+#if DEBUG
                 if (vxFmtStr.StripCount == 0)
                 {
-                    char[] orgText = vxFmtStr.dbugText.ToCharArray();
-                    _textPrinter.PrepareStringForRenderVx(vxFmtStr, orgText, 0, orgText.Length);
+
                 }
-                else
+#endif
+
+                if (!wordPlate.CreateWordStrip(this, vxFmtStr))
                 {
-                    if (!wordPlate.CreateWordStrip(this, vxFmtStr))
-                    {
-                        //we have some error?
-                        throw new NotSupportedException();
-                    }
-                    vxFmtStr.IsReset = false;
+                    //we have some error?
+                    throw new NotSupportedException();
                 }
+                vxFmtStr.IsReset = false;
+
                 vxFmtStr.State = RenderVxFormattedString.VxState.Ready;
             }
             if (latestWordplate != null)
