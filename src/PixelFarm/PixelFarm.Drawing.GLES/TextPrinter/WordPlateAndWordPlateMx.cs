@@ -27,9 +27,9 @@ namespace PixelFarm.DrawingGL
 
         public WordPlateMx()
         {
-            //MaxPlateCount = 20; //*** important!
+            MaxPlateCount = 20; //*** important!
 #if DEBUG
-            MaxPlateCount = 3;//temp for test the performance
+            //MaxPlateCount = 3;//temp for test the performance
 #endif
             AutoRemoveOldestPlate = true;
         }
@@ -189,7 +189,7 @@ namespace PixelFarm.DrawingGL
                 k.IsReset = true;
                 k.State = RenderVxFormattedString.VxState.NoStrip;
                 k.OwnerPlate = null;//remove its parent
-         
+
             }
             _wordStrips.Clear();
             _full = false;

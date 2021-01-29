@@ -408,9 +408,10 @@ namespace LayoutFarm.CustomWidgets
             if (EnableDoubleBuffer)
             {
                 var painter = new PixelFarm.Drawing.Internal.MicroPainter(d);
+                int backBufferHeight = this.Height * 2;
                 if (_builtInBackBuffer == null)
                 {
-                    _builtInBackBuffer = painter.CreateOffscreenDrawBoard(this.Width, this.Height);
+                    _builtInBackBuffer = painter.CreateOffscreenDrawBoard(this.Width, backBufferHeight); //offscreen drawboard height*2
                 }
 
                 if (!_builtInBackBuffer.IsValid)
@@ -421,7 +422,7 @@ namespace LayoutFarm.CustomWidgets
                     float backupViewportW = painter.ViewportWidth; //backup
                     float backupViewportH = painter.ViewportHeight; //backup
                     painter.AttachTo(_builtInBackBuffer); //*** switch to builtInBackbuffer 
-                    painter.SetViewportSize(this.Width, this.Height);
+                    painter.SetViewportSize(this.Width, backBufferHeight);//after to attach new buffer**
                     if (!_hasAccumRect)
                     {
                         _invalidateRect = new Rectangle(0, 0, Width, Height);
@@ -487,7 +488,9 @@ namespace LayoutFarm.CustomWidgets
                     System.Diagnostics.Debug.WriteLine("double_buffer_update:" + dbug_obj_id + " use cache");
                 }
 #endif
-                painter.DrawImage(_builtInBackBuffer.GetImage(), 0, 0, this.Width, this.Height);
+
+                //painter.DrawImage(_builtInBackBuffer.GetImage(), 0, 0, this.Width, this.Height);
+                painter.DrawImage(_builtInBackBuffer.GetImage(), 0, 0);
             }
             else
             {

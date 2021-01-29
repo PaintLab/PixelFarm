@@ -326,6 +326,7 @@ namespace PixelFarm.DrawingGL
             _shareRes.SetOrthoViewOffset(0, 0);
             rendersx.SetAsCurrentSurface();
             SetCanvasOrigin(0, 0);//reset
+            //TODO: width, height?
             SetClipRect(0, 0, rendersx.Height, rendersx.Height);
         }
 
@@ -586,6 +587,9 @@ namespace PixelFarm.DrawingGL
             switch (bmp.BitmapFormat)
             {
                 default: throw new NotSupportedException();
+                case BitmapBufferFormat.RGBO:
+                    _rgbTextureShader.DrawSubImage(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
+                    break;
                 case BitmapBufferFormat.RGBA:
                     _rgbaTextureShader.DrawSubImage(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
                     break;

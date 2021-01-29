@@ -33,6 +33,10 @@ namespace PixelFarm.Drawing.Internal
         }
 
         internal Rectangle CurrentClipRect => _drawBoard.CurrentClipRect;
+        public void DrawImage(Image img, float x, float y)
+        {
+            _drawBoard.DrawImage(img, (int)x, (int)y);
+        }
         public void DrawImage(Image img, float x, float y, float w, float h)
         {
             _drawBoard.DrawImage(img, new RectangleF(x, y, w, h));
