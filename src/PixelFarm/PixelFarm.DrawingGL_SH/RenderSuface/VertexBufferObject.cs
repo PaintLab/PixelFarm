@@ -327,10 +327,11 @@ namespace PixelFarm.DrawingGL
 
     }
 
-    public static class SharedVertexBufferStore
+    public static class SharedIndexBufferHelper
     {
-         
-        public static int GetSharedIndexBuffer(int size)
+        //helper class 
+        //
+        public static int NewElementArrayBuffer(int size)
         {
             ushort[] indexBuffer = new ushort[size];//max size
             for (ushort i = 0; i < size; ++i)

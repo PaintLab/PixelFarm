@@ -392,7 +392,7 @@ namespace PixelFarm.DrawingGL
                 else
                 {
                     //create a new one
-                    _sharedIndexBufferId = SharedVertexBufferStore.GetSharedIndexBuffer(SHARED_INDEX_BUFFER_SIZE);
+                    _sharedIndexBufferId = SharedIndexBufferHelper.NewElementArrayBuffer(SHARED_INDEX_BUFFER_SIZE);
                 }
 
                 //use a simple index buffer here
