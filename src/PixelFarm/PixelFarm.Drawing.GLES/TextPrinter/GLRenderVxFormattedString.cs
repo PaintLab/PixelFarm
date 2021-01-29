@@ -31,7 +31,6 @@ namespace PixelFarm.DrawingGL
     {
         List<SameFontTextStrip> _strips;
 
-
         internal ArrayList<float> _sh_vertexList; //temp src vertice buffer for each SameFontTextStrip
         internal ArrayList<ushort> _sh_indexList; //temp src indice buffer for each SameFontTextStrip
 
@@ -167,7 +166,7 @@ namespace PixelFarm.DrawingGL
                 s.AdditionalVerticalOffset = maxStripHeight - s.SpanHeight;
             }
         }
-        internal void PrepareIntermediateStructures()
+        internal void PrepareIntermediateStructures(bool useSingleSeqIndexList)
         {
             if (_strips == null)
             {
@@ -176,8 +175,13 @@ namespace PixelFarm.DrawingGL
             if (_sh_vertexList == null)
             {
                 _sh_vertexList = (s_vertextListPool.Count > 0) ? s_vertextListPool.Pop() : new ArrayList<float>();
+            }
+            if (!useSingleSeqIndexList)
+            {
                 _sh_indexList = (s_indexListPool.Count > 0) ? s_indexListPool.Pop() : new ArrayList<ushort>();
             }
+
+            CreationState = GLRenderVxFormattedStringState.S0_Init;
         }
 
         internal void ReleaseIntermediateStructures()
@@ -340,7 +344,7 @@ namespace PixelFarm.DrawingGL
 
         public ArrayListSegment<float> VertexCoords { get; set; }
         public ArrayListSegment<ushort> IndexArray { get; set; }
-        public int IndexArrayCount => IndexArray.Count;
+        public int IndexArrayCount => UseSeqIndexList ? _seqIndexCount : IndexArray.Count;
 
         public float Width { get; set; }
         public int SpanHeight { get; set; }
@@ -352,6 +356,13 @@ namespace PixelFarm.DrawingGL
 
         static readonly Stack<int> s_sharedIndexBufferStack = new Stack<int>();
         const int SHARED_INDEX_BUFFER_SIZE = 1024;
+        internal bool UseSeqIndexList { get; set; }
+
+        int _seqIndexCount;
+        internal void SetIndexCount(int seqIndexCount)
+        {
+            _seqIndexCount = seqIndexCount;
+        }
 
         int _sharedIndexBufferId; //use shared index buffer or not
         internal DrawingGL.VertexBufferObject GetVbo()

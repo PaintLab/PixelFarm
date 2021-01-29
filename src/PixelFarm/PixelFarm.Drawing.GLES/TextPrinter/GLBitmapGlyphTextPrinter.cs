@@ -1011,8 +1011,10 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-        internal ArrayList<float> _sh_vertexList;
-        internal ArrayList<ushort> _sh_indexList;
+        ArrayList<float> _sh_vertexList;
+        ArrayList<ushort> _sh_indexList;
+        bool _useSingleSequentialIndexList;
+        ArrayList<ushort> _sh_globalIndexList = new ArrayList<ushort>();
 
         void PrepareStringForRenderVx(GLRenderVxFormattedString vxFmtStr, FormattedGlyphPlanSeq fmt_seq)
         {
@@ -1031,6 +1033,8 @@ namespace PixelFarm.DrawingGL
                 fmt_seq = fmt_seq.Next;
             }
 
+
+
             //a fmtGlyphPlanSeqs may contains glyph from  more than 1 font,
             //now, create a overlapped strip for each 
 #if DEBUG
@@ -1047,14 +1051,21 @@ namespace PixelFarm.DrawingGL
             int maxStripHeight = 0;
 
             GlyphMixModeSummary mixModeSummary = new GlyphMixModeSummary();//light-weight state helper
-            //use pool?
-            vxFmtStr.PrepareIntermediateStructures();
-            vxFmtStr.CreationState = GLRenderVxFormattedStringState.S0_Init;
+
+            _useSingleSequentialIndexList = (_uniqueResolvedFonts.Count < 2);
+
+            vxFmtStr.PrepareIntermediateStructures(_useSingleSequentialIndexList);
             //get blank indexList and vertexList from a fmtString,
             //this text printer will create a data set for it.
-
-            _sh_indexList = vxFmtStr._sh_indexList; //temp, 
             _sh_vertexList = vxFmtStr._sh_vertexList;//temp, 
+            if (_useSingleSequentialIndexList)
+            {
+                _sh_indexList = _sh_globalIndexList;
+            }
+            else
+            {
+                _sh_indexList = vxFmtStr._sh_indexList; //temp,             
+            }
 
             foreach (SpanFormattedInfo spFmt in _uniqueResolvedFonts.Keys)
             {
@@ -1069,6 +1080,7 @@ namespace PixelFarm.DrawingGL
 
                 //TODO: review here again, use pool
                 SameFontTextStrip sameFontTextStrip = vxFmtStr.AppendNewStrip();
+                sameFontTextStrip.UseSeqIndexList = _useSingleSequentialIndexList;
                 sameFontTextStrip.ResolvedFont = spFmt.resolvedFont;
                 sameFontTextStrip.BreakInfo = spFmt.breakInfo;
 
@@ -1078,8 +1090,10 @@ namespace PixelFarm.DrawingGL
                             (typeface.HasSvgTable() || typeface.IsBitmapFont || typeface.HasColorTable()));
 
                 //**                  
-                int sh_index_begin = _sh_indexList.Count;
+
                 int sh_vertex_begin = _sh_vertexList.Count;
+
+                int sh_index_begin = _useSingleSequentialIndexList ? 0 : _sh_indexList.Count;
 
                 CreateTextCoords(sameFontTextStrip);
                 //**
@@ -1091,7 +1105,15 @@ namespace PixelFarm.DrawingGL
 
                 spanWidth = sameFontTextStrip.Width;//same width for all strip                 
 
-                sameFontTextStrip.IndexArray = _sh_indexList.CreateSpan(sh_index_begin, _sh_indexList.Length - sh_index_begin);
+                if (_useSingleSequentialIndexList)
+                {
+                    sameFontTextStrip.SetIndexCount(_sh_globalIndexList.Length);
+                    _sh_globalIndexList.Clear();
+                }
+                else
+                {
+                    sameFontTextStrip.IndexArray = _sh_indexList.CreateSpan(sh_index_begin, _sh_indexList.Length - sh_index_begin);
+                }
                 sameFontTextStrip.VertexCoords = _sh_vertexList.CreateSpan(sh_vertex_begin, _sh_vertexList.Length - sh_vertex_begin);
             }
 
