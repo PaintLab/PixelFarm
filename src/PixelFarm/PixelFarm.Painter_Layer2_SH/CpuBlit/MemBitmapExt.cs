@@ -610,6 +610,11 @@ namespace PixelFarm.CpuBlit
         {
             DefaultMemBitmapIO.SaveImage(source, output, outputFormat, saveParameters);
         }
+
+#if DEBUG
+        public static bool s_dbugEnableDebugImage;
+#endif
+
     }
 
     public abstract class MemBitmapIO
