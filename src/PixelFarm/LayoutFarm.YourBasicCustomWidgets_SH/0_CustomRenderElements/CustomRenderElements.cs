@@ -355,9 +355,30 @@ namespace LayoutFarm.CustomWidgets
 
     public class DoubleBufferCustomRenderBox : CustomRenderBox
     {
-        DrawboardBuffer _builtInBackBuffer;
+
+
         bool _hasAccumRect;
         Rectangle _invalidateRect;
+
+        class BackBufferPlate
+        {
+            public int no;
+            public int left;
+            public int right;
+            public int top;
+            public int bottom;
+            public DrawboardBuffer _backBuffer;
+            public int Width => right - left;
+            public int Height => bottom - top;
+            public void SetBounds(int left, int top, int width, int height)
+            {
+                this.left = left;
+                this.right = left + width;
+                this.top = top;
+                this.bottom = top + height;
+            }
+        }
+
 
         public DoubleBufferCustomRenderBox(int width, int height)
           : base(width, height)
@@ -368,16 +389,19 @@ namespace LayoutFarm.CustomWidgets
 
         protected override void OnInvalidateGraphicsNoti(bool fromMe, ref Rectangle totalBounds)
         {
-            if (_builtInBackBuffer != null)
+
+            //find affected slide
+
+            if (_p0 != null)
             {
                 //TODO: review here,
                 //in this case, we copy to another rect
                 //since we don't want the offset to effect the total bounds 
 #if DEBUG
-                if (totalBounds.Width == 150)
-                {
+                //if (totalBounds.Width == 150)
+                //{
 
-                }
+                //}
                 System.Diagnostics.Debug.WriteLine("noti, fromMe=" + fromMe + ",bounds" + totalBounds);
 #endif
                 if (!fromMe)
@@ -385,7 +409,13 @@ namespace LayoutFarm.CustomWidgets
                     totalBounds.Offset(-this.X, -this.Y);
                 }
 
-                _builtInBackBuffer.IsValid = false;
+                if (_invalidateRect.Top > 0)
+                {
+
+                }
+
+                _p0._backBuffer.IsValid = false;
+
 
                 if (!_hasAccumRect)
                 {
@@ -396,105 +426,314 @@ namespace LayoutFarm.CustomWidgets
                 {
                     _invalidateRect = Rectangle.Union(_invalidateRect, totalBounds);
                 }
+
+
             }
             else
             {
                 totalBounds.Offset(this.X, this.Y);
             }
+
             //base.OnInvalidateGraphicsNoti(totalBounds);//skip
         }
-        protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
+
+
+        DrawboardBuffer _builtInBackBuffer_0;
+        DrawboardBuffer _builtInBackBuffer_1;
+        DrawboardBuffer _builtInBackBuffer_2;
+
+        BackBufferPlate _p0;
+        BackBufferPlate _p1;
+        BackBufferPlate _p2; 
+
+        void GetProperPages(DrawBoard d, UpdateArea updateArea, out BackBufferPlate p0, out BackBufferPlate p1)
         {
-            if (EnableDoubleBuffer)
+            int backBufferHeight = this.Height * 2;
+            int topPlateNo = updateArea.Top / backBufferHeight;
+            int bottomPlateNo = updateArea.Bottom / backBufferHeight;
+
+            if (_p0 == null)
             {
+                //main buffer, swap-able 
                 var painter = new PixelFarm.Drawing.Internal.MicroPainter(d);
-                int backBufferHeight = this.Height * 2;
-                if (_builtInBackBuffer == null)
+                //create buffer for this
+
+                if (_builtInBackBuffer_0 == null)
                 {
-                    _builtInBackBuffer = painter.CreateOffscreenDrawBoard(this.Width, backBufferHeight); //offscreen drawboard height*2
+                    _builtInBackBuffer_0 = painter.CreateOffscreenDrawBoard(this.Width, backBufferHeight); //offscreen drawboard height*2
                 }
 
-                if (!_builtInBackBuffer.IsValid)
+                p0 = new BackBufferPlate() { _backBuffer = _builtInBackBuffer_0 };
+                p0.SetBounds(0, topPlateNo * backBufferHeight, Width, backBufferHeight);
+                p0.no = topPlateNo;
+
+                _p0 = p0;//current plate
+            }
+
+            if (topPlateNo == bottomPlateNo)
+            {
+                //use single page
+                if (_p0.no == topPlateNo)
                 {
-#if DEBUG
-                    System.Diagnostics.Debug.WriteLine("double_buffer_update:" + this.dbug_obj_id + "," + _invalidateRect.ToString());
-#endif
-                    float backupViewportW = painter.ViewportWidth; //backup
-                    float backupViewportH = painter.ViewportHeight; //backup
-                    painter.AttachTo(_builtInBackBuffer); //*** switch to builtInBackbuffer 
-                    painter.SetViewportSize(this.Width, backBufferHeight);//after to attach new buffer**
-                    if (!_hasAccumRect)
-                    {
-                        _invalidateRect = new Rectangle(0, 0, Width, Height);
-                    }
-
-#if DEBUG
-                    if (_invalidateRect.Width == 15)
-                    {
-
-                    }
-#endif
-
-                    //                    if (painter.PushLocalClipArea(
-                    //                        _invalidateRect.Left, _invalidateRect.Top,
-                    //                        _invalidateRect.Width, _invalidateRect.Height))
-                    //                    {
-                    //#if DEBUG
-                    //                        //for debug , test clear with random color
-                    //                        //another useful technique to see latest clear area frame-by-frame => use random color
-                    //                        //painter.Clear(Color.FromArgb(255, dbugRandom.Next(0, 255), dbugRandom.Next(0, 255), dbugRandom.Next(0, 255)));
-
-                    //                        canvas.Clear(Color.White);
-                    //#else
-                    //                        canvas.Clear(Color.White);
-                    //#endif
-
-                    //                        base.RenderBoxContent(canvas, updateArea);
-                    //                    }
-
-                    //if (painter.PushLocalClipArea(
-                    //    _invalidateRect.Left, _invalidateRect.Top,
-                    //    _invalidateRect.Width, _invalidateRect.Height))
-                    //{
-#if DEBUG
-                    //for debug , test clear with random color
-                    //another useful technique to see latest clear area frame-by-frame => use random color
-                    //painter.Clear(Color.FromArgb(255, dbugRandom.Next(0, 255), dbugRandom.Next(0, 255), dbugRandom.Next(0, 255)));
-
-                    d.Clear(Color.White);
-#else
-                    d.Clear(Color.White);
-#endif
-
-
-
-                    Rectangle backup = updateArea.CurrentRect;
-                    updateArea.CurrentRect = new Rectangle(0, 0, _builtInBackBuffer.Width, _builtInBackBuffer.Height);
-                    base.RenderClientContent(d, updateArea);
-                    updateArea.CurrentRect = backup;
-                    //}
-                    //painter.PopLocalClipArea();
-                    //
-                    _builtInBackBuffer.IsValid = true;
-                    _hasAccumRect = false;
-
-                    painter.AttachToNormalBuffer();//*** switch back
-                    painter.SetViewportSize(backupViewportW, backupViewportH);//restore viewport size
+                    p0 = _p0;
+                    p1 = null;
                 }
-
-#if DEBUG
                 else
                 {
-                    System.Diagnostics.Debug.WriteLine("double_buffer_update:" + dbug_obj_id + " use cache");
-                }
-#endif
+                    //swap
+                    if (_p1 != null)
+                    {
+                        if (_p0.no == _p1.no + 1)
+                        {
 
-                //painter.DrawImage(_builtInBackBuffer.GetImage(), 0, 0, this.Width, this.Height);
-                painter.DrawImage(_builtInBackBuffer.GetImage(), 0, 0);
+                        }
+                        else
+                        {
+
+                        }
+                    }
+                    else
+                    {
+                        //
+                    }
+
+                    p0 = _p0;
+                    p1 = _p1;
+                }
+
+
             }
             else
             {
+                //use 2 plates 
+
+                if (_builtInBackBuffer_1 == null)
+                {
+                    var painter = new PixelFarm.Drawing.Internal.MicroPainter(d);
+                    _builtInBackBuffer_1 = painter.CreateOffscreenDrawBoard(this.Width, backBufferHeight); //offscreen drawboard height*2
+                }
+
+                if (_p0.no == topPlateNo)
+                {
+                    p0 = _p0;
+                    if (_p1 == null)
+                    {
+                        //next plate
+                        _p1 = new BackBufferPlate() { _backBuffer = _builtInBackBuffer_1 };
+                    }
+                    p1 = _p1;
+                    p1.no = topPlateNo + 1;
+                    p1.SetBounds(0, p0.bottom, p0.Width, backBufferHeight);
+                }
+                else
+                {
+                    //swap p1 => p0
+                    if (_p2 == null)
+                    {
+                        if (_builtInBackBuffer_2 == null)
+                        {
+                            var painter = new PixelFarm.Drawing.Internal.MicroPainter(d);
+                            _builtInBackBuffer_2 = painter.CreateOffscreenDrawBoard(this.Width, backBufferHeight); //offscreen drawboard height*2
+                        }
+                        _p2 = new BackBufferPlate() { _backBuffer = _builtInBackBuffer_2 };
+                        _p2.SetBounds(0, _p1.bottom, _p1.Width, backBufferHeight);
+                    }
+
+                    //
+                    if (topPlateNo < _p0.no)
+                    {
+                        //up
+                        BackBufferPlate temp = _p1;
+                        if (_p2.no == topPlateNo)
+                        {
+                            //same plate
+                            _p1 = _p0;
+                            _p0 = _p2;
+                            _p2 = temp;
+                        }
+                        else
+                        {
+
+                        }
+                        p0 = _p0;
+                        p1 = _p1;
+                    }
+                    else
+                    {
+                        //down
+                        BackBufferPlate temp = _p0;
+                        _p0 = _p1;//swap
+                        _p1 = _p2;
+                        _p1.no = _p0.no + 1;
+                        _p2 = temp;
+
+                        p0 = _p0;
+                        p1 = _p1;
+                    }
+                }
+            }
+        }
+        protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
+        {
+            if (!EnableDoubleBuffer)
+            {
                 base.RenderClientContent(d, updateArea);
+                return;//early exit***
+            }
+            //------------------------------------------
+
+            //helper struct
+            var painter = new PixelFarm.Drawing.Internal.MicroPainter(d);
+            int backBufferHeight = this.Height * 2;
+
+            //from updateArea we should calculate a proper page
+            GetProperPages(d, updateArea, out BackBufferPlate p0, out BackBufferPlate p1);
+            bool also_drawWithBackBuffer1 = p1 != null;
+
+            //p0 is primary
+            //p1 is 
+
+            //if (_builtInBackBuffer0 == null)
+            //{
+            //    //main buffer, swap-able 
+            //    _builtInBackBuffer0 = painter.CreateOffscreenDrawBoard(this.Width, backBufferHeight); //offscreen drawboard height*2
+            //}
+
+            //if (updateArea.Bottom > _builtInBackBuffer0.Height)
+            //{
+            //    //we need another back buffer
+            //    if (_builtInBackBuffer1 == null)
+            //    {
+            //        _builtInBackBuffer1 = painter.CreateOffscreenDrawBoard(this.Width, backBufferHeight); //offscreen drawboard height*2
+            //    }
+            //    also_drawWithBackBuffer1 = true;
+            //}
+
+            if (also_drawWithBackBuffer1 && !p1._backBuffer.IsValid)
+            {
+                //update
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine("double_buffer_update:" + this.dbug_obj_id + "," + _invalidateRect.ToString());
+#endif
+                float backupViewportW = painter.ViewportWidth; //backup
+                float backupViewportH = painter.ViewportHeight; //backup
+                painter.AttachTo(p1._backBuffer); //*** switch to builtInBackbuffer 
+                painter.SetViewportSize(this.Width, backBufferHeight);//after to attach new buffer**
+                if (!_hasAccumRect)
+                {
+                    _invalidateRect = new Rectangle(0, 0, Width, Height);
+                }
+#if DEBUG
+                d.Clear(Color.Blue);//dbug
+#else
+                 d.Clear(Color.White);
+#endif
+                Rectangle backup = updateArea.CurrentRect;
+                updateArea.CurrentRect = new Rectangle(0, p1.top, p1.Width, p1.Height);
+                d.SetCanvasOrigin(0, -p1.top);//minus**
+                base.RenderClientContent(d, updateArea);
+                d.SetCanvasOrigin(0, 0);
+
+#if DEBUG
+                Image dbugImg = p1._backBuffer.CopyToNewMemBitmap();
+                PixelFarm.CpuBlit.MemBitmapExt.s_dbugEnableDebugImage = true;
+                PixelFarm.CpuBlit.MemBitmapExt.SaveImage((PixelFarm.CpuBlit.MemBitmap)dbugImg, "temp1.png", PixelFarm.CpuBlit.MemBitmapIO.OutputImageFormat.Png);
+                PixelFarm.CpuBlit.MemBitmapExt.s_dbugEnableDebugImage = false;
+#endif
+
+                updateArea.CurrentRect = backup;
+
+                p1._backBuffer.IsValid = true;
+
+                painter.AttachToNormalBuffer();//*** switch back
+                painter.SetViewportSize(backupViewportW, backupViewportH);//restore viewport size
+            }
+
+            //--------------
+            if (!p0._backBuffer.IsValid)
+            {
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine("double_buffer_update:" + this.dbug_obj_id + "," + _invalidateRect.ToString());
+#endif
+                float backupViewportW = painter.ViewportWidth; //backup
+                float backupViewportH = painter.ViewportHeight; //backup
+                painter.AttachTo(p0._backBuffer); //*** switch to builtInBackbuffer 
+                painter.SetViewportSize(this.Width, backBufferHeight);//after to attach new buffer**
+                if (!_hasAccumRect)
+                {
+                    _invalidateRect = new Rectangle(0, 0, Width, Height);
+                }
+
+#if DEBUG
+                if (_invalidateRect.Width == 15)
+                {
+
+                }
+#endif
+
+                //                    if (painter.PushLocalClipArea(
+                //                        _invalidateRect.Left, _invalidateRect.Top,
+                //                        _invalidateRect.Width, _invalidateRect.Height))
+                //                    {
+                //#if DEBUG
+                //                        //for debug , test clear with random color
+                //                        //another useful technique to see latest clear area frame-by-frame => use random color
+                //                        //painter.Clear(Color.FromArgb(255, dbugRandom.Next(0, 255), dbugRandom.Next(0, 255), dbugRandom.Next(0, 255)));
+
+                //                        canvas.Clear(Color.White);
+                //#else
+                //                        canvas.Clear(Color.White);
+                //#endif
+
+                //                        base.RenderBoxContent(canvas, updateArea);
+                //                    }
+
+                //if (painter.PushLocalClipArea(
+                //    _invalidateRect.Left, _invalidateRect.Top,
+                //    _invalidateRect.Width, _invalidateRect.Height))
+                //{
+#if DEBUG
+                //for debug , test clear with random color
+                //another useful technique to see latest clear area frame-by-frame => use random color
+                //painter.Clear(Color.FromArgb(255, dbugRandom.Next(0, 255), dbugRandom.Next(0, 255), dbugRandom.Next(0, 255)));
+
+                d.Clear(Color.White);
+#else
+                d.Clear(Color.White);
+#endif
+
+                Rectangle backup = updateArea.CurrentRect;
+                updateArea.CurrentRect = new Rectangle(0, p0.top, p0.Width, p0.Height);
+                d.SetCanvasOrigin(0, -p0.top);//minus**
+                base.RenderClientContent(d, updateArea);
+                updateArea.CurrentRect = backup;
+                d.SetCanvasOrigin(0, 0);
+                //}
+                //painter.PopLocalClipArea();
+                //
+                p0._backBuffer.IsValid = true;
+                _hasAccumRect = false;
+
+                painter.AttachToNormalBuffer();//*** switch back
+                painter.SetViewportSize(backupViewportW, backupViewportH);//restore viewport size
+            }
+#if DEBUG
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("double_buffer_update:" + dbug_obj_id + " use cache");
+            }
+#endif
+
+            _hasAccumRect = false;
+
+            if (also_drawWithBackBuffer1)
+            {
+                painter.DrawImage(p0._backBuffer.GetImage(), 0, p0.top);
+                painter.DrawImage(p1._backBuffer.GetImage(), 0, p1.top);
+            }
+            else
+            {
+                painter.DrawImage(p0._backBuffer.GetImage(), 0, p0.top);
             }
         }
 
