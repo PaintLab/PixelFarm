@@ -12,10 +12,8 @@ namespace PixelFarm.Drawing.Internal
         public float ViewportWidth => _drawBoard.Width;
         public float ViewportHeight => _drawBoard.Height;
 
-        public DrawboardBuffer CreateOffscreenDrawBoard(int width, int height)
-        {
-            return _drawBoard.CreateBackbuffer(width, height);
-        }
+        public DrawboardBuffer CreateOffscreenDrawBoard(int width, int height) => _drawBoard.CreateBackbuffer(width, height);
+
         public void AttachTo(DrawboardBuffer attachToBackbuffer)
         {
             //save  

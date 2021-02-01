@@ -377,6 +377,11 @@ namespace LayoutFarm.CustomWidgets
                 this.top = top;
                 this.bottom = top + height;
             }
+            public override string ToString()
+            {
+                //plate no
+                return no.ToString() + ", (left,top)=" + left + "," + top;
+            }
         }
 
 
@@ -438,13 +443,9 @@ namespace LayoutFarm.CustomWidgets
         }
 
 
-        DrawboardBuffer _builtInBackBuffer_0;
-        DrawboardBuffer _builtInBackBuffer_1;
-        DrawboardBuffer _builtInBackBuffer_2;
-
         BackBufferPlate _p0;
         BackBufferPlate _p1;
-        BackBufferPlate _p2; 
+        BackBufferPlate _p2;
 
         void GetProperPages(DrawBoard d, UpdateArea updateArea, out BackBufferPlate p0, out BackBufferPlate p1)
         {
@@ -454,16 +455,9 @@ namespace LayoutFarm.CustomWidgets
 
             if (_p0 == null)
             {
-                //main buffer, swap-able 
-                var painter = new PixelFarm.Drawing.Internal.MicroPainter(d);
-                //create buffer for this
-
-                if (_builtInBackBuffer_0 == null)
-                {
-                    _builtInBackBuffer_0 = painter.CreateOffscreenDrawBoard(this.Width, backBufferHeight); //offscreen drawboard height*2
-                }
-
-                p0 = new BackBufferPlate() { _backBuffer = _builtInBackBuffer_0 };
+                //main buffer, swap-able
+                //create buffer for this 
+                p0 = new BackBufferPlate() { _backBuffer = d.CreateBackbuffer(this.Width, backBufferHeight) };
                 p0.SetBounds(0, topPlateNo * backBufferHeight, Width, backBufferHeight);
                 p0.no = topPlateNo;
 
@@ -475,12 +469,42 @@ namespace LayoutFarm.CustomWidgets
                 //use single page
                 if (_p0.no == topPlateNo)
                 {
+                    //current page
                     p0 = _p0;
                     p1 = null;
                 }
                 else
                 {
-                    //swap
+                    //find
+                    if (_p0.no + 1 == topPlateNo)
+                    {
+                        //check if we 
+                        //move down
+                        if (_p1 != null)
+                        {
+                            if (_p1.no == topPlateNo)
+                            {
+
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                        else
+                        {
+
+                        }
+                    }
+                    else if (_p0.no - 1 == topPlateNo)
+                    {
+
+                    }
+                    else
+                    {
+
+                    }
+
                     if (_p1 != null)
                     {
                         if (_p0.no == _p1.no + 1)
@@ -498,28 +522,20 @@ namespace LayoutFarm.CustomWidgets
                     }
 
                     p0 = _p0;
-                    p1 = _p1;
+                    p1 = null;
                 }
-
-
             }
             else
             {
-                //use 2 plates 
-
-                if (_builtInBackBuffer_1 == null)
-                {
-                    var painter = new PixelFarm.Drawing.Internal.MicroPainter(d);
-                    _builtInBackBuffer_1 = painter.CreateOffscreenDrawBoard(this.Width, backBufferHeight); //offscreen drawboard height*2
-                }
+                //use 2 plates  
 
                 if (_p0.no == topPlateNo)
                 {
                     p0 = _p0;
                     if (_p1 == null)
                     {
-                        //next plate
-                        _p1 = new BackBufferPlate() { _backBuffer = _builtInBackBuffer_1 };
+                        //next plate                         
+                        _p1 = new BackBufferPlate() { _backBuffer = d.CreateBackbuffer(this.Width, backBufferHeight) }; //offscreen drawboard height*2 };
                     }
                     p1 = _p1;
                     p1.no = topPlateNo + 1;
@@ -530,12 +546,7 @@ namespace LayoutFarm.CustomWidgets
                     //swap p1 => p0
                     if (_p2 == null)
                     {
-                        if (_builtInBackBuffer_2 == null)
-                        {
-                            var painter = new PixelFarm.Drawing.Internal.MicroPainter(d);
-                            _builtInBackBuffer_2 = painter.CreateOffscreenDrawBoard(this.Width, backBufferHeight); //offscreen drawboard height*2
-                        }
-                        _p2 = new BackBufferPlate() { _backBuffer = _builtInBackBuffer_2 };
+                        _p2 = new BackBufferPlate() { _backBuffer = d.CreateBackbuffer(this.Width, backBufferHeight) };
                         _p2.SetBounds(0, _p1.bottom, _p1.Width, backBufferHeight);
                     }
 
