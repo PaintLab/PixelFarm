@@ -175,7 +175,7 @@ namespace PixelFarm.CpuBlit
         //        } 
         //    }
         //}
-        internal static void Clear(PixelFarm.CpuBlit.TempMemPtr tmp, Color color)
+        internal static void Clear(PixelFarm.CpuBlit.TempMemPtr tmp, Color color, int width, int height)
         {
             unsafe
             {
@@ -187,58 +187,14 @@ namespace PixelFarm.CpuBlit
                 //skip clipping ****
                 //TODO: reimplement clipping***
                 //------------------------------ 
-                if (color == Color.White)
+
+                int n = len32;
+                unsafe
                 {
-                    //fast cleat with white color
-                    int n = len32;
-                    unsafe
-                    {
-                        //fixed (void* head = &buffer[0])
-                        {
-                            uint* head_i32 = (uint*)buffer;
-                            for (int i = n - 1; i >= 0; --i)
-                            {
-                                *head_i32 = 0xffffffff; //white (ARGB)
-                                head_i32++;
-                            }
-                        }
-                    }
-                }
-                else if (color == Color.Black)
-                {
-                    //fast clear with black color
-                    int n = len32;
-                    unsafe
-                    {
-                        //fixed (void* head = &buffer[0])
-                        {
-                            uint* head_i32 = (uint*)buffer;
-                            for (int i = n - 1; i >= 0; --i)
-                            {
-                                *head_i32 = 0xff000000; //black (ARGB)
-                                head_i32++;
-                            }
-                        }
-                    }
-                }
-                else if (color == Color.Empty)
-                {
-                    int n = len32;
-                    unsafe
-                    {
-                        //fixed (void* head = &buffer[0])
-                        {
-                            uint* head_i32 = (uint*)buffer;
-                            for (int i = n - 1; i >= 0; --i)
-                            {
-                                *head_i32 = 0x00000000; //empty
-                                head_i32++;
-                            }
-                        }
-                    }
-                }
-                else
-                {
+                    //clear only 1st row 
+                    uint* head_i32 = (uint*)buffer;
+                    //first line
+
                     //other color
                     //#if WIN32
                     //                            uint colorARGB = (uint)((color.alpha << 24) | ((color.red << 16) | (color.green << 8) | color.blue));
@@ -247,26 +203,30 @@ namespace PixelFarm.CpuBlit
                     //#endif
 
                     //ARGB
-                    uint colorARGB = (uint)((color.A << CO.A_SHIFT) | ((color.R << CO.R_SHIFT) | (color.G << CO.G_SHIFT) | color.B << CO.B_SHIFT));
-                    int n = len32;
-                    unsafe
+                    uint colorARGB = 0;//empty
+                    if (color != Color.Empty)
                     {
-                        //fixed (void* head = &buffer[0])
-                        {
-                            uint* head_i32 = (uint*)buffer;
-                            for (int i = n - 1; i >= 0; --i)
-                            {
-                                *head_i32 = colorARGB;
-                                head_i32++;
-                            }
-                        }
+                        colorARGB = (uint)((color.A << CO.A_SHIFT) | ((color.R << CO.R_SHIFT) | (color.G << CO.G_SHIFT) | color.B << CO.B_SHIFT));
+                    }
+
+                    for (int i = width - 1; i >= 0; --i)
+                    {
+                        *head_i32 = colorARGB; //black (ARGB)
+                        head_i32++;
+                    }
+                    //copy to another line
+                    int stride = width * 4;
+                    for (int i = height - 2; i >= 0; --i)
+                    {
+                        MemMx.memcpy((byte*)head_i32, (byte*)buffer, stride);
+                        head_i32 += width;
                     }
                 }
             }
         }
         public static void Clear(this MemBitmap bmp, Color color)
         {
-            Clear(MemBitmap.GetBufferPtr(bmp), color);
+            Clear(MemBitmap.GetBufferPtr(bmp), color, bmp.Width, bmp.Height);
         }
         /// <summary>
         /// create thumbnail img with super-sampling technique,(Expensive, High quality thumb)
