@@ -47,6 +47,7 @@ namespace PixelFarm.CpuBlit
             return ptr;
         }
 
+
         public static int[] CopyImgBuffer(this MemBitmap memBmp, int width, int height, bool flipY = false)
         {
             //calculate stride for the width
@@ -140,6 +141,47 @@ namespace PixelFarm.CpuBlit
             return copyBmp;
         }
 
+
+        public static void DoBitBlt(MemBitmap src, MemBitmap dst, int dstX, int dstY, int srcX, int srcY, int srcW, int srcH)
+        {
+            IntPtr src_h = src.GetRawBufferHead();
+            IntPtr dst_h = dst.GetRawBufferHead();
+            unsafe
+            {
+                int* src_h1 = (int*)src_h;
+                int* dst_h1 = (int*)dst_h;
+                //copy line-by-line
+                src_h1 += srcY * src.Width;//move to src line
+                dst_h1 += dstY * dst.Width;//move to dst line
+
+                if (dstX + srcW > dst.Width)
+                {
+                    srcW = dst.Width - dstX;
+                    if (srcW < 0) { return; }//limit
+                }
+                if (dstY + srcH > dst.Height)
+                {
+                    srcH = dst.Height - dstY;
+                    if (srcH < 0) return;//limit
+                }
+
+                for (int t_count = 0; t_count < srcH; ++t_count)
+                {
+                    MemMx.memcpy((byte*)(dst_h1 + dstX), (byte*)(src_h1 + srcX), srcW * 4);
+                    //move to next line
+                    src_h1 += src.Width;
+                    dst_h1 += dst.Width;
+                }
+            }
+
+            src.ReleaseRawBufferHead(src_h);
+            dst.ReleaseRawBufferHead(dst_h);
+
+#if DEBUG
+            //dst.SaveImage("tmpN1.png");
+#endif
+        }
+
         ///// <summary>
         ///// swap from gles ARGB to ABGR (Gdi)
         ///// </summary>
@@ -207,7 +249,7 @@ namespace PixelFarm.CpuBlit
                     }
 
 
-                    
+
                     head_i32 += top * width;//move to first line 
                     //and first line only
                     uint* head_i32_1 = head_i32 + left;
@@ -638,6 +680,7 @@ namespace PixelFarm.CpuBlit
     {
         public enum OutputImageFormat
         {
+
             Default,
             Png,
             Jpeg,

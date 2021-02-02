@@ -155,8 +155,6 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             ypos += lineSpaceInPx;
 
             p.FillColor = Color.Blue;
-
-
             _sw1.Reset();
             _sw1.Start();
             for (int ty = 0; ty < 400; ++ty)
