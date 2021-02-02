@@ -79,7 +79,9 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
         void SetupFontAtlasPrinter(AggPainter p)
         {
             //use custom printer here
-            //_printer = new FontAtlasTextPrinter(p);
+
+            //in this example we have 2 text printer
+            //1. 
             if (_fontAtlasTextPrinter == null)
             {
                 _fontAtlasTextPrinter = new FontAtlasTextPrinter(p);
@@ -87,9 +89,12 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 
             if (_vxsTextPrinter == null)
             {
+
                 _openFontTextServices = new OpenFontTextService();
+
                 _vxsTextPrinter = new VxsTextSpanPrinter(p, _openFontTextServices.CreateNewServiceClient());
                 _vxsTextPrinter.ChangeFont(p.CurrentFont);
+                _vxsTextPrinter.TextBaseline = Typography.Text.TextBaseline.Top;
             }
 
             _printer = (_useFontAtlas) ?
@@ -107,6 +112,8 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 
             _printer.DrawString(buffer, startAt, len, (float)x, (float)y);
         }
+
+        System.Diagnostics.Stopwatch _sw1 = new System.Diagnostics.Stopwatch();
         public override void Draw(Painter painter)
         {
             if (!(painter is AggPainter p)) return;
@@ -149,24 +156,44 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             ypos += lineSpaceInPx;
 
             p.FillColor = Color.Blue;
-            DrawString(p, "Hello World", 10, ypos);
-            ypos += lineSpaceInPx;
 
-            p.FillColor = Color.Red;
-            DrawString(p, "Hello World", 10, ypos);
-            ypos += lineSpaceInPx;
 
-            p.FillColor = Color.Yellow;
-            DrawString(p, "Hello World", 10, ypos);
-            ypos += lineSpaceInPx;
+            _sw1.Reset();
+            _sw1.Start();
+            for (int ty = 0; ty < 20; ++ty)
+            {
+                int xpos = 10;
+                for (int tx = 0; tx < 20; ++tx)
+                {
+                    DrawString(p, "Hello World" + ty, xpos, ypos);
+                    xpos += 50;
+                }
 
-            p.FillColor = KnownColors.Gray;
-            DrawString(p, "Hello World", 10, ypos);
-            ypos += lineSpaceInPx;
+                ypos += lineSpaceInPx;
+            }
+            _sw1.Stop();
+            long ms = _sw1.ElapsedMilliseconds;
 
-            p.FillColor = Color.Black;
-            DrawString(p, "Hello World", 10, ypos);
-            ypos += lineSpaceInPx;
+
+
+            //DrawString(p, "Hello World", 10, ypos);
+            //ypos += lineSpaceInPx;
+
+            //p.FillColor = Color.Red;
+            //DrawString(p, "Hello World", 10, ypos);
+            //ypos += lineSpaceInPx;
+
+            //p.FillColor = Color.Yellow;
+            //DrawString(p, "Hello World", 10, ypos);
+            //ypos += lineSpaceInPx;
+
+            //p.FillColor = KnownColors.Gray;
+            //DrawString(p, "Hello World", 10, ypos);
+            //ypos += lineSpaceInPx;
+
+            //p.FillColor = Color.Black;
+            //DrawString(p, "Hello World", 10, ypos);
+            //ypos += lineSpaceInPx;
 
             if (!string.IsNullOrEmpty(UserText))
             {

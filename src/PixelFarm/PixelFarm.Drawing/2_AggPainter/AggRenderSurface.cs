@@ -154,7 +154,7 @@ namespace PixelFarm.CpuBlit
             if (destImage.BitDepth != 32) throw new NotSupportedException();
 #endif
 
-            MemBitmapExt.Clear(destImage.GetBufferPtr(), color);
+            MemBitmapExt.Clear(destImage.GetBufferPtr(), color, destImage.Width, destImage.Height);
 
             //unsafe
             //{                
