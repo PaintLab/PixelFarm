@@ -89,6 +89,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             {
                 _openFontTextServices = new OpenFontTextService();
                 _vxsTextPrinter = new VxsTextSpanPrinter(p, _openFontTextServices.CreateNewServiceClient());
+                _vxsTextPrinter.ChangeFont(p.CurrentFont);
             }
 
             _printer = (_useFontAtlas) ?
