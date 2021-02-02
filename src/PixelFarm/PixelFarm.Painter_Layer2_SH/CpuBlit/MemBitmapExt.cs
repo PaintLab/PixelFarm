@@ -206,7 +206,10 @@ namespace PixelFarm.CpuBlit
                         colorARGB = (uint)((color.A << CO.A_SHIFT) | ((color.R << CO.R_SHIFT) | (color.G << CO.G_SHIFT) | color.B << CO.B_SHIFT));
                     }
 
-                    //first line only
+
+                    
+                    head_i32 += top * width;//move to first line 
+                    //and first line only
                     uint* head_i32_1 = head_i32 + left;
                     for (int i = width - 1; i >= 0; --i)
                     {
@@ -214,10 +217,10 @@ namespace PixelFarm.CpuBlit
                         head_i32_1++;
                     }
 
-
+                    int stride = width * 4;//bytes
                     //and copy to another line
                     head_i32 += width;//move to another line
-                    int stride = width * 4;
+
                     for (int i = height - 2; i >= 0; --i)
                     {
                         MemMx.memcpy((byte*)(head_i32 + left), (byte*)buffer, stride);
