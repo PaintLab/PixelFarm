@@ -176,12 +176,63 @@ namespace PixelFarm.CpuBlit
         //    }
         //}
 
+        internal static void Clear(PixelFarm.CpuBlit.TempMemPtr tmp, Color color, int left, int top, int width, int height)
+        {
+            unsafe
+            {
+                int* buffer = (int*)tmp.Ptr;
+                //------------------------------
+                //fast clear buffer
+                //skip clipping ****
+                //TODO: reimplement clipping***
+                //------------------------------  
+
+                unsafe
+                {
+                    //clear only 1st row 
+                    uint* head_i32 = (uint*)buffer;
+                    //first line
+                    //other color
+                    //#if WIN32
+                    //  uint colorARGB = (uint)((color.alpha << 24) | ((color.red << 16) | (color.green << 8) | color.blue));
+                    //#else
+                    //  uint colorARGB = (uint)((color.alpha << 24) | ((color.blue << 16) | (color.green << 8) | color.red));
+                    //#endif
+
+                    //ARGB
+                    uint colorARGB = 0;//empty
+                    if (color != Color.Empty)
+                    {
+                        colorARGB = (uint)((color.A << CO.A_SHIFT) | ((color.R << CO.R_SHIFT) | (color.G << CO.G_SHIFT) | color.B << CO.B_SHIFT));
+                    }
+
+                    //first line only
+                    uint* head_i32_1 = head_i32 + left;
+                    for (int i = width - 1; i >= 0; --i)
+                    {
+                        *head_i32_1 = colorARGB; //black (ARGB)
+                        head_i32_1++;
+                    }
+
+
+                    //and copy to another line
+                    head_i32 += width;//move to another line
+                    int stride = width * 4;
+                    for (int i = height - 2; i >= 0; --i)
+                    {
+                        MemMx.memcpy((byte*)(head_i32 + left), (byte*)buffer, stride);
+                        head_i32 += width;
+                    }
+                }
+            }
+        }
+
         internal static void Clear(PixelFarm.CpuBlit.TempMemPtr tmp, Color color, int width, int height)
         {
             unsafe
             {
                 int* buffer = (int*)tmp.Ptr;
-                int len32 = tmp.LengthInBytes / 4;
+
 
                 //------------------------------
                 //fast clear buffer
@@ -189,7 +240,7 @@ namespace PixelFarm.CpuBlit
                 //TODO: reimplement clipping***
                 //------------------------------ 
 
-                int n = len32;
+
                 unsafe
                 {
                     //clear only 1st row 
@@ -198,9 +249,9 @@ namespace PixelFarm.CpuBlit
 
                     //other color
                     //#if WIN32
-                    //                            uint colorARGB = (uint)((color.alpha << 24) | ((color.red << 16) | (color.green << 8) | color.blue));
+                    //  uint colorARGB = (uint)((color.alpha << 24) | ((color.red << 16) | (color.green << 8) | color.blue));
                     //#else
-                    //                            uint colorARGB = (uint)((color.alpha << 24) | ((color.blue << 16) | (color.green << 8) | color.red));
+                    //  uint colorARGB = (uint)((color.alpha << 24) | ((color.blue << 16) | (color.green << 8) | color.red));
                     //#endif
 
                     //ARGB
@@ -220,6 +271,7 @@ namespace PixelFarm.CpuBlit
                     int stride = width * 4;
                     for (int i = height - 2; i >= 0; --i)
                     {
+                        //copy from first line to another line
                         MemMx.memcpy((byte*)head_i32, (byte*)buffer, stride);
                         head_i32 += width;
                     }
