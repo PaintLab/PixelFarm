@@ -175,6 +175,7 @@ namespace PixelFarm.CpuBlit
         //        } 
         //    }
         //}
+
         internal static void Clear(PixelFarm.CpuBlit.TempMemPtr tmp, Color color, int width, int height)
         {
             unsafe
@@ -209,12 +210,13 @@ namespace PixelFarm.CpuBlit
                         colorARGB = (uint)((color.A << CO.A_SHIFT) | ((color.R << CO.R_SHIFT) | (color.G << CO.G_SHIFT) | color.B << CO.B_SHIFT));
                     }
 
+                    //first line only
                     for (int i = width - 1; i >= 0; --i)
                     {
                         *head_i32 = colorARGB; //black (ARGB)
                         head_i32++;
                     }
-                    //copy to another line
+                    //and copy to another line
                     int stride = width * 4;
                     for (int i = height - 2; i >= 0; --i)
                     {
