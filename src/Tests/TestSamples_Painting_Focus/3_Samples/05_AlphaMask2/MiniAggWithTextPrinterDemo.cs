@@ -25,6 +25,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             this.Width = 800;
             this.Height = 600;
             UserText = "";
+            UseFontAtlas = true;
         }
         public override void Init()
         {
@@ -137,8 +138,6 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
                 lineSpaceInPx = 16; //tmp fix
             }
             int ypos = 0;
-
-
             DrawString(p, "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii", 10, ypos);
             ypos += lineSpaceInPx;
             //--------  
@@ -160,7 +159,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
 
             _sw1.Reset();
             _sw1.Start();
-            for (int ty = 0; ty < 20; ++ty)
+            for (int ty = 0; ty < 400; ++ty)
             {
                 int xpos = 10;
                 for (int tx = 0; tx < 20; ++tx)
