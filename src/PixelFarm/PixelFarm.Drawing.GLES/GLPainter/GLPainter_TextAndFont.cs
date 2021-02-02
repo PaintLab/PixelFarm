@@ -18,7 +18,7 @@ namespace PixelFarm.DrawingGL
         void PrepareStringForRenderVx(GLRenderVxFormattedString renderVx, char[] text, int startAt, int len);
         void PrepareStringForRenderVx(GLRenderVxFormattedString renderVx, int[] text, int startAt, int len);
         void PrepareStringForRenderVx(GLRenderVxFormattedString renderVx, IFormattedGlyphPlanList formattedGlyphPlans);
-        void RecreateStrip(GLRenderVxFormattedString renderVx);
+
 
         void ChangeFont(RequestFont font);
         void ChangeFillColor(Color fillColor);
@@ -193,6 +193,7 @@ namespace PixelFarm.DrawingGL
             _creationCycle++;
 
             int j = fmtStringList.Count;
+            
             for (int i = j - 1; i >= 0; --i)
             {
                 //change state before send to the drawboard
@@ -227,6 +228,10 @@ namespace PixelFarm.DrawingGL
             RequestFont prevFont = CurrentFont; //save
             WordPlate latestWordplate = null;
 
+            //if (j > 20)
+            //{
+            //    j = 20;
+            //}
             for (int i = 0; i < j; ++i)
             {
                 GLRenderVxFormattedString vxFmtStr = fmtStringList[i];

@@ -1154,10 +1154,7 @@ namespace PixelFarm.DrawingGL
 
 #endif
         }
-        public void RecreateStrip(GLRenderVxFormattedString vxFmtStr)
-        {
-            _painter.TryCreateWordStrip(vxFmtStr);
-        }
+       
         public void PrepareStringForRenderVx(GLRenderVxFormattedString vxFmtStr, IFormattedGlyphPlanList fmtGlyphPlans)
         {
             if (!(fmtGlyphPlans is FormattedGlyphPlanListHolder fmtHolder)) { return; }

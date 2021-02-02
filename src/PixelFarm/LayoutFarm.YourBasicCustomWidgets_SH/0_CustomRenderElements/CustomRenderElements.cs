@@ -356,7 +356,6 @@ namespace LayoutFarm.CustomWidgets
     public class DoubleBufferCustomRenderBox : CustomRenderBox
     {
 
-
         bool _hasAccumRect;
         Rectangle _invalidateRect;
 
@@ -392,198 +391,158 @@ namespace LayoutFarm.CustomWidgets
         }
         public bool EnableDoubleBuffer { get; set; }
 
-        protected override void OnInvalidateGraphicsNoti(bool fromMe, ref Rectangle totalBounds)
-        {
-
-            //find affected slide
-
-            if (_p0 != null)
-            {
-                //TODO: review here,
-                //in this case, we copy to another rect
-                //since we don't want the offset to effect the total bounds 
-#if DEBUG
-                //if (totalBounds.Width == 150)
-                //{
-
-                //}
-                System.Diagnostics.Debug.WriteLine("noti, fromMe=" + fromMe + ",bounds" + totalBounds);
-#endif
-                if (!fromMe)
-                {
-                    totalBounds.Offset(-this.X, -this.Y);
-                }
-
-                if (_invalidateRect.Top > 0)
-                {
-
-                }
-
-                _p0._backBuffer.IsValid = false;
-
-
-                if (!_hasAccumRect)
-                {
-                    _invalidateRect = totalBounds;
-                    _hasAccumRect = true;
-                }
-                else
-                {
-                    _invalidateRect = Rectangle.Union(_invalidateRect, totalBounds);
-                }
-
-
-            }
-            else
-            {
-                totalBounds.Offset(this.X, this.Y);
-            }
-
-            //base.OnInvalidateGraphicsNoti(totalBounds);//skip
-        }
-
 
         BackBufferPlate _p0;
         BackBufferPlate _p1;
-        BackBufferPlate _p2;
+        TriplePlateMx _triplePlateMx;
 
-        void GetProperPages(DrawBoard d, UpdateArea updateArea, out BackBufferPlate p0, out BackBufferPlate p1)
+        class TriplePlateMx
         {
-            int backBufferHeight = this.Height * 2;
-            int topPlateNo = updateArea.Top / backBufferHeight;
-            int bottomPlateNo = updateArea.Bottom / backBufferHeight;
+            BackBufferPlate[] _plates;
+            int _width;
+            int _height;
 
-            if (_p0 == null)
+            public void Init(DrawBoard d, int w, int h)
             {
-                //main buffer, swap-able
-                //create buffer for this 
-                p0 = new BackBufferPlate() { _backBuffer = d.CreateBackbuffer(this.Width, backBufferHeight) };
-                p0.SetBounds(0, topPlateNo * backBufferHeight, Width, backBufferHeight);
-                p0.no = topPlateNo;
+                if (_plates != null) return;
+                _width = w;
+                _height = h;
+                _plates = new BackBufferPlate[3];
 
-                _p0 = p0;//current plate
+                _plates[0] = new BackBufferPlate() { _backBuffer = d.CreateBackbuffer(w, h) };
+                _plates[1] = new BackBufferPlate() { _backBuffer = d.CreateBackbuffer(w, h) };
+                _plates[2] = new BackBufferPlate() { _backBuffer = d.CreateBackbuffer(w, h) };
+
+                //update init plate-no and bounds
+                int ypos = 0;
+                for (int i = 0; i < _plates.Length; ++i)
+                {
+                    BackBufferPlate p = _plates[i];
+                    p.no = i;
+                    p.SetBounds(0, ypos, w, h);
+                    ypos += h;
+                }
             }
 
-            if (topPlateNo == bottomPlateNo)
+
+            public void SetCurrentArea(UpdateArea updateArea, out BackBufferPlate _p0, out BackBufferPlate _p1)
             {
-                //use single page
-                if (_p0.no == topPlateNo)
+                int topPlateNo = updateArea.Top / _height;
+                int bottomPlateNo = updateArea.Bottom / _height;
+
+                //find top plate
+                BackBufferPlate foundPlate = null;
+                int foundAtIndex = 0;
+                for (int i = 0; i < _plates.Length; ++i)
                 {
-                    //current page
-                    p0 = _p0;
-                    p1 = null;
+                    BackBufferPlate p = _plates[i];
+                    if (p.no == topPlateNo) //match plate number
+                    {
+                        //found- page
+                        foundPlate = p;
+                        foundAtIndex = i;
+                        break;
+                    }
                 }
-                else
+
+                if (foundPlate == null)
                 {
-                    //find
-                    if (_p0.no + 1 == topPlateNo)
-                    {
-                        //check if we 
-                        //move down
-                        if (_p1 != null)
-                        {
-                            if (_p1.no == topPlateNo)
-                            {
-
-                            }
-                            else
-                            {
-
-                            }
-                        }
-                        else
-                        {
-
-                        }
-                    }
-                    else if (_p0.no - 1 == topPlateNo)
+                    //not found matching plate                     
+                    //swap up or down?
+                    if (_plates[0].no - 1 == topPlateNo)
                     {
 
-                    }
-                    else
-                    {
+                        BackBufferPlate a0 = _plates[0];
+                        BackBufferPlate a1 = _plates[1];
+                        BackBufferPlate a2 = _plates[2];
 
-                    }
-
-                    if (_p1 != null)
-                    {
-                        if (_p0.no == _p1.no + 1)
-                        {
-
-                        }
-                        else
-                        {
-
-                        }
-                    }
-                    else
-                    {
+                        //move a0, a1 down
+                        //move a2 up
+                        _plates[0] = a2;
+                        _plates[1] = a0;
+                        _plates[2] = a1;
                         //
+                        a2.no = a0.no - 1;
+                        a2._backBuffer.IsValid = false;
+                        a2.SetBounds(0, a2.no * _height, _width, _height);
+
+                        foundAtIndex = 0;
+                        foundPlate = a2;
                     }
-
-                    p0 = _p0;
-                    p1 = null;
-                }
-            }
-            else
-            {
-                //use 2 plates  
-
-                if (_p0.no == topPlateNo)
-                {
-                    p0 = _p0;
-                    if (_p1 == null)
+                    else if (_plates[2].no + 1 == topPlateNo)
                     {
-                        //next plate                         
-                        _p1 = new BackBufferPlate() { _backBuffer = d.CreateBackbuffer(this.Width, backBufferHeight) }; //offscreen drawboard height*2 };
-                    }
-                    p1 = _p1;
-                    p1.no = topPlateNo + 1;
-                    p1.SetBounds(0, p0.bottom, p0.Width, backBufferHeight);
-                }
-                else
-                {
-                    //swap p1 => p0
-                    if (_p2 == null)
-                    {
-                        _p2 = new BackBufferPlate() { _backBuffer = d.CreateBackbuffer(this.Width, backBufferHeight) };
-                        _p2.SetBounds(0, _p1.bottom, _p1.Width, backBufferHeight);
-                    }
+                        BackBufferPlate a0 = _plates[0];
+                        BackBufferPlate a1 = _plates[1];
+                        BackBufferPlate a2 = _plates[2];
 
-                    //
-                    if (topPlateNo < _p0.no)
-                    {
-                        //up
-                        BackBufferPlate temp = _p1;
-                        if (_p2.no == topPlateNo)
-                        {
-                            //same plate
-                            _p1 = _p0;
-                            _p0 = _p2;
-                            _p2 = temp;
-                        }
-                        else
-                        {
+                        //move a1,a2 up
+                        //move a0 to last elem
+                        _plates[0] = a1;
+                        _plates[1] = a2;
+                        _plates[2] = a0;
+                        //
+                        a0.no = a0.no + 1;
+                        a0._backBuffer.IsValid = false;
+                        a0.SetBounds(0, a2.no * _height, _width, _height);
 
-                        }
-                        p0 = _p0;
-                        p1 = _p1;
+                        foundAtIndex = 2;
+                        foundPlate = a0;
                     }
                     else
                     {
-                        //down
-                        BackBufferPlate temp = _p0;
-                        _p0 = _p1;//swap
-                        _p1 = _p2;
-                        _p1.no = _p0.no + 1;
-                        _p2 = temp;
+                        //reset all plates
+                        int ypos = topPlateNo * _height;
+                        for (int i = 0; i < _plates.Length; ++i)
+                        {
+                            BackBufferPlate p = _plates[i];
+                            p.no = i + topPlateNo;
+                            p._backBuffer.IsValid = false;
+                            p.SetBounds(0, ypos, _width, _height);
+                            ypos += _height;
+                        }
+                        foundPlate = _plates[0];
+                        foundAtIndex = 0;
+                    }
+                }
 
-                        p0 = _p0;
-                        p1 = _p1;
+
+                //found
+                if (topPlateNo == bottomPlateNo)
+                {
+                    _p0 = foundPlate;
+                    _p1 = null;
+                }
+                else
+                {
+                    //need 2 page
+                    _p0 = foundPlate;
+                    if (foundAtIndex + 1 < 3)
+                    {
+                        //0-1-2
+                        _p1 = _plates[foundAtIndex + 1];
+                    }
+                    else
+                    {
+                        //we need to swap
+                        BackBufferPlate a0 = _plates[0];
+                        BackBufferPlate a1 = _plates[1];
+                        BackBufferPlate a2 = _plates[2];
+
+                        BackBufferPlate tmp1 = a0;//***
+                        _plates[0] = a1;
+                        _plates[1] = a2;
+                        _plates[2] = tmp1;
+
+                        tmp1._backBuffer.IsValid = false;//**
+                        tmp1.no = a2.no + 1;
+                        tmp1.SetBounds(0, a2.bottom, tmp1.Width, tmp1.Height);
+
+                        _p1 = tmp1;
                     }
                 }
             }
         }
+
         protected override void RenderClientContent(DrawBoard d, UpdateArea updateArea)
         {
             if (!EnableDoubleBuffer)
@@ -597,30 +556,21 @@ namespace LayoutFarm.CustomWidgets
             var painter = new PixelFarm.Drawing.Internal.MicroPainter(d);
             int backBufferHeight = this.Height * 2;
 
-            //from updateArea we should calculate a proper page
-            GetProperPages(d, updateArea, out BackBufferPlate p0, out BackBufferPlate p1);
-            bool also_drawWithBackBuffer1 = p1 != null;
+            //from updateArea we should calculate a proper page 
+            int topPlateNo = updateArea.Top / backBufferHeight;
+            int bottomPlateNo = updateArea.Bottom / backBufferHeight;
+            if (_triplePlateMx == null)
+            {
+                _triplePlateMx = new TriplePlateMx();
+                _triplePlateMx.Init(d, Width, backBufferHeight);
+            }
 
-            //p0 is primary
-            //p1 is 
+            _triplePlateMx.SetCurrentArea(updateArea, out _p0, out _p1);
+            //------------------------------------------
+            bool also_drawWithBackBuffer1 = _p1 != null;
 
-            //if (_builtInBackBuffer0 == null)
-            //{
-            //    //main buffer, swap-able 
-            //    _builtInBackBuffer0 = painter.CreateOffscreenDrawBoard(this.Width, backBufferHeight); //offscreen drawboard height*2
-            //}
 
-            //if (updateArea.Bottom > _builtInBackBuffer0.Height)
-            //{
-            //    //we need another back buffer
-            //    if (_builtInBackBuffer1 == null)
-            //    {
-            //        _builtInBackBuffer1 = painter.CreateOffscreenDrawBoard(this.Width, backBufferHeight); //offscreen drawboard height*2
-            //    }
-            //    also_drawWithBackBuffer1 = true;
-            //}
-
-            if (also_drawWithBackBuffer1 && !p1._backBuffer.IsValid)
+            if (also_drawWithBackBuffer1 && !_p1._backBuffer.IsValid)
             {
                 //update
 #if DEBUG
@@ -628,7 +578,7 @@ namespace LayoutFarm.CustomWidgets
 #endif
                 float backupViewportW = painter.ViewportWidth; //backup
                 float backupViewportH = painter.ViewportHeight; //backup
-                painter.AttachTo(p1._backBuffer); //*** switch to builtInBackbuffer 
+                painter.AttachTo(_p1._backBuffer); //*** switch to builtInBackbuffer 
                 painter.SetViewportSize(this.Width, backBufferHeight);//after to attach new buffer**
                 if (!_hasAccumRect)
                 {
@@ -640,35 +590,35 @@ namespace LayoutFarm.CustomWidgets
                  d.Clear(Color.White);
 #endif
                 Rectangle backup = updateArea.CurrentRect;
-                updateArea.CurrentRect = new Rectangle(0, p1.top, p1.Width, p1.Height);
-                d.SetCanvasOrigin(0, -p1.top);//minus**
+                updateArea.CurrentRect = new Rectangle(0, _p1.top, _p1.Width, _p1.Height);
+                d.SetCanvasOrigin(0, -_p1.top);//minus**
                 base.RenderClientContent(d, updateArea);
                 d.SetCanvasOrigin(0, 0);
 
 #if DEBUG
-                Image dbugImg = p1._backBuffer.CopyToNewMemBitmap();
-                PixelFarm.CpuBlit.MemBitmapExt.s_dbugEnableDebugImage = true;
-                PixelFarm.CpuBlit.MemBitmapExt.SaveImage((PixelFarm.CpuBlit.MemBitmap)dbugImg, "temp1.png", PixelFarm.CpuBlit.MemBitmapIO.OutputImageFormat.Png);
-                PixelFarm.CpuBlit.MemBitmapExt.s_dbugEnableDebugImage = false;
+                //Image dbugImg = p1._backBuffer.CopyToNewMemBitmap();
+                //PixelFarm.CpuBlit.MemBitmapExt.s_dbugEnableDebugImage = true;
+                //PixelFarm.CpuBlit.MemBitmapExt.SaveImage((PixelFarm.CpuBlit.MemBitmap)dbugImg, "temp1.png", PixelFarm.CpuBlit.MemBitmapIO.OutputImageFormat.Png);
+                //PixelFarm.CpuBlit.MemBitmapExt.s_dbugEnableDebugImage = false;
 #endif
 
                 updateArea.CurrentRect = backup;
 
-                p1._backBuffer.IsValid = true;
+                _p1._backBuffer.IsValid = true;
 
                 painter.AttachToNormalBuffer();//*** switch back
                 painter.SetViewportSize(backupViewportW, backupViewportH);//restore viewport size
             }
 
             //--------------
-            if (!p0._backBuffer.IsValid)
+            if (!_p0._backBuffer.IsValid)
             {
 #if DEBUG
                 System.Diagnostics.Debug.WriteLine("double_buffer_update:" + this.dbug_obj_id + "," + _invalidateRect.ToString());
 #endif
                 float backupViewportW = painter.ViewportWidth; //backup
                 float backupViewportH = painter.ViewportHeight; //backup
-                painter.AttachTo(p0._backBuffer); //*** switch to builtInBackbuffer 
+                painter.AttachTo(_p0._backBuffer); //*** switch to builtInBackbuffer 
                 painter.SetViewportSize(this.Width, backBufferHeight);//after to attach new buffer**
                 if (!_hasAccumRect)
                 {
@@ -676,10 +626,10 @@ namespace LayoutFarm.CustomWidgets
                 }
 
 #if DEBUG
-                if (_invalidateRect.Width == 15)
-                {
+                //if (_invalidateRect.Width == 15)
+                //{
 
-                }
+                //}
 #endif
 
                 //                    if (painter.PushLocalClipArea(
@@ -714,15 +664,15 @@ namespace LayoutFarm.CustomWidgets
 #endif
 
                 Rectangle backup = updateArea.CurrentRect;
-                updateArea.CurrentRect = new Rectangle(0, p0.top, p0.Width, p0.Height);
-                d.SetCanvasOrigin(0, -p0.top);//minus**
+                updateArea.CurrentRect = new Rectangle(0, _p0.top, _p0.Width, _p0.Height);
+                d.SetCanvasOrigin(0, -_p0.top);//minus**
                 base.RenderClientContent(d, updateArea);
                 updateArea.CurrentRect = backup;
                 d.SetCanvasOrigin(0, 0);
                 //}
                 //painter.PopLocalClipArea();
                 //
-                p0._backBuffer.IsValid = true;
+                _p0._backBuffer.IsValid = true;
                 _hasAccumRect = false;
 
                 painter.AttachToNormalBuffer();//*** switch back
@@ -739,14 +689,60 @@ namespace LayoutFarm.CustomWidgets
 
             if (also_drawWithBackBuffer1)
             {
-                painter.DrawImage(p0._backBuffer.GetImage(), 0, p0.top);
-                painter.DrawImage(p1._backBuffer.GetImage(), 0, p1.top);
+                painter.DrawImage(_p0._backBuffer.GetImage(), 0, _p0.top);
+                painter.DrawImage(_p1._backBuffer.GetImage(), 0, _p1.top);
             }
             else
             {
-                painter.DrawImage(p0._backBuffer.GetImage(), 0, p0.top);
+                painter.DrawImage(_p0._backBuffer.GetImage(), 0, _p0.top);
             }
         }
+        protected override void OnInvalidateGraphicsNoti(bool fromMe, ref Rectangle totalBounds)
+        {
 
+            //find affected slide
+
+            if (_p0 != null)
+            {
+                //TODO: review here,
+                //in this case, we copy to another rect
+                //since we don't want the offset to effect the total bounds 
+#if DEBUG
+                //if (totalBounds.Width == 150)
+                //{
+
+                //}
+                System.Diagnostics.Debug.WriteLine("noti, fromMe=" + fromMe + ",bounds" + totalBounds);
+#endif
+                if (!fromMe)
+                {
+                    totalBounds.Offset(-this.X, -this.Y);
+                }
+
+                _p0._backBuffer.IsValid = false;
+
+                if (!_hasAccumRect)
+                {
+                    _invalidateRect = totalBounds;
+                    _hasAccumRect = true;
+                }
+                else
+                {
+                    _invalidateRect = Rectangle.Union(_invalidateRect, totalBounds);
+                }
+
+                //------
+                if (_p1 != null)
+                {
+
+                }
+            }
+            else
+            {
+                totalBounds.Offset(this.X, this.Y);
+            }
+
+            //base.OnInvalidateGraphicsNoti(totalBounds);//skip
+        }
     }
 }
