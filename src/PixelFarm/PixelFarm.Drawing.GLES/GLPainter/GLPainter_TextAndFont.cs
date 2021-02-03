@@ -193,7 +193,7 @@ namespace PixelFarm.DrawingGL
             _creationCycle++;
 
             int j = fmtStringList.Count;
-            
+
             for (int i = j - 1; i >= 0; --i)
             {
                 //change state before send to the drawboard
@@ -281,6 +281,11 @@ namespace PixelFarm.DrawingGL
 #endif
         internal bool TryCreateWordStrip(GLRenderVxFormattedString fmtString)
         {
+            
+            //fmtString.State = RenderVxFormattedString.VxState.Ready;
+            //fmtString.IsReset = false;
+            //return true;
+
 
             WordPlate wordPlate = _wordPlateMx.GetWordPlate(fmtString);
             if (wordPlate == null)
@@ -312,7 +317,7 @@ namespace PixelFarm.DrawingGL
 #endif
             _drawBoard.EnterNewDrawboardBuffer(wordPlate._backBuffer);
 
-            //ensure font info for each vx formatter string ?
+            //            //ensure font info for each vx formatter string ?
 
             if (!wordPlate.CreateWordStrip(this, fmtString))
             {
@@ -320,12 +325,13 @@ namespace PixelFarm.DrawingGL
 #if DEBUG
                 throw new NotSupportedException();
 #else
-                                        return false;
+                                                    return false;
 #endif
             }
 
-            fmtString.State = RenderVxFormattedString.VxState.Ready;
             _drawBoard.ExitCurrentDrawboardBuffer();
+
+            fmtString.State = RenderVxFormattedString.VxState.Ready;
             fmtString.IsReset = false;
 
 #if DEBUG
