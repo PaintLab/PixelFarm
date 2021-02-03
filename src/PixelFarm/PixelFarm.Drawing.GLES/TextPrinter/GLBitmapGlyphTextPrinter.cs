@@ -156,54 +156,28 @@ namespace PixelFarm.DrawingGL
 
         void ChangeFont(SameFontTextStrip s)
         {
-            ResolvedFont r_font = s.ResolvedFont;
-#if DEBUG
-            if (r_font == null) { throw new NotSupportedException(); }
-#endif
-            _px_scale = r_font.GetScaleToPixelFromPointUnit();
-            _white_space_width = r_font.WhitespaceWidth;
-            _ascending = r_font.AscentInPixels;
-            _descending = r_font.DescentInPixels;
-            _lineSpacingInPx = r_font.LineSpacingInPixels;
-
             UnicodeRangeInfo unicodeRng = s.BreakInfo.UnicodeRange;
             if (unicodeRng == null)
-            { //temp fix
-                _fontAtlas = _myGLBitmapFontMx.GetFontAtlas(r_font, 0, 255, out _glBmp);
+            {
+                ChangeFont(s.ResolvedFont, 0, 255);
             }
             else
             {
-                _fontAtlas = _myGLBitmapFontMx.GetFontAtlas(r_font, unicodeRng.StartCodepoint, unicodeRng.EndCodepoint, out _glBmp);
+                ChangeFont(s.ResolvedFont, unicodeRng.StartCodepoint, unicodeRng.EndCodepoint);
             }
         }
         void ChangeFont(FormattedGlyphPlanSeq s)
         {
-            ResolvedFont r_font = s.ResolvedFont;
-#if DEBUG
-            if (r_font == null) { throw new NotSupportedException(); }
-#endif
-            Typeface typeface = r_font.Typeface;
-            _fontSizeInPoints = r_font.SizeInPoints;
-            _px_scale = r_font.GetScaleToPixelFromPointUnit();
-
-            _white_space_width = r_font.WhitespaceWidth;//(int)Math.Round(typeface.GetWhitespaceWidth() * _px_scale);
-            _ascending = r_font.AscentInPixels;
-            _descending = r_font.DescentInPixels;
-            _lineSpacingInPx = r_font.LineSpacingInPixels; //typeface.CalculateMaxLineClipHeight() * _px_scale;
-
             UnicodeRangeInfo unicodeRng = s.BreakInfo.UnicodeRange;
             if (unicodeRng == null)
             {
-                //temp fix
-                _fontAtlas = _myGLBitmapFontMx.GetFontAtlas(r_font, 0, 255, out _glBmp);
+                ChangeFont(s.ResolvedFont, 0, 255);
             }
             else
             {
-                _fontAtlas = _myGLBitmapFontMx.GetFontAtlas(r_font, unicodeRng.StartCodepoint, unicodeRng.EndCodepoint, out _glBmp);
+                ChangeFont(s.ResolvedFont, unicodeRng.StartCodepoint, unicodeRng.EndCodepoint);
             }
-
         }
-
         public void ChangeFont(ResolvedFont font, int startCodepoint, int endCodepoint)
         {
             if (_resolvedFont == font ||
@@ -211,16 +185,6 @@ namespace PixelFarm.DrawingGL
             {
                 return;
             }
-            //if (_resolvedFont != null && font != null && GlobalTextService.TxtClient.Eq(_resolvedFont, font))
-            //{
-            //    return;
-            //}
-#if DEBUG
-            //if (font.Name.ToLower().Contains("emoji"))
-            //{
-
-            //}
-#endif
 
             _resolvedFont = font;
             _fontSizeInPoints = font.SizeInPoints;
@@ -246,21 +210,8 @@ namespace PixelFarm.DrawingGL
         }
         public bool UseVBO { get; set; }
 
-        GlyphTexturePrinterDrawingTechnique _drawingTech;
-        public GlyphTexturePrinterDrawingTechnique TextDrawingTechnique
-        {
-            get => _drawingTech;
-            set
-            {
-#if DEBUG
-                if (value == GlyphTexturePrinterDrawingTechnique.Stencil)
-                {
 
-                }
-#endif
-                _drawingTech = value;
-            }
-        }
+        public GlyphTexturePrinterDrawingTechnique TextDrawingTechnique { get; set; }
         public void ChangeFillColor(Color color)
         {
             //called by owner painter  
@@ -287,6 +238,7 @@ namespace PixelFarm.DrawingGL
             }
         }
 
+        internal bool IsInWordPlateCreatingMode { get; set; }
         public PixelFarm.Drawing.TextBaseline TextBaseline { get; set; }
 
 #if DEBUG
@@ -509,6 +461,7 @@ namespace PixelFarm.DrawingGL
 #endif
 
         readonly GLRenderVxFormattedString _reusableFmtString = new GLRenderVxFormattedString();
+
         public void DrawString(char[] buffer, int startAt, int len, double left, double top)
         {
             //for internal use
@@ -518,8 +471,6 @@ namespace PixelFarm.DrawingGL
 
             _reusableFmtString.ClearData();
         }
-
-        internal bool IsInWordPlateCreatingMode { get; set; }
 
         public void DrawString(GLRenderVxFormattedString vxFmtStr, double x, double y)
         {
@@ -1154,7 +1105,7 @@ namespace PixelFarm.DrawingGL
 
 #endif
         }
-       
+
         public void PrepareStringForRenderVx(GLRenderVxFormattedString vxFmtStr, IFormattedGlyphPlanList fmtGlyphPlans)
         {
             if (!(fmtGlyphPlans is FormattedGlyphPlanListHolder fmtHolder)) { return; }
