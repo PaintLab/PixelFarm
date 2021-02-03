@@ -5,7 +5,7 @@ using PixelFarm.CpuBlit.BitmapAtlas;
 
 using Typography.Text;
 using Mini;
-namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
+namespace PixelFarm.CpuBlit.TextPrinterDev
 {
 
 
@@ -54,6 +54,8 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
                 this.InvalidateGraphics();
             }
         }
+
+       
 
         [DemoConfig]
         public AntialiasTechnique AntialiasTechnique

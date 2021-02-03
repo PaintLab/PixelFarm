@@ -719,6 +719,9 @@ namespace LayoutFarm.CustomWidgets
                     totalBounds.Offset(-this.X, -this.Y);
                 }
 
+                int actualTop = totalBounds.Top + this.ViewportTop;
+                int actualBottom = totalBounds.Top + this.ViewportBottom;
+
                 _p0._backBuffer.IsValid = false;
 
                 if (!_hasAccumRect)
@@ -735,6 +738,18 @@ namespace LayoutFarm.CustomWidgets
                 if (_p1 != null)
                 {
 
+                    if (actualTop < _p1.top && actualBottom > _p1.top)
+                    {
+                        _p1._backBuffer.IsValid = false;
+                    }
+                    else if (actualTop > _p1.top && actualBottom > _p1.bottom)
+                    {
+                        _p1._backBuffer.IsValid = false;
+                    }
+                    else
+                    {
+
+                    }
                 }
             }
             else

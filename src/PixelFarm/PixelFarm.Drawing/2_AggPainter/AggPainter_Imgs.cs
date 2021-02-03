@@ -39,12 +39,7 @@ namespace PixelFarm.CpuBlit
             this.UseLcdEffectSubPixelRendering = useSubPix;
             _aggsx.UseSubPixelLcdEffect = useSubPix;
         }
-
-        public void BitBlt(MemBitmap memBmp, double left, double top, int srcX, int srcY, int srcW, int srcH)
-        {
-            //just copy portion of bitmap from input memBmp to dest
-            MemBitmapExt.DoBitBlt(memBmp, _aggsx.DestBitmap, (int)left, (int)top, srcX, srcY, srcW, srcH);
-        }
+       
         void DrawBitmap(MemBitmap memBmp, double left, double top, int srcX, int srcY, int srcW, int srcH)
         {
 

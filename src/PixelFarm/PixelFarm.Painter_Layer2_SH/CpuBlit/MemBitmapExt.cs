@@ -24,7 +24,25 @@ using PixelFarm.Drawing.Internal;
 namespace PixelFarm.CpuBlit
 {
 
-
+    public class MemBitmapProxy
+    {
+        public MemBitmapProxy()
+        {
+        }
+        public void Set(MemBitmap memBmp, int left, int top, int width, int height)
+        {
+            Left = left;
+            Top = top;
+            Width = width;
+            Height = height;
+            OriginalBmp = memBmp;
+        }
+        public MemBitmap OriginalBmp { get; private set; }
+        public int Left { get; private set; }
+        public int Top { get; private set; }
+        public int Width { get; private set; }
+        public int Height { get; private set; }
+    }
 
     public static class MemBitmapExt
     {
@@ -141,8 +159,12 @@ namespace PixelFarm.CpuBlit
             return copyBmp;
         }
 
+        public static void BlendColorWithMask(Color c, MemBitmapProxy mask, MemBitmap dst, int dstX, int dstY, int srcX, int srcY, int srcW, int srcH)
+        {
+            //select color from mask bitmap and blend to dst bitmap with specific color     
 
-        public static void DoBitBlt(MemBitmap src, MemBitmap dst, int dstX, int dstY, int srcX, int srcY, int srcW, int srcH)
+        }
+        public static void BitBlt(MemBitmap src, MemBitmap dst, int dstX, int dstY, int srcX, int srcY, int srcW, int srcH)
         {
             IntPtr src_h = src.GetRawBufferHead();
             IntPtr dst_h = dst.GetRawBufferHead();
