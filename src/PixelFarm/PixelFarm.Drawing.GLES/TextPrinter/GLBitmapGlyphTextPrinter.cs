@@ -1082,14 +1082,7 @@ namespace PixelFarm.DrawingGL
             //-----------
             //TODO: review here again
 
-            if (vxFmtStr.Delay)
-            {
-                //when we use delay mode
-                //we need to save current font setting  of the _painter
-                //with the render vx---
-                //vxFmtStr.RequestFont = _painter.CurrentFont;
-            }
-            else
+            if (!vxFmtStr.Delay)
             {
                 //TODO: review here again   
                 _painter.TryCreateWordStrip(vxFmtStr);

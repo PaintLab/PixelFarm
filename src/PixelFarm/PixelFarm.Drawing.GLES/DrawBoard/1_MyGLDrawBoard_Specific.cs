@@ -59,6 +59,8 @@ namespace PixelFarm.Drawing.GLES2
                 return outputBuffer;
             }
         }
+
+
     }
 
 
@@ -246,6 +248,7 @@ return _saveContextPool.Pop();
             _currentClipRect = saveContext.prevClipRect;
 
             _gpuPainter.Core.AttachToRenderSurface(saveContext.prevGLRenderSurface);
+
             _gpuPainter.Core.OriginKind = RenderSurfaceOriginKind.LeftTop;
             _gpuPainter.UpdateCore();
 

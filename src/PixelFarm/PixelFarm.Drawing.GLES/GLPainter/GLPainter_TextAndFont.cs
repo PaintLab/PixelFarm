@@ -281,11 +281,10 @@ namespace PixelFarm.DrawingGL
 #endif
         internal bool TryCreateWordStrip(GLRenderVxFormattedString fmtString)
         {
-            
+
             //fmtString.State = RenderVxFormattedString.VxState.Ready;
             //fmtString.IsReset = false;
-            //return true;
-
+            //return true; 
 
             WordPlate wordPlate = _wordPlateMx.GetWordPlate(fmtString);
             if (wordPlate == null)
@@ -315,9 +314,71 @@ namespace PixelFarm.DrawingGL
             dbugsw2.Reset();
             dbugsw2.Start();
 #endif
+            //switch the drawboard to back buffer
             _drawBoard.EnterNewDrawboardBuffer(wordPlate._backBuffer);
 
-            //            //ensure font info for each vx formatter string ?
+            if (!wordPlate.CreateWordStrip(this, fmtString))
+            {
+                //we have some error?
+#if DEBUG
+                throw new NotSupportedException();
+#else
+                                                    return false;
+#endif
+            }
+
+            _drawBoard.ExitCurrentDrawboardBuffer();
+
+            fmtString.State = RenderVxFormattedString.VxState.Ready;
+            fmtString.IsReset = false;
+
+#if DEBUG
+            dbugsw2.Stop();
+            long ms = dbugsw2.ElapsedMilliseconds;
+            if (ms > 3)
+            {
+                //Console.WriteLine("enter-exit:" + ms);
+            }
+#endif
+            _drawBoard.CurrentFont = backupFont;//restore
+            fmtString.CreationState = GLRenderVxFormattedStringState.S2_TextureStrip;
+            return fmtString.OwnerPlate != null;
+        }
+
+
+        //--------------
+        internal bool TryCreateWordStrip2(GLRenderVxFormattedString fmtString)
+        {          
+            WordPlate wordPlate = _wordPlateMx.GetWordPlate(fmtString);
+            if (wordPlate == null)
+            {
+#if DEBUG
+                throw new NotSupportedException();
+#else
+                return false;
+#endif
+            }
+
+
+            //{
+            //    //save output
+            //    using (Image img = wordPlate._backBuffer.CopyToNewMemBitmap())
+            //    {
+            //        MemBitmap memBmp = img as MemBitmap;
+            //        if (memBmp != null)
+            //        {
+            //            memBmp.SaveImage("testx_01.png");
+            //        }
+            //    }
+            //}
+
+            RequestFont backupFont = _drawBoard.CurrentFont; //backup
+#if DEBUG
+            dbugsw2.Reset();
+            dbugsw2.Start();
+#endif
+            //switch the drawboard to back buffer
+            _drawBoard.EnterNewDrawboardBuffer(wordPlate._backBuffer);
 
             if (!wordPlate.CreateWordStrip(this, fmtString))
             {

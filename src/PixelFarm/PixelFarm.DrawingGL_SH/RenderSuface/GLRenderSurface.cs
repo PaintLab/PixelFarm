@@ -77,7 +77,7 @@ namespace PixelFarm.DrawingGL
         public bool IsPrimary { get; }
         public bool IsValid { get; private set; }
 
-        public GLBitmap GetGLBitmap() => (_frameBuffer == null) ? null : _frameBuffer.GetGLBitmap();
+        public GLBitmap GetGLBitmap() => _frameBuffer?.GetGLBitmap();
 
         public InnerGLData GetInnerGLData() => (_frameBuffer != null) ? new InnerGLData(_frameBuffer.FrameBufferId, _frameBuffer.GetGLBitmap()) : new InnerGLData();
 
@@ -425,6 +425,7 @@ namespace PixelFarm.DrawingGL
                 return glBmp;
             }
             //2. 
+
             glBmp = Image.GetCacheInnerImage(image) as GLBitmap;
             if (glBmp != null)
             {
@@ -463,9 +464,9 @@ namespace PixelFarm.DrawingGL
             //   PixelType.UnsignedByte,
             //   outputBuffer);
             GL.ReadPixels(x, y, w, h,
-            OpenTK.Graphics.ES20.PixelFormat.Rgba,
-            PixelType.UnsignedByte,
-            outputBuffer);
+                OpenTK.Graphics.ES20.PixelFormat.Rgba,
+                PixelType.UnsignedByte,
+                outputBuffer);
 
         }
         //
