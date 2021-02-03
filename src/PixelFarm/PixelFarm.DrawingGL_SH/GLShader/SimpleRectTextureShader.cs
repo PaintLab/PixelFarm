@@ -1203,7 +1203,6 @@ namespace PixelFarm.DrawingGL
             GL.DrawElements(BeginMode.TriangleStrip, elemCount, DrawElementsType.UnsignedShort, 0);
 
             vbo.UnBind();
-
         }
     }
 
