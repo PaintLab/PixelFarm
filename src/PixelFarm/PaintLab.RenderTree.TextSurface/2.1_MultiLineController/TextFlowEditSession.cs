@@ -615,13 +615,13 @@ namespace LayoutFarm.TextEditing
                     }
                     if (reader.IsUtf32Buffer)
                     {
-                        _lineEditor.AddTextSpan(reader.GetUtf32Segment(begin, end - begin));
+                        _lineEditor.AddTextSpan(reader.GetUtf32Segment(begin, end + 1 - begin));
                     }
                     else
                     {
-                        _lineEditor.AddTextSpan(reader.GetUtf16Segment(begin, end - begin));
+                        _lineEditor.AddTextSpan(reader.GetUtf16Segment(begin, end + 1 - begin));
                     }
-                    
+
                     hasFirstLine = true;
                 }
 

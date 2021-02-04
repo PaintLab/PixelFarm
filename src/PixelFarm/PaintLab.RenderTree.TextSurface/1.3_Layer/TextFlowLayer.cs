@@ -238,6 +238,7 @@ namespace LayoutFarm.TextEditing
                 TextLineBox line = lines[i];
                 int linetop = line.Top;
 
+
                 if (!foundFirstLine)
                 {
                     if (linetop + line.ActualLineHeight < renderAreaTop)
@@ -279,11 +280,39 @@ namespace LayoutFarm.TextEditing
                 switch (selRange.GetLineClip(i, out int clipLeft, out int clipWidth))
                 {
                     default: throw new NotSupportedException();
-                    case VisualSelectionRange.ClipRectKind.No: break;
+                    case VisualSelectionRange.ClipRectKind.No:
+                        {
+                            ////[A]: normal line
+                            d.SetCanvasOrigin(enter_canvasX, enter_canvasY + linetop);//restore 
+                            d.SetClipRect(new Rectangle(0, 0, OwnerWidth, line.ActualLineHeight));//set clip relative to latest canvas origin
+                            d.TextBackgroundColorHint = prev_colorHint;//normal bg
+
+                            LinkedListNode<Run> curLineNode = line.First;
+                            while (curLineNode != null)
+                            {
+                                Run run = curLineNode.Value;
+                                if (run.HitTest(updateArea))
+                                {
+                                    int x = run.Left;
+
+                                    d.SetCanvasOrigin(enter_canvasX + x, enter_canvasY + linetop);
+                                    updateArea.OffsetX(-x);
+
+                                    run.Draw(d, updateArea);
+                                    //-----------
+                                    updateArea.OffsetX(x);
+                                }
+                                curLineNode = curLineNode.Next;
+                            }
+                            d.SetCanvasOrigin(enter_canvasX, enter_canvasY + linetop);//restore 
+                        }
+                        break;
                     case VisualSelectionRange.ClipRectKind.SameLine:
                     case VisualSelectionRange.ClipRectKind.StartLine:
                         {
-
+                            d.SetCanvasOrigin(enter_canvasX, enter_canvasY + linetop);//restore 
+                            d.SetClipRect(new Rectangle(0, 0, OwnerWidth, line.ActualLineHeight));//set clip relative to latest canvas origin
+                            d.TextBackgroundColorHint = prev_colorHint;//normal bg
                             //[A]: normal line
                             LinkedListNode<Run> curLineNode = line.First;
                             while (curLineNode != null)

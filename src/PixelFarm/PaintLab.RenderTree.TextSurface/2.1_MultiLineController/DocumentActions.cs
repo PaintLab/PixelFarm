@@ -75,7 +75,7 @@ namespace LayoutFarm.TextEditing.Commands
         public override void InvokeUndo(ITextFlowEditSession editSess)
         {
             editSess.CurrentLineNumber = _startLineNumber;
-            editSess.TryMoveCaretTo(_startCharIndex);
+            editSess.TryMoveCaretTo(_startCharIndex + 1);
             editSess.DoBackspace();
         }
         public override void InvokeRedo(ITextFlowEditSession editSess)
@@ -156,7 +156,7 @@ namespace LayoutFarm.TextEditing.Commands
     }
     public class DocActionDeleteRange : DocumentAction
     {
-        TextCopyBuffer _deletedTextRuns;
+        readonly TextCopyBuffer _deletedTextRuns;
         readonly int _endCharIndex;
         public DocActionDeleteRange(TextCopyBuffer deletedTextRuns, int startLineNum, int startColumnNum,
             int endLineNum, int endColumnNum)
@@ -190,10 +190,10 @@ namespace LayoutFarm.TextEditing.Commands
 
     public class DocActionInsertRuns : DocumentAction
     {
-        CopyRun _singleInsertTextRun;
-        TextCopyBuffer _insertingTextRuns;
+        readonly CopyRun _singleInsertTextRun;
+        readonly TextCopyBuffer _insertingTextRuns;
 
-        int _endCharIndex;
+        readonly int _endCharIndex;
         public DocActionInsertRuns(TextCopyBuffer insertingTextRuns,
             int startLineNumber, int startCharIndex, int endLineNumber, int endCharIndex)
             : base(startLineNumber, startCharIndex)
@@ -252,8 +252,8 @@ namespace LayoutFarm.TextEditing.Commands
     public class DocActionFormatting : DocumentAction
     {
 
-        int _endCharIndex;
-        TextSpanStyle _textStyle;
+        readonly int _endCharIndex;
+        readonly TextSpanStyle _textStyle;
         public DocActionFormatting(TextSpanStyle textStyle, int startLineNumber, int startCharIndex, int endLineNumber, int endCharIndex)
             : base(startLineNumber, startCharIndex)
         {
@@ -280,10 +280,10 @@ namespace LayoutFarm.TextEditing.Commands
 
     class DocumentCommandCollection
     {
-        LinkedList<DocumentAction> _undoList = new LinkedList<DocumentAction>();
-        Stack<DocumentAction> _reverseUndoAction = new Stack<DocumentAction>();
+        readonly LinkedList<DocumentAction> _undoList = new LinkedList<DocumentAction>();
+        readonly Stack<DocumentAction> _reverseUndoAction = new Stack<DocumentAction>();
+        readonly TextFlowEditSession _editSession;
         int _maxCommandsCount = 20;
-        TextFlowEditSession _editSession;
 
         public DocumentCommandCollection(TextFlowEditSession textEditSession)
         {
@@ -297,10 +297,7 @@ namespace LayoutFarm.TextEditing.Commands
 
         public int MaxCommandCount
         {
-            get
-            {
-                return _maxCommandsCount;
-            }
+            get => _maxCommandsCount;
             set
             {
                 _maxCommandsCount = value;

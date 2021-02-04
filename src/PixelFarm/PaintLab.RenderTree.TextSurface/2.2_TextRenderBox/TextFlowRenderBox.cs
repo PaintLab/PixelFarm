@@ -23,7 +23,7 @@ namespace LayoutFarm.TextEditing
         internal bool _isInVerticalPhase = false;
         internal bool _isFocus = false;
 
-        internal bool _isDragBegin;
+        bool _isDragBegin;
 
         public TextFlowRenderBox(int width, int height, bool isMultiLine)
             : base(width, height)

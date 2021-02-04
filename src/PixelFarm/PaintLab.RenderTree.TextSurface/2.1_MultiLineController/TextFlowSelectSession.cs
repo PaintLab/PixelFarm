@@ -39,6 +39,7 @@ namespace LayoutFarm.TextEditing
         public void CopySelectedTextToPlainText(TextCopyBuffer output)
         {
             //TODO: review here!
+            throw new NotSupportedException();
         }
         public void CopySelectedTextToPlainText(StringBuilder stBuilder)
         {
