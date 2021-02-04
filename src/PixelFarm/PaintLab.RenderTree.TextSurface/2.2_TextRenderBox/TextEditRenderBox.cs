@@ -57,8 +57,8 @@ namespace LayoutFarm.TextEditing
             if (RenderCaret && _stateShowCaret && _isEditable)
             {
                 d.SetClipRect(new Rectangle(0, 0, this.Width, this.Height));
-                Point textManCaretPos = _editSession.CaretPos;
-                _myCaret.DrawCaret(d, textManCaretPos.X, textManCaretPos.Y);
+                Point pos = _editSession.CaretPos;
+                _myCaret.DrawCaret(d, pos.X, pos.Y);
             }
         }
 
