@@ -238,7 +238,6 @@ namespace LayoutFarm.TextEditing
                 TextLineBox line = lines[i];
                 int linetop = line.Top;
 
-
                 if (!foundFirstLine)
                 {
                     if (linetop + line.ActualLineHeight < renderAreaTop)
@@ -254,7 +253,6 @@ namespace LayoutFarm.TextEditing
                 {
                     if (linetop > renderAreaBottom)
                     {
-
                         if (VisualLineOverlapped)
                         {
                             //more check

@@ -23,6 +23,9 @@ namespace LayoutFarm.TextEditing
         public virtual void UpdateLineContent(int lineNumber)
         {
         }
+        public virtual void SetCurrentPos(int lineNumber, int charIndex)
+        {
+        }
     }
 
     public class TextFlowEditSession : TextFlowSelectSession, ITextFlowEditSession
@@ -97,7 +100,6 @@ namespace LayoutFarm.TextEditing
 
             int pre_lineNumber = _lineEditor.LineNumber;
             int pre_charIndex = _lineEditor.CharIndex;
-
 
             if (passRemoveSelectedText && c == ' ')
             {
@@ -216,6 +218,9 @@ namespace LayoutFarm.TextEditing
 
                     _lineEditor.MoveToLine(startPointLindId);
                     _lineEditor.SetCurrentCharIndex(startPointCharIndex);
+
+                    _sessionListener?.SetCurrentPos(startPointLindId, startPointCharIndex);
+
                 }
             }
 
@@ -613,18 +618,17 @@ namespace LayoutFarm.TextEditing
                         _lineEditor.SplitToNewLine();
                         CurrentLineNumber++;
                     }
+
                     if (reader.IsUtf32Buffer)
                     {
-                        _lineEditor.AddTextSpan(reader.GetUtf32Segment(begin, end + 1 - begin));
+                        _lineEditor.AddTextSpan(reader.GetUtf32Segment(begin, end - begin + 1));
                     }
                     else
                     {
-                        _lineEditor.AddTextSpan(reader.GetUtf16Segment(begin, end + 1 - begin));
+                        _lineEditor.AddTextSpan(reader.GetUtf16Segment(begin, end - begin + 1));
                     }
-
                     hasFirstLine = true;
                 }
-
             }
 
             EnableUndoHistoryRecording = isRecordingHx;

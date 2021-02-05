@@ -974,10 +974,7 @@ namespace LayoutFarm.TextEditing
                 switch (diff)
                 {
                     case 0:
-                        {
-                            return;
-                        }
-
+                        return;
                     default:
                         {
                             if (diff > 0)

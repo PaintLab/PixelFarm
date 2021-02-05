@@ -218,6 +218,7 @@ namespace LayoutFarm.TextEditing.Commands
             }
             else
             {
+                
                 _insertingTextRuns.CopyTo(output);
             }
         }
