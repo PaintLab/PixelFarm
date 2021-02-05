@@ -176,10 +176,9 @@ namespace LayoutFarm.TextEditing
 
             if (_selectionRange.IsOnTheSameLine)
             {
-                var tobeDeleteTextRuns = new TextCopyBuffer();
+                var tobeDeleteTextRuns = new TextCopyBufferUtf16();
                 _lineEditor.CopySelectedTextRuns(_selectionRange, tobeDeleteTextRuns);
-
-                if (tobeDeleteTextRuns.HasSomeRuns)
+                if (tobeDeleteTextRuns.Length > 0)
                 {
                     var cmd = new DocActionDeleteRange(tobeDeleteTextRuns,
                         selSnapshot.startLineNum,
@@ -199,10 +198,10 @@ namespace LayoutFarm.TextEditing
                 int startPointLindId = startPoint.LineId;
                 int startPointCharIndex = startPoint.LineCharIndex;
 
-                var tobeDeleteTextRuns = new TextCopyBuffer();
+                var tobeDeleteTextRuns = new TextCopyBufferUtf16();
                 _lineEditor.CopySelectedTextRuns(_selectionRange, tobeDeleteTextRuns);
 
-                if (tobeDeleteTextRuns != null && tobeDeleteTextRuns.HasSomeRuns)
+                if (tobeDeleteTextRuns != null && tobeDeleteTextRuns.Length > 0)
                 {
                     var cmd = new DocActionDeleteRange(tobeDeleteTextRuns,
                         selSnapshot.startLineNum,
@@ -607,10 +606,10 @@ namespace LayoutFarm.TextEditing
             bool isRecordingHx = EnableUndoHistoryRecording;
             EnableUndoHistoryRecording = false;
 
-            if (output.HasSomeRuns)
+            if (output.Length > 0)
             {
                 bool hasFirstLine = false;
-                InputReader reader = output.GetReader();
+                output.GetReader(out InputReader reader);
                 while (reader.Readline(out int begin, out int end, out InputReader.LineEnd endLineWith))
                 {
                     if (hasFirstLine)

@@ -130,7 +130,7 @@ namespace LayoutFarm.TextEditing
             _linkNode = linkNode;
             _ownerTextLine = owner;
             owner.InvalidateCharCount();
-        } 
+        }
         protected internal void InvalidateOwnerLineCharCount() => _ownerTextLine?.InvalidateCharCount();
 
     }
@@ -138,12 +138,13 @@ namespace LayoutFarm.TextEditing
     public static class RunExtensions
     {
         [ThreadStatic]
-        static Typography.Text.TextCopyBuffer s_copyBuffer;
+        static Typography.Text.TextCopyBufferUtf32 s_copyBuffer;
         public static string GetUpperString(this Run textRun)
         {
+            //TODO: review here
             if (s_copyBuffer != null)
             {
-                s_copyBuffer = new TextCopyBuffer();
+                s_copyBuffer = new TextCopyBufferUtf32();
             }
             else
             {

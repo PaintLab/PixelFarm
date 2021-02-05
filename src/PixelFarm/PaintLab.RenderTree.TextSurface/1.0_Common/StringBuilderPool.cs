@@ -69,27 +69,53 @@ namespace LayoutFarm.TextEditing
         }
     }
 
-    public struct TextRangeCopyPoolContext<T> : System.IDisposable
+    public struct TextUtf16RangeCopyPoolContext<T> : System.IDisposable
     {
-        TextCopyBuffer _copyBuffer;
+        TextCopyBufferUtf16 _copyBuffer;
 
-        static TextRangeCopyPoolContext()
+        static TextUtf16RangeCopyPoolContext()
         {
             //once
-            ObjectPool<TextCopyBuffer, T>.SetDelegates(
-                () => new TextCopyBuffer(),
+            ObjectPool<TextCopyBufferUtf16, T>.SetDelegates(
+                () => new TextCopyBufferUtf16(),
                  rngCpy => rngCpy.Clear()
                 );
         }
-        public TextRangeCopyPoolContext(out TextCopyBuffer output)
+        public TextUtf16RangeCopyPoolContext(out TextCopyBufferUtf16 output)
         {
-            _copyBuffer = output = ObjectPool<TextCopyBuffer, T>.GetFreeInstance();
+            _copyBuffer = output = ObjectPool<TextCopyBufferUtf16, T>.GetFreeInstance();
         }
         public void Dispose()
         {
             if (_copyBuffer != null)
             {
-                ObjectPool<TextCopyBuffer, T>.ReleaseInstance(_copyBuffer);
+                ObjectPool<TextCopyBufferUtf16, T>.ReleaseInstance(_copyBuffer);
+                _copyBuffer = null;
+            }
+        }
+    }
+
+    public struct TextUtf32RangeCopyPoolContext<T> : System.IDisposable
+    {
+        TextCopyBufferUtf32 _copyBuffer;
+
+        static TextUtf32RangeCopyPoolContext()
+        {
+            //once
+            ObjectPool<TextCopyBufferUtf32, T>.SetDelegates(
+                () => new TextCopyBufferUtf32(),
+                 rngCpy => rngCpy.Clear()
+                );
+        }
+        public TextUtf32RangeCopyPoolContext(out TextCopyBufferUtf32 output)
+        {
+            _copyBuffer = output = ObjectPool<TextCopyBufferUtf32, T>.GetFreeInstance();
+        }
+        public void Dispose()
+        {
+            if (_copyBuffer != null)
+            {
+                ObjectPool<TextCopyBufferUtf32, T>.ReleaseInstance(_copyBuffer);
                 _copyBuffer = null;
             }
         }

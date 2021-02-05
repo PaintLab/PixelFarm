@@ -479,10 +479,9 @@ namespace LayoutFarm.TextEditing
                 return;
             }
 
-            using (new TextRangeCopyPoolContext<TextFlowWalkerBase>(out TextCopyBuffer output))
+            using (new TextUtf32RangeCopyPoolContext<TextFlowWalkerBase>(out TextCopyBufferUtf32 output))
             {
                 //copy to int32 arr list
-                output.BackupKind = TextCopyBuffer.BackupBufferKind.Utf32ArrayList;
 
                 _currentLine.CopyLineContent(output);
 

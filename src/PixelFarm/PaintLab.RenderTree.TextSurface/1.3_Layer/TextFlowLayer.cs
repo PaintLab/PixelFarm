@@ -708,7 +708,7 @@ namespace LayoutFarm.TextEditing
                 if (i > 0)
                 {
                     //TODO: review => preserve line ending char or not 
-                    output.AppendNewLine();
+                    output.AppendLine();
                 }
                 lines[i].CopyLineContent(output);
             }

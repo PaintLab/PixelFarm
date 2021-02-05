@@ -95,13 +95,13 @@ namespace LayoutFarm.TextEditing
                         for (int i = startLineId + 1; i < stopLineId; i++)
                         {
                             //begine new line
-                            output.AppendNewLine();
+                            output.AppendLine();
                             TextLineBox line = _textFlowLayer.GetTextLine(i);
                             line.Copy(output);
                         }
                         if (endPoint.LineCharIndex > -1)
                         {
-                            output.AppendNewLine();
+                            output.AppendLine();
                             stopLine.LeftCopy(endPoint, output);
                         }
                     }
@@ -147,7 +147,7 @@ namespace LayoutFarm.TextEditing
                     startLine.RightCopy(startPoint, output);
                     for (int i = startLineId + 1; i < stopLineId; i++)
                     {
-                        output.AppendNewLine();
+                        output.AppendLine();
                         TextLineBox line = _textFlowLayer.GetTextLine(i);
                         line.Copy(output);
                     }

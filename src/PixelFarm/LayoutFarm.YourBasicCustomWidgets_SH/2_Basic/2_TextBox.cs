@@ -280,11 +280,12 @@ namespace LayoutFarm.CustomWidgets
                 if (_textEditRenderElement != null)
                 {
                     //TODO, use string builder pool
-                    using (new TextRangeCopyPoolContext<TextBox>(out Typography.Text.TextCopyBuffer output))
+                    using (new TextUtf32RangeCopyPoolContext<TextBox>(out Typography.Text.TextCopyBufferUtf32 output))
                     {
                         CopyContentTo(output);
                         return output.ToString();
                     }
+                    
                 }
                 else
                 {

@@ -48,7 +48,7 @@ namespace LayoutFarm.TextEditing
                 _selectionRange.Normalize();
                 if (_selectionRange.IsOnTheSameLine)
                 {
-                    var copyRuns = new TextCopyBuffer();
+                    var copyRuns = new TextCopyBufferUtf32();
                     _lineEditor.CopySelectedTextRuns(_selectionRange, copyRuns);
                     copyRuns.CopyTo(stBuilder);
 
@@ -58,7 +58,7 @@ namespace LayoutFarm.TextEditing
                     VisualPointInfo startPoint = _selectionRange.StartPoint;
                     CurrentLineNumber = startPoint.LineId;
                     _lineEditor.SetCurrentCharIndex(startPoint.LineCharIndex);
-                    var copyRuns = new TextCopyBuffer();
+                    var copyRuns = new TextCopyBufferUtf32();
                     _lineEditor.CopySelectedTextRuns(_selectionRange, copyRuns);
                     copyRuns.CopyTo(stBuilder);
                 }
