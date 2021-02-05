@@ -576,7 +576,15 @@ namespace LayoutFarm.TextEditing
 
         public void MoveToLine(int lineNumber)
         {
-            _currentLine = _textFlowLayer.GetTextLine(lineNumber);
+            TextLineBox linebox = _textFlowLayer.GetTextLine(lineNumber);
+            if (linebox == null)
+            {
+                //error=> line not found
+                return;
+            }
+
+            //move to specific line box
+            _currentLine = linebox;
             _currentLineY = _currentLine.Top;
 
             //if current line is a blank line

@@ -11,8 +11,8 @@ namespace LayoutFarm.TextEditing.Commands
         SplitToNewLine,
         JointWithNextLine,
         DeleteChar,
-        DeleteRange,
-        InsertRuns,
+        DeleteText,
+        InsertText,
         FormatDocument
     }
     public interface ITextFlowSelectSession
@@ -84,6 +84,12 @@ namespace LayoutFarm.TextEditing.Commands
             editSess.TryMoveCaretTo(_startCharIndex);
             editSess.AddCharToCurrentLine(_c);
         }
+#if DEBUG
+        public override string ToString()
+        {
+            return "+" + ((char)_c).ToString();
+        }
+#endif
     }
 
     public class DocActionSplitToNewLine : DocumentAction
@@ -153,28 +159,34 @@ namespace LayoutFarm.TextEditing.Commands
             editSess.TryMoveCaretTo(_startCharIndex);
             editSess.DoDelete();
         }
+        public override string ToString()
+        {
+            return "-" + ((char)_c).ToString();
+        }
     }
-    public class DocActionDeleteRange : DocumentAction
+    public class DocActionDeleteText : DocumentAction
     {
-        readonly TextCopyBuffer _deletedTextRuns;
+        readonly TextCopyBuffer _deletedText;
         readonly int _endCharIndex;
-        public DocActionDeleteRange(TextCopyBuffer deletedTextRuns, int startLineNum, int startColumnNum,
+        public DocActionDeleteText(TextCopyBuffer deletedTextRuns, int startLineNum, int startColumnNum,
             int endLineNum, int endColumnNum)
             : base(startLineNum, startColumnNum)
         {
-            _deletedTextRuns = deletedTextRuns;
+            _deletedText = deletedTextRuns;
             _endCharIndex = endColumnNum;
             EndLineNumber = endLineNum;
         }
         public override ChangeRegion ChangeRegion => ChangeRegion.LineRange;
         public int EndCharIndex => _endCharIndex;
-        public override DocumentActionName Name => DocumentActionName.DeleteRange;
+        public override DocumentActionName Name => DocumentActionName.DeleteText;
         public override void InvokeUndo(ITextFlowEditSession editSess)
         {
             editSess.CancelSelect();
             //add text to lines...
             //TODO: check if we need to preserve format or not?
-            editSess.AddTextRunsToCurrentLine(_deletedTextRuns);
+            editSess.CurrentLineNumber = _startLineNumber;
+            editSess.TryMoveCaretTo(_startCharIndex);
+            editSess.AddTextRunsToCurrentLine(_deletedText);
         }
         public override void InvokeRedo(ITextFlowEditSession editSess)
         {
@@ -188,44 +200,27 @@ namespace LayoutFarm.TextEditing.Commands
         }
     }
 
-    public class DocActionInsertRuns : DocumentAction
+    public class DocActionInsertText : DocumentAction
     {
-        readonly CopyRun _singleInsertTextRun;
-        readonly TextCopyBuffer _insertingTextRuns;
-
+        readonly TextCopyBuffer _newText;
         readonly int _endCharIndex;
-        public DocActionInsertRuns(TextCopyBuffer insertingTextRuns,
+        public DocActionInsertText(TextCopyBuffer insertingTextRuns,
             int startLineNumber, int startCharIndex, int endLineNumber, int endCharIndex)
             : base(startLineNumber, startCharIndex)
         {
-            _insertingTextRuns = insertingTextRuns;
+            _newText = insertingTextRuns;
             _endCharIndex = endCharIndex;
             EndLineNumber = endLineNumber;
         }
-        public DocActionInsertRuns(CopyRun insertingTextRun,
-           int startLineNumber, int startCharIndex, int endLineNumber, int endCharIndex)
-            : base(startLineNumber, startCharIndex)
-        {
-            _singleInsertTextRun = insertingTextRun;
-            EndLineNumber = endLineNumber;
-            _endCharIndex = endCharIndex;
-        }
+
         public void CopyContent(System.Text.StringBuilder output)
         {
-            if (_singleInsertTextRun != null)
-            {
-                output.Append(_singleInsertTextRun.RawContent);
-            }
-            else
-            {
-                
-                _insertingTextRuns.CopyTo(output);
-            }
+            _newText.CopyTo(output);
         }
 
         public int EndCharIndex => _endCharIndex;
         public override ChangeRegion ChangeRegion => ChangeRegion.LineRange;
-        public override DocumentActionName Name => DocumentActionName.InsertRuns;
+        public override DocumentActionName Name => DocumentActionName.InsertText;
         public override void InvokeUndo(ITextFlowEditSession editSess)
         {
             editSess.CurrentLineNumber = _startLineNumber;
@@ -240,16 +235,11 @@ namespace LayoutFarm.TextEditing.Commands
         {
             editSess.CurrentLineNumber = _startLineNumber;
             editSess.TryMoveCaretTo(_startCharIndex);
-            if (_singleInsertTextRun != null)
-            {
-                editSess.AddTextRunToCurrentLine(_singleInsertTextRun);
-            }
-            else
-            {
-                editSess.AddTextRunsToCurrentLine(_insertingTextRuns);
-            }
+            editSess.AddTextRunsToCurrentLine(_newText);
+
         }
     }
+
     public class DocActionFormatting : DocumentAction
     {
 
@@ -284,7 +274,7 @@ namespace LayoutFarm.TextEditing.Commands
         readonly LinkedList<DocumentAction> _undoList = new LinkedList<DocumentAction>();
         readonly Stack<DocumentAction> _reverseUndoAction = new Stack<DocumentAction>();
         readonly TextFlowEditSession _editSession;
-        int _maxCommandsCount = 20;
+        int _maxCommandsCount = 20; //TODO: configurable
 
         public DocumentCommandCollection(TextFlowEditSession textEditSession)
         {

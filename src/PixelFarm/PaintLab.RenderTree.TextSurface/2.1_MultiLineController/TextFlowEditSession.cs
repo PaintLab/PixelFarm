@@ -180,7 +180,7 @@ namespace LayoutFarm.TextEditing
                 _lineEditor.CopySelectedTextRuns(_selectionRange, tobeDeleteTextRuns);
                 if (tobeDeleteTextRuns.Length > 0)
                 {
-                    var cmd = new DocActionDeleteRange(tobeDeleteTextRuns,
+                    var cmd = new DocActionDeleteText(tobeDeleteTextRuns,
                         selSnapshot.startLineNum,
                         selSnapshot.startColumnNum,
                         selSnapshot.endLineNum,
@@ -203,7 +203,7 @@ namespace LayoutFarm.TextEditing
 
                 if (tobeDeleteTextRuns != null && tobeDeleteTextRuns.Length > 0)
                 {
-                    var cmd = new DocActionDeleteRange(tobeDeleteTextRuns,
+                    var cmd = new DocActionDeleteText(tobeDeleteTextRuns,
                         selSnapshot.startLineNum,
                         selSnapshot.startColumnNum,
                         selSnapshot.endLineNum,
@@ -327,7 +327,8 @@ namespace LayoutFarm.TextEditing
             CopyRun copyRun = new CopyRun(textbuffer);
             EnableUndoHistoryRecording = isRecordingHx;
 
-            var cmd = new DocActionInsertRuns(copyRun, startLineNum, startCharIndex,
+
+            var cmd = new DocActionInsertText(new TextCopyBufferUtf16(textbuffer), startLineNum, startCharIndex,
                     _lineEditor.LineNumber, _lineEditor.CharIndex);
             _commandHistoryList.AddDocAction(cmd);
             _sessionListener?.AddDocAction(cmd);
@@ -631,7 +632,7 @@ namespace LayoutFarm.TextEditing
             }
 
             EnableUndoHistoryRecording = isRecordingHx;
-            var cmd = new DocActionInsertRuns(output, startLineNum, startCharIndex,
+            var cmd = new DocActionInsertText(output, startLineNum, startCharIndex,
                     _lineEditor.LineNumber, _lineEditor.CharIndex);
             _commandHistoryList.AddDocAction(cmd);
             _sessionListener?.AddDocAction(cmd);
@@ -654,9 +655,9 @@ namespace LayoutFarm.TextEditing
             EnableUndoHistoryRecording = false;
             _lineEditor.AddTextSpan(textbuffer);
 
-            CopyRun copyRun = new CopyRun(textbuffer);
+          
             EnableUndoHistoryRecording = isRecordingHx;
-            var cmd = new DocActionInsertRuns(copyRun, startLineNum, startCharIndex,
+            var cmd = new DocActionInsertText(new TextCopyBufferUtf32(textbuffer), startLineNum, startCharIndex,
                     _lineEditor.LineNumber, _lineEditor.CharIndex);
             _commandHistoryList.AddDocAction(cmd);
             _sessionListener?.AddDocAction(cmd);
