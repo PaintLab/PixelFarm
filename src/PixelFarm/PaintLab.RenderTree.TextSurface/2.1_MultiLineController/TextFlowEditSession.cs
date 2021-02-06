@@ -611,7 +611,7 @@ namespace LayoutFarm.TextEditing
             {
                 bool hasFirstLine = false;
                 output.GetReader(out InputReader reader);
-                while (reader.Readline(out int begin, out int end, out InputReader.LineEnd endLineWith))
+                while (reader.Readline(out int begin, out int len, out InputReader.LineEnd endLineWith))
                 {
                     if (hasFirstLine)
                     {
@@ -621,11 +621,11 @@ namespace LayoutFarm.TextEditing
 
                     if (reader.IsUtf32Buffer)
                     {
-                        _lineEditor.AddTextSpan(reader.GetUtf32Segment(begin, end - begin + 1));
+                        _lineEditor.AddTextSpan(reader.GetUtf32Segment(begin, len));
                     }
                     else
                     {
-                        _lineEditor.AddTextSpan(reader.GetUtf16Segment(begin, end - begin + 1));
+                        _lineEditor.AddTextSpan(reader.GetUtf16Segment(begin, len));
                     }
                     hasFirstLine = true;
                 }
@@ -655,7 +655,7 @@ namespace LayoutFarm.TextEditing
             EnableUndoHistoryRecording = false;
             _lineEditor.AddTextSpan(textbuffer);
 
-          
+
             EnableUndoHistoryRecording = isRecordingHx;
             var cmd = new DocActionInsertText(new TextCopyBufferUtf32(textbuffer), startLineNum, startCharIndex,
                     _lineEditor.LineNumber, _lineEditor.CharIndex);

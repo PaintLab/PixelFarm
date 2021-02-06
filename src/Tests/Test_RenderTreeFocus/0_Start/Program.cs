@@ -116,10 +116,10 @@ namespace TestGraphicPackage2
 
             while (reader.Readline(
                 out int begin,
-                out int end,
+                out int len,
                 out Typography.TextBreak.InputReader.LineEnd endlineWith))
             {
-                System.Diagnostics.Debug.WriteLine(begin + "," + end);
+                System.Diagnostics.Debug.WriteLine(begin + "," + len);
             }
 
 
