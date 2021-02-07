@@ -41,6 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\Typography\Typography.TextServices\TextFlow\ArrayList.cs">
+      <Link>Typography\Typography.TextServices\TextFlow\ArrayList.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextServices\TextFlow\CharSourceAndCharSpan.cs">
+      <Link>Typography\Typography.TextServices\TextFlow\CharSourceAndCharSpan.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.BurningMineCurve_SH\CubicBezier.cs">
       <Link>PixelFarm\BackEnd.BurningMineCurve_SH\CubicBezier.cs</Link>
     </Compile>
@@ -2608,9 +2614,6 @@
     </Compile>
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1_General\AlternativeTypefaceSelector.cs">
       <Link>Typography\PixelFarm.Typography\1_General\AlternativeTypefaceSelector.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1_General\CharSourceAndCharSpan.cs">
-      <Link>Typography\PixelFarm.Typography\1_General\CharSourceAndCharSpan.cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1_General\FontStyleExtensions.cs">
       <Link>Typography\PixelFarm.Typography\1_General\FontStyleExtensions.cs</Link>

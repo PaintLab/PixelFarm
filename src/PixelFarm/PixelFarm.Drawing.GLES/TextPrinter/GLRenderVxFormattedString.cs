@@ -31,8 +31,8 @@ namespace PixelFarm.DrawingGL
     {
         List<SameFontTextStrip> _strips;
 
-        internal ArrayList<float> _sh_vertexList; //temp src vertice buffer for each SameFontTextStrip
-        internal ArrayList<ushort> _sh_indexList; //temp src indice buffer for each SameFontTextStrip
+        internal PixelFarm.CpuBlit.ArrayList<float> _sh_vertexList; //temp src vertice buffer for each SameFontTextStrip
+        internal PixelFarm.CpuBlit.ArrayList<ushort> _sh_indexList; //temp src indice buffer for each SameFontTextStrip
 
         internal GLRenderVxFormattedString()
         {
@@ -174,11 +174,11 @@ namespace PixelFarm.DrawingGL
             }
             if (_sh_vertexList == null)
             {
-                _sh_vertexList = (s_vertextListPool.Count > 0) ? s_vertextListPool.Pop() : new ArrayList<float>();
+                _sh_vertexList = (s_vertextListPool.Count > 0) ? s_vertextListPool.Pop() : new PixelFarm.CpuBlit.ArrayList<float>();
             }
             if (!useSingleSeqIndexList)
             {
-                _sh_indexList = (s_indexListPool.Count > 0) ? s_indexListPool.Pop() : new ArrayList<ushort>();
+                _sh_indexList = (s_indexListPool.Count > 0) ? s_indexListPool.Pop() : new PixelFarm.CpuBlit.ArrayList<ushort>();
             }
 
             CreationState = GLRenderVxFormattedStringState.S0_Init;
@@ -240,8 +240,8 @@ namespace PixelFarm.DrawingGL
         public override string dbugName => "GL";
 #endif
 
-        readonly static Stack<ArrayList<float>> s_vertextListPool = new Stack<ArrayList<float>>();
-        readonly static Stack<ArrayList<ushort>> s_indexListPool = new Stack<ArrayList<ushort>>();
+        readonly static Stack<PixelFarm.CpuBlit.ArrayList<float>> s_vertextListPool = new Stack<PixelFarm.CpuBlit.ArrayList<float>>();
+        readonly static Stack<PixelFarm.CpuBlit.ArrayList<ushort>> s_indexListPool = new Stack<PixelFarm.CpuBlit.ArrayList<ushort>>();
         readonly static Stack<SameFontTextStrip> s_textStripPool = new Stack<SameFontTextStrip>();
         readonly static Stack<List<SameFontTextStrip>> s_sameFontTextStripListPool = new Stack<List<SameFontTextStrip>>();
 
@@ -265,8 +265,8 @@ namespace PixelFarm.DrawingGL
 #endif
         public DrawingGL.VertexBufferObject _vbo;
 
-        public ArrayListSegment<float> VertexCoords { get; set; }
-        public ArrayListSegment<ushort> IndexArray { get; set; }
+        public PixelFarm.CpuBlit.ArrayListSegment<float> VertexCoords { get; set; }
+        public PixelFarm.CpuBlit.ArrayListSegment<ushort> IndexArray { get; set; }
         public int IndexArrayCount => UseSeqIndexList ? _seqIndexCount : IndexArray.Count;
 
         public float Width { get; set; }
@@ -352,8 +352,8 @@ namespace PixelFarm.DrawingGL
             Width = 0;
             SpanHeight = DescendingInPx = AdditionalVerticalOffset = SpanDescendingInPx = 0;
             ColorGlyphOnTransparentBG = false;
-            VertexCoords = ArrayListSegment<float>.Empty;
-            IndexArray = ArrayListSegment<ushort>.Empty;
+            VertexCoords = PixelFarm.CpuBlit.ArrayListSegment<float>.Empty;
+            IndexArray = PixelFarm.CpuBlit.ArrayListSegment<ushort>.Empty;
             ResolvedFont = null;
             BreakInfo = null;
         }

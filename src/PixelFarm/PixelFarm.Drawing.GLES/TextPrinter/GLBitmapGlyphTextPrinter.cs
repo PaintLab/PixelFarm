@@ -242,8 +242,8 @@ namespace PixelFarm.DrawingGL
         public PixelFarm.Drawing.TextBaseline TextBaseline { get; set; }
 
 #if DEBUG
-        readonly ArrayList<float> _dbugVertexList = new ArrayList<float>();
-        readonly ArrayList<ushort> _dbugIndexList = new ArrayList<ushort>();
+        readonly PixelFarm.CpuBlit.ArrayList<float> _dbugVertexList = new PixelFarm.CpuBlit.ArrayList<float>();
+        readonly PixelFarm.CpuBlit.ArrayList<ushort> _dbugIndexList = new PixelFarm.CpuBlit.ArrayList<ushort>();
         void dbugInnerDrawI18NStringNO_WordPlate(char[] buffer, int startAt, int len, double left, double top)
         {
             //input string may not be only Eng+ Num
@@ -962,10 +962,10 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-        ArrayList<float> _sh_vertexList;
-        ArrayList<ushort> _sh_indexList;
+        PixelFarm.CpuBlit.ArrayList<float> _sh_vertexList;
+        PixelFarm.CpuBlit.ArrayList<ushort> _sh_indexList;
         bool _useSingleSequentialIndexList;
-        ArrayList<ushort> _sh_globalIndexList = new ArrayList<ushort>();
+        PixelFarm.CpuBlit.ArrayList<ushort> _sh_globalIndexList = new PixelFarm.CpuBlit.ArrayList<ushort>();
 
         void PrepareStringForRenderVx(GLRenderVxFormattedString vxFmtStr, FormattedGlyphPlanSeq fmt_seq)
         {
