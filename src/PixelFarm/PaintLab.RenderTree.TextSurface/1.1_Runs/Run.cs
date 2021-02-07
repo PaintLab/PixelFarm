@@ -11,7 +11,7 @@ namespace LayoutFarm.TextEditing
     /// <summary>
     /// any run, text, image etc
     /// </summary>
-    public abstract class Run
+    public abstract partial class Run
     {
         readonly RunStyle _runStyle;
         TextLineBox _ownerTextLine;
@@ -44,7 +44,7 @@ namespace LayoutFarm.TextEditing
         public abstract void Draw(DrawBoard d, UpdateArea updateArea);
 
         public bool HasParent => _ownerTextLine != null;
-        
+
         public int Width => _width;
         public int Height => _height;
         public int Left => _left;

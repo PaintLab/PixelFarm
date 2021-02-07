@@ -99,5 +99,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
+  <Import Project="..\LayoutFarm.TextFlow\LayoutFarm.TextFlow\LayoutFarm.TextFlow.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
