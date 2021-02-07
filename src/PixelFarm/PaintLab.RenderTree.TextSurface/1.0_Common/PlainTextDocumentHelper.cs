@@ -2,7 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-
+using Typography.Text;
 namespace LayoutFarm.TextEditing
 {
     public static class PlainTextDocumentHelper

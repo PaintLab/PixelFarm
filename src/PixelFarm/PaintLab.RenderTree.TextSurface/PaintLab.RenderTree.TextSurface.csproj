@@ -55,7 +55,6 @@
     <Compile Include="1.2_Lines\debugActivityRecorder.cs" />
     <Compile Include="1.2_Lines\RunListPool.cs" />
     <Compile Include="1.2_Lines\TextLineWalker.cs" />
-    <Compile Include="1.2_Lines\TextCopyBuffer.cs" />
     <Compile Include="1.3_Layer\TextFlowLayer.cs" />
     <Compile Include="1.3_Layer\ITextFlowOwner.cs" />
     <Compile Include="1.3_Layer\RunVisitor.cs" />

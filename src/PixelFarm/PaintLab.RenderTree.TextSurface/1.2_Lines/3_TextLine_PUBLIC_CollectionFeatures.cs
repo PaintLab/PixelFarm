@@ -66,13 +66,7 @@ namespace LayoutFarm.TextEditing
         {
             AddNormalRunBefore(beforeVisRun, v);
         }
-
-        public TextRun AddAfter(Run afterVisRun, CopyRun v)
-        {
-            var newRun = CreateTextRun(v.RawContent);
-            AddAfter(afterVisRun, newRun);
-            return newRun;
-        }
+ 
         public TextRun AddAfter(Run afterVisRun, CharSpan v)
         {
             var newRun = new TextRun(DefaultRunStyle, v);

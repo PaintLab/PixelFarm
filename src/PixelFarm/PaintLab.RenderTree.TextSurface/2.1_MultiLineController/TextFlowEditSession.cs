@@ -324,7 +324,7 @@ namespace LayoutFarm.TextEditing
 
             _lineEditor.AddTextSpan(textbuffer);
 
-            CopyRun copyRun = new CopyRun(textbuffer);
+            
             EnableUndoHistoryRecording = isRecordingHx;
 
 
@@ -641,10 +641,7 @@ namespace LayoutFarm.TextEditing
             //
             NotifyContentSizeChanged();
         }
-        public void AddTextRunToCurrentLine(CopyRun copyRun)
-        {
-            AddTextRunToCurrentLine(copyRun.RawContent);
-        }
+       
         public void AddTextRunToCurrentLine(char[] textbuffer)
         {
             _updateJustCurrentLine = true;

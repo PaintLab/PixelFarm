@@ -3,7 +3,7 @@
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
 using LayoutFarm.TextEditing;
-
+using Typography.Text;
 namespace LayoutFarm.CustomWidgets
 {
     public class TextFlowLabel : AbstractRectUI

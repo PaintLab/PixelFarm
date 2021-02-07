@@ -137,9 +137,6 @@
     <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\RunListPool.cs">
       <Link>0_REF_PaintLab.RenderTree.TextSurface\1.2_Lines\RunListPool.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\TextCopyBuffer.cs">
-      <Link>0_REF_PaintLab.RenderTree.TextSurface\1.2_Lines\TextCopyBuffer.cs</Link>
-    </Compile>
     <Compile Include="..\PaintLab.RenderTree.TextSurface\1.2_Lines\TextLineWalker.cs">
       <Link>0_REF_PaintLab.RenderTree.TextSurface\1.2_Lines\TextLineWalker.cs</Link>
     </Compile>
