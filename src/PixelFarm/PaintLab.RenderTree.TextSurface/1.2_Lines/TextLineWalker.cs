@@ -28,9 +28,6 @@ namespace LayoutFarm.TextEditing
         {
 
         }
-
-
-
         public void Clear()
         {
             //clear all
@@ -342,8 +339,6 @@ namespace LayoutFarm.TextEditing
                             CurrentLine.Remove(currentRun);
                         }
                     }
-
-
                 }
             }
 

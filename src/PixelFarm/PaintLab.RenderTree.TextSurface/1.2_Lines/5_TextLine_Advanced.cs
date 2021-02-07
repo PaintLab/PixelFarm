@@ -120,7 +120,6 @@ namespace LayoutFarm.TextEditing
                             endPoint.Run.PrevRun))
                         {
                             t.WriteTo(output);
-                            //output.AppendRun(t);
                         }
 
                         endPoint.Run.WriteTo(output, endPoint.RunLocalSelectedIndex + 1);//post cut 
@@ -484,7 +483,7 @@ namespace LayoutFarm.TextEditing
                 return new SelectionRangeInfo(newStartPoint, workingLine.Split(endPoint));
             }
         }
- 
+
         internal EditableVisualPointInfo Split(EditableVisualPointInfo pointInfo)
         {
             if (pointInfo.LineId != _currentLineNumber)

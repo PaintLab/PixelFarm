@@ -44,7 +44,7 @@ namespace LayoutFarm.TextEditing
         public abstract void Draw(DrawBoard d, UpdateArea updateArea);
 
         public bool HasParent => _ownerTextLine != null;
-        public Size Size => new Size(_width, _height);
+        
         public int Width => _width;
         public int Height => _height;
         public int Left => _left;

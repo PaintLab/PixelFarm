@@ -60,7 +60,7 @@ namespace TestGraphicPackage2
             //}
 
 
-            TextBufferSpan buff;
+            //TextBufferSpan buff;
             char[] utf16 = msg.ToCharArray();
 
             char[] x1 = "😁".ToCharArray();

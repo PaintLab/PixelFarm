@@ -43,7 +43,7 @@ namespace LayoutFarm.TextEditing
 
         public event EventHandler ContentSizeChanged;//TODO: review this field 
 
-        //TODO: use linked-list or tree for lines??
+        //TODO: use tree for lines??
         readonly List<TextLineBox> _lines = new List<TextLineBox>();
         readonly ITextFlowLayerOwner _owner;
         internal readonly CharSource _charSource = new CharSource();

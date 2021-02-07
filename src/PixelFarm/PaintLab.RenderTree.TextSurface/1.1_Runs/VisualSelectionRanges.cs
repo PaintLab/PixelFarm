@@ -66,6 +66,7 @@ namespace LayoutFarm.TextEditing
                 }
                 else
                 {
+                    //???
                     _endPoint = null;
                 }
             }

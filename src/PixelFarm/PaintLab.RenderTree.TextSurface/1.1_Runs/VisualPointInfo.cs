@@ -23,8 +23,6 @@ namespace LayoutFarm.TextEditing
         public int TextRunCharOffset => _onTextRunCharOffset;
 
         internal abstract Run Run { get; }
-
-        //public bool IsOnTheBeginOfLine => RunLocalSelectedIndex == -1;
         public bool IsOnTheBeginOfLine => _lineCharIndex == 0;
         public abstract int LineId { get; }
         public abstract int LineTop { get; }
@@ -36,7 +34,7 @@ namespace LayoutFarm.TextEditing
 
         public int X => _caretXPos;
 
-        public int TextRunPixelOffset => _onTextRunPixelOffset; 
+        public int TextRunPixelOffset => _onTextRunPixelOffset;
     }
 
 
