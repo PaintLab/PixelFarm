@@ -47,6 +47,9 @@
     <Compile Include="..\..\..\..\Typography\Typography.TextServices\TextFlow\CharSourceAndCharSpan.cs">
       <Link>Typography\Typography.TextServices\TextFlow\CharSourceAndCharSpan.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextServices\TextFlow\PlainTextDocument.cs">
+      <Link>Typography\Typography.TextServices\TextFlow\PlainTextDocument.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.BurningMineCurve_SH\CubicBezier.cs">
       <Link>PixelFarm\BackEnd.BurningMineCurve_SH\CubicBezier.cs</Link>
     </Compile>
@@ -2005,9 +2008,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.TreeCollection\General\SegmentTree.cs">
       <Link>PixelFarm\BackEnd.TreeCollection\General\SegmentTree.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\BackEnd.TreeCollection\PlainDocument\PlainTextDocument.cs">
-      <Link>PixelFarm\BackEnd.TreeCollection\PlainDocument\PlainTextDocument.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.TypeMirror\SimpleReflectionHelper.cs">
       <Link>PixelFarm\BackEnd.TypeMirror\SimpleReflectionHelper.cs</Link>
