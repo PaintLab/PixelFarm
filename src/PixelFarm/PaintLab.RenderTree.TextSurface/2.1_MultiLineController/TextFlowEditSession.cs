@@ -75,7 +75,7 @@ namespace LayoutFarm.TextEditing
             set => _enableUndoHistoryRecording = value;
         }
         // 
-        public void AddCharToCurrentLine(int c)
+        public void AddChar(int c)
         {
             _updateJustCurrentLine = true;
             bool passRemoveSelectedText = false;
@@ -291,7 +291,7 @@ namespace LayoutFarm.TextEditing
             }
 
         }
-        public void SplitCurrentLineIntoNewLine()
+        public void SplitIntoNewLine()
         {
             VisualSelectionRangeSnapShot removedRange = RemoveSelectedText();
 
@@ -593,13 +593,13 @@ namespace LayoutFarm.TextEditing
             {
                 if (lineCount > 0)
                 {
-                    SplitCurrentLineIntoNewLine();
+                    SplitIntoNewLine();
                 }
                 AddTextLine(line);
                 lineCount++;
             }
         }
-        public void AddTextRunsToCurrentLine(TextCopyBuffer output)
+        public void AddText(TextCopyBuffer output)
         {
             VisualSelectionRangeSnapShot removedRange = RemoveSelectedText();
             int startLineNum = _lineEditor.LineNumber;

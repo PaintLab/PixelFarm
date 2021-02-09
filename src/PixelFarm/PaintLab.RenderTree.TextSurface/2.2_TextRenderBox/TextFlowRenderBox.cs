@@ -755,7 +755,7 @@ namespace LayoutFarm.TextEditing
         }
         public void SplitCurrentLineToNewLine()
         {
-            _editSession.SplitCurrentLineIntoNewLine();
+            _editSession.SplitIntoNewLine();
         }
 
         public void AddTextRun(char[] buffer)

@@ -3,7 +3,7 @@
 using System;
 using System.Diagnostics;
 using System.Collections.Generic;
- 
+
 using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
 using Typography.Text;
@@ -16,6 +16,7 @@ namespace LayoutFarm.TextEditing
 #endif
     sealed partial class TextLineBox
     {
+        PlainTextLine _plainTextLine;
 
         //this class does not have Painting function
         //we paint each run at text-layer object

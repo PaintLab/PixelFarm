@@ -128,7 +128,7 @@ namespace LayoutFarm.TextEditing
             {
                 int insertAt = _editSession.CurrentLineCharIndex;
 
-                _editSession.AddCharToCurrentLine(e.KeyChar);
+                _editSession.AddChar(e.KeyChar);
 
                 if (_textSurfaceEventListener != null)
                 {
@@ -433,7 +433,7 @@ namespace LayoutFarm.TextEditing
                                 int lineBeforeSplit = _editSession.CurrentLineNumber;
                                 int lineCharBeforeSplit = _editSession.CurrentLineCharIndex;
 
-                                _editSession.SplitCurrentLineIntoNewLine();
+                                _editSession.SplitIntoNewLine();
 
                                 if (_textSurfaceEventListener != null)
                                 {
@@ -933,7 +933,7 @@ namespace LayoutFarm.TextEditing
 
             for (int i = NumOfWhitespaceForSingleTab; i >= 0; --i)
             {
-                _editSession.AddCharToCurrentLine(' ');
+                _editSession.AddChar(' ');
             }
 
             if (_textSurfaceEventListener != null)
