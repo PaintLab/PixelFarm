@@ -319,12 +319,13 @@ namespace LayoutFarm.TextEditing
 
             //--------------------- 
 
-            char[] textbuffer = new char[textline.CharCount];
-            textline.CopyText(textbuffer, 0, textbuffer.Length, 0);
-
+            //copy content from prev line
+            //temp fix!
+            //TODO: review here
+            char[] textbuffer = textline.ToString().ToCharArray();
             _lineEditor.AddTextSpan(textbuffer);
 
-            
+
             EnableUndoHistoryRecording = isRecordingHx;
 
 
@@ -641,10 +642,11 @@ namespace LayoutFarm.TextEditing
             //
             NotifyContentSizeChanged();
         }
-       
+
         public void AddTextRunToCurrentLine(char[] textbuffer)
         {
             _updateJustCurrentLine = true;
+
             VisualSelectionRangeSnapShot removedRange = RemoveSelectedText();
             int startLineNum = _lineEditor.LineNumber;
             int startCharIndex = _lineEditor.CharIndex;

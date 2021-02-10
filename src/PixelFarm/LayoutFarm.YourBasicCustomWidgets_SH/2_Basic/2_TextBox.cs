@@ -285,7 +285,7 @@ namespace LayoutFarm.CustomWidgets
                         CopyContentTo(output);
                         return output.ToString();
                     }
-                    
+
                 }
                 else
                 {
@@ -297,7 +297,7 @@ namespace LayoutFarm.CustomWidgets
                         {
                             if (passFirstLine) { sb.AppendLine(); }
 
-                            line.CopyText(sb);
+                            line.WriteTo(sb);
                             passFirstLine = true;
                         }
                         return sb.ToString();

@@ -41,9 +41,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\..\Typography\Typography.TextServices\TextFlow\ArrayList.cs">
-      <Link>Typography\Typography.TextServices\TextFlow\ArrayList.cs</Link>
-    </Compile>
     <Compile Include="..\..\..\..\Typography\Typography.TextServices\TextFlow\CharSourceAndCharSpan.cs">
       <Link>Typography\Typography.TextServices\TextFlow\CharSourceAndCharSpan.cs</Link>
     </Compile>
@@ -52,6 +49,9 @@
     </Compile>
     <Compile Include="..\..\..\..\Typography\Typography.TextServices\TextFlow\PlainTextDocument.cs">
       <Link>Typography\Typography.TextServices\TextFlow\PlainTextDocument.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextServices\TextFlow\TextBuffer.cs">
+      <Link>Typography\Typography.TextServices\TextFlow\TextBuffer.cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\Typography\Typography.TextServices\TextFlow\VisualSeletionRangeSnapshot.cs">
       <Link>Typography\Typography.TextServices\TextFlow\VisualSeletionRangeSnapshot.cs</Link>
@@ -3140,6 +3140,39 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\6_InternalResourceMx\" />
+    <Folder Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\LayoutFarm.YourBasicCustomWidgets_SH\0_CustomRenderElements\" />
+    <Folder Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\LayoutFarm.YourBasicCustomWidgets_SH\1_UIElement\" />
+    <Folder Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\LayoutFarm.YourBasicCustomWidgets_SH\2_Basic\" />
+    <Folder Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\LayoutFarm.YourBasicCustomWidgets_SH\3_Grid\" />
+    <Folder Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\LayoutFarm.YourBasicCustomWidgets_SH\4.1_Composites\" />
+    <Folder Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\LayoutFarm.YourBasicCustomWidgets_SH\6_InternalResourceMx\" />
+    <Folder Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\LayoutFarm.YourBasicCustomWidgets_SH\7_WindowUI\" />
+    <Folder Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\LayoutFarm.YourBasicCustomWidgets_SH\8.2_Canvas\" />
+    <Folder Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\LayoutFarm.YourBasicCustomWidgets_SH\9_TextContentSplitter\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\.vs\PixelFarm.One.HtmlRenderer\DesignTimeBuild\.dtbcache" />
+    <None Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\.vs\PixelFarm.One.HtmlRenderer\v15\.suo" />
+    <None Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\.vs\PixelFarm.One.HtmlRenderer\v15\Server\sqlite3\db.lock" />
+    <None Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\.vs\PixelFarm.One.HtmlRenderer\v15\Server\sqlite3\storage.ide" />
+    <None Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\obj\Debug\DesignTimeResolveAssemblyReferences.cache" />
+    <None Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <None Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\obj\Debug\PixelFarm.One.HtmlRenderer.csproj.CopyComplete" />
+    <None Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\obj\Debug\PixelFarm.One.HtmlRenderer.csproj.CoreCompileInputs.cache" />
+    <None Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\obj\Debug\PixelFarm.One.HtmlRenderer.csprojAssemblyReference.cache" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\bin\Debug\MiniOpenTK_Net20.dll" />
+    <Content Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\bin\Debug\MiniOpenTK_Net20.pdb" />
+    <Content Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\bin\Debug\PixelFarm.One.HtmlRenderer.dll" />
+    <Content Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\bin\Debug\PixelFarm.One.HtmlRenderer.pdb" />
+    <Content Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\bin\Release\MiniOpenTK_Net20.dll" />
+    <Content Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\bin\Release\MiniOpenTK_Net20.pdb" />
+    <Content Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\bin\Release\PixelFarm.One.HtmlRenderer.dll" />
+    <Content Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\bin\Release\PixelFarm.One.HtmlRenderer.pdb" />
+    <Content Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\obj\Debug\PixelFarm.One.HtmlRenderer.csproj.FileListAbsolute.txt" />
+    <Content Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\obj\Debug\PixelFarm.One.HtmlRenderer.dll" />
+    <Content Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\obj\Debug\PixelFarm.One.HtmlRenderer.pdb" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
