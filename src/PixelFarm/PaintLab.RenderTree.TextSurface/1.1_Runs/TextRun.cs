@@ -6,18 +6,18 @@ using PixelFarm.Drawing;
 using Typography.Text;
 using Typography.TextLayout;
 
-namespace LayoutFarm.TextEditing
+namespace LayoutFarm.TextFlow
 {
     public class TextRun : Run, IDisposable
     {
 
-        internal CharBufferSegment _mybuffer;
+        internal TextBufferSpan _mybuffer;
         int[] _charAdvances = null;
         RenderVxFormattedString _renderVxFormattedString; //re-creatable from original content
 
         bool _content_Parsed;//
 
-        internal TextRun(RunStyle runstyle, CharBufferSegment copyBuffer)
+        internal TextRun(RunStyle runstyle, TextBufferSpan copyBuffer)
             : base(runstyle)
         {
             //we need font info (in style) for evaluating the size fo this span
@@ -26,15 +26,7 @@ namespace LayoutFarm.TextEditing
             _mybuffer = copyBuffer;
             UpdateRunWidth();
         }
-        internal TextRun(RunStyle runstyle, CharSpan newSpan)
-            : base(runstyle)
-        {
-            //we need font info (in style) for evaluating the size fo this span
-            //without font info we can't measure the size of this span 
 
-            _mybuffer = new CharBufferSegment(newSpan.UnsafeInternalCharSource, newSpan.beginAt, newSpan.len);
-            UpdateRunWidth();
-        }
         public bool DelayFormattedString { get; set; }
         public void Dispose()
         {
@@ -45,14 +37,8 @@ namespace LayoutFarm.TextEditing
             }
             _content_Parsed = false;
         }
-        internal void SetNewContent(CharSpan newSpan)
-        {
-            _mybuffer = new CharBufferSegment(newSpan.UnsafeInternalCharSource, newSpan.beginAt, newSpan.len);
-            _content_Parsed = false;
-            _renderVxFormattedString?.Dispose();
-            _renderVxFormattedString = null;
-        }
-        internal void SetNewContent(CharBufferSegment newsegment)
+
+        internal void SetNewContent(TextBufferSpan newsegment)
         {
             _mybuffer = newsegment;
             _content_Parsed = false;
@@ -63,21 +49,21 @@ namespace LayoutFarm.TextEditing
         {
             _mybuffer.WriteTo(output);
         }
-        public override void WriteTo(TextCopyBuffer output, int start, int len)
-        {
-            if (len > 0)
-            {
-                _mybuffer.WriteTo(output, start, len);
-            }
-        }
-        public override void WriteTo(TextCopyBuffer output, int start)
-        {
-            int len = _mybuffer.Count - start;
-            if (len > 0)
-            {
-                _mybuffer.WriteTo(output, start, len);
-            }
-        }
+        //public override void WriteTo(TextCopyBuffer output, int start, int len)
+        //{
+        //    if (len > 0)
+        //    {
+        //        _mybuffer.WriteTo(output, start, len);
+        //    }
+        //}
+        //public override void WriteTo(TextCopyBuffer output, int start)
+        //{
+        //    int len = _mybuffer.Count - start;
+        //    if (len > 0)
+        //    {
+        //        _mybuffer.WriteTo(output, start, len);
+        //    }
+        //}
 
         public override int GetRunWidth(int charOffset)
         {
@@ -105,22 +91,22 @@ namespace LayoutFarm.TextEditing
                 return total;
             }
         }
-        public override int GetRunWidth(int startAtCharOffset, int count)
-        {
-            if (!_content_Parsed)
-            {
-                UpdateRunWidth();
-            }
-            int total = 0;
-            if (_charAdvances != null)
-            {
-                for (int i = startAtCharOffset; i < count; ++i)
-                {
-                    total += _charAdvances[i];
-                }
-            }
-            return total;
-        }
+        //public override int GetRunWidth(int startAtCharOffset, int count)
+        //{
+        //    if (!_content_Parsed)
+        //    {
+        //        UpdateRunWidth();
+        //    }
+        //    int total = 0;
+        //    if (_charAdvances != null)
+        //    {
+        //        for (int i = startAtCharOffset; i < count; ++i)
+        //        {
+        //            total += _charAdvances[i];
+        //        }
+        //    }
+        //    return total;
+        //}
 
         public override void UpdateRunWidth()
         {
@@ -148,7 +134,7 @@ namespace LayoutFarm.TextEditing
             measureResult.outputXAdvances = _charAdvances;
 
             GlobalTextService.TxtClient.CalculateUserCharGlyphAdvancePos(
-               _mybuffer.GetTextBufferSpan(),
+               _mybuffer,
                RunStyle.ReqFont,
                ref measureResult);
 
@@ -167,7 +153,7 @@ namespace LayoutFarm.TextEditing
                 bounds.Offset(0, this.OwnerLine.Top);
             }
         }
-        public override int GetChar(int index) => _mybuffer.GetUtf16Char(index);
+        public override int GetChar(int index) => _mybuffer.GetChar(index);
 
         public override int CharacterCount => _mybuffer.Count;
 
@@ -229,8 +215,8 @@ namespace LayoutFarm.TextEditing
             if (_renderVxFormattedString == null)
             {
                 _renderVxFormattedString = d.CreateFormattedString(
-                    _mybuffer.UnsafeInternalCharArr,
-                    _mybuffer.beginAt,
+                    _mybuffer.GetRawUtf32Buffer(),//TODO: review here again
+                    _mybuffer.start,
                     _mybuffer.Count,
                     DelayFormattedString);
             }
@@ -366,163 +352,161 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-
-
         internal override bool IsInsertable => true;
 
 
-        public override CharSpan Copy(int startIndex) => _mybuffer.MakeSubSpan(startIndex);
-        public override CharSpan Copy(int startIndex, int length) => _mybuffer.MakeSubSpan(startIndex, length);
-        public override CharSpan LeftCopy(int index) => _mybuffer.MakeLeftSubSpan(index);
+        //public override TextSegment Copy(int startIndex) => _mybuffer.MakeSubSpan(startIndex);
+        //public override TextSegment Copy(int startIndex, int length) => _mybuffer.MakeSubSpan(startIndex, length);
+        //public override TextSegment LeftCopy(int index) => _mybuffer.MakeLeftSubSpan(index);
 
-        //-----------------------------------------------------
-        public void InsertAfter(int index, int c)
-        {
-            CharSource charSource = _mybuffer.UnsafeInternalCharSource;
-            int oldLexLength = _mybuffer.Count;
-            //
-            if (index > -1 && index < _mybuffer.Count - 1)
-            {
-                //split to 2 parts
-                //left-new-right
+        ////-----------------------------------------------------
+        //public void InsertAfter(int index, int c)
+        //{
+        //    CharSource charSource = _mybuffer.UnsafeInternalCharSource;
+        //    int oldLexLength = _mybuffer.Count;
+        //    //
+        //    if (index > -1 && index < _mybuffer.Count - 1)
+        //    {
+        //        //split to 2 parts
+        //        //left-new-right
 
-                int startAt = charSource.LatestLen;
-                charSource.CopyAndAppend(_mybuffer.beginAt, index + 1);
-                charSource.Append(c);
-                charSource.CopyAndAppend(_mybuffer.beginAt + index + 1, oldLexLength - index - 1);
+        //        int startAt = charSource.LatestLen;
+        //        charSource.CopyAndAppend(_mybuffer.beginAt, index + 1);
+        //        charSource.Append(c);
+        //        charSource.CopyAndAppend(_mybuffer.beginAt + index + 1, oldLexLength - index - 1);
 
-                SetNewContent(new CharSpan(charSource, startAt, charSource.LatestLen - startAt));
-                InvalidateOwnerLineCharCount();
-                UpdateRunWidth();
-            }
-            else if (index == -1)
-            {
-                int startAt = charSource.LatestLen;
-                //after -1 => first part
-                charSource.Append(c);
-                //other part
-                charSource.CopyAndAppend(_mybuffer.beginAt, oldLexLength);
+        //        SetNewContent(new CharBufferSegment(charSource, startAt, charSource.LatestLen - startAt));
+        //        InvalidateOwnerLineCharCount();
+        //        UpdateRunWidth();
+        //    }
+        //    else if (index == -1)
+        //    {
+        //        int startAt = charSource.LatestLen;
+        //        //after -1 => first part
+        //        charSource.Append(c);
+        //        //other part
+        //        charSource.CopyAndAppend(_mybuffer.beginAt, oldLexLength);
 
-                SetNewContent(new CharSpan(charSource, startAt, charSource.LatestLen - startAt));
-                InvalidateOwnerLineCharCount();
-                UpdateRunWidth();
-            }
-            else if (index == oldLexLength - 1)
-            {
-                int startAt = charSource.LatestLen;
-                if (_mybuffer.beginAt + oldLexLength == startAt)
-                {
-                    //append last
-                    //check a special case
-                    charSource.Append(c);
-                    SetNewContent(new CharSpan(charSource, _mybuffer.beginAt, _mybuffer.len + 1));
-                }
-                else
-                {
-                    charSource.CopyAndAppend(_mybuffer.beginAt, oldLexLength);
-                    charSource.Append(c);
-                    SetNewContent(new CharSpan(charSource, startAt, charSource.LatestLen - startAt));
-                }
-                InvalidateOwnerLineCharCount();
-                UpdateRunWidth();
-            }
-            else
-            {
-                throw new NotSupportedException();
-            }
-        }
+        //        SetNewContent(new CharBufferSegment(charSource, startAt, charSource.LatestLen - startAt));
+        //        InvalidateOwnerLineCharCount();
+        //        UpdateRunWidth();
+        //    }
+        //    else if (index == oldLexLength - 1)
+        //    {
+        //        int startAt = charSource.LatestLen;
+        //        if (_mybuffer.beginAt + oldLexLength == startAt)
+        //        {
+        //            //append last
+        //            //check a special case
+        //            charSource.Append(c);
+        //            SetNewContent(new CharBufferSegment(charSource, _mybuffer.beginAt, _mybuffer.len + 1));
+        //        }
+        //        else
+        //        {
+        //            charSource.CopyAndAppend(_mybuffer.beginAt, oldLexLength);
+        //            charSource.Append(c);
+        //            SetNewContent(new CharBufferSegment(charSource, startAt, charSource.LatestLen - startAt));
+        //        }
+        //        InvalidateOwnerLineCharCount();
+        //        UpdateRunWidth();
+        //    }
+        //    else
+        //    {
+        //        throw new NotSupportedException();
+        //    }
+        //}
 
-        public CharSpan Remove(int startIndex, bool withFreeRun)
-        {
+        //public CharBufferSegment Remove(int startIndex, bool withFreeRun)
+        //{
 
-            CharSource charSource = _mybuffer.UnsafeInternalCharSource;
-            if (startIndex > -1 && _mybuffer.len > 0)
-            {
-                int oldLexLength = _mybuffer.Count;
+        //    CharSource charSource = _mybuffer.UnsafeInternalCharSource;
+        //    if (startIndex > -1 && _mybuffer.len > 0)
+        //    {
+        //        int oldLexLength = _mybuffer.Count;
 
-                //copy of right part
-                CharSpan rightpart = new CharSpan(charSource, _mybuffer.beginAt + startIndex, oldLexLength - startIndex);
-
-
-                //new span for left part
-                //it is ok the use the same rgn
-                CharSpan leftpart = new CharSpan(charSource, _mybuffer.beginAt, startIndex);
-
-                SetNewContent(leftpart);//replace 
-                InvalidateOwnerLineCharCount();
-                UpdateRunWidth();
-
-                //char[] newBuff = new char[oldLexLength - length];
-                //if (withFreeRun)
-                //{
-                //    freeRun = MakeCopy(startIndex, length);
-                //}
-                //if (startIndex > 0)
-                //{
-                //    Array.Copy(_mybuffer, 0, newBuff, 0, startIndex);
-                //}
-
-                //Array.Copy(_mybuffer, startIndex + length, newBuff, startIndex, oldLexLength - startIndex - length);
-                //SetNewContent(newBuff);
-                //InvalidateOwnerLineCharCount();
-                //UpdateRunWidth();
-
-                return rightpart;
-            }
-            return new CharSpan();//empty 
-        }
-        public CharSpan Remove(int startIndex, int len, bool withFreeRun)
-        {
-            CharSource charSource = _mybuffer.UnsafeInternalCharSource;
-            if (startIndex > -1 && _mybuffer.len > 0)
-            {
-                int oldLexLength = _mybuffer.Count;
-
-                //copy of right part
-                int right_startAt = startIndex + len;
-
-                CharSpan rightpart = new CharSpan(charSource, _mybuffer.beginAt + right_startAt, oldLexLength - right_startAt);
-
-                //new span for left part
-                //it is ok the use the same rgn
-                CharSpan leftpart = new CharSpan(charSource, _mybuffer.beginAt, startIndex);
+        //        //copy of right part
+        //        CharBufferSegment rightpart = new CharBufferSegment(charSource, _mybuffer.beginAt + startIndex, oldLexLength - startIndex);
 
 
-                //then merge 2 part togather
-                if (rightpart.len > 0 && leftpart.len > 0)
-                {
-                    int begin = charSource.LatestLen;
-                    charSource.Append(leftpart);
-                    charSource.Append(rightpart);
+        //        //new span for left part
+        //        //it is ok the use the same rgn
+        //        CharBufferSegment leftpart = new CharBufferSegment(charSource, _mybuffer.beginAt, startIndex);
 
-                    SetNewContent(new CharSpan(charSource, begin, charSource.LatestLen - begin));
-                }
-                else if (rightpart.len > 0)
-                {
-                    //only right part
-                    SetNewContent(rightpart);//replace 
-                }
-                else if (leftpart.len > 0)
-                {
-                    //only left part
-                    SetNewContent(leftpart);//replace 
-                }
-                else
-                {
-                    //empty span
-                    SetNewContent(new CharSpan(charSource, 0, 0));
-                }
+        //        SetNewContent(leftpart);//replace 
+        //        InvalidateOwnerLineCharCount();
+        //        UpdateRunWidth();
 
-                InvalidateOwnerLineCharCount();
-                UpdateRunWidth();
-                return rightpart;
-            }
-            return new CharSpan();//empty 
-        }
-        //
-#if DEBUG
-        public override string ToString() => _mybuffer.dbugGetString();
-#endif
+        //        //char[] newBuff = new char[oldLexLength - length];
+        //        //if (withFreeRun)
+        //        //{
+        //        //    freeRun = MakeCopy(startIndex, length);
+        //        //}
+        //        //if (startIndex > 0)
+        //        //{
+        //        //    Array.Copy(_mybuffer, 0, newBuff, 0, startIndex);
+        //        //}
+
+        //        //Array.Copy(_mybuffer, startIndex + length, newBuff, startIndex, oldLexLength - startIndex - length);
+        //        //SetNewContent(newBuff);
+        //        //InvalidateOwnerLineCharCount();
+        //        //UpdateRunWidth();
+
+        //        return rightpart;
+        //    }
+        //    return new CharBufferSegment();//empty 
+        //}
+        //public CharBufferSegment Remove(int startIndex, int len, bool withFreeRun)
+        //{
+        //    CharSource charSource = _mybuffer.UnsafeInternalCharSource;
+        //    if (startIndex > -1 && _mybuffer.len > 0)
+        //    {
+        //        int oldLexLength = _mybuffer.Count;
+
+        //        //copy of right part
+        //        int right_startAt = startIndex + len;
+
+        //        CharBufferSegment rightpart = new CharBufferSegment(charSource, _mybuffer.beginAt + right_startAt, oldLexLength - right_startAt);
+
+        //        //new span for left part
+        //        //it is ok the use the same rgn
+        //        CharBufferSegment leftpart = new CharBufferSegment(charSource, _mybuffer.beginAt, startIndex);
+
+
+        //        //then merge 2 part togather
+        //        if (rightpart.len > 0 && leftpart.len > 0)
+        //        {
+        //            int begin = charSource.LatestLen;
+        //            charSource.Append(leftpart);
+        //            charSource.Append(rightpart);
+
+        //            SetNewContent(new CharBufferSegment(charSource, begin, charSource.LatestLen - begin));
+        //        }
+        //        else if (rightpart.len > 0)
+        //        {
+        //            //only right part
+        //            SetNewContent(rightpart);//replace 
+        //        }
+        //        else if (leftpart.len > 0)
+        //        {
+        //            //only left part
+        //            SetNewContent(leftpart);//replace 
+        //        }
+        //        else
+        //        {
+        //            //empty span
+        //            SetNewContent(new CharBufferSegment(charSource, 0, 0));
+        //        }
+
+        //        InvalidateOwnerLineCharCount();
+        //        UpdateRunWidth();
+        //        return rightpart;
+        //    }
+        //    return new CharBufferSegment();//empty 
+        //}
+        ////
+        //#if DEBUG
+        //        public override string ToString() => _mybuffer.dbugGetString();
+        //#endif
 
     }
 }

@@ -10,7 +10,7 @@ namespace LayoutFarm
             {
                 var reqFont1 = new PixelFarm.Drawing.RequestFont("Sarabun", 14);
                 var textbox1 = new LayoutFarm.CustomWidgets.TextBox(400, 100, true);
-                var style1 = new TextEditing.TextSpanStyle();
+                var style1 = new TextFlow.TextSpanStyle();
                 style1.ReqFont = reqFont1;
                 //test with various font style
                 style1.FontColor = new PixelFarm.Drawing.Color(0, 0, 0);
@@ -33,7 +33,7 @@ namespace LayoutFarm
             //    textbox2.TextSplitter = textSplitter;
             //    textbox2.Text = "Hello World!";
             //}
-            
+
         }
     }
 }

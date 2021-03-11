@@ -41,20 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\..\Typography\Typography.TextServices\TextFlow\CharSourceAndCharSpan.cs">
-      <Link>Typography\Typography.TextServices\TextFlow\CharSourceAndCharSpan.cs</Link>
+    <Compile Include="..\..\..\..\Typography\Typography.TextServices\Text\TextBuilder.cs">
+      <Link>Typography\Typography.TextServices\Text\TextBuilder.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\Typography\Typography.TextServices\TextFlow\DocumentActions.cs">
-      <Link>Typography\Typography.TextServices\TextFlow\DocumentActions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\Typography.TextServices\TextFlow\PlainTextDocument.cs">
-      <Link>Typography\Typography.TextServices\TextFlow\PlainTextDocument.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\Typography.TextServices\TextFlow\TextBuffer.cs">
-      <Link>Typography\Typography.TextServices\TextFlow\TextBuffer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\Typography.TextServices\TextFlow\VisualSeletionRangeSnapshot.cs">
-      <Link>Typography\Typography.TextServices\TextFlow\VisualSeletionRangeSnapshot.cs</Link>
+    <Compile Include="..\..\..\..\Typography\Typography.TextServices\Text\TextCopyBuffers.cs">
+      <Link>Typography\Typography.TextServices\Text\TextCopyBuffers.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.BurningMineCurve_SH\CubicBezier.cs">
       <Link>PixelFarm\BackEnd.BurningMineCurve_SH\CubicBezier.cs</Link>
@@ -352,6 +343,21 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.Triangulation\Util\PolygonGenerator.cs">
       <Link>PixelFarm\BackEnd.Triangulation\Util\PolygonGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.TextFlow_SH\DocumentActions.cs">
+      <Link>PixelFarm\LayoutFarm.TextFlow_SH\DocumentActions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.TextFlow_SH\ForwardOnlyCharSource.cs">
+      <Link>PixelFarm\LayoutFarm.TextFlow_SH\ForwardOnlyCharSource.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.TextFlow_SH\ObjectPools.cs">
+      <Link>PixelFarm\LayoutFarm.TextFlow_SH\ObjectPools.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.TextFlow_SH\PlainTextDocument.cs">
+      <Link>PixelFarm\LayoutFarm.TextFlow_SH\PlainTextDocument.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.TextFlow_SH\SeletionRangeSnapshot.cs">
+      <Link>PixelFarm\LayoutFarm.TextFlow_SH\SeletionRangeSnapshot.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\0_CustomRenderElements\CustomImageRenderBox.cs">
       <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\0_CustomRenderElements\CustomImageRenderBox.cs</Link>
@@ -673,6 +679,12 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Color\Colorful_SH\Other\SaturationLChFormulas.cs">
       <Link>PixelFarm\PaintLab.Color\Colorful_SH\Other\SaturationLChFormulas.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\VisualTextFlowEditSession_part1.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\VisualTextFlowEditSession_part1.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\VisualTextFlowEditSession_part2.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\VisualTextFlowEditSession_part2.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.BasicVisualElements_SH\AffineMat.cs">
       <Link>PixelFarm\PixelFarm.BasicVisualElements_SH\AffineMat.cs</Link>
@@ -2060,9 +2072,6 @@
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.0_Common\PlainTextDocumentHelper.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.0_Common\PlainTextDocumentHelper.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.0_Common\StringBuilderPool.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.0_Common\StringBuilderPool.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_Runs\CharLocation.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.1_Runs\CharLocation.cs</Link>
     </Compile>
@@ -2096,12 +2105,6 @@
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\1_TextLine_CORE_Collection.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\1_TextLine_CORE_Collection.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\2_TextLine_PRIVATE_CollectionFeatures2.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\2_TextLine_PRIVATE_CollectionFeatures2.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\3_TextLine_PUBLIC_CollectionFeatures.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\3_TextLine_PUBLIC_CollectionFeatures.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\4_TextLine_ArrangeAndResizingMechanism.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.2_Lines\4_TextLine_ArrangeAndResizingMechanism.cs</Link>
     </Compile>
@@ -2125,15 +2128,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.3_Layer\TextFlowLayer.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.3_Layer\TextFlowLayer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\DocumentActions.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\DocumentActions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextFlowEditSession.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextFlowEditSession.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextFlowSelectSession.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextFlowSelectSession.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextSurfaceEventListener.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextSurfaceEventListener.cs</Link>
@@ -2611,9 +2605,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_BitmapAtlas\SimpleBitmapAtlasBuilder.cs">
       <Link>PixelFarm\PixelFarm.Drawing\7_BitmapAtlas\SimpleBitmapAtlasBuilder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\Build\N20\Typography.OpenFont\System.Numerics.ForNet20.cs">
-      <Link>Typography\Build\N20\Typography.OpenFont\System.Numerics.ForNet20.cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1_General\AlternativeTypefaceSelector.cs">
       <Link>Typography\PixelFarm.Typography\1_General\AlternativeTypefaceSelector.cs</Link>
@@ -3131,6 +3122,9 @@
     <Compile Include="..\..\..\..\Typography\Typography.TextServices\Text\VirtualTextSpanPrinter.cs">
       <Link>Typography\Typography.TextServices\Text\VirtualTextSpanPrinter.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\Typography.One\NumericForNet20.cs">
+      <Link>Typography\Build\N20\NumericForNet20.cs</Link>
+    </Compile>
     <Compile Include="..\..\x_resource_projects\TestAtlas1\x_TestAtlas1_Atlas_AUTOGEN.cs">
       <Link>x_TestAtlas1_Atlas_AUTOGEN.cs</Link>
     </Compile>
@@ -3140,39 +3134,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\6_InternalResourceMx\" />
-    <Folder Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\LayoutFarm.YourBasicCustomWidgets_SH\0_CustomRenderElements\" />
-    <Folder Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\LayoutFarm.YourBasicCustomWidgets_SH\1_UIElement\" />
-    <Folder Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\LayoutFarm.YourBasicCustomWidgets_SH\2_Basic\" />
-    <Folder Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\LayoutFarm.YourBasicCustomWidgets_SH\3_Grid\" />
-    <Folder Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\LayoutFarm.YourBasicCustomWidgets_SH\4.1_Composites\" />
-    <Folder Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\LayoutFarm.YourBasicCustomWidgets_SH\6_InternalResourceMx\" />
-    <Folder Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\LayoutFarm.YourBasicCustomWidgets_SH\7_WindowUI\" />
-    <Folder Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\LayoutFarm.YourBasicCustomWidgets_SH\8.2_Canvas\" />
-    <Folder Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\LayoutFarm.YourBasicCustomWidgets_SH\9_TextContentSplitter\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\.vs\PixelFarm.One.HtmlRenderer\DesignTimeBuild\.dtbcache" />
-    <None Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\.vs\PixelFarm.One.HtmlRenderer\v15\.suo" />
-    <None Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\.vs\PixelFarm.One.HtmlRenderer\v15\Server\sqlite3\db.lock" />
-    <None Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\.vs\PixelFarm.One.HtmlRenderer\v15\Server\sqlite3\storage.ide" />
-    <None Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\obj\Debug\DesignTimeResolveAssemblyReferences.cache" />
-    <None Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
-    <None Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\obj\Debug\PixelFarm.One.HtmlRenderer.csproj.CopyComplete" />
-    <None Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\obj\Debug\PixelFarm.One.HtmlRenderer.csproj.CoreCompileInputs.cache" />
-    <None Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\obj\Debug\PixelFarm.One.HtmlRenderer.csprojAssemblyReference.cache" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\bin\Debug\MiniOpenTK_Net20.dll" />
-    <Content Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\bin\Debug\MiniOpenTK_Net20.pdb" />
-    <Content Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\bin\Debug\PixelFarm.One.HtmlRenderer.dll" />
-    <Content Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\bin\Debug\PixelFarm.One.HtmlRenderer.pdb" />
-    <Content Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\bin\Release\MiniOpenTK_Net20.dll" />
-    <Content Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\bin\Release\MiniOpenTK_Net20.pdb" />
-    <Content Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\bin\Release\PixelFarm.One.HtmlRenderer.dll" />
-    <Content Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\bin\Release\PixelFarm.One.HtmlRenderer.pdb" />
-    <Content Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\obj\Debug\PixelFarm.One.HtmlRenderer.csproj.FileListAbsolute.txt" />
-    <Content Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\obj\Debug\PixelFarm.One.HtmlRenderer.dll" />
-    <Content Include="Typography\PixelFarm.Typography\PixelFarm.One.HtmlRenderer\obj\Debug\PixelFarm.One.HtmlRenderer.pdb" />
+    <Folder Include="Typography\Build\N20\Typography.OpenFont\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

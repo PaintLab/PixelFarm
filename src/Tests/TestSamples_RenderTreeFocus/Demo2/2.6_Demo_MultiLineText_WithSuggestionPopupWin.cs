@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
-using LayoutFarm.TextEditing;
+using LayoutFarm.TextFlow;
 namespace LayoutFarm
 {
     [DemoNote("2.6 Demo_MultiLineText_WithSuggestionPopupWin")]
@@ -20,7 +20,7 @@ namespace LayoutFarm
         {
             _textbox = new LayoutFarm.CustomWidgets.TextBox(400, 300, true);
             _textbox.SetLocation(20, 20);
-            var style1 = new TextEditing.TextSpanStyle();
+            var style1 = new TextSpanStyle();
             style1.ReqFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
             style1.FontColor = new PixelFarm.Drawing.Color(0, 0, 0);
             _textbox.DefaultSpanStyle = style1;
@@ -33,11 +33,11 @@ namespace LayoutFarm
             _sgBox.Hide();
             //------------------------------------
             //create special text surface listener
-            var textSurfaceListener = new LayoutFarm.TextEditing.TextSurfaceEventListener();
+            var textSurfaceListener = new TextSurfaceEventListener();
             textSurfaceListener.CharacterAdded += (s, e) => UpdateSuggestionList();
             textSurfaceListener.CharacterRemoved += (s, e) => UpdateSuggestionList();
-            textSurfaceListener.PreviewArrowKeyDown += new EventHandler<TextEditing.TextDomEventArgs>(textSurfaceListener_PreviewArrowKeyDown);
-            textSurfaceListener.PreviewEnterKeyDown += new EventHandler<TextEditing.TextDomEventArgs>(textSurfaceListener_PreviewEnterKeyDown);
+            textSurfaceListener.PreviewArrowKeyDown += new EventHandler<TextDomEventArgs>(textSurfaceListener_PreviewArrowKeyDown);
+            textSurfaceListener.PreviewEnterKeyDown += new EventHandler<TextDomEventArgs>(textSurfaceListener_PreviewEnterKeyDown);
             _textbox.TextEventListener = textSurfaceListener;
             //------------------------------------ 
 
@@ -80,7 +80,7 @@ namespace LayoutFarm
         }
 
 
-        void textSurfaceListener_PreviewArrowKeyDown(object sender, TextEditing.TextDomEventArgs e)
+        void textSurfaceListener_PreviewArrowKeyDown(object sender, TextDomEventArgs e)
         {
             //update selection in list box 
             switch (e.Key)
@@ -105,7 +105,7 @@ namespace LayoutFarm
                     break;
             }
         }
-        void textSurfaceListener_PreviewEnterKeyDown(object sender, TextEditing.TextDomEventArgs e)
+        void textSurfaceListener_PreviewEnterKeyDown(object sender, TextDomEventArgs e)
         {
             //accept selected text
             if (!_sgBox.Visible || _sgBox.SelectedIndex < 0)

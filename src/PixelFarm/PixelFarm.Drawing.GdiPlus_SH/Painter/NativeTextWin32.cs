@@ -182,6 +182,7 @@ namespace PixelFarm.Drawing.WinGdi
                     textBufferSpan.GetRawUtf16Buffer(),
                     textBufferSpan.start,
                     len);
+
                 NativeTextWin32.FontABC[] abcWidths = winfont.GetInteralABCArray();
                 int totalW = 0;
                 for (int i = 0; i < len; ++i)
@@ -368,10 +369,12 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public PixelFarm.Drawing.Size MeasureString(in TextBufferSpan textBufferSpan, RequestFont font)
         {
+            //TODO: review here*** 
             return WinGdiTextService.MeasureString(textBufferSpan.GetRawUtf16Buffer(), textBufferSpan.start, textBufferSpan.len, font);
         }
         public void MeasureString(in TextBufferSpan textBufferSpan, RequestFont font, int maxWidth, out int charFit, out int charFitWidth)
         {
+            //TODO: review here***
             WinGdiTextService.MeasureString(textBufferSpan.GetRawUtf16Buffer(), textBufferSpan.start, textBufferSpan.len, font, maxWidth, out charFit, out charFitWidth);
         }
 
@@ -384,7 +387,7 @@ namespace PixelFarm.Drawing.WinGdi
 
         public float MeasureBlankLineHeight(RequestFont f) => WinGdiTextService.MeasureBlankLineHeight(f);
 
-       
+
         public void CalculateUserCharGlyphAdvancePos(in TextBufferSpan textBufferSpan,
             ILineSegmentList lineSegs,
             RequestFont font,

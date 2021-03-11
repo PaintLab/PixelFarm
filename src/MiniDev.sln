@@ -93,8 +93,6 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Typography.GlyphLayout", ".
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Typography.TextBreak", "..\..\Typography\Typography.TextBreak\Typography.TextBreak\Typography.TextBreak.shproj", "{9A99F103-B119-4A4D-8093-6A03BAA6D36B}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Typography.TextFlow", "..\..\Typography\Typography.TextFlow\Typography.TextFlow.shproj", "{7A8A63D2-2CB5-41F5-8E83-6F6E54398CF4}"
-EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Typography.TextServices", "..\..\Typography\Typography.TextServices\Typography.TextServices.shproj", "{D07686EE-2618-4C20-8EB5-32AD4C4D3810}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Typography.One", "PixelFarm\Typography.One\Typography.One.csproj", "{5278FAB9-33F0-40E0-ADCA-7237EA0E935B}"
@@ -243,13 +241,12 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PixelFarm.Typography_SH", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DepCtrl_Painter_Layer1_With_TextSupport", "DepCtrls\DepCtrl_Painter_Layer1_With_TextSupport\DepCtrl_Painter_Layer1_With_TextSupport.csproj", "{C8C4EB0F-C324-4E11-832C-C701CF3E5D27}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "LayoutFarm.TextFlow", "PixelFarm\LayoutFarm.TextFlow\LayoutFarm.TextFlow\LayoutFarm.TextFlow.shproj", "{0324AE16-C520-492C-8A0F-E89A2E9691F7}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DepCtrls_LayoutFarm_TextFlow", "DepCtrls\DepCtrls_LayoutFarm_TextFlow\DepCtrls_LayoutFarm_TextFlow.csproj", "{6D4D57CE-C741-46E4-ADDD-25DE6D6C56EB}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "LayoutFarm.TextFlow_SH", "PixelFarm\LayoutFarm.TextFlow_SH\LayoutFarm.TextFlow_SH.shproj", "{A32CFA00-8751-427A-A655-952C00FC991A}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		PixelFarm\LayoutFarm.TextFlow\LayoutFarm.TextFlow\LayoutFarm.TextFlow.projitems*{0324ae16-c520-492c-8a0f-e89a2e9691f7}*SharedItemsImports = 13
 		PixelFarm\BackEnd.Triangulation\Triangulation.projitems*{06d5a76f-92d0-46a4-9ba9-86c65b631535}*SharedItemsImports = 4
 		PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\MiniOpenTK_Core2.projitems*{07b1aa01-3869-4af3-9439-329b96d8d3c1}*SharedItemsImports = 4
 		PixelFarm\PixelFarm.DrawingGL_SH\PixelFarm.DrawingGL_SH.projitems*{0c570c95-ee3a-4833-a3b2-9f3d68538d25}*SharedItemsImports = 4
@@ -291,11 +288,9 @@ Global
 		PixelFarm\PixelFarm.Painter_Layer1_SH\PixelFarm.Painter_Layer1_SH.projitems*{5eb9544f-51e1-42cc-abfd-b9afba6a2a0d}*SharedItemsImports = 4
 		PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\MiniOpenTK_Core1.projitems*{62e625ec-1c72-4d92-8405-9dfee251d8bc}*SharedItemsImports = 5
 		PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\LayoutFarm.YourBasicCustomWidgets_SH.projitems*{6317f5f0-bc4b-4bfd-b3c0-73c05c2aa11e}*SharedItemsImports = 4
-		PixelFarm\LayoutFarm.TextFlow\LayoutFarm.TextFlow\LayoutFarm.TextFlow.projitems*{6d4d57ce-c741-46e4-addd-25de6d6c56eb}*SharedItemsImports = 4
 		PixelFarm\BackEnd.PaintFx\PdnSharedProject\PdnSharedProject.projitems*{6ff96bfb-9e4b-4634-b682-7de60468da38}*SharedItemsImports = 13
 		PixelFarm\PixelFarm.DrawingGL_SH\PixelFarm.DrawingGL_SH.projitems*{73f1b81d-99a6-412e-ab6e-db399d32e2bf}*SharedItemsImports = 13
 		PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\MiniOpenTK_Core2.projitems*{79d65c83-fafe-43c3-b49e-3e5eada1951e}*SharedItemsImports = 5
-		..\..\Typography\Typography.TextFlow\Typography.TextFlow.projitems*{7a8a63d2-2cb5-41f5-8e83-6f6e54398cf4}*SharedItemsImports = 13
 		PixelFarm\BackEnd.Tesselate_SH\BackEnd.Tesselate_SH.projitems*{7fe0fbe6-a805-4d4f-acea-b6b881189a48}*SharedItemsImports = 13
 		PixelFarm\PixelFarm.Vectors_SH\PixelFarm.Vectors_SH.projitems*{8073ac27-be12-4efd-a030-a97beb390ca1}*SharedItemsImports = 4
 		PixelFarm\PixelFarm.Painter_Layer2_SH\PixelFarm.Painter_Layer2_SH.projitems*{80d9da2c-b25e-4a77-b4d1-cba8ddbf76bf}*SharedItemsImports = 13
@@ -304,6 +299,7 @@ Global
 		..\..\Typography\Typography.TextBreak\Typography.TextBreak\Typography.TextBreak.projitems*{9a99f103-b119-4a4d-8093-6a03baa6d36b}*SharedItemsImports = 13
 		PixelFarm\PaintLab.Color\Colorful_SH\Colorful_SH.projitems*{9cc6310f-c116-449d-be97-63d152f98746}*SharedItemsImports = 4
 		PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\LayoutFarm.YourBasicCustomWidgets_SH.projitems*{9ee24857-0686-4faf-9411-856904e88452}*SharedItemsImports = 13
+		PixelFarm\LayoutFarm.TextFlow_SH\LayoutFarm.TextFlow_SH.projitems*{a32cfa00-8751-427a-a655-952c00fc991a}*SharedItemsImports = 13
 		PixelFarm\PaintLab.Platforms.SH\PaintLab.Platforms.SH.projitems*{a3bba4d4-0c7d-4b1c-b451-75d15f661cc6}*SharedItemsImports = 13
 		PixelFarm\BackEnd.PaintFx\PdnSharedProject\PdnSharedProject.projitems*{a533e1c7-ab74-4bcf-bc7a-12d4dbbfa918}*SharedItemsImports = 4
 		PixelFarm\PaintLab.AppHost\PaintLab.AppHost.projitems*{a634550f-edad-4a1d-872c-730c2fd8c1c9}*SharedItemsImports = 4
@@ -319,6 +315,7 @@ Global
 		PixelFarm\PixelFarm.CpuBlit_Layer1\PixelFarm.CpuBlit_Layer1_SH.projitems*{ccccd3d9-e573-416d-8313-6942c1f85718}*SharedItemsImports = 4
 		PixelFarm\PixelFarm.CpuBlit_Layer2\PixelFarm.CpuBlit_Layer2.projitems*{ccccd3d9-e573-416d-8313-6942c1f85718}*SharedItemsImports = 4
 		..\..\Typography\Typography.TextServices\Typography.TextServices.projitems*{d07686ee-2618-4c20-8eb5-32ad4c4d3810}*SharedItemsImports = 13
+		PixelFarm\LayoutFarm.TextFlow_SH\LayoutFarm.TextFlow_SH.projitems*{d2cc5cef-3003-4a5d-a532-8eb7e4fa40f2}*SharedItemsImports = 4
 		PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\MiniOpenTK_Core1.projitems*{d49440c2-785f-4bac-9f2e-fc93603fa647}*SharedItemsImports = 4
 		PixelFarm\PixelFarm.Vectors_Utils_SH\PixelFarm.Vectors_Utils_SH.projitems*{d49bcb58-0126-473b-acfe-d1ff07395833}*SharedItemsImports = 4
 		..\..\Typography\Typography.GlyphLayout\Typography.GlyphLayout.projitems*{d8861cf8-c506-472b-8a57-632bd6ca6496}*SharedItemsImports = 13
@@ -326,7 +323,7 @@ Global
 		PixelFarm\PixelFarm.DrawingGL_SH\PixelFarm.DrawingGL_SH.projitems*{e1e89b3b-b529-4b17-b7ed-4c70cc8475eb}*SharedItemsImports = 4
 		PixelFarm\PaintLab.Platforms.SH\PaintLab.Platforms.SH.projitems*{e5f2b317-2205-4727-92c4-6190a2fa3ddc}*SharedItemsImports = 4
 		PixelFarm\PixelFarm.Drawing.GdiPlus_SH\PixelFarm.Drawing.GdiPlus_SH.projitems*{e5f2b317-2205-4727-92c4-6190a2fa3ddc}*SharedItemsImports = 4
-		PixelFarm\LayoutFarm.TextFlow\LayoutFarm.TextFlow\LayoutFarm.TextFlow.projitems*{e6078fc1-3ae0-4e33-ae7c-75e7aaac7a02}*SharedItemsImports = 4
+		PixelFarm\LayoutFarm.TextFlow_SH\LayoutFarm.TextFlow_SH.projitems*{e6078fc1-3ae0-4e33-ae7c-75e7aaac7a02}*SharedItemsImports = 4
 		Tests\WinFormTestBed2\WinFormTestBed2.projitems*{e8df35e8-8765-47c2-bc1a-b686a058062c}*SharedItemsImports = 4
 		PixelFarm\PaintLab.AppHost\PaintLab.AppHost.projitems*{e906647b-3216-4cc1-b849-dd249f6737f4}*SharedItemsImports = 4
 		PixelFarm\BackEnd.MiniOpenTK\src\OpenTK\MiniOpenTK_Core1.projitems*{e9a5d738-bc13-4909-94d8-d7a13d7068ff}*SharedItemsImports = 4
@@ -9743,7 +9740,6 @@ Global
 		{235A071B-8D06-40AE-A5C5-B1CE59715EE9} = {C1FD503F-59E2-4016-8AEA-831AC3231430}
 		{D8861CF8-C506-472B-8A57-632BD6CA6496} = {C1FD503F-59E2-4016-8AEA-831AC3231430}
 		{9A99F103-B119-4A4D-8093-6A03BAA6D36B} = {C1FD503F-59E2-4016-8AEA-831AC3231430}
-		{7A8A63D2-2CB5-41F5-8E83-6F6E54398CF4} = {C1FD503F-59E2-4016-8AEA-831AC3231430}
 		{D07686EE-2618-4C20-8EB5-32AD4C4D3810} = {C1FD503F-59E2-4016-8AEA-831AC3231430}
 		{5278FAB9-33F0-40E0-ADCA-7237EA0E935B} = {C1FD503F-59E2-4016-8AEA-831AC3231430}
 		{EC1307C6-309F-43EA-BFCC-5219E2F5A103} = {C1FD503F-59E2-4016-8AEA-831AC3231430}
@@ -9812,8 +9808,8 @@ Global
 		{2EF3FF2B-BF9C-47F6-9EC6-1DC75B18CA67} = {20AC18A6-5250-4307-B341-EC3A463750EA}
 		{EC0BD041-5BA5-409D-8FC6-AA9F2A6F862B} = {C1FD503F-59E2-4016-8AEA-831AC3231430}
 		{C8C4EB0F-C324-4E11-832C-C701CF3E5D27} = {20AC18A6-5250-4307-B341-EC3A463750EA}
-		{0324AE16-C520-492C-8A0F-E89A2E9691F7} = {C1FD503F-59E2-4016-8AEA-831AC3231430}
 		{6D4D57CE-C741-46E4-ADDD-25DE6D6C56EB} = {20AC18A6-5250-4307-B341-EC3A463750EA}
+		{A32CFA00-8751-427A-A655-952C00FC991A} = {C1FD503F-59E2-4016-8AEA-831AC3231430}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AD5DF903-2497-45EE-B3DC-1FAF5DA8F05C}

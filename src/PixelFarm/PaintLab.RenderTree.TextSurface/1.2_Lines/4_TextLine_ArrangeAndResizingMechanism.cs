@@ -2,7 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-namespace LayoutFarm.TextEditing
+namespace LayoutFarm.TextFlow
 {
     partial class TextLineBox
     {

@@ -4,10 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using PixelFarm.Drawing;
-namespace LayoutFarm.TextEditing
+namespace LayoutFarm.TextFlow
 {
-   
-    public class VisualSelectionRange
+
+    public sealed class VisualSelectionRange
     {
         EditableVisualPointInfo _startPoint = null;
         EditableVisualPointInfo _endPoint = null;
@@ -85,11 +85,7 @@ namespace LayoutFarm.TextEditing
             {
                 if (_startPoint != null && _endPoint != null)
                 {
-                    if ((_startPoint.Run != null && !_startPoint.Run.HasParent) ||
-                        (_endPoint.Run != null && !_endPoint.Run.HasParent))
-                    {
-                        throw new NotSupportedException("text range err");
-                    }
+
                     if ((_startPoint.LineCharIndex == _endPoint.LineCharIndex) &&
                     (_startPoint.LineId == _endPoint.LineId))
                     {
@@ -226,7 +222,7 @@ namespace LayoutFarm.TextEditing
                 int bottomLineId = BottomEnd.LineId;
                 if (bottomLineId - topLineId > 1)
                 {
-                    TextLineBox adjacentStartLine = topEndPoint.EditableLine.Next;
+                    TextLineBox adjacentStartLine = topEndPoint.Line.Next;
                     while (adjacentStartLine != BottomEnd.Line)
                     {
                         destPage.FillRectangle(BackgroundColor, 0,
@@ -235,7 +231,10 @@ namespace LayoutFarm.TextEditing
                             adjacentStartLine.ActualLineHeight);
                         adjacentStartLine = adjacentStartLine.Next;
                     }
+
+#if DEBUG
                     TextLineBox adjacentStopLine = BottomEnd.Line.Prev;
+#endif
                 }
                 VisualPointInfo bottomEndPoint = BottomEnd;
                 lineYPos = bottomEndPoint.LineTop;
@@ -245,42 +244,15 @@ namespace LayoutFarm.TextEditing
         }
         public void UpdateSelectionRange()
         {
-            if (_startPoint.Run != null && !_startPoint.Run.HasParent)
-            {
-                TextLineBox startLine = _startPoint.EditableLine;
-                _startPoint = startLine.GetTextPointInfoFromCharIndex(_startPoint.LineCharIndex);
-            }
-            if (_endPoint.Run != null && !_endPoint.Run.HasParent)
-            {
-                TextLineBox stopLine = _endPoint.EditableLine;
-                _endPoint = stopLine.GetTextPointInfoFromCharIndex(_endPoint.LineCharIndex);
-            }
+            if (!IsValid) { return; }
+
+            _startPoint = _startPoint.Line.GetTextPointInfoFromCharIndex(_startPoint.LineCharIndex);
+            _endPoint = _endPoint.Line.GetTextPointInfoFromCharIndex(_endPoint.LineCharIndex);
         }
 
-        public IEnumerable<Run> GetPrintableTextRunIter()
+        public SelectionRangeSnapShot GetSelectionRangeSnapshot()
         {
-            Run startRun = null;
-            if (_startPoint.Run == null)
-            {
-                TextLineBox line = _startPoint.EditableLine;
-                startRun = line.FirstRun;
-            }
-            else
-            {
-                startRun = _startPoint.Run.NextRun;
-            }
-
-            TextFlowLayer layer = _layer;
-            foreach (Run t in layer.GetDrawingIter(startRun, _endPoint.Run))
-            {
-                yield return t;
-
-            }
-        }
-
-        public VisualSelectionRangeSnapShot GetSelectionRangeSnapshot()
-        {
-            return new VisualSelectionRangeSnapShot(
+            return new SelectionRangeSnapShot(
                 _startPoint.LineNumber,
                 _startPoint.LineCharIndex,
                 _endPoint.LineNumber,
@@ -326,12 +298,12 @@ namespace LayoutFarm.TextEditing
         }
 
         TextFlowLayer _textLayer;
-        VisualSelectionRangeSnapShot _selectionRangeSnapshot;
+        SelectionRangeSnapShot _selectionRangeSnapshot;
         MarkerLocation _startLocation;
         MarkerLocation _stopLocation;
 
 
-        public VisualMarkerSelectionRange(VisualSelectionRangeSnapShot selectionRangeSnapshot)
+        public VisualMarkerSelectionRange(SelectionRangeSnapShot selectionRangeSnapshot)
         {
             _selectionRangeSnapshot = selectionRangeSnapshot;
             BackgroundColor = Color.FromArgb(80, Color.Yellow);//test, default

@@ -1,6 +1,6 @@
 ﻿//Apache2, 2014-present, WinterDev
 
-namespace LayoutFarm.TextEditing
+namespace LayoutFarm.TextFlow
 {
     public readonly struct CharLocation
     {

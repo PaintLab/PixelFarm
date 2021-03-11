@@ -5,9 +5,8 @@ using System.Collections.Generic;
 using System.Text;
 using PixelFarm.Drawing;
 
-using LayoutFarm.TextEditing;
+using LayoutFarm.TextFlow;
 using LayoutFarm.UI;
-using Typography.Text;
 
 namespace LayoutFarm.CustomWidgets
 {
@@ -132,7 +131,7 @@ namespace LayoutFarm.CustomWidgets
         public override int InnerHeight => (_textEditRenderElement != null) ? _textEditRenderElement.InnerContentHeight : base.InnerHeight;
 
         public abstract string Text { get; set; }
-        public abstract void SetText(IEnumerable<string> lines);
+
         //
         public void FindCurrentUnderlyingWord(out int startAt, out int len)
         {
@@ -238,7 +237,7 @@ namespace LayoutFarm.CustomWidgets
 
     public class TextBox : TextBoxBase
     {
-        IEnumerable<PlainTextLine> _doc;
+        PlainTextDocument _doc;
         bool _isEditable;
 
         public TextBox(int width, int height, bool multiline, bool isEditable = true)
@@ -261,6 +260,9 @@ namespace LayoutFarm.CustomWidgets
             //TODO
             _textEditRenderElement.CopyCurrentLine(output);
         }
+
+        public VisualTextFlowEditSession GetEditSession() => TextEditRenderBox.GetEditSession(_textEditRenderElement);
+
 #if DEBUG
         public override void SetLocation(int left, int top)
         {
@@ -268,18 +270,14 @@ namespace LayoutFarm.CustomWidgets
             base.SetLocation(left, top);
         }
 #endif
-        public override void SetText(IEnumerable<string> lines)
-        {
-            _doc = PlainTextDocumentHelper.CreatePlainTextDocument(lines);
-            ReloadDocument();
-        }
+
         public override string Text
         {
             get
             {
                 if (_textEditRenderElement != null)
                 {
-                    //TODO, use string builder pool
+
                     using (new TextUtf32RangeCopyPoolContext<TextBox>(out Typography.Text.TextCopyBufferUtf32 output))
                     {
                         CopyContentTo(output);
@@ -289,17 +287,9 @@ namespace LayoutFarm.CustomWidgets
                 }
                 else
                 {
-                    //TODO, use string builder pool
                     using (new StringBuilderPoolContext<TextBox>(out StringBuilder sb))
                     {
-                        bool passFirstLine = false;
-                        foreach (PlainTextLine line in _doc)
-                        {
-                            if (passFirstLine) { sb.AppendLine(); }
-
-                            line.WriteTo(sb);
-                            passFirstLine = true;
-                        }
+                        _doc.WriteTo(sb);
                         return sb.ToString();
                     }
                 }
@@ -308,16 +298,16 @@ namespace LayoutFarm.CustomWidgets
             {
                 if (_textEditRenderElement == null)
                 {
-                    _doc = PlainTextDocumentHelper.CreatePlainTextDocument(value);
+                    _doc = new PlainTextDocument(value);
                     return;
                 }
                 //---------------                 
                 if (value == null)
                 {
-                    _doc = new List<PlainTextLine>();
+                    _doc = new PlainTextDocument("");
                     return;
                 }
-                _doc = PlainTextDocumentHelper.CreatePlainTextDocument(value);
+                _doc = new PlainTextDocument(value);
                 ReloadDocument();
                 //convert to runs
             }
@@ -330,21 +320,7 @@ namespace LayoutFarm.CustomWidgets
             }
 
             _textEditRenderElement.ClearAllChildren();
-            int lineCount = 0;
-
-            //RunStyle runstyle = GetDefaultRunStyle();
-            foreach (PlainTextLine line in _doc)
-            {
-                if (lineCount > 0)
-                {
-                    _textEditRenderElement.SplitCurrentLineToNewLine();
-                }
-
-
-                _textEditRenderElement.AddTextLine(line);
-                lineCount++;
-            }
-
+            _textEditRenderElement.Reload(_doc);
             this.InvalidateGraphics();
         }
         public override RenderElement GetPrimaryRenderElement()
@@ -402,7 +378,6 @@ namespace LayoutFarm.CustomWidgets
             return txtbox._textEditRenderElement;
         }
 
-        public static TextFlowEditSession GetEditSession(TextBox txtbox) => TextEditRenderBox.GetCurrentEditSession(txtbox._textEditRenderElement);
 
         public Run CurrentTextSpan => _textEditRenderElement.CurrentTextRun;
 
@@ -465,16 +440,7 @@ namespace LayoutFarm.CustomWidgets
             _textEditRenderElement.HandleKeyPress(e);
             e.CancelBubbling = true;
         }
-        public override void SetText(IEnumerable<string> lines)
-        {
 
-            //not support in this version
-            //TODO: review here
-#if DEBUG
-            System.Diagnostics.Debug.WriteLine("maskTextBox_setText:");
-#endif
-
-        }
         public override string Text
         {
             get
@@ -487,6 +453,7 @@ namespace LayoutFarm.CustomWidgets
             set
             {
                 //can not set by code?
+
             }
         }
 
@@ -531,14 +498,14 @@ namespace LayoutFarm.CustomWidgets
                         }
                         else
                         {
-                            VisualSelectionRangeSnapShot removedRange = e.SelectionSnapShot;
+                            SelectionRangeSnapShot removedRange = e.SelectionSnapShot;
                             _actualUserInputText.RemoveRange(removedRange.startColumnNum, removedRange.endColumnNum - removedRange.startColumnNum);
                         }
                     }
                     else if (_keydownCharIndex == currentCharIndex)
                     {
                         //del
-                        VisualSelectionRangeSnapShot removedRange = e.SelectionSnapShot;
+                        SelectionRangeSnapShot removedRange = e.SelectionSnapShot;
                         if (removedRange.endColumnNum == removedRange.startColumnNum)
                         {
                             _actualUserInputText.RemoveAt(_keydownCharIndex);

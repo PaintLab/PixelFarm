@@ -1,6 +1,6 @@
 ﻿//Apache2, 2014-present, WinterDev
 using PixelFarm.Drawing;
-namespace LayoutFarm.TextEditing
+namespace LayoutFarm.TextFlow
 {
     
     public struct TextSpanStyle

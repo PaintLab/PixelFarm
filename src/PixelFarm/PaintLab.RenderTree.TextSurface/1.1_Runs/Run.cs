@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 using Typography.Text;
 
-namespace LayoutFarm.TextEditing
+namespace LayoutFarm.TextFlow
 {
 
     /// <summary>
@@ -80,8 +80,8 @@ namespace LayoutFarm.TextEditing
         public abstract int GetChar(int index);
 
         public abstract void WriteTo(Typography.Text.TextCopyBuffer output);
-        public abstract void WriteTo(Typography.Text.TextCopyBuffer output, int start, int len);
-        public abstract void WriteTo(Typography.Text.TextCopyBuffer output, int start);
+        //public abstract void WriteTo(Typography.Text.TextCopyBuffer output, int start, int len);
+        //public abstract void WriteTo(Typography.Text.TextCopyBuffer output, int start);
         //--------------------
         //model
         public abstract CharLocation GetCharacterFromPixelOffset(int pixelOffset);
@@ -91,13 +91,13 @@ namespace LayoutFarm.TextEditing
         /// <param name="charOffset"></param>
         /// <returns></returns>
         public abstract int GetRunWidth(int charOffset);
-        /// <summary>
-        /// get run with from charOffset to 
-        /// </summary>
-        /// <param name="charOffset"></param>
-        /// <param name="count"></param>
-        /// <returns></returns>
-        public abstract int GetRunWidth(int startAtCharOffset, int count);
+        ///// <summary>
+        ///// get run with from charOffset to 
+        ///// </summary>
+        ///// <param name="charOffset"></param>
+        ///// <param name="count"></param>
+        ///// <returns></returns>
+        //public abstract int GetRunWidth(int startAtCharOffset, int count);
 
         internal static CharLocation InnerGetCharacterFromPixelOffset(Run tt, int pixelOffset)
         {
@@ -105,9 +105,9 @@ namespace LayoutFarm.TextEditing
         }
         public abstract void UpdateRunWidth();
 
-        public abstract CharSpan LeftCopy(int index);
-        public abstract CharSpan Copy(int startIndex, int length);
-        public abstract CharSpan Copy(int startIndex);
+        //public abstract TextSegment LeftCopy(int index);
+        //public abstract TextSegment Copy(int startIndex, int length);
+        //public abstract TextSegment Copy(int startIndex);
 
         ////------------------------------
         //owner, neighbor

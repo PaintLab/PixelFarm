@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using Typography.Text;
 
-namespace LayoutFarm.TextEditing
+namespace LayoutFarm.TextFlow
 {
     static class ObjectPool<I, T>
     {
@@ -52,7 +52,7 @@ namespace LayoutFarm.TextEditing
             //once
             ObjectPool<StringBuilder, T>.SetDelegates(
                 () => new StringBuilder(),
-                 sb => sb.Length = 0
+                 sb => sb.Length = 0 //reset
                 );
         }
         public StringBuilderPoolContext(out StringBuilder stbuilder)

@@ -1,5 +1,5 @@
 ﻿//Apache2, 2014-present, WinterDev
-
+using LayoutFarm.TextFlow;
 namespace LayoutFarm
 {
     [DemoNote("2.1 SingleLineText")]
@@ -10,7 +10,8 @@ namespace LayoutFarm
             //simple textbox
             var reqFont = new PixelFarm.Drawing.RequestFont("Sarabun", 18);
             var textbox = new LayoutFarm.CustomWidgets.TextBox(200, 30, false);
-            var textSpanStyle = new TextEditing.TextSpanStyle() {
+            var textSpanStyle = new TextSpanStyle()
+            {
                 ReqFont = reqFont,
                 FontColor = new PixelFarm.Drawing.Color(255, 0, 0)
             };
@@ -24,7 +25,8 @@ namespace LayoutFarm
             //--------------
             //mask text box
             var maskTextBox = new LayoutFarm.CustomWidgets.MaskTextBox(200, 30);
-            var textSpanStyle2 = new TextEditing.TextSpanStyle() {
+            var textSpanStyle2 = new TextSpanStyle()
+            {
                 ReqFont = reqFont,
                 FontColor = PixelFarm.Drawing.Color.Black
             };

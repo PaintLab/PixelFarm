@@ -19,7 +19,7 @@ namespace LayoutFarm.CustomWidgets
         string _placeHolderText = "";
         bool _isMultiLine;
         bool _isEditable;
-        TextEditing.TextSurfaceEventListener _textSurfaceEventListener;
+        LayoutFarm.TextFlow.TextSurfaceEventListener _textSurfaceEventListener;
         public event EventHandler<UIKeyEventArgs> KeyDown;
         public event EventHandler<UIKeyEventArgs> KeyUp;
         public TextBoxContainer(int w, int h, bool multiline, bool maskTextBox = false)
@@ -89,7 +89,7 @@ namespace LayoutFarm.CustomWidgets
                     _placeHolder.TextColor = Color.FromArgb(180, KnownColors.LightGray);
                     baseRenderElement.AddChild(_placeHolder);
 
-                    _textSurfaceEventListener = new TextEditing.TextSurfaceEventListener();
+                    _textSurfaceEventListener = new LayoutFarm.TextFlow.TextSurfaceEventListener();
                     _textSurfaceEventListener.KeyDown += textEvListener_KeyDown;
 
                     TextBoxSwitcher textboxSwitcher = this.TextBoxSwitcher;
@@ -132,7 +132,7 @@ namespace LayoutFarm.CustomWidgets
                 return base.GetPrimaryRenderElement();
             }
         }
-        void textEvListener_KeyDown(object sender, TextEditing.TextDomEventArgs e)
+        void textEvListener_KeyDown(object sender, LayoutFarm.TextFlow.TextDomEventArgs e)
         {
 
             if (!string.IsNullOrEmpty(_placeHolderText))
@@ -199,22 +199,7 @@ namespace LayoutFarm.CustomWidgets
                 _userText = value;
             }
         }
-        public void SetText(IEnumerable<string> lines)
-        {
-            //TODO: review here, this version
-            //support only multiline mode
-            if (_myTextBox != null && _isMultiLine)
-            {
-                _myTextBox.SetText(lines);
-            }
-            else
-            {
-
-#if DEBUG
-                System.Diagnostics.Debug.WriteLine("set_text:");
-#endif
-            }
-        }
+         
         public override void Focus()
         {
             if (_textboxSwitcher != null)

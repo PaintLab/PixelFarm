@@ -4,15 +4,15 @@ using System;
 using PixelFarm.Drawing;
 using Typography.Text;
 
-namespace LayoutFarm.TextEditing
+namespace LayoutFarm.TextFlow
 {
     public class SolidRun : Run
     {
         //TODO: review here=> who should store/handle this handle? , owner TextBox or this run?
         Action<SolidRun, DrawBoard, UpdateArea> _externalCustomDraw;
-        CharBufferSegment _mybuffer;
+        TextBufferSpan _mybuffer;
 
-        public SolidRun(CharBufferSegment copyBuffer, RunStyle style)
+        public SolidRun(TextBufferSpan copyBuffer, RunStyle style)
             : base(style)
         {
             //check line break? 
@@ -29,45 +29,40 @@ namespace LayoutFarm.TextEditing
         {
             _mybuffer.WriteTo(output);
         }
-        public override void WriteTo(Typography.Text.TextCopyBuffer output, int start)
-        {
-            if (start == 0)
-            {
-                int length = _mybuffer.Count - start;
-                if (start > -1 && length > 0)
-                {
-                    output.AppendData(_mybuffer.UnsafeInternalCharArr, _mybuffer.beginAt + start, length);
-                }
-            }
-        }
-        public override void WriteTo(Typography.Text.TextCopyBuffer output, int start, int len)
-        {
-            if (start == 0)
-            {
-                int length = _mybuffer.Count - start;
-                if (start > -1 && length > 0)
-                {
-                    output.AppendData(_mybuffer.UnsafeInternalCharArr, start, len);
-                }
-            }
-        }
+        //public override void WriteTo(Typography.Text.TextCopyBuffer output, int start)
+        //{
+        //    //write data to buffer 
+        //    output.Append(_mybuffer); 
+        //}
+        //public override void WriteTo(Typography.Text.TextCopyBuffer output, int start, int len)
+        //{
+        //    throw new NotSupportedException();
+        //    //if (start == 0)
+        //    //{
+        //    //    int length = _mybuffer.Count - start;
+        //    //    if (start > -1 && length > 0)
+        //    //    {
+        //    //        output.Append(_mybuffer, start, len);
+        //    //    }
+        //    //}
+        //}
 
         public override int GetRunWidth(int charOffset) => CalculateDrawingStringSize(0, charOffset).Width;
-        public override int GetRunWidth(int startAtCharOffset, int count)
-        {
-            return MeasureString(new Typography.Text.TextBufferSpan(_mybuffer.UnsafeInternalCharArr, _mybuffer.beginAt + startAtCharOffset, count)).Width;
-        }
+        //public override int GetRunWidth(int startAtCharOffset, int count)
+        //{
+        //    return MeasureString(_mybuffer.CreateSubspan(startAtCharOffset, count)).Width;
+        //}
 
         public override void UpdateRunWidth()
         {
             Size size = CalculateDrawingStringSize(0, _mybuffer.len);
             SetSize(size.Width, size.Height);
         }
-        public override int GetChar(int index) => _mybuffer.GetUtf32Char(index);
+        public override int GetChar(int index) => _mybuffer.GetChar(index);
 
         public override int CharacterCount => _mybuffer.len;
 
-        Size CalculateDrawingStringSize(int start, int length) => MeasureString(new Typography.Text.TextBufferSpan(_mybuffer.UnsafeInternalCharArr, _mybuffer.beginAt + start, length));
+        Size CalculateDrawingStringSize(int start, int length) => MeasureString(_mybuffer.CreateSubspan(start, length));
 
         const int SAME_FONT_SAME_TEXT_COLOR = 0;
         const int SAME_FONT_DIFF_TEXT_COLOR = 1;
@@ -193,39 +188,39 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        public override CharSpan Copy(int startIndex)
-        {
-            if (startIndex == 0)
-            {
+        //public override TextSegment Copy(int startIndex)
+        //{
+        //    if (startIndex == 0)
+        //    {
 
-                int length = _mybuffer.Count - startIndex;
-                if (startIndex > -1 && length > 0)
-                {
-                    return _mybuffer.MakeSubSpan(startIndex, length);
-                }
-            }
-            return new CharSpan();//empty
-        }
-        public override CharSpan Copy(int startIndex, int length)
-        {
-            return _mybuffer.MakeSubSpan(startIndex, length);
-        }
-        public override CharSpan LeftCopy(int index)
-        {
-            if (index == 0)
-            {
-                return new CharSpan();//empty
-            }
+        //        int length = _mybuffer.Count - startIndex;
+        //        if (startIndex > -1 && length > 0)
+        //        {
+        //            return _mybuffer.MakeSubSpan(startIndex, length);
+        //        }
+        //    }
+        //    return new TextSegment();//empty
+        //}
+        //public override TextSegment Copy(int startIndex, int length)
+        //{
+        //    return _mybuffer.MakeSubSpan(startIndex, length);
+        //}
+        //public override TextSegment LeftCopy(int index)
+        //{
+        //    if (index == 0)
+        //    {
+        //        return new TextSegment();//empty
+        //    }
 
-            if (index > -1)
-            {
-                return _mybuffer.MakeLeftSubSpan(index);
-            }
-            else
-            {
-                return new CharSpan();//empty
-            }
-        }
+        //    if (index > -1)
+        //    {
+        //        return _mybuffer.MakeLeftSubSpan(index);
+        //    }
+        //    else
+        //    {
+        //        return new TextSegment();//empty
+        //    }
+        //}
         //public override CopyRun Copy(int startIndex)
         //{
         //    if (startIndex == 0)

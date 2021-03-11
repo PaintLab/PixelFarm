@@ -2,7 +2,7 @@
 using PixelFarm.Drawing;
 using Typography.Text;
 
-namespace LayoutFarm.TextEditing
+namespace LayoutFarm.TextFlow
 {
     public class RunStyle
     {

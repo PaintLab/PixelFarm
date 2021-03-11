@@ -6,9 +6,9 @@ using System.Collections.Generic;
 
 using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
-using Typography.Text;
 
-namespace LayoutFarm.TextEditing
+using Typography.Text;
+namespace LayoutFarm.TextFlow
 {
 
 #if DEBUG
@@ -16,7 +16,6 @@ namespace LayoutFarm.TextEditing
 #endif
     sealed partial class TextLineBox
     {
-        PlainTextLine _plainTextLine;
 
         //this class does not have Painting function
         //we paint each run at text-layer object
@@ -45,6 +44,8 @@ namespace LayoutFarm.TextEditing
         static int dbugLineTotalCount = 0;
         internal int dbugLineId;
 #endif
+
+
         internal TextLineBox(TextFlowLayer textFlowLayer)
         {
             _textFlowLayer = textFlowLayer;
@@ -54,12 +55,13 @@ namespace LayoutFarm.TextEditing
 #if DEBUG
             this.dbugLineId = dbugLineTotalCount;
             dbugLineTotalCount++;
-
 #endif
 
             OverlappedTop = 3; //test only
             OverlappedBottom = 3; //test only
         }
+
+        TextFlowLayer OwnerFlowLayer => _textFlowLayer;
         /// <summary>
         /// primary text baseline 
         /// </summary>
@@ -79,7 +81,10 @@ namespace LayoutFarm.TextEditing
         /// <summary>
         /// detach from owner line
         /// </summary>
-        internal void RemoveOwnerFlowLayer() => _textFlowLayer = null;
+        internal void RemoveOwnerFlowLayer()
+        {
+            _textFlowLayer = null;
+        }
         internal bool HasOwnerFlowLayer => _textFlowLayer != null;
 
         /// <summary>
@@ -168,8 +173,8 @@ namespace LayoutFarm.TextEditing
             return false;
         }
 
-        TextFlowLayer OwnerFlowLayer => _textFlowLayer;
-        //
+
+#if DEBUG
         public bool EndWithLineBreak
         {
             get => (_lineFlags & END_WITH_LINE_BREAK) != 0;
@@ -186,7 +191,7 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
-
+#endif
         public bool IntersectsWith(int y) => y >= _lineTop && y < (_lineTop + _actualLineHeight);
         //
         public int Top => _lineTop;
@@ -197,7 +202,18 @@ namespace LayoutFarm.TextEditing
         public int ActualLineHeight => _actualLineHeight;
         //
         public Rectangle ActualLineArea => new Rectangle(0, _lineTop - OverlappedTop, _actualLineWidth, _actualLineHeight + OverlappedTop + OverlappedBottom);
-
+        public int LineBottom => _lineTop + _actualLineHeight;
+        //
+        internal int LineWidth
+        {
+            get
+            {
+                Run lastRun = this.LastRun;
+                return (lastRun != null) ? lastRun.Right : 0;
+            }
+        }
+        public void SetTop(int linetop) => _lineTop = linetop;
+        //
         internal IEnumerable<Run> GetRunIterForward(Run startVisualElement)
         {
             if (startVisualElement != null)
@@ -227,8 +243,6 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
-
-        internal void InvalidateCharCount() => _validCharCount = false;
 
         public int CharCount()
         {
@@ -261,40 +275,17 @@ namespace LayoutFarm.TextEditing
                 linkNode = linkNode.Next;
             }
         }
+        //
 
-        //
-        public int LineBottom => _lineTop + _actualLineHeight;
-        //
-        internal int LineWidth
-        {
-            get
-            {
-                Run lastRun = this.LastRun;
-                return (lastRun != null) ? lastRun.Right : 0;
-            }
-        }
-        public void SetTop(int linetop) => _lineTop = linetop;
-        //
         public int LineNumber => _currentLineNumber;
-        //
         internal void SetLineNumber(int value) => _currentLineNumber = value;
-        //
-        bool IsFirstLine => _currentLineNumber == 0;
-        //
-        bool IsLastLine => _currentLineNumber == _textFlowLayer.LineCount - 1;
-        //
-        bool IsSingleLine => IsFirstLine && IsLastLine;
+      
+
         //
         public bool IsBlankLine => RunCount == 0;
         //
         public TextLineBox Next => (_currentLineNumber < _textFlowLayer.LineCount - 1) ? _textFlowLayer.GetTextLine(_currentLineNumber + 1) : null;
-
         public TextLineBox Prev => (_currentLineNumber > 0) ? _textFlowLayer.GetTextLine(_currentLineNumber - 1) : null;
-
-        public bool NeedArrange => (_lineFlags & LINE_CONTENT_ARRANGED) == 0;
-
-        internal void ValidateContentArrangement() => _lineFlags |= LINE_CONTENT_ARRANGED;
-
         public void CopyLineContent(TextCopyBuffer output)
         {
             LinkedListNode<Run> curNode = this.First;
@@ -306,7 +297,11 @@ namespace LayoutFarm.TextEditing
             }
             //not include line-end char?
         }
+
 #if DEBUG
+        public bool dbugNeedArrange => (_lineFlags & LINE_CONTENT_ARRANGED) == 0;
+        internal void dbugValidateContentArrangement() => _lineFlags |= LINE_CONTENT_ARRANGED;
+
         public override string ToString()
         {
             return this.dbugShortLineInfo;

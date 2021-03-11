@@ -3,7 +3,7 @@
 using System;
 using LayoutFarm.RenderBoxes;
 using LayoutFarm.UI;
-namespace LayoutFarm.TextEditing
+namespace LayoutFarm.TextFlow
 {
     static class GlobalCaretController
     {
