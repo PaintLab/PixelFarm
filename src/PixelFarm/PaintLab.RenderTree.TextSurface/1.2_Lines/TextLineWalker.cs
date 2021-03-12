@@ -194,7 +194,7 @@ namespace LayoutFarm.TextFlow
                 len = 0;
                 return;
             }
-            
+
             using (new TextUtf32RangeCopyPoolContext<VisualTextLineWalker>(out TextCopyBufferUtf32 output))
             {
                 //copy to int32 arr list
@@ -572,8 +572,7 @@ namespace LayoutFarm.TextFlow
         //
         public int CharIndex => caret_char_index;
         //
-        int InternalCharIndex => caret_char_index;
-        ////
+
         //public void SetCurrentCharStepRight()
         //{
         //    SetCurrentCharIndex(InternalCharIndex + 1);
@@ -760,7 +759,7 @@ namespace LayoutFarm.TextFlow
 
         public bool HasPrevLine => _currentLine.Prev != null;
 
-        public bool IsOnStartOfLine => InternalCharIndex == 0;
+        public bool IsOnStartOfLine => caret_char_index == 0;
 
         public int CharCount => _currentLine.CharCount();
 
