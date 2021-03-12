@@ -650,7 +650,7 @@ namespace LayoutFarm.TextFlow
         {
             //helper
             _tmpBuffer.Clear();
-            _tmpBuffer.AppendData(doc.ToCharArray());
+            _tmpBuffer.AppendData(doc);
             AddText(_tmpBuffer);
         }
 
@@ -668,6 +668,7 @@ namespace LayoutFarm.TextFlow
                 UpdateHxLinePos();
                 _hx.AddText(output);
                 _sessionListener?.AddText(output);
+                _pte.NewCharIndex = _lineWalker.CharIndex;
                 _pte.AddText(output);
                 //
 
