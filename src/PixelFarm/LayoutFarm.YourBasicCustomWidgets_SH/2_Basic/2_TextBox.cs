@@ -98,7 +98,7 @@ namespace LayoutFarm.CustomWidgets
         //
         public int CurrentLineCharIndex => _textEditRenderElement.CurrentLineCharIndex;
         //
-        public int CurrentRunCharIndex => _textEditRenderElement.CurrentTextRunCharIndex;
+        
         public int CurrentLineNumber => _textEditRenderElement.CurrentLineNumber;
 
         public override void Focus()

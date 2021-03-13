@@ -127,7 +127,7 @@ namespace LayoutFarm.TextFlow
             }
 
             int pre_lineNumber = _lineWalker.LineNumber;
-            int pre_charIndex = _lineWalker.CharIndex;
+            int pre_charIndex = _lineWalker.NewCharIndex;
 
             UpdateHxLinePos();
 
@@ -139,12 +139,12 @@ namespace LayoutFarm.TextFlow
 
             //then update visual presentation of current line
             //TODO: text-span visual formatting ...
-            UpdateCurrentLinePresentation(pre_lineNumber, _lineWalker.CharIndex);
+            UpdateCurrentLinePresentation(pre_lineNumber, _lineWalker.NewCharIndex);
         }
         void UpdateHxLinePos()
         {
-            _hx.SetCurrentPos(_lineWalker.LineNumber, _lineWalker.CharIndex);
-            _sessionListener?.SetCurrentPos(_lineWalker.LineNumber, _lineWalker.CharIndex);
+            _hx.SetCurrentPos(_lineWalker.LineNumber, _lineWalker.NewCharIndex);
+            _sessionListener?.SetCurrentPos(_lineWalker.LineNumber, _lineWalker.NewCharIndex);
         }
 
         void SetSelectionToTextModel()
@@ -278,7 +278,7 @@ namespace LayoutFarm.TextFlow
         {
             RemoveSelectedText();
 
-            var cmd = new DocActionSplitToNewLine(_lineWalker.LineNumber, _lineWalker.CharIndex);
+            var cmd = new DocActionSplitToNewLine(_lineWalker.LineNumber, _lineWalker.NewCharIndex);
             //_commandHistoryList.AddDocAction(cmd);
             //_sessionListener?.AddDocAction(cmd);
 
@@ -545,20 +545,21 @@ namespace LayoutFarm.TextFlow
 
             _updateJustCurrentLine = true;
 
-            int before1 = _pte.NewCharIndex; //before
-            UpdateHxLinePos();
-            _sessionListener?.DoBackspace();
-
-            _hx.DoBackspace();
-
-            _pte.DoBackspace();
-            //how check hx result
-
-            if (_pte.DeletedCharCount == 0)
+            if (_lineWalker.NewCharIndex == 0)
             {
-                //no char delete
+              
+                //at the begein of line
                 if (CurrentLineNumber > 0)
                 {
+                    _pte.NewCharIndex = _lineWalker.NewCharIndex;
+                    int before1 = _pte.NewCharIndex; //before
+                    _pte.GetCharacter(before1);
+
+                    UpdateHxLinePos();
+                    _sessionListener?.DoBackspace();
+                    _hx.DoBackspace();
+                    _pte.DoBackspace();
+
                     //move to current line
                     MoveToPrevLine();
                     DoEnd();
@@ -572,7 +573,19 @@ namespace LayoutFarm.TextFlow
                 return false;
             }
             else
-            {
+           {
+                _pte.NewCharIndex = _lineWalker.NewCharIndex;
+                int c = _pte.GetCharacter(_pte.NewCharIndex - 1); //tobe deleted char
+                _pte.TempCopyBuffer.Clear();//reset
+                _pte.TempCopyBuffer.Append(c);//copy to temp buffer, and shared it between hx-collection and session listener
+                //
+                int before1 = _pte.NewCharIndex; //before
+
+                UpdateHxLinePos();
+                _sessionListener?.DoBackspace();
+                _hx.DoBackspace();
+                _pte.DoBackspace();
+
                 //update presentation
                 UpdateCurrentLinePresentation(_pte.NewCharIndex, _pte.NewCharIndex - before1 + 1);
                 NotifyContentSizeChanged();
@@ -659,7 +672,7 @@ namespace LayoutFarm.TextFlow
             RemoveSelectedText();
 
             bool isRecordingHx = EnableUndoHistoryRecording;
-            EnableUndoHistoryRecording = false;
+            EnableUndoHistoryRecording = true;
 
             if (output.Length > 0)
             {
@@ -668,7 +681,7 @@ namespace LayoutFarm.TextFlow
                 UpdateHxLinePos();
                 _hx.AddText(output);
                 _sessionListener?.AddText(output);
-                _pte.NewCharIndex = _lineWalker.CharIndex;
+                _pte.NewCharIndex = _lineWalker.NewCharIndex;
                 _pte.AddText(output);
                 //
 
@@ -723,7 +736,7 @@ namespace LayoutFarm.TextFlow
 
             MoveToLine(0);
             //clear current text 
-            int currentCharIndex = _lineWalker.CharIndex;
+            int currentCharIndex = _lineWalker.NewCharIndex;
             _lineWalker.CurrentLine.Clear();
             _lineWalker.CurrentLine.TextLineReCalculateActualLineSize();
             _lineWalker.CurrentLine.RefreshInlineArrange();

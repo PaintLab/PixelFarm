@@ -117,7 +117,7 @@ namespace LayoutFarm.TextFlow
 
 #if DEBUG
         int _i_charIndex;
-        int caret_char_index
+        int _caret_NewCharIndex
         {
             get => _i_charIndex;
             set
@@ -130,7 +130,7 @@ namespace LayoutFarm.TextFlow
             }
         }
 #else
-         int caret_char_index;
+         int _caret_NewCharIndex;
 #endif
         public void EnsureCurrentTextRun(int index)
         {
@@ -163,14 +163,12 @@ namespace LayoutFarm.TextFlow
             }
         }
 
-        public void EnsureCurrentTextRun() => EnsureCurrentTextRun(CharIndex);
+        public void EnsureCurrentTextRun() => EnsureCurrentTextRun(NewCharIndex);
 
 
         public TextLineBox CurrentLine => _currentLine;
         //
         Run CurrentTextRun => _currentTextRun;
-        //
-        //internal void SetCurrentTextRun(Run r) => _currentTextRun = r;
 
         bool _needUpdateCurrentRun;
 
@@ -226,7 +224,7 @@ namespace LayoutFarm.TextFlow
                 for (int i = 0; i < segcount; ++i)
                 {
                     LineSegment seg = _lineSegs.GetLineSegment(i);
-                    if (seg.StartAt + seg.Length >= caret_char_index)
+                    if (seg.StartAt + seg.Length >= _caret_NewCharIndex)
                     {
                         //stop at this segment
                         startAt = seg.StartAt;
@@ -256,7 +254,7 @@ namespace LayoutFarm.TextFlow
                 _currentTextRun = _currentTextRun.PrevRun;
                 _rCharOffset -= _currentTextRun.CharacterCount;
                 _rPixelOffset -= _currentTextRun.Width;
-                caret_char_index = _rCharOffset + _currentTextRun.CharacterCount;
+                _caret_NewCharIndex = _rCharOffset + _currentTextRun.CharacterCount;
                 _caretXPos = _rPixelOffset + _currentTextRun.Width;
                 return true;
             }
@@ -279,7 +277,7 @@ namespace LayoutFarm.TextFlow
                 _rCharOffset += _currentTextRun.CharacterCount;
                 _rPixelOffset += _currentTextRun.Width;
                 _currentTextRun = nextTextRun;
-                caret_char_index = _rCharOffset;
+                _caret_NewCharIndex = _rCharOffset;
                 _caretXPos = _rPixelOffset + _currentTextRun.GetRunWidth(0);
                 return true;
             }
@@ -291,7 +289,7 @@ namespace LayoutFarm.TextFlow
             _rCharOffset = 0;
             _rPixelOffset = 0;
 
-            caret_char_index = 0;
+            _caret_NewCharIndex = 0;
             _caretXPos = 0;
 
             //move to specific line box
@@ -318,11 +316,11 @@ namespace LayoutFarm.TextFlow
                 if (_currentTextRun != null)
                 {
 
-                    if (caret_char_index == 0 && CharCount == 0)
+                    if (_caret_NewCharIndex == 0 && CharCount == 0)
                     {
                         return '\0';
                     }
-                    if (caret_char_index == _rCharOffset)
+                    if (_caret_NewCharIndex == _rCharOffset)
                     {
                         if (_currentTextRun.PrevRun != null)
                         {
@@ -335,7 +333,7 @@ namespace LayoutFarm.TextFlow
                     }
                     else
                     {
-                        return _currentTextRun.GetChar(caret_char_index - _rCharOffset);
+                        return _currentTextRun.GetChar(_caret_NewCharIndex - _rCharOffset);
                     }
                 }
                 else
@@ -351,11 +349,11 @@ namespace LayoutFarm.TextFlow
                 if (_currentTextRun != null)
                 {
 
-                    if (caret_char_index == 0 && CharCount == 0)
+                    if (_caret_NewCharIndex == 0 && CharCount == 0)
                     {
                         return '\0';
                     }
-                    if (caret_char_index == _rCharOffset + _currentTextRun.CharacterCount)
+                    if (_caret_NewCharIndex == _rCharOffset + _currentTextRun.CharacterCount)
                     {
                         if (_currentTextRun.NextRun != null)
                         {
@@ -368,7 +366,7 @@ namespace LayoutFarm.TextFlow
                     }
                     else
                     {
-                        return _currentTextRun.GetChar(caret_char_index - _rCharOffset);
+                        return _currentTextRun.GetChar(_caret_NewCharIndex - _rCharOffset);
                     }
                 }
                 else
@@ -391,7 +389,7 @@ namespace LayoutFarm.TextFlow
                         //no text in this line
                         return 0;
                     }
-                    if (caret_char_index == _rCharOffset + _currentTextRun.CharacterCount)
+                    if (_caret_NewCharIndex == _rCharOffset + _currentTextRun.CharacterCount)
                     {
                         //-----
                         //this is on the last of current run
@@ -411,8 +409,8 @@ namespace LayoutFarm.TextFlow
                     {
                         //in some line
 
-                        return _currentTextRun.GetRunWidth(caret_char_index - _rCharOffset + 1) -
-                                    _currentTextRun.GetRunWidth(caret_char_index - _rCharOffset);
+                        return _currentTextRun.GetRunWidth(_caret_NewCharIndex - _rCharOffset + 1) -
+                                    _currentTextRun.GetRunWidth(_caret_NewCharIndex - _rCharOffset);
                     }
                 }
                 else
@@ -434,7 +432,7 @@ namespace LayoutFarm.TextFlow
             //}
 #endif
             EditableVisualPointInfo textPointInfo =
-                new EditableVisualPointInfo(_currentLine, caret_char_index);
+                new EditableVisualPointInfo(_currentLine, _caret_NewCharIndex);
             textPointInfo.SetAdditionVisualInfo(
                 _rCharOffset, _caretXPos, _rPixelOffset);
             return textPointInfo;
@@ -453,13 +451,13 @@ namespace LayoutFarm.TextFlow
                 else
                 {
                     //2.  
-                    if (_currentTextRun.CharacterCount == caret_char_index - _rCharOffset)
+                    if (_currentTextRun.CharacterCount == _caret_NewCharIndex - _rCharOffset)
                     {
                         //end of this run
                         return '\0';
                     }
 
-                    return _currentTextRun.GetChar(caret_char_index - _rCharOffset);
+                    return _currentTextRun.GetChar(_caret_NewCharIndex - _rCharOffset);
                 }
             }
         }
@@ -468,7 +466,7 @@ namespace LayoutFarm.TextFlow
         //
         public int CurrentTextRunPixelOffset => _rPixelOffset;
         //
-        public int CurrentTextRunCharIndex => caret_char_index - _rCharOffset - 1;
+
         //
         /// <summary>
         /// try set caret x pos to nearest request value
@@ -483,7 +481,7 @@ namespace LayoutFarm.TextFlow
             //--------
             if (_currentTextRun == null)
             {
-                caret_char_index = 0;
+                _caret_NewCharIndex = 0;
                 _caretXPos = 0;
                 _rCharOffset = 0;
                 _rPixelOffset = 0;
@@ -505,7 +503,7 @@ namespace LayoutFarm.TextFlow
                         }
 #endif
                         _caretXPos = _rPixelOffset + foundLocation.pixelOffset;
-                        caret_char_index = _rCharOffset + foundLocation.RunCharIndex;
+                        _caret_NewCharIndex = _rCharOffset + foundLocation.RunCharIndex;
 
                         //for solid text run
                         //we can send some event to it
@@ -528,7 +526,7 @@ namespace LayoutFarm.TextFlow
                 } while (MoveToNextTextRun());
                 //to the last
                 _caretXPos = _rPixelOffset + _currentTextRun.Width;
-                caret_char_index = _rCharOffset + _currentTextRun.CharacterCount;
+                _caret_NewCharIndex = _rCharOffset + _currentTextRun.CharacterCount;
                 return;
             }
             else if (pixDiff < 0)
@@ -539,7 +537,7 @@ namespace LayoutFarm.TextFlow
                     {
                         CharLocation foundLocation = Run.InnerGetCharacterFromPixelOffset(_currentTextRun, xpos - _rPixelOffset);
                         _caretXPos = _rPixelOffset + foundLocation.pixelOffset;
-                        caret_char_index = _rCharOffset + foundLocation.RunCharIndex;
+                        _caret_NewCharIndex = _rCharOffset + foundLocation.RunCharIndex;
 
 
                         //for solid text run
@@ -563,14 +561,14 @@ namespace LayoutFarm.TextFlow
                     }
                 } while (MoveToPreviousTextRun());//
                 _caretXPos = 0;
-                caret_char_index = 0;
+                _caret_NewCharIndex = 0;
                 return;
             }
         }
         //
         public int CaretXPos => _caretXPos;
         //
-        public int CharIndex => caret_char_index;
+        public int NewCharIndex => _caret_NewCharIndex;
         //
 
         //public void SetCurrentCharStepRight()
@@ -614,7 +612,7 @@ namespace LayoutFarm.TextFlow
 
             if (newCharIndexPointTo == 0)
             {
-                caret_char_index = 0;
+                _caret_NewCharIndex = 0;
                 _caretXPos = 0;
                 _rCharOffset = 0;
                 _rPixelOffset = 0;
@@ -622,7 +620,7 @@ namespace LayoutFarm.TextFlow
             }
             else
             {
-                caret_char_index = 0;
+                _caret_NewCharIndex = 0;
                 _caretXPos = 0;
                 _rCharOffset = 0;
                 _rPixelOffset = 0;
@@ -632,8 +630,8 @@ namespace LayoutFarm.TextFlow
                 {
                     if (_rCharOffset + _currentTextRun.CharacterCount >= newCharIndexPointTo)
                     {
-                        caret_char_index = newCharIndexPointTo;
-                        _caretXPos = _rPixelOffset + _currentTextRun.GetRunWidth(caret_char_index - _rCharOffset);
+                        _caret_NewCharIndex = newCharIndexPointTo;
+                        _caretXPos = _rPixelOffset + _currentTextRun.GetRunWidth(_caret_NewCharIndex - _rCharOffset);
 #if DEBUG
                         if (dbugTextManRecorder != null)
                         {
@@ -645,7 +643,7 @@ namespace LayoutFarm.TextFlow
                     }
                     //
                 } while (MoveToNextTextRun());
-                caret_char_index = _rCharOffset + _currentTextRun.CharacterCount;
+                _caret_NewCharIndex = _rCharOffset + _currentTextRun.CharacterCount;
                 _caretXPos = _rPixelOffset + _currentTextRun.Width;
                 return;
             }
@@ -681,7 +679,7 @@ namespace LayoutFarm.TextFlow
 
             if (newCharIndexPointTo == 0)
             {
-                caret_char_index = 0;
+                _caret_NewCharIndex = 0;
                 _caretXPos = 0;
                 _rCharOffset = 0;
                 _rPixelOffset = 0;
@@ -689,7 +687,7 @@ namespace LayoutFarm.TextFlow
             }
             else
             {
-                int diff = newCharIndexPointTo - caret_char_index;
+                int diff = newCharIndexPointTo - _caret_NewCharIndex;
                 switch (diff)
                 {
                     case 0:
@@ -702,8 +700,8 @@ namespace LayoutFarm.TextFlow
                                 {
                                     if (_rCharOffset + _currentTextRun.CharacterCount >= newCharIndexPointTo)
                                     {
-                                        caret_char_index = newCharIndexPointTo;
-                                        _caretXPos = _rPixelOffset + _currentTextRun.GetRunWidth(caret_char_index - _rCharOffset);
+                                        _caret_NewCharIndex = newCharIndexPointTo;
+                                        _caretXPos = _rPixelOffset + _currentTextRun.GetRunWidth(_caret_NewCharIndex - _rCharOffset);
 #if DEBUG
                                         if (dbugTextManRecorder != null)
                                         {
@@ -715,7 +713,7 @@ namespace LayoutFarm.TextFlow
                                     }
                                     //
                                 } while (MoveToNextTextRun());
-                                caret_char_index = _rCharOffset + _currentTextRun.CharacterCount;
+                                _caret_NewCharIndex = _rCharOffset + _currentTextRun.CharacterCount;
                                 _caretXPos = _rPixelOffset + _currentTextRun.Width;
                                 return;
                             }
@@ -725,8 +723,8 @@ namespace LayoutFarm.TextFlow
                                 {
                                     if (_rCharOffset - 1 < newCharIndexPointTo)
                                     {
-                                        caret_char_index = newCharIndexPointTo;
-                                        _caretXPos = _rPixelOffset + _currentTextRun.GetRunWidth(caret_char_index - _rCharOffset);
+                                        _caret_NewCharIndex = newCharIndexPointTo;
+                                        _caretXPos = _rPixelOffset + _currentTextRun.GetRunWidth(_caret_NewCharIndex - _rCharOffset);
 #if DEBUG
                                         if (dbugTextManRecorder != null)
                                         {
@@ -736,7 +734,7 @@ namespace LayoutFarm.TextFlow
                                         return;
                                     }
                                 } while (MoveToPreviousTextRun());
-                                caret_char_index = 0;
+                                _caret_NewCharIndex = 0;
                                 _caretXPos = 0;
                             }
                         }
@@ -753,13 +751,13 @@ namespace LayoutFarm.TextFlow
         }
 
         //
-        public bool IsOnEndOfLine => caret_char_index == _currentLine.CharCount();
+        public bool IsOnEndOfLine => _caret_NewCharIndex == _currentLine.CharCount();
 
         public bool HasNextLine => _currentLine.Next != null;
 
         public bool HasPrevLine => _currentLine.Prev != null;
 
-        public bool IsOnStartOfLine => caret_char_index == 0;
+        public bool IsOnStartOfLine => _caret_NewCharIndex == 0;
 
         public int CharCount => _currentLine.CharCount();
 

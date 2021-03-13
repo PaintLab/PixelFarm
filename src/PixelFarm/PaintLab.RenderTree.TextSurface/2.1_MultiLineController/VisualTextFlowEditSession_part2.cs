@@ -92,11 +92,12 @@ namespace LayoutFarm.TextFlow
         public int CurrentLineCharCount => _lineWalker.CharCount;
         //
         public int LineCount => _textLayer.LineCount;
-        //
-        public int CurrentLineNewCharIndex => _lineWalker.CharIndex;
-        //
-        public int CurrentTextRunCharIndex => _lineWalker.CurrentTextRunCharIndex;
-        //
+
+        /// <summary>
+        /// index of new char on the current line
+        /// </summary>
+        public int CurrentLineNewCharIndex => _lineWalker.NewCharIndex;
+        // 
         public int CurrentLineNumber
         {
             get => _lineWalker.LineNumber;
@@ -269,11 +270,11 @@ namespace LayoutFarm.TextFlow
         public void TryMoveCaretForward()
         {
             //move caret forward 1 key stroke
-            TryMoveCaretTo(_lineWalker.CharIndex + 1);
+            TryMoveCaretTo(_lineWalker.NewCharIndex + 1);
         }
         public void TryMoveCaretBackward()
         {
-            if (_lineWalker.CharIndex == 0)
+            if (_lineWalker.NewCharIndex == 0)
             {
                 //begin of the line
                 if (CurrentLineNumber > 0)
@@ -284,7 +285,7 @@ namespace LayoutFarm.TextFlow
             }
             else
             {
-                TryMoveCaretTo(_lineWalker.CharIndex - 1, true);
+                TryMoveCaretTo(_lineWalker.NewCharIndex - 1, true);
             }
         }
         //

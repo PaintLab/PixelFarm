@@ -305,8 +305,8 @@ namespace LayoutFarm.TextFlow
         {
             if (_reverseUndoAction.Count == 0) { return; } //early exit
 
-        
-            DocumentAction docAction = _reverseUndoAction.Pop(); 
+
+            DocumentAction docAction = _reverseUndoAction.Pop();
             docAction.InvokeRedo(_editSession);
             _undoList.AddLast(docAction);
         }
@@ -344,16 +344,23 @@ namespace LayoutFarm.TextFlow
             if (!EnableUndoHistoryRecording) { return; }
 
             PlainTextEditSession tme = _pte;
-            var deletedText = new TextCopyBufferUtf32();
-            tme.CopySelection(deletedText);
-            tme.GetSelection(
-                out int startLineNo, out int startLineCharIndex,
-                out int endLineNo, out int endLineCharIndex);
+            if (tme.HasSelection)
+            {
+                var deletedText = new TextCopyBufferUtf32();
+                tme.CopySelection(deletedText);
+                tme.GetSelection(
+                    out int startLineNo, out int startLineCharIndex,
+                    out int endLineNo, out int endLineCharIndex);
 
-            _undoList.AddLast(new DocActionDeleteText(deletedText,
-                startLineNo, startLineCharIndex,
-                endLineNo, endLineCharIndex));
-
+                _undoList.AddLast(new DocActionDeleteText(deletedText,
+                    startLineNo, startLineCharIndex,
+                    endLineNo, endLineCharIndex));
+            }
+            else
+            {
+                int tempChar = _pte.TempCopyBuffer.GetChar(0);
+                _undoList.AddLast(new DocActionDeleteChar(tempChar, _pte.CurrentLineNumber, _pte.NewCharIndex - 1));
+            }
         }
         public override void DoDelete()
         {

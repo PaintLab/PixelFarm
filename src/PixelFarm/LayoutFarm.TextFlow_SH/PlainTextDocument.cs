@@ -153,7 +153,7 @@ namespace LayoutFarm.TextFlow
         //TODO: review a proper data structure again,use tree of character? (eg RB tree?)
         //esp for a long line insertion, deletion
 
-        readonly TextCopyBufferUtf32 _arrList = new TextCopyBufferUtf32();
+        readonly TextCopyBufferUtf32 _arr = new TextCopyBufferUtf32();
         bool _changed;
         bool _loaded;
         int _initContentLen;
@@ -175,7 +175,7 @@ namespace LayoutFarm.TextFlow
             //read data from this line and write to output
             if (_loaded)
             {
-                output.Append(_arrList);
+                output.Append(_arr);
             }
             else
             {
@@ -191,7 +191,7 @@ namespace LayoutFarm.TextFlow
         {
             if (_loaded)
             {
-                output.Append(_arrList, index, len);
+                output.Append(_arr, index, len);
             }
             else
             {
@@ -208,7 +208,7 @@ namespace LayoutFarm.TextFlow
             if (_line != null && _changed)
             {
                 //update content back             
-                _line.Content = _textBlock.CharSource.NewSegment(_arrList);
+                _line.Content = _textBlock.CharSource.NewSegment(_arr);
             }
             //
             _line = line;
@@ -217,7 +217,7 @@ namespace LayoutFarm.TextFlow
             _initContentLen = line.Content.len;
             _changed = false;
             _loaded = false;
-            _arrList.Clear();
+            _arr.Clear();
 
             NewCharIndex = 0;
         }
@@ -237,7 +237,7 @@ namespace LayoutFarm.TextFlow
             if (content.len > 0)
             {
                 //copy content to temp buffer
-                content.WriteTo(_arrList);
+                content.WriteTo(_arr);
             }
             _loaded = true;
 
@@ -250,7 +250,7 @@ namespace LayoutFarm.TextFlow
             get => _newCharIndex;
             set
             {
-                if (value <= ((!_loaded) ? _initContentLen : _arrList.Length))
+                if (value <= ((!_loaded) ? _initContentLen : _arr.Length))
                 {
                     _newCharIndex = value;
                 }
@@ -262,7 +262,8 @@ namespace LayoutFarm.TextFlow
             }
         }
 
-        public int GetCurrentChar() => (_newCharIndex < _arrList.Length) ? _arrList.GetChar(_newCharIndex) : 0;
+        public int GetChar(int index) => (index < _arr.Length) ? _arr.GetChar(index) : 0;
+        public int GetCurrentChar() => (_newCharIndex < _arr.Length) ? _arr.GetChar(_newCharIndex) : 0;
 
         public bool CharIndexOnTheEnd => _newCharIndex == CharacterCount;
 
@@ -281,7 +282,7 @@ namespace LayoutFarm.TextFlow
         {
             if (!_loaded) { Load(); }//
 
-            _arrList.Insert(copyBuffer, _newCharIndex, start, len);
+            _arr.Insert(copyBuffer, _newCharIndex, start, len);
             _newCharIndex += len;
             _changed = true;
         }
@@ -294,9 +295,9 @@ namespace LayoutFarm.TextFlow
         {
             if (!_loaded) { Load(); }//
 
-            int rightPartLen = _arrList.Length - _newCharIndex;
-            rightPart.Append(_arrList, _newCharIndex, rightPartLen);
-            _arrList.Remove(_newCharIndex, rightPartLen);
+            int rightPartLen = _arr.Length - _newCharIndex;
+            rightPart.Append(_arr, _newCharIndex, rightPartLen);
+            _arr.Remove(_newCharIndex, rightPartLen);
             _changed = true;
         }
 
@@ -307,7 +308,7 @@ namespace LayoutFarm.TextFlow
             if (len == 0) return;
             if (len < 0) { throw new NotSupportedException(); }
 
-            _arrList.Remove(start, len);
+            _arr.Remove(start, len);
             _newCharIndex = start;
             _changed = true;
         }
@@ -320,7 +321,7 @@ namespace LayoutFarm.TextFlow
 
             if (_newCharIndex < 1) { return; }//early exit
             //
-            _arrList.Remove(_newCharIndex - 1, 1);
+            _arr.Remove(_newCharIndex - 1, 1);
             _newCharIndex--;
             _changed = true;
         }
@@ -333,14 +334,14 @@ namespace LayoutFarm.TextFlow
 
             if (!_loaded) { Load(); }
 
-            if (_arrList.Length == _newCharIndex)
+            if (_arr.Length == _newCharIndex)
             {
                 //the last one
-                _arrList.Append(c);
+                _arr.Append(c);
             }
             else
             {
-                _arrList.Insert(_newCharIndex, c);
+                _arr.Insert(_newCharIndex, c);
             }
             _newCharIndex++;
             _changed = true;
@@ -349,14 +350,14 @@ namespace LayoutFarm.TextFlow
         {
             if (!_loaded) { Load(); }//
 
-            _arrList.Clear();
+            _arr.Clear();
             _newCharIndex = 0;
             _changed = true;
         }
         /// <summary>
         /// character count
         /// </summary>
-        public int CharacterCount => _loaded ? _arrList.Length : _initContentLen;
+        public int CharacterCount => _loaded ? _arr.Length : _initContentLen;
     }
 
     public class PlainTextDocument
@@ -453,7 +454,7 @@ namespace LayoutFarm.TextFlow
         }
         public PlainTextEditSession()
         {
-
+            TempCopyBuffer = new TextCopyBufferUtf32();
         }
         public void LoadPlainText(PlainTextDocument doc)
         {
@@ -481,14 +482,17 @@ namespace LayoutFarm.TextFlow
         }
 
         internal ForwardOnlyCharSource CharSource => _doc.CharSource;
+
         /// <summary>
-        /// current line new character index
+        /// new character index of current line
         /// </summary>
         public int NewCharIndex
         {
             get => _lineEditor.NewCharIndex;
             set => _lineEditor.NewCharIndex = value;
         }
+        public TextCopyBufferUtf32 TempCopyBuffer { get; set; }
+
         public bool IsOnTheEnd() => _lineEditor.CharIndexOnTheEnd;
         public void ReadCurrentLine(TextCopyBufferUtf32 output) => _lineEditor.Read(output);
         public void ReadCurrentLine(TextCopyBufferUtf32 output, int index, int len) => _lineEditor.Read(output, index, len);
@@ -519,7 +523,7 @@ namespace LayoutFarm.TextFlow
             _lineEditor.Clear();
             _lineEditor.AddText(copyBuffer, 0, copyBuffer.Length);
         }
-
+        public int GetCharacter(int lineCharIndex) => _lineEditor.GetChar(lineCharIndex);
         public void AddChar(int c)
         {
             if (!_selection._isEmpty)
@@ -787,25 +791,17 @@ namespace LayoutFarm.TextFlow
 
         //------------------------------------------
         readonly PlainTextSelection _selection = new PlainTextSelection();
+
         /// <summary>
         /// start selection on current character index
         /// </summary>
-        public void StartSelect()
-        {
-            _selection.StartSelect(_currentLineNo, _lineEditor.NewCharIndex);
-        }
+        public void StartSelect() => _selection.StartSelect(_currentLineNo, _lineEditor.NewCharIndex);
         /// <summary>
         /// end selection
         /// </summary>
-        public void EndSelect()
-        {
-            _selection.EndSelect(_currentLineNo, _lineEditor.NewCharIndex);
-        }
-        public void CancelSelect()
-        {
-            _selection.CancelSelection();
-        }
-
+        public void EndSelect() => _selection.EndSelect(_currentLineNo, _lineEditor.NewCharIndex);
+        public void CancelSelect() => _selection.CancelSelection();
+        public bool HasSelection => !_selection._isEmpty;
 
         internal void GetSelection(out int startLineNo, out int startLineCharIndex, out int endLineNo, out int endLineCharIndex)
         {

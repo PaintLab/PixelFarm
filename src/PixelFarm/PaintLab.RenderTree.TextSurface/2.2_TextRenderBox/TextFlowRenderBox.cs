@@ -397,7 +397,7 @@ namespace LayoutFarm.TextFlow
         //
         public int CurrentLineCharIndex => _visualEditSession.CurrentLineNewCharIndex;
         //
-        public int CurrentTextRunCharIndex => _visualEditSession.CurrentTextRunCharIndex;
+         
         //
         public int CurrentLineNumber
         {
@@ -1100,7 +1100,7 @@ namespace LayoutFarm.TextFlow
                             if (!_isInVerticalPhase)
                             {
                                 _isInVerticalPhase = true;
-                                _verticalExpectedCharIndex = _visualEditSession.CurrentTextRunCharIndex;
+                                _verticalExpectedCharIndex = _visualEditSession.CurrentLineNewCharIndex;
                             }
 
                             //----------------------------                          
