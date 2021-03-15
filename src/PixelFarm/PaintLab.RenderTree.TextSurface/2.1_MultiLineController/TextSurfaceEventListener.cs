@@ -64,9 +64,9 @@ namespace LayoutFarm.TextFlow
         public event EventHandler<TextDomEventArgs> PreviewEnterKeyDown;
         public event EventHandler<TextDomEventArgs> PreviewDialogKeyDown;
         public event EventHandler<TextDomEventArgs> PreviewMouseWheel;
-
         public event EventHandler<TextDomEventArgs> PreviewBackSpaceKeyDown;
         public event EventHandler<TextDomEventArgs> PreviewRegisteredKeyPress;
+
         public event EventHandler<NewStringAddedEventArgs> CharacterAdded;
         public event EventHandler<TextDomEventArgs> CharacterRemoved;
         public event EventHandler<TextDomEventArgs> CharacterReplaced;

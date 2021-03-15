@@ -387,7 +387,7 @@ namespace LayoutFarm.TextFlow
 
             switch (e.KeyCode)
             {
-
+                default: return false;
                 case UIKeys.Escape:
                 case UIKeys.End:
                 case UIKeys.Home:
@@ -479,6 +479,7 @@ namespace LayoutFarm.TextFlow
                         }
 
                         InvalidateGraphicOfCurrentLineArea();
+
                         if (!e.Shift)
                         {
                             _visualEditSession.CancelSelect();
@@ -513,6 +514,7 @@ namespace LayoutFarm.TextFlow
                         //-------------------
 
                         EnsureCaretVisible();
+
                         if (_textSurfaceEventListener != null)
                         {
                             TextSurfaceEventListener.NotifyArrowKeyCaretPosChanged(_textSurfaceEventListener, e.KeyCode);
@@ -762,6 +764,7 @@ namespace LayoutFarm.TextFlow
                             //---------------------------- 
 
                             _visualEditSession.CurrentLineNumber++;
+
                             if (_verticalExpectedCharIndex > _visualEditSession.CurrentLineCharCount - 1)
                             {
                                 _visualEditSession.TryMoveCaretTo(_visualEditSession.CurrentLineCharCount);
@@ -784,11 +787,12 @@ namespace LayoutFarm.TextFlow
                             }
                             else
                             {
-
                                 InvalidateGraphicOfCurrentLineArea();
                             }
                         }
+
                         EnsureCaretVisible();
+
                         if (_textSurfaceEventListener != null)
                         {
                             TextSurfaceEventListener.NotifyArrowKeyCaretPosChanged(_textSurfaceEventListener, keyData);
@@ -869,10 +873,7 @@ namespace LayoutFarm.TextFlow
                         return true;
                     }
 
-                default:
-                    {
-                        return false;
-                    }
+
             }
         }
 

@@ -28,16 +28,16 @@ namespace LayoutFarm
             var textSplitter = new CustomWidgets.ContentTextSplitter();
             _textbox.TextSplitter = textSplitter;
             _sgBox = new SuggestionWindowMx(300, 200);
-            _sgBox.UserConfirmSelectedItem += new EventHandler(sgBox_UserConfirmSelectedItem);
-            _sgBox.ListItemKeyboardEvent += new EventHandler<UIKeyEventArgs>(sgBox_ListItemKeyboardEvent);
+            _sgBox.UserConfirmSelectedItem += sgBox_UserConfirmSelectedItem;
+            _sgBox.ListItemKeyboardEvent += sgBox_ListItemKeyboardEvent;
             _sgBox.Hide();
             //------------------------------------
             //create special text surface listener
             var textSurfaceListener = new TextSurfaceEventListener();
             textSurfaceListener.CharacterAdded += (s, e) => UpdateSuggestionList();
             textSurfaceListener.CharacterRemoved += (s, e) => UpdateSuggestionList();
-            textSurfaceListener.PreviewArrowKeyDown += new EventHandler<TextDomEventArgs>(textSurfaceListener_PreviewArrowKeyDown);
-            textSurfaceListener.PreviewEnterKeyDown += new EventHandler<TextDomEventArgs>(textSurfaceListener_PreviewEnterKeyDown);
+            textSurfaceListener.PreviewArrowKeyDown += textSurfaceListener_PreviewArrowKeyDown;
+            textSurfaceListener.PreviewEnterKeyDown += textSurfaceListener_PreviewEnterKeyDown;
             _textbox.TextEventListener = textSurfaceListener;
             //------------------------------------ 
 
