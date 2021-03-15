@@ -114,7 +114,7 @@ namespace TestGraphicPackage2
             var reader = new Typography.TextBreak.InputReader(utf32, 0, utf32Len);
             //var reader = new Typography.TextBreak.InputReader(utf16);
 
-            while (reader.Readline(
+            while (reader.ReadLine(
                 out int begin,
                 out int len,
                 out Typography.TextBreak.InputReader.LineEnd endlineWith))

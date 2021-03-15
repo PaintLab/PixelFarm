@@ -108,23 +108,14 @@ namespace LayoutFarm.TextFlow
         // 
         public void AddChar(int c)
         {
+            _hx.IncrementHxStepNumber();
             _updateJustCurrentLine = true;
-            bool passRemoveSelectedText = false;
-            if (SelectionRange != null)
-            {
-                RemoveSelectedText();
-                passRemoveSelectedText = true;
-            }
-
-
-            if (passRemoveSelectedText && c == ' ')
-            {
-
-            }
-            else if (!_pte.CanAcceptThisChar(c))
+            RemoveSelectedText();
+            if (!_pte.CanAcceptThisChar(c))
             {
                 return;
             }
+
 
             int pre_lineNumber = _lineWalker.LineNumber;
             int pre_charIndex = _lineWalker.NewCharIndex;
@@ -132,8 +123,6 @@ namespace LayoutFarm.TextFlow
             UpdateHxLinePos();
 
             _hx.AddChar(c);
-
-
             _pte.AddChar(c);//text model
             _sessionListener?.AddChar(c);
 
@@ -157,87 +146,81 @@ namespace LayoutFarm.TextFlow
 
             _pte.SetSelection(s0, s1, e0, e1);
             _hx.SetSelection(s0, s1, e0, e1);
-
             _sessionListener?.SetSelection(s0, s1, e0, e1);
         }
 
         bool RemoveSelectedText()
         {
-
             if (_selectionRange == null)
             {
                 return false;
             }
             else if (!_selectionRange.IsValid)
             {
-                CancelSelect();
+                CancelSelect();//clear
                 return false;
             }
 
+            //
             _selectionRange.Normalize();
-
-            SelectionRangeSnapShot selSnapshot = _selectionRange.GetSelectionRangeSnapshot();
+            SelectionRangeSnapShot sel = _selectionRange.GetSelectionRangeSnapshot();
             VisualPointInfo startPoint = _selectionRange.StartPoint;
             CurrentLineNumber = startPoint.LineId;
             _lineWalker.SetCurrentCharIndex(startPoint.LineCharIndex);
 
             SetSelectionToTextModel();
 
-            var deletedText = new TextCopyBufferUtf32();
-            _pte.CopySelection(deletedText);
 
-            if (deletedText.Length > 0)
+            int startPointLindId = startPoint.LineId;
+            int startPointCharIndex = startPoint.LineCharIndex;
+
+            UpdateHxLinePos();
+
+            _sessionListener?.DoDelete();
+            _hx.DoDelete();
+            _pte.DoDelete(); //delete text
+
+            if (_selectionRange.IsOnTheSameLine)
             {
-                int startPointLindId = startPoint.LineId;
-                int startPointCharIndex = startPoint.LineCharIndex;
+                //2. update presentation
+                UpdateCurrentLinePresentation(0, -1);
+                _updateJustCurrentLine = true;
+            }
+            else
+            {
+                //2. update presentation
 
-                UpdateHxLinePos();
+                int ss = sel.startLineNum;
+                int ee = sel.endLineNum;
+                int diff = ee - ss;
 
-                _sessionListener?.DoDelete();
-                _hx.DoDelete();
-                _pte.DoDelete();
-
-                if (_selectionRange.IsOnTheSameLine)
+                if (diff > 1)
                 {
-                    //2. update presentation
-                    UpdateCurrentLinePresentation(0, -1);
-                    _updateJustCurrentLine = true;
+                    for (int mm = 0; mm < diff; ++mm)
+                    {
+                        //remove difftimes
+                        _textLayer.Remove(ss + 1);
+                    }
                 }
                 else
                 {
-                    //2. update presentation
-
-                    int ss = selSnapshot.startLineNum;
-                    int ee = selSnapshot.endLineNum;
-                    int diff = ee - ss;
-
-                    if (diff > 1)
-                    {
-                        for (int mm = 0; mm < diff; ++mm)
-                        {
-                            //remove difftimes
-                            _textLayer.Remove(ss + 1);
-                        }
-
-                    }
-                    else
-                    {
-                        _textLayer.Remove(ss + 1);
-                    }
-                    //UpdateLinePresentation2(_textLayer.GetTextLine(ss + 1), 0, -1);
-                    UpdateLinePresentation2(_textLayer.GetTextLine(ss), 0, -1);
-
-                    _updateJustCurrentLine = false;
-
-                    MoveToLine(startPointLindId);
-
-                    _lineWalker.SetCurrentCharIndex(startPointCharIndex);
-
-                    _sessionListener?.SetCurrentPos(startPointLindId, startPointCharIndex);
+                    _textLayer.Remove(ss + 1);
                 }
+
+                UpdateLinePresentation2(_textLayer.GetTextLine(ss), 0, -1);
+
+                _updateJustCurrentLine = false;
+
+                MoveToLine(startPointLindId);
+
+                _lineWalker.SetCurrentCharIndex(startPointCharIndex);
+
+                _sessionListener?.SetCurrentPos(startPointLindId, startPointCharIndex);
             }
 
+            //after 
             CancelSelect();
+
             return true;
         }
 
@@ -276,19 +259,15 @@ namespace LayoutFarm.TextFlow
         }
         public void SplitIntoNewLine()
         {
+            _hx.IncrementHxStepNumber();
             RemoveSelectedText();
-
-            var cmd = new DocActionSplitToNewLine(_lineWalker.LineNumber, _lineWalker.NewCharIndex);
-            //_commandHistoryList.AddDocAction(cmd);
-            //_sessionListener?.AddDocAction(cmd);
 
             UpdateHxLinePos();
             _hx.SplitIntoNewLine();
             _sessionListener?.SplitIntoNewLine();
             //1. update model
             _pte.SplitIntoNewLine();
-            //2. update presentation 
-
+            //2. update presentation  
             _textLayer.InsertNewLine(_lineWalker.LineNumber + 1);//add new line
 
             UpdateLinePresentation2(_textLayer.GetTextLine(CurrentLineNumber), 0, -1); //entire line
@@ -389,68 +368,66 @@ namespace LayoutFarm.TextFlow
 
             //have selected text or not
             //if yes=> delete the selected text
-            //else  delete             
-
-            if (!this.RemoveSelectedText())
+            //else  delete 
+            _hx.IncrementHxStepNumber();
+            if (RemoveSelectedText())
             {
-
-                _updateJustCurrentLine = true;
-                //edit session may delete more than 1 char** (since some char can' exist alone)***
-                //or it may involve more than 1 line 
-                if (!_pte.IsOnTheEnd())
-                {
-                    int before = _pte.NewCharIndex; //before
-
-                    UpdateHxLinePos();
-                    _hx.DoDelete();
-                    _sessionListener?.DoDelete();
-                    _pte.ResetAffectedCharCount();
-                    _pte.DoDelete();
-
-                    int affectedCount = _pte.AffectedCharCount;
-                    int after = _pte.NewCharIndex;
-
-                    //update presentation
-                    UpdateCurrentLinePresentation(before, affectedCount);
-                    //_walker.SetCurrentCharIndex2(_editSession.NewCharIndex);
-                }
-                else
-                {
-                    //we are on the end of this line                      
-
-                    int before = _pte.NewCharIndex; //before
-
-                    UpdateHxLinePos();
-                    _sessionListener?.DoDelete();
-                    _hx.DoDelete();
-
-                    _pte.ResetAffectedCharCount();
-                    _pte.DoDelete();
-
-                    int affectedCount = _pte.AffectedCharCount;
-                    int after = _pte.NewCharIndex;
-
-                    //update presentation 
-                    if (CurrentLineNumber < LineCount - 1)
-                    {
-                        //not the last line
-                        //remove lower
-                        _textLayer.Remove(CurrentLineNumber + 1);
-                    }
-
-                    UpdateCurrentLinePresentation(before, affectedCount);
-                    //next line will merge in
-                    //update presentation
-                    //
-                    NotifyContentSizeChanged();
-                }
-
+                //TODO: review here
+                NotifyContentSizeChanged();
                 return;
             }
-            NotifyContentSizeChanged();
+
+            //no selection range-> noting to delete 
+            _updateJustCurrentLine = true;
+            //edit session may delete more than 1 char** (since some char can' exist alone)***
+            //or it may involve more than 1 line 
+            if (!_pte.IsOnTheEnd())
+            {
+                //current line
+                int before = _pte.NewCharIndex; //before
+                _pte.NewCharIndex = _lineWalker.NewCharIndex;
+                int c = _pte.GetCharacter(before); //tobe deleted char
+                _pte.TempCopyBuffer.Clear();//reset
+                _pte.TempCopyBuffer.Append(c);
+
+                UpdateHxLinePos();
+                _hx.DoDelete();//record delete 
+                _sessionListener?.DoDelete();
+                _pte.ResetAffectedCharCount();
+                _pte.DoDelete();
+
+                int affectedCount = _pte.AffectedCharCount;
+                int after = _pte.NewCharIndex;
+                //update presentation
+                UpdateCurrentLinePresentation(before, affectedCount);
+            }
+            else
+            {
+                //we are on the end of this line                      
+
+                int before = _pte.NewCharIndex; //before
+
+                UpdateHxLinePos();
+                _sessionListener?.DoDelete();
+                _hx.DoDelete();
+
+                _pte.ResetAffectedCharCount();
+                _pte.DoDelete();
+
+                int affectedCount = _pte.AffectedCharCount;
+                int after = _pte.NewCharIndex;
+
+                //update presentation 
+                if (CurrentLineNumber < LineCount - 1)
+                {
+                    //not the last line
+                    //remove lower
+                    _textLayer.Remove(CurrentLineNumber + 1);
+                }
+                UpdateCurrentLinePresentation(before, affectedCount);
+                NotifyContentSizeChanged();
+            }
         }
-
-
 
         TextCopyBufferUtf32 _copyBuffer = new TextCopyBufferUtf32();
         List<Run> _collectedRuns = new List<Run>();
@@ -536,9 +513,10 @@ namespace LayoutFarm.TextFlow
         }
         public bool DoBackspace()
         {
+            _hx.IncrementHxStepNumber();
             if (RemoveSelectedText())
             {
-                CancelSelect();
+                //TODO: review here
                 NotifyContentSizeChanged();
                 return true;
             }
@@ -547,7 +525,7 @@ namespace LayoutFarm.TextFlow
 
             if (_lineWalker.NewCharIndex == 0)
             {
-              
+
                 //at the begein of line
                 if (CurrentLineNumber > 0)
                 {
@@ -573,7 +551,7 @@ namespace LayoutFarm.TextFlow
                 return false;
             }
             else
-           {
+            {
                 _pte.NewCharIndex = _lineWalker.NewCharIndex;
                 int c = _pte.GetCharacter(_pte.NewCharIndex - 1); //tobe deleted char
                 _pte.TempCopyBuffer.Clear();//reset
@@ -663,30 +641,30 @@ namespace LayoutFarm.TextFlow
         {
             //helper
             _tmpBuffer.Clear();
-            _tmpBuffer.AppendData(doc);
+            _tmpBuffer.Append(doc);
             AddText(_tmpBuffer);
         }
 
-        public void AddText(TextCopyBuffer output)
+        public void AddText(TextCopyBuffer input)
         {
+            _hx.IncrementHxStepNumber();
             RemoveSelectedText();
-
             bool isRecordingHx = EnableUndoHistoryRecording;
             EnableUndoHistoryRecording = true;
-
-            if (output.Length > 0)
+            if (input.Length > 0)
             {
                 int prev_lineNo = _pte.CurrentLineNumber;
                 //add multiline text to the model
                 UpdateHxLinePos();
-                _hx.AddText(output);
-                _sessionListener?.AddText(output);
+
+                _hx.AddText(input);
+                _sessionListener?.AddText(input);
                 _pte.NewCharIndex = _lineWalker.NewCharIndex;
-                _pte.AddText(output);
+                _pte.AddText(input);
                 //
 
                 int cur_lineNo = _pte.CurrentLineNumber;
-
+                
                 //then update
                 //update visual presentation of all lines
 
@@ -714,8 +692,10 @@ namespace LayoutFarm.TextFlow
                     }
                 }
 
+                int end_LineCharIndex = _pte.NewCharIndex;
                 CurrentLineNumber = _pte.CurrentLineNumber;
-                TryMoveCaretTo(_pte.NewCharIndex, true);
+                _pte.NewCharIndex = end_LineCharIndex;
+                TryMoveCaretTo(end_LineCharIndex, true);
             }
 
             EnableUndoHistoryRecording = isRecordingHx;

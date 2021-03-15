@@ -61,11 +61,10 @@ namespace LayoutFarm.TextFlow
                 //invalidate graphic area?
                 _textLayer.ClientLineBubbleupInvalidateArea(_selectionRange.GetSelectionUpdateArea());
             }
+
             _selectionRange = null;
             _pte.CancelSelect();
             _hx.CancelSelection();
-
-
             SelectionCanceled?.Invoke(this, EventArgs.Empty);
         }
         public void StartSelectIfNoSelection()

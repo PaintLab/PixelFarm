@@ -391,7 +391,7 @@ namespace LayoutFarm.TextFlow
             if (copyBuffer is TextCopyBufferUtf32 utf32)
             {
                 copyBuffer.GetReader(out Typography.TextBreak.InputReader reader);
-                while (reader.Readline(out int begin, out int len, out Typography.TextBreak.InputReader.LineEnd endWith))
+                while (reader.ReadLine(out int begin, out int len, out Typography.TextBreak.InputReader.LineEnd endWith))
                 {
                     PlainTextLine p = new PlainTextLine() { Content = _charSource.NewSegment(utf32, begin, len) };
                     _lines.Add(p);
@@ -400,7 +400,7 @@ namespace LayoutFarm.TextFlow
             else if (copyBuffer is TextCopyBufferUtf16 utf16)
             {
                 copyBuffer.GetReader(out Typography.TextBreak.InputReader reader);
-                while (reader.Readline(out int begin, out int len, out Typography.TextBreak.InputReader.LineEnd endWith))
+                while (reader.ReadLine(out int begin, out int len, out Typography.TextBreak.InputReader.LineEnd endWith))
                 {
                     //...       
                     PlainTextLine p = new PlainTextLine() { Content = _charSource.NewSegment(utf16, begin, len) };
@@ -548,13 +548,13 @@ namespace LayoutFarm.TextFlow
         public void AddText(string s)
         {
             _copyBuffer.Clear();
-            _copyBuffer.AppendData(s);
+            _copyBuffer.Append(s);
             AddText(_copyBuffer);
         }
         public void AddText(char[] s)
         {
             _copyBuffer.Clear();
-            _copyBuffer.AppendData(s);
+            _copyBuffer.Append(s);
             AddText(_copyBuffer);
         }
         public void AddText(TextCopyBuffer copy)
@@ -566,7 +566,7 @@ namespace LayoutFarm.TextFlow
 
             //may by more than one line
             copy.GetReader(out Typography.TextBreak.InputReader reader);
-            while (reader.Readline(out int begin, out int len, out Typography.TextBreak.InputReader.LineEnd lineEnd))
+            while (reader.ReadLine(out int begin, out int len, out Typography.TextBreak.InputReader.LineEnd lineEnd))
             {
                 _lineEditor.AddText(copy, begin, len);
 
@@ -722,7 +722,6 @@ namespace LayoutFarm.TextFlow
                 int char_index2 = NewCharIndex;
                 //delete  
                 InternalDoBackspace(char_index2 - char_index);
-
             }
             else
             {
@@ -781,9 +780,10 @@ namespace LayoutFarm.TextFlow
 
                 //insert newline
                 _lines.Insert(CurrentLineNumber + 1, new PlainTextLine());
-                CurrentLineNumber++;//move to lower
+                CurrentLineNumber++;//move to lower                
                 _lineEditor.AddText(_copyBuffer, 0, _copyBuffer.Length);
                 _lineEditor.NewCharIndex = 0;//move to line start
+
             }
         }
         static TextCopyBufferUtf32 GetFreeTextCopyBuffer() => ObjectPool<TextCopyBufferUtf32, PoolPrivateType>.GetFreeInstance();
@@ -1257,13 +1257,13 @@ namespace LayoutFarm.TextFlow
 
                     for (int i = _selection.startLineNo + 1; i < endLineNo; ++i)
                     {
-                        output.AppendData(s_newline);
+                        output.Append(s_newline);
                         _lines[i].Content.WriteTo(output);
                     }
                 }
 
                 CurrentLineNumber = endLineNo;
-                output.AppendData(s_newline);
+                output.Append(s_newline);
                 _lineEditor.Read(output, 0, _selection.endLineNewCharIndex);
                 CurrentLineNumber = currentLine;//gotback
             }

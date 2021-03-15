@@ -11,7 +11,7 @@ namespace LayoutFarm.TextFlow
     {
         CharTyping,
         SplitToNewLine,
-        JointWithNextLine,
+
         DeleteChar,
         DeleteText,
         InsertText,
@@ -55,16 +55,19 @@ namespace LayoutFarm.TextFlow
         {
             _startLineNumber = lineNumber;
             _startCharIndex = charIndex;
-            EndLineNumber = _startLineNumber;//default
         }
         public abstract ChangeRegion ChangeRegion { get; }
         public int StartLineNumber => _startLineNumber;
         public int StartCharIndex => _startCharIndex;
-        public int EndLineNumber { get; protected set; }
+
         public abstract void InvokeUndo(ITextFlowEditSession editSess);
         public abstract void InvokeRedo(ITextFlowEditSession editSess);
+        public int HxStepNumber { get; set; }
     }
 
+    /// <summary>
+    /// sincle chracter typeing
+    /// </summary>
     public class DocActionCharTyping : DocumentAction
     {
         readonly int _c;
@@ -84,6 +87,7 @@ namespace LayoutFarm.TextFlow
         }
         public override void InvokeRedo(ITextFlowEditSession editSess)
         {
+            //move to specific
             editSess.CurrentLineNumber = _startLineNumber;
             editSess.TryMoveCaretTo(_startCharIndex);
             editSess.AddChar(_c);
@@ -117,30 +121,11 @@ namespace LayoutFarm.TextFlow
             editSess.SplitIntoNewLine();
         }
     }
-    public class DocActionJoinWithNextLine : DocumentAction
-    {
-        public DocActionJoinWithNextLine(int lineNumber, int charIndex)
-            : base(lineNumber, charIndex)
-        {
-        }
-        public override ChangeRegion ChangeRegion => ChangeRegion.LineRange;
-        public override DocumentActionName Name => DocumentActionName.JointWithNextLine;
-        public override void InvokeUndo(ITextFlowEditSession editSess)
-        {
-            editSess.CurrentLineNumber = _startLineNumber;
-            editSess.TryMoveCaretTo(_startCharIndex);
-            editSess.SplitIntoNewLine();
-        }
-        public override void InvokeRedo(ITextFlowEditSession editSess)
-        {
-            editSess.CurrentLineNumber = _startLineNumber;
-            editSess.TryMoveCaretTo(_startCharIndex);
-            editSess.DoDelete();
-        }
-    }
 
 
-
+    /// <summary>
+    /// delete single char
+    /// </summary>
     public class DocActionDeleteChar : DocumentAction
     {
         readonly int _c;
@@ -157,6 +142,7 @@ namespace LayoutFarm.TextFlow
             editSess.CurrentLineNumber = _startLineNumber;
             editSess.TryMoveCaretTo(_startCharIndex);
             editSess.AddChar(_c);
+            editSess.TryMoveCaretTo(_startCharIndex); //move back
         }
         public override void InvokeRedo(ITextFlowEditSession editSess)
         {
@@ -169,20 +155,25 @@ namespace LayoutFarm.TextFlow
             return "-" + ((char)_c).ToString();
         }
     }
+    /// <summary>
+    /// delete a range of text
+    /// </summary>
     public class DocActionDeleteText : DocumentAction
     {
         readonly TextCopyBuffer _deletedText;
-        readonly int _endCharIndex;
+
         public DocActionDeleteText(TextCopyBuffer deletedTextRuns, int startLineNum, int startColumnNum,
             int endLineNum, int endColumnNum)
             : base(startLineNum, startColumnNum)
         {
             _deletedText = deletedTextRuns;
-            _endCharIndex = endColumnNum;
             EndLineNumber = endLineNum;
+            EndCharIndex = endColumnNum;
         }
+
         public override ChangeRegion ChangeRegion => ChangeRegion.LineRange;
-        public int EndCharIndex => _endCharIndex;
+        public int EndCharIndex { get; }
+        public int EndLineNumber { get; }
         public override DocumentActionName Name => DocumentActionName.DeleteText;
         public override void InvokeUndo(ITextFlowEditSession editSess)
         {
@@ -199,40 +190,66 @@ namespace LayoutFarm.TextFlow
             editSess.TryMoveCaretTo(_startCharIndex);
             editSess.StartSelect();
             editSess.CurrentLineNumber = EndLineNumber;
-            editSess.TryMoveCaretTo(_endCharIndex);
+            editSess.TryMoveCaretTo(EndCharIndex);
             editSess.EndSelect();
             editSess.DoDelete();
         }
     }
 
+    /// <summary>
+    /// insert text
+    /// </summary>
     public class DocActionInsertText : DocumentAction
     {
         readonly TextCopyBuffer _newText;
-        readonly int _endCharIndex;
-        public DocActionInsertText(TextCopyBuffer insertingTextRuns,
-            int startLineNumber, int startCharIndex, int endLineNumber, int endCharIndex)
+        bool _eval_textRange;
+        int _endLineNo;
+        int _endLineCharIndex;
+
+        public DocActionInsertText(TextCopyBuffer insertingTextRuns, int startLineNumber, int startCharIndex)
             : base(startLineNumber, startCharIndex)
         {
+            //if we have selection
             _newText = insertingTextRuns;
-            _endCharIndex = endCharIndex;
-            EndLineNumber = endLineNumber;
         }
-
         public void CopyContent(System.Text.StringBuilder output)
         {
             _newText.CopyTo(output);
         }
-
-        public int EndCharIndex => _endCharIndex;
         public override ChangeRegion ChangeRegion => ChangeRegion.LineRange;
         public override DocumentActionName Name => DocumentActionName.InsertText;
+
+        void EvalTextRange()
+        {
+            if (_eval_textRange) { return; } //once
+
+            _newText.GetReader(out Typography.TextBreak.InputReader r);
+            _endLineNo = _startLineNumber;
+            _endLineCharIndex = _startLineNumber + _newText.Length;
+            while (r.ReadLine(out int begin, out int len, out Typography.TextBreak.InputReader.LineEnd endWith))
+            {
+                //text may be multi line                
+                if (endWith != Typography.TextBreak.InputReader.LineEnd.None)
+                {
+                    _endLineCharIndex = len;
+                    _endLineNo++;
+                }
+            }
+            _eval_textRange = true;
+        }
+
         public override void InvokeUndo(ITextFlowEditSession editSess)
         {
+            //have selection or not
+            //delete test
             editSess.CurrentLineNumber = _startLineNumber;
             editSess.TryMoveCaretTo(_startCharIndex);
             editSess.StartSelect();
-            editSess.CurrentLineNumber = EndLineNumber;
-            editSess.TryMoveCaretTo(_endCharIndex);
+            //how many line involve this
+            EvalTextRange();
+            //
+            editSess.CurrentLineNumber = _endLineNo;
+            editSess.TryMoveCaretTo(_endLineCharIndex);
             editSess.EndSelect();
             editSess.DoDelete();
         }
@@ -299,19 +316,33 @@ namespace LayoutFarm.TextFlow
                 docAction.InvokeUndo(textEditSession);
                 //sync content ...   
                 _reverseUndoAction.Push(docAction);
+                //check if next command has the same step number?
+                while (Count > 0)
+                {
+                    DocumentAction cmd = PeekCommand();
+                    if (cmd.HxStepNumber == docAction.HxStepNumber)
+                    {
+                        cmd.InvokeUndo(textEditSession);
+                        //sync content ...   
+                        _reverseUndoAction.Push(cmd);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
             }
         }
         public void ReverseLastUndoAction()
         {
             if (_reverseUndoAction.Count == 0) { return; } //early exit
 
-
             DocumentAction docAction = _reverseUndoAction.Pop();
             docAction.InvokeRedo(_editSession);
             _undoList.AddLast(docAction);
         }
 
-        public DocumentAction PeekCommand => _undoList.Last.Value;
+        public DocumentAction PeekCommand() => _undoList.Last.Value;
 
         public int Count => _undoList.Count;
 
@@ -329,73 +360,87 @@ namespace LayoutFarm.TextFlow
             }
         }
 
-        //-----------------
         public override void AddChar(int c)
         {
-            //create history
+
             if (!EnableUndoHistoryRecording) { return; }
 
-            _undoList.AddLast(new DocActionCharTyping(c,
+            AppendToUndoList(new DocActionCharTyping(c,
                  CurrentLineNo,
                  CurrentLineNewCharIndex));
+        }
+
+        void AppendToUndoList(DocumentAction action)
+        {
+            action.HxStepNumber = HxStepNumber;
+            _undoList.AddLast(action);
         }
         public override void DoBackspace()
         {
             if (!EnableUndoHistoryRecording) { return; }
 
-            PlainTextEditSession tme = _pte;
-            if (tme.HasSelection)
+            if (_pte.HasSelection)
             {
                 var deletedText = new TextCopyBufferUtf32();
-                tme.CopySelection(deletedText);
-                tme.GetSelection(
+                _pte.CopySelection(deletedText);
+                _pte.GetSelection(
                     out int startLineNo, out int startLineCharIndex,
                     out int endLineNo, out int endLineCharIndex);
 
-                _undoList.AddLast(new DocActionDeleteText(deletedText,
+                AppendToUndoList(new DocActionDeleteText(deletedText,
                     startLineNo, startLineCharIndex,
                     endLineNo, endLineCharIndex));
             }
             else
             {
                 int tempChar = _pte.TempCopyBuffer.GetChar(0);
-                _undoList.AddLast(new DocActionDeleteChar(tempChar, _pte.CurrentLineNumber, _pte.NewCharIndex - 1));
+                AppendToUndoList(new DocActionDeleteChar(tempChar, _pte.CurrentLineNumber, _pte.NewCharIndex - 1));
             }
         }
         public override void DoDelete()
         {
             if (!EnableUndoHistoryRecording) { return; }
 
-            PlainTextEditSession tme = _pte;
-            var deletedText = new TextCopyBufferUtf32();
-            tme.CopySelection(deletedText);
-            tme.GetSelection(
-                out int startLineNo, out int startLineCharIndex,
-                out int endLineNo, out int endLineCharIndex);
+            if (_pte.HasSelection)
+            {
 
-            _undoList.AddLast(new DocActionDeleteText(deletedText,
-                startLineNo, startLineCharIndex,
-                endLineNo, endLineCharIndex));
+                var deletedText = new TextCopyBufferUtf32();
+                _pte.CopySelection(deletedText);
+                _pte.GetSelection(
+                    out int startLineNo, out int startLineCharIndex,
+                    out int endLineNo, out int endLineCharIndex);
 
+                AppendToUndoList(new DocActionDeleteText(deletedText,
+                    startLineNo, startLineCharIndex,
+                    endLineNo, endLineCharIndex));
+            }
+            else
+            {
+                int tempChar = _pte.TempCopyBuffer.GetChar(0);
+                AppendToUndoList(new DocActionDeleteChar(tempChar, _pte.CurrentLineNumber, _pte.NewCharIndex));
+            }
         }
+
         public override void AddText(TextCopyBuffer buffer)
         {
             if (!EnableUndoHistoryRecording) { return; }
+#if DEBUG
+            if (_pte.HasSelection) { throw new NotSupportedException(); }
+#endif
 
-            PlainTextEditSession tme = _pte;
-            tme.GetSelection(
-                out int startLineNo, out int startLineCharIndex,
-                out int endLineNo, out int endLineCharIndex);
+            AppendToUndoList(new DocActionInsertText(buffer, CurrentLineNo, CurrentLineNewCharIndex));
 
-            _undoList.AddLast(new DocActionInsertText(buffer,
-                startLineNo, startLineCharIndex,
-                endLineNo, endLineCharIndex));
         }
         public override void SplitIntoNewLine()
         {
             if (!EnableUndoHistoryRecording) { return; }
 
-            _undoList.AddLast(new DocActionSplitToNewLine(CurrentLineNo, CurrentLineNewCharIndex));
+            AppendToUndoList(new DocActionSplitToNewLine(CurrentLineNo, CurrentLineNewCharIndex));
         }
+
+        //-----------------
+        internal int HxStepNumber { get; private set; }
+        internal void ResetHxStepNumber() => HxStepNumber = 0;
+        internal void IncrementHxStepNumber() => HxStepNumber++;
     }
 }
