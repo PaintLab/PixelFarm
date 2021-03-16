@@ -181,7 +181,7 @@ namespace LayoutFarm.TextFlow
 
         readonly LayoutWordVisitor _wordVisitor = new LayoutWordVisitor();
         readonly LineSegmentList<LineSegment> _lineSegs = new LineSegmentList<LineSegment>();
-        readonly TextBuilder<char> _utf16ArrList = new TextBuilder<char>();
+       
         readonly TextBuilder<int> _utf32ArrList = new TextBuilder<int>();
 
         public void FindCurrentHitWord(out int startAt, out int len)
@@ -203,7 +203,7 @@ namespace LayoutFarm.TextFlow
                 _wordVisitor.SetLineSegmentList(_lineSegs);
 
                 int content_len = output.Length;
-                _utf16ArrList.Clear(content_len);
+                
                 _utf32ArrList.Clear(content_len);
 
                 output.CopyTo(_utf32ArrList);

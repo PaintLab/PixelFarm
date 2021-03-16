@@ -129,12 +129,12 @@ namespace LayoutFarm.TextFlow
     public class DocActionDeleteChar : DocumentAction
     {
         readonly int _c;
-        public DocActionDeleteChar(int c, int lineNumber, int editSess)
-            : base(lineNumber, editSess)
+        public DocActionDeleteChar(int c, int lineNumber, int charIndex)
+            : base(lineNumber, charIndex)
         {
             _c = c;
         }
-        public int Char => _c;
+        public int Char => _c;        
         public override ChangeRegion ChangeRegion => ChangeRegion.Line;
         public override DocumentActionName Name => DocumentActionName.DeleteChar;
         public override void InvokeUndo(ITextFlowEditSession editSess)
@@ -155,16 +155,16 @@ namespace LayoutFarm.TextFlow
             return "-" + ((char)_c).ToString();
         }
     }
+
     /// <summary>
     /// delete a range of text
     /// </summary>
     public class DocActionDeleteText : DocumentAction
     {
         readonly TextCopyBuffer _deletedText;
-
-        public DocActionDeleteText(TextCopyBuffer deletedTextRuns, int startLineNum, int startColumnNum,
+        public DocActionDeleteText(TextCopyBuffer deletedTextRuns, int startLineNum, int startCharIndex,
             int endLineNum, int endColumnNum)
-            : base(startLineNum, startColumnNum)
+            : base(startLineNum, startCharIndex)
         {
             _deletedText = deletedTextRuns;
             EndLineNumber = endLineNum;
@@ -403,7 +403,6 @@ namespace LayoutFarm.TextFlow
 
             if (_pte.HasSelection)
             {
-
                 var deletedText = new TextCopyBufferUtf32();
                 _pte.CopySelection(deletedText);
                 _pte.GetSelection(
