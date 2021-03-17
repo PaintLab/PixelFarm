@@ -450,6 +450,9 @@ namespace LayoutFarm.TextFlow
                         //remove lower
                         TextLineBox curLine = _textLayer.GetTextLine(CurrentLineNumber);
                         _textLayer.Remove(CurrentLineNumber + 1);
+
+                        UpdateCurrentLinePresentation(before, 1);
+                        NotifyContentSizeChanged();
                         _textLayer.ClientLineBubbleupInvalidateArea(
                             new PixelFarm.Drawing.Rectangle(0, curLine.Top, _textLayer.OwnerWidth, _textLayer.OwnerHeight - curLine.Top));
                     }

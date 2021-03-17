@@ -9,14 +9,18 @@ namespace LayoutFarm.TextFlow
 
     public enum DocumentActionName
     {
-        CharTyping,
-        SplitToNewLine,
+        AddChar,//add single char
+        AddText, //add more than1 char
+
+        SplitToNewLine, //
         DeleteNewLine,
         JoinWithUpperLine,
-        DeleteChar,
-        DeleteText,
-        InsertText,
-        FormatDocument
+
+        DeleteWithBackspace,//delete char with backspace
+        DeleteChar,//delete char with delete button
+
+        DeleteText,//delete range of text 
+
     }
     public interface ITextFlowSelectSession
     {
@@ -69,17 +73,17 @@ namespace LayoutFarm.TextFlow
     /// <summary>
     /// sincle chracter typeing
     /// </summary>
-    public class DocActionCharTyping : DocumentAction
+    public class DocActionAddChar : DocumentAction
     {
         readonly int _c;
-        public DocActionCharTyping(int c, int lineNumber, int charIndex)
+        public DocActionAddChar(int c, int lineNumber, int charIndex)
             : base(lineNumber, charIndex)
         {
             _c = c;
         }
         public override ChangeRegion ChangeRegion => ChangeRegion.Line;
         public int Char => _c;
-        public override DocumentActionName Name => DocumentActionName.CharTyping;
+        public override DocumentActionName Name => DocumentActionName.AddChar;
         public override void InvokeUndo(ITextFlowEditSession editSess)
         {
             editSess.CurrentLineNumber = _startLineNumber;
@@ -157,12 +161,45 @@ namespace LayoutFarm.TextFlow
         }
     }
 
+    public class DocActionBackspace : DocumentAction
+    {
+        readonly int _c;
+        public DocActionBackspace(int c, int lineNumber, int charIndex)
+            : base(lineNumber, charIndex)
+        {
+            _c = c;
+        }
+        public int Char => _c;
+        public override ChangeRegion ChangeRegion => ChangeRegion.Line;
+        public override DocumentActionName Name => DocumentActionName.DeleteWithBackspace;
+        public override void InvokeUndo(ITextFlowEditSession editSess)
+        {
+            editSess.CurrentLineNumber = _startLineNumber;
+            editSess.TryMoveCaretTo(_startCharIndex + 1);
+            editSess.AddChar(_c);
+        }
+        public override void InvokeRedo(ITextFlowEditSession editSess)
+        {
+            editSess.CurrentLineNumber = _startLineNumber;
+            editSess.TryMoveCaretTo(_startCharIndex);
+            editSess.DoBackspace();
+        }
+        public override string ToString()
+        {
+            return "-" + ((char)_c).ToString();
+        }
+    }
+
+
     public class DocActionDeleteNewLine : DocumentAction
     {
         public DocActionDeleteNewLine(int lineNumber)
           : base(lineNumber, 0)
         {
         }
+        /// <summary>
+        /// snapshot char count
+        /// </summary>
         public int CurrentLineCharCount { get; set; }
         public override ChangeRegion ChangeRegion => ChangeRegion.LineRange;
         public override DocumentActionName Name => DocumentActionName.DeleteNewLine;
@@ -170,7 +207,7 @@ namespace LayoutFarm.TextFlow
         public override void InvokeUndo(ITextFlowEditSession editSess)
         {
             editSess.CurrentLineNumber = _startLineNumber;
-            editSess.DoEnd();
+            editSess.TryMoveCaretTo(CurrentLineCharCount);
             editSess.SplitIntoNewLine();
             editSess.CurrentLineNumber = _startLineNumber;
             editSess.DoEnd();//
@@ -277,7 +314,7 @@ namespace LayoutFarm.TextFlow
             _newText.CopyTo(output);
         }
         public override ChangeRegion ChangeRegion => ChangeRegion.LineRange;
-        public override DocumentActionName Name => DocumentActionName.InsertText;
+        public override DocumentActionName Name => DocumentActionName.AddText;
 
         void EvalTextRange()
         {
@@ -425,7 +462,7 @@ namespace LayoutFarm.TextFlow
 
             if (!EnableUndoHistoryRecording) { return; }
 
-            AppendToUndoList(new DocActionCharTyping(c,
+            AppendToUndoList(new DocActionAddChar(c,
                  CurrentLineNo,
                  CurrentLineNewCharIndex));
         }
@@ -466,7 +503,7 @@ namespace LayoutFarm.TextFlow
                 else
                 {
                     int tempChar = _pte.TempCopyBuffer.GetChar(0);
-                    AppendToUndoList(new DocActionDeleteChar(tempChar, _pte.CurrentLineNumber, _pte.NewCharIndex - 1));
+                    AppendToUndoList(new DocActionBackspace(tempChar, _pte.CurrentLineNumber, _pte.NewCharIndex));
                 }
 
             }
@@ -494,8 +531,8 @@ namespace LayoutFarm.TextFlow
                     //end of the line
                     if (CurrentLineNo < _pte.LineCount - 1)
                     {
-                        //last line nothing
-                        AppendToUndoList(new DocActionDeleteNewLine(_pte.CurrentLineNumber));
+                        //
+                        AppendToUndoList(new DocActionDeleteNewLine(_pte.CurrentLineNumber) { CurrentLineCharCount = _pte.GetLineCharCount(_pte.CurrentLineNumber) });
                     }
 
                 }
