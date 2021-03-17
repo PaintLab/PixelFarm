@@ -181,7 +181,7 @@ namespace LayoutFarm.TextFlow
 
         readonly LayoutWordVisitor _wordVisitor = new LayoutWordVisitor();
         readonly LineSegmentList<LineSegment> _lineSegs = new LineSegmentList<LineSegment>();
-       
+
         readonly TextBuilder<int> _utf32ArrList = new TextBuilder<int>();
 
         public void FindCurrentHitWord(out int startAt, out int len)
@@ -203,7 +203,7 @@ namespace LayoutFarm.TextFlow
                 _wordVisitor.SetLineSegmentList(_lineSegs);
 
                 int content_len = output.Length;
-                
+
                 _utf32ArrList.Clear(content_len);
 
                 output.CopyTo(_utf32ArrList);
@@ -569,31 +569,14 @@ namespace LayoutFarm.TextFlow
         public int CaretXPos => _caretXPos;
         //
         public int NewCharIndex => _caret_NewCharIndex;
-        //
-
-        //public void SetCurrentCharStepRight()
-        //{
-        //    SetCurrentCharIndex(InternalCharIndex + 1);
-        //    //check current char is surrogate or not
-        //    //int c = CurrentChar;
-        //    //#if DEBUG
-        //    //            bool is_high_surrogate = char.IsHighSurrogate(c);
-        //    //            bool is_low_surrogate = char.IsLowSurrogate(c);
-        //    //#endif
-
-        //    //            if (char.IsLowSurrogate(c))
-        //    //            {
-        //    //                //can't stop at this 
-        //    //                SetCurrentCharStepRight();
-        //    //            }
-        //}
-
-        //public void SetCurrentCharStepLeft() => SetCurrentCharIndex(InternalCharIndex - 1);
 
         public void SetCurrentCharIndexToEnd() => SetCurrentCharIndex(this.CharCount);
 
         public void SetCurrentCharIndexToBegin() => SetCurrentCharIndex(0);
-
+        public void SetCurrentTextRunToLast()
+        {
+            _currentTextRun = _currentLine.LastRun;
+        }
         public void SetCurrentCharIndex2(int newCharIndexPointTo)
         {
 
@@ -609,22 +592,16 @@ namespace LayoutFarm.TextFlow
                 throw new NotSupportedException("index out of range");
             }
 
+            _caret_NewCharIndex = 0;
+            _caretXPos = 0;
+            _rCharOffset = 0;
+            _rPixelOffset = 0;
+            _currentTextRun = _currentLine.FirstRun;
 
-            if (newCharIndexPointTo == 0)
+
+            if (newCharIndexPointTo > 0)
             {
-                _caret_NewCharIndex = 0;
-                _caretXPos = 0;
-                _rCharOffset = 0;
-                _rPixelOffset = 0;
-                _currentTextRun = _currentLine.FirstRun;
-            }
-            else
-            {
-                _caret_NewCharIndex = 0;
-                _caretXPos = 0;
-                _rCharOffset = 0;
-                _rPixelOffset = 0;
-                _currentTextRun = _currentLine.FirstRun;
+                //always search from begin           
 
                 do
                 {
@@ -655,10 +632,7 @@ namespace LayoutFarm.TextFlow
 #endif
 
         }
-        public void SetCurrentTextRunToLast()
-        {
-            _currentTextRun = _currentLine.LastRun;
-        }
+
         public void SetCurrentCharIndex(int newCharIndexPointTo)
         {
 

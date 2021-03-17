@@ -62,7 +62,7 @@ namespace LayoutFarm.TextFlow
             VisualLineOverlapped = true;
             //add default lines  
         }
-       
+
 
         public ForwardOnlyCharSource CharSource => _plainText.CharSource;
 
@@ -73,6 +73,7 @@ namespace LayoutFarm.TextFlow
         /// </summary>
         public bool VisualLineOverlapped { get; set; }
         public int OwnerWidth => _owner.Width;
+        public int OwnerHeight => _owner.Height;
 
         public RunStyle DefaultRunStyle { get; private set; }
 

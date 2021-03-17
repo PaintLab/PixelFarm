@@ -7,6 +7,7 @@ namespace LayoutFarm.TextFlow
     public interface ITextFlowLayerOwner
     {
         int Width { get; }
+        int Height { get; }
         void ClientLayerBubbleUpInvalidateArea(Rectangle clientInvalidatedArea);
     }
 

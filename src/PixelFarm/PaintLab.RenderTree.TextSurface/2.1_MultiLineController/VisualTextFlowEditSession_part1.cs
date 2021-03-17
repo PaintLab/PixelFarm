@@ -12,7 +12,7 @@ namespace LayoutFarm.TextFlow
 
         PlainTextEditSession _pte; //text-model edit (for plain  text)
         HistoryCollector _hx;//history collector
-        
+
         TextFlowLayer _textLayer;//visual multi textlinebox layer
         VisualTextLineWalker _lineWalker;
 
@@ -90,7 +90,7 @@ namespace LayoutFarm.TextFlow
         {
             _textLayer.NotifyContentSizeChanged();
         }
-        
+
         internal void SetMarkerLayer(TextMarkerLayer textMarkerLayer)
         {
             _textMarkerLayer = textMarkerLayer;
@@ -439,7 +439,6 @@ namespace LayoutFarm.TextFlow
 
                     int before = _pte.NewCharIndex; //before
                     UpdateCaretPos();
-
                     _hx.DoDelete();
                     _pte.DoDelete();
 
@@ -449,10 +448,17 @@ namespace LayoutFarm.TextFlow
                     {
                         //not the last line
                         //remove lower
+                        TextLineBox curLine = _textLayer.GetTextLine(CurrentLineNumber);
                         _textLayer.Remove(CurrentLineNumber + 1);
+                        _textLayer.ClientLineBubbleupInvalidateArea(
+                            new PixelFarm.Drawing.Rectangle(0, curLine.Top, _textLayer.OwnerWidth, _textLayer.OwnerHeight - curLine.Top));
                     }
-                    UpdateCurrentLinePresentation(before, 1);
-                    NotifyContentSizeChanged();
+                    else
+                    {
+                        UpdateCurrentLinePresentation(before, 1);
+
+                        NotifyContentSizeChanged();
+                    }
                 }
             }
         }
@@ -462,6 +468,7 @@ namespace LayoutFarm.TextFlow
 
         void UpdateLinePresentation2(TextLineBox linebox, int startAt, int affectedCharCount)
         {
+
             linebox.Clear();
             _copyBuffer.Clear();
 
