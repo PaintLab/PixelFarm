@@ -11,7 +11,8 @@ namespace LayoutFarm.TextFlow
     {
         CharTyping,
         SplitToNewLine,
-
+        DeleteNewLine,
+        JoinWithUpperLine,
         DeleteChar,
         DeleteText,
         InsertText,
@@ -134,7 +135,7 @@ namespace LayoutFarm.TextFlow
         {
             _c = c;
         }
-        public int Char => _c;        
+        public int Char => _c;
         public override ChangeRegion ChangeRegion => ChangeRegion.Line;
         public override DocumentActionName Name => DocumentActionName.DeleteChar;
         public override void InvokeUndo(ITextFlowEditSession editSess)
@@ -153,6 +154,65 @@ namespace LayoutFarm.TextFlow
         public override string ToString()
         {
             return "-" + ((char)_c).ToString();
+        }
+    }
+
+    public class DocActionDeleteNewLine : DocumentAction
+    {
+        public DocActionDeleteNewLine(int lineNumber)
+          : base(lineNumber, 0)
+        {
+        }
+        public int CurrentLineCharCount { get; set; }
+        public override ChangeRegion ChangeRegion => ChangeRegion.LineRange;
+        public override DocumentActionName Name => DocumentActionName.DeleteNewLine;
+
+        public override void InvokeUndo(ITextFlowEditSession editSess)
+        {
+            editSess.CurrentLineNumber = _startLineNumber;
+            editSess.DoEnd();
+            editSess.SplitIntoNewLine();
+            editSess.CurrentLineNumber = _startLineNumber;
+            editSess.DoEnd();//
+        }
+        public override void InvokeRedo(ITextFlowEditSession editSess)
+        {
+            editSess.CurrentLineNumber = _startLineNumber;
+            editSess.DoEnd();
+            editSess.DoDelete();
+        }
+        public override string ToString()
+        {
+            return "-newline";
+        }
+    }
+    public class DocActionJoinWithUpperLine : DocumentAction
+    {
+        public DocActionJoinWithUpperLine(int lineNumber)
+          : base(lineNumber, 0)
+        {
+        }
+        public override ChangeRegion ChangeRegion => ChangeRegion.LineRange;
+        public override DocumentActionName Name => DocumentActionName.JoinWithUpperLine;
+        public int PrevLineCharIndex { get; set; }
+        public override void InvokeUndo(ITextFlowEditSession editSess)
+        {
+            editSess.CurrentLineNumber = _startLineNumber - 1;
+            editSess.TryMoveCaretTo(PrevLineCharIndex);
+
+            editSess.SplitIntoNewLine();
+            editSess.CurrentLineNumber = _startLineNumber;
+            editSess.DoHome();
+        }
+        public override void InvokeRedo(ITextFlowEditSession editSess)
+        {
+            editSess.CurrentLineNumber = _startLineNumber;
+            editSess.DoHome();
+            editSess.DoBackspace();
+        }
+        public override string ToString()
+        {
+            return "-newline";
         }
     }
 
@@ -393,8 +453,22 @@ namespace LayoutFarm.TextFlow
             }
             else
             {
-                int tempChar = _pte.TempCopyBuffer.GetChar(0);
-                AppendToUndoList(new DocActionDeleteChar(tempChar, _pte.CurrentLineNumber, _pte.NewCharIndex - 1));
+                if (_pte.NewCharIndex == 0)
+                {
+                    //goto upper
+                    if (_pte.CurrentLineNumber > 0)
+                    {
+                        //get previous line
+                        int prevLineCharCount = _pte.GetLineCharCount(_pte.CurrentLineNumber - 1);
+                        AppendToUndoList(new DocActionJoinWithUpperLine(_pte.CurrentLineNumber) { PrevLineCharIndex = prevLineCharCount });
+                    }
+                }
+                else
+                {
+                    int tempChar = _pte.TempCopyBuffer.GetChar(0);
+                    AppendToUndoList(new DocActionDeleteChar(tempChar, _pte.CurrentLineNumber, _pte.NewCharIndex - 1));
+                }
+
             }
         }
         public override void DoDelete()
@@ -415,8 +489,21 @@ namespace LayoutFarm.TextFlow
             }
             else
             {
-                int tempChar = _pte.TempCopyBuffer.GetChar(0);
-                AppendToUndoList(new DocActionDeleteChar(tempChar, _pte.CurrentLineNumber, _pte.NewCharIndex));
+                if (_pte.IsOnTheEnd())
+                {
+                    //end of the line
+                    if (CurrentLineNo < _pte.LineCount - 1)
+                    {
+                        //last line nothing
+                        AppendToUndoList(new DocActionDeleteNewLine(_pte.CurrentLineNumber));
+                    }
+
+                }
+                else
+                {
+                    int tempChar = _pte.TempCopyBuffer.GetChar(0);
+                    AppendToUndoList(new DocActionDeleteChar(tempChar, _pte.CurrentLineNumber, _pte.NewCharIndex));
+                }
             }
         }
 
@@ -439,7 +526,14 @@ namespace LayoutFarm.TextFlow
 
         //-----------------
         internal int HxStepNumber { get; private set; }
-        internal void ResetHxStepNumber() => HxStepNumber = 0;
-        internal void IncrementHxStepNumber() => HxStepNumber++;
+        internal void ResetHxStepNumber()
+        {
+            HxStepNumber = 0;
+        }
+        internal void IncrementHxStepNumber()
+        {
+            if (!EnableUndoHistoryRecording) { return; }
+            HxStepNumber++;
+        }
     }
 }

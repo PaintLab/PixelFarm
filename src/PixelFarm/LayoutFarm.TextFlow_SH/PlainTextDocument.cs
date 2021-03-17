@@ -254,6 +254,11 @@ namespace LayoutFarm.TextFlow
                 {
                     _newCharIndex = value;
                 }
+                else if (value == _arr.Length + 1)
+                {
+                    //to the end of this
+                    _newCharIndex = value;
+                }
                 else
                 {
                     //not accept
@@ -480,7 +485,17 @@ namespace LayoutFarm.TextFlow
             _lines.Add(new PlainTextLine()); //default
             CurrentLineNumber = 0;
         }
-
+        public int GetLineCharCount(int lineNo)
+        {
+            if (lineNo < _lines.Count)
+            {
+                return _lines[lineNo].CharCount;
+            }
+            else
+            {
+                return -1;
+            }
+        }
         internal ForwardOnlyCharSource CharSource => _doc.CharSource;
 
         /// <summary>
@@ -526,7 +541,7 @@ namespace LayoutFarm.TextFlow
         public int GetCharacter(int lineCharIndex) => _lineEditor.GetChar(lineCharIndex);
         public void AddChar(int c)
         {
-            if (!_selection._isEmpty)
+            if (!_selection.isEmpty)
             {
                 DeleteSelectedText();
             }
@@ -559,7 +574,7 @@ namespace LayoutFarm.TextFlow
         }
         public void AddText(TextCopyBuffer copy)
         {
-            if (!_selection._isEmpty)
+            if (!_selection.isEmpty)
             {
                 DeleteSelectedText();
             }
@@ -587,13 +602,11 @@ namespace LayoutFarm.TextFlow
             }
         }
 
-        int _deletedCharCount = 0;
-        public int DeletedCharCount => _deletedCharCount;
 
         public bool DoBackspace()
         {
-            _deletedCharCount = 0;
-            if (!_selection._isEmpty)
+
+            if (!_selection.isEmpty)
             {
                 return DeleteSelectedText();
             }
@@ -603,7 +616,7 @@ namespace LayoutFarm.TextFlow
             {
                 //on current line
                 _lineEditor.DoBackSpace();
-                _deletedCharCount = 1;
+
                 return true;
             }
             else if (CurrentLineNumber == 0)
@@ -644,15 +657,10 @@ namespace LayoutFarm.TextFlow
             {
                 _lineEditor.DoBackSpace();
             }
-            if (deleteCharCount > AffectedCharCount)
-            {
-                AffectedCharCount = deleteCharCount;
-            }
-
         }
         bool DeleteSelectedText()
         {
-            if (_selection._isEmpty) { return false; }
+            if (_selection.isEmpty) { return false; }
 
             //
             _selection.Normalize();
@@ -701,15 +709,30 @@ namespace LayoutFarm.TextFlow
             }
             return true;
         }
-
-        public int AffectedCharCount { get; private set; }
-        public void ResetAffectedCharCount() => AffectedCharCount = 0;
+        public int PreviewSingleCharDelete()
+        {
+            //single deletion may affect more 1 char
+            //this beh is different from do-backspace
+            if (!_selection.isEmpty) { return -1; }//not evaluate
+            if (_lineEditor.NewCharIndex < _lineEditor.CharacterCount)
+            {
+                int char_index = NewCharIndex;
+                TryMoveCaretTo(char_index + 1);//try move to next charet stop 
+                int char_index2 = NewCharIndex;
+                NewCharIndex = char_index; //restore back
+                return char_index2 - char_index;
+            }
+            else
+            {
+                return 0;//end of this line
+            }
+        }
 
         public void DoDelete()
         {
             //reset
-            AffectedCharCount = 0;
-            if (!_selection._isEmpty)
+
+            if (!_selection.isEmpty)
             {
                 DeleteSelectedText();
                 return;
@@ -725,7 +748,7 @@ namespace LayoutFarm.TextFlow
             }
             else
             {
-                //blank line
+
                 //the bring to lower line to join with this line
                 if (this.LineCount > 1 && _currentLineNo < this.LineCount - 1)
                 {
@@ -761,7 +784,7 @@ namespace LayoutFarm.TextFlow
         /// </summary>
         public void SplitIntoNewLine()
         {
-            if (!_selection._isEmpty)
+            if (!_selection.isEmpty)
             {
                 DeleteSelectedText();
             }
@@ -801,7 +824,7 @@ namespace LayoutFarm.TextFlow
         /// </summary>
         public void EndSelect() => _selection.EndSelect(_currentLineNo, _lineEditor.NewCharIndex);
         public void CancelSelect() => _selection.CancelSelection();
-        public bool HasSelection => !_selection._isEmpty;
+        public bool HasSelection => !_selection.isEmpty;
 
         internal void GetSelection(out int startLineNo, out int startLineCharIndex, out int endLineNo, out int endLineCharIndex)
         {
@@ -992,24 +1015,12 @@ namespace LayoutFarm.TextFlow
                 //move caret backward
                 int curChar = _lineEditor.GetCurrentChar();
                 int tmp_index = charIndex;
-#if DEBUG
-                //UnicodeCategory unicodeCat = char.GetUnicodeCategory(prevChar);
-                //bool is_highSurrogate = char.IsHighSurrogate(prevChar);
-                //bool is_lowSurrogate = char.IsLowSurrogate(prevChar);
-#endif
-
-
                 while (curChar != '\0' && tmp_index > 0 && !CanCaretStopOnThisChar(curChar))
                 {
                     _lineEditor.NewCharIndex--;
                     curChar = _lineEditor.GetCurrentChar();
                     tmp_index--;
                 }
-
-                //if (char.IsLowSurrogate(_lineEditor.CurrentChar))
-                //{
-                //    _lineEditor.SetCurrentCharStepLeft();
-                //}
             }
             else
             {
@@ -1022,115 +1033,9 @@ namespace LayoutFarm.TextFlow
                     curChar = _lineEditor.GetCurrentChar();
                     tmp_index++;
                 }
-
-
-                ////#if DEBUG
-                ////                        UnicodeCategory unicodeCat = char.GetUnicodeCategory(nextChar);
-                ////                        bool is_highSurrogate = char.IsHighSurrogate(nextChar);
-                ////                        bool is_lowSurrogate = char.IsLowSurrogate(nextChar);
-                ////#endif
-
-                //int lineCharCount = _walker.CharCount;
-                //int tmp_index = charIndex + 1;
-                //while (nextChar != '\0' && tmp_index <= lineCharCount && !CanCaretStopOnThisChar(nextChar))
-                //{
-                //    _walker.SetCurrentCharStepRight();
-                //    nextChar = _walker.NextChar;
-                //    tmp_index++;
-                //}
-
-                //if (char.IsLowSurrogate(_lineEditor.CurrentChar))
-                //{
-                //    _lineEditor.SetCurrentCharStepRight();
-                //} 
             }
 
         }
-
-        //        public void TryMoveCaretTo(int charIndex, bool backward = false)
-        //        {
-        //            if (NewCharIndex == 0)
-        //            {
-
-        //            }
-
-        //            if (_walker.CharIndex < 1 && charIndex < 0)
-        //            {
-        //                if (backward)
-        //                {
-        //                    if (_walker.HasPrevLine)
-        //                    {
-        //                        MoveToPrevLine();
-        //                        DoEnd();
-        //                    }
-        //                }
-        //            }
-        //            else
-        //            {
-        //                int lineLength = _walker.CharCount;
-        //                if (_walker.CharIndex >= lineLength && charIndex > lineLength)
-        //                {
-        //                    if (_walker.HasNextLine)
-        //                    {
-        //                        MoveToNextLine();
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    _walker.SetCurrentCharIndex(charIndex);
-        //                    //check if we can stop at this char or not
-        //                    if (backward)
-        //                    {
-        //                        //move caret backward
-        //                        int prevChar = _walker.PrevChar;
-        //                        int tmp_index = charIndex;
-        //#if DEBUG
-        //                        //UnicodeCategory unicodeCat = char.GetUnicodeCategory(prevChar);
-        //                        //bool is_highSurrogate = char.IsHighSurrogate(prevChar);
-        //                        //bool is_lowSurrogate = char.IsLowSurrogate(prevChar);
-        //#endif
-
-
-        //                        while (prevChar != '\0' && tmp_index > 0 && !CanCaretStopOnThisChar(prevChar))
-        //                        {
-        //                            _walker.SetCurrentCharStepLeft();
-        //                            prevChar = _walker.PrevChar;
-        //                            tmp_index--;
-        //                        }
-
-        //                        //if (char.IsLowSurrogate(_lineEditor.CurrentChar))
-        //                        //{
-        //                        //    _lineEditor.SetCurrentCharStepLeft();
-        //                        //}
-        //                    }
-        //                    else
-        //                    {
-        //                        int nextChar = _walker.NextChar;
-
-        //                        //#if DEBUG
-        //                        //                        UnicodeCategory unicodeCat = char.GetUnicodeCategory(nextChar);
-        //                        //                        bool is_highSurrogate = char.IsHighSurrogate(nextChar);
-        //                        //                        bool is_lowSurrogate = char.IsLowSurrogate(nextChar);
-        //                        //#endif
-
-        //                        int lineCharCount = _walker.CharCount;
-        //                        int tmp_index = charIndex + 1;
-        //                        while (nextChar != '\0' && tmp_index <= lineCharCount && !CanCaretStopOnThisChar(nextChar))
-        //                        {
-        //                            _walker.SetCurrentCharStepRight();
-        //                            nextChar = _walker.NextChar;
-        //                            tmp_index++;
-        //                        }
-
-        //                        //if (char.IsLowSurrogate(_lineEditor.CurrentChar))
-        //                        //{
-        //                        //    _lineEditor.SetCurrentCharStepRight();
-        //                        //} 
-        //                    }
-
-        //                }
-        //            }
-        //        }
 
         class PlainTextSelection
         {
@@ -1138,11 +1043,11 @@ namespace LayoutFarm.TextFlow
             public int startLineNewCharIndex;//start line new char-index
             public int endLineNo;
             public int endLineNewCharIndex;//on end line
-            public bool _isEmpty = true;
+            public bool isEmpty = true;
 
             public void StartSelect(int startLineNo, int charIndex)
             {
-                this._isEmpty = false;
+                this.isEmpty = false;
                 this.startLineNo = endLineNo = startLineNo;
                 this.startLineNewCharIndex = endLineNewCharIndex = charIndex;
             }
@@ -1151,15 +1056,8 @@ namespace LayoutFarm.TextFlow
                 this.endLineNo = endLineNo;
                 this.endLineNewCharIndex = charIndex;
             }
-            public void CancelSelection()
-            {
-                _isEmpty = true;
-            }
-            public void Finish()
-            {
-                _isEmpty = true;
-            }
-
+            public void CancelSelection() => isEmpty = true;
+            public void Finish() => isEmpty = true;
             /// <summary>
             /// normalized selection
             /// </summary>
@@ -1189,10 +1087,7 @@ namespace LayoutFarm.TextFlow
                     }
                 }
             }
-
         }
-
-        //----
         public void CopyAll(TextCopyBufferUtf32 output)
         {
             //all
@@ -1235,7 +1130,7 @@ namespace LayoutFarm.TextFlow
         public void CopySelection(TextCopyBufferUtf32 output)
         {
             //only selection
-            if (_selection._isEmpty) { return; }
+            if (_selection.isEmpty) { return; }
 
             int currentLine = _currentLineNo;
             _selection.Normalize();
