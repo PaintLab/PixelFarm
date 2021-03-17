@@ -17,7 +17,8 @@ namespace PixelFarm.DrawingGL
         int _indexBufferId; // element buffer
         bool _hasData;
 
-
+        bool _useSharedIndexBuffer;
+        int _sharedIndexBufferLen;
 #if DEBUG
         static Dictionary<int, bool> s_dbugVboCount = new Dictionary<int, bool>();
 #endif
@@ -42,7 +43,7 @@ namespace PixelFarm.DrawingGL
             {
 
             }
-            System.Diagnostics.Debug.WriteLine("vbo_dbugId=" + dbugId);
+            //System.Diagnostics.Debug.WriteLine("vbo_dbugId=" + dbugId);
 #endif
         }
 #if DEBUG
@@ -130,15 +131,68 @@ namespace PixelFarm.DrawingGL
                    indexBuffer, (indexBuffer != null) ? indexBuffer.Length : 0);
         }
 
-        internal void CreateBuffers(CpuBlit.ArrayListSpan<float> vertexBuffer, CpuBlit.ArrayListSpan<ushort> indexBuffer)
+        internal void CreateBuffers(CpuBlit.ArrayListSegment<float> vertexBuffer, int sharedIndexBufferId, int indexBufferLen)
         {
             if (_hasData)
             {
                 throw new NotSupportedException();
             }
 
-            CpuBlit.ArrayListSpan<float>.UnsafeGetInternalArr(vertexBuffer, out float[] v_arr);
-            CpuBlit.ArrayListSpan<ushort>.UnsafeGetInternalArr(indexBuffer, out ushort[] i_arr);
+            //create only vertex buffer
+            CpuBlit.ArrayListSegment<float>.UnsafeGetInternalArr(vertexBuffer, out float[] v_arr);
+
+            if (v_arr != null)
+            {
+                if (vertexBuffer.len == 0)
+                {
+
+#if DEBUG
+                    //this can occur,
+                    //eg. when no glyph data 
+                    //
+                    //System.Diagnostics.Debugger.Break();
+                    //System.Diagnostics.Debug.WriteLine("create_buffers?");
+#endif
+                    return;
+                }
+
+
+                //1.
+                GL.GenBuffers(1, out _vertexBufferId);
+                GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferId);
+                unsafe
+                {
+                    fixed (void* vertDataPtr = &v_arr[vertexBuffer.beginAt])
+                    {
+                        GL.BufferData(BufferTarget.ArrayBuffer,
+                         new IntPtr(vertexBuffer.len * 4), //size in byte
+                         new IntPtr(vertDataPtr),
+                         BufferUsage.StaticDraw);   //this version we use static draw
+                    }
+                }
+                // IMPORTANT: Unbind from the buffer when we're done with it.
+                GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+#if DEBUG
+                //System.Diagnostics.Debug.WriteLine("vbo_create=" + _vertexBufferId);
+#endif
+            }
+            //----
+            //2.
+
+            _indexBufferId = sharedIndexBufferId;
+            _sharedIndexBufferLen = indexBufferLen;
+            _useSharedIndexBuffer = sharedIndexBufferId > 0;
+            _hasData = true;
+        }
+        internal void CreateBuffers(CpuBlit.ArrayListSegment<float> vertexBuffer, CpuBlit.ArrayListSegment<ushort> indexBuffer)
+        {
+            if (_hasData)
+            {
+                throw new NotSupportedException();
+            }
+
+            CpuBlit.ArrayListSegment<float>.UnsafeGetInternalArr(vertexBuffer, out float[] v_arr);
+            CpuBlit.ArrayListSegment<ushort>.UnsafeGetInternalArr(indexBuffer, out ushort[] i_arr);
 
             if (v_arr != null)
             {
@@ -224,9 +278,18 @@ namespace PixelFarm.DrawingGL
                     }
 #endif
 
-                    int* toDeleteBufferIndexArr = stackalloc int[] { _vertexBufferId, _indexBufferId };
+                    if (_useSharedIndexBuffer)
+                    {
+                        int* toDeleteBufferIndexArr = stackalloc int[] { _vertexBufferId };
+                        GL.DeleteBuffers(1, toDeleteBufferIndexArr);
+                    }
+                    else
+                    {
+                        int* toDeleteBufferIndexArr = stackalloc int[] { _vertexBufferId, _indexBufferId };
+                        GL.DeleteBuffers(2, toDeleteBufferIndexArr);
+                    }
 
-                    GL.DeleteBuffers(2, toDeleteBufferIndexArr);
+                    _useSharedIndexBuffer = false;
                     _vertexBufferId = _indexBufferId = 0;
                 }
 
@@ -260,5 +323,37 @@ namespace PixelFarm.DrawingGL
         //
         public bool HasData => _hasData;
         //
+
+
+    }
+
+    public static class SharedIndexBufferHelper
+    {
+        //helper class 
+        //
+        public static int NewElementArrayBuffer(int size)
+        {
+            ushort[] indexBuffer = new ushort[size];//max size
+            for (ushort i = 0; i < size; ++i)
+            {
+                indexBuffer[i] = i;
+            }
+
+            GL.GenBuffers(1, out int indexBufferId);
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, indexBufferId);
+            unsafe
+            {
+                fixed (void* indexDataPtr = &indexBuffer[0])
+                {
+                    GL.BufferData(BufferTarget.ElementArrayBuffer,
+                        new IntPtr(indexBuffer.Length * 2), //we use size of ushort
+                        new IntPtr(indexDataPtr),
+                        BufferUsage.StaticDraw);   //this version we use static draw
+                }
+            }
+            // IMPORTANT: Unbind from the buffer when we're done with it.            
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
+            return indexBufferId;
+        }
     }
 }

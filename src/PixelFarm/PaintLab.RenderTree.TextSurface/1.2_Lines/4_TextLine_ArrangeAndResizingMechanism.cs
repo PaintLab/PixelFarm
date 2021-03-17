@@ -2,11 +2,11 @@
 
 using System;
 using System.Collections.Generic;
-namespace LayoutFarm.TextEditing
+namespace LayoutFarm.TextFlow
 {
     partial class TextLineBox
     {
-        public void RefreshInlineArrange()
+        internal void RefreshInlineArrange()
         {
             Run r = this.FirstRun;
             int lastestX = 0;
@@ -16,21 +16,18 @@ namespace LayoutFarm.TextEditing
                         r,
                         lastestX,
                         r.Top);
+                //no inter-space between each run
                 lastestX += r.Width;
+
                 r = r.NextRun;
             }
         }
-        internal void SetPostArrangeLineSize(int lineWidth, int lineHeight)
-        {
-            _actualLineWidth = lineWidth;
-            _actualLineHeight = lineHeight;
-
-        }
-        public void LocalSuspendLineReArrange()
+       
+        internal void LocalSuspendLineReArrange()
         {
             _lineFlags |= LOCAL_SUSPEND_LINE_REARRANGE;
         }
-        public void LocalResumeLineReArrange()
+        internal void LocalResumeLineReArrange()
         {
             _lineFlags &= ~LOCAL_SUSPEND_LINE_REARRANGE;
             LinkedListNode<Run> curNode = this.First;
@@ -39,6 +36,7 @@ namespace LayoutFarm.TextEditing
             {
                 Run r = curNode.Value;
                 Run.DirectSetLocation(r, cx, 0);
+                //no inter-space between each run
                 cx += r.Width;
                 curNode = curNode.Next;
             }

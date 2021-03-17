@@ -1,4 +1,4 @@
-//AUTOGEN, 2020-04-20T21:27:56
+//AUTOGEN, 2020-11-26T21:57:10
 //source: D:\projects\PixelFarm\src\x_resource_projects\TestAtlas1\TestAtlas1.csproj
 //tools: D:\projects\PixelFarm\src\Tools\PaintLabResTool\bin\Debug\PaintLabResTool.exe
 using PixelFarm.Drawing;

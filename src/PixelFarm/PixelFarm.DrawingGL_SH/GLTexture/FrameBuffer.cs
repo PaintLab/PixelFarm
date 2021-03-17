@@ -11,10 +11,10 @@ namespace PixelFarm.DrawingGL
         int _frameBufferId;
         int _renderBufferId;
 
-        int _width;
-        int _height;
+        readonly int _width;
+        readonly int _height;
+        readonly bool _isBmpOwner;
         GLBitmap _glBmp;
-        bool _isBmpOwner;
 
         public Framebuffer(GLBitmap glBmp, bool isBmpOwner)
         {

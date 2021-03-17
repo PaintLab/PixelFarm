@@ -5,10 +5,9 @@ using System.Collections.Generic;
 using System.Text;
 using PixelFarm.Drawing;
 
-using LayoutFarm.TextEditing;
+using LayoutFarm.TextFlow;
 using LayoutFarm.UI;
 
-using Typography.Text;
 namespace LayoutFarm.CustomWidgets
 {
     public abstract class TextBoxBase : AbstractRectUI
@@ -99,7 +98,7 @@ namespace LayoutFarm.CustomWidgets
         //
         public int CurrentLineCharIndex => _textEditRenderElement.CurrentLineCharIndex;
         //
-        public int CurrentRunCharIndex => _textEditRenderElement.CurrentTextRunCharIndex;
+        
         public int CurrentLineNumber => _textEditRenderElement.CurrentLineNumber;
 
         public override void Focus()
@@ -132,7 +131,7 @@ namespace LayoutFarm.CustomWidgets
         public override int InnerHeight => (_textEditRenderElement != null) ? _textEditRenderElement.InnerContentHeight : base.InnerHeight;
 
         public abstract string Text { get; set; }
-        public abstract void SetText(IEnumerable<string> lines);
+
         //
         public void FindCurrentUnderlyingWord(out int startAt, out int len)
         {
@@ -238,7 +237,7 @@ namespace LayoutFarm.CustomWidgets
 
     public class TextBox : TextBoxBase
     {
-        IEnumerable<PlainTextLine> _doc;
+        PlainTextDocument _doc;
         bool _isEditable;
 
         public TextBox(int width, int height, bool multiline, bool isEditable = true)
@@ -252,67 +251,45 @@ namespace LayoutFarm.CustomWidgets
         /// write all lines into stbuilder
         /// </summary>
         /// <param name="stbuilder"></param>
-        public void CopyContentTo(StringBuilder stBuilder)
+        public void CopyContentTo(Typography.Text.TextCopyBuffer output)
         {
-            _textEditRenderElement.CopyContentToStringBuilder(stBuilder);
+            _textEditRenderElement.CopyContentToStringBuilder(output);
         }
+        public void CopyCurrentLine(Typography.Text.TextCopyBuffer output)
+        {
+            //TODO
+            _textEditRenderElement.CopyCurrentLine(output);
+        }
+
+        public VisualTextFlowEditSession GetEditSession() => TextEditRenderBox.GetEditSession(_textEditRenderElement);
+
 #if DEBUG
         public override void SetLocation(int left, int top)
         {
+            //for debug
             base.SetLocation(left, top);
         }
 #endif
 
-        RunStyle _runStyle;
-        RunStyle GetDefaultRunStyle()
-        {
-            if (_runStyle == null)
-            {
-                return _runStyle = new RunStyle()
-                {
-                    FontColor = DefaultSpanStyle.FontColor,
-                    ReqFont = DefaultSpanStyle.ReqFont,
-                    ContentHAlign = DefaultSpanStyle.ContentHAlign,
-                };
-            }
-            else
-            {
-                return _runStyle;
-            }
-        }
-
-
-        public override void SetText(IEnumerable<string> lines)
-        {
-            _doc = PlainTextDocumentHelper.CreatePlainTextDocument(lines);
-            ReloadDocument();
-        }
         public override string Text
         {
             get
             {
                 if (_textEditRenderElement != null)
                 {
-                    //TODO, use string builder pool
-                    using (StringBuilderPool<TextBox>.GetFreeStringBuilder(out StringBuilder sb))
+
+                    using (new TextUtf32RangeCopyPoolContext<TextBox>(out Typography.Text.TextCopyBufferUtf32 output))
                     {
-                        CopyContentTo(sb);
-                        return sb.ToString();
+                        CopyContentTo(output);
+                        return output.ToString();
                     }
 
                 }
                 else
                 {
-                    //TODO, use string builder pool
-                    using (StringBuilderPool<TextBox>.GetFreeStringBuilder(out StringBuilder sb))
+                    using (new StringBuilderPoolContext<TextBox>(out StringBuilder sb))
                     {
-                        bool passFirstLine = false;
-                        foreach (PlainTextLine line in _doc)
-                        {
-                            if (passFirstLine) { sb.AppendLine(); }
-                            line.CopyText(sb);
-                            passFirstLine = true;
-                        }
+                        _doc.WriteTo(sb);
                         return sb.ToString();
                     }
                 }
@@ -321,16 +298,16 @@ namespace LayoutFarm.CustomWidgets
             {
                 if (_textEditRenderElement == null)
                 {
-                    _doc = PlainTextDocumentHelper.CreatePlainTextDocument(value);
+                    _doc = new PlainTextDocument(value);
                     return;
                 }
                 //---------------                 
                 if (value == null)
                 {
-                    _doc = new List<PlainTextLine>();
+                    _doc = new PlainTextDocument("");
                     return;
                 }
-                _doc = PlainTextDocumentHelper.CreatePlainTextDocument(value);
+                _doc = new PlainTextDocument(value);
                 ReloadDocument();
                 //convert to runs
             }
@@ -343,21 +320,7 @@ namespace LayoutFarm.CustomWidgets
             }
 
             _textEditRenderElement.ClearAllChildren();
-            int lineCount = 0;
-
-            //RunStyle runstyle = GetDefaultRunStyle();
-            foreach (PlainTextLine line in _doc)
-            {
-                if (lineCount > 0)
-                {
-                    _textEditRenderElement.SplitCurrentLineToNewLine();
-                }
-
-                 
-                _textEditRenderElement.AddTextLine(line);
-                lineCount++;
-            }
-
+            _textEditRenderElement.Reload(_doc);
             this.InvalidateGraphics();
         }
         public override RenderElement GetPrimaryRenderElement()
@@ -415,7 +378,6 @@ namespace LayoutFarm.CustomWidgets
             return txtbox._textEditRenderElement;
         }
 
-        public static TextFlowEditSession GetEditSession(TextBox txtbox) => TextEditRenderBox.GetCurrentEditSession(txtbox._textEditRenderElement);
 
         public Run CurrentTextSpan => _textEditRenderElement.CurrentTextRun;
 
@@ -423,31 +385,12 @@ namespace LayoutFarm.CustomWidgets
         {
             _textEditRenderElement?.ReplaceCurrentTextRunContent(nBackspaces, newstr);
         }
-
-        public void CopyCurrentLine(StringBuilder stbuilder)
-        {
-            _textEditRenderElement.CopyCurrentLine(stbuilder);
-        }
-
-        //public void FormatCurrentSelection(TextSpanStyle spanStyle)
-        //{
-        //    //TODO: reimplement text-model again
-        //    _textEditRenderElement.TextLayerController.DoFormatSelection(spanStyle);
-
-        //}
-        //public void FormatCurrentSelection(TextSpanStyle spanStyle, FontStyle toggleFontStyle)
-        //{
-        //    //TODO: reimplement text-model again
-        //    _textEditRenderElement.TextLayerController.DoFormatSelection(spanStyle, toggleFontStyle);
-        //}
-
-
     }
 
 
     public sealed class MaskTextBox : TextBoxBase
     {
-        List<char> _actualUserInputText = new List<char>();
+        readonly List<char> _actualUserInputText = new List<char>();
         int _keydownCharIndex = 0;
 
         public MaskTextBox(int width, int height)
@@ -497,16 +440,7 @@ namespace LayoutFarm.CustomWidgets
             _textEditRenderElement.HandleKeyPress(e);
             e.CancelBubbling = true;
         }
-        public override void SetText(IEnumerable<string> lines)
-        {
 
-            //not support in this version
-            //TODO: review here
-#if DEBUG
-            System.Diagnostics.Debug.WriteLine("maskTextBox_setText:");
-#endif
-
-        }
         public override string Text
         {
             get
@@ -519,6 +453,7 @@ namespace LayoutFarm.CustomWidgets
             set
             {
                 //can not set by code?
+
             }
         }
 
@@ -563,14 +498,14 @@ namespace LayoutFarm.CustomWidgets
                         }
                         else
                         {
-                            VisualSelectionRangeSnapShot removedRange = e.SelectionSnapShot;
+                            SelectionRangeSnapShot removedRange = e.SelectionSnapShot;
                             _actualUserInputText.RemoveRange(removedRange.startColumnNum, removedRange.endColumnNum - removedRange.startColumnNum);
                         }
                     }
                     else if (_keydownCharIndex == currentCharIndex)
                     {
                         //del
-                        VisualSelectionRangeSnapShot removedRange = e.SelectionSnapShot;
+                        SelectionRangeSnapShot removedRange = e.SelectionSnapShot;
                         if (removedRange.endColumnNum == removedRange.startColumnNum)
                         {
                             _actualUserInputText.RemoveAt(_keydownCharIndex);

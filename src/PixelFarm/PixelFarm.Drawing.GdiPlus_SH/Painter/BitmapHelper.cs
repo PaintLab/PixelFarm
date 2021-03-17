@@ -3,7 +3,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
- 
+
 using PixelFarm.CpuBlit.Imaging;
 using MemMx = PixelFarm.Drawing.Internal.MemMx;
 
@@ -436,9 +436,7 @@ namespace PixelFarm.CpuBlit
 
             TempMemPtr targetBufferPtr = MemBitmap.GetBufferPtr(dstMemBmp);
             BitmapData bmpData = srcWindowsBitmap.LockBits(
-                      new Rectangle(0, 0,
-                          w,
-                          h),
+                      new Rectangle(0, 0, w, h),
                           System.Drawing.Imaging.ImageLockMode.ReadOnly,
                           System.Drawing.Imaging.PixelFormat.Format32bppArgb); //read as 32 bits
             unsafe

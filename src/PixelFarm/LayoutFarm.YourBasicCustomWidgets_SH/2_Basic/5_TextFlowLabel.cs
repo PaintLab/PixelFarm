@@ -2,7 +2,7 @@
 
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
-using LayoutFarm.TextEditing;
+using LayoutFarm.TextFlow;
 
 namespace LayoutFarm.CustomWidgets
 {
@@ -14,7 +14,7 @@ namespace LayoutFarm.CustomWidgets
 
         protected TextFlowRenderBox _textFlowRenderBox;
 
-        protected System.Collections.Generic.IEnumerable<PlainTextLine> _doc;
+        protected PlainTextDocument _doc;
 
         public TextFlowLabel() : this(16, 16)
         {
@@ -108,7 +108,7 @@ namespace LayoutFarm.CustomWidgets
             set
             {
                 _orgText = value;
-                _doc = PlainTextDocumentHelper.CreatePlainTextDocument(value);
+                _doc = new PlainTextDocument(value);
                 if (_textFlowRenderBox != null)
                 {
                     ReloadDocument();
@@ -123,19 +123,7 @@ namespace LayoutFarm.CustomWidgets
             }
 
             _textFlowRenderBox.ClearAllChildren();
-            int lineCount = 0;
-
-            foreach (PlainTextLine line in _doc)
-            {
-                if (lineCount > 0)
-                {
-                    _textFlowRenderBox.SplitCurrentLineToNewLine();
-                }
-                //we create an unparse text run***
-                _textFlowRenderBox.AddTextLine(line);
-                lineCount++;
-            }
-
+            _textFlowRenderBox.Reload(_doc); 
             this.InvalidateGraphics();
         }
 

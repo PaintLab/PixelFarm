@@ -48,25 +48,21 @@
     <Compile Include="1.1_Runs\VisualSelectionRanges.cs" />
     <Compile Include="1.2_Lines\0_TextLine.cs" />
     <Compile Include="1.2_Lines\1_TextLine_CORE_Collection.cs" />
-    <Compile Include="1.2_Lines\2_TextLine_PRIVATE_CollectionFeatures2.cs" />
-    <Compile Include="1.2_Lines\3_TextLine_PUBLIC_CollectionFeatures.cs" />
     <Compile Include="1.2_Lines\4_TextLine_ArrangeAndResizingMechanism.cs" />
     <Compile Include="1.2_Lines\5_TextLine_Advanced.cs" />
     <Compile Include="1.2_Lines\debugActivityRecorder.cs" />
+    <Compile Include="1.2_Lines\RunListPool.cs" />
     <Compile Include="1.2_Lines\TextLineWalker.cs" />
-    <Compile Include="1.2_Lines\TextRangeCopy.cs" />
     <Compile Include="1.3_Layer\TextFlowLayer.cs" />
     <Compile Include="1.3_Layer\ITextFlowOwner.cs" />
     <Compile Include="1.3_Layer\RunVisitor.cs" />
-    <Compile Include="2.1_MultiLineController\DocumentActions.cs" />
-    <Compile Include="2.1_MultiLineController\TextFlowEditSession.cs" />
-    <Compile Include="2.1_MultiLineController\TextFlowSelectSession.cs" />
+    <Compile Include="2.1_MultiLineController\VisualTextFlowEditSession_part1.cs" />
+    <Compile Include="2.1_MultiLineController\VisualTextFlowEditSession_part2.cs" />
     <Compile Include="2.1_MultiLineController\TextSurfaceEventListener.cs" />
     <Compile Include="1.0_Common\DoubleBufferCustomRenderBox.cs" />
     <Compile Include="2.2_TextRenderBox\EditorCaret.cs" />
     <Compile Include="2.2_TextRenderBox\GlobalCaretController.cs" />
     <Compile Include="1.0_Common\PlainTextDocumentHelper.cs" />
-    <Compile Include="1.0_Common\StringBuilderPool.cs" />
     <Compile Include="2.2_TextRenderBox\TextEditRenderBox.cs" />
     <Compile Include="2.2_TextRenderBox\TextFlowRenderBox.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -97,5 +93,7 @@
       <Name>Typography.One</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
+  <Import Project="..\LayoutFarm.TextFlow_SH\LayoutFarm.TextFlow_SH.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

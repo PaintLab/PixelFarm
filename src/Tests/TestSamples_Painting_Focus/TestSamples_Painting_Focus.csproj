@@ -11,7 +11,7 @@
     <AssemblyName>TestSamples_Painting_Focus</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-	  <LangVersion>8.0</LangVersion>
+    <LangVersion>8.0</LangVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -71,6 +71,7 @@
     <Compile Include="3_Samples\05_AlphaMask2\FontTextureDemo3.cs" />
     <Compile Include="3_Samples\05_AlphaMask2\LionMask3.cs" />
     <Compile Include="3_Samples\05_AlphaMask2\MiniAggWithTextPrinterDemo.cs" />
+    <Compile Include="3_Samples\05_AlphaMask2\MiniAggWithTextPrinterDemo2.cs" />
     <Compile Include="3_Samples\06_ComponentRendering\ComponentRendering.cs" />
     <Compile Include="3_Samples\07_Shading\01_GradientSample.cs" />
     <Compile Include="3_Samples\07_Shading\02_GouraudSample.cs" />

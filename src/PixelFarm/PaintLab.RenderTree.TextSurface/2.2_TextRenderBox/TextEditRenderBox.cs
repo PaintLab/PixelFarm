@@ -4,8 +4,7 @@ using System.Text;
 
 using LayoutFarm.UI;
 using PixelFarm.Drawing;
-
-namespace LayoutFarm.TextEditing
+namespace LayoutFarm.TextFlow
 {
 
     public sealed class TextEditRenderBox : TextFlowRenderBox
@@ -57,8 +56,8 @@ namespace LayoutFarm.TextEditing
             if (RenderCaret && _stateShowCaret && _isEditable)
             {
                 d.SetClipRect(new Rectangle(0, 0, this.Width, this.Height));
-                Point textManCaretPos = _editSession.CaretPos;
-                _myCaret.DrawCaret(d, textManCaretPos.X, textManCaretPos.Y);
+                Point pos = _visualEditSession.CaretPos;
+                _myCaret.DrawCaret(d, pos.X, pos.Y);
             }
         }
 
@@ -87,12 +86,12 @@ namespace LayoutFarm.TextEditing
         public override void Blur()
         {
             if (_isEditable && !_blurring)
-            { 
+            {
                 _blurring = true;
                 GlobalCaretController.CurrentTextEditBox = null;
                 this.SetCaretVisible(false);
                 _isFocus = false;
-                _blurring = false; 
+                _blurring = false;
             }
         }
 
@@ -117,7 +116,7 @@ namespace LayoutFarm.TextEditing
             if (_textSurfaceEventListener != null &&
                 !(preventDefault = TextSurfaceEventListener.NotifyPreviewKeyPress(_textSurfaceEventListener, e)))
             {
-                _editSession.UpdateSelectionRange();
+                _visualEditSession.UpdateSelectionRange();
             }
             if (preventDefault)
             {
@@ -126,14 +125,14 @@ namespace LayoutFarm.TextEditing
 
             if (_isEditable)
             {
-                int insertAt = _editSession.CurrentLineCharIndex;
+                int insertAt = _visualEditSession.CurrentLineNewCharIndex;
 
-                _editSession.AddCharToCurrentLine(e.KeyChar);
+                _visualEditSession.AddChar(e.KeyChar);
 
                 if (_textSurfaceEventListener != null)
                 {
                     //TODO: review this again ***
-                    if (_editSession.SelectionRange != null)
+                    if (_visualEditSession.SelectionRange != null)
                     {
                         TextSurfaceEventListener.NotifyCharacterReplaced(_textSurfaceEventListener, e.KeyChar);
                     }
@@ -185,6 +184,7 @@ namespace LayoutFarm.TextEditing
         }
         public override void HandleKeyDown(UIKeyEventArgs e)
         {
+
             this.SetCaretVisible(true);
             if (!e.HasKeyData)
             {
@@ -207,7 +207,7 @@ namespace LayoutFarm.TextEditing
                     {
                         if (_isEditable)
                         {
-                            if (_editSession.SelectionRange != null)
+                            if (_visualEditSession.SelectionRange != null)
                             {
                                 InvalidateGraphicOfCurrentSelectionArea();
                             }
@@ -217,15 +217,15 @@ namespace LayoutFarm.TextEditing
                             }
                             if (_textSurfaceEventListener == null)
                             {
-                                _editSession.DoBackspace();
+                                _visualEditSession.DoBackspace();
                             }
                             else
                             {
                                 if (!TextSurfaceEventListener.NotifyPreviewBackSpace(_textSurfaceEventListener, e) &&
-                                    _editSession.DoBackspace())
+                                    _visualEditSession.DoBackspace())
                                 {
                                     TextSurfaceEventListener.NotifyCharactersRemoved(_textSurfaceEventListener,
-                                        new TextDomEventArgs(_editSession._updateJustCurrentLine));
+                                        new TextDomEventArgs(_visualEditSession._updateJustCurrentLine));
                                 }
                             }
                             EnsureCaretVisible();
@@ -236,7 +236,7 @@ namespace LayoutFarm.TextEditing
                     {
                         if (_isEditable)
                         {
-                            if (_editSession.SelectionRange != null)
+                            if (_visualEditSession.SelectionRange != null)
                             {
                                 InvalidateGraphicOfCurrentSelectionArea();
                             }
@@ -246,13 +246,16 @@ namespace LayoutFarm.TextEditing
                             }
                             if (_textSurfaceEventListener == null)
                             {
-                                _editSession.DoDelete();
+                                _visualEditSession.DoDelete();
                             }
                             else
                             {
-                                VisualSelectionRangeSnapShot delpart = _editSession.DoDelete();
+
+                                _visualEditSession.DoDelete();
+
+                                SelectionRangeSnapShot delpart = new SelectionRangeSnapShot();
                                 TextSurfaceEventListener.NotifyCharactersRemoved(_textSurfaceEventListener,
-                                    new TextDomEventArgs(_editSession._updateJustCurrentLine, delpart));
+                                           new TextDomEventArgs(_visualEditSession._updateJustCurrentLine, delpart));
                             }
 
                             EnsureCaretVisible();
@@ -292,52 +295,54 @@ namespace LayoutFarm.TextEditing
                             DoEnd(true); //
                         }
                         break;
-                    case UIKeys.C:
-                        {
-                            using (StringBuilderPool<TempTextLineCopyContext>.GetFreeStringBuilder(out StringBuilder stBuilder))
-                            {
-                                _editSession.CopySelectedTextToPlainText(stBuilder);
-                                if (stBuilder != null)
-                                {
-                                    if (stBuilder.Length == 0)
-                                    {
-                                        Clipboard.Clear();
-                                    }
-                                    else
-                                    {
-                                        Clipboard.SetText(stBuilder.ToString());
-                                    }
-                                }
-                            }
-                        }
-                        break;
                     case UIKeys.V:
                         {
                             if (_isEditable && Clipboard.ContainsUnicodeText())
                             {
                                 //1. we need to parse multi-line to single line
-                                //this may need text-break services 
-
-                                _editSession.AddTextToCurrentLine(PlainTextDocumentHelper.CreatePlainTextDocument(Clipboard.GetUnicodeText()));
-
+                                //this may need text-break services                                  
+                                _visualEditSession.AddText(Clipboard.GetUnicodeText());
                                 EnsureCaretVisible();
+                            }
+                        }
+                        break;
+                    case UIKeys.C:
+                        {
+                            using (new StringBuilderPoolContext<TextEditRenderBox>(out StringBuilder sb))
+                            {
+                                _visualEditSession.CopySelectedTextToPlainText(sb);
+                                //copy to plain text
+                                if (sb.Length == 0)
+                                {
+                                    Clipboard.Clear();
+                                }
+                                else
+                                {
+                                    Clipboard.SetText(sb.ToString());
+                                }
                             }
                         }
                         break;
                     case UIKeys.X:
                         {
-                            if (_isEditable && _editSession.SelectionRange != null)
+                            if (_isEditable && _visualEditSession.SelectionRange != null)
                             {
                                 InvalidateGraphicOfCurrentSelectionArea();
 
-                                using (StringBuilderPool<TempTextLineCopyContext>.GetFreeStringBuilder(out StringBuilder stBuilder))
+                                using (new StringBuilderPoolContext<TextEditRenderBox>(out StringBuilder sb))
                                 {
-                                    _editSession.CopySelectedTextToPlainText(stBuilder);
-                                    if (stBuilder != null)
+                                    _visualEditSession.CopySelectedTextToPlainText(sb);
+
+                                    if (sb.Length == 0)
                                     {
-                                        Clipboard.SetText(stBuilder.ToString());
+                                        Clipboard.Clear();
                                     }
-                                    _editSession.DoDelete();
+                                    else
+                                    {
+                                        Clipboard.SetText(sb.ToString());
+                                    }
+
+                                    _visualEditSession.DoDelete();
                                     EnsureCaretVisible();
                                 }
                             }
@@ -347,7 +352,7 @@ namespace LayoutFarm.TextEditing
                         {
                             if (_isEditable)
                             {
-                                _editSession.UndoLastAction();
+                                _visualEditSession.UndoLastAction();
                                 EnsureCaretVisible();
                             }
                         }
@@ -356,7 +361,7 @@ namespace LayoutFarm.TextEditing
                         {
                             if (_isEditable)
                             {
-                                _editSession.ReverseLastUndoAction();
+                                _visualEditSession.ReverseLastUndoAction();
                                 EnsureCaretVisible();
                             }
                         }
@@ -370,8 +375,6 @@ namespace LayoutFarm.TextEditing
             }
 
         }
-        //
-
 
         public override bool HandleProcessDialogKey(UIKeyEventArgs e)
         {
@@ -384,7 +387,7 @@ namespace LayoutFarm.TextEditing
 
             switch (e.KeyCode)
             {
-
+                default: return false;
                 case UIKeys.Escape:
                 case UIKeys.End:
                 case UIKeys.Home:
@@ -418,21 +421,21 @@ namespace LayoutFarm.TextEditing
                         {
                             if (_isMultiLine)
                             {
-                                if (_editSession.SelectionRange != null)
+                                if (_visualEditSession.SelectionRange != null)
                                 {
                                     InvalidateGraphicOfCurrentSelectionArea();
 
                                 }
 
-                                if (_editSession.SelectionRange != null)
+                                if (_visualEditSession.SelectionRange != null)
                                 {
                                     //this selection range will be remove first
                                 }
 
-                                int lineBeforeSplit = _editSession.CurrentLineNumber;
-                                int lineCharBeforeSplit = _editSession.CurrentLineCharIndex;
+                                int lineBeforeSplit = _visualEditSession.CurrentLineNumber;
+                                int lineCharBeforeSplit = _visualEditSession.CurrentLineNewCharIndex;
 
-                                _editSession.SplitCurrentLineIntoNewLine();
+                                _visualEditSession.SplitIntoNewLine();
 
                                 if (_textSurfaceEventListener != null)
                                 {
@@ -443,7 +446,7 @@ namespace LayoutFarm.TextEditing
                                     TextSurfaceEventListener.NofitySplitNewLine(_textSurfaceEventListener, splitEventE);
                                 }
 
-                                Rectangle lineArea = _editSession.CurrentLineArea;
+                                Rectangle lineArea = _visualEditSession.CurrentLineArea;
                                 if (lineArea.Bottom > this.ViewportBottom)
                                 {
                                     ScrollOffset(0, lineArea.Bottom - this.ViewportBottom);
@@ -476,54 +479,42 @@ namespace LayoutFarm.TextEditing
                         }
 
                         InvalidateGraphicOfCurrentLineArea();
+
                         if (!e.Shift)
                         {
-                            _editSession.CancelSelect();
+                            _visualEditSession.CancelSelect();
                         }
                         else
                         {
-                            _editSession.StartSelectIfNoSelection();
+                            _visualEditSession.StartSelectIfNoSelection();
                         }
 
-                        Point currentCaretPos = Point.Empty;
+
                         if (!_isMultiLine)
                         {
-                            if (!_editSession.IsOnStartOfLine)
+                            if (!_visualEditSession.IsOnStartOfLine)
                             {
 #if DEBUG
-                                Point prvCaretPos = _editSession.CaretPos;
+                                Point prvCaretPos = _visualEditSession.CaretPos;
 #endif
-                                _editSession.TryMoveCaretBackward();
-                                currentCaretPos = _editSession.CaretPos;
+                                _visualEditSession.TryMoveCaretBackward();
+
                             }
                         }
                         else
                         {
-                            if (_editSession.IsOnStartOfLine)
-                            {
-                                _editSession.TryMoveCaretBackward();
-                                currentCaretPos = _editSession.CaretPos;
-                            }
-                            else
-                            {
-                                if (!_editSession.IsOnStartOfLine)
-                                {
-#if DEBUG
-                                    Point prvCaretPos = _editSession.CaretPos;
-#endif
-                                    _editSession.TryMoveCaretBackward();
-                                    currentCaretPos = _editSession.CaretPos;
-                                }
-                            }
+                            _visualEditSession.TryMoveCaretBackward();
+
                         }
                         //-------------------
                         if (e.Shift)
                         {
-                            _editSession.EndSelectIfNoSelection();
+                            _visualEditSession.EndSelectIfNoSelection();
                         }
                         //-------------------
 
                         EnsureCaretVisible();
+
                         if (_textSurfaceEventListener != null)
                         {
                             TextSurfaceEventListener.NotifyArrowKeyCaretPosChanged(_textSurfaceEventListener, e.KeyCode);
@@ -542,11 +533,11 @@ namespace LayoutFarm.TextEditing
                         InvalidateGraphicOfCurrentLineArea();
                         if (!e.Shift)
                         {
-                            _editSession.CancelSelect();
+                            _visualEditSession.CancelSelect();
                         }
                         else
                         {
-                            _editSession.StartSelectIfNoSelection();
+                            _visualEditSession.StartSelectIfNoSelection();
                         }
 
 
@@ -554,31 +545,31 @@ namespace LayoutFarm.TextEditing
                         if (!_isMultiLine)
                         {
 #if DEBUG
-                            Point prvCaretPos = _editSession.CaretPos;
+                            Point prvCaretPos = _visualEditSession.CaretPos;
 #endif
-                            _editSession.TryMoveCaretForward();
-                            currentCaretPos = _editSession.CaretPos;
+                            _visualEditSession.TryMoveCaretForward();
+                            currentCaretPos = _visualEditSession.CaretPos;
                         }
                         else
                         {
-                            if (_editSession.IsOnEndOfLine)
+                            if (_visualEditSession.IsOnEndOfLine)
                             {
-                                _editSession.TryMoveCaretForward();
-                                currentCaretPos = _editSession.CaretPos;
+                                _visualEditSession.TryMoveCaretForward();
+                                currentCaretPos = _visualEditSession.CaretPos;
                             }
                             else
                             {
 #if DEBUG
-                                Point prvCaretPos = _editSession.CaretPos;
+                                Point prvCaretPos = _visualEditSession.CaretPos;
 #endif
-                                _editSession.TryMoveCaretForward();
-                                currentCaretPos = _editSession.CaretPos;
+                                _visualEditSession.TryMoveCaretForward();
+                                currentCaretPos = _visualEditSession.CaretPos;
                             }
                         }
                         //-------------------
                         if (e.Shift)
                         {
-                            _editSession.EndSelectIfNoSelection();
+                            _visualEditSession.EndSelectIfNoSelection();
                         }
                         //-------------------
 
@@ -604,52 +595,52 @@ namespace LayoutFarm.TextEditing
                             if (!_isInVerticalPhase)
                             {
                                 _isInVerticalPhase = true;
-                                _verticalExpectedCharIndex = _editSession.CharIndex;
+                                _verticalExpectedCharIndex = _visualEditSession.CurrentLineNewCharIndex;
                             }
 
                             //----------------------------                          
                             if (!e.Shift)
                             {
-                                _editSession.CancelSelect();
+                                _visualEditSession.CancelSelect();
                             }
                             else
                             {
-                                _editSession.StartSelectIfNoSelection();
+                                _visualEditSession.StartSelectIfNoSelection();
                             }
                             //----------------------------
                             //approximate line per viewport
-                            int line_per_viewport = Height / _editSession.CurrentLineArea.Height;
+                            int line_per_viewport = Height / _visualEditSession.CurrentLineArea.Height;
                             if (line_per_viewport > 1)
                             {
-                                if (_editSession.CurrentLineNumber - line_per_viewport < 0)
+                                if (_visualEditSession.CurrentLineNumber - line_per_viewport < 0)
                                 {
                                     //move to first line
-                                    _editSession.CurrentLineNumber = 0;
+                                    _visualEditSession.CurrentLineNumber = 0;
                                 }
                                 else
                                 {
-                                    _editSession.CurrentLineNumber -= line_per_viewport;
+                                    _visualEditSession.CurrentLineNumber -= line_per_viewport;
                                 }
                             }
 
 
 
-                            if (_verticalExpectedCharIndex > _editSession.CurrentLineCharCount - 1)
+                            if (_verticalExpectedCharIndex > _visualEditSession.CurrentLineCharCount - 1)
                             {
-                                _editSession.TryMoveCaretTo(_editSession.CurrentLineCharCount);
+                                _visualEditSession.TryMoveCaretTo(_visualEditSession.CurrentLineCharCount);
                             }
                             else
                             {
-                                _editSession.TryMoveCaretTo(_verticalExpectedCharIndex);
+                                _visualEditSession.TryMoveCaretTo(_verticalExpectedCharIndex);
                             }
 
                             //----------------------------
                             if (e.Shift)
                             {
-                                _editSession.EndSelectIfNoSelection();
+                                _visualEditSession.EndSelectIfNoSelection();
                             }
 
-                            Rectangle lineArea = _editSession.CurrentLineArea;
+                            Rectangle lineArea = _visualEditSession.CurrentLineArea;
                             if (lineArea.Top < ViewportTop)
                             {
                                 ScrollOffset(0, lineArea.Top - ViewportTop);
@@ -685,49 +676,49 @@ namespace LayoutFarm.TextEditing
                             if (!_isInVerticalPhase)
                             {
                                 _isInVerticalPhase = true;
-                                _verticalExpectedCharIndex = _editSession.CharIndex;
+                                _verticalExpectedCharIndex = _visualEditSession.CurrentLineNewCharIndex;
                             }
 
                             //----------------------------                          
                             if (!e.Shift)
                             {
-                                _editSession.CancelSelect();
+                                _visualEditSession.CancelSelect();
                             }
                             else
                             {
-                                _editSession.StartSelectIfNoSelection();
+                                _visualEditSession.StartSelectIfNoSelection();
                             }
                             //---------------------------- 
 
-                            int line_per_viewport = Height / _editSession.CurrentLineArea.Height;
+                            int line_per_viewport = Height / _visualEditSession.CurrentLineArea.Height;
 
-                            if (_editSession.CurrentLineNumber + line_per_viewport < _editSession.LineCount)
+                            if (_visualEditSession.CurrentLineNumber + line_per_viewport < _visualEditSession.LineCount)
                             {
 
-                                _editSession.CurrentLineNumber += line_per_viewport;
+                                _visualEditSession.CurrentLineNumber += line_per_viewport;
                             }
                             else
                             {
                                 //move to last line
-                                _editSession.CurrentLineNumber = _editSession.LineCount - 1;
+                                _visualEditSession.CurrentLineNumber = _visualEditSession.LineCount - 1;
                             }
 
-                            if (_verticalExpectedCharIndex > _editSession.CurrentLineCharCount - 1)
+                            if (_verticalExpectedCharIndex > _visualEditSession.CurrentLineCharCount - 1)
                             {
-                                _editSession.TryMoveCaretTo(_editSession.CurrentLineCharCount);
+                                _visualEditSession.TryMoveCaretTo(_visualEditSession.CurrentLineCharCount);
                             }
                             else
                             {
-                                _editSession.TryMoveCaretTo(_verticalExpectedCharIndex);
+                                _visualEditSession.TryMoveCaretTo(_verticalExpectedCharIndex);
                             }
                             //----------------------------
 
                             if (e.Shift)
                             {
-                                _editSession.EndSelectIfNoSelection();
+                                _visualEditSession.EndSelectIfNoSelection();
                             }
                             //----------------------------
-                            Rectangle lineArea = _editSession.CurrentLineArea;
+                            Rectangle lineArea = _visualEditSession.CurrentLineArea;
                             if (lineArea.Bottom > this.ViewportBottom)
                             {
                                 ScrollOffset(0, lineArea.Bottom - this.ViewportBottom);
@@ -758,48 +749,50 @@ namespace LayoutFarm.TextEditing
                             if (!_isInVerticalPhase)
                             {
                                 _isInVerticalPhase = true;
-                                _verticalExpectedCharIndex = _editSession.CharIndex;
+                                _verticalExpectedCharIndex = _visualEditSession.CurrentLineNewCharIndex;
                             }
 
                             //----------------------------                          
                             if (!e.Shift)
                             {
-                                _editSession.CancelSelect();
+                                _visualEditSession.CancelSelect();
                             }
                             else
                             {
-                                _editSession.StartSelectIfNoSelection();
+                                _visualEditSession.StartSelectIfNoSelection();
                             }
                             //---------------------------- 
 
-                            _editSession.CurrentLineNumber++;
-                            if (_verticalExpectedCharIndex > _editSession.CurrentLineCharCount - 1)
+                            _visualEditSession.CurrentLineNumber++;
+
+                            if (_verticalExpectedCharIndex > _visualEditSession.CurrentLineCharCount - 1)
                             {
-                                _editSession.TryMoveCaretTo(_editSession.CurrentLineCharCount);
+                                _visualEditSession.TryMoveCaretTo(_visualEditSession.CurrentLineCharCount);
                             }
                             else
                             {
-                                _editSession.TryMoveCaretTo(_verticalExpectedCharIndex);
+                                _visualEditSession.TryMoveCaretTo(_verticalExpectedCharIndex);
                             }
                             //----------------------------
 
                             if (e.Shift)
                             {
-                                _editSession.EndSelectIfNoSelection();
+                                _visualEditSession.EndSelectIfNoSelection();
                             }
                             //----------------------------
-                            Rectangle lineArea = _editSession.CurrentLineArea;
+                            Rectangle lineArea = _visualEditSession.CurrentLineArea;
                             if (lineArea.Bottom > this.ViewportBottom)
                             {
                                 ScrollOffset(0, lineArea.Bottom - this.ViewportBottom);
                             }
                             else
                             {
-
                                 InvalidateGraphicOfCurrentLineArea();
                             }
                         }
+
                         EnsureCaretVisible();
+
                         if (_textSurfaceEventListener != null)
                         {
                             TextSurfaceEventListener.NotifyArrowKeyCaretPosChanged(_textSurfaceEventListener, keyData);
@@ -823,37 +816,37 @@ namespace LayoutFarm.TextEditing
                             if (!_isInVerticalPhase)
                             {
                                 _isInVerticalPhase = true;
-                                _verticalExpectedCharIndex = _editSession.CharIndex;
+                                _verticalExpectedCharIndex = _visualEditSession.CurrentLineNewCharIndex;
                             }
 
                             //----------------------------                          
                             if (!e.Shift)
                             {
-                                _editSession.CancelSelect();
+                                _visualEditSession.CancelSelect();
                             }
                             else
                             {
-                                _editSession.StartSelectIfNoSelection();
+                                _visualEditSession.StartSelectIfNoSelection();
                             }
                             //----------------------------
 
-                            _editSession.CurrentLineNumber--;
-                            if (_verticalExpectedCharIndex > _editSession.CurrentLineCharCount - 1)
+                            _visualEditSession.CurrentLineNumber--;
+                            if (_verticalExpectedCharIndex > _visualEditSession.CurrentLineCharCount - 1)
                             {
-                                _editSession.TryMoveCaretTo(_editSession.CurrentLineCharCount);
+                                _visualEditSession.TryMoveCaretTo(_visualEditSession.CurrentLineCharCount);
                             }
                             else
                             {
-                                _editSession.TryMoveCaretTo(_verticalExpectedCharIndex);
+                                _visualEditSession.TryMoveCaretTo(_verticalExpectedCharIndex);
                             }
 
                             //----------------------------
                             if (e.Shift)
                             {
-                                _editSession.EndSelectIfNoSelection();
+                                _visualEditSession.EndSelectIfNoSelection();
                             }
 
-                            Rectangle lineArea = _editSession.CurrentLineArea;
+                            Rectangle lineArea = _visualEditSession.CurrentLineArea;
                             if (lineArea.Top < ViewportTop)
                             {
                                 ScrollOffset(0, lineArea.Top - ViewportTop);
@@ -880,10 +873,7 @@ namespace LayoutFarm.TextEditing
                         return true;
                     }
 
-                default:
-                    {
-                        return false;
-                    }
+
             }
         }
 
@@ -905,7 +895,7 @@ namespace LayoutFarm.TextEditing
 
             if (_isEditable)
             {
-                _myCaret.SetHeight(_editSession.CurrentCaretHeight);
+                _myCaret.SetHeight(_visualEditSession.CurrentCaretHeight);
             }
         }
 
@@ -914,25 +904,25 @@ namespace LayoutFarm.TextEditing
         {
             if (!_isEditable) return;
             //
-            if (_editSession.SelectionRange != null)
+            if (_visualEditSession.SelectionRange != null)
             {
-                VisualSelectionRange visualSelectionRange = _editSession.SelectionRange;
-                visualSelectionRange.SwapIfUnOrder();
+                VisualSelectionRange visualSelectionRange = _visualEditSession.SelectionRange;
+                visualSelectionRange.Normalize();
                 if (visualSelectionRange.IsValid && !visualSelectionRange.IsOnTheSameLine)
                 {
                     InvalidateGraphicOfCurrentSelectionArea();
                     //
-                    _editSession.DoTabOverSelectedRange();
+                    _visualEditSession.DoTabOverSelectedRange();
                     return; //finish here
                 }
             }
             //------------
             //do tab as usuall
-            int insertAt = _editSession.CurrentLineCharIndex;
+            int insertAt = _visualEditSession.CurrentLineNewCharIndex;
 
             for (int i = NumOfWhitespaceForSingleTab; i >= 0; --i)
             {
-                _editSession.AddCharToCurrentLine(' ');
+                _visualEditSession.AddChar(' ');
             }
 
             if (_textSurfaceEventListener != null)

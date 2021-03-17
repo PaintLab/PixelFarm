@@ -30,8 +30,7 @@ namespace LayoutFarm
                 dbugVRoot.dbug_PushInvalidateMsg(RootGraphic.dbugMsg_BLOCKED, this);
 #endif
 
-                //early exit
-                //don't use
+                //early exit 
                 BubbleInvalidater.ReleaseInvalidateGfxArgs(args);
                 return;
             }

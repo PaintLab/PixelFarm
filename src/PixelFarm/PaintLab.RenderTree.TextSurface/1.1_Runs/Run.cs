@@ -2,22 +2,20 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using PixelFarm.Drawing;
+using Typography.Text;
 
-namespace LayoutFarm.TextEditing
+namespace LayoutFarm.TextFlow
 {
 
     /// <summary>
     /// any run, text, image etc
     /// </summary>
-    public abstract class Run
+    public abstract partial class Run
     {
-        //bool _validCalSize;
-        //bool _validContentArr;
-
+        readonly RunStyle _runStyle;
         TextLineBox _ownerTextLine;
-        RunStyle _runStyle;
+
         LinkedListNode<Run> _linkNode;
 
         int _left;
@@ -25,26 +23,17 @@ namespace LayoutFarm.TextEditing
         int _width;
         int _height;
 
-
         internal Run(RunStyle runStyle)
         {
             _runStyle = runStyle;
-            _width = _height = 10;
+            _width = _height = 10;//default
         }
 
         protected RequestFont GetFont() => _runStyle.ReqFont;
 
-        protected int MeasureLineHeightInt32() => (int)Math.Round(_runStyle.MeasureBlankLineHeight());
-
-        protected float MeasureLineHeight() => _runStyle.MeasureBlankLineHeight();
-
-        protected Size MeasureString(in TextBufferSpan textBufferSpan) => _runStyle.MeasureString(textBufferSpan);
+        protected Size MeasureString(in Typography.Text.TextBufferSpan textBufferSpan) => _runStyle.MeasureString(textBufferSpan);
 
         public RunStyle RunStyle => _runStyle;
-        //
-        public virtual void SetStyle(RunStyle runStyle) => _runStyle = runStyle;
-
-        public bool HitTest(Rectangle r) => Bounds.IntersectsWith(r);
 
         public bool HitTest(UpdateArea r) => Bounds.IntersectsWith(r.CurrentRect);
 
@@ -55,7 +44,7 @@ namespace LayoutFarm.TextEditing
         public abstract void Draw(DrawBoard d, UpdateArea updateArea);
 
         public bool HasParent => _ownerTextLine != null;
-        public Size Size => new Size(_width, _height);
+
         public int Width => _width;
         public int Height => _height;
         public int Left => _left;
@@ -87,9 +76,12 @@ namespace LayoutFarm.TextEditing
 
         internal abstract bool IsInsertable { get; }
         public abstract int CharacterCount { get; }
-        public abstract char GetChar(int index);
-        public abstract string GetText();
-        public abstract void WriteTo(StringBuilder stbuilder);
+
+        public abstract int GetChar(int index);
+
+        public abstract void WriteTo(Typography.Text.TextCopyBuffer output);
+        //public abstract void WriteTo(Typography.Text.TextCopyBuffer output, int start, int len);
+        //public abstract void WriteTo(Typography.Text.TextCopyBuffer output, int start);
         //--------------------
         //model
         public abstract CharLocation GetCharacterFromPixelOffset(int pixelOffset);
@@ -99,32 +91,25 @@ namespace LayoutFarm.TextEditing
         /// <param name="charOffset"></param>
         /// <returns></returns>
         public abstract int GetRunWidth(int charOffset);
+        ///// <summary>
+        ///// get run with from charOffset to 
+        ///// </summary>
+        ///// <param name="charOffset"></param>
+        ///// <param name="count"></param>
+        ///// <returns></returns>
+        //public abstract int GetRunWidth(int startAtCharOffset, int count);
 
-        ///////////////////////////////////////////////////////////////
-        //edit funcs
-        internal abstract void InsertAfter(int index, char c);
-        internal abstract CopyRun Remove(int startIndex, int length, bool withFreeRun);
-
-        internal static CopyRun InnerRemove(Run tt, int startIndex, int length, bool withFreeRun)
-        {
-            return tt.Remove(startIndex, length, withFreeRun);
-        }
-        internal static CopyRun InnerRemove(Run tt, int startIndex, bool withFreeRun)
-        {
-            return tt.Remove(startIndex, tt.CharacterCount - (startIndex), withFreeRun);
-        }
         internal static CharLocation InnerGetCharacterFromPixelOffset(Run tt, int pixelOffset)
         {
             return tt.GetCharacterFromPixelOffset(pixelOffset);
         }
         public abstract void UpdateRunWidth();
-        ///////////////////////////////////////////////////////////////  
-        public abstract CopyRun CreateCopy();
-        public abstract CopyRun LeftCopy(int index);
-        public abstract CopyRun Copy(int startIndex, int length);
-        public abstract CopyRun Copy(int startIndex);
-        public abstract void CopyContentToStringBuilder(StringBuilder stBuilder);
-        //------------------------------
+
+        //public abstract TextSegment LeftCopy(int index);
+        //public abstract TextSegment Copy(int startIndex, int length);
+        //public abstract TextSegment Copy(int startIndex);
+
+        ////------------------------------
         //owner, neighbor
         /// <summary>
         /// next run
@@ -146,28 +131,27 @@ namespace LayoutFarm.TextEditing
             _ownerTextLine = owner;
             owner.InvalidateCharCount();
         }
-
-        public void TopDownReCalculateContentSize() => this.UpdateRunWidth();
         protected internal void InvalidateOwnerLineCharCount() => _ownerTextLine?.InvalidateCharCount();
-#if DEBUG
-        //public override string dbug_FullElementDescription()
-        //{
-        //    string user_elem_id = null;
-        //    if (user_elem_id != null)
-        //    {
-        //        return dbug_FixedElementCode + dbug_GetBoundInfo() + " "
-        //            + " i" + dbug_obj_id + "a " + ((EditableRun)this).GetText() + ",(ID " + user_elem_id + ") " + dbug_GetLayoutInfo();
-        //    }
-        //    else
-        //    {
-        //        return dbug_FixedElementCode + dbug_GetBoundInfo() + " "
-        //         + " i" + dbug_obj_id + "a " + ((EditableRun)this).GetText() + " " + dbug_GetLayoutInfo();
-        //    }
-        //}
-        //public override string ToString()
-        //{
-        //    return "[" + this.dbug_obj_id + "]" + GetText();
-        //}
-#endif
+
+    }
+
+    public static class RunExtensions
+    {
+        [ThreadStatic]
+        static Typography.Text.TextCopyBufferUtf32 s_copyBuffer;
+        public static string GetUpperString(this Run textRun)
+        {
+            //TODO: review here
+            if (s_copyBuffer != null)
+            {
+                s_copyBuffer = new TextCopyBufferUtf32();
+            }
+            else
+            {
+                s_copyBuffer.Clear();
+            }
+            textRun.WriteTo(s_copyBuffer);
+            return s_copyBuffer.ToString().ToUpper();
+        }
     }
 }

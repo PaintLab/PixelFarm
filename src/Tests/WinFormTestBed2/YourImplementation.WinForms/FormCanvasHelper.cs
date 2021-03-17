@@ -118,13 +118,13 @@ namespace LayoutFarm.UI
             InitWinform();
             IInstalledTypefaceProvider fontLoader = YourImplementation.CommonTextServiceSetup.FontLoader;
             //2. 
-             
+
 
             switch (internalViewportKind)
             {
                 default:
                     //gdi, gdi on gles
-                    
+
 
                     break;
                 case InnerViewportKind.PureAgg:
@@ -136,8 +136,30 @@ namespace LayoutFarm.UI
 
                         PixelFarm.Drawing.GLES2.GLES2Platform.TextService = openFontTextService;
 
-                        Typography.Text.GlobalTextService.TxtClient = openFontTextService.CreateNewServiceClient(); 
+                        Typography.Text.GlobalTextService.TxtClient = openFontTextService.CreateNewServiceClient();
+                        {
+                            var myAlternativeTypefaceSelector = new Typography.Text.AlternativeTypefaceSelector();
+                            {
+                                var preferTypefaces = new Typography.FontCollections.PreferredTypefaceList();
+                                preferTypefaces.AddTypefaceName("Source Sans Pro");
+                                preferTypefaces.AddTypefaceName("Sarabun");
 
+
+                                myAlternativeTypefaceSelector.SetPreferredTypefaces(
+                                     new[]{Typography.TextBreak.Unicode13RangeInfoList.C0_Controls_and_Basic_Latin,
+                                       Typography.TextBreak.Unicode13RangeInfoList.C1_Controls_and_Latin_1_Supplement,
+                                       Typography.TextBreak.Unicode13RangeInfoList.Latin_Extended_A,
+                                       Typography.TextBreak.Unicode13RangeInfoList.Latin_Extended_B,
+                                     },
+                                    preferTypefaces);
+                            }
+                            {
+                                var preferTypefaces = new Typography.FontCollections.PreferredTypefaceList();
+                                preferTypefaces.AddTypefaceName("Twitter Color Emoji");
+                                myAlternativeTypefaceSelector.SetPerferredEmoji(preferTypefaces);
+                            }
+                            Typography.Text.GlobalTextService.TxtClient.AlternativeTypefaceSelector = myAlternativeTypefaceSelector;
+                        }
                     }
                     break;
             }
@@ -163,20 +185,29 @@ namespace LayoutFarm.UI
             landingControl.Controls.Add(actualWinUI);
 
 
-            //so we create abstraction of actual UI
+            //so we create abstraction of actual UI            
             IGpuOpenGLSurfaceView viewAbstraction = actualWinUI.CreateWindowWrapper(bridge);
+            //all GL funcs are loaded.
 
             var viewRoot = view_root = new GraphicsViewRoot(
                 screenClientAreaRect.Width,
                 screenClientAreaRect.Height);
-
+#if DEBUG
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
+#endif            
             view_root.InitRootGraphics(
                 myRootGfx,
                 myRootGfx.TopWinEventPortal,
                 internalViewportKind,
                 viewAbstraction,
                 bridge);
-
+            //all shaders are compiled(or loaded from cache)
+            //see 'EnableProgramBinaryCache'
+#if DEBUG
+            sw.Stop();
+            long ms0 = sw.ElapsedMilliseconds;
+#endif
             //TODO: review here again
             myRootGfx.SetDrawboardReqDelegate(view_root.GetDrawBoard);
             //------
@@ -187,6 +218,7 @@ namespace LayoutFarm.UI
 
             //
             Form ownerForm = landingControl.FindForm();
+            
             if (ownerForm != null)
             {
                 ownerForm.FormClosing += (s, e) =>

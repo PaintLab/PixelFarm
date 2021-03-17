@@ -2,7 +2,9 @@
 
 using System;
 using LayoutFarm.UI;
-namespace LayoutFarm.TextEditing
+using Typography.Text;
+
+namespace LayoutFarm.TextFlow
 {
     public class TextDomEventArgs : EventArgs
     {
@@ -29,12 +31,12 @@ namespace LayoutFarm.TextEditing
         {
             this.UpdateJustCurrentLine = updateJustCurrentLine;
         }
-        public TextDomEventArgs(bool updateJustCurrentLine, VisualSelectionRangeSnapShot changedSnapShot)
+        public TextDomEventArgs(bool updateJustCurrentLine, SelectionRangeSnapShot changedSnapShot)
         {
             this.UpdateJustCurrentLine = updateJustCurrentLine;
             this.SelectionSnapShot = changedSnapShot;
         }
-        public VisualSelectionRangeSnapShot SelectionSnapShot { get; private set; }
+        public SelectionRangeSnapShot SelectionSnapShot { get; private set; }
         public bool Shift { get; set; }
         public bool Control { get; set; }
         public bool Alt { get; set; }
@@ -62,9 +64,9 @@ namespace LayoutFarm.TextEditing
         public event EventHandler<TextDomEventArgs> PreviewEnterKeyDown;
         public event EventHandler<TextDomEventArgs> PreviewDialogKeyDown;
         public event EventHandler<TextDomEventArgs> PreviewMouseWheel;
-
         public event EventHandler<TextDomEventArgs> PreviewBackSpaceKeyDown;
         public event EventHandler<TextDomEventArgs> PreviewRegisteredKeyPress;
+
         public event EventHandler<NewStringAddedEventArgs> CharacterAdded;
         public event EventHandler<TextDomEventArgs> CharacterRemoved;
         public event EventHandler<TextDomEventArgs> CharacterReplaced;
@@ -257,4 +259,68 @@ namespace LayoutFarm.TextEditing
             //TODO:???
         }
     }
+
+    public abstract class TextFlowEditSessionListener
+    {
+        int _currentLineNo;
+        int _currentLineCharIndex;
+
+        public TextFlowEditSessionListener()
+        {
+
+        }
+
+        public int CurrentLineNewCharIndex => _currentLineCharIndex;
+        public int CurrentLineNo => _currentLineNo;
+        public bool HasSelection { get; private set; }
+        //
+        public int SelectionStartLineNo { get; private set; }
+        public int SelectionStartLineCharIndex { get; private set; }
+        public int SelectionEndLineNo { get; private set; }
+        public int SelectionEndLineCharIndexNo { get; private set; }
+        //
+
+        public virtual void AddChar(int c)
+        {
+
+        }
+        public virtual void AddText(TextCopyBuffer buffer)
+        {
+
+        }
+        public virtual void SetCurrentPos(int lineNumber, int charIndex)
+        {
+            _currentLineNo = lineNumber;
+            _currentLineCharIndex = charIndex;
+        }
+        public virtual void SetSelection(int startLineNo, int startLineCharIndex, int endLineNo, int endLineCharIndex)
+        {
+            //we need to ensure that the selection is normalized**
+            SelectionStartLineNo = startLineNo;
+            SelectionStartLineCharIndex = startLineCharIndex;
+            SelectionEndLineNo = endLineNo;
+            SelectionEndLineCharIndexNo = endLineCharIndex;
+            HasSelection = true;
+        }
+        public virtual void CancelSelection()
+        {
+            //cancel prev selection
+            HasSelection = false;
+        }
+        public virtual void SplitIntoNewLine()
+        {
+
+        }
+
+        public virtual void DoDelete()
+        {
+
+        }
+        public virtual void DoBackspace()
+        {
+
+        }
+    }
+
+
 }

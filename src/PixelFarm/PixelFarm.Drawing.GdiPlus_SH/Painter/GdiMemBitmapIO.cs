@@ -1,14 +1,15 @@
 ﻿//Apache2, 2014-present, WinterDev
 
 using System;
-using PixelFarm.CpuBlit;
 using System.IO;
+
+using PixelFarm.CpuBlit;
 using MemMx = PixelFarm.Drawing.Internal.MemMx;
 namespace PixelFarm.Drawing.WinGdi
 {
 
     public sealed class GdiBitmapIO : MemBitmapIO
-    { 
+    {
 
         public override MemBitmap ScaleImage(MemBitmap bmp, float x_scale, float y_scale)
         {
@@ -116,34 +117,12 @@ namespace PixelFarm.Drawing.WinGdi
         public override void SaveImage(MemBitmap bitmap, string filename, OutputImageFormat outputFormat, object saveParameters)
         {
             //TODO: resolve filename here!!!
-
-            using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(bitmap.Width, bitmap.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+            using (FileStream output = new FileStream(filename, FileMode.Create))
             {
-                var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height),
-                    System.Drawing.Imaging.ImageLockMode.WriteOnly,
-                    System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                unsafe
-                {
-                    byte* ptr = (byte*)MemBitmap.GetBufferPtr(bitmap).Ptr;
-                    MemMx.memcpy((byte*)bmpdata.Scan0, ptr, bmpdata.Stride * bmp.Height);
-                }
-                bmp.UnlockBits(bmpdata);
-
-                //save to stream
-                System.Drawing.Imaging.ImageFormat format = null;
-                switch (outputFormat)
-                {
-                    case OutputImageFormat.Default:
-                        throw new NotSupportedException();
-                    case OutputImageFormat.Jpeg:
-                        format = System.Drawing.Imaging.ImageFormat.Jpeg;
-                        break;
-                    case OutputImageFormat.Png:
-                        format = System.Drawing.Imaging.ImageFormat.Png;
-                        break;
-                }
-                bmp.Save(filename, format);
+                SaveImage(bitmap, output, outputFormat, saveParameters);
+                output.Flush();
             }
+           
         }
     }
 }

@@ -2,7 +2,7 @@
 
 using System;
 using PixelFarm.Drawing;
-namespace LayoutFarm.TextEditing
+namespace LayoutFarm.TextFlow
 {
     public class RunVisitor
     {

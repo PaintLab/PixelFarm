@@ -58,10 +58,10 @@ namespace burningmime.curves
             this.p0 = p0;
             this.p1 = p1;
             this.p2 = p2;
-            this.p3 = p3; 
+            this.p3 = p3;
         }
 
-        public bool HasSomeNanComponent 
+        public bool HasSomeNanComponent
         {
             get
             {
@@ -173,7 +173,7 @@ namespace burningmime.curves
         /// http://en.wikipedia.org/wiki/Jenkins_hash_function
         /// I forget where I got these magic numbers from; supposedly they're good.
         /// </summary>
-        private struct JenkinsHash
+        ref struct JenkinsHash
         {
             private int _current;
 #if !UNITY && !PIXEL_FARM

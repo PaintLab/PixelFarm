@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
+using LayoutFarm.TextFlow;
 namespace LayoutFarm
 {
     [DemoNote("2.3 SingleLineText_WithSuggestion")]
@@ -17,7 +18,7 @@ namespace LayoutFarm
         {
             _textbox = new LayoutFarm.CustomWidgets.TextBox(400, 30, false);
             _textbox.SetLocation(20, 20);
-            var style2 = new TextEditing.TextSpanStyle();
+            var style2 = new TextSpanStyle();
             style2.ReqFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
             style2.FontColor = new PixelFarm.Drawing.Color(0, 0, 0);
             _textbox.DefaultSpanStyle = style2;
@@ -29,11 +30,11 @@ namespace LayoutFarm
             _listbox.Visible = false;
             //------------------------------------
             //create special text surface listener
-            var textSurfaceListener = new LayoutFarm.TextEditing.TextSurfaceEventListener();
+            var textSurfaceListener = new TextSurfaceEventListener();
             textSurfaceListener.CharacterAdded += (s, e) => UpdateSuggestionList();
             textSurfaceListener.CharacterRemoved += (s, e) => UpdateSuggestionList();
-            textSurfaceListener.PreviewArrowKeyDown += new EventHandler<TextEditing.TextDomEventArgs>(textSurfaceListener_PreviewArrowKeyDown);
-            textSurfaceListener.PreviewEnterKeyDown += new EventHandler<TextEditing.TextDomEventArgs>(textSurfaceListener_PreviewEnterKeyDown);
+            textSurfaceListener.PreviewArrowKeyDown += textSurfaceListener_PreviewArrowKeyDown;
+            textSurfaceListener.PreviewEnterKeyDown += textSurfaceListener_PreviewEnterKeyDown;
             _textbox.TextEventListener = textSurfaceListener;
             //------------------------------------ 
             host.AddChild(_textbox);
@@ -43,7 +44,7 @@ namespace LayoutFarm
         }
 
 
-        void textSurfaceListener_PreviewArrowKeyDown(object sender, TextEditing.TextDomEventArgs e)
+        void textSurfaceListener_PreviewArrowKeyDown(object sender, TextDomEventArgs e)
         {
             //update selection in list box
             switch (e.Key)
@@ -66,7 +67,7 @@ namespace LayoutFarm
                     break;
             }
         }
-        void textSurfaceListener_PreviewEnterKeyDown(object sender, TextEditing.TextDomEventArgs e)
+        void textSurfaceListener_PreviewEnterKeyDown(object sender, TextDomEventArgs e)
         {
             //accept selected text
 
@@ -91,6 +92,8 @@ namespace LayoutFarm
             return new string(buffer, bound.startIndex, bound.length);
         }
 
+
+
         string _currentLocalText = null;
         void UpdateSuggestionList()
         {
@@ -105,7 +108,11 @@ namespace LayoutFarm
             //-------------------------------------------------------------------------
             //simple parse ...
             //In this example  all country name start with Captial letter so ...
-            string currentTextSpanText = _textbox.CurrentTextSpan.GetText().ToUpper();
+
+
+
+            string currentTextSpanText = _textbox.CurrentTextSpan.GetUpperString();
+
             //analyze content
             char[] textBuffer = currentTextSpanText.ToCharArray();
             var results = new List<LayoutFarm.Composers.TextSplitBounds>();

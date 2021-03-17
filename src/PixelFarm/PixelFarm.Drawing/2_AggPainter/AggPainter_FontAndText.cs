@@ -15,6 +15,7 @@ namespace PixelFarm.CpuBlit
         /// <param name="top"></param>
         void DrawString(AggRenderVxFormattedString renderVx, double left, double top);
         void PrepareStringForRenderVx(AggRenderVxFormattedString renderVx, char[] text, int startAt, int len);
+        void PrepareStringForRenderVx(AggRenderVxFormattedString renderVx, IFormattedGlyphPlanList fmtGlyphPlans);
         int CurrentLineSpaceHeight { get; }
         void ChangeFont(RequestFont font);
         void ChangeFillColor(Color fillColor);
@@ -81,24 +82,58 @@ namespace PixelFarm.CpuBlit
                     char[] buffer = text.ToCharArray();
                     _textPrinter.DrawString(buffer, 0, buffer.Length, x, this.Height - y);
                 }
-
             }
         }
         public override void DrawString(RenderVxFormattedString renderVx, double left, double top)
         {
             //draw string from render vx 
+            AggRenderVxFormattedString aggVxString = (AggRenderVxFormattedString)renderVx;
+            if (aggVxString.IsDelay)
+            {
+                //check state is string is ready or not
+                if (aggVxString.State == RenderVxFormattedString.VxState.NoStrip)
+                {
+                    //parse the string content
 
-            _textPrinter?.DrawString((AggRenderVxFormattedString)renderVx, left, top);
+                }
+            }
+            _textPrinter?.DrawString(aggVxString, left, top);
+        }
+
+        public RenderVxFormattedString CreateRenderVx(string text, bool delay)
+        {
+            if (delay)
+            {
+                var renderVxFmtStr = new AggRenderVxFormattedString();
+                if (_textPrinter != null)
+                {
+                    renderVxFmtStr.IsDelay = true;
+                    renderVxFmtStr.DelayString = text;
+                }
+                return renderVxFmtStr;
+            }
+            else
+            {
+                return CreateRenderVx(text);
+            }
         }
         public override RenderVxFormattedString CreateRenderVx(string textspan)
         {
-
             var renderVxFmtStr = new AggRenderVxFormattedString();
             if (_textPrinter != null)
             {
                 char[] buffer = textspan.ToCharArray();
+                //prepare string from current printer setting
                 _textPrinter.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
-
+            }
+            return renderVxFmtStr;
+        }
+        public override RenderVxFormattedString CreateRenderVx(IFormattedGlyphPlanList formattedGlyphPlans)
+        {
+            var renderVxFmtStr = new AggRenderVxFormattedString();
+            if (_textPrinter != null)
+            {
+                _textPrinter.PrepareStringForRenderVx(renderVxFmtStr, formattedGlyphPlans);
             }
             return renderVxFmtStr;
         }

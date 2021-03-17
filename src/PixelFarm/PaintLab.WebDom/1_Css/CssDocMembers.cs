@@ -105,15 +105,13 @@ namespace LayoutFarm.WebDom
             }
             else
             {
-                CssCompundElementSelector combinatorExpr = _elementSelector as CssCompundElementSelector;
-                if (combinatorExpr != null)
+                if (_elementSelector is CssCompundElementSelector combinatorExpr)
                 {
                     combinatorExpr.RightSelector = primExpr;
                 }
                 else
                 {
-                    CssSimpleElementSelector currentPrimExpr = _elementSelector as CssSimpleElementSelector;
-                    if (currentPrimExpr != null)
+                    if (_elementSelector is CssSimpleElementSelector currentPrimExpr)
                     {
                         combinatorExpr = new CssCompundElementSelector(CssCombinatorOperator.Descendant);
                         combinatorExpr.LeftSelector = _elementSelector;

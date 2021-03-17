@@ -2,10 +2,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
-namespace LayoutFarm.TextEditing
+using Typography.Text;
+using LayoutFarm.TextFlow;
+namespace LayoutFarm.TextFlow
 {
     class TextMarkerLayer
     {
@@ -35,30 +36,36 @@ namespace LayoutFarm.TextEditing
         VaryLineHeight
     }
 
+    /// <summary>
+    /// visual multi-line text layer (presentation)
+    /// </summary>
     sealed class TextFlowLayer
     {
-        //TextFlowLayer: contains and manages collection of TextLineBox
-        //public event EventHandler Reflow; //TODO: review this field
-
         public event EventHandler ContentSizeChanged;//TODO: review this field 
 
-        //TODO: use linked-list or tree for lines??
-        List<TextLineBox> _lines = new List<TextLineBox>();
-        ITextFlowLayerOwner _owner;
+        //TODO: use tree for lines
+        readonly List<TextLineBox> _lines = new List<TextLineBox>();
+        readonly ITextFlowLayerOwner _owner;
+        internal PlainTextDocument _plainText;
+
+        int _posCalContentW;
+        int _posCalContentH;
 
         public TextFlowLayer(ITextFlowLayerOwner owner, RunStyle defaultSpanStyle)
         {
             _owner = owner;
+            _plainText = new PlainTextDocument("");
 
             //start with single line per layer
             //and can be changed to multiline
             DefaultRunStyle = defaultSpanStyle;
-
-            //add default lines
-            _lines.Add(new TextLineBox(this));
-
             VisualLineOverlapped = true;
+            //add default lines  
         }
+
+
+        public ForwardOnlyCharSource CharSource => _plainText.CharSource;
+
         public LineHeightHint LineHeightHint { get; set; } //help on hit test, find line from y pos
 
         /// <summary>
@@ -66,6 +73,7 @@ namespace LayoutFarm.TextEditing
         /// </summary>
         public bool VisualLineOverlapped { get; set; }
         public int OwnerWidth => _owner.Width;
+        public int OwnerHeight => _owner.Height;
 
         public RunStyle DefaultRunStyle { get; private set; }
 
@@ -78,6 +86,18 @@ namespace LayoutFarm.TextEditing
             _owner.ClientLayerBubbleUpInvalidateArea(clientInvalidatedArea);
         }
 
+        public void AppendNewLine(TextLineBox linebox)
+        {
+            int ypos = 0;
+            if (_lines.Count > 0)
+            {
+                ypos = _lines[_lines.Count - 1].LineBottom;
+            }
+
+            linebox.SetLineNumber(_lines.Count);
+            linebox.SetTop(ypos);
+            _lines.Add(linebox);
+        }
         public int DefaultLineHeight => DefaultRunStyle.ResolvedFont.LineSpacingInPixels;
 
         internal void NotifyContentSizeChanged() => ContentSizeChanged?.Invoke(this, EventArgs.Empty);
@@ -251,7 +271,6 @@ namespace LayoutFarm.TextEditing
                 {
                     if (linetop > renderAreaBottom)
                     {
-
                         if (VisualLineOverlapped)
                         {
                             //more check
@@ -277,11 +296,39 @@ namespace LayoutFarm.TextEditing
                 switch (selRange.GetLineClip(i, out int clipLeft, out int clipWidth))
                 {
                     default: throw new NotSupportedException();
-                    case VisualSelectionRange.ClipRectKind.No: break;
+                    case VisualSelectionRange.ClipRectKind.No:
+                        {
+                            ////[A]: normal line
+                            d.SetCanvasOrigin(enter_canvasX, enter_canvasY + linetop);//restore 
+                            d.SetClipRect(new Rectangle(0, 0, OwnerWidth, line.ActualLineHeight));//set clip relative to latest canvas origin
+                            d.TextBackgroundColorHint = prev_colorHint;//normal bg
+
+                            LinkedListNode<Run> curLineNode = line.First;
+                            while (curLineNode != null)
+                            {
+                                Run run = curLineNode.Value;
+                                if (run.HitTest(updateArea))
+                                {
+                                    int x = run.Left;
+
+                                    d.SetCanvasOrigin(enter_canvasX + x, enter_canvasY + linetop);
+                                    updateArea.OffsetX(-x);
+
+                                    run.Draw(d, updateArea);
+                                    //-----------
+                                    updateArea.OffsetX(x);
+                                }
+                                curLineNode = curLineNode.Next;
+                            }
+                            d.SetCanvasOrigin(enter_canvasX, enter_canvasY + linetop);//restore 
+                        }
+                        break;
                     case VisualSelectionRange.ClipRectKind.SameLine:
                     case VisualSelectionRange.ClipRectKind.StartLine:
                         {
-
+                            d.SetCanvasOrigin(enter_canvasX, enter_canvasY + linetop);//restore 
+                            d.SetClipRect(new Rectangle(0, 0, OwnerWidth, line.ActualLineHeight));//set clip relative to latest canvas origin
+                            d.TextBackgroundColorHint = prev_colorHint;//normal bg
                             //[A]: normal line
                             LinkedListNode<Run> curLineNode = line.First;
                             while (curLineNode != null)
@@ -532,8 +579,7 @@ namespace LayoutFarm.TextEditing
             return false;
         }
 
-        int _posCalContentW;
-        int _posCalContentH;
+
         public void TopDownReCalculateContentSize()
         {
 #if DEBUG
@@ -562,10 +608,20 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        internal TextLineBox GetTextLine(int lineId) => (lineId < _lines.Count) ? _lines[lineId] : null;
+        internal TextLineBox GetTextLine(int lineId)
+        {
+            if (lineId < 0)
+            {
+                //WHY?
+                throw new NotSupportedException();
+            }
+
+            return (lineId < _lines.Count) ? _lines[lineId] : null;
+        }
 
         internal TextLineBox GetTextLineAtPos(int y)
         {
+            //TODO: review this again
             List<TextLineBox> lines = _lines;
             if (lines != null)
             {
@@ -593,8 +649,8 @@ namespace LayoutFarm.TextEditing
                 }
                 else
                 {
-                    //vary, 
-                    //TODO: use HeightTree?
+                    //TODO: if lines is not overlapped
+                    //we can use binary search 
 
                     int j = lines.Count;
                     for (int i = 0; i < j; ++i)
@@ -669,19 +725,10 @@ namespace LayoutFarm.TextEditing
             }
         }
 
-        public void CopyContentToStringBuilder(StringBuilder stBuilder)
+        public void CopyContent(TextCopyBufferUtf32 output)
         {
-            List<TextLineBox> lines = _lines;
-            int j = lines.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                if (i > 0)
-                {
-                    //TODO: review => preserve line ending char or not 
-                    stBuilder.AppendLine();
-                }
-                lines[i].CopyLineContent(stBuilder);
-            }
+            //throw new 
+            throw new NotSupportedException();
         }
 
         internal IEnumerable<Run> TextRunForward(Run startRun, Run stopRun)
@@ -730,8 +777,11 @@ namespace LayoutFarm.TextEditing
                 }
             }
         }
+
         public void Clear()
         {
+
+            //clear all -visual presentation
             List<TextLineBox> lines = _lines;
             for (int i = lines.Count - 1; i > -1; --i)
             {
@@ -741,8 +791,8 @@ namespace LayoutFarm.TextEditing
             }
             lines.Clear();
 
-            //auto add first line
-            _lines.Add(new TextLineBox(this));
+            lines.Add(new TextLineBox(this));
+
         }
 
         internal void Remove(int lineId)
@@ -753,15 +803,51 @@ namespace LayoutFarm.TextEditing
                 throw new NotSupportedException();
             }
 #endif
-            //if ((_layerFlags & FLOWLAYER_HAS_MULTILINE) == 0)
-            //{
-            //    return;
-            //}
+
             List<TextLineBox> lines = _lines;
             if (lines.Count < 2)
             {
-                return;
+                return;//only 1 line
             }
+
+            TextLineBox removedLine = lines[lineId];
+            int cy = removedLine.Top;
+            //
+            lines.RemoveAt(lineId);
+            removedLine.RemoveOwnerFlowLayer();
+
+            //arrange 
+            int j = lines.Count;
+            for (int i = lineId; i < j; ++i)
+            {
+                TextLineBox line = lines[i];
+                line.SetTop(cy);
+                line.SetLineNumber(i);
+                cy += line.ActualLineHeight;
+            }
+        }
+        internal void Remove(int lineId, int count)
+        {
+#if DEBUG
+            if (lineId < 0)
+            {
+                throw new NotSupportedException();
+            }
+#endif
+            if (count < 1) { return; }
+
+            List<TextLineBox> lines = _lines;
+            if (lines.Count < 2)
+            {
+                return;//only 1 line
+            }
+
+            for (int i = lineId + count; i >= lineId; --i)
+            {
+                TextLineBox selectedLine = lines[lineId];
+                lines.RemoveAt(i);
+            }
+
 
             TextLineBox removedLine = lines[lineId];
             int cy = removedLine.Top;

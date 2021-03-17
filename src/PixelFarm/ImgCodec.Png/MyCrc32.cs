@@ -31,7 +31,7 @@
 // ------------------------------------------------------------------
 namespace ImageTools
 {
-    struct CRC32Calculator
+    ref struct CRC32Calculator
     {
         long _totalBytesRead;
         uint _runningCrc32Result;

@@ -2,11 +2,12 @@
 
 using System;
 using PixelFarm.Drawing;
-namespace LayoutFarm.TextEditing
+namespace LayoutFarm.TextFlow
 {
     public interface ITextFlowLayerOwner
     {
         int Width { get; }
+        int Height { get; }
         void ClientLayerBubbleUpInvalidateArea(Rectangle clientInvalidatedArea);
     }
 

@@ -1,12 +1,8 @@
 ﻿//Apache2, 2014-present, WinterDev
-
-
 using PixelFarm.Drawing;
-using Typography.TextBreak;
-using Typography.TextLayout;
 using Typography.Text;
 
-namespace LayoutFarm.TextEditing
+namespace LayoutFarm.TextFlow
 {
     public class RunStyle
     {
@@ -53,7 +49,7 @@ namespace LayoutFarm.TextEditing
             }
         }
         //
-        internal Size MeasureString(in PixelFarm.Drawing.TextBufferSpan textBufferSpan)
+        internal Size MeasureString(in Typography.Text.TextBufferSpan textBufferSpan)
         {
             return GlobalTextService.TxtClient.MeasureString(textBufferSpan, ReqFont);
         }
@@ -62,33 +58,6 @@ namespace LayoutFarm.TextEditing
         {
             return GlobalTextService.TxtClient.MeasureBlankLineHeight(ReqFont);
         }
-
-       
-
-        public void BreakToLineSegments(in Typography.Text.TextBufferSpan textBufferSpan, WordVisitor wordVisitor) 
-            => GlobalTextService.TxtClient.BreakToLineSegments(textBufferSpan, wordVisitor);
-
-        public void CalculateUserCharGlyphAdvancePos(
-            in Typography.Text.TextBufferSpan textBufferSpan,
-            ref TextSpanMeasureResult measureResult)
-        {
-            GlobalTextService.TxtClient.CalculateUserCharGlyphAdvancePos(
-                    textBufferSpan,
-                    ReqFont,
-                    ref measureResult);
-        }
-
-        internal void CalculateUserCharGlyphAdvancePos(in Typography.Text.TextBufferSpan textBufferSpan,
-            ILineSegmentList lineSegs,
-            ref TextSpanMeasureResult measureResult)
-        {
-            GlobalTextService.TxtClient.CalculateUserCharGlyphAdvancePos(
-                textBufferSpan,
-                lineSegs,
-                ReqFont,
-                ref measureResult);
-        }
-
     }
 
 }

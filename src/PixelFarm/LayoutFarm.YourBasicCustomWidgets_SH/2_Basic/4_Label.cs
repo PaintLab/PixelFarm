@@ -7,7 +7,7 @@ namespace LayoutFarm.CustomWidgets
 
     public class Label : AbstractRectUI
     {
-        string _text;
+        string _text; //temp text during no text-run
         Color _textColor; //text color
         Color _backColor;//actual filling color
 
@@ -42,22 +42,27 @@ namespace LayoutFarm.CustomWidgets
             {
                 var t_run = new CustomTextRun(this.Width, this.Height);
                 t_run.TextDrawingTech = _textDrawingTech;
-
                 t_run.TextColor = _textColor;
                 t_run.BackColor = _backColor;
-                t_run.Text = this.Text;
                 t_run.PaddingLeft = this.PaddingLeft;
                 t_run.PaddingTop = this.PaddingTop;
+                t_run.MayOverlapOther = this.MayOverlapOther;
                 t_run.SetVisible(this.Visible);
-                t_run.SetLocation(this.Left, this.Top);
-                t_run.SetController(this);
-                t_run.TransparentForMouseEvents = this.TransparentForMouseEvents;
+                t_run.DelayFormattedString = _delayTextEvalution;
 
-                //
                 if (_font != null)
                 {
                     t_run.RequestFont = _font;
                 }
+                t_run.Text = this.Text;
+
+                t_run.SetLocation(this.Left, this.Top);
+                t_run.SetController(this);
+                t_run.TransparentForMouseEvents = this.TransparentForMouseEvents;
+                //
+
+
+                //IMPORTANT, place here in last-step
                 _myTextRun = t_run;
             }
             //-----------
@@ -102,21 +107,23 @@ namespace LayoutFarm.CustomWidgets
             if (_myTextRun != null)
             {
                 _myTextRun.RequestFont = font;
-            } 
-            
+            }
         }
         //
         public override RenderElement CurrentPrimaryRenderElement => _myTextRun;
         //
         public string Text
         {
-            get => _text;
+            get => (_myTextRun != null) ? _myTextRun.Text : _text;
             set
             {
-                _text = value;
                 if (_myTextRun != null)
                 {
                     _myTextRun.Text = value;
+                }
+                else
+                {
+                    _text = value;
                 }
             }
         }
@@ -133,6 +140,33 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
+        bool _delayTextEvalution;
+        public bool DelayTextEvalution
+        {
+            get => _delayTextEvalution;
+            set
+            {
+                _delayTextEvalution = value;
+                if (_myTextRun != null)
+                {
+                    _myTextRun.DelayFormattedString = value;
+                }
+            }
+        }
+
+        bool _mayOverlapOther;
+        public bool MayOverlapOther
+        {
+            get => _mayOverlapOther;
+            set
+            {
+                _mayOverlapOther = value;
+                if (_myTextRun != null)
+                {
+                    _myTextRun.MayOverlapOther = value;
+                }
+            }
+        }
 
 
         /// <summary>

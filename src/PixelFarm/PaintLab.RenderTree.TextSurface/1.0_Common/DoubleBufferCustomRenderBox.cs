@@ -3,7 +3,7 @@
  
 using PixelFarm.Drawing;
 
-namespace LayoutFarm.TextEditing
+namespace LayoutFarm.TextFlow
 {
     public class DoubleBufferCustomRenderBox : AbstractRectRenderElement
     {
@@ -149,7 +149,8 @@ namespace LayoutFarm.TextEditing
                     System.Diagnostics.Debug.WriteLine("double_buffer_update:" + dbug_obj_id + " use cache");
                 }
 #endif
-                painter.DrawImage(_builtInBackBuffer.GetImage(), 0, 0, this.Width, this.Height);
+                //painter.DrawImage(_builtInBackBuffer.GetImage(), 0, 0, this.Width, this.Height);
+                painter.DrawImage(_builtInBackBuffer.GetImage(), 0, 0);
             }
             else
             {

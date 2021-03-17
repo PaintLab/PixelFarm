@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>a32cfa00-8751-427a-a655-952c00fc991a</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>LayoutFarm.TextFlow_SH</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)DocumentActions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ForwardOnlyCharSource.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ObjectPools.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlainTextDocument.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SeletionRangeSnapshot.cs" />
+  </ItemGroup>
+</Project>

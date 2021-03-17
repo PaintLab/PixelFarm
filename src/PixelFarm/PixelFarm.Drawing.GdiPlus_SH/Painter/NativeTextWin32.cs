@@ -179,9 +179,10 @@ namespace PixelFarm.Drawing.WinGdi
 
 
                 byte[] encoding = s_en.GetBytes(
-                    textBufferSpan.GetRawCharBuffer(),
+                    textBufferSpan.GetRawUtf16Buffer(),
                     textBufferSpan.start,
                     len);
+
                 NativeTextWin32.FontABC[] abcWidths = winfont.GetInteralABCArray();
                 int totalW = 0;
                 for (int i = 0; i < len; ++i)
@@ -368,11 +369,13 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public PixelFarm.Drawing.Size MeasureString(in TextBufferSpan textBufferSpan, RequestFont font)
         {
-            return WinGdiTextService.MeasureString(textBufferSpan.GetRawCharBuffer(), textBufferSpan.start, textBufferSpan.len, font);
+            //TODO: review here*** 
+            return WinGdiTextService.MeasureString(textBufferSpan.GetRawUtf16Buffer(), textBufferSpan.start, textBufferSpan.len, font);
         }
         public void MeasureString(in TextBufferSpan textBufferSpan, RequestFont font, int maxWidth, out int charFit, out int charFitWidth)
         {
-            WinGdiTextService.MeasureString(textBufferSpan.GetRawCharBuffer(), textBufferSpan.start, textBufferSpan.len, font, maxWidth, out charFit, out charFitWidth);
+            //TODO: review here***
+            WinGdiTextService.MeasureString(textBufferSpan.GetRawUtf16Buffer(), textBufferSpan.start, textBufferSpan.len, font, maxWidth, out charFit, out charFitWidth);
         }
 
         public void CalculateUserCharGlyphAdvancePos(in TextBufferSpan textBufferSpan,
@@ -384,11 +387,7 @@ namespace PixelFarm.Drawing.WinGdi
 
         public float MeasureBlankLineHeight(RequestFont f) => WinGdiTextService.MeasureBlankLineHeight(f);
 
-        public ILineSegmentList BreakToLineSegments(in TextBufferSpan textBufferSpan)
-        {
-            return null;
-            throw new NotImplementedException();
-        }
+
         public void CalculateUserCharGlyphAdvancePos(in TextBufferSpan textBufferSpan,
             ILineSegmentList lineSegs,
             RequestFont font,
