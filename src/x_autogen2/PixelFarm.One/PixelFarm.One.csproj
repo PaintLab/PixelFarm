@@ -9,6 +9,7 @@
     <FileAlignment>512</FileAlignment>
     <AssemblyName>PixelFarm.One</AssemblyName>
     <LangVersion>8.0</LangVersion>
+    <ProjectGuid>{48687C19-8F1A-46A5-8A3A-31C3ABD78B5D}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
