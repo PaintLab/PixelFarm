@@ -494,9 +494,9 @@ namespace PixelFarm.DrawingGL
                     break;
                 case PixelFarm.Drawing.TextBaseline.Top:
 
-                    //base_offset = vxFmtStr.DescendingInPx;                    
+                    base_offset = vxFmtStr.DescendingInPx;                    
                     //base_offset += 10; 
-                    base_offset -= vxFmtStr.DescendingInPx;
+                    //base_offset -= vxFmtStr.DescendingInPx;
                     break;
                 case PixelFarm.Drawing.TextBaseline.Bottom:
                     base_offset = -vxFmtStr.SpanHeight;
