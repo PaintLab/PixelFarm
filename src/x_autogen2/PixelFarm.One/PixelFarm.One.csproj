@@ -7,9 +7,8 @@
     <OutputType>Library</OutputType>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AssemblyName>PixelFarm.One.HtmlRenderer</AssemblyName>
+    <AssemblyName>PixelFarm.One</AssemblyName>
     <LangVersion>8.0</LangVersion>
-    <ProjectGuid>{662F2274-D6F8-413A-A908-1B2F10C01348}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -41,12 +40,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\..\Typography\Typography.TextServices\Text\TextBuilder.cs">
-      <Link>Typography\Typography.TextServices\Text\TextBuilder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\Typography\Typography.TextServices\Text\TextCopyBuffers.cs">
-      <Link>Typography\Typography.TextServices\Text\TextCopyBuffers.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\BackEnd.BurningMineCurve_SH\CubicBezier.cs">
       <Link>PixelFarm\BackEnd.BurningMineCurve_SH\CubicBezier.cs</Link>
     </Compile>
@@ -455,6 +448,12 @@
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\4.1_Composites\TreeView.cs">
       <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\4.1_Composites\TreeView.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\6_InternalResourceMx\x_TestAtlas1_Atlas_AUTOGEN.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\6_InternalResourceMx\x_TestAtlas1_Atlas_AUTOGEN.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\6_InternalResourceMx\x_TestAtlas1_Atlas_AUTOGEN_BINDERS.cs">
+      <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\6_InternalResourceMx\x_TestAtlas1_Atlas_AUTOGEN_BINDERS.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\7_WindowUI\UIFloatWindow.cs">
       <Link>PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\7_WindowUI\UIFloatWindow.cs</Link>
     </Compile>
@@ -679,12 +678,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.Color\Colorful_SH\Other\SaturationLChFormulas.cs">
       <Link>PixelFarm\PaintLab.Color\Colorful_SH\Other\SaturationLChFormulas.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\VisualTextFlowEditSession_part1.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\VisualTextFlowEditSession_part1.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\VisualTextFlowEditSession_part2.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\VisualTextFlowEditSession_part2.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.BasicVisualElements_SH\AffineMat.cs">
       <Link>PixelFarm\PixelFarm.BasicVisualElements_SH\AffineMat.cs</Link>
@@ -2069,9 +2062,6 @@
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.0_Common\DoubleBufferCustomRenderBox.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.0_Common\DoubleBufferCustomRenderBox.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.0_Common\PlainTextDocumentHelper.cs">
-      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.0_Common\PlainTextDocumentHelper.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\1.1_Runs\CharLocation.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\1.1_Runs\CharLocation.cs</Link>
     </Compile>
@@ -2131,6 +2121,12 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextSurfaceEventListener.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\TextSurfaceEventListener.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\VisualTextFlowEditSession_part1.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\VisualTextFlowEditSession_part1.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\VisualTextFlowEditSession_part2.cs">
+      <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.1_MultiLineController\VisualTextFlowEditSession_part2.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\EditorCaret.cs">
       <Link>PixelFarm\PaintLab.RenderTree.TextSurface\2.2_TextRenderBox\EditorCaret.cs</Link>
@@ -2605,6 +2601,9 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.Drawing\7_BitmapAtlas\SimpleBitmapAtlasBuilder.cs">
       <Link>PixelFarm\PixelFarm.Drawing\7_BitmapAtlas\SimpleBitmapAtlasBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography.One\NumericForNet20.cs">
+      <Link>PixelFarm\Typography.One\NumericForNet20.cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\Typography\PixelFarm.Typography\1_General\AlternativeTypefaceSelector.cs">
       <Link>Typography\PixelFarm.Typography\1_General\AlternativeTypefaceSelector.cs</Link>
@@ -3119,22 +3118,15 @@
     <Compile Include="..\..\..\..\Typography\Typography.TextServices\Text\TextBufferSpan.cs">
       <Link>Typography\Typography.TextServices\Text\TextBufferSpan.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextServices\Text\TextBuilder.cs">
+      <Link>Typography\Typography.TextServices\Text\TextBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\Typography\Typography.TextServices\Text\TextCopyBuffers.cs">
+      <Link>Typography\Typography.TextServices\Text\TextCopyBuffers.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\..\Typography\Typography.TextServices\Text\VirtualTextSpanPrinter.cs">
       <Link>Typography\Typography.TextServices\Text\VirtualTextSpanPrinter.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\Typography.One\NumericForNet20.cs">
-      <Link>Typography\Build\N20\NumericForNet20.cs</Link>
-    </Compile>
-    <Compile Include="..\..\x_resource_projects\TestAtlas1\x_TestAtlas1_Atlas_AUTOGEN.cs">
-      <Link>x_TestAtlas1_Atlas_AUTOGEN.cs</Link>
-    </Compile>
-    <Compile Include="..\..\x_resource_projects\TestAtlas1\x_TestAtlas1_Atlas_AUTOGEN_BINDERS.cs">
-      <Link>x_TestAtlas1_Atlas_AUTOGEN_BINDERS.cs</Link>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="PixelFarm\LayoutFarm.YourBasicCustomWidgets_SH\6_InternalResourceMx\" />
-    <Folder Include="Typography\Build\N20\Typography.OpenFont\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
