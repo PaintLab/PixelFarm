@@ -123,6 +123,10 @@
       <Project>{e5f2b317-2205-4727-92c4-6190a2fa3ddc}</Project>
       <Name>PaintLab.Platforms.Win32</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\x_autogen2\PixelFarm.One\PixelFarm.One.csproj">
+      <Project>{48687c19-8f1a-46a5-8a3a-31c3abd78b5d}</Project>
+      <Name>PixelFarm.One</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

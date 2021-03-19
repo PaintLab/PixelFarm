@@ -11,7 +11,7 @@
     <AssemblyName>Test_RenderTree_Focus</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-	  <LangVersion>8.0</LangVersion>
+    <LangVersion>8.0</LangVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -86,9 +86,9 @@
       <Project>{12bd3faf-a10b-4e38-9337-f5b28c6543b4}</Project>
       <Name>PaintLab.Svg.One</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\x_autogen2\PixelFarm.One.HtmlRenderer\PixelFarm.One.HtmlRenderer.csproj">
-      <Project>{662f2274-d6f8-413a-a908-1b2f10c01348}</Project>
-      <Name>PixelFarm.One.HtmlRenderer</Name>
+    <ProjectReference Include="..\..\x_autogen2\PixelFarm.One\PixelFarm.One.csproj">
+      <Project>{48687c19-8f1a-46a5-8a3a-31c3abd78b5d}</Project>
+      <Name>PixelFarm.One</Name>
     </ProjectReference>
     <ProjectReference Include="..\TestSamples_RenderTreeFocus\TestSamples_RenderTreeFocus.csproj">
       <Project>{e906647b-3216-4cc1-b849-dd249f6737f4}</Project>
