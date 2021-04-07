@@ -13,6 +13,8 @@ namespace OpenTkEssTest
         //HarfBuzzShapingService hbShapingService;
         PixelFarm.Drawing.RequestFont _font1;
         PixelFarm.Drawing.RequestFont _font2;
+        float _font1_h;
+        float _font2_h;
         protected override void OnReadyForInitGLShaderProgram()
         {
 
@@ -21,6 +23,9 @@ namespace OpenTkEssTest
         {
             _font1 = new PixelFarm.Drawing.RequestFont("tahoma", 15);
             _font2 = new PixelFarm.Drawing.RequestFont("tahoma", 11);
+
+            _font1_h = Typography.Text.GlobalTextService.TxtClient.MeasureBlankLineHeight(_font1);
+            _font2_h = Typography.Text.GlobalTextService.TxtClient.MeasureBlankLineHeight(_font2);
 
             painter.UseLcdEffectSubPixelRendering = true;
             painter.CurrentFont = _font1;
@@ -41,7 +46,7 @@ namespace OpenTkEssTest
             //string test_str = "ปู่";
             //string test_str = "ก็";
             //string test_str = "example";
-            string test_str = "ex";
+            string test_str = "jhPfmnpqOo";
             //string test_str = "A";
             //string test_str = "012345";
             //string test_str = "กิน";
@@ -50,36 +55,52 @@ namespace OpenTkEssTest
             p.FillColor = PixelFarm.Drawing.Color.Red;
             p.UseLcdEffectSubPixelRendering = true;
 
-            int n = 50;
+            int n = 3;
             float xpos2 = 0;
+            float y_pos = 0;
+
             for (int i = 0; i < n; i++)
             {
                 xpos2 += 1f;
                 //  p.DrawString(test_str, i * 10, i * 10);
                 float x_pos = xpos2;
-                float y_pos = i * 20;
-                p.FillRect(x_pos, y_pos, x_pos + 5, y_pos + 5);
+
+
+                p.FillColor = Color.Yellow;
+                p.FillRect(x_pos, y_pos, 200, _font1_h); //draw 5x5px marker
+
+                p.FillColor = Color.Red;
+                p.FillRect(x_pos, y_pos, 5, 5); //draw 5x5px marker
+
+                y_pos += _font1_h;
             }
 
             p.FillColor = PixelFarm.Drawing.Color.Black;
+
             xpos2 = 0;
+            y_pos = 0;
             for (int i = 0; i < n; i++)
             {
                 xpos2 += 1f;
                 float x_pos = xpos2;//i + .1f;
-                float y_pos = i * 20;
+
                 //p.DrawString("(" + x_pos + "," + y_pos + ")", x_pos, y_pos);
-                if ((i % 2) == 0)
-                {
-                    p.CurrentFont = _font1;
-                }
-                else
-                {
-                    p.CurrentFont = _font2;
-                }
+                //if ((i % 2) == 0)
+                //{
+                p.CurrentFont = _font1;
                 p.DrawString(test_str, x_pos, y_pos);
+                y_pos += _font1_h;
+
+                //}
+                //else
+                //{
+                //    p.CurrentFont = _font2;
+                //    p.DrawString(test_str, x_pos, y_pos);
+                //    y_pos += _font2_h;
+                //}
+
             }
-         
+
         }
     }
 
