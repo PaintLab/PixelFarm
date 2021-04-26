@@ -8,9 +8,11 @@ namespace LayoutFarm.CustomWidgets
     public class CustomMaskBox
     {
         VertexStore _maskVxs;
-        public CustomMaskBox(int width, int height) { }
-        public int Width { get; set; }
-        public int Height { get; set; }
+        public CustomMaskBox()
+        {
+        }
+        public int Width { get; private set; }
+        public int Height { get; private set; }
         public void SetEllipseMask(int width, int height, int cx, int cy, int rx, int ry)
         {
             Width = width;
@@ -32,10 +34,14 @@ namespace LayoutFarm.CustomWidgets
             {
                 rr.SetRect(0, height, width, 0);
                 rr.SetRadius(cornerRad);
-                ellipse.MakeVxs(_maskVxs);
+                rr.MakeVxs(_maskVxs);
             }
         }
-        internal VertexStore Vxs => _maskVxs;
+        public void SetCustomMask(VertexStore externalVxs)
+        {
+            _maskVxs = externalVxs;
+        }
+        public VertexStore Vxs => _maskVxs;
     }
 
     public class CustomImageRenderBox : CustomRenderBox
