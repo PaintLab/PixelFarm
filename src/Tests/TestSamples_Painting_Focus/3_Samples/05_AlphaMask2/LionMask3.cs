@@ -162,7 +162,7 @@ namespace PixelFarm.CpuBlit.Sample_LionAlphaMask
             painter.FillColor = Color.Blue;
             painter.FillCircle(300, 300, 100);
             painter.DrawImage(lionImg, 20, 20);
-
+            painter.EnableMask = true;
 
 
             ////4.

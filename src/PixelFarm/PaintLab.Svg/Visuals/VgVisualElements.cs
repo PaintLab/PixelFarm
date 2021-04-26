@@ -176,6 +176,8 @@ namespace PaintLab.Svg
         public override WellknownSvgElementName ElemName => WellknownSvgElementName.ForeignNode;
     }
 
+
+
     public class VgVisualElement : VgVisualElementBase, IDisposable
     {
 
@@ -192,7 +194,6 @@ namespace PaintLab.Svg
 
         internal SvgVisualSpec _visualSpec;
         internal VgPathVisualMarkers _pathMarkers;
-
 
         ImageBinder _imgBinder;
         VgVisualDoc _vgVisualDoc;
@@ -634,6 +635,9 @@ namespace PaintLab.Svg
             }
         }
         //---------------------------
+
+        static LineDashGenerator s_lineDashGen;
+
         public override void Paint(VgPaintArgs vgPainterArgs)
         {
 
@@ -689,11 +693,6 @@ namespace PaintLab.Svg
 
                 if (_visualSpec.MaskPathLink != null)
                 {
-                    //apply mask path 
-                    if (_visualSpec.ResolvedMask == null)
-                    {
-
-                    }
 
                     if (_visualSpec.ResolvedMask != null)
                     {
@@ -1173,18 +1172,23 @@ namespace PaintLab.Svg
                                 }
                                 else if (p.FillColor.A > 0)
                                 {
-                                    RenderVx renderVx = this.RenderVx;
-                                    if (renderVx != null)
+                                    if (ElemName != WellknownSvgElementName.Line &&
+                                        ElemName != WellknownSvgElementName.Polyline)
                                     {
-                                        //has render vx     
-                                        p.FillRenderVx(renderVx);
+                                        RenderVx renderVx = this.RenderVx;
+                                        if (renderVx != null)
+                                        {
+                                            //has render vx     
+                                            p.FillRenderVx(renderVx);
+                                        }
+                                        else
+                                        {
+                                            renderVx = p.CreateRenderVx(VxsPath);
+                                            SetRenderVx(renderVx, true);
+                                            p.FillRenderVx(renderVx);
+                                        }
                                     }
-                                    else
-                                    {
-                                        renderVx = p.CreateRenderVx(VxsPath);
-                                        SetRenderVx(renderVx, true);
-                                        p.FillRenderVx(renderVx);
-                                    }
+
                                 }
                                 //to draw stroke
                                 //stroke width must > 0 and stroke-color must not be transparent color
@@ -1200,21 +1204,42 @@ namespace PaintLab.Svg
                                     //else
                                     //{ 
                                     //check if we need to create a new stroke or not
+
                                     if (_strokeVxs == null || _latestStrokeW != (float)p.StrokeWidth)
                                     {
                                         //TODO: review here again***
                                         //vxs caching 
                                         _latestStrokeW = (float)p.StrokeWidth;
 
-                                        using (Tools.BorrowVxs(out var v1))
-                                        using (Tools.BorrowStroke(out var stroke))
+                                        if (_visualSpec.StrokeDashArray != null)
                                         {
-                                            stroke.Width = _latestStrokeW;
-                                            stroke.MakeVxs(VxsPath, v1);
-                                            _strokeVxs = v1.CreateTrim();
+                                            if (s_lineDashGen == null)
+                                            {
+                                                s_lineDashGen = new LineDashGenerator();
+                                            }
+
+                                            s_lineDashGen.SetDashPattern(2, 1);//temp !
+
+                                            IDashGenerator tmp = p.LineDashGen;
+                                            p.StrokeWidth = 2; //TODO: review here
+                                            p.LineDashGen = s_lineDashGen;
+                                            p.Draw(VxsPath);
+                                            p.LineDashGen = tmp;//restore
+
+                                        }
+                                        else
+                                        {
+                                            using (Tools.BorrowVxs(out var v1))
+                                            using (Tools.BorrowStroke(out var stroke))
+                                            {
+                                                stroke.Width = _latestStrokeW;
+                                                stroke.MakeVxs(VxsPath, v1);
+                                                _strokeVxs = v1.CreateTrim();
+                                            }
+                                            p.Fill(_strokeVxs, p.StrokeColor);
                                         }
                                     }
-                                    p.Fill(_strokeVxs, p.StrokeColor);
+
                                 }
                             }
                             else
@@ -1438,7 +1463,6 @@ namespace PaintLab.Svg
                 _childNodes = new List<VgVisualElementBase>();
             }
             _childNodes.Add(vgVisElem);
-
         }
         public int ChildCount => (_childNodes == null) ? 0 : _childNodes.Count;
 

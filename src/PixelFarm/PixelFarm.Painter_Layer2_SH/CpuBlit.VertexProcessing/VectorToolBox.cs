@@ -63,7 +63,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         }
     }
 
-
+    public
     static class VxsTemp
     {
 
@@ -176,7 +176,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             return Temp<VxsClipper>.Borrow(out clipper);
         }
 
-        
+
     }
 
 

@@ -32,6 +32,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         public void AddMoveTo(LineWalkerMark maker, double x, double y) => _vxs.AddMoveTo(x, y);
     }
 
+
     public class LineDashGenerator : IDashGenerator
     {
         LineWalker _dashGenLineWalker = new LineWalker();
@@ -43,8 +44,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         {
 
         }
-
-
         public void SetDashPattern(DashSegment[] segments)
         {
             IsStaticPattern = true;
@@ -71,7 +70,11 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         public DashSegment[] GetStaticDashSegments() => _staicDashSegments;
 
         public bool IsStaticPattern { get; set; }
-
+        public ushort LineJoinRadius
+        {
+            get => _dashGenLineWalker.LineJoinRadius;
+            set => _dashGenLineWalker.LineJoinRadius = value;
+        }
         public string GetPatternAsString()
         {
             if (IsStaticPattern)
@@ -91,21 +94,22 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             return null;
         }
 
-        public void GenerateDash(VertexStore srcVxs, ILineSegmentWalkerOutput output)
+        public void CreateDash(VertexStore srcVxs, ILineSegmentWalkerOutput output)
         {
             if (_dashGenLineWalker == null)
             {
                 return;
             }
+
             _dashGenLineWalker.Walk(srcVxs, output);
         }
         public void CreateDash(VertexStore srcVxs, VertexStore output)
         {
             _output.SetOutput(output);
-            GenerateDash(srcVxs, _output);
+            CreateDash(srcVxs, _output);
         }
-
     }
+
 
     public static class LineDashGeneratorExtension
     {

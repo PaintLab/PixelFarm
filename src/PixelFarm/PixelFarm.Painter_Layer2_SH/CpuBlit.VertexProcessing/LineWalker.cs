@@ -26,6 +26,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         void AddLineTo(LineWalkerMark marker, double x, double y);
     }
 
+
+
     public delegate void LineSegmentDelegate(ILineSegmentWalkerOutput walkerOutput, LineWalkerMark markerSrc, VertexCmd cmd, double x, double y);
 
     public class LineWalkerMark
@@ -113,6 +115,11 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         public LineWalker()
         {
         }
+        public ushort LineJoinRadius
+        {
+            get => _walkStateMan.LineJoinRadius;
+            set => _walkStateMan.LineJoinRadius = value;
+        }
         public void Reset()
         {
             _walkStateMan.ClearAllMarkers();
@@ -182,7 +189,6 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
 
             internal ILineSegmentWalkerOutput _output;
-
             public void AddSegmentMark(LineWalkerMark segMark)
             {
                 segMark.Index = _marks.Count;
@@ -264,6 +270,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 }
                 //-----------------
             }
+            public ushort LineJoinRadius { get; set; }
             public void MoveTo(double x0, double y0)
             {
                 switch (_state)
@@ -283,6 +290,8 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         break;
                 }
             }
+
+
             public void LineTo(double x1, double y1)
             {
                 switch (_state)
@@ -296,8 +305,11 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                         {
 
                             //clear prev segment len  
-                            //find line segment length 
+                            //find line segment length
+                            //
                             double new_remaining_len = AggMath.calc_distance(_latest_X, _latest_Y, x1, y1);
+
+
                             //check current gen state
                             //find angle
                             double angle = Math.Atan2(y1 - _latest_Y, x1 - _latest_X);
@@ -307,14 +319,26 @@ namespace PixelFarm.CpuBlit.VertexProcessing
 
                             OnBeginLineSegment(sin, cos, ref new_remaining_len);
 
+                            if (LineJoinRadius > 0)
+                            {
+                                //offset linejoin radius
+                                new_x = _latest_X + (LineJoinRadius * cos);
+                                new_y = _latest_Y + (LineJoinRadius * sin);
+                                new_remaining_len -= (LineJoinRadius * 2);//remove begin and len
+                                _latest_X = new_x;
+                                _latest_Y = new_y;
+                            }
+
                             while (new_remaining_len >= _expectedSegmentLen)
                             {
                                 //we can create a new segment
                                 new_x = _latest_X + (_expectedSegmentLen * cos);
                                 new_y = _latest_Y + (_expectedSegmentLen * sin);
                                 new_remaining_len -= _expectedSegmentLen;
+
                                 //each segment has its own line production procedure
-                                //eg.  
+                                //eg...
+
                                 OnSegment(new_x, new_y);
                                 //--------------------
                                 _latest_Y = new_y;

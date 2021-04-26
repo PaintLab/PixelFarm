@@ -137,7 +137,8 @@ namespace PixelFarm.Drawing
                    (uint)((c2._a << 24) | (c2._r << 16) | (c2._g << 8) | (c2._b));
         }
         public int ToARGB() => ((_a << 24) | (_r << 16) | (_g << 8) | _b);
-
+        public int ToArgb() => ((_a << 24) | (_r << 16) | (_g << 8) | _b); //temp
+        
         public uint ToABGR() => (uint)((_a << 24) | (_b << 16) | (_g << 8) | _r);
 
 

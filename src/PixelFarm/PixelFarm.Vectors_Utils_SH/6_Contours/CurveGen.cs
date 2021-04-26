@@ -1,12 +1,10 @@
-﻿#region --- License ---
-/* Licensed under the MIT/X11 license.
+﻿/* Licensed under the MIT/X11 license.
  * Copyright (c) 2006-2008 the OpenTK Team.
  * This notice may not be removed from any source distribution.
  * See license.txt for licensing detailed licensing details.
  * 
  * Contributions by Georg W�chter.
  */
-#endregion
 using PixelFarm.VectorMath;
 namespace PixelFarm.Contours
 {
@@ -25,7 +23,6 @@ namespace PixelFarm.Contours
     //[Serializable]
     struct BezierCurveCubic
     {
-        #region Fields
 
         /// <summary>
         /// Start anchor point.
@@ -51,9 +48,7 @@ namespace PixelFarm.Contours
         /// the original curve, 5.0f i.e. stands for a curve that has always a distance
         /// of 5.f to the original curve at any point.</remarks>
         public float Parallel;
-        #endregion
 
-        #region Constructors
 
         /// <summary>
         /// Constructs a new <see cref="BezierCurveCubic"/>.
@@ -88,9 +83,7 @@ namespace PixelFarm.Contours
             this.SecondControlPoint = secondControlPoint;
         }
 
-        #endregion
 
-        #region Functions
 
         /// <summary>
         /// Calculates the point with the specified t.
@@ -150,7 +143,6 @@ namespace PixelFarm.Contours
         //    return (float)length;
         //}
 
-        #endregion
     }
 
     /// <summary>
@@ -159,7 +151,6 @@ namespace PixelFarm.Contours
     //[Serializable]
     public struct BezierCurveQuadric
     {
-        #region Fields
 
         /// <summary>
         /// Start anchor point.
@@ -181,9 +172,7 @@ namespace PixelFarm.Contours
         /// the original curve, 5.0f i.e. stands for a curve that has always a distance
         /// of 5.f to the original curve at any point.</remarks>
         public float Parallel;
-        #endregion
 
-        #region Constructors
 
         /// <summary>
         /// Constructs a new <see cref="BezierCurveQuadric"/>.
@@ -214,9 +203,7 @@ namespace PixelFarm.Contours
             this.ControlPoint = controlPoint;
         }
 
-        #endregion
 
-        #region Functions
 
         /// <summary>
         /// Calculates the point with the specified t.
@@ -273,6 +260,5 @@ namespace PixelFarm.Contours
             return (float)length;
         }
 
-        #endregion
     }
 }

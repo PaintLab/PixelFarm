@@ -39,7 +39,7 @@ namespace PixelFarm.DrawingGL
                 if (this.OriginX != 0 || this.OriginY != 0)
                 {
 #if DEBUG
-                    System.Diagnostics.Debugger.Break();
+                    //System.Diagnostics.Debugger.Break();
 #endif
                 }
 

@@ -431,7 +431,7 @@ namespace PixelFarm.CpuBlit.Sample_Draw
 
                 var exampleWalker = new ExampleVxsLineDash2Walker();
                 exampleWalker.SetPainter(p);
-                _lineDashGen.GenerateDash(b.CurrentSharedVxs, exampleWalker);
+                _lineDashGen.CreateDash(b.CurrentSharedVxs, exampleWalker);
 
             }
 

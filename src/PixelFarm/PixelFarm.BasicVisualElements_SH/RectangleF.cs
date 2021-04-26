@@ -81,9 +81,9 @@ namespace PixelFarm.Drawing
         ///	Inflates the RectangleF by a specified width and height.
         /// </remarks>
 
-        public void Inflate(float x, float y)
+        public void Inflate(float dw, float dh)
         {
-            Inflate(new SizeF(x, y));
+            Inflate(new SizeF(dw, dh));
         }
 
         /// <summary>

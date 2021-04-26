@@ -55,6 +55,8 @@ namespace PaintLab.Svg
                 this.HasStrokeWidth = true;
             }
         }
+
+        public float[] StrokeDashArray { get; set; }
         public string Class { get; set; }
         public float Opacity
         {
@@ -84,6 +86,8 @@ namespace PaintLab.Svg
         public object ResolvedFillBrush { get; set; }//TODO: review here 
         public object ResolvedMask { get; set; }
         public object ResolvedFilter { get; set; }
+
+
 
     }
     public class SvgGroupSpec : SvgVisualSpec
@@ -342,6 +346,7 @@ namespace PaintLab.Svg
         public CssLength Y2 { get; set; }
 
         //
+
         public SvgAttributeLink MarkerStart { get; set; }
         public SvgAttributeLink MarkerMid { get; set; }
         public SvgAttributeLink MarkerEnd { get; set; }

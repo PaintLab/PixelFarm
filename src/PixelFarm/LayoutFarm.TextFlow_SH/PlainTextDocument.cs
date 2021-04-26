@@ -1088,12 +1088,18 @@ namespace LayoutFarm.TextFlow
                 }
             }
         }
+
+        static char[] s_newline = new[] { '\r', '\n' };
         public void CopyAll(TextCopyBufferUtf32 output)
         {
             //all
             int j = _lines.Count;
             for (int i = 0; i < j; ++i)
             {
+                if (i > 0)
+                {
+                    output.Append(s_newline);
+                }
                 if (i == _currentLineNo)
                 {
                     _lineEditor.Read(output);
@@ -1101,9 +1107,11 @@ namespace LayoutFarm.TextFlow
                 else
                 {
                     _lines[i].Content.WriteTo(output);
+
                 }
             }
         }
+
         public void CopyCurrentLine(TextCopyBufferUtf32 output)
         {
             _lineEditor.Read(output);
@@ -1126,7 +1134,7 @@ namespace LayoutFarm.TextFlow
             }
         }
 
-        static readonly char[] s_newline = new char[] { '\r', '\n' };
+      
         public void CopySelection(TextCopyBufferUtf32 output)
         {
             //only selection

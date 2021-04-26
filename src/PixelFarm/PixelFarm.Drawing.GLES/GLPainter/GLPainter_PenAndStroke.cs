@@ -163,7 +163,13 @@ namespace PixelFarm.DrawingGL
                     }
                     else
                     {
-                        _lineDashGen.CreateDash(vxs, v1);
+                        //TODO: cache?
+                        ushort tempLineJoinRadius = _lineDashGen.LineJoinRadius;
+                        //
+                        _lineDashGen.LineJoinRadius = 0;//px
+                        _lineDashGen.CreateDash(vxs, v1);//a set of line dash
+                        _lineDashGen.LineJoinRadius = tempLineJoinRadius;
+
                         if (_dashGenV2 && _lineDashGen.IsStaticPattern)
                         {
                             //generate texture backend for a dash pattern
@@ -220,12 +226,45 @@ namespace PixelFarm.DrawingGL
                                 py = y;
                             }
 
-                            _vboBuilder.AppendDegenerativeTriangle();
 
+
+                            //ushort patNo = 0;
+                            //for (int i = 0; i < n; ++i)
+                            //{
+                            //    VertexCmd cmd = v1.GetVertex(i, out double x, out double y);
+                            //    switch (cmd)
+                            //    {
+                            //        case VertexCmd.MoveTo:
+
+                            //            break;
+                            //        case VertexCmd.LineTo:
+                            //            {
+                            //                //select proper img for this segment
+
+                            //                simpleBmpAtlas.TryGetItem(patNo, out AtlasItem atlasItem);
+                            //                var srcRect = new Rectangle(atlasItem.Left - (int)atlasItem.TextureXOffset, atlasItem.Top - (int)atlasItem.TextureYOffset, atlasItem.Width - 8, atlasItem.Height - 8);
+                            //                //please note that : we start rect at (px,py)
+                            //                _vboBuilder.WriteRectWithRotation(srcRect, (float)px, (float)py, (float)Math.Atan2(y - py, x - px));
+                            //                patNo += 2;
+                            //                if (patNo >= prebuilt_patt.Length)
+                            //                {
+                            //                    patNo = 0;//reset
+                            //                }
+                            //            }
+                            //            break;
+                            //    }
+                            //    px = x;
+                            //    py = y;
+                            //}
+
+                            _vboBuilder.AppendDegenerativeTriangle();
                             Color prevColor = _pcx.FontFillColor;
                             _pcx.FontFillColor = this.StrokeColor;//***
                             _pcx.DrawGlyphImageWithStecil_VBO(glbmp, _vboBuilder); //TODO: review here. in this version, use glyph renderer
                             _pcx.FontFillColor = prevColor; //restore
+
+                            //---------------
+
                         }
                         else
                         {

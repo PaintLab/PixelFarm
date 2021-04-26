@@ -70,7 +70,8 @@ namespace LayoutFarm.TextFlow
         {
             if (textspan.IsEmpty)
             {
-                return NewSpan(textspan.GetRawUtf32Buffer(), textspan.start, textspan.len);
+                //return NewSpan(textspan.GetRawUtf32Buffer(), textspan.start, textspan.len);
+                return NewSpan(textspan.GetRawUtf16Buffer(), textspan.start, textspan.len);
             }
             else
             {

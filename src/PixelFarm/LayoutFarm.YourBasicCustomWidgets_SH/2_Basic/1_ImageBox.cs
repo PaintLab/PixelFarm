@@ -11,6 +11,8 @@ namespace LayoutFarm.CustomWidgets
         CustomImageRenderBox _imgRenderBox;
         ImageBinder _imageBinder;
         EventHandler _imgChangedSubscribe;
+        CustomMaskBox _customMaskBox;
+
         public ImageBox() : this(16, 16)
         {
             //if user does not provide width and height,
@@ -55,17 +57,34 @@ namespace LayoutFarm.CustomWidgets
             }
         }
 
+        public CustomMaskBox MaskBox
+        {
+            get => _customMaskBox;
+            set
+            {
+                _customMaskBox = value;
+                if (_imgRenderBox != null)
+                {
+                    _imgRenderBox.MaskBox = value;
+                }
+            }
+        }
 
         public override RenderElement GetPrimaryRenderElement()
         {
             if (_imgRenderBox == null)
             {
-                var renderBox = new CustomImageRenderBox(this.Width, this.Height);
-                SetCommonProperties(renderBox, this);
-                renderBox.ImageBinder = _imageBinder;
+                var imgBox = new CustomImageRenderBox(this.Width, this.Height);
+                SetCommonProperties(imgBox, this);
+                imgBox.ImageBinder = _imageBinder;
 
-                SetPrimaryRenderElement(renderBox);
-                _imgRenderBox = renderBox;
+                if (_customMaskBox != null)
+                {
+                    imgBox.MaskBox = _customMaskBox;
+                }
+
+                SetPrimaryRenderElement(imgBox);
+                _imgRenderBox = imgBox;
             }
             return _imgRenderBox;
         }
@@ -76,8 +95,8 @@ namespace LayoutFarm.CustomWidgets
             this.CurrentPrimaryRenderElement?.SetSize(width, height);
         }
         public override void SetInnerContentSize(int w, int h)
-        { 
-            this.CurrentPrimaryRenderElement?.SetSize(w, h); 
+        {
+            this.CurrentPrimaryRenderElement?.SetSize(w, h);
         }
         void OnContentUpdate()
         {
