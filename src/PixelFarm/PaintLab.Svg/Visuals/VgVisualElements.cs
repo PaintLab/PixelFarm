@@ -17,10 +17,7 @@ namespace PaintLab.Svg
     /// </summary>
     public abstract class VgVisualElementBase
     {
-        public virtual void Paint(VgPaintArgs p)
-        {
-            //paint with painter interface
-        }
+        public virtual void Paint(VgPaintArgs p) { }
         public abstract WellknownSvgElementName ElemName { get; }
         public virtual void Accept(VgVisitorArgs p) { }
 
@@ -181,8 +178,6 @@ namespace PaintLab.Svg
     public class VgVisualElement : VgVisualElementBase, IDisposable
     {
 
-        bool _handleBitmapSnapshotAsOwner;
-        //-------------------------
         List<VgVisualElementBase> _childNodes = null;
         WellknownSvgElementName _wellknownName;
         //-------------------------
@@ -198,6 +193,7 @@ namespace PaintLab.Svg
         ImageBinder _imgBinder;
         VgVisualDoc _vgVisualDoc; //owner doc
 
+        bool _handleBitmapSnapshotAsOwner;
         Image _backimg;
         Q1RectD _boundRect;
         bool _needBoundUpdate;
@@ -207,12 +203,13 @@ namespace PaintLab.Svg
         internal float _imgX;
         internal float _imgY;
 
-        VertexStore _vxsPath;
+        VertexStore _vxsPath;//filling shape
         bool _isRenderVxOwner;
+        RenderVx _renderVx;
 
         public VgVisualElement(WellknownSvgElementName wellknownName,
-            SvgVisualSpec visualSpec,
-            VgVisualDoc vgVisualDoc)
+               SvgVisualSpec visualSpec,
+               VgVisualDoc vgVisualDoc)
         {
             //we can create visual element without its DOM
             _needBoundUpdate = true;
@@ -231,9 +228,6 @@ namespace PaintLab.Svg
         public object GetController() => _controller;
         //
         public ICoordTransformer CoordTx { get; set; }
-
-
-        RenderVx _renderVx;
         public RenderVx RenderVx => _renderVx;
         public void SetRenderVx(RenderVx renderVx, bool isOwner)
         {
@@ -252,7 +246,8 @@ namespace PaintLab.Svg
                 }
 #endif
                 _vxsPath = value;
-                ReleaseRenderVx();
+
+                ReleaseRenderVx();//relrease previus render vx
             }
         }
         void ReleaseRenderVx()
@@ -290,27 +285,13 @@ namespace PaintLab.Svg
                     {
                         _imgH = value.Height;
                     }
+
                     value.ImageChanged += (s, e) => _vgVisualDoc.Invalidate(this);
                 }
             }
         }
 
-        public void HitTest(float x, float y, Action<VgVisualElement, float, float, VertexStore> onHitSvg)
-        {
-            using (VgVistorArgsPool.Borrow(out VgVisitorArgs visitor))
-            {
-                visitor.VgElemenVisitHandler = (vxs, args) =>
-                {
-                    if (args.Current != null &&
-                       PixelFarm.CpuBlit.VertexProcessing.VertexHitTester.IsPointInVxs(vxs, x, y))
-                    {
-                        //add actual transform vxs ... 
-                        onHitSvg(args.Current, x, y, vxs);
-                    }
-                };
-                this.Accept(visitor);
-            }
-        }
+       
         public bool HitTest(VgHitChain hitChain)
         {
             using (VgVistorArgsPool.Borrow(out VgVisitorArgs paintArgs))
@@ -323,9 +304,9 @@ namespace PaintLab.Svg
                     {
                         //add actual transform vxs ... 
                         hitChain.AddHit(args.Current,
-                        hitChain.X,
-                        hitChain.Y,
-                        hitChain.MakeCopyOfHitVxs ? vxs.CreateTrim() : null);
+                            hitChain.X,
+                            hitChain.Y,
+                            hitChain.MakeCopyOfHitVxs ? vxs.CreateTrim() : null);
                     }
                 };
                 this.Accept(paintArgs);
@@ -638,7 +619,7 @@ namespace PaintLab.Svg
 
         static LineDashGenerator s_lineDashGen;
 
-    
+
         public override void Paint(VgPaintArgs vgPainterArgs)
         {
 
@@ -786,10 +767,13 @@ namespace PaintLab.Svg
                                 else if (vgVisualElem.VisualSpec is SvgLinearGradientSpec)
                                 {
                                     SvgLinearGradientSpec linearGrSpec = (SvgLinearGradientSpec)vgVisualElem.VisualSpec;
+
+#if DEBUG
                                     if (linearGrSpec.Transform != null)
                                     {
 
                                     }
+#endif
                                     if (linearGrSpec.StopList != null)
                                     {
                                         int stopListCount = linearGrSpec.StopList.Count;
