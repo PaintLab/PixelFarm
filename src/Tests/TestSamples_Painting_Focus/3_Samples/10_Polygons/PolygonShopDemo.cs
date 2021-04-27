@@ -448,7 +448,6 @@ namespace PixelFarm
 
                     selectedVxs.RotateDegToNewVxs(i * (360 / 8), v1);
                     p.Fill(v1);
-
                     v1.Clear();
                 }
 

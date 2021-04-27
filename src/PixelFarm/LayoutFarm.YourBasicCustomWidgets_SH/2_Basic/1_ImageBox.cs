@@ -11,7 +11,7 @@ namespace LayoutFarm.CustomWidgets
         CustomImageRenderBox _imgRenderBox;
         ImageBinder _imageBinder;
         EventHandler _imgChangedSubscribe;
-        CustomMaskBox _customMaskBox;
+         
 
         public ImageBox() : this(16, 16)
         {
@@ -56,33 +56,14 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-
-        public CustomMaskBox MaskBox
-        {
-            get => _customMaskBox;
-            set
-            {
-                _customMaskBox = value;
-                if (_imgRenderBox != null)
-                {
-                    _imgRenderBox.MaskBox = value;
-                }
-            }
-        }
-
+         
         public override RenderElement GetPrimaryRenderElement()
         {
             if (_imgRenderBox == null)
             {
                 var imgBox = new CustomImageRenderBox(this.Width, this.Height);
                 SetCommonProperties(imgBox, this);
-                imgBox.ImageBinder = _imageBinder;
-
-                if (_customMaskBox != null)
-                {
-                    imgBox.MaskBox = _customMaskBox;
-                }
-
+                imgBox.ImageBinder = _imageBinder; 
                 SetPrimaryRenderElement(imgBox);
                 _imgRenderBox = imgBox;
             }
