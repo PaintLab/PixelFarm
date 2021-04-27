@@ -22,6 +22,27 @@ namespace PixelFarm.CpuBlit
         PixelBlenderPerColorComponentWithMask _maskPixelBlenderPerCompo;
         ClipingTechnique _currentClipTech;
 
+        void ClearClipRgn()
+        {
+            //remove clip rgn if exists**
+            switch (_currentClipTech)
+            {
+                case ClipingTechnique.ClipMask:
+                    this.EnableBuiltInMaskComposite = false;
+                    this.TargetBufferName = TargetBufferName.AlphaMask;//swicth to mask buffer
+                    this.Clear(Color.Black);
+                    this.TargetBufferName = TargetBufferName.Default;
+
+                    break;
+                case ClipingTechnique.ClipSimpleRect:
+
+                    this.SetClipBox(0, 0, this.Width, this.Height);
+                    break;
+            }
+
+            _currentClipTech = ClipingTechnique.None;
+        }
+   
         /// <summary>
         /// we DO NOT store vxs
         /// </summary>
@@ -69,23 +90,7 @@ namespace PixelFarm.CpuBlit
             }
             else
             {
-                //remove clip rgn if exists**
-                switch (_currentClipTech)
-                {
-                    case ClipingTechnique.ClipMask:
-                        this.EnableBuiltInMaskComposite = false;
-                        this.TargetBufferName = TargetBufferName.AlphaMask;//swicth to mask buffer
-                        this.Clear(Color.Black);
-                        this.TargetBufferName = TargetBufferName.Default;
-
-                        break;
-                    case ClipingTechnique.ClipSimpleRect:
-
-                        this.SetClipBox(0, 0, this.Width, this.Height);
-                        break;
-                }
-
-                _currentClipTech = ClipingTechnique.None;
+                ClearClipRgn();
             }
         }
         public override Rectangle ClipBox
@@ -265,7 +270,7 @@ namespace PixelFarm.CpuBlit
 
         public override void FillRegion(VertexStore vxs)
         {
-            
+
 
             this.SetClipRgn(vxs);
 

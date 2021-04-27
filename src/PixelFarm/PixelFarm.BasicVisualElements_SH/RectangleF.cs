@@ -288,6 +288,7 @@ namespace PixelFarm.Drawing
 
 
         public float Left => _left;
+        
 
         /// <summary>
         ///	Location Property
@@ -508,6 +509,8 @@ namespace PixelFarm.Drawing
         {
             Offset(pos.X, pos.Y);
         }
+        public float X => _left;
+        public float Y => _top;
 
         /// <summary>
         ///	ToString Method

@@ -196,7 +196,7 @@ namespace PaintLab.Svg
         internal VgPathVisualMarkers _pathMarkers;
 
         ImageBinder _imgBinder;
-        VgVisualDoc _vgVisualDoc;
+        VgVisualDoc _vgVisualDoc; //owner doc
 
         Image _backimg;
         Q1RectD _boundRect;
@@ -638,6 +638,7 @@ namespace PaintLab.Svg
 
         static LineDashGenerator s_lineDashGen;
 
+    
         public override void Paint(VgPaintArgs vgPainterArgs)
         {
 
@@ -1188,7 +1189,6 @@ namespace PaintLab.Svg
                                             p.FillRenderVx(renderVx);
                                         }
                                     }
-
                                 }
                                 //to draw stroke
                                 //stroke width must > 0 and stroke-color must not be transparent color
@@ -1218,13 +1218,15 @@ namespace PaintLab.Svg
                                                 s_lineDashGen = new LineDashGenerator();
                                             }
 
-                                            s_lineDashGen.SetDashPattern(2, 1);//temp !
+                                            //set dash generator
+                                            s_lineDashGen.SetDashPattern(_visualSpec.StrokeDashArray[0], _visualSpec.StrokeDashArray[1]);//temp !                                         
 
+                                            VertexStore vxs = VxsPath;
                                             IDashGenerator tmp = p.LineDashGen;
-                                            p.StrokeWidth = 2; //TODO: review here
+                                            p.StrokeWidth = 2; //TODO: review here//***
                                             p.LineDashGen = s_lineDashGen;
-                                            p.Draw(VxsPath);
-                                            p.LineDashGen = tmp;//restore
+                                            p.Draw(vxs);//draw a dash-vxs path
+                                            p.LineDashGen = tmp;//restore 
 
                                         }
                                         else
@@ -1385,7 +1387,7 @@ namespace PaintLab.Svg
                                 }
                                 if (_pathMarkers.EndMarker != null)
                                 {
-                                    //draw this
+                                    //draw this***
 
                                 }
 

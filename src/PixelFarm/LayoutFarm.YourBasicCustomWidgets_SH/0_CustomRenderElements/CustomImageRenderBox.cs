@@ -8,6 +8,7 @@ namespace LayoutFarm.CustomWidgets
     public class CustomMaskBox
     {
         VertexStore _maskVxs;
+        Image _maskImg;
         public CustomMaskBox()
         {
         }
@@ -41,7 +42,15 @@ namespace LayoutFarm.CustomWidgets
         {
             _maskVxs = externalVxs;
         }
-        public VertexStore Vxs => _maskVxs;
+        public void SetCustomMask(Image maskImg)
+        {
+            _maskImg = maskImg;
+            //PathRenderVx.Create(_pathRenderVxBuilder.Build(vxs));
+
+        }
+        internal VertexStore Vxs => _maskVxs;
+        internal Image MaskImg => _maskImg;
+        internal RenderVx _renderVx;
     }
 
     public class CustomImageRenderBox : CustomRenderBox
@@ -81,15 +90,25 @@ namespace LayoutFarm.CustomWidgets
                         {
                             //draw maskbox first
                             Painter p = d.GetPainter();
-                            p.SetClipRgn(MaskBox.Vxs);
-                            d.FillRectangle(this.BackColor, 0, 0, this.Width, this.Height);
-                            d.DrawImage(ImageBinder,
-                                new RectangleF(
-                                ContentLeft, ContentTop,
-                                ContentWidth,
-                                ContentHeight));
 
-                            p.SetClipRgn(null);
+                            if (MaskBox.Vxs != null)
+                            {
+
+                                p.SetClipRgn(MaskBox.Vxs);
+
+                                d.FillRectangle(this.BackColor, 0, 0, this.Width, this.Height);
+                                d.DrawImage(ImageBinder,
+                                    new RectangleF(
+                                    ContentLeft, ContentTop,
+                                    ContentWidth,
+                                    ContentHeight));
+                                p.SetClipRgn(null);
+                            }
+                            else if (MaskBox.MaskImg != null)
+                            {
+                                //use image as mask
+
+                            }
                         }
                         else
                         {
@@ -116,11 +135,6 @@ namespace LayoutFarm.CustomWidgets
                             //resolve this and draw
                             goto case BinderState.Loaded;
 
-                            //d.DrawImage(ImageBinder,
-                            //   new RectangleF(
-                            //   ContentLeft, ContentTop,
-                            //   ContentWidth,
-                            //   ContentHeight));
                         }
                     }
                     break;
