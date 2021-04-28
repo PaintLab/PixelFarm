@@ -135,46 +135,139 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             get => _arc.ApproximateScale;
             set => _arc.ApproximateScale = value;
         }
+
+        //IEnumerable<VertexData> GetVertexIter()
+        //{
+
+        //    _arc.UseStartEndLimit = true;
+        //    _arc.Init(_bounds.Left + _leftBottomRadius.x, _bounds.Bottom + _leftBottomRadius.y, _leftBottomRadius.x, _leftBottomRadius.y, Math.PI, Math.PI + Math.PI * 0.5);
+        //    _arc.SetStartEndLimit(_bounds.Left, _bounds.Bottom + _leftBottomRadius.y,
+        //        _bounds.Left + _leftBottomRadius.x, _bounds.Bottom);
+
+        //    foreach (VertexData vertexData in _arc.GetVertexIter())
+        //    {
+        //        if (VertexHelper.IsEmpty(vertexData.command))
+        //        {
+        //            break;
+        //        }
+        //        yield return vertexData;
+        //    }
+
+
+        //    _arc.Init(_bounds.Right - _rightBottomRadius.x, _bounds.Bottom + _rightBottomRadius.y, _rightBottomRadius.x, _rightBottomRadius.y, Math.PI + Math.PI * 0.5, 0.0);
+        //    _arc.SetStartEndLimit(_bounds.Right - _rightBottomRadius.x,
+        //        _bounds.Bottom, _bounds.Right, _bounds.Bottom + _rightBottomRadius.y);
+
+        //    foreach (VertexData vertexData in _arc.GetVertexIter())
+        //    {
+        //        if (VertexHelper.IsMoveTo(vertexData.command))
+        //        {
+        //            // skip the initial moveto
+        //            continue;
+        //        }
+        //        if (VertexHelper.IsEmpty(vertexData.command))
+        //        {
+        //            break;
+        //        }
+        //        yield return vertexData;
+        //    }
+
+
+        //    _arc.Init(_bounds.Right - _rightTopRadius.x, _bounds.Top - _rightTopRadius.y, _rightTopRadius.x, _rightTopRadius.y, 0.0, Math.PI * 0.5);
+        //    _arc.SetStartEndLimit(_bounds.Right, _bounds.Top - _rightTopRadius.y,
+        //        _bounds.Right - _rightTopRadius.x, _bounds.Top);
+
+        //    foreach (VertexData vertexData in _arc.GetVertexIter())
+        //    {
+        //        if (VertexHelper.IsMoveTo(vertexData.command))
+        //        {
+        //            // skip the initial moveto
+        //            continue;
+        //        }
+        //        if (VertexHelper.IsEmpty(vertexData.command))
+        //        {
+        //            break;
+        //        }
+        //        yield return vertexData;
+        //    }
+
+
+        //    _arc.Init(_bounds.Left + _leftTopRadius.x, _bounds.Top - _leftTopRadius.y, _leftTopRadius.x, _leftTopRadius.y, Math.PI * 0.5, Math.PI);
+        //    _arc.SetStartEndLimit(_bounds.Left - _leftTopRadius.x, _bounds.Top,
+        //          _bounds.Left, _bounds.Top - _leftTopRadius.y);
+
+        //    foreach (VertexData vertexData in _arc.GetVertexIter())
+        //    {
+        //        switch (vertexData.command)
+        //        {
+        //            case VertexCmd.MoveTo:
+        //                continue;
+        //            case VertexCmd.NoMore:
+        //                goto EXIT_LOOP;
+        //            default:
+        //                yield return vertexData;
+        //                break;
+        //        }
+        //    }
+
+        //EXIT_LOOP:
+
+        //    yield return new VertexData(VertexCmd.Close, (int)EndVertexOrientation.CCW, 0);
+        //    yield return new VertexData(VertexCmd.NoMore);
+        //}
+
         IEnumerable<VertexData> GetVertexIter()
         {
+
             _arc.UseStartEndLimit = true;
-            _arc.Init(_bounds.Left + _leftBottomRadius.x, _bounds.Bottom + _leftBottomRadius.y, _leftBottomRadius.x, _leftBottomRadius.y, Math.PI, Math.PI + Math.PI * 0.5);
-            _arc.SetStartEndLimit(_bounds.Left, _bounds.Bottom + _leftBottomRadius.y,
-                _bounds.Left + _leftBottomRadius.x, _bounds.Bottom);
 
-            foreach (VertexData vertexData in _arc.GetVertexIter())
-            {
-                if (VertexHelper.IsEmpty(vertexData.command))
-                {
-                    break;
-                }
-                yield return vertexData;
-            }
+            //left-top in view
+            //_arc.Init(_bounds.Left + _leftBottomRadius.x, _bounds.Bottom + _leftBottomRadius.y, _leftBottomRadius.x, _leftBottomRadius.y, Math.PI, Math.PI + Math.PI * 0.5);
+            //_arc.SetStartEndLimit(_bounds.Left, _bounds.Bottom + _leftBottomRadius.y,
+            //    _bounds.Left + _leftBottomRadius.x, _bounds.Bottom);
+
+            //foreach (VertexData vertexData in _arc.GetVertexIter())
+            //{
+            //    if (VertexHelper.IsEmpty(vertexData.command))
+            //    {
+            //        break;
+            //    }
+            //    yield return vertexData;
+            //}
+
+            //yield return new VertexData(VertexCmd.LineTo, _bounds.Left + _leftBottomRadius.x, _bounds.Bottom + _leftBottomRadius.y);
+
+            //------------------------------
+            //right-top in view
+            //_arc.Init(_bounds.Right - _rightBottomRadius.x, _bounds.Bottom + _rightBottomRadius.y, _rightBottomRadius.x, _rightBottomRadius.y, Math.PI + Math.PI * 0.5, 0.0);
+            //_arc.SetStartEndLimit(_bounds.Right - _rightBottomRadius.x,
+            //    _bounds.Bottom, _bounds.Right, _bounds.Bottom + _rightBottomRadius.y);
+
+            //foreach (VertexData vertexData in _arc.GetVertexIter())
+            //{
+            //    if (VertexHelper.IsMoveTo(vertexData.command))
+            //    {
+            //        // skip the initial moveto
+            //        continue;
+            //    }
+            //    if (VertexHelper.IsEmpty(vertexData.command))
+            //    {
+            //        break;
+            //    }
+            //    yield return vertexData;
+            //}
+            //yield return new VertexData(VertexCmd.LineTo, _bounds.Right - (_rightBottomRadius.x), _bounds.Bottom + _leftBottomRadius.y);
+            //yield return new VertexData(VertexCmd.LineTo, _bounds.Right - (_rightBottomRadius.x), _bounds.Bottom);
+            //------------------------------
 
 
-            _arc.Init(_bounds.Right - _rightBottomRadius.x, _bounds.Bottom + _rightBottomRadius.y, _rightBottomRadius.x, _rightBottomRadius.y, Math.PI + Math.PI * 0.5, 0.0);
-            _arc.SetStartEndLimit(_bounds.Right - _rightBottomRadius.x,
-                _bounds.Bottom, _bounds.Right, _bounds.Bottom + _rightBottomRadius.y);
-
-            foreach (VertexData vertexData in _arc.GetVertexIter())
-            {
-                if (VertexHelper.IsMoveTo(vertexData.command))
-                {
-                    // skip the initial moveto
-                    continue;
-                }
-                if (VertexHelper.IsEmpty(vertexData.command))
-                {
-                    break;
-                }
-                yield return vertexData;
-            }
-
-
+            //right - bottom in view
             _arc.Init(_bounds.Right - _rightTopRadius.x, _bounds.Top - _rightTopRadius.y, _rightTopRadius.x, _rightTopRadius.y, 0.0, Math.PI * 0.5);
             _arc.SetStartEndLimit(_bounds.Right, _bounds.Top - _rightTopRadius.y,
                 _bounds.Right - _rightTopRadius.x, _bounds.Top);
 
+            yield return new VertexData(VertexCmd.LineTo, _bounds.Right, _bounds.Top - _rightTopRadius.y);
+
             foreach (VertexData vertexData in _arc.GetVertexIter())
             {
                 if (VertexHelper.IsMoveTo(vertexData.command))
@@ -188,25 +281,26 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 }
                 yield return vertexData;
             }
+            //------------------------------
+            yield return new VertexData(VertexCmd.LineTo, _bounds.Right - (_rightBottomRadius.x), _bounds.Top - _rightTopRadius.y);
 
+        //_arc.Init(_bounds.Left + _leftTopRadius.x, _bounds.Top - _leftTopRadius.y, _leftTopRadius.x, _leftTopRadius.y, Math.PI * 0.5, Math.PI);
+        //_arc.SetStartEndLimit(_bounds.Left - _leftTopRadius.x, _bounds.Top,
+        //      _bounds.Left, _bounds.Top - _leftTopRadius.y);
 
-            _arc.Init(_bounds.Left + _leftTopRadius.x, _bounds.Top - _leftTopRadius.y, _leftTopRadius.x, _leftTopRadius.y, Math.PI * 0.5, Math.PI);
-            _arc.SetStartEndLimit(_bounds.Left - _leftTopRadius.x, _bounds.Top,
-                  _bounds.Left, _bounds.Top - _leftTopRadius.y);
-
-            foreach (VertexData vertexData in _arc.GetVertexIter())
-            {
-                switch (vertexData.command)
-                {
-                    case VertexCmd.MoveTo:
-                        continue;
-                    case VertexCmd.NoMore:
-                        goto EXIT_LOOP;
-                    default:
-                        yield return vertexData;
-                        break;
-                }
-            }
+        //foreach (VertexData vertexData in _arc.GetVertexIter())
+        //{
+        //    switch (vertexData.command)
+        //    {
+        //        case VertexCmd.MoveTo:
+        //            continue;
+        //        case VertexCmd.NoMore:
+        //            goto EXIT_LOOP;
+        //        default:
+        //            yield return vertexData;
+        //            break;
+        //    }
+        //}
 
         EXIT_LOOP:
 

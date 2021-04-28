@@ -42,6 +42,11 @@ namespace LayoutFarm.CustomWidgets
 
         }
 
+        public void RenderItsContent(DrawBoard d, UpdateArea updateArea)
+        {
+            RenderClientContent(d, updateArea);
+        }
+
 
         internal List<RenderElemLineBox> Lines { get; set; }
 

@@ -182,7 +182,17 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             //4.              
             //add no more?
         }
-
+        public static void MakeVxs(this Arc arc, VertexStore v)
+        {
+            foreach (VertexData vertexData in arc.GetVertexIter())
+            {
+                if (VertexHelper.IsEmpty(vertexData.command))
+                {
+                    break;
+                }
+                v.AddVertex(vertexData.x, vertexData.y, vertexData.command);
+            }
+        }
         public static IEnumerable<VertexData> GetVertexIter(this Arc arc)
         {
             // go to the start

@@ -480,7 +480,7 @@ namespace LayoutFarm.CustomWidgets
                         new_top = 0;
                     }
                 }
-                SetViewport(_viewportLeft, new_top); 
+                SetViewport(_viewportLeft, new_top);
             }
             MouseWheel?.Invoke(this, e);
         }
