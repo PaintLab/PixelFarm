@@ -67,16 +67,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             }
         }
 
-        public RoundedRect(Q1RectD bounds, double r)
-            : this(bounds.Left, bounds.Bottom, bounds.Right, bounds.Top, r)
-        {
-        }
-
-        public RoundedRect(Q1Rect bounds, double r)
-            : this(bounds.Left, bounds.Bottom, bounds.Right, bounds.Top, r)
-        {
-        }
-
+       
         public void SetRect(double left, double bottom, double right, double top)
         {
             _bounds = new Q1RectD(left, bottom, right, top);

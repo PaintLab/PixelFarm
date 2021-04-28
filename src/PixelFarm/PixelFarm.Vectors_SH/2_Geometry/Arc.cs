@@ -38,9 +38,9 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         double _startAngle;
         double _endAngle;
         double _scale;
-        ArcDirection _Direction;
+        ArcDirection _direction;
         double _flattenDeltaAngle;
-        bool _IsInitialized;
+        bool _isInitialized;
         //------------        
         double _startX;
         double _startY;
@@ -56,7 +56,7 @@ namespace PixelFarm.CpuBlit.VertexProcessing
         public Arc()
         {
             _scale = 1.0;
-            _IsInitialized = false;
+            _isInitialized = false;
         }
 
 
@@ -127,9 +127,9 @@ namespace PixelFarm.CpuBlit.VertexProcessing
             set
             {
                 _scale = value;
-                if (_IsInitialized)
+                if (_isInitialized)
                 {
-                    Normalize(_startAngle, _endAngle, _Direction);
+                    Normalize(_startAngle, _endAngle, _direction);
                 }
             }
         }
@@ -153,10 +153,10 @@ namespace PixelFarm.CpuBlit.VertexProcessing
                 }
                 _flattenDeltaAngle = -_flattenDeltaAngle;
             }
-            _Direction = direction;
+            _direction = direction;
             _startAngle = angle1;
             _endAngle = angle2;
-            _IsInitialized = true;
+            _isInitialized = true;
             _calculateNSteps = (int)Math.Floor(((_endAngle - _startAngle) / _flattenDeltaAngle));
         }
     }
